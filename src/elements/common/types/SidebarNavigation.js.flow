@@ -27,8 +27,8 @@ export type SidebarNavigation = {
     activeFeedEntryType?: FeedEntryTypeValues,
     activeFeedEntryId?: string,
     fileVersionId?: string,
-    filteredTemplateIds?: string,
-    sidebar: ViewTypeValues,
+    filteredTemplateIds?: string[],
+    sidebar?: ViewTypeValues,
     versionId?: string,
 };
 

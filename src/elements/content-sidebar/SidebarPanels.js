@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /**
  * @flow
  * @file Content Sidebar Panels component
@@ -42,6 +43,11 @@ import type { User, BoxItem } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { BoxAISidebarCache } from './types/BoxAISidebarTypes';
+import type {
+    InternalSidebarNavigation,
+    InternalSidebarNavigationHandler,
+} from '../common/types/SidebarNavigation';
+import { ViewType } from '../common/types/SidebarNavigation';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -64,6 +70,8 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isOpen: boolean,
     location: Location,
     metadataSidebarProps: MetadataSidebarProps,
@@ -71,6 +79,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState?: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    routerDisabled?: boolean,
     versionsSidebarProps: VersionsSidebarProps,
 };
 
@@ -118,7 +127,7 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
 
 const SIDEBAR_PATH_VERSIONS = '/:sidebar(activity|details)/versions/:versionId?';
 
-class SidebarPanels extends React.Component<Props, State> {
+class SidebarPanelsRouter extends React.Component<Props, State> {
     boxAISidebar: ElementRefType = React.createRef();
 
     activitySidebar: ElementRefType = React.createRef();
@@ -472,7 +481,342 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 }
 
-export { SidebarPanels as SidebarPanelsComponent };
+class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
+    boxAISidebar: ElementRefType = React.createRef();
+
+    activitySidebar: ElementRefType = React.createRef();
+
+    detailsSidebar: ElementRefType = React.createRef();
+
+    initialPanel: { current: null | string } = React.createRef();
+
+    metadataSidebar: ElementRefType = React.createRef();
+
+    state: State = { isInitialized: false };
+
+    versionsSidebar: ElementRefType = React.createRef();
+
+    boxAiSidebarCache: BoxAISidebarCache = {
+        agents: {
+            agents: [],
+            selectedAgent: null,
+            requestState: 'not_started',
+        },
+        encodedSession: null,
+        questions: [],
+        shouldShowLandingPage: true,
+        suggestedQuestions: [],
+    };
+
+    componentDidMount() {
+        this.setState({ isInitialized: true });
+    }
+
+    componentDidUpdate(prevProps: Props): void {
+        const { onVersionChange, internalSidebarNavigation } = this.props;
+        const { internalSidebarNavigation: prevInternalSidebarNavigation } = prevProps;
+
+        // Reset the current version id if the wrapping versions route is no longer active
+        if (onVersionChange) {
+            const wasOnVersionsPath = this.isVersionsNavigationPath(prevInternalSidebarNavigation);
+            const isOnVersionsPath = this.isVersionsNavigationPath(internalSidebarNavigation);
+
+            if (wasOnVersionsPath && !isOnVersionsPath) {
+                onVersionChange(null);
+            }
+        }
+    }
+
+    isVersionsNavigationPath = (navigation: InternalSidebarNavigation) => {
+        if (!navigation || !('versionId' in navigation)) {
+            return false;
+        }
+        const { sidebar, versionId } = navigation;
+        return (sidebar === ViewType.ACTIVITY || sidebar === ViewType.DETAILS) && !!versionId;
+    };
+
+    handlePanelRender = (panel: string): void => {
+        const { onPanelChange = noop } = this.props;
+        // Call onPanelChange only once with the initial panel
+        if (!this.initialPanel.current) {
+            this.initialPanel.current = panel;
+            onPanelChange(panel, true);
+        }
+    };
+
+    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions', value: any) => {
+        this.boxAiSidebarCache[key] = value;
+    };
+
+    /**
+     * Refreshes the contents of the active sidebar
+     * @returns {void}
+     */
+    refresh(shouldRefreshCache: boolean = true): void {
+        const { current: boxAISidebar } = this.boxAISidebar;
+        const { current: activitySidebar } = this.activitySidebar;
+        const { current: detailsSidebar } = this.detailsSidebar;
+        const { current: metadataSidebar } = this.metadataSidebar;
+        const { current: versionsSidebar } = this.versionsSidebar;
+
+        if (boxAISidebar) {
+            boxAISidebar.refresh();
+        }
+
+        if (activitySidebar) {
+            activitySidebar.refresh(shouldRefreshCache);
+        }
+
+        if (detailsSidebar) {
+            detailsSidebar.refresh();
+        }
+
+        if (metadataSidebar) {
+            metadataSidebar.refresh();
+        }
+
+        if (versionsSidebar) {
+            versionsSidebar.refresh();
+        }
+    }
+
+    render() {
+        const {
+            activitySidebarProps,
+            boxAISidebarProps,
+            currentUser,
+            currentUserError,
+            defaultPanel,
+            detailsSidebarProps,
+            docGenSidebarProps,
+            elementId,
+            features,
+            file,
+            fileId,
+            getPreview,
+            getViewer,
+            hasActivity,
+            hasBoxAI,
+            hasDetails,
+            hasDocGen,
+            hasMetadata,
+            hasSkills,
+            hasVersions,
+            internalSidebarNavigation,
+            isOpen,
+            metadataSidebarProps,
+            onAnnotationSelect,
+            versionsSidebarProps,
+        } = this.props;
+
+        const { isInitialized } = this.state;
+
+        const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
+        const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
+        const { shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel, showOnlyNavButton: showOnlyBoxAINavButton } =
+            getFeatureConfig(features, 'boxai.sidebar');
+
+        const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
+
+        const panelsEligibility = {
+            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
+            [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
+            [SIDEBAR_VIEW_SKILLS]: hasSkills,
+            [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
+            [SIDEBAR_VIEW_DETAILS]: hasDetails,
+            [SIDEBAR_VIEW_METADATA]: hasMetadata,
+        };
+
+        const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
+
+        if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
+            return null;
+        }
+
+        // Get the current sidebar from internal navigation, or determine default
+        let currentSidebar = internalSidebarNavigation?.sidebar;
+        
+        if (!currentSidebar) {
+            // Determine default sidebar using the same logic as the router version
+            if (showDefaultPanel) {
+                currentSidebar = defaultPanel;
+            } else if (canShowBoxAISidebarPanel && shouldBoxAIBeDefaultPanel) {
+                currentSidebar = SIDEBAR_VIEW_BOXAI;
+            } else if (hasDocGen) {
+                currentSidebar = SIDEBAR_VIEW_DOCGEN;
+            } else if (hasSkills) {
+                currentSidebar = SIDEBAR_VIEW_SKILLS;
+            } else if (hasActivity) {
+                currentSidebar = SIDEBAR_VIEW_ACTIVITY;
+            } else if (hasDetails) {
+                currentSidebar = SIDEBAR_VIEW_DETAILS;
+            } else if (hasMetadata) {
+                currentSidebar = SIDEBAR_VIEW_METADATA;
+            } else if (canShowBoxAISidebarPanel && !shouldBoxAIBeDefaultPanel) {
+                currentSidebar = SIDEBAR_VIEW_BOXAI;
+            }
+        }
+
+        // Handle Versions sidebar FIRST (special case: it's a sub-view of Activity or Details)
+        // This must be checked before Activity/Details to avoid hijacking
+        const versionId = internalSidebarNavigation?.versionId;
+        if (versionId && hasVersions && (currentSidebar === SIDEBAR_VIEW_ACTIVITY || currentSidebar === SIDEBAR_VIEW_DETAILS)) {
+            // For versions, we call handlePanelRender with the parent sidebar (activity/details)
+            this.handlePanelRender(currentSidebar);
+            return (
+                <LoadableVersionsSidebar
+                    fileId={fileId}
+                    hasSidebarInitialized={isInitialized}
+                    key={fileId}
+                    onVersionChange={onVersionChange}
+                    parentName={currentSidebar}
+                    ref={this.versionsSidebar}
+                    versionId={versionId}
+                    routerDisabled={true}
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    {...versionsSidebarProps}
+                />
+            );
+        }
+
+        // Render the appropriate sidebar based on currentSidebar
+        if (currentSidebar === SIDEBAR_VIEW_BOXAI && canShowBoxAISidebarPanel) {
+            this.handlePanelRender(SIDEBAR_VIEW_BOXAI);
+            return (
+                <LoadableBoxAISidebar
+                    contentName={file.name}
+                    elementId={elementId}
+                    fileExtension={file.extension}
+                    fileID={file.id}
+                    hasSidebarInitialized={isInitialized}
+                    ref={this.boxAISidebar}
+                    startMarkName={MARK_NAME_JS_LOADING_BOXAI}
+                    cache={this.boxAiSidebarCache}
+                    setCacheValue={this.setBoxAiSidebarCacheValue}
+                    {...boxAISidebarProps}
+                />
+            );
+        }
+
+        if (currentSidebar === SIDEBAR_VIEW_SKILLS && hasSkills) {
+            this.handlePanelRender(SIDEBAR_VIEW_SKILLS);
+            return (
+                <LoadableSkillsSidebar
+                    elementId={elementId}
+                    key={file.id}
+                    file={file}
+                    getPreview={getPreview}
+                    getViewer={getViewer}
+                    hasSidebarInitialized={isInitialized}
+                    startMarkName={MARK_NAME_JS_LOADING_SKILLS}
+                />
+            );
+        }
+
+        if (currentSidebar === SIDEBAR_VIEW_ACTIVITY && hasActivity) {
+            // Extract activity-specific params from internal navigation
+            const activeFeedEntryType = internalSidebarNavigation?.activeFeedEntryType;
+            const activeFeedEntryId = internalSidebarNavigation?.activeFeedEntryId;
+            
+            this.handlePanelRender(SIDEBAR_VIEW_ACTIVITY);
+            return (
+                <LoadableActivitySidebar
+                    elementId={elementId}
+                    currentUser={currentUser}
+                    currentUserError={currentUserError}
+                    file={file}
+                    hasSidebarInitialized={isInitialized}
+                    onAnnotationSelect={onAnnotationSelect}
+                    onVersionChange={onVersionChange}
+                    onVersionHistoryClick={onVersionHistoryClick}
+                    ref={this.activitySidebar}
+                    startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
+                    activeFeedEntryId={activeFeedEntryId}
+                    activeFeedEntryType={activeFeedEntryId && activeFeedEntryType}
+                    routerDisabled={true}
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    {...activitySidebarProps}
+                />
+            );
+        }
+
+        if (currentSidebar === SIDEBAR_VIEW_DETAILS && hasDetails) {
+            this.handlePanelRender(SIDEBAR_VIEW_DETAILS);
+            return (
+                <LoadableDetailsSidebar
+                    elementId={elementId}
+                    fileId={fileId}
+                    hasSidebarInitialized={isInitialized}
+                    key={fileId}
+                    hasVersions={hasVersions}
+                    onVersionHistoryClick={onVersionHistoryClick}
+                    ref={this.detailsSidebar}
+                    startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                    {...detailsSidebarProps}
+                />
+            );
+        }
+
+        if (currentSidebar === SIDEBAR_VIEW_METADATA && hasMetadata) {
+            // Extract metadata-specific params from internal navigation
+            const filteredTemplateIds = internalSidebarNavigation?.filteredTemplateIds || [];
+            
+            this.handlePanelRender(SIDEBAR_VIEW_METADATA);
+            return isMetadataSidebarRedesignEnabled ? (
+                <LoadableMetadataSidebarRedesigned
+                    elementId={elementId}
+                    fileExtension={file.extension}
+                    fileId={fileId}
+                    filteredTemplateIds={filteredTemplateIds}
+                    hasSidebarInitialized={isInitialized}
+                    isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
+                    ref={this.metadataSidebar}
+                    startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
+                    {...metadataSidebarProps}
+                />
+            ) : (
+                <LoadableMetadataSidebar
+                    elementId={elementId}
+                    fileId={fileId}
+                    hasSidebarInitialized={isInitialized}
+                    ref={this.metadataSidebar}
+                    startMarkName={MARK_NAME_JS_LOADING_METADATA}
+                    {...metadataSidebarProps}
+                />
+            );
+        }
+
+        if (currentSidebar === SIDEBAR_VIEW_DOCGEN && hasDocGen) {
+            this.handlePanelRender(SIDEBAR_VIEW_DOCGEN);
+            return (
+                <LoadableDocGenSidebar
+                    hasSidebarInitialized={isInitialized}
+                    startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
+                    {...docGenSidebarProps}
+                />
+            );
+        }
+
+        // All sidebars implemented!
+        return null;
+    }
+}
+
+class SidebarPanels extends React.Component<Props> {
+    render() {
+        const { routerDisabled, ...otherProps } = this.props;
+        
+        if (routerDisabled) {
+            return <SidebarPanelsRouterDisabled {...otherProps} />;
+        }
+        
+        return <SidebarPanelsRouter {...otherProps} />;
+    }
+}
+
+export { SidebarPanelsRouter as SidebarPanelsComponent };
 export default flow([
     withFeatureConsumer,
     withSidebarAnnotations,

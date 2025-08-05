@@ -22,7 +22,7 @@ type VersionSidebarView = {
 
 export type MetadataSidebarView = {
     sidebar: ViewType.METADATA | ViewType.METADATA_REDESIGN;
-    filteredTemplateIds?: string;
+    filteredTemplateIds?: string[];
 };
 
 export type ActivityAnnotationsSidebarView = {
@@ -39,7 +39,7 @@ type ActivityCommentsSidebarView = {
 
 export type SidebarNavigation =
     | {
-          sidebar: ViewType;
+          sidebar?: ViewType;
       }
     | VersionSidebarView
     | MetadataSidebarView
