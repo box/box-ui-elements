@@ -6,9 +6,7 @@ import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
 
 // The intent behind relying on mockMetadata is to allow a developer to paste in their own metadata template schema for use with live API calls.
-const EID = '0';
-const templateScope = mockSchema.scope ?? `enterprise_${EID}`;
-const templateKey = mockSchema.templateKey ?? 'mdViewTemplate1';
+const { scope: templateScope, templateKey } = mockSchema;
 
 const metadataScopeAndKey = `${templateScope}.${templateKey}`;
 const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
