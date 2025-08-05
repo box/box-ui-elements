@@ -3,6 +3,7 @@ import { http, HttpResponse } from 'msw';
 import type { Meta, StoryObj } from '@storybook/react';
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+import mockAncestorFolder from '../../../common/__mocks__/mockAncestorFolder';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
 
 const EID = '0';
@@ -94,6 +95,9 @@ const meta: Meta<typeof ContentExplorer> = {
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/metadata_templates/enterprise/templateName/schema`, () => {
                     return HttpResponse.json(mockSchema);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/313259567207`, () => {
+                    return HttpResponse.json(mockAncestorFolder);
                 }),
             ],
         },
