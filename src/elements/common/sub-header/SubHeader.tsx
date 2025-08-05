@@ -1,7 +1,11 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
+import classNames from 'classnames';
 import { PageHeader } from '@box/blueprint-web';
+import type { Selection } from 'react-aria-components';
+
 import SubHeaderLeft from './SubHeaderLeft';
+import SubHeaderLeftV2 from './SubHeaderLeftV2';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
 import type { View, Collection } from '../../../common/types/core';
@@ -19,6 +23,7 @@ export interface SubHeaderProps {
     gridMinColumns?: number;
     isSmall: boolean;
     maxGridColumnCountForWidth?: number;
+    onClearSelectedItemIds: () => void;
     onCreate: () => void;
     onGridViewSliderChange?: (newSliderValue: number) => void;
     onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
@@ -28,6 +33,8 @@ export interface SubHeaderProps {
     portalElement?: HTMLElement;
     rootId: string;
     rootName?: string;
+    selectedItemIds: Selection;
+    title?: string;
     view: View;
     viewMode?: ViewMode;
 }
@@ -42,6 +49,7 @@ const SubHeader = ({
     maxGridColumnCountForWidth = 0,
     onGridViewSliderChange = noop,
     isSmall,
+    onClearSelectedItemIds,
     onCreate,
     onItemClick,
     onSortChange,
@@ -50,6 +58,8 @@ const SubHeader = ({
     portalElement,
     rootId,
     rootName,
+    selectedItemIds,
+    title,
     view,
     viewMode = VIEW_MODE_LIST,
 }: SubHeaderProps) => {
@@ -60,7 +70,11 @@ const SubHeader = ({
     }
 
     return (
-        <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="inline">
+        <PageHeader.Root
+            className={classNames({ 'be-sub-header': !isMetadataViewV2Feature })}
+            data-testid="be-sub-header"
+            variant="inline"
+        >
             <PageHeader.StartElements>
                 {view !== VIEW_METADATA && !isMetadataViewV2Feature && (
                     <SubHeaderLeft
@@ -71,6 +85,15 @@ const SubHeader = ({
                         rootId={rootId}
                         rootName={rootName}
                         view={view}
+                    />
+                )}
+                {isMetadataViewV2Feature && (
+                    <SubHeaderLeftV2
+                        currentCollection={currentCollection}
+                        onClearSelectedItemIds={onClearSelectedItemIds}
+                        rootName={rootName}
+                        selectedItemIds={selectedItemIds}
+                        title={title}
                     />
                 )}
             </PageHeader.StartElements>
