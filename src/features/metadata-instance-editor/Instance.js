@@ -377,6 +377,7 @@ class Instance extends React.PureComponent<Props, State> {
      */
     getState(props: Props): State {
         const isCascadingEnabled = this.isCascadingEnabledThroughProps(props);
+        console.log('props', props);
 
         return {
             cascadePolicyConfiguration: null,
@@ -700,6 +701,7 @@ class Instance extends React.PureComponent<Props, State> {
                                 <div className="metadata-instance-editor-instance">
                                     {isCascadingPolicyApplicable && (
                                         <CascadePolicy
+                                            cascadePolicyConfiguration={cascadePolicy?.cascadePolicyConfiguration}
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
                                             canUseAIFolderExtraction={canUseAIFolderExtraction}
                                             canUseAIFolderExtractionAgentSelector={

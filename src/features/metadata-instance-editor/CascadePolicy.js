@@ -18,12 +18,14 @@ import Link from '../../components/link/Link';
 import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import messages from './messages';
 import './CascadePolicy.scss';
-import { STANDARD_AGENT_ID, ENHANCED_AGENT_ID } from './constants';
+import { STANDARD_AGENT_ID, ENHANCED_AGENT_ID, ENHANCED_AGENT_CONFIGURATION } from './constants';
+import { type MetadataCascadePolicyConfiguration } from '../../common/types/metadata';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
 
 type Props = {
+    cascadePolcyConfiguration?: MetadataCascadePolicyConfiguration,
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
     canUseAIFolderExtractionAgentSelector: boolean,
@@ -40,6 +42,7 @@ type Props = {
 };
 
 const CascadePolicy = ({
+    cascadePolicyConfiguration,
     canEdit,
     canUseAIFolderExtraction,
     canUseAIFolderExtractionAgentSelector,
@@ -62,6 +65,8 @@ const CascadePolicy = ({
         </div>
     ) : null;
 
+    const isEnhancedAgentSelected = cascadePolicyConfiguration?.agent === ENHANCED_AGENT_CONFIGURATION;
+
     const agents = React.useMemo(
         () => [
             {
@@ -74,6 +79,7 @@ const CascadePolicy = ({
                 name: formatMessage(messages.enhancedAgentName),
                 isEnterpriseDefault: false,
                 customIcon: BoxAiAdvancedColor,
+                isSelected: isEnhancedAgentSelected,
             },
         ],
         [formatMessage],
