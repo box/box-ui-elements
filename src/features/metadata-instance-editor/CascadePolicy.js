@@ -25,7 +25,7 @@ const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-C
 const AI_LINK = 'https://www.box.com/ai';
 
 type Props = {
-    cascadePolcyConfiguration?: MetadataCascadePolicyConfiguration,
+    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
     canUseAIFolderExtractionAgentSelector: boolean,
