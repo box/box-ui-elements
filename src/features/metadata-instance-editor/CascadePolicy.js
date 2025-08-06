@@ -19,7 +19,7 @@ import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import messages from './messages';
 import './CascadePolicy.scss';
 import { STANDARD_AGENT_ID, ENHANCED_AGENT_ID, ENHANCED_AGENT_CONFIGURATION } from './constants';
-import { type MetadataCascadePolicyConfiguration } from '../../common/types/metadata';
+import type { MetadataCascadePolicyConfiguration } from '../../common/types/metadata';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
@@ -82,7 +82,7 @@ const CascadePolicy = ({
                 isSelected: isEnhancedAgentSelected,
             },
         ],
-        [formatMessage],
+        [formatMessage, isEnhancedAgentSelected],
     );
 
     // BoxAiAgentSelectorWithApiContainer expects a function that returns a Promise<AgentListResponse>
