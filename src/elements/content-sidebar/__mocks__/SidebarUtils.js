@@ -24,7 +24,13 @@ export default {
             },
             [SIDEBAR_VIEW_METADATA_REDESIGN]: class MetadataSidebarRedesigned extends React.Component {
                 render() {
-                    return <div data-testid="metadata-sidebar-redesigned" />;
+                    const { filteredTemplateIds } = this.props;
+                    return (
+                        <div 
+                            data-testid="metadata-sidebar-redesigned"
+                            data-filtered-template-ids={filteredTemplateIds ? JSON.stringify(filteredTemplateIds) : undefined}
+                        />
+                    );
                 }
             },
             skills: class SkillsSidebar extends React.Component {
@@ -34,12 +40,26 @@ export default {
             },
             activity: class ActivitySidebar extends React.Component {
                 render() {
-                    return <div data-testid="activity-sidebar" />;
+                    const { activeFeedEntryType, activeFeedEntryId, hasSidebarInitialized } = this.props;
+                    return (
+                        <div 
+                            data-testid="activity-sidebar"
+                            data-active-feed-entry-type={activeFeedEntryType}
+                            data-active-feed-entry-id={activeFeedEntryId}
+                            data-has-sidebar-initialized={hasSidebarInitialized}
+                        />
+                    );
                 }
             },
             versions: class VersionsSidebar extends React.Component {
                 render() {
-                    return <div data-testid="versions-sidebar" />;
+                    const { versionId } = this.props;
+                    return (
+                        <div 
+                            data-testid="versions-sidebar"
+                            data-version-id={versionId}
+                        />
+                    );
                 }
             },
             docgen: class DocGenSidebar extends React.Component {
