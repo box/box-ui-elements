@@ -25,10 +25,10 @@ const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-C
 const AI_LINK = 'https://www.box.com/ai';
 
 type Props = {
-    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
     canUseAIFolderExtractionAgentSelector: boolean,
+    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
     isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -42,10 +42,10 @@ type Props = {
 };
 
 const CascadePolicy = ({
-    cascadePolicyConfiguration,
     canEdit,
     canUseAIFolderExtraction,
     canUseAIFolderExtractionAgentSelector,
+    cascadePolicyConfiguration,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
