@@ -102,7 +102,7 @@ const MARK_NAME_JS_LOADING_METADATA_REDESIGNED = `${ORIGIN_METADATA_SIDEBAR_REDE
 const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
-const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task' };
+const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task', versions: undefined };
 
 const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
 const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
@@ -527,7 +527,7 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
         }
     }
 
-    isVersionsNavigationPath = (navigation: InternalSidebarNavigation) => {
+    isVersionsNavigationPath = (navigation?: InternalSidebarNavigation): boolean => {
         if (!navigation) {
             return false;
         }
@@ -632,7 +632,7 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
         // Determine default sidebar using the same logic as the router version
         if (showDefaultPanel) {
-            return defaultPanel;
+            return defaultPanel || null;
         } if (canShowBoxAISidebarPanel && shouldBoxAIBeDefaultPanel) {
             return SIDEBAR_VIEW_BOXAI;
         } if (hasDocGen) {
@@ -724,7 +724,10 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
         if (sidebarToRender) {
             if (sidebarToRender === SIDEBAR_VIEW_VERSIONS) {
-                this.handlePanelRender(internalSidebarNavigation?.sidebar);
+                const parentName = internalSidebarNavigation?.sidebar;
+                if (parentName) {
+                    this.handlePanelRender(parentName);
+                }
             } else {
                 this.handlePanelRender(sidebarToRender);
             }

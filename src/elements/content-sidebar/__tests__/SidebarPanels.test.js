@@ -959,7 +959,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 ${{ sidebar: 'details', activeFeedEntryType: 'versions' }}                                                       | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
                 ${{ sidebar: 'details', activeFeedEntryType: 'versions', versionId: '1234' }}                                    | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
                 ${{ sidebar: 'metadata' }}                                                                                       | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
-                ${{ sidebar: 'metadata', filteredTemplateIds: [1, 3] }}                                                          | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+                ${{ sidebar: 'metadata', filteredTemplateIds: ['1', '3'] }}                                                        | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
                 ${{ sidebar: 'skills' }}                                                                                         | ${true}     | ${true}    | ${true}     | ${true}     | ${false}  | ${true}   | ${true}  | ${false}               | ${'boxai'}
                 ${{ sidebar: 'docgen' }}                                                                                         | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${false}  | ${true}  | ${false}               | ${'boxai'}
                 ${{ sidebar: 'boxai' }}                                                                                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false} | ${false}               | ${'docgen'}
@@ -1104,12 +1104,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     renderSidebarPanelsRouterDisabled({
                         internalSidebarNavigation: {
                             sidebar: 'metadata',
-                            filteredTemplateIds: [123, 124],
+                            filteredTemplateIds: ['123', '124'],
                         },
                         features: { metadata: { redesign: { enabled: true } } },
                     });
                     const metadataSidebar = screen.getByTestId('metadata-sidebar-redesigned');
-                    expect(metadataSidebar).toHaveAttribute('data-filtered-template-ids', JSON.stringify([123, 124]));
+                    expect(metadataSidebar).toHaveAttribute('data-filtered-template-ids', JSON.stringify(['123', '124']));
                 });
 
                 test('should render redesigned sidebar if it is enabled', () => {
