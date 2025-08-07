@@ -1,4 +1,3 @@
-import React from 'react';
 import { http, HttpResponse } from 'msw';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
@@ -91,13 +90,6 @@ const metadataViewV2ElementProps = {
 
 export const metadataViewV2: Story = {
     args: metadataViewV2ElementProps,
-    render: args => {
-        return (
-            <div style={{ padding: '50px' }}>
-                <ContentExplorer {...args} />
-            </div>
-        );
-    },
 };
 
 export const metadataViewV2WithCustomActions: Story = {
@@ -129,13 +121,6 @@ export const metadataViewV2WithCustomActions: Story = {
                 ],
             },
         },
-    },
-    render: args => {
-        return (
-            <div style={{ padding: '50px' }}>
-                <ContentExplorer {...args} />
-            </div>
-        );
     },
     play: async ({ canvas }) => {
         await waitFor(() => {
