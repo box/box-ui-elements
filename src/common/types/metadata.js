@@ -87,14 +87,15 @@ type MetadataType = {
     global?: MetadataSkillsTemplate,
 };
 
+type MetadataCascadePolicyConfiguration = {
+    agent: string,
+};
+
 type MetadataCascadePolicy = {
     canEdit?: boolean,
     id?: string,
     cascadePolicyType?: string,
-};
-
-type MetadataCascadePolicyConfiguration = {
-    agent: string,
+    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
 };
 
 type MetadataCascadingPolicyData = {
