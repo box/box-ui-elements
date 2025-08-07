@@ -627,7 +627,7 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
             (currentSidebar === SIDEBAR_VIEW_ACTIVITY || currentSidebar === SIDEBAR_VIEW_DETAILS) && 
             activeFeedEntryType === FeedEntryType.VERSIONS) 
         {
-            return SIDEBAR_VIEW_VERSIONS
+            return SIDEBAR_VIEW_VERSIONS;
         }
 
         // Determine default sidebar using the same logic as the router version
