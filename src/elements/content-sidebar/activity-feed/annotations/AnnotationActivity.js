@@ -114,11 +114,7 @@ const AnnotationActivity = ({
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;
-    const messageToUse =
-        target.location.type === 'page'
-            ? messages.annotationActivityPageItem
-            : messages.annotationActivityTimeStampItem;
-    const linkMessage = isCurrentVersion ? messageToUse : messages.annotationActivityVersionLink;
+    const linkMessage = isCurrentVersion ? messages.annotationActivityPageItem : messages.annotationActivityVersionLink;
     const linkValue = isCurrentVersion ? target.location.value : getProp(file_version, 'version_number');
     const message = (description && description.message) || '';
     const activityLinkMessage = isFileVersionUnavailable
@@ -159,8 +155,6 @@ const AnnotationActivity = ({
                                 id={createdByUser.id}
                                 name={createdByUser.name}
                             />
-
-                            <div className="bcs-AnnotationActivity-target">{target.location.type}</div>
                         </div>
                         <div className="bcs-AnnotationActivity-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />

@@ -8,11 +8,6 @@ export type Page = {
     value: number,
 };
 
-export type Frame = {
-    type: 'frame',
-    value: number,
-};
-
 export type Rect = {
     fill?: {
         color: string,
@@ -29,13 +24,13 @@ export type Rect = {
 };
 
 export type TargetRegion = {
-    location: Page | Frame,
+    location: Page,
     shape?: Rect,
     type: 'region',
 };
 
 export type TargetPoint = {
-    location: Page | Frame,
+    location: Page,
     type: 'point',
     x: number,
     y: number,
