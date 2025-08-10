@@ -87,14 +87,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         isRequired: false,
         onChange: noop,
         validateOnBlur: true,
-        isVideo: false,
-        timeStampedCommentsEnabled: false,
     };
 
     constructor(props: Props) {
         super(props);
 
-        this.mentionDecorator = new CompositeDecorator([
+        this.compositeDecorator = new CompositeDecorator([
             {
                 strategy: mentionStrategy,
                 component: DraftMentionItem,
@@ -113,7 +111,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         this.state = {
             contacts: [],
             isTouched: false,
-            internalEditorState: props.editorState ? null : EditorState.createEmpty(this.mentionDecorator),
+            internalEditorState: props.editorState ? null : EditorState.createEmpty(this.compositeDecorator),
             error: null,
             timeStampPrepended: false,
         };
@@ -156,12 +154,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // Check if the editor state already has our decorator
         const currentDecorator = editorState.getDecorator();
-        if (currentDecorator === this.mentionDecorator) {
+        if (currentDecorator === this.compositeDecorator) {
             return editorState;
         }
 
         // Apply our decorator to the editor state
-        return EditorState.set(editorState, { decorator: this.mentionDecorator });
+        return EditorState.set(editorState, { decorator: this.compositeDecorator });
     }
 
     getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState) {
@@ -380,7 +378,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     render() {
         const {
             className = '',
-            allowVideoTimeStamps,
             contactsLoaded,
             editorState: externalEditorState,
             hideLabel,

@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+/* eslint-disable react/jsx-no-comment-textnodes */
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
-import { ContentState, EditorState } from 'draft-js';
+import { ContentState, EditorState, convertToRaw } from 'draft-js';
 import sinon from 'sinon';
 
 import DraftJSMentionSelector from '..';
