@@ -22,7 +22,7 @@ import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-c
 import { FILE_EXTENSIONS } from '../../../common/item/constants';
 import type { FeatureConfig } from '../../../common/feature-checking/flowTypes';
 import messages from './messages';
-import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
+import type { GetAvatarUrlCallback } from '../../common/flowTypes';
 import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import './CommentForm.scss';
 
@@ -49,6 +49,7 @@ export type CommentFormProps = {
     tagged_message?: string,
     updateComment?: Function,
     user?: User,
+    features?: FeatureConfig,
 };
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
@@ -151,10 +152,12 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
+            'bcs-time-stamped-comments': isTimeStampedCommentsEnabled,
         });
 
         const { file } = this.props;
         const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
+        const allowVideoTimeStamps = isVideo && isTimeStampedCommentsEnabled;
         return (
             <Media className={inputContainerClassNames}>
                 {!isEditing && !!user && (
@@ -173,7 +176,7 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                             hideLabel
                             isDisabled={isDisabled}
                             isRequired={isOpen}
-                            isVideo={isVideo}
+                            allowVideoTimeStamps={allowVideoTimeStamps}
                             name="commentText"
                             label={formatMessage(messages.commentLabel)}
                             timestampLabel={timestampLabel}

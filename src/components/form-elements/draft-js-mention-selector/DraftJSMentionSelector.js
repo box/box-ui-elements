@@ -66,6 +66,7 @@ type Props = {
     hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
+    allowVideoTimeStamps?: boolean,
     label: React.Node,
     maxLength?: number,
     mentionTriggers?: Array<string>,
@@ -80,6 +81,7 @@ type Props = {
     startMentionMessage?: React.Node,
     timestampLabel?: string | null,
     validateOnBlur?: boolean,
+    timeStampLabel?: string,
 };
 
 type State = {
@@ -97,6 +99,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         isRequired: false,
         onChange: noop,
         validateOnBlur: true,
+        isVideo: false,
+        timeStampedCommentsEnabled: false,
     };
 
     constructor(props: Props) {
@@ -450,6 +454,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     render() {
         const {
             className = '',
+            allowVideoTimeStamps,
             contactsLoaded,
             editorState: externalEditorState,
             hideLabel,
@@ -462,6 +467,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             onMention,
             placeholder,
             selectorRow,
+
             startMentionMessage,
             onReturn,
             timestampLabel,
