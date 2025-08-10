@@ -17,10 +17,6 @@ const customStyleMap = {
     BLACK: {
         color: 'black',
     },
-    TIMESTAMP: {
-        color: 'blue',
-        fontWeight: 'bold',
-    },
 };
 
 /**
