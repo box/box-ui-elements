@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 
 import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
 import DraftMentionItem from './DraftMentionItem';
+import DraftTimestampItem from './DraftTimestampItem';
 import FormInput from '../form/FormInput';
 import * as messages from '../input-messages';
 import type { SelectorItems } from '../../../common/types/core';
@@ -15,10 +16,6 @@ import Toggle from '../../toggle/Toggle';
 const customStyleMap = {
     BLACK: {
         color: 'black',
-    },
-    TIMESTAMP: {
-        color: 'blue',
-        fontWeight: 'bold',
     },
 };
 
@@ -33,6 +30,20 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
     contentBlock.findEntityRanges(character => {
         const entityKey = character.getEntity();
         const ret = entityKey !== null && contentState.getEntity(entityKey).getType() === 'MENTION';
+        return ret;
+    }, callback);
+};
+
+/**
+ * Scans a Draft ContentBlock for timestamp entity ranges
+ * @param {ContentBlock} contentBlock
+ * @param {function} callback
+ * @param {ContentState} contentState
+ */
+const timestampStrategy = (contentBlock, callback, contentState) => {
+    contentBlock.findEntityRanges(character => {
+        const entityKey = character.getEntity();
+        const ret = entityKey !== null && contentState.getEntity(entityKey).getType() === 'UNEDITABLE_TEXT';
         return ret;
     }, callback);
 };
@@ -83,10 +94,14 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const mentionDecorator = new CompositeDecorator([
+        this.mentionDecorator = new CompositeDecorator([
             {
                 strategy: mentionStrategy,
                 component: DraftMentionItem,
+            },
+            {
+                strategy: timestampStrategy,
+                component: DraftTimestampItem,
             },
         ]);
 
@@ -98,7 +113,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         this.state = {
             contacts: [],
             isTouched: false,
-            internalEditorState: props.editorState ? null : EditorState.createEmpty(mentionDecorator),
+            internalEditorState: props.editorState ? null : EditorState.createEmpty(this.mentionDecorator),
             error: null,
             timeStampPrepended: false,
         };
@@ -133,6 +148,20 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                 this.checkValidityIfAllowed();
             }
         }
+    }
+
+    // Ensure external editor state has the decorator applied
+    getEditorStateWithDecorator(editorState: EditorState): EditorState {
+        if (!editorState) return editorState;
+
+        // Check if the editor state already has our decorator
+        const currentDecorator = editorState.getDecorator();
+        if (currentDecorator === this.mentionDecorator) {
+            return editorState;
+        }
+
+        // Apply our decorator to the editor state
+        return EditorState.set(editorState, { decorator: this.mentionDecorator });
     }
 
     getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState) {
@@ -179,15 +208,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                 focusOffset: 0,
             });
 
-            // First insert the timestamp text
-            updatedContent = Modifier.insertText(
-                currentContent,
-                selectionAtStart,
-                timestampText,
-                OrderedSet.of('TIMESTAMP'),
-            );
+            // First insert the timestamp text followed by a space
+            updatedContent = Modifier.insertText(currentContent, selectionAtStart, `${timestampText} `);
 
-            // Then apply the entity to the inserted text
+            // Then apply the entity to the inserted text (excluding the space)
             const selectionWithTimestamp = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: timestampText.length,
@@ -197,8 +221,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
             newTimeStampPrepended = true;
         } else {
-            // Remove timestamp - create selection range for the timestamp text
-            const timestampLength = timestampText.length;
+            // Remove timestamp - create selection range for the timestamp text and space
+            const timestampLength = timestampText.length + 1; // Include the space
             const selectionToRemove = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: timestampLength,
@@ -211,8 +235,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         // Create a new EditorState with the updated content
         let newEditorState = EditorState.push(editorState, updatedContent, 'insert-characters');
 
-        // Position cursor after the timestamp (if adding) or at the beginning (if removing)
-        const cursorOffset = newTimeStampPrepended ? timestampText.length : 0;
+        // Position cursor after the timestamp and space (if adding) or at the beginning (if removing)
+        const cursorOffset = newTimeStampPrepended ? timestampText.length + 1 : 0;
+
+        // Create a selection that ensures the cursor is outside any entity
         const finalSelection = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
             anchorOffset: cursorOffset,
             focusOffset: cursorOffset,
@@ -374,7 +400,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         } = this.props;
         const { contacts, internalEditorState, error, timeStampPrepended } = this.state;
         const { handleBlur, handleChange, handleFocus, toggleTimeStamp } = this;
-        const editorState: EditorState = internalEditorState || externalEditorState;
+        const rawEditorState: EditorState = internalEditorState || externalEditorState;
+        const editorState: EditorState = this.getEditorStateWithDecorator(rawEditorState);
 
         return (
             <div
@@ -407,7 +434,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     />
 
                     {isRequired && timestampLabel && (
-                        <Toggle className="bcs-CommentTimestamp-toggle" label={timestampLabel} onChange={noop} />
+                        <Toggle
+                            label={timeStampLabel}
+                            isOn={timeStampPrepended}
+                            onChange={() => toggleTimeStamp(editorState)}
+                        />
                     )}
                 </FormInput>
             </div>

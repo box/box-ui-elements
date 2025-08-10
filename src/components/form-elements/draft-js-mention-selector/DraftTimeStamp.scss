@@ -1,0 +1,18 @@
+@import '../../../styles/variables';
+
+.timestamp-item {
+    color: $bdl-box-blue-80;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+    padding: 6px 4px;
+    letter-spacing: 0.3px;
+    border-radius: 4px;
+    background-color: $bdl-box-blue-10;
+    cursor: default;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
