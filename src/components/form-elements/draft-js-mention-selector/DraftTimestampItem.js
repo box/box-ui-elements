@@ -13,6 +13,7 @@ const DraftTimestampItem = ({ children, entityKey, contentState }: Props) => {
     const { timestamp } = entity.getData();
     return (
         <span className="timestamp-item" title={`Video timestamp: ${timestamp}`}>
+            asdfasdf
             {children}
         </span>
     );

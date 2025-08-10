@@ -95,8 +95,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         isRequired: false,
         onChange: noop,
         validateOnBlur: true,
-        isVideo: false,
-        timeStampedCommentsEnabled: false,
     };
 
     constructor(props: Props) {
@@ -450,7 +448,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     render() {
         const {
             className = '',
-            allowVideoTimeStamps,
             contactsLoaded,
             editorState: externalEditorState,
             hideLabel,

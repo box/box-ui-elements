@@ -2,12 +2,12 @@
 
 .timestamp-item {
     color: $bdl-box-blue-80;
-    font-size: 14px;
+    font-size: $bdl-btn-text-icon-size;
     font-weight: normal;
-    line-height: 20px;
+    line-height: $bdl-line-height;
     padding: 6px 4px;
     letter-spacing: 0.3px;
-    border-radius: 4px;
+    border-radius: $bdl-border-radius-size;
     background-color: $bdl-box-blue-10;
     cursor: default;
     pointer-events: none;

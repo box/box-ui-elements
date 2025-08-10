@@ -152,12 +152,9 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
-            'bcs-time-stamped-comments': isTimeStampedCommentsEnabled,
+            'bcs-time-stamped-comments': allowVideoTimeStamps,
         });
 
-        const { file } = this.props;
-        const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
-        const allowVideoTimeStamps = isVideo && isTimeStampedCommentsEnabled;
         return (
             <Media className={inputContainerClassNames}>
                 {!isEditing && !!user && (
@@ -176,7 +173,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                             hideLabel
                             isDisabled={isDisabled}
                             isRequired={isOpen}
-                            allowVideoTimeStamps={allowVideoTimeStamps}
                             name="commentText"
                             label={formatMessage(messages.commentLabel)}
                             timestampLabel={timestampLabel}
