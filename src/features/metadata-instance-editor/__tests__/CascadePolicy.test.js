@@ -176,6 +176,51 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
             expect(onAIAgentSelect).toHaveBeenCalledWith(expectedAgent);
         });
+
+        test('should render with cascadePolicyConfiguration prop and select enhanced agent if configured', async () => {
+            const cascadePolicyConfiguration = {
+                agent: 'enhanced_extract_agent',
+            };
+            render(
+                <CascadePolicy
+                    canEdit
+                    canUseAIFolderExtraction
+                    canUseAIFolderExtractionAgentSelector
+                    shouldShowCascadeOptions
+                    isAIFolderExtractionEnabled
+                    cascadePolicyConfiguration={cascadePolicyConfiguration}
+                    onAIFolderExtractionToggle={jest.fn()}
+                />,
+            );
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            await userEvent.click(aiToggle); // Enable AI
+
+            expect(aiToggle).toBeChecked();
+
+            // The Enhanced agent should be selected in the combobox
+            const combobox = screen.getByRole('combobox', { name: 'Enhanced' });
+            expect(combobox).toBeInTheDocument();
+        });
+
+        test('should render standard agent if cascadePolicyConfiguration is undefined', async () => {
+            render(
+                <CascadePolicy
+                    canEdit
+                    canUseAIFolderExtraction
+                    canUseAIFolderExtractionAgentSelector
+                    shouldShowCascadeOptions
+                    isAIFolderExtractionEnabled
+                    onAIFolderExtractionToggle={jest.fn()}
+                />,
+            );
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            await userEvent.click(aiToggle); // Enable AI
+
+            expect(aiToggle).toBeChecked();
+
+            // Should default to Standard agent
+            expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
+        });
     });
 
     describe('AI Autofill Toggle', () => {

@@ -1465,15 +1465,15 @@
     tabbable "^4.0.0"
     type-fest "^3.2.0"
 
-"@box/box-ai-agent-selector@^0.48.5":
-  version "0.48.6"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.48.6.tgz#753cab9ef626845d94c4ee939055b7beadcbeb48"
-  integrity sha512-R6+8r764MWs5D9y0iBaINJQHk+JuR6NVyS9s9aK23ms7JkP5fGI6k3VDQ/86BxMhMtSWhVLLXzUNaTbE2vd+gQ==
+"@box/box-ai-agent-selector@^0.52.0":
+  version "0.52.0"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.52.0.tgz#eaedf3acbf0098b4762818306aa6246675089c86"
+  integrity sha512-AkZBMU6VwKwMaYhTD1zRv5MVXhCCGsGC69ge//DC5725nPwTo/GTN1zJFY0c+TSPcpS++C3b4/akTPl4iUaNjw==
 
 "@box/box-ai-content-answers@^0.124.1":
-  version "0.124.1"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.124.1.tgz#3248b33bb0605b376b1ff7acf1ac658055aa4cac"
-  integrity sha512-NrQ+JWi1JCO5vdLi/kdJEmFOCKpE8Xa4mo6D/aXtREo+acEEC/VE8vJk6jgGdyrgP6wvgc//TCL2d2L51Tr/jg==
+  version "0.124.5"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.124.5.tgz#664a34d8338569be6801c1433295f858d8f054ad"
+  integrity sha512-0p1j2JW9ig0rhM4tiOyEFN6dbiHa7wuX8PmKTjPbgU5MQDibGSbNeZS7IxZlJLYs2BmJ+IncUrPN+zlnsfaRgw==
 
 "@box/box-item-type-selector@^0.61.12":
   version "0.61.16"

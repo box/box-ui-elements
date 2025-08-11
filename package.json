@@ -126,7 +126,7 @@
         "@babel/types": "^7.24.7",
         "@box/blueprint-web": "12.43.0",
         "@box/blueprint-web-assets": "4.61.5",
-        "@box/box-ai-agent-selector": "^0.48.5",
+        "@box/box-ai-agent-selector": "^0.52.0",
         "@box/box-ai-content-answers": "^0.124.1",
         "@box/box-item-type-selector": "^0.61.12",
         "@box/cldr-data": "^34.2.0",
@@ -295,7 +295,7 @@
     "peerDependencies": {
         "@box/blueprint-web": "12.43.0",
         "@box/blueprint-web-assets": "4.61.5",
-        "@box/box-ai-agent-selector": "^0.48.5",
+        "@box/box-ai-agent-selector": "^0.52.0",
         "@box/box-ai-content-answers": "^0.124.1",
         "@box/box-item-type-selector": "^0.61.12",
         "@box/cldr-data": ">=34.2.0",
