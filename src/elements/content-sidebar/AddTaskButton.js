@@ -12,7 +12,7 @@ import type { ElementsXhrError } from '../../common/types/api';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type Props = {|
-    history: RouterHistory,
+    history?: RouterHistory,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled: boolean,
@@ -55,7 +55,7 @@ class AddTaskButton extends React.Component<Props, State> {
                 },
                 true,
             );
-        } else {
+        } else if (history) {
             history.replace({ state: { open: true } });
         }
 

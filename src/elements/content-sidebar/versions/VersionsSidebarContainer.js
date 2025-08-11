@@ -37,7 +37,7 @@ type Props = {
     features: FeatureConfig,
     fileId: string,
     hasSidebarInitialized?: boolean,
-    history: RouterHistory,
+    history?: RouterHistory,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     match: Match,
@@ -284,7 +284,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 delete navigationUpdate.versionId;
             }
             internalSidebarNavigationHandler(navigationUpdate);
-        } else {
+        } else if (history) {
             history.push(generatePath(match.path, { ...match.params, versionId }));
         }
     };
