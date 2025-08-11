@@ -47,7 +47,7 @@ import type {
     InternalSidebarNavigation,
     InternalSidebarNavigationHandler,
 } from '../common/types/SidebarNavigation';
-import { FeedEntryType,ViewType } from '../common/types/SidebarNavigation';
+import { FeedEntryType, ViewType } from '../common/types/SidebarNavigation';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
