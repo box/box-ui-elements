@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { CompositeDecorator, EditorState, Modifier, SelectionState } from 'draft-js';
-import { OrderedSet } from 'immutable';
 import noop from 'lodash/noop';
 
 import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
@@ -187,20 +186,20 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     toggleTimeStamp = editorState => {
         const currentContent = editorState.getCurrentContent();
         const timestamp = this.getVideoTimestamp();
-        const timestampText = `${timestamp}: `;
+        const timestampText = `${timestamp}:`;
         let updatedContent;
         let newTimeStampPrepended;
         const { timeStampPrepended } = this.state;
 
         if (!timeStampPrepended) {
-            const newEntity = currentContent.createEntity(
+            // Create a new entity for the timestamp. It is immutable so it will not be editable.
+            const timeStampEntity = currentContent.createEntity(
                 'UNEDITABLE_TEXT', // Entity type
                 'IMMUTABLE',
                 { timestamp },
             );
-            const entityKey = newEntity.getLastCreatedEntityKey();
 
-            // Create a selection at the very beginning of the content
+            // Create a selection at the very beginning of the input box for the timestamp
             const selectionAtStart = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: 0,
@@ -215,48 +214,51 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                 focusOffset: timestampText.length,
             });
 
+            // Get the entity key for the timestamp entity
+            const entityKey = timeStampEntity.getLastCreatedEntityKey();
+
+            // Apply the timestamp entity to the inserted text. This will ensure that the timestamp is uneditable and that
+            // the decorator will apply the proper styling to the timestamp.
             updatedContent = Modifier.applyEntity(updatedContent, selectionWithTimestamp, entityKey);
 
             newTimeStampPrepended = true;
         } else {
-            // Remove timestamp - create selection range for the timestamp text and space
+            // get the legnth of the timestamp text including the space
             const timestampLength = timestampText.length + 1; // Include the space
+
+            // Create a selection range for the timestamp text and space so that we know what to remove and
+            // to move it from the beginning of the input box
             const selectionToRemove = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: timestampLength,
             });
 
+            // Remove the timestamp text and space. No need for an entity key because we are not applying any entity to the text.
             updatedContent = Modifier.replaceText(currentContent, selectionToRemove, '');
             newTimeStampPrepended = false;
         }
 
-        // Create a new EditorState with the updated content
-        let newEditorState = EditorState.push(editorState, updatedContent, 'insert-characters');
-
         // Position cursor after the timestamp and space (if adding) or at the beginning (if removing)
         const cursorOffset = newTimeStampPrepended ? timestampText.length + 1 : 0;
-
-        // Create a selection that ensures the cursor is outside any entity
+        // Create a selection that ensures the cursor is outside any entity. This is important because we want to ensure
+        // that the cursor is not inside the timestamp component when if it is displayed
         const finalSelection = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
             anchorOffset: cursorOffset,
             focusOffset: cursorOffset,
         });
 
+        // Create a new EditorState with the updated content
+        let newEditorState = EditorState.push(editorState, updatedContent, 'insert-characters');
         // Apply selection first
         newEditorState = EditorState.forceSelection(newEditorState, finalSelection);
-
-        // Clear inline styles for subsequent text input when timestamp is added
-        if (newTimeStampPrepended) {
-            newEditorState = EditorState.setInlineStyleOverride(newEditorState, OrderedSet());
-        }
 
         // Update state with new timestamp status
         this.setState({
             timeStampPrepended: newTimeStampPrepended,
         });
-        this.handleChange(newEditorState);
 
-        return newEditorState;
+        // handle the change in the editor state
+        this.handleChange(newEditorState);
     };
 
     checkValidityIfAllowed() {
