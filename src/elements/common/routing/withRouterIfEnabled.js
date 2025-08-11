@@ -5,11 +5,13 @@ import { isFeatureEnabled } from '../feature-checking';
 
 export default function withRouterIfEnabled(Wrapped: React.ComponentType<any>) {
 
+    const WrappedWithRouter = withRouter(Wrapped);
+
     const WithRouterIfEnabled = (props: any) => {
         const routerDisabled =
             props?.routerDisabled === true || isFeatureEnabled(props?.features, 'routerDisabled.value');
-
-        const Component = routerDisabled ? Wrapped : withRouter(Wrapped);
+            
+        const Component = routerDisabled ? Wrapped : WrappedWithRouter;
 
         return <Component {...props} />;
     };
