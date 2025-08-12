@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { Button } from '@box/blueprint-web';
-import { Pencil } from '@box/blueprint-web-assets/icons/Fill';
 import { useIntl } from 'react-intl';
+
+import { Button, DropdownMenu } from '@box/blueprint-web';
+import { Ellipsis, Pencil } from '@box/blueprint-web-assets/icons/Fill';
+import type { Selection } from 'react-aria-components';
+
+import type { BulkItemActionMenuProps } from '../../../elements/content-explorer/MetadataViewContainer';
 import Sort from './Sort';
 import Add from './Add';
 import GridViewSlider from '../../../components/grid-view/GridViewSlider';
@@ -17,6 +21,7 @@ import messages from './messages';
 import './SubHeaderRight.scss';
 
 export interface SubHeaderRightProps {
+    bulkItemActionMenuProps?: BulkItemActionMenuProps;
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -30,6 +35,7 @@ export interface SubHeaderRightProps {
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
+    selectedItemIds: Selection;
     view: View;
     viewMode: ViewMode;
 }
@@ -48,8 +54,10 @@ const SubHeaderRight = ({
     onUpload,
     onViewModeChange,
     portalElement,
+    selectedItemIds,
     view,
     viewMode,
+    bulkItemActionMenuProps,
 }: SubHeaderRightProps) => {
     const { formatMessage } = useIntl();
     const isMetadataViewV2Feature = useFeatureEnabled('contentExplorer.metadataViewV2');
@@ -60,6 +68,7 @@ const SubHeaderRight = ({
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isMetadataView: boolean = view === VIEW_METADATA;
+
     return (
         <div className="be-sub-header-right">
             {!isMetadataView && (
@@ -91,9 +100,33 @@ const SubHeaderRight = ({
             )}
 
             {isMetadataView && isMetadataViewV2Feature && (
-                <Button icon={Pencil} size="large" variant="primary">
-                    {formatMessage(messages.metadata)}
-                </Button>
+                <>
+                    {(selectedItemIds === 'all' || (selectedItemIds instanceof Set && selectedItemIds.size > 0)) && (
+                        <DropdownMenu.Root>
+                            <DropdownMenu.Trigger className="be-sub-header-right-dropdown-trigger">
+                                <Button
+                                    role="button"
+                                    aria-label={formatMessage(messages.bulkItemActionMenuAriaLabel)}
+                                    icon={Ellipsis}
+                                    size="large"
+                                    variant="secondary"
+                                />
+                            </DropdownMenu.Trigger>
+                            <DropdownMenu.Content align="start">
+                                {bulkItemActionMenuProps.actions.map(({ label, onClick }) => {
+                                    return (
+                                        <DropdownMenu.Item key={label} onSelect={() => onClick(selectedItemIds)}>
+                                            {label}
+                                        </DropdownMenu.Item>
+                                    );
+                                })}
+                            </DropdownMenu.Content>
+                        </DropdownMenu.Root>
+                    )}
+                    <Button icon={Pencil} size="large" variant="primary">
+                        {formatMessage(messages.metadata)}
+                    </Button>
+                </>
             )}
         </div>
     );
