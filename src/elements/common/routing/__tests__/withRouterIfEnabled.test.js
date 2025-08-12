@@ -27,29 +27,29 @@ test('injects router props when wrapped in a Router', () => {
         </MemoryRouter>,
     );
 
-    const el = getByTestId('test-component');
-    expect(el).toHaveAttribute('data-has-history', 'true');
-    expect(el).toHaveAttribute('data-has-location', 'true');
-    expect(el).toHaveAttribute('data-has-match', 'true');
-    expect(el).not.toHaveAttribute('data-router-disabled');
+    const component = getByTestId('test-component');
+    expect(component).toHaveAttribute('data-has-history', 'true');
+    expect(component).toHaveAttribute('data-has-location', 'true');
+    expect(component).toHaveAttribute('data-has-match', 'true');
+    expect(component).not.toHaveAttribute('data-router-disabled');
 });
 
 test('renders without Router and without router props (routerDisabled prop)', () => {
     const { getByTestId } = render(<WithRouterIfEnabled routerDisabled />);
-    const el = getByTestId('test-component');
-    expect(el).not.toHaveAttribute('data-has-history');
-    expect(el).not.toHaveAttribute('data-has-location');
-    expect(el).not.toHaveAttribute('data-has-match');
-    expect(el).toHaveAttribute('data-router-disabled', 'true');
+    const component = getByTestId('test-component');
+    expect(component).not.toHaveAttribute('data-has-history');
+    expect(component).not.toHaveAttribute('data-has-location');
+    expect(component).not.toHaveAttribute('data-has-match');
+    expect(component).toHaveAttribute('data-router-disabled', 'true');
 });
 
 test('renders without Router and without router props (feature flag)', () => {
     const features = { routerDisabled: { value: true } };
     const { getByTestId } = render(<WithRouterIfEnabled features={features} />);
 
-    const el = getByTestId('test-component');
-    expect(el).not.toHaveAttribute('data-has-history');
-    expect(el).not.toHaveAttribute('data-has-location');
-    expect(el).not.toHaveAttribute('data-has-match');
+    const component = getByTestId('test-component');
+    expect(component).not.toHaveAttribute('data-has-history');
+    expect(component).not.toHaveAttribute('data-has-location');
+    expect(component).not.toHaveAttribute('data-has-match');
 });
 
