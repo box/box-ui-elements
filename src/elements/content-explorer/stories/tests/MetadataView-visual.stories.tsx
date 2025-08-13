@@ -32,13 +32,11 @@ const metadataQuery = {
     fields: [
         // Default to returning all fields in the metadata template schema, and name as a standalone (non-metadata) field
         ...mockSchema.fields.map(field => `${metadataFieldNamePrefix}.${field.key}`),
-        'name',
     ],
 };
 
 // Used for metadata view v1
 const fieldsToShow = [
-    { key: `${metadataFieldNamePrefix}.name`, canEdit: false, displayName: 'Alias' },
     { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
     { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
     { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
@@ -46,15 +44,6 @@ const fieldsToShow = [
 
 // Used for metadata view v2
 const columns = [
-    {
-        // Always include the name column
-        textValue: 'Name',
-        id: 'name',
-        type: 'string',
-        allowsSorting: true,
-        minWidth: 150,
-        maxWidth: 150,
-    },
     ...mockSchema.fields.map(field => ({
         textValue: field.displayName,
         id: `${metadataFieldNamePrefix}.${field.key}`,
@@ -167,9 +156,9 @@ export const metadataViewV2WithCustomActions: Story = {
 
 const initialFilterActionBarProps = {
     initialFilterValues: {
-        'industry-filter': { value: ['Legal'] },
+        industry: { value: ['Legal'] },
         'mimetype-filter': { value: ['boxnoteType', 'documentType', 'threedType'] },
-        'role-filter': { value: ['Developer', 'Business Owner', 'Marketing'] },
+        role: { value: ['Developer', 'Business Owner', 'Marketing'] },
     },
 };
 
