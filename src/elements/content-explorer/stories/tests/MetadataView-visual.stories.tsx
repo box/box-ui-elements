@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
-import { expect, waitFor } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
+import { Sign } from '@box/blueprint-web-assets/icons/Line';
+import noop from 'lodash/noop';
 
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
@@ -90,6 +93,46 @@ export const metadataViewV2: Story = {
     args: metadataViewV2ElementProps,
 };
 
+export const metadataViewV2WithCustomActions: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+            itemActionMenuProps: {
+                actions: [
+                    {
+                        label: 'Download',
+                        onClick: noop,
+                        icon: Download,
+                    },
+                ],
+                subMenuTrigger: {
+                    label: 'Sign',
+                    icon: Sign,
+                },
+                subMenuActions: [
+                    {
+                        label: 'Request Signature',
+                        onClick: noop,
+                        icon: SignMeOthers,
+                    },
+                ],
+            },
+        },
+    },
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const ellipsesButton = within(firstRow).getByRole('button', { name: 'Action menu' });
+        userEvent.click(ellipsesButton);
+    },
+};
+
 const initialFilterActionBarProps = {
     initialFilterValues: {
         'industry-filter': { value: ['Legal'] },
@@ -111,7 +154,6 @@ export const metadataViewV2WithInitialFilterValues: Story = {
         await waitFor(() => {
             expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
         });
-
         // Chips should reflect initial counts
         const industryChip = canvas.getByRole('button', { name: /Industry/i });
         await waitFor(() => expect(industryChip).toHaveTextContent(/\(1\)/));
