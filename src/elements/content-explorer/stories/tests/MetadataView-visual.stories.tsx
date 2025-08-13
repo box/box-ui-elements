@@ -1,6 +1,7 @@
-import React from 'react';
-import { http, HttpResponse } from 'msw';
 import type { Meta, StoryObj } from '@storybook/react';
+import { http, HttpResponse } from 'msw';
+import { expect, waitFor } from 'storybook/test';
+
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
@@ -71,26 +72,55 @@ export const metadataView: Story = {
     },
 };
 
-export const metadataViewV2: Story = {
-    args: {
-        metadataViewProps: {
-            columns,
-        },
-        metadataQuery,
-        fieldsToShow,
-        defaultView,
-        features: {
-            contentExplorer: {
-                metadataViewV2: true,
-            },
+const metadataViewV2ElementProps = {
+    metadataViewProps: {
+        columns,
+    },
+    metadataQuery,
+    fieldsToShow,
+    defaultView,
+    features: {
+        contentExplorer: {
+            metadataViewV2: true,
         },
     },
-    render: args => {
-        return (
-            <div style={{ padding: '50px' }}>
-                <ContentExplorer {...args} />
-            </div>
-        );
+};
+
+export const metadataViewV2: Story = {
+    args: metadataViewV2ElementProps,
+};
+
+const initialFilterActionBarProps = {
+    initialFilterValues: {
+        'industry-filter': { value: ['Legal'] },
+        'mimetype-filter': { value: ['boxnoteType', 'documentType', 'threedType'] },
+        'role-filter': { value: ['Developer', 'Business Owner', 'Marketing'] },
+    },
+};
+
+export const metadataViewV2WithInitialFilterValues: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            actionBarProps: initialFilterActionBarProps,
+        },
+    },
+    play: async ({ canvas }) => {
+        // Wait for content to render
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Chips should reflect initial counts
+        const industryChip = canvas.getByRole('button', { name: /Industry/i });
+        await waitFor(() => expect(industryChip).toHaveTextContent(/\(1\)/));
+
+        const contactRoleChip = canvas.getByRole('button', { name: /Contact Role/i });
+        await waitFor(() => expect(contactRoleChip).toHaveTextContent(/\(3\)/));
+
+        const fileTypeChip = canvas.getByRole('button', { name: /Box Note/i });
+        await waitFor(() => expect(fileTypeChip).toHaveTextContent(/\+2/));
     },
 };
 
