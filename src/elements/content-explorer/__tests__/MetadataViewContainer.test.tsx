@@ -1,9 +1,9 @@
 import * as React from 'react';
-import userEvent from '@testing-library/user-event';
-import { render, screen, waitFor, within } from '../../../test-utils/testing-library';
-import MetadataViewContainer, { MetadataViewContainerProps } from '../MetadataViewContainer';
+
 import type { Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
+import { render, screen, userEvent, waitFor, within } from '../../../test-utils/testing-library';
+import MetadataViewContainer, { MetadataViewContainerProps } from '../MetadataViewContainer';
 
 describe('elements/content-explorer/MetadataViewContainer', () => {
     const mockItems = [
@@ -19,7 +19,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             type: 'string',
         },
         {
-            id: 'field1',
+            id: 'field2',
             key: 'industry',
             displayName: 'Industry',
             type: 'enum',
@@ -103,14 +103,11 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
 
         renderComponent({ metadataTemplate: template, actionBarProps: { onFilterSubmit } });
 
-        const roleChip = screen.getByRole('button', { name: /Contact Role/ });
-        await userEvent.click(roleChip);
-        let menu = screen.getByRole('menu');
-        await userEvent.click(within(menu).getByRole('menuitemcheckbox', { name: 'Developer' }));
+        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
+        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Developer' }));
         // Re-open the chip to select a second value (menu closes after submit)
-        await userEvent.click(roleChip);
-        menu = screen.getByRole('menu');
-        await userEvent.click(within(menu).getByRole('menuitemcheckbox', { name: 'Marketing' }));
+        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
+        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Marketing' }));
 
         await waitFor(() => expect(onFilterSubmit).toHaveBeenCalledTimes(2));
         const firstCall = onFilterSubmit.mock.calls[0][0];

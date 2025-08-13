@@ -1,27 +1,55 @@
 import * as React from 'react';
+import type { EnumType, FloatType, MetadataFormFieldValue, RangeType } from '@box/metadata-filter';
 import { MetadataView, type MetadataViewProps } from '@box/metadata-view';
-import { FloatType, MetadataFormFieldValue, RangeType } from '@box/metadata-filter';
 
-import type { MetadataTemplate } from '../../common/types/metadata';
 import type { Collection } from '../../common/types/core';
+import type { MetadataTemplate } from '../../common/types/metadata';
 
-// Public-friendly metadata value shape (array value for enum type, range/float objects stay the same)
-export type MetadataFormFieldValuePublic = string[] | RangeType | FloatType;
+// Public-friendly version of MetadataFormFieldValue from @box/metadata-filter
+// (string[] for enum type, range/float objects stay the same)
+type EnumToStringArray<T> = T extends EnumType ? string[] : T;
+type ExternalMetadataFormFieldValue = EnumToStringArray<MetadataFormFieldValue>;
 
-export type FilterValuesPublic = Record<
+type ExternalFilterValues = Record<
     string,
     {
-        value: MetadataFormFieldValuePublic;
+        value: ExternalMetadataFormFieldValue;
     }
 >;
 
-export type ActionBarProps = Omit<
+type ActionBarProps = Omit<
     MetadataViewProps['actionBarProps'],
     'initialFilterValues' | 'onFilterSubmit' | 'filterGroups'
 > & {
-    initialFilterValues?: FilterValuesPublic;
-    onFilterSubmit?: (filterValues: FilterValuesPublic) => void;
+    initialFilterValues?: ExternalFilterValues;
+    onFilterSubmit?: (filterValues: ExternalFilterValues) => void;
 };
+
+function transformInitialFilterValuesToInternal(
+    publicValues?: ExternalFilterValues,
+): Record<string, { value: MetadataFormFieldValue }> | undefined {
+    if (!publicValues) return undefined;
+
+    return Object.entries(publicValues).reduce<Record<string, { value: MetadataFormFieldValue }>>(
+        (acc, [key, { value }]) => {
+            acc[key] = Array.isArray(value) ? { value: { enum: value } } : { value };
+            return acc;
+        },
+        {},
+    );
+}
+
+function transformInternalFieldsToPublic(
+    fields: Record<string, { value: MetadataFormFieldValue }>,
+): ExternalFilterValues {
+    return Object.entries(fields).reduce<ExternalFilterValues>((acc, [key, { value }]) => {
+        acc[key] =
+            'enum' in value && Array.isArray(value.enum)
+                ? { value: value.enum }
+                : { value: value as RangeType | FloatType };
+        return acc;
+    }, {});
+}
 
 export interface MetadataViewContainerProps extends Omit<MetadataViewProps, 'items' | 'actionBarProps'> {
     actionBarProps?: ActionBarProps;
@@ -37,6 +65,7 @@ const MetadataViewContainer = ({
     ...rest
 }: MetadataViewContainerProps) => {
     const { items = [] } = currentCollection;
+    const { initialFilterValues: initialFilterValuesProp, onFilterSubmit: onFilterSubmitProp } = actionBarProps ?? {};
 
     const filterGroups = React.useMemo(
         () => [
@@ -58,41 +87,19 @@ const MetadataViewContainer = ({
     );
 
     // Transform initial filter values to internal field format
-    const initialFilterValues = React.useMemo(() => {
-        const filterValues = actionBarProps?.initialFilterValues;
-        if (!filterValues) return undefined;
-
-        const transformed: Record<string, { value: MetadataFormFieldValue }> = {};
-        Object.entries(filterValues).forEach(([key, filterValue]) => {
-            const { value } = filterValue;
-            if (Array.isArray(value)) {
-                // Convert customer-friendly array to internal enum shape
-                transformed[key] = { value: { enum: value } };
-            } else {
-                // Keep range/float as-is
-                transformed[key] = { value };
-            }
-        });
-        return transformed;
-    }, [actionBarProps?.initialFilterValues]);
+    const initialFilterValues = React.useMemo(
+        () => transformInitialFilterValuesToInternal(initialFilterValuesProp),
+        [initialFilterValuesProp],
+    );
 
     // Transform field values to public-friendly format
     const onFilterSubmit = React.useCallback(
         (fields: Record<string, { value: MetadataFormFieldValue }>) => {
-            if (!actionBarProps?.onFilterSubmit) return;
-
-            const transformed: Record<string, { value: MetadataFormFieldValuePublic }> = {};
-            Object.entries(fields).forEach(([key, filterValue]) => {
-                const { value } = filterValue;
-                if (value && typeof value === 'object' && 'enum' in value && Array.isArray(value.enum)) {
-                    transformed[key] = { value: value.enum };
-                } else {
-                    transformed[key] = { value: value as RangeType | FloatType };
-                }
-            });
-            actionBarProps.onFilterSubmit(transformed);
+            if (!onFilterSubmitProp) return;
+            const transformed = transformInternalFieldsToPublic(fields);
+            onFilterSubmitProp(transformed);
         },
-        [actionBarProps],
+        [onFilterSubmitProp],
     );
 
     const transformedActionBarProps = React.useMemo(() => {

@@ -150,19 +150,16 @@ export const metadataViewV2WithInitialFilterValues: Story = {
         },
     },
     play: async ({ canvas }) => {
-        // Wait for content to render
+        // Wait for chips to update with initial values
         await waitFor(() => {
-            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /Industry/i })).toHaveTextContent(/\(1\)/);
         });
-        // Chips should reflect initial counts
-        const industryChip = canvas.getByRole('button', { name: /Industry/i });
-        await waitFor(() => expect(industryChip).toHaveTextContent(/\(1\)/));
-
+        // Other chips should reflect initialized values
         const contactRoleChip = canvas.getByRole('button', { name: /Contact Role/i });
-        await waitFor(() => expect(contactRoleChip).toHaveTextContent(/\(3\)/));
+        expect(contactRoleChip).toHaveTextContent(/\(3\)/);
 
         const fileTypeChip = canvas.getByRole('button', { name: /Box Note/i });
-        await waitFor(() => expect(fileTypeChip).toHaveTextContent(/\+2/));
+        expect(fileTypeChip).toHaveTextContent(/\+2/);
     },
 };
 
