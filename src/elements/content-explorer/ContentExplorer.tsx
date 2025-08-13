@@ -94,7 +94,7 @@ import type {
 import type { BulkItemAction } from '../common/sub-header/BulkItemActionMenu';
 import type { ContentPreviewProps } from '../content-preview';
 import type { ContentUploaderProps } from '../content-uploader';
-import type { MetadataViewContainerProps } from './MetadataViewContainer';
+import type { ExternalFilterValues, MetadataViewContainerProps } from './MetadataViewContainer';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -137,7 +137,10 @@ export interface ContentExplorerProps {
     measureRef?: (ref: Element | null) => void;
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
-    metadataViewProps?: Omit<MetadataViewContainerProps, 'hasError' | 'currentCollection'>;
+    metadataViewProps?: Omit<
+        MetadataViewContainerProps,
+        'hasError' | 'currentCollection' | 'metadataTemplate' | 'onMetadataFilter'
+    >;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -180,6 +183,7 @@ type State = {
     isUploadModalOpen: boolean;
     markers: Array<string | null | undefined>;
     metadataTemplate: MetadataTemplate;
+    metadataFilters: ExternalFilterValues;
     rootName: string;
     searchQuery: string;
     selected?: BoxItem;
@@ -210,7 +214,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     store: LocalStore = new LocalStore();
 
-    metadataQueryAPIHelper: MetadataQueryAPIHelper;
+    metadataQueryAPIHelper: MetadataQueryAPIHelper | MetadataQueryAPIHelperV2;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -305,6 +309,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen: false,
             isUploadModalOpen: false,
             markers: [],
+            metadataFilters: {},
             metadataTemplate: {},
             rootName: '',
             selectedItemIds: new Set(),
@@ -388,6 +393,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      *
      * @private
      * @param {Object} metadataQueryCollection - Metadata query response collection
+     * @param {Object} metadataTemplate - Metadata template object
      * @return {void}
      */
     showMetadataQueryResultsSuccessCallback = (
@@ -439,7 +445,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      */
     showMetadataQueryResults() {
         const { features, metadataQuery = {} }: ContentExplorerProps = this.props;
-        const { currentPageNumber, markers, sortBy, sortDirection }: State = this.state;
+        const { currentPageNumber, markers, metadataFilters, sortBy, sortDirection }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 
         if (currentPageNumber === 0) {
@@ -474,6 +480,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             ];
 
             this.metadataQueryAPIHelper = new MetadataQueryAPIHelperV2(this.api);
+            this.metadataQueryAPIHelper.fetchMetadataQueryResults(
+                metadataQueryClone,
+                this.showMetadataQueryResultsSuccessCallback,
+                this.errorCallback,
+                metadataFilters,
+            );
         } else {
             metadataQueryClone.order_by = [
                 {
@@ -482,13 +494,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 },
             ];
             this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+            this.metadataQueryAPIHelper.fetchMetadataQueryResults(
+                metadataQueryClone,
+                this.showMetadataQueryResultsSuccessCallback,
+                this.errorCallback,
+            );
         }
-
-        this.metadataQueryAPIHelper.fetchMetadataQueryResults(
-            metadataQueryClone,
-            this.showMetadataQueryResultsSuccessCallback,
-            this.errorCallback,
-        );
     }
 
     /**
@@ -1690,6 +1701,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         this.setState({ isMetadataSidePanelOpen: false });
     };
 
+    filterMetadata = (fields: ExternalFilterValues) => {
+        this.setState({ metadataFilters: fields }, this.refreshCollection);
+    };
+
     /**
      * Renders the file picker
      *
@@ -1843,6 +1858,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     onItemRename={this.rename}
                                     onItemSelect={this.select}
                                     onItemShare={this.share}
+                                    onMetadataFilter={this.filterMetadata}
                                     onMetadataUpdate={this.updateMetadata}
                                     onSortChange={this.sort}
                                     portalElement={this.rootElement}

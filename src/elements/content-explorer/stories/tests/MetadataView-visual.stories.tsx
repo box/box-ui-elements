@@ -166,9 +166,9 @@ export const metadataViewV2WithCustomActions: Story = {
 
 const initialFilterActionBarProps = {
     initialFilterValues: {
-        'industry-filter': { value: ['Legal'] },
+        industry: { value: ['Legal'] },
         'mimetype-filter': { value: ['boxnoteType', 'documentType', 'threedType'] },
-        'role-filter': { value: ['Developer', 'Business Owner', 'Marketing'] },
+        role: { value: ['Developer', 'Business Owner', 'Marketing'] },
     },
 };
 
