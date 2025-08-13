@@ -8,7 +8,7 @@ import type { Collection } from '../../common/types/core';
 // Public-friendly metadata value shape (array value for enum type, range/float objects stay the same)
 export type MetadataFormFieldValuePublic = string[] | RangeType | FloatType;
 
-type FilterValuesPublic = Record<
+export type FilterValuesPublic = Record<
     string,
     {
         value: MetadataFormFieldValuePublic;
@@ -64,13 +64,13 @@ const MetadataViewContainer = ({
 
         const transformed: Record<string, { value: MetadataFormFieldValue }> = {};
         Object.entries(filterValues).forEach(([key, filterValue]) => {
-            const { value } = filterValue as { value: unknown };
+            const { value } = filterValue;
             if (Array.isArray(value)) {
                 // Convert customer-friendly array to internal enum shape
-                transformed[key] = { value: { enum: value } as unknown as MetadataFormFieldValue };
+                transformed[key] = { value: { enum: value } };
             } else {
                 // Keep range/float as-is
-                transformed[key] = filterValue as unknown as { value: MetadataFormFieldValue };
+                transformed[key] = { value };
             }
         });
         return transformed;
@@ -83,11 +83,11 @@ const MetadataViewContainer = ({
 
             const transformed: Record<string, { value: MetadataFormFieldValuePublic }> = {};
             Object.entries(fields).forEach(([key, filterValue]) => {
-                const { value } = filterValue as { value: MetadataFormFieldValuePublic };
-                if (value && 'enum' in value && Array.isArray(value.enum)) {
+                const { value } = filterValue;
+                if (value && typeof value === 'object' && 'enum' in value && Array.isArray(value.enum)) {
                     transformed[key] = { value: value.enum };
                 } else {
-                    transformed[key] = { value };
+                    transformed[key] = { value: value as RangeType | FloatType };
                 }
             });
             actionBarProps.onFilterSubmit(transformed);
