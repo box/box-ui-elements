@@ -45,7 +45,6 @@ type Props = {
     className?: string,
     contacts: SelectorItems<>,
     contactsLoaded?: boolean,
-    customStyleMap?: Object,
     description?: React.Node,
     editorState: EditorState,
     error?: ?Object,
@@ -239,7 +238,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             className,
             contacts,
             contactsLoaded,
-            customStyleMap,
             editorState,
             error,
             hideLabel,
@@ -269,7 +267,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     onSelect={this.handleContactSelected}
                     selector={
                         <DraftJSEditor
-                            customStyleMap={customStyleMap}
                             editorState={editorState}
                             error={error}
                             hideLabel={hideLabel}
