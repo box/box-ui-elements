@@ -131,7 +131,7 @@ function getFormattedCommentText(editorState: EditorState): { hasMention: boolea
                 // Otherwise append its text to the block result as-is
                 if (entityKey) {
                     const entity = contentState.getEntity(entityKey);
-                    const isTimestamp = entity.getType() === 'UNEDITABLE_TEXT';
+                    const isTimestamp = entity.getType() === 'UNEDITABLE_TIMESTAMP_TEXT';
                     if (!isTimestamp) {
                         const stringToAdd = `@[${entity.getData().id}:${text.substring(start + 1, end)}]`;
                         blockMapStringArr.push(stringToAdd);

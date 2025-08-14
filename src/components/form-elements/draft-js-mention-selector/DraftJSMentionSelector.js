@@ -35,7 +35,7 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
 const timestampStrategy = (contentBlock, callback, contentState) => {
     contentBlock.findEntityRanges(character => {
         const entityKey = character.getEntity();
-        const ret = entityKey !== null && contentState.getEntity(entityKey).getType() === 'UNEDITABLE_TEXT';
+        const ret = entityKey !== null && contentState.getEntity(entityKey).getType() === 'UNEDITABLE_TIMESTAMP_TEXT';
         return ret;
     }, callback);
 };
@@ -190,7 +190,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         if (!timeStampPrepended || forceOn) {
             // Create a new entity for the timestamp. It is immutable so it will not be editable.
             const timeStampEntity = currentContent.createEntity(
-                'UNEDITABLE_TEXT', // Entity type
+                'UNEDITABLE_TIMESTAMP_TEXT', // Entity type
                 'IMMUTABLE',
                 { timestamp },
             );
@@ -337,7 +337,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             const char = characterList.get(i);
             if (char && char.getEntity()) {
                 const entity = currentContent.getEntity(char.getEntity());
-                if (entity.getType() === 'UNEDITABLE_TEXT') {
+                if (entity.getType() === 'UNEDITABLE_TIMESTAMP_TEXT') {
                     timestampLength = i + 1; // Include the space after timestamp
                     break;
                 }

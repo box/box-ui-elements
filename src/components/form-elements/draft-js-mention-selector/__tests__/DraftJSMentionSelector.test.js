@@ -523,7 +523,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toEqual('this is coool!!!');
         });
 
-        test('should add an UNEDITABLE_TEXT entity to the editor state when the toggle is clicked on', () => {
+        test('should add an UNEDITABLE_TIMESTAMP_TEXT entity to the editor state when the toggle is clicked on', () => {
             const wrapper = getTimeStampedEnableComponent();
             const instance = wrapper.instance();
             instance.setState({
@@ -532,11 +532,11 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             const rawContentState = convertToRaw(instance.state.internalEditorState.getCurrentContent());
             const entity = rawContentState.entityMap[0];
-            expect(entity.type).toEqual('UNEDITABLE_TEXT');
+            expect(entity.type).toEqual('UNEDITABLE_TIMESTAMP_TEXT');
             expect(entity.data.timestamp).toEqual('00:01:10');
         });
 
-        test('should remove the UNEDITABLE_TEXT entity from the editor state when the toggle is clicked off', () => {
+        test('should remove the UNEDITABLE_TIMESTAMP_TEXT entity from the editor state when the toggle is clicked off', () => {
             const wrapper = getTimeStampedEnableComponent();
             const instance = wrapper.instance();
             instance.setState({
@@ -548,7 +548,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(rawContentState.entityMap).toEqual({});
         });
 
-        test('decorator should recognize the UNEDITABLE_TEXT entity', () => {
+        test('decorator should recognize the UNEDITABLE_TIMESTAMP_TEXT entity', () => {
             const wrapper = getTimeStampedEnableComponent();
             const instance = wrapper.instance();
             expect(instance.compositeDecorator).toBeDefined();
@@ -564,7 +564,10 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             firstBlock.findEntityRanges(
                 character => {
                     const entityKey = character.getEntity();
-                    if (entityKey !== null && contentState.getEntity(entityKey).getType() === 'UNEDITABLE_TEXT') {
+                    if (
+                        entityKey !== null &&
+                        contentState.getEntity(entityKey).getType() === 'UNEDITABLE_TIMESTAMP_TEXT'
+                    ) {
                         entityFound = true;
                         return true;
                     }
