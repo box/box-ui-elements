@@ -3,7 +3,7 @@ import * as React from 'react';
 import type { Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
 import { render, screen, userEvent, waitFor, within } from '../../../test-utils/testing-library';
-import MetadataViewContainer, { MetadataViewContainerProps } from '../MetadataViewContainer';
+import MetadataViewContainer, { type MetadataViewContainerProps } from '../MetadataViewContainer';
 
 describe('elements/content-explorer/MetadataViewContainer', () => {
     const mockItems = [
