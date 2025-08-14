@@ -1419,24 +1419,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@4.61.5":
-  version "4.61.5"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.61.5.tgz#7e2813fc39f8940f63881ed24df1f8509f340c27"
-  integrity sha512-BFQ8ek2y/tPVWuq1tDxPJfuFgLQsYlGxtas5k/bKHDK5XBQrfktPqzusqjif9doVERhB/pKWZ34XMNmjVtzHzA==
+"@box/blueprint-web-assets@^4.63.0", "@box/blueprint-web-assets@^4.63.10":
+  version "4.63.10"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.63.10.tgz#90078c719717e4d4e08027f82cb3b3e459080b3d"
+  integrity sha512-S792QbT3jJJ6M0jY2OJu95uwhr9ZuK++YjSbR56eAjMoIz8LT+Fn/hyDz6Hc5VTQq9D3Q0wXCw13cdOOTQPR4A==
 
-"@box/blueprint-web-assets@^4.60.0":
-  version "4.62.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.62.1.tgz#76e870dfeadf7d985c275c2b1371a3c5af60f0ad"
-  integrity sha512-ftIs27yZhIXsVt/88BR5+j4gxe01/td5o5qDTZpUrvUL1Kr1DTGP71xkZx7Jaor0tazcWZUfibmEfN97KJ2Yyw==
-
-"@box/blueprint-web@12.43.0":
-  version "12.43.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.43.0.tgz#9febd397c1d5d4cfee936dd070a50a0b352eadcc"
-  integrity sha512-PQ3eAwhE+J2XalLIwQ67TKC1wwpszOM+MYYRzv3Xs/occm0uCeS5ry9F8tsA7KTjHsGSlbR4lIlmycKOBIwv5w==
+"@box/blueprint-web@^12.57.1":
+  version "12.57.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.57.1.tgz#4a927740dbdbdddcd68fe1d99f51c1dc573f8f69"
+  integrity sha512-PwXqUOKcu9VspYo0pAc2VyPUhID/Xs8UOiFfAHpjVrcXPwdWDFqiBQFxA9PdLNWqSPcbMm8jCKHt0C+Dpu58Mw==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.60.0"
+    "@box/blueprint-web-assets" "^4.63.0"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1502,10 +1497,10 @@
     rimraf "^3.0.0"
     semver "^7.4.0"
 
-"@box/item-icon@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-0.17.0.tgz#2e92c62046ce0d35c6d510ae1f2d2a36b31d72ad"
-  integrity sha512-Pj4XUYMnMfjZ72ZPMxmbt//juidqArdbfyxxbXEI+yKH8hsO4jr6Z2RGAUmSepweWkxYHLm5gDzTEJwBC0csHQ==
+"@box/item-icon@^0.17.13":
+  version "0.17.13"
+  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-0.17.13.tgz#dec3a1a9fe68d0ad037604c329348fd06767dd63"
+  integrity sha512-W17XabwdraJzHNjJu0Gx+6robvQnpkM2xl0tT+8VRucI9w5ZKs7UPNpJRU3UkD3ljQ7rhrJveOmhBiWhxZi/Yg==
 
 "@box/languages@^1.0.0":
   version "1.1.2"
