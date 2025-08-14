@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
+// @flow
 export { default as withRouterAndRef } from './withRouterAndRef';
+export { default as withRouterIfEnabled } from './withRouterIfEnabled';
