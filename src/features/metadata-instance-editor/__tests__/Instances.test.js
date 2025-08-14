@@ -182,50 +182,6 @@ const editor2 = {
 // State of editors from server
 const editorsOnServer = [editor1, editor2];
 
-const testInstanceFields = [
-    {
-        id: 'field1',
-        type: 'string',
-        key: 'stringfield',
-        displayName: 'String Field',
-        description: 'example of a string field',
-    },
-];
-
-const getInstancesBaseProps = (props = {}) => ({
-    editors: [
-        {
-            instance: {
-                id: 'test-instance-1',
-                canEdit: true,
-                data: { stringfield: 'value1' },
-                isDirty: false,
-                hasError: false,
-                isCascadingPolicyApplicable: true,
-                cascadePolicy: {
-                    id: 'policy-1',
-                    canEdit: true,
-                    isEnabled: true,
-                    scope: 'enterprise_123',
-                    cascadePolicyType: 'regular',
-                },
-            },
-            template: {
-                id: 'template-1',
-                displayName: 'Test Template Editor',
-                fields: testInstanceFields,
-                templateKey: 'editorTemplateKey',
-            },
-        },
-    ],
-    onSave: jest.fn(),
-    onModification: jest.fn(),
-    onRemove: jest.fn(),
-    canUseAIFolderExtraction: true,
-    isCascadingPolicyApplicable: true,
-    ...props,
-});
-
 describe('features/metadata-editor-editor/Instances', () => {
     test('should correctly render editors', () => {
         const wrapper = shallow(<Instances editors={editorsOnServer} />);

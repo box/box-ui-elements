@@ -533,3 +533,42 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
         expect(instances.prop('selectedTemplateKey')).toBe(selectedTemplateKey);
     });
 });
+
+describe('MetadataInstanceEditor agent selector', () => {
+    test('should show "Enhanced" in the combobox when the second option is selected', async () => {
+        const props = getMetadataEditorBaseProps({
+            canUseAIFolderExtraction: true,
+        });
+        props.editors[0].instance.cascadePolicy.cascadePolicyType = 'ai_extract';
+        props.editors[0].instance.cascadePolicy.id = null;
+
+        render(<MetadataInstanceEditor {...props} />);
+
+        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' }, { timeout: 3000 });
+        await userEvent.click(editButton);
+
+        // Click Enable Cascade Policy
+        const cascadeToggle = screen.getByRole('switch', { name: 'Enable Cascade Policy' });
+        expect(cascadeToggle).not.toBeChecked();
+        await userEvent.click(cascadeToggle);
+        expect(cascadeToggle).toBeChecked();
+
+        // Find the combobox and open it
+        const comboBox = screen.getByRole('combobox', { name: 'Standard' });
+        expect(comboBox).toBeInTheDocument();
+
+        // Open the combobox options (simulate click)
+        expect(comboBox).not.toHaveAttribute('disabled');
+        expect(comboBox).toBeVisible();
+        await userEvent.click(comboBox);
+
+        // Find the 'Enhanced' option and select it
+        const enhancedOption = await screen.findByRole('option', { name: 'Enhanced' });
+        expect(enhancedOption).not.toHaveAttribute('disabled');
+        expect(enhancedOption).toBeVisible();
+        await userEvent.click(enhancedOption);
+
+        // The combobox should now show 'Enhanced'
+        expect(screen.getByRole('combobox', { name: 'Enhanced' })).toBeInTheDocument();
+    }, 15000); // Increase timeout to 15 seconds
+});
