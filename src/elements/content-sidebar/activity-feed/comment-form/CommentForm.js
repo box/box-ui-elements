@@ -152,7 +152,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
-            'bcs-time-stamped-comments': allowVideoTimeStamps,
         });
 
         return (
