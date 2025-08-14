@@ -1,5 +1,7 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import { MetadataFieldType } from '@box/metadata-view';
+
 import { render, screen, waitFor, within } from '../../../test-utils/testing-library';
 import { ContentExplorerComponent as ContentExplorer, ContentExplorerProps } from '../ContentExplorer';
 import { mockRecentItems, mockRootFolder, mockRootFolderSharedLink } from '../../common/__mocks__/mockRootFolder';
@@ -77,7 +79,13 @@ describe('elements/content-explorer/ContentExplorer', () => {
     const renderComponent = ({ features, ...props }: Partial<ContentExplorerProps> = {}) => {
         return render(
             <FeatureProvider features={features}>
-                <ContentExplorer defaultView="list" rootFolderId="69083462919" token="token" {...props} />
+                <ContentExplorer
+                    defaultView="list"
+                    features={features}
+                    rootFolderId="69083462919"
+                    token="token"
+                    {...props}
+                />
             </FeatureProvider>,
         );
     };
@@ -414,31 +422,84 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(screen.getByText('Technology')).toBeInTheDocument();
             expect(screen.getByText('November 16, 2023')).toBeInTheDocument();
         });
+
         describe('Metadata View V2', () => {
-            test('should render metadata view button', async () => {
-                renderComponent({
-                    defaultView: 'metadata',
-                    features: {
-                        contentExplorer: {
-                            metadataViewV2: true,
-                        },
+            const { scope: templateScope, templateKey } = mockSchema;
+            const metadataScopeAndKey = `${templateScope}.${templateKey}`;
+            const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
+            const metadataQuery = {
+                from: metadataScopeAndKey,
+                ancestor_folder_id: '0',
+                sort_by: [
+                    {
+                        field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`, // Default to sorting by the first field in the schema
+                        direction: 'asc',
                     },
-                });
+                ],
+                fields: [
+                    // Default to returning all fields in the metadata template schema, and name as a standalone (non-metadata) field
+                    ...mockSchema.fields.map(field => `${metadataFieldNamePrefix}.${field.key}`),
+                    'name',
+                ],
+            };
+            const fieldsToShow = [
+                { key: `${metadataFieldNamePrefix}.name`, canEdit: false, displayName: 'Alias' },
+                { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
+                { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
+                { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
+            ];
+            const columns = [
+                {
+                    // Always include the name column
+                    textValue: 'Name',
+                    id: 'name',
+                    type: 'string' as const,
+                    allowSorting: true,
+                    minWidth: 150,
+                    maxWidth: 150,
+                },
+                ...mockSchema.fields.map(field => ({
+                    textValue: field.displayName,
+                    id: `${metadataFieldNamePrefix}.${field.key}`,
+                    type: field.type as MetadataFieldType,
+                    allowSorting: true,
+                    minWidth: 150,
+                    maxWidth: 150,
+                })),
+            ];
+            const defaultView = 'metadata';
+            const metadataViewV2ElementProps = {
+                metadataViewProps: {
+                    columns,
+                    metadataTemplate: mockSchema,
+                    tableProps: {
+                        isSelectAllEnabled: true,
+                    },
+                },
+                metadataQuery,
+                fieldsToShow,
+                defaultView,
+                features: {
+                    contentExplorer: {
+                        metadataViewV2: true,
+                    },
+                },
+            };
 
-                // two separate promises need to be resolved before the component is ready
-                await waitFor(() => {
-                    expect(screen.getByText('Please wait while the items load...')).toBeInTheDocument();
-                });
-
+            test('should render metadata view button', async () => {
+                renderComponent(metadataViewV2ElementProps);
                 await waitFor(() => {
                     expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
                 });
+                expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).toBeInTheDocument();
 
-                expect(screen.queryByRole('searchbox', { name: 'Search files and folders' })).not.toBeInTheDocument();
-                expect(screen.queryByRole('button', { name: 'Preview Test Folder' })).not.toBeInTheDocument();
-                expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).not.toBeInTheDocument();
-                expect(screen.queryByRole('button', { name: 'Sort' })).not.toBeInTheDocument();
-                expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
+                await waitFor(() => {
+                    expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+                });
+
+                const selectAllCheckbox = screen.getByLabelText('Select all');
+                await userEvent.click(selectAllCheckbox);
+
                 expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
             });
         });

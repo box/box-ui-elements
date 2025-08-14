@@ -24,6 +24,7 @@ import ThemingStyles from '../common/theming';
 import API from '../../api';
 import MetadataQueryAPIHelperV2 from './MetadataQueryAPIHelper';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
+import MetadataSidePanel from './MetadataSidePanel';
 import Footer from './Footer';
 import PreviewDialog from '../common/preview-dialog/PreviewDialog';
 import ShareDialog from './ShareDialog';
@@ -169,6 +170,7 @@ type State = {
     isCreateFolderModalOpen: boolean;
     isDeleteModalOpen: boolean;
     isLoading: boolean;
+    isMetadataSidePanelOpen: boolean;
     isPreviewModalOpen: boolean;
     isRenameModalOpen: boolean;
     isShareModalOpen: boolean;
@@ -294,6 +296,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
+            isMetadataSidePanelOpen: false,
             isPreviewModalOpen: false,
             isRenameModalOpen: false,
             isShareModalOpen: false,
@@ -1543,7 +1546,11 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 selectedKeys: selectedItemIds,
                 onSelectionChange: (ids: Selection) => {
                     onSelectionChange?.(ids);
-                    this.setState({ selectedItemIds: ids });
+                    const isSelectionEmpty = ids !== 'all' && ids.size === 0;
+                    this.setState({
+                        selectedItemIds: ids,
+                        ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
+                    });
                 },
             },
         };
@@ -1625,7 +1632,32 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     };
 
     clearSelectedItemIds = () => {
-        this.setState({ selectedItemIds: new Set() });
+        this.setState({
+            selectedItemIds: new Set(),
+            isMetadataSidePanelOpen: false,
+        });
+    };
+
+    /**
+     * Toggle metadata side panel visibility
+     *
+     * @private
+     * @return {void}
+     */
+    toggleMetadataSidePanel = () => {
+        this.setState(prevState => ({
+            isMetadataSidePanelOpen: !prevState.isMetadataSidePanelOpen,
+        }));
+    };
+
+    /**
+     * Close metadata side panel
+     *
+     * @private
+     * @return {void}
+     */
+    closeMetadataSidePanel = () => {
+        this.setState({ isMetadataSidePanelOpen: false });
     };
 
     /**
@@ -1725,6 +1757,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
         const isDefaultViewMetadata: boolean = defaultView === DEFAULT_VIEW_METADATA;
+        const isMetadataViewV2Feature = isFeatureEnabled(features, 'contentExplorer.metadataViewV2');
         const isErrorView: boolean = view === VIEW_ERROR;
 
         const viewMode = this.getViewMode();
@@ -1743,76 +1776,96 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                     <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                            {!isDefaultViewMetadata && <Header view={view} logoUrl={logoUrl} onSearch={this.search} />}
+                            <div className="bce-container">
+                                <div className="bce-main">
+                                    {!isDefaultViewMetadata && (
+                                        <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
+                                    )}
 
-                            <SubHeader
-                                view={view}
-                                viewMode={viewMode}
-                                rootId={rootFolderId}
-                                isSmall={isSmall}
-                                rootName={rootName}
-                                currentCollection={currentCollection}
-                                canUpload={allowUpload}
-                                canCreateNewFolder={allowCreate}
-                                gridColumnCount={gridColumnCount}
-                                gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
-                                gridMinColumns={GRID_VIEW_MIN_COLUMNS}
-                                maxGridColumnCountForWidth={maxGridColumnCount}
-                                onUpload={this.upload}
-                                onClearSelectedItemIds={this.clearSelectedItemIds}
-                                onCreate={this.createFolder}
-                                onGridViewSliderChange={this.onGridViewSliderChange}
-                                onItemClick={this.fetchFolder}
-                                onSortChange={this.sort}
-                                onViewModeChange={this.changeViewMode}
-                                portalElement={this.rootElement}
-                                selectedItemIds={this.state.selectedItemIds}
-                                title={title}
-                            />
-
-                            <Content
-                                canDelete={canDelete}
-                                canDownload={canDownload}
-                                canPreview={canPreview}
-                                canRename={canRename}
-                                canShare={canShare}
-                                currentCollection={currentCollection}
-                                features={features}
-                                gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
-                                isMedium={isMedium}
-                                isSmall={isSmall}
-                                isTouch={isTouch}
-                                itemActions={itemActions}
-                                fieldsToShow={fieldsToShow}
-                                metadataTemplate={metadataTemplate}
-                                metadataViewProps={metadataViewProps}
-                                onItemClick={this.onItemClick}
-                                onItemDelete={this.delete}
-                                onItemDownload={this.download}
-                                onItemPreview={this.preview}
-                                onItemRename={this.rename}
-                                onItemSelect={this.select}
-                                onItemShare={this.share}
-                                onMetadataUpdate={this.updateMetadata}
-                                onSortChange={this.sort}
-                                portalElement={this.rootElement}
-                                view={view}
-                                viewMode={viewMode}
-                            />
-                            {!isErrorView && (
-                                <Footer>
-                                    <Pagination
-                                        hasNextMarker={hasNextMarker}
-                                        hasPrevMarker={hasPreviousMarker}
+                                    <SubHeader
+                                        view={view}
+                                        viewMode={viewMode}
+                                        rootId={rootFolderId}
                                         isSmall={isSmall}
-                                        offset={offset}
-                                        onOffsetChange={this.paginate}
-                                        pageSize={currentPageSize}
-                                        totalCount={totalCount}
-                                        onMarkerBasedPageChange={this.markerBasedPaginate}
+                                        rootName={rootName}
+                                        currentCollection={currentCollection}
+                                        canUpload={allowUpload}
+                                        canCreateNewFolder={allowCreate}
+                                        gridColumnCount={gridColumnCount}
+                                        gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                        gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                        maxGridColumnCountForWidth={maxGridColumnCount}
+                                        onUpload={this.upload}
+                                        onClearSelectedItemIds={this.clearSelectedItemIds}
+                                        onCreate={this.createFolder}
+                                        onGridViewSliderChange={this.onGridViewSliderChange}
+                                        onItemClick={this.fetchFolder}
+                                        onSortChange={this.sort}
+                                        onToggleMetadataSidePanel={this.toggleMetadataSidePanel}
+                                        onViewModeChange={this.changeViewMode}
+                                        portalElement={this.rootElement}
+                                        selectedItemIds={this.state.selectedItemIds}
+                                        title={title}
                                     />
-                                </Footer>
-                            )}
+
+                                    <Content
+                                        canDelete={canDelete}
+                                        canDownload={canDownload}
+                                        canPreview={canPreview}
+                                        canRename={canRename}
+                                        canShare={canShare}
+                                        currentCollection={currentCollection}
+                                        features={features}
+                                        gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
+                                        isMedium={isMedium}
+                                        isSmall={isSmall}
+                                        isTouch={isTouch}
+                                        itemActions={itemActions}
+                                        fieldsToShow={fieldsToShow}
+                                        metadataTemplate={metadataTemplate}
+                                        metadataViewProps={metadataViewProps}
+                                        onItemClick={this.onItemClick}
+                                        onItemDelete={this.delete}
+                                        onItemDownload={this.download}
+                                        onItemPreview={this.preview}
+                                        onItemRename={this.rename}
+                                        onItemSelect={this.select}
+                                        onItemShare={this.share}
+                                        onMetadataUpdate={this.updateMetadata}
+                                        onSortChange={this.sort}
+                                        portalElement={this.rootElement}
+                                        view={view}
+                                        viewMode={viewMode}
+                                    />
+
+                                    {!isErrorView && (
+                                        <Footer>
+                                            <Pagination
+                                                hasNextMarker={hasNextMarker}
+                                                hasPrevMarker={hasPreviousMarker}
+                                                isSmall={isSmall}
+                                                offset={offset}
+                                                onOffsetChange={this.paginate}
+                                                pageSize={currentPageSize}
+                                                totalCount={totalCount}
+                                                onMarkerBasedPageChange={this.markerBasedPaginate}
+                                            />
+                                        </Footer>
+                                    )}
+                                </div>
+                                {isDefaultViewMetadata &&
+                                    isMetadataViewV2Feature &&
+                                    this.state.isMetadataSidePanelOpen && (
+                                        <div className="bce-sidepanel">
+                                            <MetadataSidePanel
+                                                currentCollection={currentCollection}
+                                                closeMetadataSidePanel={this.closeMetadataSidePanel}
+                                                metadataTemplate={metadataTemplate}
+                                                selectedItemIds={this.state.selectedItemIds}
+                                            />
+                                        </div>
+                                    )}
+                            </div>
                         </div>
                         {allowUpload && !!this.appElement ? (
                             <UploadDialog

@@ -163,6 +163,32 @@ export const metadataViewV2WithInitialFilterValues: Story = {
     },
 };
 
+export const sidePanelOpenWithSingleItemSelected: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+        },
+    },
+
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Select the first row by clicking its checkbox
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstRow).getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        const metadataButton = canvas.getByRole('button', { name: 'Metadata' });
+        await userEvent.click(metadataButton);
+    },
+};
+
 const meta: Meta<typeof ContentExplorer> = {
     title: 'Elements/ContentExplorer/tests/MetadataView/visual',
     component: ContentExplorer,
