@@ -70,7 +70,6 @@ type Props = {
     startMentionMessage?: React.Node,
     timestampLabel?: string | null,
     validateOnBlur?: boolean,
-    timeStampToggleOn?: boolean,
     timeStampLabel?: string,
 };
 
