@@ -12,9 +12,14 @@ const DraftTimestampItem = ({ children, entityKey, contentState }: Props) => {
     const entity = contentState.getEntity(entityKey);
     const { timestamp } = entity.getData();
     return (
-        <span className="timestamp-item" title={`Video timestamp: ${timestamp}`}>
+        <div
+            className="timestamp-item"
+            title={`Video timestamp: ${timestamp}`}
+            contentEditable={false}
+            suppressContentEditableWarning={true}
+        >
             {children}
-        </span>
+        </div>
     );
 };
 
