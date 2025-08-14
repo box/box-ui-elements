@@ -5,7 +5,6 @@ import CascadePolicy from '../../CascadePolicy';
 const baseProps = {
     canEdit: true,
     canUseAIFolderExtraction: true,
-    canUseAIFolderExtractionAgentSelector: true,
     isAIFolderExtractionEnabled: false,
     isCascadingEnabled: true,
     isCascadingOverwritten: false,

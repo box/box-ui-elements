@@ -27,7 +27,6 @@ const AI_LINK = 'https://www.box.com/ai';
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
-    canUseAIFolderExtractionAgentSelector: boolean,
     cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
     isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
@@ -44,7 +43,6 @@ type Props = {
 const CascadePolicy = ({
     canEdit,
     canUseAIFolderExtraction,
-    canUseAIFolderExtractionAgentSelector,
     cascadePolicyConfiguration,
     isCascadingEnabled,
     isCascadingOverwritten,
@@ -194,7 +192,7 @@ const CascadePolicy = ({
                                 <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
-                        {canUseAIFolderExtractionAgentSelector && isAIFolderExtractionEnabled && (
+                        {isAIFolderExtractionEnabled && (
                             <div className="metadata-cascade-ai-agent-selector">
                                 <BoxAiAgentSelectorWithApiContainer
                                     disabled={isExistingCascadePolicy}
