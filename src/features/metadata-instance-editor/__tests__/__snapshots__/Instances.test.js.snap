@@ -2,7 +2,7 @@
 
 exports[`features/metadata-editor-editor/Instances should correctly render editors 1`] = `
 [
-  <injectIntl(Instance)
+  <Instance
     canEdit={true}
     canUseAIFolderExtraction={false}
     data={
@@ -107,7 +107,7 @@ exports[`features/metadata-editor-editor/Instances should correctly render edito
       }
     }
   />,
-  <injectIntl(Instance)
+  <Instance
     canEdit={false}
     canUseAIFolderExtraction={false}
     data={
