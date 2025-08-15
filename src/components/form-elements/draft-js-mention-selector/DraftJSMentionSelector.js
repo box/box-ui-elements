@@ -8,6 +8,7 @@ import DraftMentionItem from './DraftMentionItem';
 import FormInput from '../form/FormInput';
 import * as messages from '../input-messages';
 import type { SelectorItems } from '../../../common/types/core';
+import Toggle from '../../toggle/Toggle';
 
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated
@@ -34,6 +35,7 @@ type Props = {
     hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
+    allowVideoTimeStamps?: boolean,
     label: React.Node,
     maxLength?: number,
     mentionTriggers?: Array<string>,
@@ -46,6 +48,8 @@ type Props = {
     placeholder?: string,
     selectorRow?: React.Element<any>,
     startMentionMessage?: React.Node,
+    timeStampLabel?: string | null,
+    timeStampedCommentsEnabled?: boolean,
     validateOnBlur?: boolean,
 };
 
@@ -148,10 +152,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     }
 
     isEditorStateEmpty(editorState: EditorState): boolean {
-        const text = editorState
-            .getCurrentContent()
-            .getPlainText()
-            .trim();
+        const text = editorState.getCurrentContent().getPlainText().trim();
         const lastChangeType = editorState.getLastChangeType();
 
         return text.length === 0 && lastChangeType === null;
@@ -166,10 +167,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // manually check for content length if isRequired is true
         const editorState: EditorState = internalEditorState || externalEditorState;
-        const { length } = editorState
-            .getCurrentContent()
-            .getPlainText()
-            .trim();
+        const { length } = editorState.getCurrentContent().getPlainText().trim();
 
         if (isRequired && !length) {
             return messages.valueMissing();
@@ -261,6 +259,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             selectorRow,
             startMentionMessage,
             onReturn,
+            timeStampedCommentsEnabled,
+            timeStampLabel = '',
         } = this.props;
         const { contacts, internalEditorState, error } = this.state;
         const { handleBlur, handleChange, handleFocus } = this;
@@ -294,6 +294,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         selectorRow={selectorRow}
                         startMentionMessage={startMentionMessage}
                     />
+
+                    {isRequired && timeStampedCommentsEnabled && (
+                        <Toggle className="comment-Timestamp-toggle" label={timeStampLabel} onChange={noop} />
+                    )}
                 </FormInput>
             </div>
         );

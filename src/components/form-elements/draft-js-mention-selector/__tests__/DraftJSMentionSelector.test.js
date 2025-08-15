@@ -252,10 +252,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                 });
             } else {
                 test('should not call checkValidity when called', () => {
-                    sandbox
-                        .mock(instance)
-                        .expects('checkValidity')
-                        .never();
+                    sandbox.mock(instance).expects('checkValidity').never();
                 });
             }
         });
@@ -323,17 +320,11 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
             if (isTouched) {
                 test('should update state', () => {
-                    sandbox
-                        .mock(instance)
-                        .expects('setState')
-                        .withArgs({ error: err });
+                    sandbox.mock(instance).expects('setState').withArgs({ error: err });
                 });
             } else {
                 test('should not update state', () => {
-                    sandbox
-                        .mock(instance)
-                        .expects('setState')
-                        .never();
+                    sandbox.mock(instance).expects('setState').never();
                 });
             }
         });
@@ -366,6 +357,29 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             const instance = wrapper.instance();
 
             expect(instance.isEditorStateEmpty(editorState)).toEqual(expectedResult);
+        });
+    });
+
+    describe('video time stamp toggle', () => {
+        test('should toggle the time stamp if isRequired and timeStampedCommentsEnabled is true', () => {
+            const wrapper = shallow(
+                <DraftJSMentionSelector {...requiredProps} isRequired={true} timeStampedCommentsEnabled={true} />,
+            );
+            expect(wrapper.find('Toggle').length).toEqual(1);
+        });
+
+        test('should not toggle the time stamp if isRequired is false', () => {
+            const wrapper = shallow(
+                <DraftJSMentionSelector {...requiredProps} isRequired={false} timeStampedCommentsEnabled={true} />,
+            );
+            expect(wrapper.find('Toggle').length).toEqual(0);
+        });
+
+        test('should not toggle the time stamp if timeStampedCommentsEnabled is false', () => {
+            const wrapper = shallow(
+                <DraftJSMentionSelector {...requiredProps} isRequired={true} timeStampedCommentsEnabled={false} />,
+            );
+            expect(wrapper.find('Toggle').length).toEqual(0);
         });
     });
 });

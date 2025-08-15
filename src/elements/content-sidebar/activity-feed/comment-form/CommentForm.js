@@ -17,17 +17,20 @@ import DraftJSMentionSelector, {
 } from '../../../../components/form-elements/draft-js-mention-selector';
 import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
+import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-checking';
+
+import type { FeatureConfig } from '../../../common/feature-checking/flowTypes';
 import messages from './messages';
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
-
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import './CommentForm.scss';
 
-type Props = {
+export type CommentFormProps = {
     className: string,
     contactsLoaded?: boolean,
     createComment?: Function,
     entityId?: string,
+    file?: BoxItem,
     getAvatarUrl?: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     intl: IntlShape,
@@ -44,7 +47,28 @@ type Props = {
     tagged_message?: string,
     updateComment?: Function,
     user?: User,
+    features?: FeatureConfig,
 };
+// flow does not recognise FILE_EXTENSIONS in ../common/item/constants.ts as it is ts so
+// we need to define them here
+export const VIDEO_EXTENSIONS = [
+    '3g2',
+    '3gp',
+    'avi',
+    'flv',
+    'm2ts',
+    'm2v',
+    'm4v',
+    'mkv',
+    'mov',
+    'mp4',
+    'mpeg',
+    'mpg',
+    'mts',
+    'ogg',
+    'qt',
+    'wmv',
+];
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
     shouldFocusOnOpen
@@ -55,17 +79,18 @@ type State = {
     commentEditorState: any,
 };
 
-class CommentForm extends React.Component<Props, State> {
+class CommentForm extends React.Component<CommentFormProps, State> {
     static defaultProps = {
         isOpen: false,
         shouldFocusOnOpen: false,
+        timeStampedCommentsEnabled: false,
     };
 
     state = {
         commentEditorState: getEditorState(this.props.shouldFocusOnOpen, this.props.tagged_message),
     };
 
-    componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
+    componentDidUpdate({ isOpen: prevIsOpen }: CommentFormProps): void {
         const { isOpen } = this.props;
 
         if (isOpen !== prevIsOpen && !isOpen) {
@@ -130,7 +155,18 @@ class CommentForm extends React.Component<Props, State> {
             getAvatarUrl,
             showTip = true,
             placeholder = formatMessage(messages.commentWrite),
+            features = {},
         } = this.props;
+
+        // Get feature configuration from context
+        const timeStampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timeStampedComments');
+
+        // Use feature config to determine if time stamped comments are enabled
+        const isTimeStampedCommentsEnabled = timeStampedCommentsConfig?.enabled === true;
+        const { file } = this.props;
+        const isVideo = VIDEO_EXTENSIONS.includes(file?.extension);
+        const allowVideoTimeStamps = isVideo && isTimeStampedCommentsEnabled;
+
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
@@ -152,10 +188,12 @@ class CommentForm extends React.Component<Props, State> {
                             contactsLoaded={contactsLoaded}
                             editorState={commentEditorState}
                             hideLabel
+                            timeStampedCommentsEnabled={allowVideoTimeStamps}
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"
                             label={formatMessage(messages.commentLabel)}
+                            timeStampLabel={formatMessage(messages.commentTimestampLabel)}
                             description={formatMessage(messages.atMentionTipDescription)}
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
@@ -179,4 +217,4 @@ class CommentForm extends React.Component<Props, State> {
 
 // For testing only
 export { CommentForm as CommentFormUnwrapped };
-export default injectIntl(CommentForm);
+export default withFeatureConsumer(injectIntl(CommentForm));
