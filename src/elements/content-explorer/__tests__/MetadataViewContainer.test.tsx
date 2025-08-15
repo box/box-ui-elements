@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { render, screen } from '../../../test-utils/testing-library';
-import MetadataViewContainer, { MetadataViewContainerProps } from '../MetadataViewContainer';
+
 import type { Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
+import { render, screen, userEvent, waitFor, within } from '../../../test-utils/testing-library';
+import MetadataViewContainer, { type MetadataViewContainerProps } from '../MetadataViewContainer';
 
 describe('elements/content-explorer/MetadataViewContainer', () => {
     const mockItems = [
@@ -18,7 +19,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             type: 'string',
         },
         {
-            id: 'field1',
+            id: 'field2',
             key: 'industry',
             displayName: 'Industry',
             type: 'enum',
@@ -79,5 +80,39 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
         expect(screen.getByRole('button', { name: 'Industry' })).toBeInTheDocument();
         expect(screen.getByText('File 1.txt')).toBeInTheDocument();
         expect(screen.getByText('File 2.pdf')).toBeInTheDocument();
+    });
+
+    test('should pass values as string[] on submit', async () => {
+        const onFilterSubmit = jest.fn();
+        const template: MetadataTemplate = {
+            ...mockMetadataTemplate,
+            fields: [
+                {
+                    id: 'ms1',
+                    key: 'role',
+                    displayName: 'Contact Role',
+                    type: 'multiSelect',
+                    options: [
+                        { id: 'r1', key: 'Developer' },
+                        { id: 'r2', key: 'Marketing' },
+                        { id: 'r3', key: 'Sales' },
+                    ],
+                },
+            ],
+        };
+
+        renderComponent({ metadataTemplate: template, actionBarProps: { onFilterSubmit } });
+
+        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
+        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Developer' }));
+        // Re-open the chip to select a second value (menu closes after submit)
+        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
+        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Marketing' }));
+
+        await waitFor(() => expect(onFilterSubmit).toHaveBeenCalledTimes(2));
+        const firstCall = onFilterSubmit.mock.calls[0][0];
+        const secondCall = onFilterSubmit.mock.calls[1][0];
+        expect(firstCall['role-filter'].value).toEqual(['Developer']);
+        expect(secondCall['role-filter'].value).toEqual(['Developer', 'Marketing']);
     });
 });

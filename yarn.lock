@@ -1475,10 +1475,10 @@
   resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.124.5.tgz#664a34d8338569be6801c1433295f858d8f054ad"
   integrity sha512-0p1j2JW9ig0rhM4tiOyEFN6dbiHa7wuX8PmKTjPbgU5MQDibGSbNeZS7IxZlJLYs2BmJ+IncUrPN+zlnsfaRgw==
 
-"@box/box-item-type-selector@^0.61.12":
-  version "0.61.16"
-  resolved "https://registry.yarnpkg.com/@box/box-item-type-selector/-/box-item-type-selector-0.61.16.tgz#476ba5d58e177f9967a064077273d0d690b887f0"
-  integrity sha512-0wiiqX4/x6K7lX7QfbQYxW3ELTV+9rYdRxdV2IZqE+3fzrGiSgucYtRLkyfeqsBRUFDQSfYRXHA+sE4ZdTb/fA==
+"@box/box-item-type-selector@^0.63.12":
+  version "0.63.13"
+  resolved "https://registry.yarnpkg.com/@box/box-item-type-selector/-/box-item-type-selector-0.63.13.tgz#08999f0149f9222f8d7f00db20f7951c59b6da97"
+  integrity sha512-c3N2zTPfZqYhLgQOHEo5kE/TTrXi9BDEaPQrqb2ctsySdRCzkwLk6DfVhGFyXLQeIl0zZLhMXomSMKSxryG1cA==
 
 "@box/cldr-data@^34.2.0":
   version "34.8.0"
@@ -1502,10 +1502,10 @@
     rimraf "^3.0.0"
     semver "^7.4.0"
 
-"@box/item-icon@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-0.17.0.tgz#2e92c62046ce0d35c6d510ae1f2d2a36b31d72ad"
-  integrity sha512-Pj4XUYMnMfjZ72ZPMxmbt//juidqArdbfyxxbXEI+yKH8hsO4jr6Z2RGAUmSepweWkxYHLm5gDzTEJwBC0csHQ==
+"@box/item-icon@^0.17.15":
+  version "0.17.16"
+  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-0.17.16.tgz#bd883e33a5f75e8153a9236edbf30674a1dc69c2"
+  integrity sha512-8uNEvBuXHdoRonmQUe5lCyyIkzFIY7Fhcb2WD9yhfgRU4wHS/rqWZ6JHicGUkpT7GPNssEwuWU44Fytqp8lHvw==
 
 "@box/languages@^1.0.0":
   version "1.1.2"
@@ -1517,15 +1517,15 @@
   resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.122.16.tgz#d120602dcc39a6b4cd6f441ddd5fdc4b2f2862a4"
   integrity sha512-fy43Z9fr6+t0hO+tlVDX4A890K0mos78GqHeZp9fGDH+lQsjHBHz3DDvcbyfmkCrf3Dbg15wrvBO0Pa4FaCSvw==
 
-"@box/metadata-filter@^1.16.12":
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.18.0.tgz#c6e2a69f1ce9919063243fb451a97b4fc78ed019"
-  integrity sha512-us2njX6ade6iYeJekaerUv67d+yAob+o14ouYkfHzRFjLyfxDxB6ycTy/0jHwXLQYREXSZfIu6L+INEgbT2VAA==
+"@box/metadata-filter@^1.19.2":
+  version "1.19.3"
+  resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.19.3.tgz#87364bea4cbb1417866e65639f3b1e137a6d9b6a"
+  integrity sha512-5cSY8yLW7S1zsiqBHAuKkHjcyHFBuBUBHGTnYigV0eKyLH4Dm9ozjon23P3Z9HXVB5IMHwTM3I9TRDFAZuP7vw==
 
-"@box/metadata-view@^0.29.4":
-  version "0.29.4"
-  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-0.29.4.tgz#03c42c0e32e9fc9895a5b56bc4a97daafeec8ca9"
-  integrity sha512-0CPQ7PE6uiW4hO3EOfpyLu1nD0u4UXwCMYsdHjQTHSeqgpmT8sx7ZlZ/7or+bwlekMqijdJ2CqbJhz3WsIlIfQ==
+"@box/metadata-view@^0.41.2":
+  version "0.41.3"
+  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-0.41.3.tgz#95a4d8322d02c13172fb0be681e74e17f8fe90dc"
+  integrity sha512-7ZqUrx4YmfmwXeDoPhSpLnL8xxVBkZ3Hlw4gpfpCw8IPHdT/nYTFml1GW7DO5d43jICf3foD08wwksW9IeB7/A==
 
 "@box/react-virtualized@^9.22.3-rc-box.10":
   version "9.22.3-rc-box.10"
