@@ -7,5 +7,22 @@
         .bcpr {
             z-index: 1; // Prevents overlay issues with list-item when a file is previewed
         }
+
+        .bce-container {
+            display: flex;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .bce-main {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .bce-sidepanel {
+            margin-left: var(--space-4);
+        }
     }
 }

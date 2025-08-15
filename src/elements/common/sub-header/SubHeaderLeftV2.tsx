@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { XMark } from '@box/blueprint-web-assets/icons/Fill/index';
 import { IconButton, PageHeader, Text } from '@box/blueprint-web';
 import type { Selection } from 'react-aria-components';
+import { useSelectedItemText } from '../../content-explorer/utils';
 import type { Collection } from '../../../common/types/core';
 import messages from '../messages';
 
@@ -20,27 +21,7 @@ const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
     const { currentCollection, onClearSelectedItemIds, rootName, selectedItemIds, title } = props;
     const { formatMessage } = useIntl();
 
-    // Generate selected item text based on selected keys
-    const selectedItemText: string = useMemo(() => {
-        const selectedCount = selectedItemIds === 'all' ? currentCollection.items.length : selectedItemIds.size;
-
-        if (selectedCount === 0) {
-            return '';
-        }
-
-        // Case 1: Single selected item - show item name
-        if (selectedCount === 1) {
-            const selectedKey =
-                selectedItemIds === 'all' ? currentCollection.items[0].id : selectedItemIds.values().next().value;
-            const selectedItem = currentCollection.items.find(item => item.id === selectedKey);
-            return selectedItem?.name ?? '';
-        }
-        // Case 2: Multiple selected items - show count
-        if (selectedCount > 1) {
-            return formatMessage(messages.numFilesSelected, { numSelected: selectedCount });
-        }
-        return '';
-    }, [currentCollection.items, formatMessage, selectedItemIds]);
+    const selectedItemText = useSelectedItemText(currentCollection, selectedItemIds);
 
     // Case 1 and 2: selected item text with X button
     if (selectedItemText) {

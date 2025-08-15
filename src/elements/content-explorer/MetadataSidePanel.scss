@@ -1,0 +1,22 @@
+.bce-sidepanel-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.bce-sidepanel-title-container {
+    width: 100%;
+}
+
+.bce-sidepanel-subtitle {
+    display: flex;
+    align-items: center;
+}
+
+.bce-sidepanel-content {
+    padding: var(--space-4);
+
+    [data-target-id='TextButton-deleteButton'] {
+        visibility: hidden;
+    }
+}
