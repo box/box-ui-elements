@@ -107,6 +107,9 @@
             "commit-msg": "commitlint -e"
         }
     },
+    "dependencies": {
+        "box-typescript-sdk-gen": "^1.17.1"
+    },
     "devDependencies": {
         "@babel/cli": "^7.24.7",
         "@babel/core": "^7.24.7",
