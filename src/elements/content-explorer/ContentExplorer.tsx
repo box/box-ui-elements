@@ -1733,6 +1733,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         const metadataViewProps = this.getMetadataViewProps();
 
+        // @TODO: Add download as default action, so that bulkItemActionMenuProps always exists
+        const { bulkItemActionMenuProps } = metadataViewProps;
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
@@ -1766,6 +1769,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 portalElement={this.rootElement}
                                 selectedItemIds={this.state.selectedItemIds}
                                 title={title}
+                                bulkItemActionMenuProps={bulkItemActionMenuProps}
                             />
 
                             <Content

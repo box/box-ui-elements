@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { PageHeader } from '@box/blueprint-web';
 import type { Selection } from 'react-aria-components';
 
+import type { BulkItemActionMenuProps } from '../../../elements/content-explorer/MetadataViewContainer';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderLeftV2 from './SubHeaderLeftV2';
 import SubHeaderRight from './SubHeaderRight';
@@ -15,6 +16,7 @@ import { useFeatureEnabled } from '../feature-checking';
 import './SubHeader.scss';
 
 export interface SubHeaderProps {
+    bulkItemActionMenuProps: BulkItemActionMenuProps;
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -40,6 +42,7 @@ export interface SubHeaderProps {
 }
 
 const SubHeader = ({
+    bulkItemActionMenuProps,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -99,6 +102,7 @@ const SubHeader = ({
             </PageHeader.StartElements>
             <PageHeader.EndElements>
                 <SubHeaderRight
+                    bulkItemActionMenuProps={bulkItemActionMenuProps}
                     canCreateNewFolder={canCreateNewFolder}
                     canUpload={canUpload}
                     currentCollection={currentCollection}
@@ -112,6 +116,7 @@ const SubHeader = ({
                     onUpload={onUpload}
                     onViewModeChange={onViewModeChange}
                     portalElement={portalElement}
+                    selectedItemIds={selectedItemIds}
                     view={view}
                     viewMode={viewMode}
                 />

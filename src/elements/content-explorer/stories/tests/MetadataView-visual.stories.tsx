@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
 import { Sign } from '@box/blueprint-web-assets/icons/Line';
+import { expect, fn, userEvent, waitFor, within, screen } from 'storybook/test';
 import noop from 'lodash/noop';
 
 import ContentExplorer from '../../ContentExplorer';
@@ -66,8 +66,6 @@ const columns = [
 // Switches ContentExplorer to use Metadata View over standard, folder-based view.
 const defaultView = 'metadata';
 
-type Story = StoryObj<typeof ContentExplorer>;
-
 export const metadataView: Story = {
     args: {
         metadataQuery,
@@ -90,40 +88,61 @@ const metadataViewV2ElementProps = {
     },
 };
 
+const metadataViewV2WithInlineCustomActionsElementProps = {
+    ...metadataViewV2ElementProps,
+    metadataViewProps: {
+        columns,
+        tableProps: {
+            isSelectAllEnabled: true,
+        },
+        itemActionMenuProps: {
+            actions: [
+                {
+                    label: 'Download',
+                    onClick: noop,
+                    icon: Download,
+                },
+            ],
+            subMenuTrigger: {
+                label: 'Sign',
+                icon: Sign,
+            },
+            subMenuActions: [
+                {
+                    label: 'Request Signature',
+                    onClick: noop,
+                    icon: SignMeOthers,
+                },
+            ],
+        },
+    },
+};
+
+const metadataViewV2WithBulkItemActionMenuProps = {
+    ...metadataViewV2ElementProps,
+    metadataViewProps: {
+        columns,
+        tableProps: {
+            isSelectAllEnabled: true,
+        },
+        bulkItemActionMenuProps: {
+            actions: [
+                {
+                    label: 'Download',
+                    onClick: fn(),
+                    icon: Download,
+                },
+            ],
+        },
+    },
+};
+
 export const metadataViewV2: Story = {
     args: metadataViewV2ElementProps,
 };
 
 export const metadataViewV2WithCustomActions: Story = {
-    args: {
-        ...metadataViewV2ElementProps,
-        metadataViewProps: {
-            columns,
-            tableProps: {
-                isSelectAllEnabled: true,
-            },
-            itemActionMenuProps: {
-                actions: [
-                    {
-                        label: 'Download',
-                        onClick: noop,
-                        icon: Download,
-                    },
-                ],
-                subMenuTrigger: {
-                    label: 'Sign',
-                    icon: Sign,
-                },
-                subMenuActions: [
-                    {
-                        label: 'Request Signature',
-                        onClick: noop,
-                        icon: SignMeOthers,
-                    },
-                ],
-            },
-        },
-    },
+    args: metadataViewV2WithInlineCustomActionsElementProps,
     play: async ({ canvas }) => {
         await waitFor(() => {
             expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
@@ -164,6 +183,75 @@ export const metadataViewV2WithInitialFilterValues: Story = {
     },
 };
 
+export const metadataViewV2WithBulkItemActionMenuShowsEllipsis: Story = {
+    args: metadataViewV2WithBulkItemActionMenuProps,
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstRow).getByRole('checkbox');
+        userEvent.click(checkbox);
+    },
+};
+
+export const metadataViewV2WithBulkItemActionMenuShowsItemActionMenu: Story = {
+    args: metadataViewV2WithBulkItemActionMenuProps,
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstRow).getByRole('checkbox');
+        userEvent.click(checkbox);
+
+        await waitFor(() => {
+            expect(canvas.getByRole('button', { name: 'Show actions for selected items' })).toBeInTheDocument();
+        });
+
+        const ellipsisButton = canvas.getByRole('button', { name: 'Show actions for selected items' });
+
+        userEvent.click(ellipsisButton);
+
+        await waitFor(() => {
+            expect(screen.getByRole('menuitem', { name: 'Download' })).toBeInTheDocument();
+        });
+    },
+};
+
+export const metadataViewV2WithBulkItemActionMenuCallsOnClick: Story = {
+    args: metadataViewV2WithBulkItemActionMenuProps,
+    play: async ({ canvas, args }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstRow).getByRole('checkbox');
+        userEvent.click(checkbox);
+
+        await waitFor(() => {
+            expect(canvas.getByRole('button', { name: 'Show actions for selected items' })).toBeInTheDocument();
+        });
+
+        const ellipsisButton = canvas.getByRole('button', { name: 'Show actions for selected items' });
+
+        userEvent.click(ellipsisButton);
+
+        await waitFor(() => {
+            expect(screen.getByRole('menuitem', { name: 'Download' })).toBeInTheDocument();
+        });
+        const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+        userEvent.click(downloadAction);
+
+        await waitFor(() => {
+            expect(args.metadataViewProps?.bulkItemActionMenuProps?.actions[0].onClick).toHaveBeenCalled();
+        });
+    },
+};
+
 const meta: Meta<typeof ContentExplorer> = {
     title: 'Elements/ContentExplorer/tests/MetadataView/visual',
     component: ContentExplorer,
@@ -188,5 +276,7 @@ const meta: Meta<typeof ContentExplorer> = {
         },
     },
 };
+
+type Story = StoryObj<typeof meta>;
 
 export default meta;

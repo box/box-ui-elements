@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type { EnumType, FloatType, MetadataFormFieldValue, RangeType } from '@box/metadata-filter';
 import { MetadataView, type MetadataViewProps } from '@box/metadata-view';
+import type { Selection } from 'react-aria-components';
 
 import type { Collection } from '../../common/types/core';
 import type { MetadataTemplate } from '../../common/types/metadata';
@@ -24,6 +25,16 @@ type ActionBarProps = Omit<
     initialFilterValues?: ExternalFilterValues;
     onFilterSubmit?: (filterValues: ExternalFilterValues) => void;
 };
+
+export interface BulkItemAction {
+    label: string;
+    onClick: (selectedItemIds: Selection) => void;
+}
+
+// We may want to add submenus in the future.
+export interface BulkItemActionMenuProps {
+    actions: BulkItemAction[];
+}
 
 function transformInitialFilterValuesToInternal(
     publicValues?: ExternalFilterValues,
@@ -55,6 +66,9 @@ export interface MetadataViewContainerProps extends Omit<MetadataViewProps, 'ite
     actionBarProps?: ActionBarProps;
     currentCollection: Collection;
     metadataTemplate: MetadataTemplate;
+    /* Array of custom actions to show in the bulk item action menu. Customers may optionally provide this value, but the Element will always
+    show a default action of "Download" */
+    bulkItemActionMenuProps?: BulkItemActionMenuProps;
 }
 
 const MetadataViewContainer = ({
