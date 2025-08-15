@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { action } from 'storybook/actions';
 
-import CommentForm, { CommentFormUnwrapped } from '../CommentForm';
+import CommentForm, { CommentFormUnwrapped, type CommentFormProps } from '../CommentForm';
 
 const intlFake = {
     formatMessage: message => message.defaultMessage,
@@ -21,64 +21,39 @@ const defaultFile = {
     type: 'file',
 };
 
-export const basic = () => (
-    <CommentForm
+const getTemplate = customProps => (props: CommentFormProps) => (
+    <CommentFormUnwrapped
         user={defaultUser}
         file={defaultFile}
+        intl={intlFake}
         onCancel={action('onCancel')}
         createComment={action('createComment')}
         updateComment={action('updateComment')}
         onSubmit={action('onSubmit')}
         onFocus={action('onFocus')}
         getMentionWithQuery={action('getMentionWithQuery')}
+        {...props}
+        {...customProps}
     />
 );
 
-export const open = () => (
-    <CommentForm
-        user={defaultUser}
-        file={defaultFile}
-        isOpen={true}
-        onCancel={action('onCancel')}
-        createComment={action('createComment')}
-        updateComment={action('updateComment')}
-        onSubmit={action('onSubmit')}
-        onFocus={action('onFocus')}
-        getMentionWithQuery={action('getMentionWithQuery')}
-    />
-);
+export const Default = getTemplate({});
 
-export const editing = () => (
-    <CommentForm
-        user={defaultUser}
-        file={defaultFile}
-        isOpen={true}
-        isEditing={true}
-        entityId="comment_123"
-        tagged_message="This is an existing comment"
-        onCancel={action('onCancel')}
-        createComment={action('createComment')}
-        updateComment={action('updateComment')}
-        onSubmit={action('onSubmit')}
-        onFocus={action('onFocus')}
-        getMentionWithQuery={action('getMentionWithQuery')}
-    />
-);
+export const Open = getTemplate({
+    isOpen: true,
+});
 
-export const disabled = () => (
-    <CommentForm
-        user={defaultUser}
-        file={defaultFile}
-        isOpen={true}
-        isDisabled={true}
-        onCancel={action('onCancel')}
-        createComment={action('createComment')}
-        updateComment={action('updateComment')}
-        onSubmit={action('onSubmit')}
-        onFocus={action('onFocus')}
-        getMentionWithQuery={action('getMentionWithQuery')}
-    />
-);
+export const Editing = getTemplate({
+    isOpen: true,
+    isEditing: true,
+    entityId: 'comment_123',
+    tagged_message: 'This is an existing comment',
+});
+
+export const Disabled = getTemplate({
+    isOpen: true,
+    isDisabled: true,
+});
 
 export const VideoFile = () => {
     const features = {
@@ -91,11 +66,12 @@ export const VideoFile = () => {
 
     return (
         <div>
-            <div className="bp-media-dash">
+            <div className="bp-media-dash" style={{ width: '100px', height: '100px', marginBottom: '10px' }}>
                 {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                 <video
                     src="//cdn03.boxcdn.net/sites/default/files/homepage/v2/images/hero/run/laptop-screen-1680-v2@1x.mp4"
-                    width="200px"
+                    controls
+                    style={{ width: '100%', height: '100%' }}
                 />
             </div>
 
@@ -127,6 +103,71 @@ export default {
             description: {
                 component: 'A form component for creating and editing comments in the activity feed.',
             },
+        },
+    },
+    argTypes: {
+        isOpen: {
+            control: { type: 'boolean' },
+            description: 'Whether the comment form is open',
+        },
+        isEditing: {
+            control: { type: 'boolean' },
+            description: 'Whether the form is in editing mode',
+        },
+        isDisabled: {
+            control: { type: 'boolean' },
+            description: 'Whether the form is disabled',
+        },
+
+        features: {
+            control: { type: 'object' },
+            description: 'Features object',
+        },
+
+        file: {
+            control: { type: 'object' },
+            description: 'File object',
+        },
+
+        tagged_message: {
+            control: { type: 'text' },
+            description: 'Initial message content for editing',
+        },
+        placeholder: {
+            control: { type: 'text' },
+            description: 'Placeholder text for the comment input',
+        },
+        shouldFocusOnOpen: {
+            control: { type: 'boolean' },
+            description: 'Whether to focus the input when opened',
+        },
+        showTip: {
+            control: { type: 'boolean' },
+            description: 'Whether to show a tip',
+        },
+        onCancel: {
+            action: 'onCancel',
+            description: 'Callback when cancel is clicked',
+        },
+        createComment: {
+            action: 'createComment',
+            description: 'Callback to create a new comment',
+        },
+        updateComment: {
+            action: 'updateComment',
+            description: 'Callback to update an existing comment',
+        },
+        onSubmit: {
+            action: 'onSubmit',
+            description: 'Callback when form is submitted',
+        },
+        onFocus: {
+            action: 'onFocus',
+            description: 'Callback when input is focused',
+        },
+        getMentionWithQuery: {
+            action: 'getMentionWithQuery',
+            description: 'Callback to get mentions based on query',
         },
     },
 };
