@@ -7,6 +7,7 @@ import noop from 'lodash/noop';
 
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+import { mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
 
 // The intent behind relying on mockMetadata is to allow a developer to paste in their own metadata template schema for use with live API calls.
@@ -179,6 +180,9 @@ const meta: Meta<typeof ContentExplorer> = {
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/metadata_templates/enterprise/templateName/schema`, () => {
                     return HttpResponse.json(mockSchema);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/0`, () => {
+                    return HttpResponse.json(mockRootFolder);
                 }),
             ],
         },
