@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { MetadataFieldType } from '@box/metadata-view';
+import type { MetadataFieldType } from '@box/metadata-view';
 
 import { render, screen, waitFor, within } from '../../../test-utils/testing-library';
 import { ContentExplorerComponent as ContentExplorer, ContentExplorerProps } from '../ContentExplorer';

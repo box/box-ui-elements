@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import { MetadataTemplate } from '@box/metadata-editor';
+import type { MetadataTemplate } from '@box/metadata-editor';
 import type { Selection } from 'react-aria-components';
 import type { BoxItem, Collection } from '../../common/types/core';
 
@@ -32,16 +32,8 @@ export function useSelectedItemText(currentCollection: Collection, selectedItemI
 export function getTemplateInstance(metadataTemplate: MetadataTemplate, selectedItems: BoxItem[]) {
     const { displayName, fields, hidden, id, scope, templateKey, type } = metadataTemplate;
 
-    const selectedItemsFields = fields.map(field => {
-        const {
-            displayName: fieldDisplayName,
-            hidden: fieldHidden,
-            id: fieldId,
-            key,
-            options,
-            type: fieldType,
-        } = field;
-        return {
+    const selectedItemsFields = fields.map(
+        ({ displayName: fieldDisplayName, hidden: fieldHidden, id: fieldId, key, options, type: fieldType }) => ({
             displayName: fieldDisplayName,
             hidden: fieldHidden,
             id: fieldId,
@@ -50,8 +42,8 @@ export function getTemplateInstance(metadataTemplate: MetadataTemplate, selected
             type: fieldType,
             // TODO: Add support for multiple selected items
             value: selectedItems[0].metadata[scope][templateKey][key],
-        };
-    });
+        }),
+    );
 
     return {
         canEdit: true,
