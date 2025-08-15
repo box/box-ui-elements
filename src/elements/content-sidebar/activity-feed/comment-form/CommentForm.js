@@ -51,6 +51,26 @@ export type CommentFormProps = {
     user?: User,
     features?: FeatureConfig,
 };
+// flow does not recognise FILE_EXTENSIONS in ../common/item/constants.ts as it is ts so
+// we need to define them here
+export const VIDEO_EXTENSIONS = [
+    '3g2',
+    '3gp',
+    'avi',
+    'flv',
+    'm2ts',
+    'm2v',
+    'm4v',
+    'mkv',
+    'mov',
+    'mp4',
+    'mpeg',
+    'mpg',
+    'mts',
+    'ogg',
+    'qt',
+    'wmv',
+];
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
     shouldFocusOnOpen
