@@ -19,11 +19,10 @@ import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
 import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-checking';
 
-import type { FeatureConfig } from '../../common/feature-checking/flowTypes';
+import type { FeatureConfig } from '../../../common/feature-checking/flowTypes';
 import messages from './messages';
-import type { GetAvatarUrlCallback } from '../../common/flowTypes';
+import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
-import { FILE_EXTENSIONS } from '../../../common/item/constants';
 import './CommentForm.scss';
 
 export type CommentFormProps = {
@@ -50,6 +49,26 @@ export type CommentFormProps = {
     user?: User,
     features?: FeatureConfig,
 };
+// flow does not recognise FILE_EXTENSIONS in ../common/item/constants.ts as it is ts so
+// we need to define them here
+export const VIDEO_EXTENSIONS = [
+    '3g2',
+    '3gp',
+    'avi',
+    'flv',
+    'm2ts',
+    'm2v',
+    'm4v',
+    'mkv',
+    'mov',
+    'mp4',
+    'mpeg',
+    'mpg',
+    'mts',
+    'ogg',
+    'qt',
+    'wmv',
+];
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
     shouldFocusOnOpen
@@ -71,7 +90,7 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         commentEditorState: getEditorState(this.props.shouldFocusOnOpen, this.props.tagged_message),
     };
 
-    componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
+    componentDidUpdate({ isOpen: prevIsOpen }: CommentFormProps): void {
         const { isOpen } = this.props;
 
         if (isOpen !== prevIsOpen && !isOpen) {
@@ -145,7 +164,7 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         // Use feature config to determine if time stamped comments are enabled
         const isTimeStampedCommentsEnabled = timeStampedCommentsConfig?.enabled === true;
         const { file } = this.props;
-        const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
+        const isVideo = VIDEO_EXTENSIONS.includes(file?.extension);
         const allowVideoTimeStamps = isVideo && isTimeStampedCommentsEnabled;
 
         const { commentEditorState } = this.state;
