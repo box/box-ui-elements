@@ -139,19 +139,17 @@ const ActiveState = ({
     const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
         onReplyDelete({ ...options, parentId });
     };
-    const onReplyUpdateHandler =
-        (parentId: string) =>
-        (
-            id: string,
-            text: string,
-            status?: FeedItemStatus,
-            hasMention?: boolean,
-            permissions: BoxCommentPermission,
-            onSuccess: ?Function,
-            onError: ?Function,
-        ) => {
-            onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
-        };
+    const onReplyUpdateHandler = (parentId: string) => (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => {
+        onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
+    };
     const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
         onShowReplies(id, type);
     };
