@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
