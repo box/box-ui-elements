@@ -1,6 +1,8 @@
 // @flow
 import { EditorState, Modifier } from 'draft-js';
 
+export const UNEDITABLE_TIMESTAMP_TEXT = 'UNEDITABLE_TIMESTAMP_TEXT';
+
 export type Mention = {
     blockID: string,
     end: number,
@@ -131,7 +133,7 @@ function getFormattedCommentText(editorState: EditorState): { hasMention: boolea
                 // Otherwise append its text to the block result as-is
                 if (entityKey) {
                     const entity = contentState.getEntity(entityKey);
-                    const isTimestamp = entity.getType() === 'UNEDITABLE_TIMESTAMP_TEXT';
+                    const isTimestamp = entity.getType() === UNEDITABLE_TIMESTAMP_TEXT;
                     if (!isTimestamp) {
                         const stringToAdd = `@[${entity.getData().id}:${text.substring(start + 1, end)}]`;
                         blockMapStringArr.push(stringToAdd);
