@@ -35,7 +35,6 @@ type Props = {
     hideLabel?: boolean,
     isDisabled?: boolean,
     isRequired?: boolean,
-    allowVideoTimeStamps?: boolean,
     label: React.Node,
     maxLength?: number,
     mentionTriggers?: Array<string>,
