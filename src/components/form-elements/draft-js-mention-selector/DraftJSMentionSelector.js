@@ -137,7 +137,13 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             }
         }
 
-        if (this.props.isRequired !== prevProps.isRequired && this.props.isRequired) {
+        // If timeStampedCommentsEnabled is true and isRequired is true then force the timestamp
+        // to be added to the editor state as that is the spceified default behavior for video comments
+        if (
+            this.props.timeStampedCommentsEnabled === true &&
+            this.props.isRequired !== prevProps.isRequired &&
+            this.props.isRequired === true
+        ) {
             this.toggleTimeStamp(currentEditorState, true);
         }
     }
