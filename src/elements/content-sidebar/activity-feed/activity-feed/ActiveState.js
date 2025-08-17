@@ -139,17 +139,19 @@ const ActiveState = ({
     const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
         onReplyDelete({ ...options, parentId });
     };
-    const onReplyUpdateHandler = (parentId: string) => (
-        id: string,
-        text: string,
-        status?: FeedItemStatus,
-        hasMention?: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => {
-        onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
-    };
+    const onReplyUpdateHandler =
+        (parentId: string) =>
+        (
+            id: string,
+            text: string,
+            status?: FeedItemStatus,
+            hasMention?: boolean,
+            permissions: BoxCommentPermission,
+            onSuccess: ?Function,
+            onError: ?Function,
+        ) => {
+            onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
+        };
     const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
         onShowReplies(id, type);
     };
@@ -217,6 +219,7 @@ const ActiveState = ({
                                     <BaseComment
                                         {...commentAndAnnotationCommonProps}
                                         onDelete={onCommentDelete}
+                                        file={file}
                                         onCommentEdit={onCommentEdit}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
                                         onReplyDelete={onReplyDeleteHandler(item.id)}

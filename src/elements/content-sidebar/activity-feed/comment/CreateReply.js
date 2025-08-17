@@ -19,6 +19,7 @@ type Props = {
     getMentionWithQuery?: (searchStr: string) => void,
     intl: IntlShape,
     isDisabled?: boolean,
+    file?: BoxItem,
     mentionSelectorContacts?: SelectorItems<>,
     onCancel: () => void,
     onClick: () => void,
@@ -37,6 +38,7 @@ const CreateReply = ({
     onCancel,
     onSubmit,
     onClick,
+    file,
     placeholder = intl.formatMessage(messages.replyInThread),
     showReplyForm,
 }: Props) => {
@@ -53,6 +55,7 @@ const CreateReply = ({
                     getMentionWithQuery={getMentionWithQuery}
                     isOpen
                     isEditing
+                    file={file}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onCancel={onCancel}
                     onFocus={onFocus}
