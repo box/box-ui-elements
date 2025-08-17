@@ -338,7 +338,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { currentFolderId, defaultView, metadataQuery }: ContentExplorerProps = this.props;
+        const { currentFolderId, defaultView }: ContentExplorerProps = this.props;
         this.rootElement = document.getElementById(this.id) as HTMLElement;
         this.appElement = this.rootElement.firstElementChild as HTMLElement;
 
@@ -348,7 +348,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 break;
             case DEFAULT_VIEW_METADATA:
                 this.showMetadataQueryResults();
-                this.fetchFolderName(metadataQuery?.ancestor_folder_id);
                 break;
             default:
                 this.fetchFolder(currentFolderId);
@@ -390,12 +389,14 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         metadataTemplate: MetadataTemplate,
     ): void => {
         const { nextMarker } = metadataQueryCollection;
+        const { metadataQuery, features } = this.props;
         const { currentCollection, currentPageNumber, markers }: State = this.state;
         const cloneMarkers = [...markers];
         if (nextMarker) {
             cloneMarkers[currentPageNumber + 1] = nextMarker;
         }
-        this.setState({
+
+        const nextState = {
             currentCollection: {
                 ...currentCollection,
                 ...metadataQueryCollection,
@@ -403,7 +404,25 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             },
             markers: cloneMarkers,
             metadataTemplate,
-        });
+        };
+
+        // if v2, fetch folder name and add to state
+        if (metadataQuery?.ancestor_folder_id && isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
+            this.api.getFolderAPI().getFolderFields(
+                metadataQuery.ancestor_folder_id,
+                ({ name }) => {
+                    this.setState({
+                        ...nextState,
+                        rootName: name || '',
+                    });
+                },
+                this.errorCallback,
+                { fields: [FIELD_NAME] },
+            );
+        } else {
+            // No folder name to fetch, update state immediately with just metadata
+            this.setState(nextState);
+        }
     };
 
     /**
@@ -1626,27 +1645,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     clearSelectedItemIds = () => {
         this.setState({ selectedItemIds: new Set() });
-    };
-
-    /**
-     * Fetches the folder name and stores it in state rootName if successful
-     *
-     * @private
-     * @return {void}
-     */
-    fetchFolderName = (folderId?: string) => {
-        if (!folderId) {
-            return;
-        }
-
-        this.api.getFolderAPI(false).getFolderFields(
-            folderId,
-            ({ name }) => {
-                this.setState({ rootName: name });
-            },
-            this.errorCallback,
-            { fields: [FIELD_NAME] },
-        );
     };
 
     /**
