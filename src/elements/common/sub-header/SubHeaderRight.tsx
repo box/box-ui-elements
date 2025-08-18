@@ -71,7 +71,6 @@ const SubHeaderRight = ({
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isMetadataView: boolean = view === VIEW_METADATA;
     const hasSelectedItems: boolean = !!(selectedItemIds && (selectedItemIds === 'all' || selectedItemIds.size > 0));
-
     return (
         <div className="be-sub-header-right">
             {!isMetadataView && (
