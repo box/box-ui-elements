@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Button } from '@box/blueprint-web';
 import { Pencil } from '@box/blueprint-web-assets/icons/Fill';
 import { useIntl } from 'react-intl';
+import type { Selection } from 'react-aria-components';
 import Sort from './Sort';
 import Add from './Add';
 import GridViewSlider from '../../../components/grid-view/GridViewSlider';
@@ -27,9 +28,11 @@ export interface SubHeaderRightProps {
     onCreate: () => void;
     onGridViewSliderChange: (newSliderValue: number) => void;
     onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    onMetadataSidePanelToggle?: () => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
+    selectedItemIds?: Selection;
     view: View;
     viewMode: ViewMode;
 }
@@ -45,9 +48,11 @@ const SubHeaderRight = ({
     onCreate,
     onGridViewSliderChange,
     onSortChange,
+    onMetadataSidePanelToggle,
     onUpload,
     onViewModeChange,
     portalElement,
+    selectedItemIds,
     view,
     viewMode,
 }: SubHeaderRightProps) => {
@@ -60,6 +65,7 @@ const SubHeaderRight = ({
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isMetadataView: boolean = view === VIEW_METADATA;
+    const hasSelectedItems: boolean = !!(selectedItemIds && (selectedItemIds === 'all' || selectedItemIds.size > 0));
     return (
         <div className="be-sub-header-right">
             {!isMetadataView && (
@@ -90,8 +96,8 @@ const SubHeaderRight = ({
                 </>
             )}
 
-            {isMetadataView && isMetadataViewV2Feature && (
-                <Button icon={Pencil} size="large" variant="primary">
+            {isMetadataView && isMetadataViewV2Feature && hasSelectedItems && (
+                <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
                     {formatMessage(messages.metadata)}
                 </Button>
             )}

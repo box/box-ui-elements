@@ -7,5 +7,17 @@
         .bcpr {
             z-index: 1; // Prevents overlay issues with list-item when a file is previewed
         }
+
+        .be-app-element {
+            flex-direction: row;
+            gap: var(--space-4);
+        }
+
+        .bce-ContentExplorer-main {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            min-width: 0;
+        }
     }
 }
