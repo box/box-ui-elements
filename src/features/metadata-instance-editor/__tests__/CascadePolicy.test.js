@@ -118,7 +118,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                 <CascadePolicy
                     canEdit
                     canUseAIFolderExtraction
-                    canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
                     isAIFolderExtractionEnabled
                     onAIFolderExtractionToggle={jest.fn()}
@@ -133,18 +132,12 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
         });
 
-        test('should not render AI agent selector when canUseAIFolderExtractionAgentSelector is false', () => {
-            render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
-            expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
-        });
-
         test('should call onAIAgentSelect when an agent is selected', async () => {
             const onAIAgentSelect = jest.fn();
             render(
                 <CascadePolicy
                     canEdit
                     canUseAIFolderExtraction
-                    canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
                     isAIFolderExtractionEnabled
                     onAIAgentSelect={onAIAgentSelect}
@@ -185,7 +178,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                 <CascadePolicy
                     canEdit
                     canUseAIFolderExtraction
-                    canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
                     isAIFolderExtractionEnabled
                     cascadePolicyConfiguration={cascadePolicyConfiguration}
@@ -207,7 +199,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                 <CascadePolicy
                     canEdit
                     canUseAIFolderExtraction
-                    canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
                     isAIFolderExtractionEnabled
                     onAIFolderExtractionToggle={jest.fn()}
