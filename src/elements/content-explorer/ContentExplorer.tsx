@@ -49,6 +49,7 @@ import {
     DEFAULT_HOSTNAME_STATIC,
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
+    FIELD_ITEM_NAME,
     FIELD_NAME,
     FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
@@ -456,7 +457,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         metadataQueryClone.order_by = [
             {
-                field_key: sortBy,
+                // Default to the prefixed name field for metadata view v2 only, while not touching the default sortBy for other views.
+                field_key: sortBy === FIELD_NAME ? FIELD_ITEM_NAME : sortBy,
                 direction: sortDirection,
             },
         ];
