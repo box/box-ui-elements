@@ -23,19 +23,19 @@ import './MetadataSidePanel.scss';
 
 export interface MetadataSidePanelProps {
     currentCollection: Collection;
-    closeMetadataSidePanel: () => void;
+    onClose: () => void;
     metadataTemplate: MetadataTemplate;
     selectedItemIds: Selection;
 }
 
 const MetadataSidePanel = ({
     currentCollection,
-    closeMetadataSidePanel,
+    onClose,
     selectedItemIds,
     metadataTemplate,
 }: MetadataSidePanelProps) => {
     const { formatMessage } = useIntl();
-    const [editingTemplate, setEditingTemplate] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
 
     const selectedItemText = useSelectedItemText(currentCollection, selectedItemIds);
@@ -46,11 +46,11 @@ const MetadataSidePanel = ({
     const templateInstance = getTemplateInstance(metadataTemplate, selectedItems);
 
     const handleMetadataInstanceEdit = () => {
-        setEditingTemplate(true);
+        setIsEditing(true);
     };
 
     const handleMetadataInstanceFormCancel = () => {
-        setEditingTemplate(false);
+        setIsEditing(false);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,7 +60,7 @@ const MetadataSidePanel = ({
 
     const handleMetadataInstanceFormDiscardUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(false);
-        setEditingTemplate(false);
+        setIsEditing(false);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -71,30 +71,28 @@ const MetadataSidePanel = ({
     return (
         <SidePanel variant="persistent">
             <SidePanel.Header>
-                <div className="bce-sidepanel-header">
-                    <div className="bce-sidepanel-title-container">
-                        <Text as="span" variant="titleLarge">
-                            {formatMessage(messages.sidebarMetadataTitle)}
+                <div>
+                    <Text as="span" variant="titleLarge">
+                        {formatMessage(messages.sidebarMetadataTitle)}
+                    </Text>
+                    <div className="bce-MetadataSidePanel-subtitle">
+                        <FileDefault />
+                        <Text as="span" color="textOnLightSecondary" variant="subtitle">
+                            {selectedItemText}
                         </Text>
-                        <div className="bce-sidepanel-subtitle">
-                            <FileDefault />
-                            <Text as="span" color="textOnLightSecondary" variant="subtitle">
-                                {selectedItemText}
-                            </Text>
-                        </div>
                     </div>
-                    <IconButton
-                        aria-label={formatMessage(messages.clearSelection)}
-                        icon={XMark}
-                        onClick={closeMetadataSidePanel}
-                        size="large"
-                    />
                 </div>
+                <IconButton
+                    aria-label={formatMessage(messages.clearSelection)}
+                    icon={XMark}
+                    onClick={onClose}
+                    size="large"
+                />
             </SidePanel.Header>
             <SidePanel.ScrollableContainer>
-                <div className="bce-sidepanel-content">
+                <div className="bce-MetadataSidePanel-content">
                     <AutofillContextProvider fetchSuggestions={null} isAiSuggestionsFeatureEnabled={false}>
-                        {editingTemplate ? (
+                        {isEditing ? (
                             <MetadataInstanceForm
                                 areAiSuggestionsAvailable={false}
                                 isAiSuggestionsFeatureEnabled={false}

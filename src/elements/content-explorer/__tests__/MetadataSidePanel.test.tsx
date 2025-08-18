@@ -1,7 +1,7 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
-import MetadataSidePanel, { MetadataSidePanelProps } from '../MetadataSidePanel';
+import MetadataSidePanel, { type MetadataSidePanelProps } from '../MetadataSidePanel';
 
 // Mock scrollTo method
 Object.defineProperty(Element.prototype, 'scrollTo', {
@@ -65,7 +65,7 @@ const mockCloseMetadataSidePanel = jest.fn();
 describe('elements/content-explorer/MetadataSidePanel', () => {
     const defaultProps: MetadataSidePanelProps = {
         currentCollection: mockCollection,
-        closeMetadataSidePanel: mockCloseMetadataSidePanel,
+        onClose: mockCloseMetadataSidePanel,
         metadataTemplate: mockMetadataTemplate,
         selectedItemIds: new Set(['1']),
     };

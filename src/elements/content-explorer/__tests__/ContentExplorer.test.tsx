@@ -429,7 +429,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
             const metadataQuery = {
                 from: metadataScopeAndKey,
-                ancestor_folder_id: '0',
+                ancestor_folder_id: '69083462919',
                 sort_by: [
                     {
                         field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`, // Default to sorting by the first field in the schema
@@ -491,7 +491,10 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 await waitFor(() => {
                     expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
                 });
-                expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).toBeInTheDocument();
+
+                await waitFor(() => {
+                    expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).toBeInTheDocument();
+                });
 
                 await waitFor(() => {
                     expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();

@@ -8,21 +8,16 @@
             z-index: 1; // Prevents overlay issues with list-item when a file is previewed
         }
 
-        .bce-container {
-            display: flex;
-            height: 100%;
-            min-height: 0;
+        .be-app-element {
+            flex-direction: row;
+            gap: var(--space-4);
         }
 
-        .bce-main {
+        .bce-ContentExplorer-main {
             display: flex;
             flex: 1;
             flex-direction: column;
             min-width: 0;
-        }
-
-        .bce-sidepanel {
-            margin-left: var(--space-4);
         }
     }
 }
