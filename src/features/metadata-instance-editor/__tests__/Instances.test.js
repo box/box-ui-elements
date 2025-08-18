@@ -253,11 +253,9 @@ describe('features/metadata-editor-editor/Instances', () => {
     });
 });
 
-describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () => {
-    test('should pass canUseAIFolderExtractionAgentSelector to child Instance components, showing agent selector', async () => {
-        const props = getInstancesBaseProps({
-            canUseAIFolderExtractionAgentSelector: true,
-        });
+describe('Instances component -  AI agent selector', () => {
+    test('should show AI agent selector when canUseAIFolderExtraction is true', async () => {
+        const props = getInstancesBaseProps();
         props.editors[0].instance.cascadePolicy.cascadePolicyType = CASCADE_POLICY_TYPE_AI_EXTRACT;
         render(<Instances {...props} />);
 
@@ -273,11 +271,11 @@ describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () 
         expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
     });
 
-    test('should not show agent selector in child Instance if canUseAIFolderExtractionAgentSelector is false', async () => {
+    test('should not show agent selector in child Instance if canUseAIFolderExtraction is false', async () => {
         render(
             <Instances
                 {...getInstancesBaseProps({
-                    canUseAIFolderExtractionAgentSelector: false,
+                    canUseAIFolderExtraction: false,
                 })}
             />,
         );
@@ -288,9 +286,9 @@ describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () 
         expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
     });
 
-    test('should not show agent selector in child Instance if canUseAIFolderExtractionAgentSelector is undefined', async () => {
+    test('should not show agent selector in child Instance if canUseAIFolderExtraction is undefined', async () => {
         const props = getInstancesBaseProps();
-        delete props.canUseAIFolderExtractionAgentSelector;
+        delete props.canUseAIFolderExtraction;
         render(<Instances {...props} />);
 
         const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
