@@ -199,6 +199,7 @@ const CascadePolicy = ({
                                     fetcher={agentFetcher}
                                     onSelectAgent={handleAgentSelect}
                                     recordAction={() => {}}
+                                    selectorAlignment="left"
                                 />
                             </div>
                         )}
