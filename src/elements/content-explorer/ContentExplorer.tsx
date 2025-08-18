@@ -1663,7 +1663,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @private
      * @return {void}
      */
-    toggleMetadataSidePanel = () => {
+    onMetadataSidePanelToggle = () => {
         this.setState(prevState => ({
             isMetadataSidePanelOpen: !prevState.isMetadataSidePanelOpen,
         }));
@@ -1800,7 +1800,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     onGridViewSliderChange={this.onGridViewSliderChange}
                                     onItemClick={this.fetchFolder}
                                     onSortChange={this.sort}
-                                    onToggleMetadataSidePanel={this.toggleMetadataSidePanel}
+                                    onMetadataSidePanelToggle={this.onMetadataSidePanelToggle}
                                     onViewModeChange={this.changeViewMode}
                                     portalElement={this.rootElement}
                                     selectedItemIds={selectedItemIds}

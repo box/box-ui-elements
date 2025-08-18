@@ -82,12 +82,7 @@ const MetadataSidePanel = ({
                         </Text>
                     </div>
                 </div>
-                <IconButton
-                    aria-label={formatMessage(messages.clearSelection)}
-                    icon={XMark}
-                    onClick={onClose}
-                    size="large"
-                />
+                <IconButton aria-label={formatMessage(messages.close)} icon={XMark} onClick={onClose} size="large" />
             </SidePanel.Header>
             <SidePanel.ScrollableContainer>
                 <div className="bce-MetadataSidePanel-content">

@@ -60,12 +60,12 @@ const mockMetadataTemplate = {
     ],
 };
 
-const mockCloseMetadataSidePanel = jest.fn();
+const mockOnClose = jest.fn();
 
 describe('elements/content-explorer/MetadataSidePanel', () => {
     const defaultProps: MetadataSidePanelProps = {
         currentCollection: mockCollection,
-        onClose: mockCloseMetadataSidePanel,
+        onClose: mockOnClose,
         metadataTemplate: mockMetadataTemplate,
         selectedItemIds: new Set(['1']),
     };
@@ -80,7 +80,7 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
 
     test('renders the close button with proper aria-label', () => {
         renderComponent();
-        const closeButton = screen.getByLabelText('Clear selection');
+        const closeButton = screen.getByLabelText('Close');
         expect(closeButton).toBeInTheDocument();
     });
 
@@ -101,11 +101,11 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         expect(fieldValue).toBeInTheDocument();
     });
 
-    test('call closeMetadataSidePanel when close button is clicked', async () => {
+    test('call onClose when close button is clicked', async () => {
         renderComponent();
-        const closeButton = screen.getByLabelText('Clear selection');
+        const closeButton = screen.getByLabelText('Close');
         await userEvent.click(closeButton);
-        expect(mockCloseMetadataSidePanel).toHaveBeenCalledTimes(1);
+        expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
 
     test('render correct subtitle when multiple items are selected', () => {

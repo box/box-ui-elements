@@ -28,7 +28,7 @@ export interface SubHeaderProps {
     onGridViewSliderChange?: (newSliderValue: number) => void;
     onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
     onSortChange: (sortBy: string, sortDirection: string) => void;
-    onToggleMetadataSidePanel?: () => void;
+    onMetadataSidePanelToggle?: () => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
@@ -54,7 +54,7 @@ const SubHeader = ({
     onCreate,
     onItemClick,
     onSortChange,
-    onToggleMetadataSidePanel,
+    onMetadataSidePanelToggle,
     onUpload,
     onViewModeChange,
     portalElement,
@@ -111,7 +111,7 @@ const SubHeader = ({
                     onCreate={onCreate}
                     onGridViewSliderChange={onGridViewSliderChange}
                     onSortChange={onSortChange}
-                    onToggleMetadataSidePanel={onToggleMetadataSidePanel}
+                    onMetadataSidePanelToggle={onMetadataSidePanelToggle}
                     onUpload={onUpload}
                     onViewModeChange={onViewModeChange}
                     portalElement={portalElement}

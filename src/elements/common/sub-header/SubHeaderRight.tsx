@@ -28,7 +28,7 @@ export interface SubHeaderRightProps {
     onCreate: () => void;
     onGridViewSliderChange: (newSliderValue: number) => void;
     onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
-    onToggleMetadataSidePanel?: () => void;
+    onMetadataSidePanelToggle?: () => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
@@ -48,7 +48,7 @@ const SubHeaderRight = ({
     onCreate,
     onGridViewSliderChange,
     onSortChange,
-    onToggleMetadataSidePanel,
+    onMetadataSidePanelToggle,
     onUpload,
     onViewModeChange,
     portalElement,
@@ -65,10 +65,7 @@ const SubHeaderRight = ({
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isMetadataView: boolean = view === VIEW_METADATA;
-    const isMetadataViewV2ItemSelected: boolean = !!(
-        selectedItemIds &&
-        (selectedItemIds === 'all' || selectedItemIds.size > 0)
-    );
+    const hasSelectedItems: boolean = !!(selectedItemIds && (selectedItemIds === 'all' || selectedItemIds.size > 0));
     return (
         <div className="be-sub-header-right">
             {!isMetadataView && (
@@ -99,8 +96,8 @@ const SubHeaderRight = ({
                 </>
             )}
 
-            {isMetadataView && isMetadataViewV2Feature && isMetadataViewV2ItemSelected && (
-                <Button icon={Pencil} size="large" variant="primary" onClick={onToggleMetadataSidePanel}>
+            {isMetadataView && isMetadataViewV2Feature && hasSelectedItems && (
+                <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
                     {formatMessage(messages.metadata)}
                 </Button>
             )}
