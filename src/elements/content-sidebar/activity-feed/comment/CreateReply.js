@@ -8,7 +8,7 @@ import noop from 'lodash/noop';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
 import PlainButton from '../../../../components/plain-button';
 
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, BoxItem } from '../../../../common/types/core';
 
 import CommentForm from '../comment-form';
 
