@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 
 import { Button, DropdownMenu } from '@box/blueprint-web';
-import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill/index';
+import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill';
 import type { Selection } from 'react-aria-components';
 
 import messages from '../../common/sub-header/messages';
@@ -22,7 +22,7 @@ export const BulkItemActionMenu = ({ actions, selectedItemIds }: BulkItemActionM
 
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger className="be-bulkItemActionMenu-trigger">
+            <DropdownMenu.Trigger className="be-BulkItemActionMenu-trigger">
                 <Button
                     role="button"
                     aria-label={formatMessage(messages.bulkItemActionMenuAriaLabel)}

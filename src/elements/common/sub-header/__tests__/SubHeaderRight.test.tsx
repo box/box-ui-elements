@@ -19,7 +19,6 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
         onViewModeChange: jest.fn(),
         view: VIEW_FOLDER,
         viewMode: VIEW_MODE_GRID,
-        selectedItemIds: new Set([]),
     };
 
     const renderComponent = (props: Partial<SubHeaderRightProps> = {}) =>

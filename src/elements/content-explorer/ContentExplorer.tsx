@@ -78,7 +78,6 @@ import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction } from '../common/item';
 import type { Theme } from '../common/theming';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
-
 import type { MetadataFieldValue, MetadataTemplate } from '../../common/types/metadata';
 import type {
     View,

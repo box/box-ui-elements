@@ -5,7 +5,7 @@ import { Button } from '@box/blueprint-web';
 import { Pencil } from '@box/blueprint-web-assets/icons/Fill';
 import type { Selection } from 'react-aria-components';
 
-import { BulkItemAction, BulkItemActionMenu } from './BulkItemActionMenu';
+import { type BulkItemAction, BulkItemActionMenu } from './BulkItemActionMenu';
 import Sort from './Sort';
 import Add from './Add';
 import GridViewSlider from '../../../components/grid-view/GridViewSlider';
@@ -42,6 +42,7 @@ export interface SubHeaderRightProps {
 }
 
 const SubHeaderRight = ({
+    bulkItemActions,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -59,7 +60,6 @@ const SubHeaderRight = ({
     selectedItemIds,
     view,
     viewMode,
-    bulkItemActions,
 }: SubHeaderRightProps) => {
     const { formatMessage } = useIntl();
     const isMetadataViewV2Feature = useFeatureEnabled('contentExplorer.metadataViewV2');
@@ -108,7 +108,7 @@ const SubHeaderRight = ({
                         bulkItemActions.length > 0 && (
                             <BulkItemActionMenu actions={bulkItemActions} selectedItemIds={selectedItemIds} />
                         )}
-                        <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
+                    <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
                         {formatMessage(messages.metadata)}
                     </Button>
                 </>
