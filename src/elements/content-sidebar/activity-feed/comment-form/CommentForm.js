@@ -141,10 +141,10 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         } = this.props;
 
         // Get feature configuration from context
-        const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timeStampedComments');
+        const timestampCommentsConfig = getFeatureConfig(features, 'activityFeed.timeStampedComments');
 
         // Use feature config to determine if time stamped comments are enabled
-        const isTimeStampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
+        const isTimeStampedCommentsEnabled = timestampCommentsConfig?.enabled === true;
         const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
         const allowVideoTimeStamps = isVideo && isTimeStampedCommentsEnabled;
 
