@@ -102,6 +102,7 @@ const MARK_NAME_JS_LOADING_METADATA_REDESIGNED = `${ORIGIN_METADATA_SIDEBAR_REDE
 const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
+// `versions` sets undefined value - this situation will never happen, but it's needed to fulfill the type
 const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task', versions: undefined };
 
 const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
@@ -518,10 +519,10 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
         // Reset the current version id if the wrapping versions route is no longer active
         if (onVersionChange) {
-            const wasOnVersionsPath = this.isVersionsNavigationPath(prevInternalSidebarNavigation);
-            const isOnVersionsPath = this.isVersionsNavigationPath(internalSidebarNavigation);
+            const wasPreviousNavigationVersions = this.isVersionsNavigationPath(prevInternalSidebarNavigation);
+            const isCurrentNavigationVersions = this.isVersionsNavigationPath(internalSidebarNavigation);
 
-            if (wasOnVersionsPath && !isOnVersionsPath) {
+            if (wasPreviousNavigationVersions && !isCurrentNavigationVersions) {
                 onVersionChange(null);
             }
         }
