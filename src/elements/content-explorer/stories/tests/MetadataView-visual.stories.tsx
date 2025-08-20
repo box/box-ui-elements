@@ -21,7 +21,7 @@ const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
 const metadataQuery = {
     from: metadataScopeAndKey,
     ancestor_folder_id: '0',
-    sort_by: [
+    order_by: [
         {
             field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`, // Default to sorting by the first field in the schema
             direction: 'asc',
@@ -49,7 +49,7 @@ const columns = [
         textValue: 'Name',
         id: 'name',
         type: 'string',
-        allowSorting: true,
+        allowsSorting: true,
         minWidth: 150,
         maxWidth: 150,
     },
@@ -57,7 +57,7 @@ const columns = [
         textValue: field.displayName,
         id: `${metadataFieldNamePrefix}.${field.key}`,
         type: field.type,
-        allowSorting: true,
+        allowsSorting: true,
         minWidth: 150,
         maxWidth: 150,
     })),
@@ -92,6 +92,20 @@ const metadataViewV2ElementProps = {
 
 export const metadataViewV2: Story = {
     args: metadataViewV2ElementProps,
+};
+
+// @TODO Assert that rows are actually sorted in a different order, once handleSortChange is implemented
+export const metadataViewV2SortsFromHeader: Story = {
+    args: metadataViewV2ElementProps,
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Industry/i })).toBeInTheDocument();
+        });
+
+        const firstRow = canvas.getByRole('row', { name: /Industry/i });
+        const industryHeader = within(firstRow).getByRole('columnheader', { name: 'Industry' });
+        userEvent.click(industryHeader);
+    },
 };
 
 export const metadataViewV2WithCustomActions: Story = {
