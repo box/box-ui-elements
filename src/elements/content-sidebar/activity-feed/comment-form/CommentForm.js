@@ -169,7 +169,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                             contactsLoaded={contactsLoaded}
                             editorState={commentEditorState}
                             hideLabel
-                            timeStampedCommentsEnabled={allowVideoTimeStamps}
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"

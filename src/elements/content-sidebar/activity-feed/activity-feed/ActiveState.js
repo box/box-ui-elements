@@ -220,7 +220,6 @@ const ActiveState = ({
                                         {...commentAndAnnotationCommonProps}
                                         file={file}
                                         onDelete={onCommentDelete}
-                                        file={file}
                                         onCommentEdit={onCommentEdit}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
                                         onReplyDelete={onReplyDeleteHandler(item.id)}
