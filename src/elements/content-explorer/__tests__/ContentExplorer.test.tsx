@@ -505,6 +505,58 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
                 expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
             });
+
+            test('should call onClick when bulk item action is clicked', async () => {
+                const mockOnClick = jest.fn();
+                const metadataViewV2WithBulkItemActions = {
+                    ...metadataViewV2ElementProps,
+                    bulkItemActions: [
+                        {
+                            label: 'Download',
+                            onClick: mockOnClick,
+                        },
+                    ],
+                };
+
+                renderComponent(metadataViewV2WithBulkItemActions);
+
+                await waitFor(() => {
+                    expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
+                });
+
+                await waitFor(() => {
+                    expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+                });
+
+                const firstRow = screen.getByRole('row', { name: /Child 2/i });
+                const checkbox = within(firstRow).getByRole('checkbox');
+                await userEvent.click(checkbox);
+
+                await waitFor(() => {
+                    expect(screen.getByRole('button', { name: 'Bulk actions' })).toBeInTheDocument();
+                });
+
+                const ellipsisButton = screen.getByRole('button', { name: 'Bulk actions' });
+                await userEvent.click(ellipsisButton);
+
+                await waitFor(() => {
+                    expect(screen.getByRole('menuitem', { name: 'Download' })).toBeInTheDocument();
+                });
+
+                const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+                await userEvent.click(downloadAction);
+
+                const expectedOnClickArgument = new Set(['1188890835']);
+                await waitFor(() => {
+                    expect(mockOnClick).toHaveBeenCalled();
+
+                    // Array conversion from sets to avoid set comparison issues in Jest
+                    const argsForFirstMockCall = mockOnClick.mock.calls[0];
+                    const firstArgToMockOnClick = argsForFirstMockCall[0];
+
+                    expect(Array.from(firstArgToMockOnClick)).toEqual(Array.from(expectedOnClickArgument));
+                });
+            });
         });
     });
 

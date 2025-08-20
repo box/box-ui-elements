@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { render, screen } from '../../../../test-utils/testing-library';
+import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import SubHeaderRight, { SubHeaderRightProps } from '../SubHeaderRight';
-import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../../constants';
+import { VIEW_FOLDER, VIEW_METADATA, VIEW_MODE_GRID } from '../../../../constants';
+import { FeatureProvider } from '../../feature-checking';
 
 describe('elements/common/sub-header/SubHeaderRight', () => {
     const defaultProps = {
@@ -21,8 +22,12 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
         viewMode: VIEW_MODE_GRID,
     };
 
-    const renderComponent = (props: Partial<SubHeaderRightProps> = {}) =>
-        render(<SubHeaderRight {...defaultProps} {...props} />);
+    const renderComponent = (props: Partial<SubHeaderRightProps> = {}, features = {}) =>
+        render(
+            <FeatureProvider features={features}>
+                <SubHeaderRight {...defaultProps} {...props} />
+            </FeatureProvider>,
+        );
 
     test('should render GridViewSlider when there are items and viewMode is grid', () => {
         renderComponent({
@@ -81,5 +86,96 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
     test('should not render Add when showAdd is false', () => {
         renderComponent(defaultProps);
         expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
+    });
+
+    describe('metadataViewV2', () => {
+        const metadataViewV2Props = {
+            ...defaultProps,
+            selectedItemIds: 'all' as const,
+            bulkItemActions: [
+                {
+                    label: 'Download',
+                    onClick: jest.fn(),
+                },
+            ],
+            view: VIEW_METADATA,
+            onMetadataSidePanelToggle: jest.fn(),
+        };
+
+        test.each([
+            {
+                selectedItemIds: 'all' as const,
+            },
+            {
+                selectedItemIds: new Set(['1', '2']),
+            },
+        ])('should render bulkItemActionMenu when selectedItemIds is $selectedItemIds', async ({ selectedItemIds }) => {
+            const features = {
+                contentExplorer: {
+                    metadataViewV2: true, // enable the feature flag
+                },
+            };
+
+            renderComponent(
+                {
+                    ...metadataViewV2Props,
+                    selectedItemIds,
+                },
+                features,
+            );
+
+            expect(screen.getByRole('button', { name: 'Bulk actions' })).toBeInTheDocument();
+        });
+
+        test('should call onClick when a bulk item action is clicked', async () => {
+            const mockOnClick = jest.fn();
+            const user = userEvent();
+            const features = {
+                contentExplorer: {
+                    metadataViewV2: true, // enable the feature flag
+                },
+            };
+
+            renderComponent(
+                {
+                    ...metadataViewV2Props,
+                    bulkItemActions: [
+                        {
+                            label: 'Download',
+                            onClick: mockOnClick,
+                        },
+                    ],
+                },
+                features,
+            );
+
+            const ellipsisButton = screen.getByRole('button', { name: 'Bulk actions' });
+
+            await user.click(ellipsisButton);
+
+            const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+            await user.click(downloadAction);
+
+            const expectedOnClickArgument = 'all';
+            expect(mockOnClick).toHaveBeenCalledWith(expectedOnClickArgument);
+        });
+
+        test('should not render metadata button when metadataViewV2 feature is disabled', async () => {
+            const features = {
+                contentExplorer: {
+                    metadataViewV2: false, // Disable the feature flag
+                },
+            };
+
+            renderComponent(
+                {
+                    ...metadataViewV2Props,
+                },
+                features,
+            );
+
+            expect(screen.queryByRole('button', { name: 'Bulk actions' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: 'Metadata' })).not.toBeInTheDocument();
+        });
     });
 });
