@@ -218,8 +218,8 @@ const ActiveState = ({
                                     // $FlowFixMe
                                     <BaseComment
                                         {...commentAndAnnotationCommonProps}
-                                        onDelete={onCommentDelete}
                                         file={file}
+                                        onDelete={onCommentDelete}
                                         onCommentEdit={onCommentEdit}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
                                         onReplyDelete={onReplyDeleteHandler(item.id)}

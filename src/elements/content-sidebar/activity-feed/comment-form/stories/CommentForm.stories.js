@@ -58,7 +58,7 @@ export const Disabled = getTemplate({
 export const VideoFile = () => {
     const features = {
         activityFeed: {
-            timeStampedComments: {
+            timestampedComments: {
                 enabled: true,
             },
         },

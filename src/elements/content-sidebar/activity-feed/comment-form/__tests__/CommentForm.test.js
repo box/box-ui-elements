@@ -146,27 +146,27 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         expect(mockFocusFunc).toHaveBeenCalled();
     });
 
-    test('should enable timestamp when file is a video and timeStampedComments is enabled', () => {
+    test('should enable timestamp when file is a video and timestampedComments is enabled', () => {
         const wrapper = getWrapper({
             file: { extension: 'mp4' },
-            features: { 'activityFeed.timeStampedComments': { enabled: true } },
+            features: { 'activityFeed.timestampedComments': { enabled: true } },
         });
-        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timeStampedCommentsEnabled')).toEqual(true);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampedCommentsEnabled')).toEqual(true);
     });
 
-    test('should not enable timestamp when file is not a video but timeStampedComments is enabled', () => {
+    test('should not enable timestamp when file is not a video but timestampedComments is enabled', () => {
         const wrapper = getWrapper({
             file: { extension: 'pdf' },
-            features: { 'activityFeed.timeStampedComments': { enabled: true } },
+            features: { 'activityFeed.timestampedComments': { enabled: true } },
         });
-        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timeStampedCommentsEnabled')).toEqual(false);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampedCommentsEnabled')).toEqual(false);
     });
 
-    test('should not enable timestamp when file is a video but timeStampedComments is disabled', () => {
+    test('should not enable timestamp when file is a video but timestampedComments is disabled', () => {
         const wrapper = getWrapper({
             file: { extension: 'mp4' },
-            features: { 'activityFeed.timeStampedComments': { enabled: false } },
+            features: { 'activityFeed.timestampedComments': { enabled: false } },
         });
-        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timeStampedCommentsEnabled')).toEqual(false);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampedCommentsEnabled')).toEqual(false);
     });
 });

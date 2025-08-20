@@ -64,7 +64,7 @@ class CommentForm extends React.Component<CommentFormProps, State> {
     static defaultProps = {
         isOpen: false,
         shouldFocusOnOpen: false,
-        timeStampedCommentsEnabled: false,
+        timestampedCommentsEnabled: false,
     };
 
     state = {
@@ -141,13 +141,13 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         } = this.props;
 
         // Get feature configuration from context
-        const timestampCommentsConfig = getFeatureConfig(features, 'activityFeed.timeStampedComments');
+        const timestampCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
 
         // Use feature config to determine if time stamped comments are enabled
-        const isTimeStampedCommentsEnabled = timestampCommentsConfig?.enabled === true;
+        const istimestampedCommentsEnabled = timestampCommentsConfig?.enabled === true;
         const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
-        const allowVideoTimeStamps = isVideo && isTimeStampedCommentsEnabled;
-
+        const allowVideoTimeStamps = isVideo && istimestampedCommentsEnabled;
+        const timestampLabel = allowVideoTimeStamps ? formatMessage(messages.commentTimestampLabel) : undefined;
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
@@ -169,12 +169,11 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                             contactsLoaded={contactsLoaded}
                             editorState={commentEditorState}
                             hideLabel
-                            timeStampedCommentsEnabled={allowVideoTimeStamps}
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"
                             label={formatMessage(messages.commentLabel)}
-                            timeStampLabel={formatMessage(messages.commentTimestampLabel)}
+                            timestampLabel={timestampLabel}
                             description={formatMessage(messages.atMentionTipDescription)}
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}

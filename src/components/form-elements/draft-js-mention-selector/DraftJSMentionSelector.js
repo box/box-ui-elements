@@ -47,8 +47,7 @@ type Props = {
     placeholder?: string,
     selectorRow?: React.Element<any>,
     startMentionMessage?: React.Node,
-    timeStampLabel?: string | null,
-    timeStampedCommentsEnabled?: boolean,
+    timestampLabel?: string | null,
     validateOnBlur?: boolean,
 };
 
@@ -258,8 +257,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             selectorRow,
             startMentionMessage,
             onReturn,
-            timeStampedCommentsEnabled,
-            timeStampLabel = '',
+            timestampLabel,
         } = this.props;
         const { contacts, internalEditorState, error } = this.state;
         const { handleBlur, handleChange, handleFocus } = this;
@@ -294,8 +292,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         startMentionMessage={startMentionMessage}
                     />
 
-                    {isRequired && timeStampedCommentsEnabled && (
-                        <Toggle className="comment-Timestamp-toggle" label={timeStampLabel} onChange={noop} />
+                    {isRequired && timestampLabel && (
+                        <Toggle className="bcs-CommentTimestamp-toggle" label={timestampLabel} onChange={noop} />
                     )}
                 </FormInput>
             </div>
