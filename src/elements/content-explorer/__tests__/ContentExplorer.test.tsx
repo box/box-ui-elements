@@ -507,7 +507,10 @@ describe('elements/content-explorer/ContentExplorer', () => {
             });
 
             test('should call onClick when bulk item action is clicked', async () => {
-                const mockOnClick = jest.fn();
+                let mockOnClickArg;
+                const mockOnClick = jest.fn(arg => {
+                    mockOnClickArg = arg;
+                });
                 const metadataViewV2WithBulkItemActions = {
                     ...metadataViewV2ElementProps,
                     bulkItemActions: [
@@ -520,42 +523,26 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
                 renderComponent(metadataViewV2WithBulkItemActions);
 
-                await waitFor(() => {
-                    expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
-                });
+                await screen.findByTestId('content-explorer');
 
-                await waitFor(() => {
-                    expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
-                });
+                await screen.findByRole('row', { name: /Child 2/i });
 
                 const firstRow = screen.getByRole('row', { name: /Child 2/i });
                 const checkbox = within(firstRow).getByRole('checkbox');
                 await userEvent.click(checkbox);
 
-                await waitFor(() => {
-                    expect(screen.getByRole('button', { name: 'Bulk actions' })).toBeInTheDocument();
-                });
+                await screen.findByRole('button', { name: 'Bulk actions' });
 
                 const ellipsisButton = screen.getByRole('button', { name: 'Bulk actions' });
                 await userEvent.click(ellipsisButton);
 
-                await waitFor(() => {
-                    expect(screen.getByRole('menuitem', { name: 'Download' })).toBeInTheDocument();
-                });
+                await screen.findByRole('menuitem', { name: 'Download' });
 
                 const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
                 await userEvent.click(downloadAction);
 
-                const expectedOnClickArgument = new Set(['1188890835']);
-                await waitFor(() => {
-                    expect(mockOnClick).toHaveBeenCalled();
-
-                    // Array conversion from sets to avoid set comparison issues in Jest
-                    const argsForFirstMockCall = mockOnClick.mock.calls[0];
-                    const firstArgToMockOnClick = argsForFirstMockCall[0];
-
-                    expect(Array.from(firstArgToMockOnClick)).toEqual(Array.from(expectedOnClickArgument));
-                });
+                expect(mockOnClick).toHaveBeenCalled();
+                expect(Array.from(mockOnClickArg)).toEqual(['1188890835']);
             });
         });
     });

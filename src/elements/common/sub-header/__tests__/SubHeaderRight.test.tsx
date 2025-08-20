@@ -2,7 +2,6 @@ import * as React from 'react';
 import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import SubHeaderRight, { SubHeaderRightProps } from '../SubHeaderRight';
 import { VIEW_FOLDER, VIEW_METADATA, VIEW_MODE_GRID } from '../../../../constants';
-import { FeatureProvider } from '../../feature-checking';
 
 describe('elements/common/sub-header/SubHeaderRight', () => {
     const defaultProps = {
@@ -23,11 +22,7 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
     };
 
     const renderComponent = (props: Partial<SubHeaderRightProps> = {}, features = {}) =>
-        render(
-            <FeatureProvider features={features}>
-                <SubHeaderRight {...defaultProps} {...props} />
-            </FeatureProvider>,
-        );
+        render(<SubHeaderRight {...defaultProps} {...props} />, { wrapperProps: { features } });
 
     test('should render GridViewSlider when there are items and viewMode is grid', () => {
         renderComponent({
@@ -90,7 +85,6 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
 
     describe('metadataViewV2', () => {
         const metadataViewV2Props = {
-            ...defaultProps,
             selectedItemIds: 'all' as const,
             bulkItemActions: [
                 {
@@ -102,30 +96,26 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
             onMetadataSidePanelToggle: jest.fn(),
         };
 
-        test.each([
-            {
-                selectedItemIds: 'all' as const,
-            },
-            {
-                selectedItemIds: new Set(['1', '2']),
-            },
-        ])('should render bulkItemActionMenu when selectedItemIds is $selectedItemIds', async ({ selectedItemIds }) => {
-            const features = {
-                contentExplorer: {
-                    metadataViewV2: true, // enable the feature flag
-                },
-            };
+        test.each(['all' as const, new Set(['1', '2'])])(
+            'should render bulkItemActionMenu when selectedItemIds is $selectedItemIds',
+            async selectedItemIds => {
+                const features = {
+                    contentExplorer: {
+                        metadataViewV2: true, // enable the feature flag
+                    },
+                };
 
-            renderComponent(
-                {
-                    ...metadataViewV2Props,
-                    selectedItemIds,
-                },
-                features,
-            );
+                renderComponent(
+                    {
+                        ...metadataViewV2Props,
+                        selectedItemIds,
+                    },
+                    features,
+                );
 
-            expect(screen.getByRole('button', { name: 'Bulk actions' })).toBeInTheDocument();
-        });
+                expect(screen.getByRole('button', { name: 'Bulk actions' })).toBeInTheDocument();
+            },
+        );
 
         test('should call onClick when a bulk item action is clicked', async () => {
             const mockOnClick = jest.fn();
@@ -160,19 +150,14 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
             expect(mockOnClick).toHaveBeenCalledWith(expectedOnClickArgument);
         });
 
-        test('should not render metadata button when metadataViewV2 feature is disabled', async () => {
+        test('should not render metadata v2 features when metadataViewV2 feature is disabled', async () => {
             const features = {
                 contentExplorer: {
                     metadataViewV2: false, // Disable the feature flag
                 },
             };
 
-            renderComponent(
-                {
-                    ...metadataViewV2Props,
-                },
-                features,
-            );
+            renderComponent(metadataViewV2Props, features);
 
             expect(screen.queryByRole('button', { name: 'Bulk actions' })).not.toBeInTheDocument();
             expect(screen.queryByRole('button', { name: 'Metadata' })).not.toBeInTheDocument();
