@@ -431,7 +431,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(wrapper.state('isInputOpen')).toBe(false);
     });
 
-    test('should call create comment handler and close input on valid comment submit', async () => {
+    test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn().mockReturnValue(Promise.resolve({}));
         const wrapper = getWrapper({
             feedItems,
@@ -446,7 +446,6 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         commentForm.prop('createComment')({ text: 'foo' });
 
-        // After submission, input should be closed and handler called
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
