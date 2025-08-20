@@ -19,12 +19,12 @@ export const metadataTaxonomyFetcher = async (
     return {
         options: metadataOptions.entries.map((metadataOption: MetadataOptionEntry) => ({
             value: metadataOption.id,
-            displayValue: metadataOption.display_name || metadataOption.displayName,
+            displayValue: metadataOption.displayName,
             level: metadataOption.level,
             parentId: metadataOption.parentId,
             nodePath: metadataOption.nodePath,
             deprecated: metadataOption.deprecated,
-            ancestors: metadataOption.ancestors?.map(({display_name, displayName, ...rest}) => ({...rest, displayName: display_name || displayName })),
+            ancestors: metadataOption.ancestors?.map(({displayName, ...rest}) => ({...rest, displayName })),
             selectable: metadataOption.selectable,
         })),
         marker,
@@ -62,7 +62,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
     for (const item of metadataTaxonomy.levels) {
         const levelData = {
             level: item.level,
-            levelName: item.displayName || item.display_name,
+            levelName: item.displayName,
             description: item.description,
         };
 
@@ -71,7 +71,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
             levelsMap.set(item.level, {
                 ...levelData,
                 id: metadataTaxonomyNode.id,
-                levelValue: metadataTaxonomyNode.displayName || metadataTaxonomyNode.display_name,
+                levelValue: metadataTaxonomyNode.displayName,
             });
             // If the level is not the metadataTaxonomyNode level, just add the level data
         } else {
@@ -84,7 +84,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
             const levelData = levelsMap.get(ancestor.level);
 
             if (levelData) {
-                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName || ancestor.display_name, id: ancestor.id });
+                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName, id: ancestor.id });
             }
         }
     }
