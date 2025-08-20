@@ -127,7 +127,7 @@
         "@box/blueprint-web": "12.43.0",
         "@box/blueprint-web-assets": "4.61.5",
         "@box/box-ai-agent-selector": "^0.53.0",
-        "@box/box-ai-content-answers": "^0.124.1",
+        "@box/box-ai-content-answers": "^0.139.0",
         "@box/box-item-type-selector": "^0.63.12",
         "@box/cldr-data": "^34.2.0",
         "@box/combobox-with-api": "^0.34.9",
