@@ -523,22 +523,18 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
                 renderComponent(metadataViewV2WithBulkItemActions);
 
-                await screen.findByTestId('content-explorer');
+                const firstRow = await screen.findByRole('row', { name: /Child 2/i });
+                expect(firstRow).toBeInTheDocument();
 
-                await screen.findByRole('row', { name: /Child 2/i });
-
-                const firstRow = screen.getByRole('row', { name: /Child 2/i });
                 const checkbox = within(firstRow).getByRole('checkbox');
-                await userEvent.click(checkbox);
+                userEvent.click(checkbox);
 
-                await screen.findByRole('button', { name: 'Bulk actions' });
+                const ellipsisButton = await screen.findByRole('button', { name: 'Bulk actions' });
+                expect(ellipsisButton).toBeInTheDocument();
+                userEvent.click(ellipsisButton);
 
-                const ellipsisButton = screen.getByRole('button', { name: 'Bulk actions' });
-                await userEvent.click(ellipsisButton);
-
-                await screen.findByRole('menuitem', { name: 'Download' });
-
-                const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+                const downloadAction = await screen.findByRole('menuitem', { name: 'Download' });
+                expect(downloadAction).toBeInTheDocument();
                 await userEvent.click(downloadAction);
 
                 expect(mockOnClick).toHaveBeenCalled();
