@@ -455,13 +455,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             metadataQueryClone.limit = DEFAULT_PAGE_SIZE;
         }
 
-        metadataQueryClone.order_by = [
-            {
-                // Default to the prefixed name field for metadata view v2 only, while not touching the default sortBy for other views.
-                field_key: sortBy === FIELD_NAME ? FIELD_ITEM_NAME : sortBy,
-                direction: sortDirection,
-            },
-        ];
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
@@ -470,8 +463,22 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         });
 
         if (isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
+            metadataQueryClone.order_by = [
+                {
+                    // Default to the prefixed name field for metadata view v2 only, while not touching the default sortBy for other views.
+                    field_key: sortBy === FIELD_NAME ? FIELD_ITEM_NAME : sortBy,
+                    direction: sortDirection,
+                },
+            ];
+
             this.metadataQueryAPIHelper = new MetadataQueryAPIHelperV2(this.api);
         } else {
+            metadataQueryClone.order_by = [
+                {
+                    field_key: sortBy,
+                    direction: sortDirection,
+                },
+            ];
             this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
         }
 

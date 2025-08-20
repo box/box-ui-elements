@@ -108,7 +108,6 @@ export const metadataViewV2SortsFromHeader: Story = {
     },
 };
 
-// @TODO Fix shared feature to never allow multi and single select to sort
 export const metadataViewV2WithCustomActions: Story = {
     args: {
         ...metadataViewV2ElementProps,
