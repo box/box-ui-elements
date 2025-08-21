@@ -445,7 +445,6 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(wrapper.state('isInputOpen')).toBe(true);
 
         commentForm.prop('createComment')({ text: 'foo' });
-
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
