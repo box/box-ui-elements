@@ -28,7 +28,7 @@ import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { SignSidebarProps } from './SidebarNavSign';
@@ -46,6 +46,7 @@ type Props = {
     className: string,
     currentUser?: User,
     currentUserError?: Errors,
+    customSidebarPanels?: Array<CustomSidebarPanel>,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     features: FeatureConfig,
@@ -297,6 +298,7 @@ class Sidebar extends React.Component<Props, State> {
             className,
             currentUser,
             currentUserError,
+            customSidebarPanels,
             detailsSidebarProps,
             docGenSidebarProps,
             file,
@@ -340,6 +342,7 @@ class Sidebar extends React.Component<Props, State> {
                         {hasNav && (
                             <SidebarNav
                                 additionalTabs={additionalTabs}
+                                customTabs={customSidebarPanels}
                                 elementId={this.id}
                                 fileId={fileId}
                                 hasActivity={hasActivity}
@@ -359,6 +362,7 @@ class Sidebar extends React.Component<Props, State> {
                             boxAISidebarProps={boxAISidebarProps}
                             currentUser={currentUser}
                             currentUserError={currentUserError}
+                            customPanels={customSidebarPanels}
                             elementId={this.id}
                             defaultPanel={defaultPanel}
                             detailsSidebarProps={detailsSidebarProps}

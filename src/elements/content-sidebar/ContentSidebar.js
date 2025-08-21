@@ -39,7 +39,7 @@ import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsXhrError, RequestOptions, ErrorContextProps } from '../../common/types/api';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
-import type { AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
@@ -59,6 +59,7 @@ type Props = {
     className: string,
     clientName: string,
     currentUser?: User,
+    customSidebarPanels?: Array<CustomSidebarPanel>,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps?: DocGenSidebarProps,
@@ -346,6 +347,7 @@ class ContentSidebar extends React.Component<Props, State> {
             boxAISidebarProps,
             className,
             currentUser,
+            customSidebarPanels,
             defaultView,
             detailsSidebarProps,
             docGenSidebarProps,
@@ -375,6 +377,9 @@ class ContentSidebar extends React.Component<Props, State> {
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
+        
+        // Filter out falsy values from customSidebarPanels array
+        const filteredCustomSidebarPanels = customSidebarPanels ? customSidebarPanels.filter(Boolean) : undefined;
 
         if (!file || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors)) {
             return null;
@@ -391,6 +396,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
+                                customSidebarPanels={filteredCustomSidebarPanels}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
                                 file={file}

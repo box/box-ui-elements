@@ -33,6 +33,16 @@ type AdditionalSidebarTab = {
     icon?: React.Node,
 };
 
+type CustomSidebarPanel = {
+    id: string, // Unique identifier for the panel
+    path: string, // routh path for the panel
+    component: React.ComponentType<any>, // The component to render
+    title: string, // Panel title
+    isDisabled?: boolean, // Whether the panel is disabled (default: false)
+    icon?: React.ComponentType<any>, // Optional icon for the nav button
+    navButtonProps?: Object, // Additional props for the nav button
+};
+
 type Translations = {
     onTranslate?: Function,
     translationEnabled?: boolean,
@@ -49,6 +59,7 @@ type FileAccessStats = {
 export type {
     ClassificationInfo,
     ContentInsights,
+    CustomSidebarPanel,
     NavigateOptions,
     AdditionalSidebarTab,
     AdditionalSidebarTabFtuxData,
