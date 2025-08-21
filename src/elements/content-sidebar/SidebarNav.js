@@ -34,13 +34,14 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
-import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
+import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
+    customTabs?: Array<CustomSidebarPanel>,
     elementId: string,
     fileId: string,
     hasActivity: boolean,
@@ -61,25 +62,26 @@ type Props = {
 };
 
 const SidebarNav = ({
-    additionalTabs,
-    elementId,
-    fileId,
-    hasActivity,
-    hasAdditionalTabs,
-    hasBoxAI,
-    hasDetails,
-    hasMetadata,
-    hasSkills,
-    hasDocGen = false,
-    internalSidebarNavigation,
-    internalSidebarNavigationHandler,
-    intl,
-    isOpen,
-    onNavigate,
-    onPanelChange = noop,
-    routerDisabled,
-    signSidebarProps,
-}: Props) => {
+                        additionalTabs,
+                        customTabs,
+                        elementId,
+                        fileId,
+                        hasActivity,
+                        hasAdditionalTabs,
+                        hasBoxAI,
+                        hasDetails,
+                        hasMetadata,
+                        hasSkills,
+                        hasDocGen = false,
+                        internalSidebarNavigation,
+                        internalSidebarNavigationHandler,
+                        intl,
+                        isOpen,
+                        onNavigate,
+                        onPanelChange = noop,
+                        routerDisabled,
+                        signSidebarProps,
+                    }: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
@@ -95,6 +97,125 @@ const SidebarNav = ({
         }
     };
 
+    const hasCustomTabs = customTabs && customTabs.length > 0;
+
+    const sidebarTabs = [
+        hasBoxAI && (
+            <SidebarNavButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
+                data-target-id="SidebarNavButton-boxAI"
+                data-testid="sidebarboxai"
+                isDisabled={showOnlyBoxAINavButton}
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_BOXAI}
+                tooltip={showOnlyBoxAINavButton ? boxAIDisabledTooltip : intl.formatMessage(messages.sidebarBoxAITitle)}
+            >
+                <BoxAiLogo height={Size6} width={Size6} />
+            </SidebarNavButton>
+        ),
+        hasActivity && (
+            <SidebarNavButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
+                data-target-id="SidebarNavButton-activity"
+                data-testid="sidebaractivity"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_ACTIVITY}
+                tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
+            >
+                <IconChatRound className="bcs-SidebarNav-icon" />
+            </SidebarNavButton>
+        ),
+        hasDetails && (
+            <SidebarNavButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
+                data-target-id="SidebarNavButton-details"
+                data-testid="sidebardetails"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_DETAILS}
+                tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
+            >
+                <IconDocInfo className="bcs-SidebarNav-icon" />
+            </SidebarNavButton>
+        ),
+        hasSkills && (
+            <SidebarNavButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
+                data-target-id="SidebarNavButton-skills"
+                data-testid="sidebarskills"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_SKILLS}
+                tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
+            >
+                <IconMagicWand className="bcs-SidebarNav-icon" />
+            </SidebarNavButton>
+        ),
+        hasMetadata && (
+            <SidebarNavButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
+                data-target-id="SidebarNavButton-metadata"
+                data-testid="sidebarmetadata"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_METADATA}
+                tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
+            >
+                <IconMetadataThick className="bcs-SidebarNav-icon" />
+            </SidebarNavButton>
+        ),
+        hasDocGen && (
+            <SidebarNavButton
+                data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
+                data-target-id="SidebarNavButton-docgen"
+                data-testid="sidebardocgen"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_DOCGEN}
+                tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
+            >
+                <DocGenIcon className="bcs-SidebarNav-icon" />
+            </SidebarNavButton>
+        ),
+    ];
+
+    // Filter out falsy values first
+    const visibleTabs = sidebarTabs.filter(Boolean);
+
+    // Insert custom tabs at the end
+    if (hasCustomTabs) {
+        customTabs.forEach((customTab) => {
+            const {
+                id: customTabId,
+                path: customTabPath,
+                icon: CustomTabIcon,
+                title: customTabTitle,
+                navButtonProps,
+            } = customTab;
+
+            const customTabButton = (
+                <SidebarNavButton
+                    key={customTabId}
+                    data-resin-target={`sidebar${customTabId}`}
+                    data-target-id={`SidebarNavButton-${customTabId}`}
+                    data-testid={`sidebar${customTabId}`}
+                    isDisabled={customTab.isDisabled}
+                    onClick={handleSidebarNavButtonClick}
+                    sidebarView={customTabPath}
+                    tooltip={customTabTitle ?? customTabId}
+                    {...navButtonProps}
+                >
+                    {CustomTabIcon &&
+                        (typeof CustomTabIcon === 'function' ? (
+                            <CustomTabIcon className="bcs-SidebarNav-icon" />
+                        ) : (
+                            CustomTabIcon
+                        ))}
+                </SidebarNavButton>
+            );
+
+            visibleTabs.push(customTabButton);
+        });
+    }
+
+    const navButtons = visibleTabs;
+
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
             <div className="bcs-SidebarNav-tabs">
@@ -106,83 +227,7 @@ const SidebarNav = ({
                     onNavigate={onNavigate}
                     routerDisabled={routerDisabled}
                 >
-                    {hasBoxAI && (
-                        <SidebarNavButton
-                            data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
-                            data-target-id="SidebarNavButton-boxAI"
-                            data-testid="sidebarboxai"
-                            isDisabled={showOnlyBoxAINavButton}
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_BOXAI}
-                            tooltip={
-                                showOnlyBoxAINavButton
-                                    ? boxAIDisabledTooltip
-                                    : intl.formatMessage(messages.sidebarBoxAITitle)
-                            }
-                        >
-                            <BoxAiLogo height={Size6} width={Size6} />
-                        </SidebarNavButton>
-                    )}
-                    {hasActivity && (
-                        <SidebarNavButton
-                            data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
-                            data-target-id="SidebarNavButton-activity"
-                            data-testid="sidebaractivity"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                            tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
-                        >
-                            <IconChatRound className="bcs-SidebarNav-icon" />
-                        </SidebarNavButton>
-                    )}
-                    {hasDetails && (
-                        <SidebarNavButton
-                            data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
-                            data-target-id="SidebarNavButton-details"
-                            data-testid="sidebardetails"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_DETAILS}
-                            tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
-                        >
-                            <IconDocInfo className="bcs-SidebarNav-icon" />
-                        </SidebarNavButton>
-                    )}
-                    {hasSkills && (
-                        <SidebarNavButton
-                            data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
-                            data-target-id="SidebarNavButton-skills"
-                            data-testid="sidebarskills"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_SKILLS}
-                            tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
-                        >
-                            <IconMagicWand className="bcs-SidebarNav-icon" />
-                        </SidebarNavButton>
-                    )}
-                    {hasMetadata && (
-                        <SidebarNavButton
-                            data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
-                            data-target-id="SidebarNavButton-metadata"
-                            data-testid="sidebarmetadata"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_METADATA}
-                            tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
-                        >
-                            <IconMetadataThick className="bcs-SidebarNav-icon" />
-                        </SidebarNavButton>
-                    )}
-                    {hasDocGen && (
-                        <SidebarNavButton
-                            data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
-                            data-target-id="SidebarNavButton-docGen"
-                            data-testid="sidebardocgen"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_DOCGEN}
-                            tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
-                        >
-                            <DocGenIcon className="bcs-SidebarNav-icon" />
-                        </SidebarNavButton>
-                    )}
+                    {navButtons}
                 </SidebarNavTablist>
 
                 {hasBoxSign && (
