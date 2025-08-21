@@ -8,10 +8,6 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
-// $FlowFixMe
-import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
-// $FlowFixMe
-import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
@@ -33,7 +29,6 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
-import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
@@ -46,7 +41,6 @@ type Props = {
     fileId: string,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
-    hasBoxAI: boolean,
     hasDetails: boolean,
     hasDocGen?: boolean,
     hasMetadata: boolean,
@@ -68,7 +62,6 @@ const SidebarNav = ({
                         fileId,
                         hasActivity,
                         hasAdditionalTabs,
-                        hasBoxAI,
                         hasDetails,
                         hasMetadata,
                         hasSkills,
@@ -83,8 +76,6 @@ const SidebarNav = ({
                         signSidebarProps,
                     }: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
-    const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
-        useFeatureConfig('boxai.sidebar');
 
     const { focusPrompt } = usePromptFocus('.be.bcs');
 
@@ -96,21 +87,29 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-
-    const hasCustomTabs = customTabs && customTabs.length > 0;
+    const boxAiTab = customTabs?.find(tab => tab.id === SIDEBAR_VIEW_BOXAI);
+    const otherCustomTabs = customTabs?.filter(tab => tab.id !== SIDEBAR_VIEW_BOXAI);
+    const hasOtherCustomTabs = otherCustomTabs && otherCustomTabs.length > 0;
 
     const sidebarTabs = [
-        hasBoxAI && (
+        boxAiTab && (
             <SidebarNavButton
-                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
-                data-target-id="SidebarNavButton-boxAI"
-                data-testid="sidebarboxai"
-                isDisabled={showOnlyBoxAINavButton}
+                key={boxAiTab.id}
+                data-resin-target={`sidebar${boxAiTab.id}`}
+                data-target-id={`SidebarNavButton-${boxAiTab.id}`}
+                data-testid={`sidebar${boxAiTab.id}`}
+                isDisabled={boxAiTab.isDisabled}
                 onClick={handleSidebarNavButtonClick}
-                sidebarView={SIDEBAR_VIEW_BOXAI}
-                tooltip={showOnlyBoxAINavButton ? boxAIDisabledTooltip : intl.formatMessage(messages.sidebarBoxAITitle)}
+                sidebarView={boxAiTab.path}
+                tooltip={boxAiTab.title ?? boxAiTab.id}
+                {...boxAiTab.navButtonProps}
             >
-                <BoxAiLogo height={Size6} width={Size6} />
+                {boxAiTab.icon &&
+                    (typeof boxAiTab.icon === 'function' ? (
+                        <boxAiTab.icon className="bcs-SidebarNav-icon" />
+                    ) : (
+                        boxAiTab.icon
+                    ))}
             </SidebarNavButton>
         ),
         hasActivity && (
@@ -178,9 +177,10 @@ const SidebarNav = ({
     // Filter out falsy values first
     const visibleTabs = sidebarTabs.filter(Boolean);
 
-    // Insert custom tabs at the end
-    if (hasCustomTabs) {
-        customTabs.forEach((customTab) => {
+    // Insert custom tabs - box-ai goes at the top, others at the end
+    if (hasOtherCustomTabs) {
+        // Add other custom tabs at the end
+        otherCustomTabs.forEach(customTab => {
             const {
                 id: customTabId,
                 path: customTabPath,
@@ -210,7 +210,7 @@ const SidebarNav = ({
                 </SidebarNavButton>
             );
 
-            visibleTabs.push(customTabButton);
+            visibleTabs.push(customTabButton); // Add at the end
         });
     }
 
