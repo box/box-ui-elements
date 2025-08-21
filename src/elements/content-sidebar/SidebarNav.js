@@ -87,8 +87,8 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const boxAiTab = customTabs?.find(tab => tab.id === SIDEBAR_VIEW_BOXAI);
-    const otherCustomTabs = customTabs?.filter(tab => tab.id !== SIDEBAR_VIEW_BOXAI);
+    const boxAiTab = customTabs ? customTabs.find(tab => tab.id === SIDEBAR_VIEW_BOXAI) : undefined;
+    const otherCustomTabs = customTabs ? customTabs.filter(tab => tab.id !== SIDEBAR_VIEW_BOXAI) : [];
     const hasOtherCustomTabs = otherCustomTabs && otherCustomTabs.length > 0;
 
     const sidebarTabs = [

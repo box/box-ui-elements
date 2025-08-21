@@ -194,7 +194,12 @@ class SidebarPanels extends React.Component<Props, State> {
         if (!this.customSidebars.has(panelId)) {
             this.customSidebars.set(panelId, React.createRef());
         }
-        return this.customSidebars.get(panelId);
+        // Flow doesn't understand that we just set the value above, so we need to assert it exists
+        const ref = this.customSidebars.get(panelId);
+        if (!ref) {
+            throw new Error(`Failed to get or create ref for panel ${panelId}`);
+        }
+        return ref;
     };
 
     /**
@@ -244,15 +249,15 @@ class SidebarPanels extends React.Component<Props, State> {
 
         // Separate box-ai custom panel from other custom panels
         const boxAiCustomPanel = customPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
-        const boxAiCustomPanelPath = boxAiCustomPanel?.path;
         const otherCustomPanels = customPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI);
         const otherCustomPanelPaths = otherCustomPanels.map(panel => panel.path);
 
         if (boxAiCustomPanel) {
             // special case for box-ai custom panel
+            const boxAiCustomPanelPath = boxAiCustomPanel.path;
             return shouldBoxAIBeDefaultPanel
                 ? // if box-ai is default panel, put it at the top
-                [boxAiCustomPanelPath, ...DEFAULT_SIDEBAR_VIEWS, otherCustomPanels]
+                [boxAiCustomPanelPath, ...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths]
                 : // if box-ai is not default panel, put it at the bottom
                 [...DEFAULT_SIDEBAR_VIEWS, boxAiCustomPanelPath, ...otherCustomPanelPaths];
         }
@@ -299,7 +304,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         // Build eligibility for custom panels
         const customPanelEligibility = {};
-        if (hasCustomPanels) {
+        if (hasCustomPanels && customPanels) {
             customPanels.forEach(panel => {
                 const canShowPanel = !panel.isDisabled;
                 if (canShowPanel) {
@@ -328,7 +333,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         return (
             <Switch>
-                {hasCustomPanels &&
+                {hasCustomPanels && customPanels &&
                     customPanels.map(customPanel => {
                         const {
                             id: customPanelId,
