@@ -16,7 +16,7 @@ import partition from 'lodash/partition';
 import uniq from 'lodash/uniq';
 import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
-import { getTypedFileId } from '../utils/file';
+import { getTypedFileId, getTypedFolderId } from '../utils/file';
 import { handleOnAbort, formatMetadataFieldValue } from './utils';
 import File from './File';
 import {
@@ -109,6 +109,21 @@ class Metadata extends File {
      */
     getMetadataUrl(id: string, scope?: string, template?: string): string {
         const baseUrl = `${this.getUrl(id)}/metadata`;
+        if (scope && template) {
+            return `${baseUrl}/${scope}/${template}`;
+        }
+        return baseUrl;
+    }
+
+    /**
+     * API URL for metadata
+     *
+     * @param {string} id - a Box folder id
+     * @param {string} field - metadata field
+     * @return {string} base url for files
+     */
+    getMetadataUrlForFolder(id: string, scope?: string, template?: string): string {
+        const baseUrl = `${this.getBaseApiUrl()}/folders/${id}/metadata`;
         if (scope && template) {
             return `${baseUrl}/${scope}/${template}`;
         }
@@ -810,9 +825,9 @@ class Metadata extends File {
     }
 
     /**
-     * API for patching metadata on file
+     * API for patching metadata on item (file/folder)
      *
-     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {BoxItem} item - File/Folder object for which we are changing the description
      * @param {Object} template - Metadata template
      * @param {Array} operations - Array of JSON patch operations
      * @param {Function} successCallback - Success callback
@@ -820,7 +835,7 @@ class Metadata extends File {
      * @return {Promise}
      */
     async updateMetadata(
-        file: BoxItem,
+        item: BoxItem,
         template: MetadataTemplate,
         operations: JSONPatchOperations,
         successCallback: Function,
@@ -830,7 +845,7 @@ class Metadata extends File {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        const { id, permissions } = file;
+        const { id, permissions } = item;
         if (!id || !permissions) {
             this.errorHandler(getBadItemError());
             return;
@@ -845,11 +860,14 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.put({
-                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                url:
+                    item.type === 'file'
+                        ? this.getMetadataUrl(id, template.scope, template.templateKey)
+                        : this.getMetadataUrlForFolder(id, template.scope, template.templateKey),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
-                id: getTypedFileId(id),
+                id: item.type === 'file' ? getTypedFileId(id) : getTypedFolderId(id),
                 data: operations,
             });
             if (!this.isDestroyed()) {

@@ -1700,6 +1700,7 @@ describe('api/Metadata', () => {
                 permissions: {
                     can_upload: true,
                 },
+                type: 'file',
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cache = new Cache();
@@ -1767,6 +1768,7 @@ describe('api/Metadata', () => {
                 permissions: {
                     can_upload: true,
                 },
+                type: 'file',
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cache = new Cache();
@@ -1833,6 +1835,7 @@ describe('api/Metadata', () => {
                 permissions: {
                     can_upload: true,
                 },
+                type: 'file',
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cache = new Cache();

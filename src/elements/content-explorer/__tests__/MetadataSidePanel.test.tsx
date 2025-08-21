@@ -1,6 +1,7 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '../../../test-utils/testing-library';
+import { Notification } from '@box/blueprint-web';
+import { render, screen, waitFor } from '../../../test-utils/testing-library';
 import MetadataSidePanel, { type MetadataSidePanelProps } from '../MetadataSidePanel';
 
 // Mock scrollTo method
@@ -65,13 +66,21 @@ const mockOnClose = jest.fn();
 describe('elements/content-explorer/MetadataSidePanel', () => {
     const defaultProps: MetadataSidePanelProps = {
         currentCollection: mockCollection,
-        onClose: mockOnClose,
+        getOperations: jest.fn(),
         metadataTemplate: mockMetadataTemplate,
+        onClose: mockOnClose,
+        refreshCollection: jest.fn(),
+        updateMetadataV2: jest.fn(),
         selectedItemIds: new Set(['1']),
     };
 
     const renderComponent = (props: Partial<MetadataSidePanelProps> = {}) =>
-        render(<MetadataSidePanel {...defaultProps} {...props} />);
+        render(
+            <Notification.Provider>
+                <Notification.Viewport />
+                <MetadataSidePanel {...defaultProps} {...props} />
+            </Notification.Provider>,
+        );
 
     test('renders the metadata title', () => {
         renderComponent();
@@ -123,5 +132,175 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         expect(cancelButton).toBeInTheDocument();
         const submitButton = screen.getByRole('button', { name: 'Save' });
         expect(submitButton).toBeInTheDocument();
+    });
+
+    test('switches back to view mode when cancel button is clicked', async () => {
+        renderComponent();
+        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
+        await userEvent.click(editTemplateButton);
+
+        const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+        await userEvent.click(cancelButton);
+
+        // Should be back in view mode
+        expect(screen.getByLabelText('Edit Mock Template')).toBeInTheDocument();
+    });
+
+    test('calls updateMetadataV2 when form is submitted for single item', async () => {
+        const mockUpdateMetadata = jest.fn().mockResolvedValue(undefined);
+        renderComponent({ updateMetadataV2: mockUpdateMetadata });
+
+        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
+        await userEvent.click(editTemplateButton);
+
+        const submitButton = screen.getByRole('button', { name: 'Save' });
+        await userEvent.click(submitButton);
+
+        expect(mockUpdateMetadata).toHaveBeenCalledWith(
+            mockCollection.items[0],
+            expect.any(Array),
+            expect.any(Function),
+            expect.any(Function),
+        );
+    });
+
+    test('calls getOperations and updateMetadataV2 for each item when multiple items are selected', async () => {
+        const mockUpdateMetadata = jest.fn().mockResolvedValue(undefined);
+        const mockGetOperations = jest.fn().mockReturnValue([]);
+
+        renderComponent({
+            selectedItemIds: new Set(['1', '2']),
+            updateMetadataV2: mockUpdateMetadata,
+            getOperations: mockGetOperations,
+        });
+
+        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
+        await userEvent.click(editTemplateButton);
+
+        const submitButton = screen.getByRole('button', { name: 'Save' });
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(mockGetOperations).toHaveBeenCalledTimes(2);
+            expect(mockUpdateMetadata).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    test('displays success notification when metadata update succeeds', async () => {
+        const mockUpdateMetadata = jest.fn().mockImplementation((_, __, successCallback) => {
+            successCallback();
+            return Promise.resolve();
+        });
+        const mockRefreshCollection = jest.fn();
+
+        renderComponent({
+            updateMetadataV2: mockUpdateMetadata,
+            refreshCollection: mockRefreshCollection,
+        });
+
+        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
+        await userEvent.click(editTemplateButton);
+
+        const submitButton = screen.getByRole('button', { name: 'Save' });
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText('1 document updated')).toBeInTheDocument();
+            expect(mockRefreshCollection).toHaveBeenCalledTimes(1);
+            expect(screen.getByLabelText('Edit Mock Template')).toBeInTheDocument(); // Back to view mode
+        });
+    });
+
+    test('displays error notification when metadata update fails', async () => {
+        const mockUpdateMetadata = jest.fn().mockImplementation((_, __, ___, errorCallback) => {
+            errorCallback();
+            return Promise.resolve();
+        });
+
+        renderComponent({ updateMetadataV2: mockUpdateMetadata });
+
+        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
+        await userEvent.click(editTemplateButton);
+
+        const submitButton = screen.getByRole('button', { name: 'Save' });
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText('Unable to save changes. Please try again')).toBeInTheDocument();
+        });
+    });
+
+    test('displays error notification when multiple item update fails', async () => {
+        const mockUpdateMetadata = jest.fn().mockRejectedValue(new Error('Update failed'));
+        const mockGetOperations = jest.fn().mockReturnValue([]);
+
+        renderComponent({
+            selectedItemIds: new Set(['1', '2']),
+            updateMetadataV2: mockUpdateMetadata,
+            getOperations: mockGetOperations,
+        });
+
+        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
+        await userEvent.click(editTemplateButton);
+
+        const submitButton = screen.getByRole('button', { name: 'Save' });
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText('Unable to save changes. Please try again')).toBeInTheDocument();
+        });
+    });
+
+    test('handles "all" selection correctly', () => {
+        renderComponent({ selectedItemIds: 'all' });
+        const subtitle = screen.getByText('2 files selected');
+        expect(subtitle).toBeInTheDocument();
+    });
+
+    test('displays "Multiple Values" for items with different field values', () => {
+        const collectionWithDifferentValues = {
+            ...mockCollection,
+            items: [
+                {
+                    ...mockCollection.items[0],
+                    metadata: {
+                        enterprise_123: {
+                            mockTemplate: {
+                                alias: 'value-1',
+                            },
+                        },
+                    },
+                },
+                {
+                    ...mockCollection.items[1],
+                    metadata: {
+                        enterprise_123: {
+                            mockTemplate: {
+                                alias: 'value-2',
+                            },
+                        },
+                    },
+                },
+            ],
+        };
+
+        renderComponent({
+            currentCollection: collectionWithDifferentValues,
+            selectedItemIds: new Set(['1', '2']),
+        });
+
+        expect(screen.getByText('Multiple Values')).toBeInTheDocument();
+    });
+
+    test('renders correct accessibility attributes', () => {
+        renderComponent();
+
+        // Close button should have proper aria-label
+        const closeButton = screen.getByLabelText('Close');
+        expect(closeButton).toHaveAttribute('aria-label', 'Close');
+
+        // Edit button should have proper aria-label
+        const editButton = screen.getByLabelText('Edit Mock Template');
+        expect(editButton).toHaveAttribute('aria-label', 'Edit Mock Template');
     });
 });

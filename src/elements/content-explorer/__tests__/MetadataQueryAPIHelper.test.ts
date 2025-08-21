@@ -8,7 +8,7 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../../common/constants';
-import { FIELD_METADATA, FIELD_NAME, FIELD_EXTENSION } from '../../../constants';
+import { FIELD_METADATA, FIELD_NAME, FIELD_EXTENSION, FIELD_PERMISSIONS } from '../../../constants';
 
 describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
@@ -426,27 +426,30 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 expect(isArray(updatedMetadataQuery.fields)).toBe(true);
                 expect(includes(updatedMetadataQuery.fields, FIELD_NAME)).toBe(true);
                 expect(includes(updatedMetadataQuery.fields, FIELD_EXTENSION)).toBe(true);
+                expect(includes(updatedMetadataQuery.fields, FIELD_PERMISSIONS)).toBe(true);
 
                 if (index === 2) {
-                    // Verify "name" and "extension" are added to pre-existing fields
+                    // Verify "name", "extension" and "permission" are added to pre-existing fields
                     expect(updatedMetadataQuery.fields).toEqual([
                         ...mdQueryWithoutNameField.fields,
                         FIELD_NAME,
                         FIELD_EXTENSION,
+                        FIELD_PERMISSIONS,
                     ]);
                 }
 
                 if (index === 4) {
-                    // Verify "extension" is added when "name" exists but "extension" doesn't
+                    // Verify "extension" and "permission" are added when "name" exists but "extension" and "permission" don't
                     expect(updatedMetadataQuery.fields).toEqual([
                         ...mdQueryWithoutExtensionField.fields,
                         FIELD_EXTENSION,
+                        FIELD_PERMISSIONS,
                     ]);
                 }
 
                 if (index === 5) {
-                    // No change, original query has all necessary fields
-                    expect(updatedMetadataQuery.fields).toEqual(mdQueryWithBothFields.fields);
+                    // Verify "permission" is added
+                    expect(updatedMetadataQuery.fields).toEqual([...mdQueryWithBothFields.fields, FIELD_PERMISSIONS]);
                 }
             },
         );

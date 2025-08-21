@@ -1105,6 +1105,41 @@ const messages = defineMessages({
             }
         `,
     },
+    multipleValues: {
+        id: 'be.multipleValues',
+        description: 'Display text for field when there are multiple items selected and have different value',
+        defaultMessage: 'Multiple Values',
+    },
+    notificationCloseIcon: {
+        id: 'be.notificationCloseIcon',
+        description: 'Aria Label for close icon in the notification banner',
+        defaultMessage: 'Close',
+    },
+    errorTypeIcon: {
+        id: 'be.errorTypeIcon',
+        description: 'Aria Label for type icon in the error notification banner',
+        defaultMessage: 'Error',
+    },
+    successTypeIcon: {
+        id: 'be.successTypeIcon',
+        description: 'Aria Label for type icon in the success notification banner',
+        defaultMessage: 'Success',
+    },
+    errorNotification: {
+        id: 'be.errorNotification',
+        description: 'Text shown in error notification banner',
+        defaultMessage: 'Unable to save changes. Please try again',
+    },
+    successNotification: {
+        id: 'be.successNotification',
+        description: 'Text shown in success notification banner',
+        defaultMessage: `
+            {numSelected, plural,
+                =1 {1 document updated}
+                other {# documents updated}
+            }
+        `,
+    },
 });
 
 export default messages;

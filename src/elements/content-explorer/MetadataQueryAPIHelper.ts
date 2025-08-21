@@ -3,7 +3,6 @@ import find from 'lodash/find';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
-import isNil from 'lodash/isNil';
 import API from '../../api';
 
 import {
@@ -14,7 +13,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
-import { FIELD_NAME, FIELD_METADATA, FIELD_EXTENSION } from '../../constants';
+import { FIELD_NAME, FIELD_METADATA, FIELD_EXTENSION, FIELD_PERMISSIONS } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -26,6 +25,7 @@ import type {
 } from '../../common/types/metadata';
 import type { ElementsXhrError, JSONPatchOperations } from '../../common/types/api';
 import type { Collection, BoxItem } from '../../common/types/core';
+import { isEmptyValue } from './utils';
 
 type SuccessCallback = (metadataQueryCollection: Collection, metadataTemplate: MetadataTemplate) => void;
 type ErrorCallback = (e: ElementsXhrError) => void;
@@ -57,13 +57,25 @@ export default class MetadataQueryAPIHelper {
         oldValue: MetadataFieldValue | null,
         newValue: MetadataFieldValue | null,
     ): JSONPatchOperations => {
+        // check if two values are the same, return empty operations if so
+        if (
+            (isEmptyValue(oldValue) && isEmptyValue(newValue)) ||
+            (Array.isArray(oldValue) &&
+                Array.isArray(newValue) &&
+                oldValue.length === newValue.length &&
+                oldValue.every(val => newValue.includes(val))) ||
+            oldValue === newValue
+        ) {
+            return [];
+        }
+
         let operation = JSON_PATCH_OP_REPLACE;
 
-        if (isNil(oldValue) && newValue) {
+        if (isEmptyValue(oldValue) && !isEmptyValue(newValue)) {
             operation = JSON_PATCH_OP_ADD;
         }
 
-        if (oldValue && isNil(newValue)) {
+        if (!isEmptyValue(oldValue) && isEmptyValue(newValue)) {
             operation = JSON_PATCH_OP_REMOVE;
         }
 
@@ -205,6 +217,17 @@ export default class MetadataQueryAPIHelper {
             .updateMetadata(file, this.metadataTemplate, operations, successCallback, errorCallback);
     };
 
+    updateMetadataWithOperations = (
+        item: BoxItem,
+        operations: JSONPatchOperations,
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ): Promise<void> => {
+        return this.api
+            .getMetadataAPI(true)
+            .updateMetadata(item, this.metadataTemplate, operations, successCallback, errorCallback);
+    };
+
     /**
      * Verify that the metadata query has required fields and update it if necessary
      * For a file item, default fields included in the response are "type", "id", "etag"
@@ -223,6 +246,11 @@ export default class MetadataQueryAPIHelper {
 
         if (!clonedFields.includes(FIELD_EXTENSION)) {
             clonedFields.push(FIELD_EXTENSION);
+        }
+
+        // This field is necessary to check if the user has permission to update metadata
+        if (!clonedFields.includes(FIELD_PERMISSIONS)) {
+            clonedFields.push(FIELD_PERMISSIONS);
         }
 
         clonedQuery.fields = clonedFields;
