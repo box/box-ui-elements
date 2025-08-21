@@ -79,10 +79,14 @@ class File extends Item {
         }
 
         const { query, url: downloadBaseUrl } = queryString.parseUrl(downloadUrl);
+        const urlObj = new URL(downloadBaseUrl);
+        urlObj.pathname = `/transparent/authed_files_api${urlObj.pathname}/download`;
+        const modifiedBaseUrl = urlObj.toString();
+
         const downloadUrlParams = { ...query, access_token: token };
         const downloadUrlQuery = queryString.stringify(downloadUrlParams);
 
-        this.successHandler(`${downloadBaseUrl}?${downloadUrlQuery}`);
+        this.successHandler(`${modifiedBaseUrl}?${downloadUrlQuery}`);
     }
 
     /**
