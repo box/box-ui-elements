@@ -91,6 +91,7 @@ import type {
     BoxItemPermission,
     BoxItem,
 } from '../../common/types/core';
+import type { BulkItemAction } from '../common/sub-header/BulkItemActionMenu';
 import type { ContentPreviewProps } from '../content-preview';
 import type { ContentUploaderProps } from '../content-uploader';
 import type { MetadataViewContainerProps } from './MetadataViewContainer';
@@ -107,6 +108,7 @@ export interface ContentExplorerProps {
     apiHost?: string;
     appHost?: string;
     autoFocus?: boolean;
+    bulkItemActions?: BulkItemAction[];
     canCreateNewFolder?: boolean;
     canDelete?: boolean;
     canDownload?: boolean;
@@ -1699,6 +1701,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const {
             apiHost,
             appHost,
+            bulkItemActions,
             canCreateNewFolder,
             canDelete,
             canDownload,
@@ -1791,6 +1794,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 )}
 
                                 <SubHeader
+                                    bulkItemActions={bulkItemActions}
                                     view={view}
                                     viewMode={viewMode}
                                     rootId={rootFolderId}
