@@ -23,6 +23,16 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
     };
 
     describe('render()', () => {
+        beforeEach(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation(() => ({
+                querySelector: () => ({ currentTime: 70 }),
+            }));
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
         test('should correctly render the component', () => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
 
@@ -42,11 +52,22 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(wrapper.find('Toggle').length).toEqual(0);
         });
 
-        test('should not toggle the time stamp if timeStampLabel is undefined', () => {
+        test('should not toggle the time stamp if timestampLabel is undefined', () => {
             const wrapper = shallow(
                 <DraftJSMentionSelector {...requiredProps} isRequired={true} timestampLabel={undefined} />,
             );
             expect(wrapper.find('Toggle').length).toEqual(0);
+        });
+
+        test('should show timestamp toggle on with timestamp if timestamplabel is defined and isRequired is true', () => {
+            const props = { ...requiredProps };
+            const wrapper = shallow(<DraftJSMentionSelector {...props} />);
+            wrapper.setProps({ ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true });
+            const instance = wrapper.instance();
+            expect(instance.state.timestampPrepended).toEqual(true);
+            expect(wrapper.find('Toggle').length).toEqual(1);
+            expect(wrapper.find('Toggle').prop('isOn')).toEqual(true);
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
         });
     });
 
@@ -441,7 +462,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
     });
     describe('video timestamp toggle', () => {
         const getTimeStampedEnableComponent = () => {
-            const props = { ...requiredProps, timeStampedCommentsEnabled: true, isRequired: true };
+            const props = { ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true };
             return shallow(<DraftJSMentionSelector {...props} />);
         };
 
@@ -459,34 +480,12 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             jest.restoreAllMocks();
         });
 
-        test('should show timestamp toggle on with timestamp if timeStampedCommentsEnabled is true and isRequired is true', () => {
-            const props = { ...requiredProps };
-            const wrapper = shallow(<DraftJSMentionSelector {...props} />);
-            wrapper.setProps({ ...requiredProps, timeStampedCommentsEnabled: true, isRequired: true });
-            const instance = wrapper.instance();
-            expect(instance.state.timeStampPrepended).toEqual(true);
-            expect(wrapper.find('Toggle').length).toEqual(1);
-            expect(wrapper.find('Toggle').prop('isOn')).toEqual(true);
-            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
-        });
-
-        test('should not show timestamp toggle if timeStampedCommentsEnabled is false', () => {
-            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} timeStampedCommentsEnabled={false} />);
-            expect(wrapper.find('Toggle').length).toEqual(0);
-        });
-
-        test('should not show timestamp toggle if timeStampedCommentsEnabled is true and isRequired is false', () => {
-            const props = { ...requiredProps, timeStampedCommentsEnabled: true, isRequired: false };
-            const wrapper = shallow(<DraftJSMentionSelector {...props} />);
-            expect(wrapper.find('Toggle').length).toEqual(0);
-        });
-
         test('should add timestamp to the editor state when the toggle is clicked', () => {
             const wrapper = getTimeStampedEnableComponent();
             const instance = wrapper.instance();
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
-            expect(instance.state.timeStampPrepended).toEqual(true);
+            expect(instance.state.timestampPrepended).toEqual(true);
         });
 
         test('should remove timestamp from the editor state when the toggle is clicked off', () => {
@@ -496,7 +495,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
             wrapper.find('Toggle').simulate('change', { target: { checked: false } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).not.toContain('00:01:10');
-            expect(instance.state.timeStampPrepended).toEqual(false);
+            expect(instance.state.timestampPrepended).toEqual(false);
         });
 
         test('should add timestamp to the beginning of the editor state when the toggle is clicked on', () => {
@@ -588,14 +587,14 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
 
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
-            expect(instance.state.timeStampPrepended).toEqual(true);
+            expect(instance.state.timestampPrepended).toEqual(true);
 
             // Simulate user deleting all content (including timestamp)
             const emptyEditorState = EditorState.createWithContent(ContentState.createFromText(''));
             instance.handleChange(emptyEditorState);
 
-            // Verify that timeStampPrepended is set to false when content is deleted
-            expect(instance.state.timeStampPrepended).toEqual(false);
+            // Verify that timestampPrepended is set to false when content is deleted
+            expect(instance.state.timestampPrepended).toEqual(false);
             expect(wrapper.find('Toggle').prop('isOn')).toEqual(false);
         });
 
@@ -609,7 +608,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
 
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
-            expect(instance.state.timeStampPrepended).toEqual(true);
+            expect(instance.state.timestampPrepended).toEqual(true);
 
             // Simulate user deleting part of the content but keeping some
             const partialContentEditorState = EditorState.createWithContent(
@@ -617,8 +616,8 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             );
             instance.handleChange(partialContentEditorState);
 
-            // Verify that timeStampPrepended is set to false when timestamp is removed
-            expect(instance.state.timeStampPrepended).toEqual(false);
+            // Verify that timestampPrepended is set to false when timestamp is removed
+            expect(instance.state.timestampPrepended).toEqual(false);
             expect(wrapper.find('Toggle').prop('isOn')).toEqual(false);
         });
 
@@ -632,7 +631,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
 
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
-            expect(instance.state.timeStampPrepended).toEqual(true);
+            expect(instance.state.timestampPrepended).toEqual(true);
 
             // Simulate user using backspace to delete the timestamp
             // Create an editor state that represents the content after backspace deletion
@@ -645,8 +644,8 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
             instance.handleChange(editorStateAfterBackspace);
 
-            // Verify that timeStampPrepended is set to false when timestamp is deleted
-            expect(instance.state.timeStampPrepended).toEqual(false);
+            // Verify that timestampPrepended is set to false when timestamp is deleted
+            expect(instance.state.timestampPrepended).toEqual(false);
             expect(wrapper.find('Toggle').prop('isOn')).toEqual(false);
         });
     });

@@ -103,7 +103,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             isTouched: false,
             internalEditorState: props.editorState ? null : EditorState.createEmpty(this.compositeDecorator),
             error: null,
-            timeStampPrepended: false,
+            timestampPrepended: false,
         };
     }
 
@@ -136,10 +136,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             }
         }
 
-        // If timeStampedCommentsEnabled is true and isRequired is true then force the timestamp
+        // If timestampedCommentsEnabled is true and isRequired is true then force the timestamp
         // to be added to the editor state as that is the spceified default behavior for video comments
         if (
-            this.props.timeStampedCommentsEnabled === true &&
+            this.props.timestampLabel &&
             this.props.isRequired !== prevProps.isRequired &&
             this.props.isRequired === true
         ) {
@@ -189,11 +189,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const timestampText = `${timestamp}`;
         let updatedContent;
         let newTimeStampPrepended;
-        const { timeStampPrepended } = this.state;
+        const { timestampPrepended } = this.state;
 
-        if (!timeStampPrepended || forceOn) {
+        if (!timestampPrepended || forceOn) {
             // Create a new entity for the timestamp. It is immutable so it will not be editable.
-            const timeStampEntity = currentContent.createEntity(
+            const timestampEntity = currentContent.createEntity(
                 UNEDITABLE_TIMESTAMP_TEXT, // Entity type
                 'IMMUTABLE',
                 { timestamp },
@@ -215,7 +215,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             });
 
             // Get the entity key for the timestamp entity
-            const entityKey = timeStampEntity.getLastCreatedEntityKey();
+            const entityKey = timestampEntity.getLastCreatedEntityKey();
 
             // Apply the timestamp entity to the inserted text. This will ensure that the timestamp is uneditable and that
             // the decorator will apply the proper styling to the timestamp.
@@ -254,7 +254,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // Update state with new timestamp status
         this.setState({
-            timeStampPrepended: newTimeStampPrepended,
+            timestampPrepended: newTimeStampPrepended,
         });
 
         // handle the change in the editor state
@@ -383,15 +383,15 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @returns {void}
      */
     handleChange = (nextEditorState: EditorState) => {
-        const { internalEditorState, timeStampPrepended }: State = this.state;
+        const { internalEditorState, timestampPrepended }: State = this.state;
         const { onChange }: Props = this.props;
 
         // Check if timestamp entity is still present in the content
         let processedEditorState = nextEditorState;
         let shouldUpdateTimeStampPrepended = false;
-        let newTimeStampPrepended = timeStampPrepended;
+        let newTimeStampPrepended = timestampPrepended;
 
-        if (timeStampPrepended) {
+        if (timestampPrepended) {
             const currentContent = nextEditorState.getCurrentContent();
             const firstBlock = currentContent.getFirstBlock();
             const timestampLength = this.getTimestampLength(currentContent, firstBlock);
@@ -410,11 +410,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         if (internalEditorState) {
             const newState = { internalEditorState: processedEditorState };
             if (shouldUpdateTimeStampPrepended) {
-                newState.timeStampPrepended = newTimeStampPrepended;
+                newState.timestampPrepended = newTimeStampPrepended;
             }
             this.setState(newState);
         } else if (shouldUpdateTimeStampPrepended) {
-            this.setState({ timeStampPrepended: newTimeStampPrepended });
+            this.setState({ timestampPrepended: newTimeStampPrepended });
         }
     };
 
@@ -447,8 +447,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     };
 
     getTimeStampLabel = () => {
-        const { timeStampPrepended } = this.state;
-        return timeStampPrepended ? 'Remove Video Timestamp' : 'Add Video Timestamp';
+        const { timestampPrepended } = this.state;
+        return timestampPrepended ? 'Remove Video Timestamp' : 'Add Video Timestamp';
     };
 
     render() {
@@ -470,7 +470,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             onReturn,
             timestampLabel,
         } = this.props;
-        const { contacts, internalEditorState, error, timeStampPrepended } = this.state;
+        const { contacts, internalEditorState, error, timestampPrepended } = this.state;
         const { handleBlur, handleChange, handleFocus, toggleTimeStamp } = this;
         const rawEditorState: EditorState = internalEditorState || externalEditorState;
         const editorState: EditorState = this.getEditorStateWithDecorator(rawEditorState);
@@ -507,8 +507,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     {isRequired && timestampLabel && (
                         <Toggle
                             className="comment-Timestamp-toggle"
-                            label={timeStampLabel}
-                            isOn={timeStampPrepended}
+                            label={timestampLabel}
+                            isOn={timestampPrepended}
                             onChange={() => toggleTimeStamp(editorState)}
                         />
                     )}
