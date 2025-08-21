@@ -140,9 +140,9 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
             );
 
             const ellipsisButton = await screen.findByRole('button', { name: 'Bulk actions' });
-            user.click(ellipsisButton);
+            await user.click(ellipsisButton);
 
-            const downloadAction = await screen.findByRole('menuitem', { name: 'Download' });
+            const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
             await user.click(downloadAction);
 
             const expectedOnClickArgument = 'all';

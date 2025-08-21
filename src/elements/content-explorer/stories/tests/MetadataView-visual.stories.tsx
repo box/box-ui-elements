@@ -222,25 +222,18 @@ export const sidePanelOpenWithSingleItemSelected: Story = {
 export const metadataViewV2WithBulkItemActionMenuShowsItemActionMenu: Story = {
     args: metadataViewV2WithBulkItemActions,
     play: async ({ canvas }) => {
-        await waitFor(() => {
-            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
-        });
+        const firstRow = await canvas.findByRole('row', { name: /Child 2/i });
+        expect(firstRow).toBeInTheDocument();
 
-        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
         const checkbox = within(firstRow).getByRole('checkbox');
-        userEvent.click(checkbox);
-
-        await waitFor(() => {
-            expect(canvas.getByRole('button', { name: 'Bulk actions' })).toBeInTheDocument();
-        });
+        await userEvent.click(checkbox);
 
         const ellipsisButton = canvas.getByRole('button', { name: 'Bulk actions' });
+        expect(ellipsisButton).toBeInTheDocument();
+        await userEvent.click(ellipsisButton);
 
-        userEvent.click(ellipsisButton);
-
-        await waitFor(() => {
-            expect(screen.getByRole('menuitem', { name: 'Download' })).toBeInTheDocument();
-        });
+        const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+        expect(downloadAction).toBeInTheDocument();
     },
 };
 

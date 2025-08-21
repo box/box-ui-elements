@@ -104,11 +104,9 @@ const SubHeaderRight = ({
 
             {isMetadataView && isMetadataViewV2Feature && hasSelectedItems && (
                 <>
-                    {(selectedItemIds === 'all' || (selectedItemIds instanceof Set && selectedItemIds.size > 0)) &&
-                        bulkItemActions &&
-                        bulkItemActions.length > 0 && (
-                            <BulkItemActionMenu actions={bulkItemActions} selectedItemIds={selectedItemIds} />
-                        )}
+                    {bulkItemActions && bulkItemActions.length > 0 && (
+                        <BulkItemActionMenu actions={bulkItemActions} selectedItemIds={selectedItemIds} />
+                    )}
                     <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
                         {formatMessage(messages.metadata)}
                     </Button>

@@ -526,14 +526,13 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 const firstRow = await screen.findByRole('row', { name: /Child 2/i });
                 expect(firstRow).toBeInTheDocument();
 
-                const checkbox = within(firstRow).getByRole('checkbox');
-                userEvent.click(checkbox);
+                await userEvent.click(within(firstRow).getByRole('checkbox'));
 
-                const ellipsisButton = await screen.findByRole('button', { name: 'Bulk actions' });
-                expect(ellipsisButton).toBeInTheDocument();
-                userEvent.click(ellipsisButton);
+                const bulkActionsButton = screen.getByRole('button', { name: 'Bulk actions' });
+                expect(bulkActionsButton).toBeInTheDocument();
+                await userEvent.click(bulkActionsButton);
 
-                const downloadAction = await screen.findByRole('menuitem', { name: 'Download' });
+                const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
                 expect(downloadAction).toBeInTheDocument();
                 await userEvent.click(downloadAction);
 
