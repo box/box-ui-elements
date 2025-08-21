@@ -151,7 +151,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
             file: { extension: 'mp4' },
             features: { 'activityFeed.timestampedComments': { enabled: true } },
         });
-        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampedCommentsEnabled')).toEqual(true);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampLabel')).toBeDefined();
     });
 
     test('should not enable timestamp when file is not a video but timestampedComments is enabled', () => {
@@ -159,7 +159,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
             file: { extension: 'pdf' },
             features: { 'activityFeed.timestampedComments': { enabled: true } },
         });
-        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampedCommentsEnabled')).toEqual(false);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampLabel')).toBeUndefined();
     });
 
     test('should not enable timestamp when file is a video but timestampedComments is disabled', () => {
@@ -167,6 +167,6 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
             file: { extension: 'mp4' },
             features: { 'activityFeed.timestampedComments': { enabled: false } },
         });
-        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampedCommentsEnabled')).toEqual(false);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampLabel')).toBeUndefined();
     });
 });
