@@ -114,6 +114,7 @@ const SidebarNav = ({
         ),
         hasActivity && (
             <SidebarNavButton
+                key={SIDEBAR_VIEW_ACTIVITY}
                 data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                 data-target-id="SidebarNavButton-activity"
                 data-testid="sidebaractivity"
@@ -126,6 +127,7 @@ const SidebarNav = ({
         ),
         hasDetails && (
             <SidebarNavButton
+                key={SIDEBAR_VIEW_DETAILS}
                 data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                 data-target-id="SidebarNavButton-details"
                 data-testid="sidebardetails"
@@ -138,6 +140,7 @@ const SidebarNav = ({
         ),
         hasSkills && (
             <SidebarNavButton
+                key={SIDEBAR_VIEW_SKILLS}
                 data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                 data-target-id="SidebarNavButton-skills"
                 data-testid="sidebarskills"
@@ -150,6 +153,7 @@ const SidebarNav = ({
         ),
         hasMetadata && (
             <SidebarNavButton
+                key={SIDEBAR_VIEW_METADATA}
                 data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                 data-target-id="SidebarNavButton-metadata"
                 data-testid="sidebarmetadata"
@@ -162,6 +166,7 @@ const SidebarNav = ({
         ),
         hasDocGen && (
             <SidebarNavButton
+                key={SIDEBAR_VIEW_DOCGEN}
                 data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                 data-target-id="SidebarNavButton-docgen"
                 data-testid="sidebardocgen"
