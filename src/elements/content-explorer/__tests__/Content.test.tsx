@@ -30,6 +30,7 @@ const mockProps: ContentProps = {
     onItemRename: jest.fn(),
     onItemSelect: jest.fn(),
     onItemShare: jest.fn(),
+    onMetadataFilter: jest.fn(),
     onMetadataUpdate: jest.fn(),
     onSortChange: jest.fn(),
     portalElement: null,

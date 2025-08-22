@@ -468,10 +468,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 })),
             ];
             const defaultView = 'metadata';
-            const metadataViewV2ElementProps = {
+            const metadataViewV2ElementProps: Partial<ContentExplorerProps> = {
                 metadataViewProps: {
                     columns,
-                    metadataTemplate: mockSchema,
                     tableProps: {
                         isSelectAllEnabled: true,
                     },
@@ -496,9 +495,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).toBeInTheDocument();
                 });
 
-                await waitFor(() => {
-                    expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
-                });
+                expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
 
                 const selectAllCheckbox = screen.getByLabelText('Select all');
                 await userEvent.click(selectAllCheckbox);
