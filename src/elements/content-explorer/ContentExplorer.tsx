@@ -100,6 +100,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 
 const GRID_VIEW_MAX_COLUMNS = 7;
 const GRID_VIEW_MIN_COLUMNS = 1;
@@ -1974,4 +1975,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider])(ContentExplorer);
+export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider, withBlueprintModernization])(
+    ContentExplorer,
+);
