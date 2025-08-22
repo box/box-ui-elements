@@ -39,7 +39,7 @@ type CustomSidebarPanel = {
     component: React.ComponentType<any>, // The component to render
     title: string, // Panel title
     isDisabled?: boolean, // Whether the panel is disabled (default: false)
-    icon?: React.ComponentType<any>, // Optional icon for the nav button
+    icon?: React.ComponentType<any> | React.Element<any>, // Optional icon for the nav button
     navButtonProps?: Object, // Additional props for the nav button
 };
 
