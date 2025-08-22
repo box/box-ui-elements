@@ -21,7 +21,7 @@ import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
 import type { Annotation, AnnotationPermission, FeedItemStatus } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 
 import IconAnnotation from '../../../../icons/two-toned/IconAnnotation';
 
@@ -31,6 +31,7 @@ import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/type
 
 type Props = {
     currentUser?: User,
+    file?: BoxItem,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -47,6 +48,7 @@ type Props = {
 const AnnotationActivity = ({
     currentUser,
     item,
+    file,
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
@@ -172,6 +174,7 @@ const AnnotationActivity = ({
                             <CommentForm
                                 className="bcs-AnnotationActivity-editor"
                                 entityId={id}
+                                file={file}
                                 getAvatarUrl={getAvatarUrl}
                                 getMentionWithQuery={getMentionWithQuery}
                                 isEditing={isEditing}

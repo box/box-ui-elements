@@ -17,17 +17,22 @@ import DraftJSMentionSelector, {
 } from '../../../../components/form-elements/draft-js-mention-selector';
 import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
+import { withFeatureConsumer, getFeatureConfig } from '../../../common/feature-checking';
+// $FlowFixMe
+import { FILE_EXTENSIONS } from '../../../common/item/constants';
+import type { FeatureConfig } from '../../../common/feature-checking/flowTypes';
 import messages from './messages';
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
-
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import './CommentForm.scss';
 
-type Props = {
+export type CommentFormProps = {
     className: string,
     contactsLoaded?: boolean,
     createComment?: Function,
     entityId?: string,
+    features?: FeatureConfig,
+    file?: BoxItem,
     getAvatarUrl?: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     intl: IntlShape,
@@ -55,17 +60,18 @@ type State = {
     commentEditorState: any,
 };
 
-class CommentForm extends React.Component<Props, State> {
+class CommentForm extends React.Component<CommentFormProps, State> {
     static defaultProps = {
         isOpen: false,
         shouldFocusOnOpen: false,
+        timestampedCommentsEnabled: false,
     };
 
     state = {
         commentEditorState: getEditorState(this.props.shouldFocusOnOpen, this.props.tagged_message),
     };
 
-    componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
+    componentDidUpdate({ isOpen: prevIsOpen }: CommentFormProps): void {
         const { isOpen } = this.props;
 
         if (isOpen !== prevIsOpen && !isOpen) {
@@ -130,7 +136,18 @@ class CommentForm extends React.Component<Props, State> {
             getAvatarUrl,
             showTip = true,
             placeholder = formatMessage(messages.commentWrite),
+            features = {},
+            file,
         } = this.props;
+
+        // Get feature configuration from context
+        const timestampCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
+
+        // Use feature config to determine if time stamped comments are enabled
+        const istimestampedCommentsEnabled = timestampCommentsConfig?.enabled === true;
+        const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
+        const allowVideoTimeStamps = isVideo && istimestampedCommentsEnabled;
+        const timestampLabel = allowVideoTimeStamps ? formatMessage(messages.commentTimestampLabel) : undefined;
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
@@ -156,6 +173,7 @@ class CommentForm extends React.Component<Props, State> {
                             isRequired={isOpen}
                             name="commentText"
                             label={formatMessage(messages.commentLabel)}
+                            timestampLabel={timestampLabel}
                             description={formatMessage(messages.atMentionTipDescription)}
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
@@ -179,4 +197,4 @@ class CommentForm extends React.Component<Props, State> {
 
 // For testing only
 export { CommentForm as CommentFormUnwrapped };
-export default injectIntl(CommentForm);
+export default withFeatureConsumer(injectIntl(CommentForm));

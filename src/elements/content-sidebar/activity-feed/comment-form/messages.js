@@ -69,6 +69,11 @@ const messages = defineMessages({
             'Use the @ symbol to mention users and use the up and down arrow keys to scroll through autocomplete suggestions.',
         description: 'Mentioning call to action detailed description for screen reader users',
     },
+    commentTimestampLabel: {
+        id: 'be.contentSidebar.activityFeed.commentForm.commentTimestampLabel',
+        defaultMessage: 'Comment with timestamp',
+        description: 'Label for toggle to add video timestamp to comment',
+    },
 });
 
 export default messages;

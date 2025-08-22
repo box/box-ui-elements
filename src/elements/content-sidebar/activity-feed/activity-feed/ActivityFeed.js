@@ -395,6 +395,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
                             approverSelectorContacts={approverSelectorContacts}
                             currentFileVersionId={currentFileVersionId}
                             currentUser={currentUser}
+                            file={file}
                             getApproverWithQuery={getApproverWithQuery}
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
@@ -462,6 +463,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
                             'bcs-is-disabled': isDisabled,
                         })}
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
+                        file={file}
                         getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         // $FlowFixMe
