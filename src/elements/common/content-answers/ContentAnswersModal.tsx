@@ -27,7 +27,6 @@ import messages from './messages';
 export interface ExternalProps {
     isCitationsEnabled?: boolean;
     isMarkdownEnabled?: boolean;
-    isResetChatEnabled?: boolean;
     onAsk?: () => void;
     onClearConversation?: () => void;
     onRequestClose?: () => void;
@@ -50,7 +49,6 @@ const ContentAnswersModal = ({
     suggestedQuestions,
     isCitationsEnabled = true,
     isMarkdownEnabled = true,
-    isResetChatEnabled = true,
 }: ContentAnswersModalProps) => {
     const { formatMessage } = useIntl();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -176,7 +174,6 @@ const ContentAnswersModal = ({
             hasRequestInProgress={isLoading}
             isCitationsEnabled={isCitationsEnabled}
             isMarkdownEnabled={isMarkdownEnabled}
-            isResetChatEnabled={isResetChatEnabled}
             onClearAction={handleClearConversation}
             onOpenChange={handleOnRequestClose}
             open={isOpen}

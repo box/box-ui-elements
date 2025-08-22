@@ -45,7 +45,6 @@ export interface BoxAISidebarProps {
     isFeedbackFormEnabled: boolean;
     isIntelligentQueryMode: boolean;
     isMarkdownEnabled: boolean;
-    isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
     items: Array<ItemType>;

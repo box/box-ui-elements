@@ -534,57 +534,10 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
     });
 });
 
-describe('MetadataInstanceEditor - canUseAIFolderExtractionAgentSelector prop', () => {
-    test('should propagate canUseAIFolderExtractionAgentSelector, showing agent selector', async () => {
-        const props = getMetadataEditorBaseProps({
-            canUseAIFolderExtraction: true,
-            canUseAIFolderExtractionAgentSelector: true,
-        });
-        props.editors[0].instance.cascadePolicy.cascadePolicyType = 'ai_extract';
-        render(<MetadataInstanceEditor {...props} />);
-
-        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' }, { timeout: 3000 });
-        await userEvent.click(editButton);
-
-        const cascadeToggle = screen.getByRole('switch', { name: 'Enable Cascade Policy' });
-        expect(cascadeToggle).toBeChecked();
-
-        const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
-        expect(aiToggle).toBeChecked();
-
-        expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
-    });
-
-    test('should not show agent selector if canUseAIFolderExtractionAgentSelector is false', async () => {
-        render(
-            <MetadataInstanceEditor
-                {...getMetadataEditorBaseProps({
-                    canUseAIFolderExtractionAgentSelector: false,
-                })}
-            />,
-        );
-
-        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' });
-        await userEvent.click(editButton);
-
-        expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
-    });
-
-    test('should not show agent selector if canUseAIFolderExtractionAgentSelector is undefined', async () => {
-        const props = getMetadataEditorBaseProps();
-        delete props.canUseAIFolderExtractionAgentSelector;
-        render(<MetadataInstanceEditor {...props} />);
-
-        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' });
-        await userEvent.click(editButton);
-
-        expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
-    });
-
+describe('MetadataInstanceEditor agent selector', () => {
     test('should show "Enhanced" in the combobox when the second option is selected', async () => {
         const props = getMetadataEditorBaseProps({
             canUseAIFolderExtraction: true,
-            canUseAIFolderExtractionAgentSelector: true,
         });
         props.editors[0].instance.cascadePolicy.cascadePolicyType = 'ai_extract';
         props.editors[0].instance.cascadePolicy.id = null;

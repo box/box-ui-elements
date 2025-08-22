@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { withRouter, type RouterHistory } from 'react-router-dom';
+import { type RouterHistory } from 'react-router-dom';
+import { withRouterIfEnabled } from '../common/routing';
 
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
@@ -11,7 +12,7 @@ import type { ElementsXhrError } from '../../common/types/api';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type Props = {|
-    history: RouterHistory,
+    history?: RouterHistory,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled: boolean,
@@ -54,7 +55,7 @@ class AddTaskButton extends React.Component<Props, State> {
                 },
                 true,
             );
-        } else {
+        } else if (history) {
             history.replace({ state: { open: true } });
         }
 
@@ -103,4 +104,4 @@ class AddTaskButton extends React.Component<Props, State> {
 }
 
 export { AddTaskButton as AddTaskButtonComponent };
-export default withRouter(AddTaskButton);
+export default withRouterIfEnabled(AddTaskButton);

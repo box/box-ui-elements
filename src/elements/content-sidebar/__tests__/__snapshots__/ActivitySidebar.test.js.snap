@@ -4,7 +4,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
 <SidebarContent
   actions={
     <React.Fragment>
-      <withRouter(AddTaskButton)
+      <withRouterIfEnabled(AddTaskButton)
         isDisabled={false}
         onTaskModalClose={[Function]}
         taskFormProps={

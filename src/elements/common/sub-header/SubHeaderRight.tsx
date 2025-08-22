@@ -1,7 +1,11 @@
 import * as React from 'react';
+import { useIntl } from 'react-intl';
+
 import { Button } from '@box/blueprint-web';
 import { Pencil } from '@box/blueprint-web-assets/icons/Fill';
-import { useIntl } from 'react-intl';
+import type { Selection } from 'react-aria-components';
+
+import { type BulkItemAction, BulkItemActionMenu } from './BulkItemActionMenu';
 import Sort from './Sort';
 import Add from './Add';
 import GridViewSlider from '../../../components/grid-view/GridViewSlider';
@@ -17,6 +21,7 @@ import messages from './messages';
 import './SubHeaderRight.scss';
 
 export interface SubHeaderRightProps {
+    bulkItemActions?: BulkItemAction[];
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -27,14 +32,17 @@ export interface SubHeaderRightProps {
     onCreate: () => void;
     onGridViewSliderChange: (newSliderValue: number) => void;
     onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    onMetadataSidePanelToggle?: () => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
+    selectedItemIds?: Selection;
     view: View;
     viewMode: ViewMode;
 }
 
 const SubHeaderRight = ({
+    bulkItemActions,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -45,9 +53,11 @@ const SubHeaderRight = ({
     onCreate,
     onGridViewSliderChange,
     onSortChange,
+    onMetadataSidePanelToggle,
     onUpload,
     onViewModeChange,
     portalElement,
+    selectedItemIds,
     view,
     viewMode,
 }: SubHeaderRightProps) => {
@@ -60,6 +70,8 @@ const SubHeaderRight = ({
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isMetadataView: boolean = view === VIEW_METADATA;
+    const hasSelectedItems: boolean = !!(selectedItemIds && (selectedItemIds === 'all' || selectedItemIds.size > 0));
+
     return (
         <div className="be-sub-header-right">
             {!isMetadataView && (
@@ -90,10 +102,15 @@ const SubHeaderRight = ({
                 </>
             )}
 
-            {isMetadataView && isMetadataViewV2Feature && (
-                <Button icon={Pencil} size="large" variant="primary">
-                    {formatMessage(messages.metadata)}
-                </Button>
+            {isMetadataView && isMetadataViewV2Feature && hasSelectedItems && (
+                <>
+                    {bulkItemActions && bulkItemActions.length > 0 && (
+                        <BulkItemActionMenu actions={bulkItemActions} selectedItemIds={selectedItemIds} />
+                    )}
+                    <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
+                        {formatMessage(messages.metadata)}
+                    </Button>
+                </>
             )}
         </div>
     );

@@ -9,7 +9,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import merge from 'lodash/merge';
 import noop from 'lodash/noop';
-import { generatePath, withRouter } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
 import type { MessageDescriptor } from 'react-intl';
 import { withFeatureConsumer, isFeatureEnabled } from '../../common/feature-checking';
@@ -21,6 +21,7 @@ import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
+import { withRouterIfEnabled } from '../../common/routing';
 import type { FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
@@ -36,7 +37,7 @@ type Props = {
     features: FeatureConfig,
     fileId: string,
     hasSidebarInitialized?: boolean,
-    history: RouterHistory,
+    history?: RouterHistory,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     match: Match,
@@ -283,7 +284,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
                 delete navigationUpdate.versionId;
             }
             internalSidebarNavigationHandler(navigationUpdate);
-        } else {
+        } else if (history) {
             history.push(generatePath(match.path, { ...match.params, versionId }));
         }
     };
@@ -349,4 +350,4 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
 export type VersionsSidebarProps = Props;
 export { VersionsSidebarContainer as VersionsSidebarContainerComponent };
-export default flow([withRouter, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);
+export default flow([withRouterIfEnabled, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);

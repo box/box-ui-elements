@@ -16,7 +16,12 @@ import {
 import APIContext from '../../api-context';
 
 describe('elements/common/content-answers/ContentAnswersModal', () => {
-    const mockQuestion = { isCompleted: false, isLoading: true, prompt: 'summarize another question' };
+    const mockQuestion = {
+        isCompleted: false,
+        isLoading: true,
+        prompt: 'summarize another question',
+        promptType: 'user_input',
+    };
     const renderComponent = (api = mockApi, props?: {}) => {
         render(
             <Notification.Provider>
@@ -137,7 +142,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         await userEvent.click(submitButton);
 
         expect(mockApi.getIntelligenceAPI().ask).lastCalledWith(
-            { isCompleted: false, isLoading: true, prompt: 'Another question?' },
+            { isCompleted: false, isLoading: true, prompt: 'Another question?', promptType: 'user_input' },
             [{ id: mockFile.id, type: 'file' }],
             [{ answer: 'summarize answer', created_at: '', prompt: 'summarize another question' }],
             {

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { PageHeader } from '@box/blueprint-web';
 import type { Selection } from 'react-aria-components';
 
+import type { BulkItemAction } from './BulkItemActionMenu';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderLeftV2 from './SubHeaderLeftV2';
 import SubHeaderRight from './SubHeaderRight';
@@ -15,6 +16,7 @@ import { useFeatureEnabled } from '../feature-checking';
 import './SubHeader.scss';
 
 export interface SubHeaderProps {
+    bulkItemActions?: BulkItemAction[];
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -28,6 +30,7 @@ export interface SubHeaderProps {
     onGridViewSliderChange?: (newSliderValue: number) => void;
     onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
     onSortChange: (sortBy: string, sortDirection: string) => void;
+    onMetadataSidePanelToggle?: () => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
@@ -40,6 +43,7 @@ export interface SubHeaderProps {
 }
 
 const SubHeader = ({
+    bulkItemActions,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -53,6 +57,7 @@ const SubHeader = ({
     onCreate,
     onItemClick,
     onSortChange,
+    onMetadataSidePanelToggle,
     onUpload,
     onViewModeChange,
     portalElement,
@@ -99,6 +104,7 @@ const SubHeader = ({
             </PageHeader.StartElements>
             <PageHeader.EndElements>
                 <SubHeaderRight
+                    bulkItemActions={bulkItemActions}
                     canCreateNewFolder={canCreateNewFolder}
                     canUpload={canUpload}
                     currentCollection={currentCollection}
@@ -109,9 +115,11 @@ const SubHeader = ({
                     onCreate={onCreate}
                     onGridViewSliderChange={onGridViewSliderChange}
                     onSortChange={onSortChange}
+                    onMetadataSidePanelToggle={onMetadataSidePanelToggle}
                     onUpload={onUpload}
                     onViewModeChange={onViewModeChange}
                     portalElement={portalElement}
+                    selectedItemIds={selectedItemIds}
                     view={view}
                     viewMode={viewMode}
                 />

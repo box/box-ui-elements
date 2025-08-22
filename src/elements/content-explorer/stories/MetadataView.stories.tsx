@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ContentExplorer from '../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../constants';
 import { mockMetadata, mockSchema } from '../../common/__mocks__/mockMetadata';
+import { mockRootFolder } from '../../common/__mocks__/mockRootFolder';
 
 const EID = '0';
 const templateName = 'templateName';
@@ -119,6 +120,9 @@ const meta: Meta<typeof ContentExplorer> = {
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/metadata_templates/enterprise/templateName/schema`, () => {
                     return HttpResponse.json(mockSchema);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/:id`, () => {
+                    return HttpResponse.json(mockRootFolder);
                 }),
             ],
         },

@@ -168,6 +168,19 @@ export const FIELD_CLASSIFICATION: 'classification' = 'classification';
 export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
 export const FIELD_HOSTNAME: 'hostname' = 'hostname';
 
+/* ----------------------- Item-Prefixed Fields for MD Query API --------------------------- */
+const ITEM_PREFIX = 'item.';
+export const FIELD_ITEM_TYPE = `${ITEM_PREFIX}${FIELD_TYPE}`;
+export const FIELD_ITEM_NAME = `${ITEM_PREFIX}${FIELD_NAME}`;
+export const FIELD_ITEM_DESCRIPTION = `${ITEM_PREFIX}${FIELD_DESCRIPTION}`;
+export const FIELD_ITEM_EXTENSION = `${ITEM_PREFIX}${FIELD_EXTENSION}`;
+export const FIELD_ITEM_OWNED_BY = `${ITEM_PREFIX}${FIELD_OWNED_BY}`;
+export const FIELD_ITEM_CREATED_AT = `${ITEM_PREFIX}${FIELD_CREATED_AT}`;
+export const FIELD_ITEM_MODIFIED_AT = `${ITEM_PREFIX}${FIELD_MODIFIED_AT}`;
+export const FIELD_ITEM_CONTENT_CREATED_AT = `${ITEM_PREFIX}${FIELD_CONTENT_CREATED_AT}`;
+export const FIELD_ITEM_CONTENT_MODIFIED_AT = `${ITEM_PREFIX}${FIELD_CONTENT_MODIFIED_AT}`;
+export const FIELD_ITEM_QUICK_SEARCH_CONTENT = `${ITEM_PREFIX}quick_search_content`;
+
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_COMMENT = 'can_comment';
 export const PERMISSION_CAN_CREATE_ANNOTATIONS = 'can_create_annotations';

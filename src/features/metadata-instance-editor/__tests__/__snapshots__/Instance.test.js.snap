@@ -416,7 +416,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         >
           <CascadePolicy
             canUseAIFolderExtraction={false}
-            canUseAIFolderExtractionAgentSelector={false}
             isAIFolderExtractionEnabled={false}
             isCascadingEnabled={true}
             isCascadingOverwritten={false}

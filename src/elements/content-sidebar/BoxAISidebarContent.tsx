@@ -50,7 +50,6 @@ function BoxAISidebarContent(
         hostAppName,
         isAIStudioAgentSelectorEnabled,
         isLoading,
-        isResetChatEnabled,
         onSelectAgent,
         questions,
         shouldShowLandingPage,
@@ -191,7 +190,7 @@ function BoxAISidebarContent(
     const renderActions = () => (
         <>
             {renderBoxAISidebarTitle()}
-            {isResetChatEnabled && <ClearConversationButton onClick={onClearAction} />}
+            <ClearConversationButton onClick={onClearAction} />
             <Tooltip content={formatMessage(messages.sidebarBoxAISwitchToModalView)} variant="standard">
                 <IconButton
                     aria-label={formatMessage(messages.sidebarBoxAISwitchToModalView)}
@@ -248,7 +247,6 @@ function BoxAISidebarContent(
                 isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                 isFeedbackEnabled={isFeedbackEnabled}
                 isFeedbackFormEnabled={isFeedbackFormEnabled}
-                isResetChatEnabled={isResetChatEnabled}
                 isStopResponseEnabled={isStopResponseEnabled}
                 items={items}
                 itemSize={itemSize}

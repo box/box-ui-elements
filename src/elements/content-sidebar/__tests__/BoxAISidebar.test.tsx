@@ -36,7 +36,6 @@ jest.mock('@box/box-ai-content-answers', () => ({
             isMarkdownEnabled={props.isMarkdownEnabled}
             isLoading={props.isLoading}
             isOpen
-            isResetChatEnabled={props.isResetChatEnabled}
             isStreamingEnabled={props.isStreamingEnabled}
             itemID={props.itemID}
             itemIDs={props.itemIDs}
@@ -120,7 +119,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isFeedbackFormEnabled: true,
         isIntelligentQueryMode: true,
         isMarkdownEnabled: true,
-        isResetChatEnabled: true,
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
         onFeedbackFormSubmit: jest.fn(),
@@ -184,12 +182,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         await renderComponent();
 
         expect(screen.getByRole('button', { name: 'Clear conversation' })).toBeInTheDocument();
-    });
-
-    test('should not have accessible "Clear" button if isResetChatEnabled is false', async () => {
-        await renderComponent({ isResetChatEnabled: false });
-
-        expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument();
     });
 
     test('should call recordAction on load if provided', async () => {
