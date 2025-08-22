@@ -106,8 +106,8 @@ const SidebarNav = ({
             >
                 {boxAiTab.icon &&
                     (React.isValidElement(boxAiTab.icon)
-                        ? React.cloneElement(boxAiTab.icon, { className: 'bcs-SidebarNav-icon' })
-                        : React.createElement(boxAiTab.icon, { className: 'bcs-SidebarNav-icon' }))}
+                        ? React.cloneElement((boxAiTab.icon: any), { className: 'bcs-SidebarNav-icon' })
+                        : React.createElement((boxAiTab.icon: any), { className: 'bcs-SidebarNav-icon' }))}
             </SidebarNavButton>
         ),
         hasActivity && (
@@ -206,8 +206,8 @@ const SidebarNav = ({
                 >
                     {CustomTabIcon &&
                         (React.isValidElement(CustomTabIcon)
-                            ? React.cloneElement(CustomTabIcon, { className: 'bcs-SidebarNav-icon' })
-                            : React.createElement(CustomTabIcon, { className: 'bcs-SidebarNav-icon' }))}
+                            ? React.cloneElement((CustomTabIcon: any), { className: 'bcs-SidebarNav-icon' })
+                            : React.createElement((CustomTabIcon: any), { className: 'bcs-SidebarNav-icon' }))}
                 </SidebarNavButton>
             );
 
