@@ -21,6 +21,9 @@ export default {
         hasVersions: true,
         token: global.TOKEN,
     },
+    parameters: {
+        chromatic: { ignoreSelectors: ['.bcs-scroll-content'] },
+    },
 };
 
 export const ContentSidebarWithBoxAIDisabled: StoryObj<typeof BoxAISidebar> = {
