@@ -56,25 +56,25 @@ type Props = {
 };
 
 const SidebarNav = ({
-                        additionalTabs,
-                        customTabs,
-                        elementId,
-                        fileId,
-                        hasActivity,
-                        hasAdditionalTabs,
-                        hasDetails,
-                        hasMetadata,
-                        hasSkills,
-                        hasDocGen = false,
-                        internalSidebarNavigation,
-                        internalSidebarNavigationHandler,
-                        intl,
-                        isOpen,
-                        onNavigate,
-                        onPanelChange = noop,
-                        routerDisabled,
-                        signSidebarProps,
-                    }: Props) => {
+    additionalTabs,
+    customTabs,
+    elementId,
+    fileId,
+    hasActivity,
+    hasAdditionalTabs,
+    hasDetails,
+    hasMetadata,
+    hasSkills,
+    hasDocGen = false,
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
+    intl,
+    isOpen,
+    onNavigate,
+    onPanelChange = noop,
+    routerDisabled,
+    signSidebarProps,
+}: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
 
     const { focusPrompt } = usePromptFocus('.be.bcs');
@@ -105,11 +105,9 @@ const SidebarNav = ({
                 {...boxAiTab.navButtonProps}
             >
                 {boxAiTab.icon &&
-                    (typeof boxAiTab.icon === 'function' ? (
-                        <boxAiTab.icon className="bcs-SidebarNav-icon" />
-                    ) : (
-                        boxAiTab.icon
-                    ))}
+                    (React.isValidElement(boxAiTab.icon)
+                        ? React.cloneElement(boxAiTab.icon, { className: 'bcs-SidebarNav-icon' })
+                        : React.createElement(boxAiTab.icon, { className: 'bcs-SidebarNav-icon' }))}
             </SidebarNavButton>
         ),
         hasActivity && (
@@ -207,11 +205,9 @@ const SidebarNav = ({
                     {...navButtonProps}
                 >
                     {CustomTabIcon &&
-                        (typeof CustomTabIcon === 'function' ? (
-                            <CustomTabIcon className="bcs-SidebarNav-icon" />
-                        ) : (
-                            CustomTabIcon
-                        ))}
+                        (React.isValidElement(CustomTabIcon)
+                            ? React.cloneElement(CustomTabIcon, { className: 'bcs-SidebarNav-icon' })
+                            : React.createElement(CustomTabIcon, { className: 'bcs-SidebarNav-icon' }))}
                 </SidebarNavButton>
             );
 
