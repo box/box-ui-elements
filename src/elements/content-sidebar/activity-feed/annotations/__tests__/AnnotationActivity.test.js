@@ -109,24 +109,13 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ ...mockActivity, ...activity });
 
-        wrapper
-            .find(AnnotationActivityMenu)
-            .dive()
-            .simulate('click');
-        wrapper
-            .find(AnnotationActivityMenu)
-            .dive()
-            .find('MenuItem')
-            .simulate('click');
-        expect(wrapper.exists('CommentForm')).toBe(true);
+        wrapper.find(AnnotationActivityMenu).dive().simulate('click');
+        wrapper.find(AnnotationActivityMenu).dive().find('MenuItem').simulate('click');
+        expect(wrapper.exists('ForwardRef(withFeatureConsumer(CommentForm))')).toBe(true);
 
         // Firing the onCancel prop will remove the CommentForm
-        wrapper
-            .find('CommentForm')
-            .dive()
-            .props()
-            .onCancel();
-        expect(wrapper.exists('CommentForm')).toBe(false);
+        wrapper.find('ForwardRef(withFeatureConsumer(CommentForm))').props().onCancel();
+        expect(wrapper.exists('ForwardRef(withFeatureConsumer(CommentForm))')).toBe(false);
     });
 
     test('should correctly render annotation activity of another file version', () => {

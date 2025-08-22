@@ -23,7 +23,7 @@ import type {
 } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { OnAnnotationEdit, OnCommentEdit, OnAnnotationStatusChange, OnCommentStatusChange } from './types';
-import type { SelectorItems, User } from '../../../../common/types/core';
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import type { Translations } from '../../flowTypes';
 
 import './BaseComment.scss';
@@ -37,6 +37,7 @@ export type BaseCommentProps = {
     created_by: User,
     currentUser?: User,
     error?: ActionItemError,
+    file?: BoxItem,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -71,6 +72,7 @@ export const BaseComment = ({
     created_by,
     currentUser,
     error,
+    file,
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
@@ -195,6 +197,7 @@ export const BaseComment = ({
                                 'bcs-is-disabled': isDisabled,
                             })}
                             entityId={id}
+                            file={file}
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             isDisabled={isDisabled}

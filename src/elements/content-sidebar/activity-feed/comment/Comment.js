@@ -24,7 +24,7 @@ import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '
 import messages from './messages';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 import './Comment.scss';
 import { type OnCommentEdit } from './types';
@@ -34,6 +34,7 @@ type Props = {
     created_by: User,
     currentUser?: User,
     error?: ActionItemError,
+    file?: BoxItem,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -143,6 +144,7 @@ class Comment extends React.Component<Props, State> {
             id,
             isPending,
             error,
+            file,
             tagged_message = '',
             translatedTaggedMessage,
             translations,
@@ -274,6 +276,7 @@ class Comment extends React.Component<Props, State> {
                                 onFocus={this.commentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
+                                file={file}
                                 tagged_message={tagged_message}
                                 getAvatarUrl={getAvatarUrl}
                                 mentionSelectorContacts={mentionSelectorContacts}

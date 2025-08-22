@@ -60,23 +60,13 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     test('should set required to false on comment input when not open', () => {
         const wrapper = getWrapper();
 
-        expect(
-            wrapper
-                .find('DraftJSMentionSelector')
-                .at(0)
-                .prop('isRequired'),
-        ).toEqual(false);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('isRequired')).toEqual(false);
     });
 
     test('should set required to true on comment input when isOpen is true', () => {
         const wrapper = getWrapper({ isOpen: true });
 
-        expect(
-            wrapper
-                .find('DraftJSMentionSelector')
-                .at(0)
-                .prop('isRequired'),
-        ).toEqual(true);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('isRequired')).toEqual(true);
     });
 
     // Test cases in order
@@ -105,46 +95,27 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     test('should have editor state reflect tagged_message prop when not empty', () => {
         const wrapper = getWrapper({ tagged_message: 'hey there' });
 
-        expect(
-            wrapper
-                .find('DraftJSMentionSelector')
-                .at(0)
-                .prop('placeholder'),
-        ).toBeUndefined();
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('placeholder')).toBeUndefined();
 
-        const content = wrapper
-            .state()
-            .commentEditorState.getCurrentContent()
-            .getPlainText();
+        const content = wrapper.state().commentEditorState.getCurrentContent().getPlainText();
         expect(content).toEqual('hey there');
     });
 
     test('should have editor state reflect empty state when no tagged_message prop is passed', () => {
         const wrapper = getWrapper();
 
-        expect(
-            wrapper
-                .find('DraftJSMentionSelector')
-                .at(0)
-                .prop('placeholder'),
-        ).toEqual('be.contentSidebar.activityFeed.commentForm.commentWrite');
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('placeholder')).toEqual(
+            'be.contentSidebar.activityFeed.commentForm.commentWrite',
+        );
 
-        const content = wrapper
-            .state()
-            .commentEditorState.getCurrentContent()
-            .getPlainText();
+        const content = wrapper.state().commentEditorState.getCurrentContent().getPlainText();
         expect(content).toEqual('');
     });
 
     test('should not display trigger @mention selector when getMentionQuery prop is empty', () => {
         const wrapper = getWrapper({ getMentionWithQuery: null });
 
-        expect(
-            wrapper
-                .find('DraftJSMentionSelector')
-                .at(0)
-                .prop('onMention'),
-        ).toEqual(null);
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('onMention')).toEqual(null);
     });
 
     test('should not show mention tip is showTip is false', () => {
@@ -156,12 +127,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     test('should show custom placeholder when provided', () => {
         const wrapper = getWrapper({ placeholder: 'Your comment goes here' });
 
-        expect(
-            wrapper
-                .find('DraftJSMentionSelector')
-                .at(0)
-                .prop('placeholder'),
-        ).toEqual('Your comment goes here');
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('placeholder')).toEqual('Your comment goes here');
     });
 
     test('should not focus on textbox when shouldFocusOnOpen is false', () => {
@@ -178,5 +144,29 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
 
         getWrapperRTL({ shouldFocusOnOpen: true });
         expect(mockFocusFunc).toHaveBeenCalled();
+    });
+
+    test('should enable timestamp when file is a video and timestampedComments is enabled', () => {
+        const wrapper = getWrapper({
+            file: { extension: 'mp4' },
+            features: { 'activityFeed.timestampedComments': { enabled: true } },
+        });
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampLabel')).toBeDefined();
+    });
+
+    test('should not enable timestamp when file is not a video but timestampedComments is enabled', () => {
+        const wrapper = getWrapper({
+            file: { extension: 'pdf' },
+            features: { 'activityFeed.timestampedComments': { enabled: true } },
+        });
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampLabel')).toBeUndefined();
+    });
+
+    test('should not enable timestamp when file is a video but timestampedComments is disabled', () => {
+        const wrapper = getWrapper({
+            file: { extension: 'mp4' },
+            features: { 'activityFeed.timestampedComments': { enabled: false } },
+        });
+        expect(wrapper.find('DraftJSMentionSelector').at(0).prop('timestampLabel')).toBeUndefined();
     });
 });
