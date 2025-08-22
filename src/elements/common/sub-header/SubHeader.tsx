@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { PageHeader } from '@box/blueprint-web';
 import type { Selection } from 'react-aria-components';
 
+import type { BulkItemAction } from './BulkItemActionMenu';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderLeftV2 from './SubHeaderLeftV2';
 import SubHeaderRight from './SubHeaderRight';
@@ -15,6 +16,7 @@ import { useFeatureEnabled } from '../feature-checking';
 import './SubHeader.scss';
 
 export interface SubHeaderProps {
+    bulkItemActions?: BulkItemAction[];
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -41,6 +43,7 @@ export interface SubHeaderProps {
 }
 
 const SubHeader = ({
+    bulkItemActions,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -101,6 +104,7 @@ const SubHeader = ({
             </PageHeader.StartElements>
             <PageHeader.EndElements>
                 <SubHeaderRight
+                    bulkItemActions={bulkItemActions}
                     canCreateNewFolder={canCreateNewFolder}
                     canUpload={canUpload}
                     currentCollection={currentCollection}

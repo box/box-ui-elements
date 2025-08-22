@@ -505,6 +505,40 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
                 expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
             });
+
+            test('should call onClick when bulk item action is clicked', async () => {
+                let mockOnClickArg;
+                const mockOnClick = jest.fn(arg => {
+                    mockOnClickArg = arg;
+                });
+                const metadataViewV2WithBulkItemActions = {
+                    ...metadataViewV2ElementProps,
+                    bulkItemActions: [
+                        {
+                            label: 'Download',
+                            onClick: mockOnClick,
+                        },
+                    ],
+                };
+
+                renderComponent(metadataViewV2WithBulkItemActions);
+
+                const firstRow = await screen.findByRole('row', { name: /Child 2/i });
+                expect(firstRow).toBeInTheDocument();
+
+                await userEvent.click(within(firstRow).getByRole('checkbox'));
+
+                const bulkActionsButton = screen.getByRole('button', { name: 'Bulk actions' });
+                expect(bulkActionsButton).toBeInTheDocument();
+                await userEvent.click(bulkActionsButton);
+
+                const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+                expect(downloadAction).toBeInTheDocument();
+                await userEvent.click(downloadAction);
+
+                expect(mockOnClick).toHaveBeenCalled();
+                expect(Array.from(mockOnClickArg)).toEqual(['1188890835']);
+            });
         });
     });
 
