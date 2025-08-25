@@ -10,7 +10,7 @@ import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import type { Selection } from 'react-aria-components';
+import type { Key, Selection } from 'react-aria-components';
 
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
@@ -152,7 +152,7 @@ export interface ContentExplorerProps {
     rootFolderId?: string;
     sharedLink?: string;
     sharedLinkPassword?: string;
-    sortBy?: SortBy;
+    sortBy?: SortBy | Key;
     sortDirection?: SortDirection;
     staticHost?: string;
     staticPath?: string;
@@ -895,7 +895,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @param {string} sortDirection - sort direction
      * @return {void}
      */
-    sort = (sortBy: SortBy, sortDirection: SortDirection) => {
+    sort = (sortBy: SortBy | Key, sortDirection: SortDirection) => {
         const {
             currentCollection: { id },
             view,
