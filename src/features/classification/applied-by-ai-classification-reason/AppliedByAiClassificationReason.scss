@@ -1,0 +1,31 @@
+@import '~@box/blueprint-web-assets/dist/tokens/tokens';
+
+$reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
+
+.AppliedByAiClassificationReason {
+    .AppliedByAiClassificationReason-headerText {
+        font-size: $reason-font-size;
+    }
+
+    .AppliedByAiClassificationReason-answer {
+        font-size: $reason-font-size;
+        line-height: $body-default-line-height;
+    }
+
+    .AppliedByAiClassificationReason-references {
+        > * > * {
+            font-size: $reason-font-size;
+        }
+    }
+}
+
+.AppliedByAiClassificationReason-header {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin: 0 0 $space-2;
+}
+
+.AppliedByAiClassificationReason-references {
+    margin-top: $space-2;
+}
