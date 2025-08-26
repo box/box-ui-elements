@@ -152,7 +152,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
     });
 
     // Skipping those tests, since now suggested questions will be a part of a new landing page, which is turned off for ContentAnswersModal
-    describe.skip('should render suggested questions', () => {
+    describe('should render suggested questions', () => {
         test('renders suggested questions when provided', () => {
             const suggestedQuestions = [{ id: '1', label: 'Suggested Question 1', prompt: 'Prompt 1' }];
             renderComponent(mockApi, { suggestedQuestions });
