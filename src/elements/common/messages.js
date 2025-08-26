@@ -27,6 +27,11 @@ const messages = defineMessages({
         description: 'Generic error label.',
         defaultMessage: 'Error',
     },
+    success: {
+        id: 'be.success',
+        description: 'Generic success label.',
+        defaultMessage: 'Success',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -1110,28 +1115,13 @@ const messages = defineMessages({
         description: 'Display text for field when there are multiple items selected and have different value',
         defaultMessage: 'Multiple Values',
     },
-    notificationCloseIcon: {
-        id: 'be.notificationCloseIcon',
-        description: 'Aria Label for close icon in the notification banner',
-        defaultMessage: 'Close',
-    },
-    errorTypeIcon: {
-        id: 'be.errorTypeIcon',
-        description: 'Aria Label for type icon in the error notification banner',
-        defaultMessage: 'Error',
-    },
-    successTypeIcon: {
-        id: 'be.successTypeIcon',
-        description: 'Aria Label for type icon in the success notification banner',
-        defaultMessage: 'Success',
-    },
-    errorNotification: {
-        id: 'be.errorNotification',
+    metadataUpdateErrorNotification: {
+        id: 'be.metadataUpdateErrorNotification',
         description: 'Text shown in error notification banner',
         defaultMessage: 'Unable to save changes. Please try again',
     },
-    successNotification: {
-        id: 'be.successNotification',
+    metadataUpdateSuccessNotification: {
+        id: 'be.metadataUpdateSuccessNotification',
         description: 'Text shown in success notification banner',
         defaultMessage: `
             {numSelected, plural,

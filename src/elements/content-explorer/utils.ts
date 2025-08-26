@@ -16,7 +16,7 @@ import messages from '../common/messages';
 
 // Specific type for metadata field value in the item
 // Note: Item doesn't have field value in metadata object if that field is not set, so the value will be undefined in this case
-type ItemMetadataFieldValue = string | number | Array<string> | undefined;
+type ItemMetadataFieldValue = string | number | Array<string> | null | undefined;
 
 // Get selected item text
 export function useSelectedItemText(currentCollection: Collection, selectedItemIds: Selection): string {
@@ -42,8 +42,26 @@ export function useSelectedItemText(currentCollection: Collection, selectedItemI
 // Check if the field value is empty.
 // Note: 0 doesn't represent empty here because of float type field
 export function isEmptyValue(value: ItemMetadataFieldValue) {
-    if (isNil(value)) return true;
-    return value === '' || (Array.isArray(value) && value.length === 0) || Number.isNaN(value);
+    if (isNil(value)) {
+        return true;
+    }
+
+    // date, string, enum
+    if (value === '') {
+        return true;
+    }
+
+    // multiSelect
+    if (Array.isArray(value) && value.length === 0) {
+        return true;
+    }
+
+    // float
+    if (Number.isNaN(value)) {
+        return true;
+    }
+
+    return false;
 }
 
 // Check if the field values are equal based on the field types
@@ -62,11 +80,22 @@ export function areFieldValuesEqual(
     return value1 === value2;
 }
 
+// Return default form value by field type
+function getDefaultValueByFieldType(fieldType: MetadataFieldType) {
+    if (fieldType === 'date' || fieldType === 'enum' || fieldType === 'float' || fieldType === 'string') {
+        return '';
+    }
+    if (fieldType === 'multiSelect') {
+        return [];
+    }
+    return undefined;
+}
+
 // Set the field value in Metadata Form based on the field type
 function setFieldValue(fieldType: MetadataFieldType, fieldValue: ItemMetadataFieldValue) {
-    if (fieldValue) return fieldValue;
-    if (fieldType === 'multiSelect') return [];
-    if (fieldType === 'enum') return '';
+    if (isNil(fieldValue)) {
+        return getDefaultValueByFieldType(fieldType);
+    }
     return fieldValue;
 }
 

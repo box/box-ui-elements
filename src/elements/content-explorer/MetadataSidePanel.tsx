@@ -31,13 +31,13 @@ export interface MetadataSidePanelProps {
     ) => JSONPatchOperations;
     metadataTemplate: MetadataTemplate;
     onClose: () => void;
-    refreshCollection: () => void;
-    updateMetadataV2: (
+    onUpdate: (
         file: BoxItem,
         operations: JSONPatchOperations,
         successCallback?: () => void,
         errorCallback?: ErrorCallback,
     ) => Promise<void>;
+    refreshCollection: () => void;
     selectedItemIds: Selection;
 }
 
@@ -46,8 +46,8 @@ const MetadataSidePanel = ({
     getOperations,
     metadataTemplate,
     onClose,
+    onUpdate,
     refreshCollection,
-    updateMetadataV2,
     selectedItemIds,
 }: MetadataSidePanelProps) => {
     const { addNotification } = useNotification();
@@ -77,10 +77,12 @@ const MetadataSidePanel = ({
 
     const handleUpdateMetadataSuccess = () => {
         addNotification({
-            closeButtonAriaLabel: formatMessage(messages.notificationCloseIcon),
+            closeButtonAriaLabel: formatMessage(messages.close),
             sensitivity: 'foreground',
-            styledText: formatMessage(messages.successNotification, { numSelected: selectedItems.length }),
-            typeIconAriaLabel: formatMessage(messages.successTypeIcon),
+            styledText: formatMessage(messages.metadataUpdateSuccessNotification, {
+                numSelected: selectedItems.length,
+            }),
+            typeIconAriaLabel: formatMessage(messages.success),
             variant: 'success',
         });
         setIsEditing(false);
@@ -89,22 +91,17 @@ const MetadataSidePanel = ({
 
     const handleUpdateMetadataError = () => {
         addNotification({
-            closeButtonAriaLabel: formatMessage(messages.notificationCloseIcon),
+            closeButtonAriaLabel: formatMessage(messages.close),
             sensitivity: 'foreground',
-            styledText: formatMessage(messages.errorNotification),
-            typeIconAriaLabel: formatMessage(messages.errorTypeIcon),
+            styledText: formatMessage(messages.metadataUpdateErrorNotification),
+            typeIconAriaLabel: formatMessage(messages.error),
             variant: 'error',
         });
     };
 
     const handleMetadataInstanceFormSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
         if (selectedItems.length === 1) {
-            await updateMetadataV2(
-                selectedItems[0],
-                operations,
-                handleUpdateMetadataSuccess,
-                handleUpdateMetadataError,
-            );
+            await onUpdate(selectedItems[0], operations, handleUpdateMetadataSuccess, handleUpdateMetadataError);
         } else {
             const { fields: templateNewFields } = values.metadata;
             const { fields: templateOldFields } = templateInstance;
@@ -115,7 +112,7 @@ const MetadataSidePanel = ({
                     await previousPromise;
 
                     const ops = getOperations(item, templateOldFields, templateNewFields);
-                    await updateMetadataV2(item, ops);
+                    await onUpdate(item, ops);
                 }, Promise.resolve());
                 handleUpdateMetadataSuccess();
             } catch (error) {

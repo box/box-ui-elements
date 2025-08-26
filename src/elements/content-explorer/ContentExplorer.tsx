@@ -12,7 +12,6 @@ import { Notification, TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { Key, Selection } from 'react-aria-components';
 import type { MetadataTemplateField } from '@box/metadata-editor';
-import type { MetadataFieldType } from '@box/metadata-view';
 
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
@@ -98,7 +97,6 @@ import type { BulkItemAction } from '../common/sub-header/BulkItemActionMenu';
 import type { ContentPreviewProps } from '../content-preview';
 import type { ContentUploaderProps } from '../content-uploader';
 import type { MetadataViewContainerProps } from './MetadataViewContainer';
-import { isMultiValuesField } from './utils';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -507,47 +505,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         templateOldFields: MetadataTemplateField[],
         templateNewFields: MetadataTemplateField[],
     ): JSONPatchOperations => {
-        const { scope, templateKey } = this.state.metadataTemplate;
-        const itemFields = item.metadata[scope][templateKey];
-        const operations = [];
-        templateNewFields.forEach(newField => {
-            let newFieldValue = newField.value;
-            const { key, type } = newField;
-            // when retrieve value from float type field, it gives a string instead
-            if (type === 'float' && newFieldValue !== '') {
-                newFieldValue = Number(newFieldValue);
-            }
-            const oldField = templateOldFields.find(f => f.key === key);
-            const oldFieldValue = oldField.value;
-
-            let fieldOperations = [];
-            /*
-                Generate operations array based on all the fields' orignal value and the incoming updated value.
-
-                Edge Case:
-                    If there are multiple items shared different value for enum or multi-select field, the form will
-                    return 'Multiple values' as the value. In this case, it needs to generate operation based on the
-                    actual item's field value.
-            */
-            if (
-                isMultiValuesField(type as MetadataFieldType, oldFieldValue) &&
-                !isMultiValuesField(type as MetadataFieldType, newFieldValue)
-            ) {
-                fieldOperations = this.metadataQueryAPIHelper.createJSONPatchOperations(
-                    key,
-                    itemFields[key],
-                    newFieldValue,
-                );
-            } else {
-                fieldOperations = this.metadataQueryAPIHelper.createJSONPatchOperations(
-                    key,
-                    oldFieldValue,
-                    newFieldValue,
-                );
-            }
-            operations.push(...fieldOperations);
-        });
-        return operations;
+        return this.metadataQueryAPIHelper.generateOperations(item, templateOldFields, templateNewFields);
     };
 
     /**
@@ -1952,9 +1910,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                         getOperations={this.getOperations}
                                         metadataTemplate={metadataTemplate}
                                         onClose={this.closeMetadataSidePanel}
+                                        onUpdate={this.updateMetadataV2}
                                         refreshCollection={this.refreshCollection}
                                         selectedItemIds={selectedItemIds}
-                                        updateMetadataV2={this.updateMetadataV2}
                                     />
                                 )}
                             </div>

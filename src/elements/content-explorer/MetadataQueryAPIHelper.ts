@@ -3,7 +3,11 @@ import find from 'lodash/find';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
+import xor from 'lodash/xor';
+import type { MetadataTemplateField } from '@box/metadata-editor';
+import type { MetadataFieldType } from '@box/metadata-view';
 import API from '../../api';
+import { isEmptyValue, isMultiValuesField } from './utils';
 
 import {
     JSON_PATCH_OP_ADD,
@@ -25,7 +29,6 @@ import type {
 } from '../../common/types/metadata';
 import type { ElementsXhrError, JSONPatchOperations } from '../../common/types/api';
 import type { Collection, BoxItem } from '../../common/types/core';
-import { isEmptyValue } from './utils';
 
 type SuccessCallback = (metadataQueryCollection: Collection, metadataTemplate: MetadataTemplate) => void;
 type ErrorCallback = (e: ElementsXhrError) => void;
@@ -60,10 +63,7 @@ export default class MetadataQueryAPIHelper {
         // check if two values are the same, return empty operations if so
         if (
             (isEmptyValue(oldValue) && isEmptyValue(newValue)) ||
-            (Array.isArray(oldValue) &&
-                Array.isArray(newValue) &&
-                oldValue.length === newValue.length &&
-                oldValue.every(val => newValue.includes(val))) ||
+            (Array.isArray(oldValue) && Array.isArray(newValue) && xor(oldValue, newValue).length === 0) ||
             oldValue === newValue
         ) {
             return [];
@@ -180,6 +180,51 @@ export default class MetadataQueryAPIHelper {
         this.templateKey = Object.keys(instance)[0];
 
         return this.api.getMetadataAPI(true).getSchemaByTemplateKey(this.templateKey);
+    };
+
+    /**
+     * Generate operations for all fields update in the metadata sidepanel
+     *
+     * @private
+     * @return {JSONPatchOperations}
+     */
+    generateOperations = (
+        item: BoxItem,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+    ): JSONPatchOperations => {
+        const { scope, templateKey } = this.metadataTemplate;
+        const itemFields = item.metadata[scope][templateKey];
+        const operations = templateNewFields.flatMap(newField => {
+            let newFieldValue = newField.value;
+            const { key, type } = newField;
+            // when retrieve value from float type field, it gives a string instead
+            if (type === 'float' && newFieldValue !== '') {
+                newFieldValue = Number(newFieldValue);
+            }
+            const oldField = templateOldFields.find(f => f.key === key);
+            const oldFieldValue = oldField.value;
+
+            /*
+                Generate operations array based on all the fields' orignal value and the incoming updated value.
+
+                Edge Case:
+                    If there are multiple items shared different value for enum or multi-select field, the form will
+                    return 'Multiple values' as the value. In this case, it needs to generate operation based on the
+                    actual item's field value.
+            */
+            const shouldUseItemFieldValue =
+                isMultiValuesField(type as MetadataFieldType, oldFieldValue) &&
+                !isMultiValuesField(type as MetadataFieldType, newFieldValue);
+
+            return this.createJSONPatchOperations(
+                key,
+                shouldUseItemFieldValue ? itemFields[key] : oldFieldValue,
+                newFieldValue,
+            );
+        });
+
+        return operations;
     };
 
     queryMetadata = (): Promise<MetadataQueryResponseData> => {

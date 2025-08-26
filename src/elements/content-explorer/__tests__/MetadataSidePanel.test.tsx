@@ -69,8 +69,8 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         getOperations: jest.fn(),
         metadataTemplate: mockMetadataTemplate,
         onClose: mockOnClose,
+        onUpdate: jest.fn(),
         refreshCollection: jest.fn(),
-        updateMetadataV2: jest.fn(),
         selectedItemIds: new Set(['1']),
     };
 
@@ -146,9 +146,9 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         expect(screen.getByLabelText('Edit Mock Template')).toBeInTheDocument();
     });
 
-    test('calls updateMetadataV2 when form is submitted for single item', async () => {
+    test('calls onUpdate when form is submitted for single item', async () => {
         const mockUpdateMetadata = jest.fn().mockResolvedValue(undefined);
-        renderComponent({ updateMetadataV2: mockUpdateMetadata });
+        renderComponent({ onUpdate: mockUpdateMetadata });
 
         const editTemplateButton = screen.getByLabelText('Edit Mock Template');
         await userEvent.click(editTemplateButton);
@@ -164,13 +164,13 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         );
     });
 
-    test('calls getOperations and updateMetadataV2 for each item when multiple items are selected', async () => {
+    test('calls getOperations and onUpdate for each item when multiple items are selected', async () => {
         const mockUpdateMetadata = jest.fn().mockResolvedValue(undefined);
         const mockGetOperations = jest.fn().mockReturnValue([]);
 
         renderComponent({
             selectedItemIds: new Set(['1', '2']),
-            updateMetadataV2: mockUpdateMetadata,
+            onUpdate: mockUpdateMetadata,
             getOperations: mockGetOperations,
         });
 
@@ -194,7 +194,7 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         const mockRefreshCollection = jest.fn();
 
         renderComponent({
-            updateMetadataV2: mockUpdateMetadata,
+            onUpdate: mockUpdateMetadata,
             refreshCollection: mockRefreshCollection,
         });
 
@@ -217,7 +217,7 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
             return Promise.resolve();
         });
 
-        renderComponent({ updateMetadataV2: mockUpdateMetadata });
+        renderComponent({ onUpdate: mockUpdateMetadata });
 
         const editTemplateButton = screen.getByLabelText('Edit Mock Template');
         await userEvent.click(editTemplateButton);
@@ -236,7 +236,7 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
 
         renderComponent({
             selectedItemIds: new Set(['1', '2']),
-            updateMetadataV2: mockUpdateMetadata,
+            onUpdate: mockUpdateMetadata,
             getOperations: mockGetOperations,
         });
 

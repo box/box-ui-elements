@@ -859,15 +859,16 @@ class Metadata extends File {
         }
 
         try {
+            const { type } = item;
             const metadata = await this.xhr.put({
                 url:
-                    item.type === 'file'
+                    type === 'file'
                         ? this.getMetadataUrl(id, template.scope, template.templateKey)
                         : this.getMetadataUrlForFolder(id, template.scope, template.templateKey),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
-                id: item.type === 'file' ? getTypedFileId(id) : getTypedFolderId(id),
+                id: type === 'file' ? getTypedFileId(id) : getTypedFolderId(id),
                 data: operations,
             });
             if (!this.isDestroyed()) {
