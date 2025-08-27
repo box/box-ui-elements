@@ -297,7 +297,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         // Build eligibility for custom panels
         const customPanelEligibility = {};
-        if (hasCustomPanels) {
+        if (hasCustomPanels && customPanels) {
             customPanels.forEach(({ path, isDisabled }) => {
                 customPanelEligibility[path] = !isDisabled;
             });
