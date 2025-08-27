@@ -507,17 +507,17 @@ describe('elements/content-explorer/ContentExplorer', () => {
             });
 
             test('should call both internal and user onSortChange callbacks when sorting by a metadata field', async () => {
-                const mockOnSortChangeBUIE = jest.fn();
-                const mockOnSortChangeConsumer = jest.fn();
+                const mockOnSortChangeInternal = jest.fn();
+                const mockOnSortChangeExternal = jest.fn();
 
                 renderComponent({
                     ...metadataViewV2ElementProps,
                     metadataViewProps: {
                         ...metadataViewV2ElementProps.metadataViewProps,
-                        onSortChange: mockOnSortChangeBUIE, // Internal callback - receives trimmed column name
+                        onSortChange: mockOnSortChangeInternal, // Internal callback - receives trimmed column name
                         tableProps: {
                             ...metadataViewV2ElementProps.metadataViewProps.tableProps,
-                            onSortChange: mockOnSortChangeConsumer, // User callback - receives full column ID
+                            onSortChange: mockOnSortChangeExternal, // User callback - receives full column ID
                         },
                     },
                 });
@@ -531,10 +531,10 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 await userEvent.click(industryHeader);
 
                 // Internal callback gets trimmed version for API calls
-                expect(mockOnSortChangeBUIE).toHaveBeenCalledWith('industry', 'ASC');
+                expect(mockOnSortChangeInternal).toHaveBeenCalledWith('industry', 'ASC');
 
                 // User callback gets full column ID with direction
-                expect(mockOnSortChangeConsumer).toHaveBeenCalledWith({
+                expect(mockOnSortChangeExternal).toHaveBeenCalledWith({
                     column: 'metadata.enterprise_0.templateName.industry',
                     direction: 'ascending',
                 });
