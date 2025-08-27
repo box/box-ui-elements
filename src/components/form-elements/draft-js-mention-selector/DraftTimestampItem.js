@@ -13,7 +13,7 @@ const DraftTimestampItem = ({ children, entityKey, contentState }: Props) => {
     const { timestamp } = entity.getData();
     return (
         <div
-            className="timestamp-item"
+            className="bcs-CommentTimestamp-entity"
             title={`Video timestamp: ${timestamp}`}
             contentEditable={false}
             suppressContentEditableWarning={true}
