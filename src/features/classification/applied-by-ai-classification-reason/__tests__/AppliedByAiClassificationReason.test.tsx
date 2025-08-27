@@ -1,16 +1,19 @@
 import * as React from 'react';
+
 import { render, screen } from '../../../../test-utils/testing-library';
 import AppliedByAiClassificationReason from '../AppliedByAiClassificationReason';
+
 import messages from '../messages';
 
 describe('AppliedByAiClassificationReason', () => {
-    const defaultProps = {
-        answer: 'This file is marked as Internal Only because it contains non-public financial results.',
-        modifiedAt: '2024-01-15T10:30:00Z',
-    };
+    let defaultProps;
     let modifiedAtDisplayDate;
 
     beforeEach(() => {
+        defaultProps = {
+            answer: 'This file is marked as Internal Only because it contains non-public financial results.',
+            modifiedAt: '2024-01-15T10:30:00Z',
+        };
         modifiedAtDisplayDate = 'January 15, 2024';
     });
 
@@ -25,6 +28,7 @@ describe('AppliedByAiClassificationReason', () => {
 
         const boxAiIcon = screen.getByTestId('box-ai-icon');
         const appliedByWithDate = screen.getByRole('heading', {
+            level: 3,
             name: messages.appliedByBoxAiOnDate.defaultMessage.replace('{modifiedAt}', modifiedAtDisplayDate),
         });
         const reasonText = screen.getByText(defaultProps.answer);
@@ -74,6 +78,7 @@ describe('AppliedByAiClassificationReason', () => {
             renderComponent({ modifiedAt: invalidModifiedAt });
 
             const appliedByWithoutDate = screen.getByRole('heading', {
+                level: 3,
                 name: messages.appliedByBoxAi.defaultMessage,
             });
 
@@ -81,14 +86,14 @@ describe('AppliedByAiClassificationReason', () => {
         },
     );
 
-    test('renders long answer text correctly', () => {
+    test('should render long answer text correctly', () => {
         const longAnswer = 'A'.repeat(1000);
         renderComponent({ answer: longAnswer });
 
         expect(screen.getByText(longAnswer)).toBeVisible();
     });
 
-    test('renders answer with special and unicode characters correctly', () => {
+    test('should render answer with special and unicode characters correctly', () => {
         const nonPlainAnswer = 'Answer with special characters and unicode !@#$%^&*()_+-=[]{}|;:,.<>? 🚀🌟🎉中文日本語';
 
         renderComponent({ answer: nonPlainAnswer });

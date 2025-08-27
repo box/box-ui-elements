@@ -12,7 +12,9 @@ import messages from './messages';
 
 import './AppliedByAiClassificationReason.scss';
 
-const AppliedByAiClassificationReason = ({ answer, modifiedAt, citations }: AiClassificationReason) => {
+export type AppliedByAiClassificationReasonProps = AiClassificationReason;
+
+const AppliedByAiClassificationReason = ({ answer, modifiedAt, citations }: AppliedByAiClassificationReasonProps) => {
     const modifiedDate = new Date(modifiedAt);
     const isModifiedDateAvailable = Boolean(modifiedAt) && isValidDate(modifiedDate);
 
