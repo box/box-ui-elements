@@ -129,8 +129,8 @@ function getFormattedCommentText(editorState: EditorState): { hasMention: boolea
             () => true,
             (start, end) => {
                 const entityKey = block.getEntityAt(start);
-                // If the range is an Entity, format its text eg "@[1:Username]"
-                // Otherwise append its text to the block result as-is
+                // If the range is an Entity but not a timestamp, format its text eg "@[1:Username]"
+                // Otherwise append if it is a timestamp entity or regular text add the text to the block result as-is
                 if (entityKey) {
                     const entity = contentState.getEntity(entityKey);
                     const isTimestamp = entity.getType() === UNEDITABLE_TIMESTAMP_TEXT;
