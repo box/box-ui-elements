@@ -830,6 +830,7 @@ class Metadata extends File {
      * @param {BoxItem} item - File/Folder object for which we are changing the description
      * @param {Object} template - Metadata template
      * @param {Array} operations - Array of JSON patch operations
+     * @param {boolean} suppressCallbacks - Boolean to decide whether suppress callbacks or not
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {Promise}
@@ -838,14 +839,19 @@ class Metadata extends File {
         item: BoxItem,
         template: MetadataTemplate,
         operations: JSONPatchOperations,
-        successCallback: Function,
-        errorCallback: ElementsErrorCallback,
+        suppressCallbacks: boolean = false,
+        successCallback?: Function,
+        errorCallback?: ElementsErrorCallback,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_UPDATE_METADATA;
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
+        if (!suppressCallbacks) {
+            // Only set callbacks when we intend to invoke them for this call
+            // so that callers performing bulk operations can suppress per-item callbacks
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
+        }
 
-        const { id, permissions } = item;
+        const { id, permissions, type } = item;
         if (!id || !permissions) {
             this.errorHandler(getBadItemError());
             return;
@@ -859,7 +865,6 @@ class Metadata extends File {
         }
 
         try {
-            const { type } = item;
             const metadata = await this.xhr.put({
                 url:
                     type === 'file'
@@ -883,10 +888,60 @@ class Metadata extends File {
                         editor,
                     );
                 }
-                this.successHandler(editor);
+                if (!suppressCallbacks) {
+                    this.successHandler(editor);
+                }
             }
         } catch (e) {
+            if (suppressCallbacks) {
+                // Let the caller decide how to handle errors (e.g., aggregate for bulk operations)
+                throw e;
+            }
             this.errorHandler(e);
+        }
+    }
+
+    /**
+     * API for bulk patching metadata on items (file/folder)
+     *
+     * @param {BoxItem[]} items - File/Folder object for which we are changing the description
+     * @param {Object} template - Metadata template
+     * @param {Array} operations - Array of JSON patch operations for each item
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async bulkUpdateMetadata(
+        items: BoxItem[],
+        template: MetadataTemplate,
+        operations: JSONPatchOperations[],
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_UPDATE_METADATA;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        try {
+            const updatePromises = items.map(async (item, index) => {
+                try {
+                    // Suppress per-item callbacks; aggregate outcome at the bulk level only
+                    await this.updateMetadata(item, template, operations[index], true, null, null);
+                } catch (e) {
+                    // Re-throw to be caught by Promise.all and handled once below
+                    throw new Error(`Failed to update metadata for item "${item.name}": ${e.message || e}`);
+                }
+            });
+
+            await Promise.all(updatePromises);
+
+            if (!this.isDestroyed()) {
+                this.successHandler();
+            }
+        } catch (e) {
+            if (!this.isDestroyed()) {
+                this.errorHandler(e);
+            }
         }
     }
 

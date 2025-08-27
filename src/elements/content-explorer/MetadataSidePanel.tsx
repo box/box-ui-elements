@@ -24,18 +24,15 @@ import './MetadataSidePanel.scss';
 
 export interface MetadataSidePanelProps {
     currentCollection: Collection;
-    getOperations: (
-        item: BoxItem,
-        templateOldFields: MetadataTemplateField[],
-        templateNewFields: MetadataTemplateField[],
-    ) => JSONPatchOperations;
     metadataTemplate: MetadataTemplate;
     onClose: () => void;
     onUpdate: (
-        file: BoxItem,
+        items: BoxItem[],
         operations: JSONPatchOperations,
-        successCallback?: () => void,
-        errorCallback?: ErrorCallback,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
     ) => Promise<void>;
     refreshCollection: () => void;
     selectedItemIds: Selection;
@@ -43,7 +40,6 @@ export interface MetadataSidePanelProps {
 
 const MetadataSidePanel = ({
     currentCollection,
-    getOperations,
     metadataTemplate,
     onClose,
     onUpdate,
@@ -100,25 +96,17 @@ const MetadataSidePanel = ({
     };
 
     const handleMetadataInstanceFormSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
-        if (selectedItems.length === 1) {
-            await onUpdate(selectedItems[0], operations, handleUpdateMetadataSuccess, handleUpdateMetadataError);
-        } else {
-            const { fields: templateNewFields } = values.metadata;
-            const { fields: templateOldFields } = templateInstance;
+        const { fields: templateNewFields } = values.metadata;
+        const { fields: templateOldFields } = templateInstance;
 
-            try {
-                // Process items sequentially to avoid conflicts
-                await selectedItems.reduce(async (previousPromise, item) => {
-                    await previousPromise;
-
-                    const ops = getOperations(item, templateOldFields, templateNewFields);
-                    await onUpdate(item, ops);
-                }, Promise.resolve());
-                handleUpdateMetadataSuccess();
-            } catch (error) {
-                handleUpdateMetadataError();
-            }
-        }
+        await onUpdate(
+            selectedItems,
+            operations,
+            templateOldFields,
+            templateNewFields,
+            handleUpdateMetadataSuccess,
+            handleUpdateMetadataError,
+        );
     };
 
     return (

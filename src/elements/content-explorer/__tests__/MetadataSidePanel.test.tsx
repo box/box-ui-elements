@@ -66,7 +66,6 @@ const mockOnClose = jest.fn();
 describe('elements/content-explorer/MetadataSidePanel', () => {
     const defaultProps: MetadataSidePanelProps = {
         currentCollection: mockCollection,
-        getOperations: jest.fn(),
         metadataTemplate: mockMetadataTemplate,
         onClose: mockOnClose,
         onUpdate: jest.fn(),
@@ -157,21 +156,21 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         await userEvent.click(submitButton);
 
         expect(mockUpdateMetadata).toHaveBeenCalledWith(
-            mockCollection.items[0],
+            [mockCollection.items[0]],
+            expect.any(Array),
+            expect.any(Array),
             expect.any(Array),
             expect.any(Function),
             expect.any(Function),
         );
     });
 
-    test('calls getOperations and onUpdate for each item when multiple items are selected', async () => {
+    test('calls onUpdate when multiple items are selected', async () => {
         const mockUpdateMetadata = jest.fn().mockResolvedValue(undefined);
-        const mockGetOperations = jest.fn().mockReturnValue([]);
 
         renderComponent({
             selectedItemIds: new Set(['1', '2']),
             onUpdate: mockUpdateMetadata,
-            getOperations: mockGetOperations,
         });
 
         const editTemplateButton = screen.getByLabelText('Edit Mock Template');
@@ -181,13 +180,12 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         await userEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(mockGetOperations).toHaveBeenCalledTimes(2);
-            expect(mockUpdateMetadata).toHaveBeenCalledTimes(2);
+            expect(mockUpdateMetadata).toHaveBeenCalledTimes(1);
         });
     });
 
     test('displays success notification when metadata update succeeds', async () => {
-        const mockUpdateMetadata = jest.fn().mockImplementation((_, __, successCallback) => {
+        const mockUpdateMetadata = jest.fn().mockImplementation((_, __, ___, ____, successCallback) => {
             successCallback();
             return Promise.resolve();
         });
@@ -212,33 +210,12 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
     });
 
     test('displays error notification when metadata update fails', async () => {
-        const mockUpdateMetadata = jest.fn().mockImplementation((_, __, ___, errorCallback) => {
+        const mockUpdateMetadata = jest.fn().mockImplementation((_, __, ___, ____, _____, errorCallback) => {
             errorCallback();
             return Promise.resolve();
         });
 
         renderComponent({ onUpdate: mockUpdateMetadata });
-
-        const editTemplateButton = screen.getByLabelText('Edit Mock Template');
-        await userEvent.click(editTemplateButton);
-
-        const submitButton = screen.getByRole('button', { name: 'Save' });
-        await userEvent.click(submitButton);
-
-        await waitFor(() => {
-            expect(screen.getByText('Unable to save changes. Please try again')).toBeInTheDocument();
-        });
-    });
-
-    test('displays error notification when multiple item update fails', async () => {
-        const mockUpdateMetadata = jest.fn().mockRejectedValue(new Error('Update failed'));
-        const mockGetOperations = jest.fn().mockReturnValue([]);
-
-        renderComponent({
-            selectedItemIds: new Set(['1', '2']),
-            onUpdate: mockUpdateMetadata,
-            getOperations: mockGetOperations,
-        });
 
         const editTemplateButton = screen.getByLabelText('Edit Mock Template');
         await userEvent.click(editTemplateButton);

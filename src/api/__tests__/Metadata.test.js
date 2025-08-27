@@ -1654,7 +1654,7 @@ describe('api/Metadata', () => {
             jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.updateMetadata({}, {}, {}, successCallback, errorCallback);
+            metadata.updateMetadata({}, {}, {}, false, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
@@ -1663,7 +1663,7 @@ describe('api/Metadata', () => {
             jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.updateMetadata({ id: 'id' }, {}, {}, successCallback, errorCallback);
+            metadata.updateMetadata({ id: 'id' }, {}, {}, false, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
@@ -1672,7 +1672,7 @@ describe('api/Metadata', () => {
             ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.updateMetadata({ id: 'id', permissions: {} }, {}, {}, successCallback, errorCallback);
+            metadata.updateMetadata({ id: 'id', permissions: {} }, {}, {}, false, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
@@ -1685,6 +1685,7 @@ describe('api/Metadata', () => {
                 { id: 'id', permissions: { can_upload: false } },
                 {},
                 {},
+                false,
                 successCallback,
                 errorCallback,
             );
@@ -1739,7 +1740,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.updateMetadata(file, template, ops, success, error);
+            await metadata.updateMetadata(file, template, ops, false, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -1806,7 +1807,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.updateMetadata(file, template, ops, success, error);
+            await metadata.updateMetadata(file, template, ops, false, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -1874,7 +1875,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.updateMetadata(file, template, ops, success, error);
+            await metadata.updateMetadata(file, template, ops, false, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -1894,6 +1895,107 @@ describe('api/Metadata', () => {
                 editors: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
+        });
+    });
+
+    describe('bulkUpdateMetadata()', () => {
+        test('should call updateMetadata for each item and call successHandler when all succeed', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const items = [
+                { id: '1', name: 'file1', permissions: { can_upload: true }, type: 'file' },
+                { id: '2', name: 'file2', permissions: { can_upload: true }, type: 'file' },
+            ];
+            const template = { scope: 'scope', templateKey: 'templateKey' };
+            const ops = [[{ op: 'replace', path: '/foo', value: 'a' }], [{ op: 'replace', path: '/foo', value: 'b' }]];
+
+            metadata.updateMetadata = jest.fn().mockResolvedValue(undefined);
+            metadata.isDestroyed = jest.fn().mockReturnValue(false);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.bulkUpdateMetadata(items, template, ops, success, error);
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_UPDATE_METADATA);
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.updateMetadata).toHaveBeenCalledTimes(2);
+            expect(metadata.updateMetadata).toHaveBeenNthCalledWith(1, items[0], template, ops[0], true, null, null);
+            expect(metadata.updateMetadata).toHaveBeenNthCalledWith(2, items[1], template, ops[1], true, null, null);
+            expect(metadata.isDestroyed).toHaveBeenCalledTimes(1);
+            expect(metadata.successHandler).toHaveBeenCalledTimes(1);
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+        });
+
+        test('should call errorHandler with aggregated error when any update fails', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const items = [
+                { id: '1', name: 'file1', permissions: { can_upload: true }, type: 'file' },
+                { id: '2', name: 'file2', permissions: { can_upload: true }, type: 'file' },
+            ];
+            const template = { scope: 'scope', templateKey: 'templateKey' };
+            const ops = [[], []];
+
+            metadata.updateMetadata = jest
+                .fn()
+                .mockResolvedValueOnce(undefined)
+                .mockRejectedValueOnce(new Error('mock error'));
+            metadata.isDestroyed = jest.fn().mockReturnValue(false);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.bulkUpdateMetadata(items, template, ops, success, error);
+
+            expect(metadata.updateMetadata).toHaveBeenCalledTimes(2);
+            expect(metadata.errorHandler).toHaveBeenCalledTimes(1);
+            const errArg = metadata.errorHandler.mock.calls[0][0];
+            expect(errArg).toBeInstanceOf(Error);
+            expect(errArg.message).toContain('Failed to update metadata for item "file2"');
+            expect(errArg.message).toContain('mock error');
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+        });
+
+        test('should not call successHandler when destroyed after successful updates', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const items = [
+                { id: '1', name: 'file1', permissions: { can_upload: true }, type: 'file' },
+                { id: '2', name: 'file2', permissions: { can_upload: true }, type: 'file' },
+            ];
+            const template = { scope: 'scope', templateKey: 'templateKey' };
+            const ops = [[], []];
+
+            metadata.updateMetadata = jest.fn().mockResolvedValue(undefined);
+            metadata.isDestroyed = jest.fn().mockReturnValue(true);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.bulkUpdateMetadata(items, template, ops, success, error);
+
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+        });
+
+        test('should not call errorHandler when destroyed after failure', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const items = [
+                { id: '1', name: 'file1', permissions: { can_upload: true }, type: 'file' },
+                { id: '2', name: 'file2', permissions: { can_upload: true }, type: 'file' },
+            ];
+            const template = { scope: 'scope', templateKey: 'templateKey' };
+            const ops = [[], []];
+
+            metadata.updateMetadata = jest.fn().mockRejectedValue(new Error('mock error'));
+            metadata.isDestroyed = jest.fn().mockReturnValue(true);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.bulkUpdateMetadata(items, template, ops, success, error);
+
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
         });
     });
 

@@ -273,6 +273,23 @@ export default class MetadataQueryAPIHelper {
             .updateMetadata(item, this.metadataTemplate, operations, successCallback, errorCallback);
     };
 
+    bulkUpdateMetadata = (
+        items: BoxItem[],
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ): Promise<void> => {
+        const operations: JSONPatchOperations = [];
+        items.forEach(item => {
+            const operation = this.generateOperations(item, templateOldFields, templateNewFields);
+            operations.push(operation);
+        });
+        return this.api
+            .getMetadataAPI(true)
+            .bulkUpdateMetadata(items, this.metadataTemplate, operations, successCallback, errorCallback);
+    };
+
     /**
      * Verify that the metadata query has required fields and update it if necessary
      * For a file item, default fields included in the response are "type", "id", "etag"

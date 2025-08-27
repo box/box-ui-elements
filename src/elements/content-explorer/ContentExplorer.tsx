@@ -495,37 +495,35 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     }
 
     /**
-     * Get operations for all fields update in the metadata sidepanel
-     *
-     * @private
-     * @return {JSONPatchOperations}
-     */
-    getOperations = (
-        item: BoxItem,
-        templateOldFields: MetadataTemplateField[],
-        templateNewFields: MetadataTemplateField[],
-    ): JSONPatchOperations => {
-        return this.metadataQueryAPIHelper.generateOperations(item, templateOldFields, templateNewFields);
-    };
-
-    /**
-     * Update item's metadata instance with either operations or old and new value for one specific field
+     * Update selected items' metadata instances based on original and new field values in the metadata instance form
      *
      * @private
      * @return {void}
      */
     updateMetadataV2 = async (
-        item: BoxItem,
+        items: BoxItem[],
         operations: JSONPatchOperations,
-        successCallback?: () => void,
-        errorCallback?: ErrorCallback,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
     ) => {
-        await this.metadataQueryAPIHelper.updateMetadataWithOperations(
-            item,
-            operations,
-            successCallback,
-            errorCallback,
-        );
+        if (items.length === 1) {
+            await this.metadataQueryAPIHelper.updateMetadataWithOperations(
+                items[0],
+                operations,
+                successCallback,
+                errorCallback,
+            );
+        } else {
+            await this.metadataQueryAPIHelper.bulkUpdateMetadata(
+                items,
+                templateOldFields,
+                templateNewFields,
+                successCallback,
+                errorCallback,
+            );
+        }
     };
 
     /**
@@ -1907,7 +1905,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 {isDefaultViewMetadata && isMetadataViewV2Feature && isMetadataSidePanelOpen && (
                                     <MetadataSidePanel
                                         currentCollection={currentCollection}
-                                        getOperations={this.getOperations}
                                         metadataTemplate={metadataTemplate}
                                         onClose={this.closeMetadataSidePanel}
                                         onUpdate={this.updateMetadataV2}
