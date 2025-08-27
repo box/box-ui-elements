@@ -2,6 +2,7 @@ import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
+import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
@@ -14,6 +15,7 @@ import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import ThemingStyles, { Theme } from '../common/theming';
 import FolderUpload from '../../api/uploads/FolderUpload';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
@@ -1323,5 +1325,5 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     }
 }
 
-export default makeResponsive(ContentUploader);
+export default flow([makeResponsive, withBlueprintModernization])(ContentUploader);
 export { ContentUploader as ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES };
