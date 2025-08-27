@@ -4,7 +4,7 @@ Our development setup assumes a LINUX/BSD environment.
 
 ## Project Setup
 
-1. Install Node v18.
+1. Install Node v20.
 2. Install Yarn package manager `https://yarnpkg.com/en/docs/install` v1.10 or higher.
 3. Fork the upstream repo `https://github.com/box/box-ui-elements` via github.
 4. Clone your fork locally `git clone git@github.com:[YOUR GITHUB USERNAME]/box-ui-elements.git`.

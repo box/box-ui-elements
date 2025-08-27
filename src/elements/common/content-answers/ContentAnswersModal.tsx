@@ -180,6 +180,7 @@ const ContentAnswersModal = ({
             questions={questions}
             retryQuestion={handleRetry}
             setAnswerFeedback={noop}
+            shouldShowLandingPage={questions.length === 0}
             submitQuestion={handleAsk}
             suggestedQuestions={suggestedQuestions || localizedQuestions}
             warningNotice={spreadsheetNotice}
