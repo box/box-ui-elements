@@ -106,7 +106,7 @@ const SidebarNav = ({
             >
                 {boxAiTab.icon &&
                     (React.isValidElement(boxAiTab.icon)
-                        ? React.cloneElement((boxAiTab.icon: any), { className: 'bcs-SidebarNav-icon' })
+                        ? boxAiTab.icon
                         : React.createElement((boxAiTab.icon: any), { className: 'bcs-SidebarNav-icon' }))}
             </SidebarNavButton>
         ),
@@ -206,7 +206,7 @@ const SidebarNav = ({
                 >
                     {CustomTabIcon &&
                         (React.isValidElement(CustomTabIcon)
-                            ? React.cloneElement((CustomTabIcon: any), { className: 'bcs-SidebarNav-icon' })
+                            ? CustomTabIcon
                             : React.createElement((CustomTabIcon: any), { className: 'bcs-SidebarNav-icon' }))}
                 </SidebarNavButton>
             );
@@ -214,8 +214,6 @@ const SidebarNav = ({
             visibleTabs.push(customTabButton); // Add at the end
         });
     }
-
-    const navButtons = visibleTabs;
 
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
@@ -228,7 +226,7 @@ const SidebarNav = ({
                     onNavigate={onNavigate}
                     routerDisabled={routerDisabled}
                 >
-                    {navButtons}
+                    {visibleTabs}
                 </SidebarNavTablist>
 
                 {hasBoxSign && (
