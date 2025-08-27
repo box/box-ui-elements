@@ -830,18 +830,18 @@ class Metadata extends File {
      * @param {BoxItem} item - File/Folder object for which we are changing the description
      * @param {Object} template - Metadata template
      * @param {Array} operations - Array of JSON patch operations
-     * @param {boolean} suppressCallbacks - Boolean to decide whether suppress callbacks or not
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {boolean} suppressCallbacks - Boolean to decide whether suppress callbacks or not
      * @return {Promise}
      */
     async updateMetadata(
         item: BoxItem,
         template: MetadataTemplate,
         operations: JSONPatchOperations,
-        suppressCallbacks: boolean = false,
-        successCallback?: Function,
-        errorCallback?: ElementsErrorCallback,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        suppressCallbacks?: boolean,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_UPDATE_METADATA;
         if (!suppressCallbacks) {
@@ -926,10 +926,10 @@ class Metadata extends File {
             const updatePromises = items.map(async (item, index) => {
                 try {
                     // Suppress per-item callbacks; aggregate outcome at the bulk level only
-                    await this.updateMetadata(item, template, operations[index], true, null, null);
+                    await this.updateMetadata(item, template, operations[index], successCallback, errorCallback, true);
                 } catch (e) {
                     // Re-throw to be caught by Promise.all and handled once below
-                    throw new Error(`Failed to update metadata for item "${item.name}": ${e.message || e}`);
+                    throw new Error(`Failed to update metadata: ${e.message || e}`);
                 }
             });
 

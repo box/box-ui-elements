@@ -1654,7 +1654,7 @@ describe('api/Metadata', () => {
             jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.updateMetadata({}, {}, {}, false, successCallback, errorCallback);
+            metadata.updateMetadata({}, {}, {}, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
@@ -1663,7 +1663,7 @@ describe('api/Metadata', () => {
             jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.updateMetadata({ id: 'id' }, {}, {}, false, successCallback, errorCallback);
+            metadata.updateMetadata({ id: 'id' }, {}, {}, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
@@ -1672,7 +1672,7 @@ describe('api/Metadata', () => {
             ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.updateMetadata({ id: 'id', permissions: {} }, {}, {}, false, successCallback, errorCallback);
+            metadata.updateMetadata({ id: 'id', permissions: {} }, {}, {}, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
@@ -1685,7 +1685,6 @@ describe('api/Metadata', () => {
                 { id: 'id', permissions: { can_upload: false } },
                 {},
                 {},
-                false,
                 successCallback,
                 errorCallback,
             );
@@ -1740,7 +1739,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.updateMetadata(file, template, ops, false, success, error);
+            await metadata.updateMetadata(file, template, ops, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -1807,7 +1806,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.updateMetadata(file, template, ops, false, success, error);
+            await metadata.updateMetadata(file, template, ops, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -1875,7 +1874,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.updateMetadata(file, template, ops, false, success, error);
+            await metadata.updateMetadata(file, template, ops, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -1920,8 +1919,24 @@ describe('api/Metadata', () => {
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
             expect(metadata.updateMetadata).toHaveBeenCalledTimes(2);
-            expect(metadata.updateMetadata).toHaveBeenNthCalledWith(1, items[0], template, ops[0], true, null, null);
-            expect(metadata.updateMetadata).toHaveBeenNthCalledWith(2, items[1], template, ops[1], true, null, null);
+            expect(metadata.updateMetadata).toHaveBeenNthCalledWith(
+                1,
+                items[0],
+                template,
+                ops[0],
+                success,
+                error,
+                true,
+            );
+            expect(metadata.updateMetadata).toHaveBeenNthCalledWith(
+                2,
+                items[1],
+                template,
+                ops[1],
+                success,
+                error,
+                true,
+            );
             expect(metadata.isDestroyed).toHaveBeenCalledTimes(1);
             expect(metadata.successHandler).toHaveBeenCalledTimes(1);
             expect(metadata.errorHandler).not.toHaveBeenCalled();
@@ -1951,7 +1966,7 @@ describe('api/Metadata', () => {
             expect(metadata.errorHandler).toHaveBeenCalledTimes(1);
             const errArg = metadata.errorHandler.mock.calls[0][0];
             expect(errArg).toBeInstanceOf(Error);
-            expect(errArg.message).toContain('Failed to update metadata for item "file2"');
+            expect(errArg.message).toContain('Failed to update metadata');
             expect(errArg.message).toContain('mock error');
             expect(metadata.successHandler).not.toHaveBeenCalled();
         });
