@@ -183,13 +183,6 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (
-        key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions',
-        value: any,
-    ) => {
-        this.boxAiSidebarCache[key] = value;
-    };
-
     getCustomSidebarRef = (panelId: string): ElementRefType => {
         if (!this.customSidebars.has(panelId)) {
             this.customSidebars.set(panelId, React.createRef());
@@ -257,9 +250,9 @@ class SidebarPanels extends React.Component<Props, State> {
             const boxAiCustomPanelPath = boxAiCustomPanel.path;
             return shouldBoxAIBeDefaultPanel
                 ? // if box-ai is default panel, put it at the top
-                [boxAiCustomPanelPath, ...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths]
+                  [boxAiCustomPanelPath, ...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths]
                 : // if box-ai is not default panel, put it at the bottom
-                [...DEFAULT_SIDEBAR_VIEWS, boxAiCustomPanelPath, ...otherCustomPanelPaths];
+                  [...DEFAULT_SIDEBAR_VIEWS, boxAiCustomPanelPath, ...otherCustomPanelPaths];
         }
         return DEFAULT_SIDEBAR_VIEWS;
     };
@@ -304,12 +297,9 @@ class SidebarPanels extends React.Component<Props, State> {
 
         // Build eligibility for custom panels
         const customPanelEligibility = {};
-        if (hasCustomPanels && customPanels) {
-            customPanels.forEach(panel => {
-                const canShowPanel = !panel.isDisabled;
-                if (canShowPanel) {
-                    customPanelEligibility[panel.path] = true;
-                }
+        if (hasCustomPanels) {
+            customPanels.forEach(({ path, isDisabled }) => {
+                customPanelEligibility[path] = !isDisabled;
             });
         }
 
@@ -333,16 +323,21 @@ class SidebarPanels extends React.Component<Props, State> {
 
         return (
             <Switch>
-                {hasCustomPanels && customPanels &&
+                {hasCustomPanels &&
+                    customPanels &&
                     customPanels.map(customPanel => {
                         const {
                             id: customPanelId,
                             path: customPanelPath,
                             component: CustomPanelComponent,
+                            isDisabled,
                         } = customPanel;
-                        const canShowPanel = !customPanel.isDisabled;
+                        // Guard clause: return early if panel is disabled
+                        if (isDisabled) {
+                            return null;
+                        }
 
-                        return canShowPanel ? (
+                        return (
                             <Route
                                 exact
                                 key={customPanelId}
@@ -360,7 +355,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     ) : null;
                                 }}
                             />
-                        ) : null;
+                        );
                     })}
                 {hasSkills && (
                     <Route
