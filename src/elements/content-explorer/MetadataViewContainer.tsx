@@ -81,7 +81,7 @@ const MetadataViewContainer = ({
     columns,
     currentCollection,
     metadataTemplate,
-    onSortChange: onSortChangeBUIE,
+    onSortChange: onSortChangeInternal,
     ...rest
 }: MetadataViewContainerProps) => {
     const { items = [] } = currentCollection;
@@ -133,28 +133,28 @@ const MetadataViewContainer = ({
 
     // Extract the original tableProps.onSortChange from rest
     const { tableProps, ...otherRest } = rest;
-    const onSortChangeConsumer = tableProps?.onSortChange;
+    const onSortChangeExternal = tableProps?.onSortChange;
 
     // Create a wrapper function that calls both. The wrapper function should follow the signature of onSortChange from RAC
     const handleSortChange = React.useCallback(
         ({ column, direction }: SortDescriptor) => {
             // Call the internal onSortChange first
             // API accepts asc/desc "https://developer.box.com/reference/post-metadata-queries-execute-read/"
-            if (onSortChangeBUIE) {
+            if (onSortChangeInternal) {
                 const trimmedColumn = trimMetadataFieldPrefix(String(column));
-                onSortChangeBUIE(trimmedColumn, direction === 'ascending' ? 'ASC' : 'DESC');
+                onSortChangeInternal(trimmedColumn, direction === 'ascending' ? 'ASC' : 'DESC');
             }
 
             // Then call the original customer-provided onSortChange if it exists
             // Accepts "ascending" / "descending" (https://react-spectrum.adobe.com/react-aria/Table.html)
-            if (onSortChangeConsumer) {
-                onSortChangeConsumer({
+            if (onSortChangeExternal) {
+                onSortChangeExternal({
                     column,
                     direction,
                 });
             }
         },
-        [onSortChangeBUIE, onSortChangeConsumer],
+        [onSortChangeInternal, onSortChangeExternal],
     );
 
     // Create new tableProps with our wrapper function

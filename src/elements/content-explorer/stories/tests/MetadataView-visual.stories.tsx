@@ -256,7 +256,7 @@ const meta: Meta<typeof ContentExplorer> = {
                     const orderByFieldKey = body.order_by[0].field_key;
 
                     // Hardcoded case for sorting by industry
-                    if (orderByFieldKey === `${metadataFieldNamePrefix}.industry` && orderByDirection === 'ASC') {
+                    if (orderByFieldKey === `industry` && orderByDirection === 'ASC') {
                         const sortedMetadata = orderBy(
                             mockMetadata.entries,
                             'metadata.enterprise_0.templateName.industry',
