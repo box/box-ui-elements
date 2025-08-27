@@ -199,10 +199,10 @@ const SidebarNav = ({
                     data-target-id={`SidebarNavButton-${customTabId}`}
                     data-testid={`sidebar${customTabId}`}
                     isDisabled={customTab.isDisabled}
+                    {...navButtonProps}
                     onClick={handleSidebarNavButtonClick}
                     sidebarView={customTabPath}
                     tooltip={customTabTitle ?? customTabId}
-                    {...navButtonProps}
                 >
                     {CustomTabIcon &&
                         (React.isValidElement(CustomTabIcon)
