@@ -273,7 +273,6 @@ class SidebarPanels extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasActivity,
-            hasBoxAI,
             hasDetails,
             hasDocGen,
             hasMetadata,
@@ -316,7 +315,13 @@ class SidebarPanels extends React.Component<Props, State> {
 
         if (
             !isOpen ||
-            (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions && !hasCustomPanels)
+            (!hasActivity &&
+                !hasDetails &&
+                !hasMetadata &&
+                !hasSkills &&
+                !hasDocGen &&
+                !hasVersions &&
+                !hasCustomPanels)
         ) {
             return null;
         }
