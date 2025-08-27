@@ -1,5 +1,3 @@
-@import '~@box/blueprint-web-assets/dist/tokens/tokens';
-
 $reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
 
 .AppliedByAiClassificationReason {
@@ -9,7 +7,7 @@ $reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
 
     .AppliedByAiClassificationReason-answer {
         font-size: $reason-font-size;
-        line-height: $body-default-line-height;
+        line-height: var(--body-default-line-height);
     }
 
     .AppliedByAiClassificationReason-references {
@@ -22,10 +20,10 @@ $reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
 .AppliedByAiClassificationReason-header {
     display: flex;
     align-items: center;
-    gap: $space-2;
-    margin: 0 0 $space-2;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
 }
 
 .AppliedByAiClassificationReason-references {
-    margin-top: $space-2;
+    margin-top: var(--space-2);
 }
