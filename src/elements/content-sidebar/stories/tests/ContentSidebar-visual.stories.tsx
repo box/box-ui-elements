@@ -23,6 +23,12 @@ export default {
     },
 };
 
+export const Modernization = {
+    args: {
+        enableModernizedComponents: true,
+    },
+};
+
 export const ContentSidebarWithBoxAIDisabled: StoryObj<typeof BoxAISidebar> = {
     args: {
         features: {
