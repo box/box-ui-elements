@@ -98,8 +98,8 @@ const SidebarNav = ({
                 data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                 data-target-id={`SidebarNavButton-${boxAiTab.id}`}
                 data-testid={`sidebar${boxAiTab.id}`}
-                isDisabled={boxAiTab.isDisabled}
                 {...boxAiTab.navButtonProps}
+                isDisabled={boxAiTab.isDisabled}
                 onClick={handleSidebarNavButtonClick}
                 sidebarView={boxAiTab.path}
                 tooltip={boxAiTab.title ?? boxAiTab.id}
@@ -198,8 +198,8 @@ const SidebarNav = ({
                     data-resin-target={`sidebar${customTabId}`}
                     data-target-id={`SidebarNavButton-${customTabId}`}
                     data-testid={`sidebar${customTabId}`}
-                    isDisabled={customTab.isDisabled}
                     {...navButtonProps}
+                    isDisabled={customTab.isDisabled}
                     onClick={handleSidebarNavButtonClick}
                     sidebarView={customTabPath}
                     tooltip={customTabTitle ?? customTabId}
