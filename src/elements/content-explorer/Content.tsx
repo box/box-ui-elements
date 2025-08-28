@@ -89,6 +89,7 @@ const Content = ({
                     isLoading={percentLoaded !== 100}
                     hasError={view === VIEW_ERROR}
                     metadataTemplate={metadataTemplate}
+                    onSortChange={onSortChange}
                     {...metadataViewProps}
                 />
             )}

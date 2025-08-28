@@ -91,6 +91,16 @@ class Metadata extends File {
     }
 
     /**
+     * Creates a key for the metadata template schema cache
+     *
+     * @param {string} templateKey - template key
+     * @return {string} key
+     */
+    getMetadataTemplateSchemaCacheKey(templateKey: string): string {
+        return `${CACHE_PREFIX_METADATA}template_schema_${templateKey}`;
+    }
+
+    /**
      * API URL for metadata
      *
      * @param {string} id - a Box file id
@@ -337,9 +347,23 @@ class Metadata extends File {
      * @param {string} templateKey - template key
      * @return {Promise} Promise object of metadata template
      */
-    getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+    async getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+        const cache: APICache = this.getCache();
+        const key = this.getMetadataTemplateSchemaCacheKey(templateKey);
+
+        // Return cached value if it exists
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+
+        // Fetch from API if not cached
         const url = this.getMetadataTemplateSchemaUrl(templateKey);
-        return this.xhr.get({ url });
+        const response = await this.xhr.get({ url });
+
+        // Cache the response
+        cache.set(key, response);
+
+        return response;
     }
 
     /**

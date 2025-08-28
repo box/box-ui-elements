@@ -454,7 +454,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     textValue: 'Name',
                     id: 'name',
                     type: 'string' as const,
-                    allowSorting: true,
+                    allowsSorting: true,
                     minWidth: 150,
                     maxWidth: 150,
                 },
@@ -462,7 +462,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     textValue: field.displayName,
                     id: `${metadataFieldNamePrefix}.${field.key}`,
                     type: field.type as MetadataFieldType,
-                    allowSorting: true,
+                    allowsSorting: true,
                     minWidth: 150,
                     maxWidth: 150,
                 })),
@@ -504,6 +504,40 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 await userEvent.click(selectAllCheckbox);
 
                 expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
+            });
+
+            test('should call both internal and user onSortChange callbacks when sorting by a metadata field', async () => {
+                const mockOnSortChangeInternal = jest.fn();
+                const mockOnSortChangeExternal = jest.fn();
+
+                renderComponent({
+                    ...metadataViewV2ElementProps,
+                    metadataViewProps: {
+                        ...metadataViewV2ElementProps.metadataViewProps,
+                        onSortChange: mockOnSortChangeInternal, // Internal callback - receives trimmed column name
+                        tableProps: {
+                            ...metadataViewV2ElementProps.metadataViewProps.tableProps,
+                            onSortChange: mockOnSortChangeExternal, // User callback - receives full column ID
+                        },
+                    },
+                });
+
+                const industryHeader = await screen.findByRole('columnheader', { name: 'Industry' });
+                expect(industryHeader).toBeInTheDocument();
+
+                const firstRow = await screen.findByRole('row', { name: /Child 2/i });
+                expect(firstRow).toBeInTheDocument();
+
+                await userEvent.click(industryHeader);
+
+                // Internal callback gets trimmed version for API calls
+                expect(mockOnSortChangeInternal).toHaveBeenCalledWith('industry', 'ASC');
+
+                // User callback gets full column ID with direction
+                expect(mockOnSortChangeExternal).toHaveBeenCalledWith({
+                    column: 'metadata.enterprise_0.templateName.industry',
+                    direction: 'ascending',
+                });
             });
 
             test('should call onClick when bulk item action is clicked', async () => {

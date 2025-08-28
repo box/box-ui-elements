@@ -1,7 +1,9 @@
 import * as React from 'react';
 import type { EnumType, FloatType, MetadataFormFieldValue, RangeType } from '@box/metadata-filter';
 import { MetadataView, type MetadataViewProps } from '@box/metadata-view';
+import { type Key } from '@react-types/shared';
 
+import { SortDescriptor } from 'react-aria-components';
 import type { Collection } from '../../common/types/core';
 import type { MetadataTemplate } from '../../common/types/metadata';
 
@@ -24,6 +26,21 @@ type ActionBarProps = Omit<
     initialFilterValues?: ExternalFilterValues;
     onFilterSubmit?: (filterValues: ExternalFilterValues) => void;
 };
+
+/**
+ * Helper function to trim metadataFieldNamePrefix from column names
+ * For example: 'metadata.enterprise_1515946.mdViewTemplate1.industry' -> 'industry'
+ */
+function trimMetadataFieldPrefix(column: string): string {
+    // Check if the column starts with 'metadata.' and contains at least 2 dots
+    if (column.startsWith('metadata.') && column.split('.').length >= 3) {
+        // Split by dots and take everything after the first 3 parts
+        // metadata.enterprise_1515946.mdViewTemplate1.industry -> industry
+        const parts = column.split('.');
+        return parts.slice(3).join('.');
+    }
+    return column;
+}
 
 function transformInitialFilterValuesToInternal(
     publicValues?: ExternalFilterValues,
@@ -55,6 +72,8 @@ export interface MetadataViewContainerProps extends Omit<MetadataViewProps, 'ite
     actionBarProps?: ActionBarProps;
     currentCollection: Collection;
     metadataTemplate: MetadataTemplate;
+    /* Internally controlled onSortChange prop for the MetadataView component. */
+    onSortChange?: (sortBy: Key, sortDirection: string) => void;
 }
 
 const MetadataViewContainer = ({
@@ -62,6 +81,7 @@ const MetadataViewContainer = ({
     columns,
     currentCollection,
     metadataTemplate,
+    onSortChange: onSortChangeInternal,
     ...rest
 }: MetadataViewContainerProps) => {
     const { items = [] } = currentCollection;
@@ -111,7 +131,47 @@ const MetadataViewContainer = ({
         };
     }, [actionBarProps, initialFilterValues, onFilterSubmit, filterGroups]);
 
-    return <MetadataView actionBarProps={transformedActionBarProps} columns={columns} items={items} {...rest} />;
+    // Extract the original tableProps.onSortChange from rest
+    const { tableProps, ...otherRest } = rest;
+    const onSortChangeExternal = tableProps?.onSortChange;
+
+    // Create a wrapper function that calls both. The wrapper function should follow the signature of onSortChange from RAC
+    const handleSortChange = React.useCallback(
+        ({ column, direction }: SortDescriptor) => {
+            // Call the internal onSortChange first
+            // API accepts asc/desc "https://developer.box.com/reference/post-metadata-queries-execute-read/"
+            if (onSortChangeInternal) {
+                const trimmedColumn = trimMetadataFieldPrefix(String(column));
+                onSortChangeInternal(trimmedColumn, direction === 'ascending' ? 'ASC' : 'DESC');
+            }
+
+            // Then call the original customer-provided onSortChange if it exists
+            // Accepts "ascending" / "descending" (https://react-spectrum.adobe.com/react-aria/Table.html)
+            if (onSortChangeExternal) {
+                onSortChangeExternal({
+                    column,
+                    direction,
+                });
+            }
+        },
+        [onSortChangeInternal, onSortChangeExternal],
+    );
+
+    // Create new tableProps with our wrapper function
+    const newTableProps = {
+        ...tableProps,
+        onSortChange: handleSortChange,
+    };
+
+    return (
+        <MetadataView
+            actionBarProps={transformedActionBarProps}
+            columns={columns}
+            items={items}
+            tableProps={newTableProps}
+            {...otherRest}
+        />
+    );
 };
 
 export default MetadataViewContainer;
