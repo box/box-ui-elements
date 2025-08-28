@@ -3,11 +3,10 @@ import find from 'lodash/find';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
-import xor from 'lodash/xor';
 import type { MetadataTemplateField } from '@box/metadata-editor';
 import type { MetadataFieldType } from '@box/metadata-view';
 import API from '../../api';
-import { isEmptyValue, isMultiValuesField } from './utils';
+import { areFieldValuesEqual, isEmptyValue, isMultiValuesField } from './utils';
 
 import {
     JSON_PATCH_OP_ADD,
@@ -61,11 +60,7 @@ export default class MetadataQueryAPIHelper {
         newValue: MetadataFieldValue | null,
     ): JSONPatchOperations => {
         // check if two values are the same, return empty operations if so
-        if (
-            (isEmptyValue(oldValue) && isEmptyValue(newValue)) ||
-            (Array.isArray(oldValue) && Array.isArray(newValue) && xor(oldValue, newValue).length === 0) ||
-            oldValue === newValue
-        ) {
+        if (areFieldValuesEqual(oldValue, newValue)) {
             return [];
         }
 

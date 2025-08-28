@@ -1118,7 +1118,7 @@ const messages = defineMessages({
     metadataUpdateErrorNotification: {
         id: 'be.metadataUpdateErrorNotification',
         description: 'Text shown in error notification banner',
-        defaultMessage: 'Unable to save changes. Please try again',
+        defaultMessage: 'Unable to save changes. Please try again.',
     },
     metadataUpdateSuccessNotification: {
         id: 'be.metadataUpdateSuccessNotification',

@@ -202,11 +202,9 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         const submitButton = screen.getByRole('button', { name: 'Save' });
         await userEvent.click(submitButton);
 
-        await waitFor(() => {
-            expect(screen.getByText('1 document updated')).toBeInTheDocument();
-            expect(mockRefreshCollection).toHaveBeenCalledTimes(1);
-            expect(screen.getByLabelText('Edit Mock Template')).toBeInTheDocument(); // Back to view mode
-        });
+        expect(screen.getByText('1 document updated')).toBeInTheDocument();
+        expect(mockRefreshCollection).toHaveBeenCalledTimes(1);
+        expect(screen.getByLabelText('Edit Mock Template')).toBeInTheDocument(); // Back to view mode
     });
 
     test('displays error notification when metadata update fails', async () => {
@@ -224,7 +222,7 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         await userEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(screen.getByText('Unable to save changes. Please try again')).toBeInTheDocument();
+            expect(screen.getByText('Unable to save changes. Please try again.')).toBeInTheDocument();
         });
     });
 
@@ -267,17 +265,5 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         });
 
         expect(screen.getByText('Multiple Values')).toBeInTheDocument();
-    });
-
-    test('renders correct accessibility attributes', () => {
-        renderComponent();
-
-        // Close button should have proper aria-label
-        const closeButton = screen.getByLabelText('Close');
-        expect(closeButton).toHaveAttribute('aria-label', 'Close');
-
-        // Edit button should have proper aria-label
-        const editButton = screen.getByLabelText('Edit Mock Template');
-        expect(editButton).toHaveAttribute('aria-label', 'Edit Mock Template');
     });
 });

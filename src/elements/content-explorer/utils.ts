@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import isNil from 'lodash/isNil';
+import xor from 'lodash/xor';
 
 import {
     MULTI_VALUE_DEFAULT_OPTION,
@@ -65,16 +66,14 @@ export function isEmptyValue(value: ItemMetadataFieldValue) {
 }
 
 // Check if the field values are equal based on the field types
-export function areFieldValuesEqual(
-    fieldType: MetadataFieldType,
-    value1: ItemMetadataFieldValue,
-    value2: ItemMetadataFieldValue,
-) {
-    if (isEmptyValue(value1) && isEmptyValue(value2)) return true;
+export function areFieldValuesEqual(value1: ItemMetadataFieldValue, value2: ItemMetadataFieldValue) {
+    if (isEmptyValue(value1) && isEmptyValue(value2)) {
+        return true;
+    }
 
     // Handle multiSelect arrays comparison
-    if (fieldType === 'multiSelect' && Array.isArray(value1) && Array.isArray(value2)) {
-        return value1.length === value2.length && value1.every(val => value2.includes(val));
+    if (Array.isArray(value1) && Array.isArray(value2)) {
+        return xor(value1, value2).length === 0;
     }
 
     return value1 === value2;
@@ -92,7 +91,7 @@ function getDefaultValueByFieldType(fieldType: MetadataFieldType) {
 }
 
 // Set the field value in Metadata Form based on the field type
-function setFieldValue(fieldType: MetadataFieldType, fieldValue: ItemMetadataFieldValue) {
+function getFieldValue(fieldType: MetadataFieldType, fieldValue: ItemMetadataFieldValue) {
     if (isNil(fieldValue)) {
         return getDefaultValueByFieldType(fieldType);
     }
@@ -117,52 +116,68 @@ export function useTemplateInstance(metadataTemplate: MetadataTemplate, selected
 
     const selectedItemsFields = fields.map(
         ({ displayName: fieldDisplayName, hidden: fieldHidden, id: fieldId, key, options, type: fieldType }) => {
-            const firstSelectedItem = selectedItems[0];
-            let fieldValue = firstSelectedItem.metadata[scope][templateKey][key];
-
-            if (selectedItems.length > 1) {
-                const allItemsHaveSameInitialValue = selectedItems.every(selectedItem =>
-                    areFieldValuesEqual(
-                        fieldType as MetadataFieldType,
-                        selectedItem.metadata[scope][templateKey][key],
-                        fieldValue,
-                    ),
-                );
-
-                // Update field display value when selected items have different values
-                if (!allItemsHaveSameInitialValue) {
-                    if (isEditing) {
-                        // Add MultiValue Option if the field is multiSelect or enum
-                        if (fieldType === 'multiSelect' || fieldType === 'enum') {
-                            fieldValue = fieldType === 'enum' ? MULTI_VALUE_DEFAULT_VALUE : [MULTI_VALUE_DEFAULT_VALUE];
-                            const multiValueOption = options?.find(option => option.key === MULTI_VALUE_DEFAULT_VALUE);
-                            if (!multiValueOption) {
-                                options?.push(MULTI_VALUE_DEFAULT_OPTION);
-                            }
-                        } else {
-                            fieldValue = setFieldValue(fieldType as MetadataFieldType, undefined);
-                        }
-                    } else {
-                        /**
-                         * We want to show "Multiple values" label for multiple dates across files selection.
-                         * We use fragment here to bypass check in shared feature.
-                         * This feature tries to parse string as date if the string is passed as value.
-                         */
-                        const multipleValuesText = formatMessage(messages.multipleValues);
-                        fieldValue = React.createElement(React.Fragment, null, multipleValuesText);
-                    }
-                } else {
-                    fieldValue = setFieldValue(fieldType as MetadataFieldType, fieldValue);
-                }
-            }
-            return {
+            const defaultItemField = {
                 displayName: fieldDisplayName,
                 hidden: fieldHidden,
                 id: fieldId,
                 key,
                 options,
                 type: fieldType,
-                value: fieldValue,
+                value: getFieldValue(fieldType as MetadataFieldType, undefined),
+            };
+
+            const firstSelectedItem = selectedItems[0];
+            const firstSelectedItemFieldValue = firstSelectedItem.metadata[scope][templateKey][key];
+
+            // Case 1: Single selected item
+            if (selectedItems.length <= 1) {
+                return {
+                    ...defaultItemField,
+                    value: firstSelectedItemFieldValue,
+                };
+            }
+
+            // Case 2.1: Multiple selected items, but all have the same initial value
+            const allItemsHaveSameInitialValue = selectedItems.every(selectedItem =>
+                areFieldValuesEqual(selectedItem.metadata[scope][templateKey][key], firstSelectedItemFieldValue),
+            );
+
+            if (allItemsHaveSameInitialValue) {
+                return {
+                    ...defaultItemField,
+                    value: getFieldValue(fieldType as MetadataFieldType, firstSelectedItemFieldValue),
+                };
+            }
+
+            // Case 2.2: Multiple selected items, but some have different initial values
+            // Case 2.2.1: Edit Mode
+            if (isEditing) {
+                let fieldValue = getFieldValue(fieldType as MetadataFieldType, undefined);
+                // Add MultiValue Option if the field is multiSelect or enum
+                if (fieldType === 'multiSelect' || fieldType === 'enum') {
+                    fieldValue = fieldType === 'enum' ? MULTI_VALUE_DEFAULT_VALUE : [MULTI_VALUE_DEFAULT_VALUE];
+                    const multiValueOption = options?.find(option => option.key === MULTI_VALUE_DEFAULT_VALUE);
+                    if (!multiValueOption) {
+                        options?.push(MULTI_VALUE_DEFAULT_OPTION);
+                    }
+                }
+                return {
+                    ...defaultItemField,
+                    value: fieldValue,
+                };
+            }
+
+            /**
+             * Case: 2.2.2 View Mode
+             *
+             * We want to show "Multiple values" label for multiple dates across files selection.
+             * We use fragment here to bypass check in shared feature.
+             * This feature tries to parse string as date if the string is passed as value.
+             */
+            const multipleValuesText = formatMessage(messages.multipleValues);
+            return {
+                ...defaultItemField,
+                value: React.createElement(React.Fragment, null, multipleValuesText),
             };
         },
     );
