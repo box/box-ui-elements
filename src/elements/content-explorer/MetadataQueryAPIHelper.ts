@@ -3,8 +3,10 @@ import find from 'lodash/find';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
-import isNil from 'lodash/isNil';
+import type { MetadataTemplateField } from '@box/metadata-editor';
+import type { MetadataFieldType } from '@box/metadata-view';
 import API from '../../api';
+import { areFieldValuesEqual, isEmptyValue, isMultiValuesField } from './utils';
 
 import {
     JSON_PATCH_OP_ADD,
@@ -14,7 +16,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
-import { FIELD_NAME, FIELD_METADATA, FIELD_EXTENSION } from '../../constants';
+import { FIELD_NAME, FIELD_METADATA, FIELD_EXTENSION, FIELD_PERMISSIONS } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -57,13 +59,18 @@ export default class MetadataQueryAPIHelper {
         oldValue: MetadataFieldValue | null,
         newValue: MetadataFieldValue | null,
     ): JSONPatchOperations => {
+        // check if two values are the same, return empty operations if so
+        if (areFieldValuesEqual(oldValue, newValue)) {
+            return [];
+        }
+
         let operation = JSON_PATCH_OP_REPLACE;
 
-        if (isNil(oldValue) && newValue) {
+        if (isEmptyValue(oldValue) && !isEmptyValue(newValue)) {
             operation = JSON_PATCH_OP_ADD;
         }
 
-        if (oldValue && isNil(newValue)) {
+        if (!isEmptyValue(oldValue) && isEmptyValue(newValue)) {
             operation = JSON_PATCH_OP_REMOVE;
         }
 
@@ -170,6 +177,51 @@ export default class MetadataQueryAPIHelper {
         return this.api.getMetadataAPI(true).getSchemaByTemplateKey(this.templateKey);
     };
 
+    /**
+     * Generate operations for all fields update in the metadata sidepanel
+     *
+     * @private
+     * @return {JSONPatchOperations}
+     */
+    generateOperations = (
+        item: BoxItem,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+    ): JSONPatchOperations => {
+        const { scope, templateKey } = this.metadataTemplate;
+        const itemFields = item.metadata[scope][templateKey];
+        const operations = templateNewFields.flatMap(newField => {
+            let newFieldValue = newField.value;
+            const { key, type } = newField;
+            // when retrieve value from float type field, it gives a string instead
+            if (type === 'float' && newFieldValue !== '') {
+                newFieldValue = Number(newFieldValue);
+            }
+            const oldField = templateOldFields.find(f => f.key === key);
+            const oldFieldValue = oldField.value;
+
+            /*
+                Generate operations array based on all the fields' orignal value and the incoming updated value.
+
+                Edge Case:
+                    If there are multiple items shared different value for enum or multi-select field, the form will
+                    return 'Multiple values' as the value. In this case, it needs to generate operation based on the
+                    actual item's field value.
+            */
+            const shouldUseItemFieldValue =
+                isMultiValuesField(type as MetadataFieldType, oldFieldValue) &&
+                !isMultiValuesField(type as MetadataFieldType, newFieldValue);
+
+            return this.createJSONPatchOperations(
+                key,
+                shouldUseItemFieldValue ? itemFields[key] : oldFieldValue,
+                newFieldValue,
+            );
+        });
+
+        return operations;
+    };
+
     queryMetadata = (): Promise<MetadataQueryResponseData> => {
         return new Promise((resolve, reject) => {
             this.api.getMetadataQueryAPI().queryMetadata(this.metadataQuery, resolve, reject, { forceFetch: true });
@@ -205,6 +257,34 @@ export default class MetadataQueryAPIHelper {
             .updateMetadata(file, this.metadataTemplate, operations, successCallback, errorCallback);
     };
 
+    updateMetadataWithOperations = (
+        item: BoxItem,
+        operations: JSONPatchOperations,
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ): Promise<void> => {
+        return this.api
+            .getMetadataAPI(true)
+            .updateMetadata(item, this.metadataTemplate, operations, successCallback, errorCallback);
+    };
+
+    bulkUpdateMetadata = (
+        items: BoxItem[],
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ): Promise<void> => {
+        const operations: JSONPatchOperations = [];
+        items.forEach(item => {
+            const operation = this.generateOperations(item, templateOldFields, templateNewFields);
+            operations.push(operation);
+        });
+        return this.api
+            .getMetadataAPI(true)
+            .bulkUpdateMetadata(items, this.metadataTemplate, operations, successCallback, errorCallback);
+    };
+
     /**
      * Verify that the metadata query has required fields and update it if necessary
      * For a file item, default fields included in the response are "type", "id", "etag"
@@ -223,6 +303,11 @@ export default class MetadataQueryAPIHelper {
 
         if (!clonedFields.includes(FIELD_EXTENSION)) {
             clonedFields.push(FIELD_EXTENSION);
+        }
+
+        // This field is necessary to check if the user has permission to update metadata
+        if (!clonedFields.includes(FIELD_PERMISSIONS)) {
+            clonedFields.push(FIELD_PERMISSIONS);
         }
 
         clonedQuery.fields = clonedFields;

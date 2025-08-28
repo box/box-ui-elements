@@ -8,9 +8,10 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
-import { TooltipProvider } from '@box/blueprint-web';
+import { Notification, TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { Key, Selection } from 'react-aria-components';
+import type { MetadataTemplateField } from '@box/metadata-editor';
 
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
@@ -77,6 +78,7 @@ import {
 import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction } from '../common/item';
 import type { Theme } from '../common/theming';
+import type { JSONPatchOperations } from '../../common/types/api';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue, MetadataTemplate } from '../../common/types/metadata';
 import type {
@@ -491,6 +493,38 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             this.errorCallback,
         );
     }
+
+    /**
+     * Update selected items' metadata instances based on original and new field values in the metadata instance form
+     *
+     * @private
+     * @return {void}
+     */
+    updateMetadataV2 = async (
+        items: BoxItem[],
+        operations: JSONPatchOperations,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ) => {
+        if (items.length === 1) {
+            await this.metadataQueryAPIHelper.updateMetadataWithOperations(
+                items[0],
+                operations,
+                successCallback,
+                errorCallback,
+            );
+        } else {
+            await this.metadataQueryAPIHelper.bulkUpdateMetadata(
+                items,
+                templateOldFields,
+                templateNewFields,
+                successCallback,
+                errorCallback,
+            );
+        }
+    };
 
     /**
      * Resets the collection so that the loading bar starts showing
@@ -1785,188 +1819,193 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <TooltipProvider container={this.rootElement}>
-                    <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
-                        <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                            <div className="bce-ContentExplorer-main">
-                                {!isDefaultViewMetadata && (
-                                    <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
-                                )}
+                <Notification.Provider>
+                    <Notification.Viewport />
+                    <TooltipProvider container={this.rootElement}>
+                        <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                            <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
+                                <div className="bce-ContentExplorer-main">
+                                    {!isDefaultViewMetadata && (
+                                        <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
+                                    )}
 
-                                <SubHeader
-                                    bulkItemActions={bulkItemActions}
-                                    view={view}
-                                    viewMode={viewMode}
-                                    rootId={rootFolderId}
-                                    isSmall={isSmall}
-                                    rootName={rootName}
-                                    currentCollection={currentCollection}
-                                    canUpload={allowUpload}
-                                    canCreateNewFolder={allowCreate}
-                                    gridColumnCount={gridColumnCount}
-                                    gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
-                                    gridMinColumns={GRID_VIEW_MIN_COLUMNS}
-                                    maxGridColumnCountForWidth={maxGridColumnCount}
-                                    onUpload={this.upload}
-                                    onClearSelectedItemIds={this.clearSelectedItemIds}
-                                    onCreate={this.createFolder}
-                                    onGridViewSliderChange={this.onGridViewSliderChange}
-                                    onItemClick={this.fetchFolder}
-                                    onSortChange={this.sort}
-                                    onMetadataSidePanelToggle={this.onMetadataSidePanelToggle}
-                                    onViewModeChange={this.changeViewMode}
-                                    portalElement={this.rootElement}
-                                    selectedItemIds={selectedItemIds}
-                                    title={title}
-                                />
+                                    <SubHeader
+                                        bulkItemActions={bulkItemActions}
+                                        view={view}
+                                        viewMode={viewMode}
+                                        rootId={rootFolderId}
+                                        isSmall={isSmall}
+                                        rootName={rootName}
+                                        currentCollection={currentCollection}
+                                        canUpload={allowUpload}
+                                        canCreateNewFolder={allowCreate}
+                                        gridColumnCount={gridColumnCount}
+                                        gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                        gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                        maxGridColumnCountForWidth={maxGridColumnCount}
+                                        onUpload={this.upload}
+                                        onClearSelectedItemIds={this.clearSelectedItemIds}
+                                        onCreate={this.createFolder}
+                                        onGridViewSliderChange={this.onGridViewSliderChange}
+                                        onItemClick={this.fetchFolder}
+                                        onSortChange={this.sort}
+                                        onMetadataSidePanelToggle={this.onMetadataSidePanelToggle}
+                                        onViewModeChange={this.changeViewMode}
+                                        portalElement={this.rootElement}
+                                        selectedItemIds={selectedItemIds}
+                                        title={title}
+                                    />
 
-                                <Content
-                                    canDelete={canDelete}
-                                    canDownload={canDownload}
-                                    canPreview={canPreview}
-                                    canRename={canRename}
-                                    canShare={canShare}
-                                    currentCollection={currentCollection}
-                                    features={features}
-                                    gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
-                                    isMedium={isMedium}
-                                    isSmall={isSmall}
-                                    isTouch={isTouch}
-                                    itemActions={itemActions}
-                                    fieldsToShow={fieldsToShow}
-                                    metadataTemplate={metadataTemplate}
-                                    metadataViewProps={metadataViewProps}
-                                    onItemClick={this.onItemClick}
-                                    onItemDelete={this.delete}
-                                    onItemDownload={this.download}
-                                    onItemPreview={this.preview}
-                                    onItemRename={this.rename}
-                                    onItemSelect={this.select}
-                                    onItemShare={this.share}
-                                    onMetadataUpdate={this.updateMetadata}
-                                    onSortChange={this.sort}
-                                    portalElement={this.rootElement}
-                                    view={view}
-                                    viewMode={viewMode}
-                                />
+                                    <Content
+                                        canDelete={canDelete}
+                                        canDownload={canDownload}
+                                        canPreview={canPreview}
+                                        canRename={canRename}
+                                        canShare={canShare}
+                                        currentCollection={currentCollection}
+                                        features={features}
+                                        gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
+                                        isMedium={isMedium}
+                                        isSmall={isSmall}
+                                        isTouch={isTouch}
+                                        itemActions={itemActions}
+                                        fieldsToShow={fieldsToShow}
+                                        metadataTemplate={metadataTemplate}
+                                        metadataViewProps={metadataViewProps}
+                                        onItemClick={this.onItemClick}
+                                        onItemDelete={this.delete}
+                                        onItemDownload={this.download}
+                                        onItemPreview={this.preview}
+                                        onItemRename={this.rename}
+                                        onItemSelect={this.select}
+                                        onItemShare={this.share}
+                                        onMetadataUpdate={this.updateMetadata}
+                                        onSortChange={this.sort}
+                                        portalElement={this.rootElement}
+                                        view={view}
+                                        viewMode={viewMode}
+                                    />
 
-                                {!isErrorView && (
-                                    <Footer>
-                                        <Pagination
-                                            hasNextMarker={hasNextMarker}
-                                            hasPrevMarker={hasPreviousMarker}
-                                            isSmall={isSmall}
-                                            offset={offset}
-                                            onOffsetChange={this.paginate}
-                                            pageSize={currentPageSize}
-                                            totalCount={totalCount}
-                                            onMarkerBasedPageChange={this.markerBasedPaginate}
-                                        />
-                                    </Footer>
+                                    {!isErrorView && (
+                                        <Footer>
+                                            <Pagination
+                                                hasNextMarker={hasNextMarker}
+                                                hasPrevMarker={hasPreviousMarker}
+                                                isSmall={isSmall}
+                                                offset={offset}
+                                                onOffsetChange={this.paginate}
+                                                pageSize={currentPageSize}
+                                                totalCount={totalCount}
+                                                onMarkerBasedPageChange={this.markerBasedPaginate}
+                                            />
+                                        </Footer>
+                                    )}
+                                </div>
+                                {isDefaultViewMetadata && isMetadataViewV2Feature && isMetadataSidePanelOpen && (
+                                    <MetadataSidePanel
+                                        currentCollection={currentCollection}
+                                        metadataTemplate={metadataTemplate}
+                                        onClose={this.closeMetadataSidePanel}
+                                        onUpdate={this.updateMetadataV2}
+                                        refreshCollection={this.refreshCollection}
+                                        selectedItemIds={selectedItemIds}
+                                    />
                                 )}
                             </div>
-                            {isDefaultViewMetadata && isMetadataViewV2Feature && isMetadataSidePanelOpen && (
-                                <MetadataSidePanel
-                                    currentCollection={currentCollection}
-                                    onClose={this.closeMetadataSidePanel}
-                                    metadataTemplate={metadataTemplate}
-                                    selectedItemIds={selectedItemIds}
+                            {allowUpload && !!this.appElement ? (
+                                <UploadDialog
+                                    isOpen={isUploadModalOpen}
+                                    currentFolderId={id}
+                                    token={token}
+                                    sharedLink={sharedLink}
+                                    sharedLinkPassword={sharedLinkPassword}
+                                    apiHost={apiHost}
+                                    uploadHost={uploadHost}
+                                    onClose={this.uploadSuccessHandler}
+                                    parentElement={this.rootElement}
+                                    appElement={this.appElement}
+                                    onUpload={onUpload}
+                                    contentUploaderProps={contentUploaderProps}
+                                    requestInterceptor={requestInterceptor}
+                                    responseInterceptor={responseInterceptor}
                                 />
-                            )}
+                            ) : null}
+                            {allowCreate && !!this.appElement ? (
+                                <CreateFolderDialog
+                                    isOpen={isCreateFolderModalOpen}
+                                    onCreate={this.throttledCreateFolderCallback}
+                                    onCancel={this.closeModals}
+                                    isLoading={isLoading}
+                                    errorCode={errorCode}
+                                    parentElement={this.rootElement}
+                                    appElement={this.appElement}
+                                />
+                            ) : null}
+                            {canDelete && selected && !!this.appElement ? (
+                                <DeleteConfirmationDialog
+                                    isOpen={isDeleteModalOpen}
+                                    onDelete={this.deleteCallback}
+                                    onCancel={this.closeModals}
+                                    item={selected}
+                                    isLoading={isLoading}
+                                    parentElement={this.rootElement}
+                                    appElement={this.appElement}
+                                />
+                            ) : null}
+                            {canRename && selected && !!this.appElement ? (
+                                <RenameDialog
+                                    isOpen={isRenameModalOpen}
+                                    onRename={this.renameCallback}
+                                    onCancel={this.closeModals}
+                                    item={selected}
+                                    isLoading={isLoading}
+                                    errorCode={errorCode}
+                                    parentElement={this.rootElement}
+                                    appElement={this.appElement}
+                                />
+                            ) : null}
+                            {canShare && selected && !!this.appElement ? (
+                                <ShareDialog
+                                    isOpen={isShareModalOpen}
+                                    canSetShareAccess={canSetShareAccess}
+                                    onShareAccessChange={this.changeShareAccess}
+                                    onCancel={this.refreshCollection}
+                                    item={selected}
+                                    isLoading={isLoading}
+                                    parentElement={this.rootElement}
+                                    appElement={this.appElement}
+                                />
+                            ) : null}
+                            {canPreview && selected && !!this.appElement ? (
+                                <PreviewDialog
+                                    isOpen={isPreviewModalOpen}
+                                    isTouch={isTouch}
+                                    onCancel={this.closeModals}
+                                    item={selected}
+                                    currentCollection={cloneDeep(currentCollection)}
+                                    token={token}
+                                    parentElement={this.rootElement}
+                                    appElement={this.appElement}
+                                    onPreview={onPreview}
+                                    onDownload={onDownload}
+                                    canDownload={canDownload}
+                                    cache={this.api.getCache()}
+                                    apiHost={apiHost}
+                                    appHost={appHost}
+                                    staticHost={staticHost}
+                                    staticPath={staticPath}
+                                    previewLibraryVersion={previewLibraryVersion}
+                                    sharedLink={sharedLink}
+                                    sharedLinkPassword={sharedLinkPassword}
+                                    contentPreviewProps={contentPreviewProps}
+                                    requestInterceptor={requestInterceptor}
+                                    responseInterceptor={responseInterceptor}
+                                />
+                            ) : null}
                         </div>
-                        {allowUpload && !!this.appElement ? (
-                            <UploadDialog
-                                isOpen={isUploadModalOpen}
-                                currentFolderId={id}
-                                token={token}
-                                sharedLink={sharedLink}
-                                sharedLinkPassword={sharedLinkPassword}
-                                apiHost={apiHost}
-                                uploadHost={uploadHost}
-                                onClose={this.uploadSuccessHandler}
-                                parentElement={this.rootElement}
-                                appElement={this.appElement}
-                                onUpload={onUpload}
-                                contentUploaderProps={contentUploaderProps}
-                                requestInterceptor={requestInterceptor}
-                                responseInterceptor={responseInterceptor}
-                            />
-                        ) : null}
-                        {allowCreate && !!this.appElement ? (
-                            <CreateFolderDialog
-                                isOpen={isCreateFolderModalOpen}
-                                onCreate={this.throttledCreateFolderCallback}
-                                onCancel={this.closeModals}
-                                isLoading={isLoading}
-                                errorCode={errorCode}
-                                parentElement={this.rootElement}
-                                appElement={this.appElement}
-                            />
-                        ) : null}
-                        {canDelete && selected && !!this.appElement ? (
-                            <DeleteConfirmationDialog
-                                isOpen={isDeleteModalOpen}
-                                onDelete={this.deleteCallback}
-                                onCancel={this.closeModals}
-                                item={selected}
-                                isLoading={isLoading}
-                                parentElement={this.rootElement}
-                                appElement={this.appElement}
-                            />
-                        ) : null}
-                        {canRename && selected && !!this.appElement ? (
-                            <RenameDialog
-                                isOpen={isRenameModalOpen}
-                                onRename={this.renameCallback}
-                                onCancel={this.closeModals}
-                                item={selected}
-                                isLoading={isLoading}
-                                errorCode={errorCode}
-                                parentElement={this.rootElement}
-                                appElement={this.appElement}
-                            />
-                        ) : null}
-                        {canShare && selected && !!this.appElement ? (
-                            <ShareDialog
-                                isOpen={isShareModalOpen}
-                                canSetShareAccess={canSetShareAccess}
-                                onShareAccessChange={this.changeShareAccess}
-                                onCancel={this.refreshCollection}
-                                item={selected}
-                                isLoading={isLoading}
-                                parentElement={this.rootElement}
-                                appElement={this.appElement}
-                            />
-                        ) : null}
-                        {canPreview && selected && !!this.appElement ? (
-                            <PreviewDialog
-                                isOpen={isPreviewModalOpen}
-                                isTouch={isTouch}
-                                onCancel={this.closeModals}
-                                item={selected}
-                                currentCollection={cloneDeep(currentCollection)}
-                                token={token}
-                                parentElement={this.rootElement}
-                                appElement={this.appElement}
-                                onPreview={onPreview}
-                                onDownload={onDownload}
-                                canDownload={canDownload}
-                                cache={this.api.getCache()}
-                                apiHost={apiHost}
-                                appHost={appHost}
-                                staticHost={staticHost}
-                                staticPath={staticPath}
-                                previewLibraryVersion={previewLibraryVersion}
-                                sharedLink={sharedLink}
-                                sharedLinkPassword={sharedLinkPassword}
-                                contentPreviewProps={contentPreviewProps}
-                                requestInterceptor={requestInterceptor}
-                                responseInterceptor={responseInterceptor}
-                            />
-                        ) : null}
-                    </div>
-                </TooltipProvider>
+                    </TooltipProvider>
+                </Notification.Provider>
             </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */

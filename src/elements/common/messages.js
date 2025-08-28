@@ -27,6 +27,11 @@ const messages = defineMessages({
         description: 'Generic error label.',
         defaultMessage: 'Error',
     },
+    success: {
+        id: 'be.success',
+        description: 'Generic success label.',
+        defaultMessage: 'Success',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -1102,6 +1107,26 @@ const messages = defineMessages({
                 =0 {0 files selected}
                 one {1 file selected}
                 other {# files selected}
+            }
+        `,
+    },
+    multipleValues: {
+        id: 'be.multipleValues',
+        description: 'Display text for field when there are multiple items selected and have different value',
+        defaultMessage: 'Multiple Values',
+    },
+    metadataUpdateErrorNotification: {
+        id: 'be.metadataUpdateErrorNotification',
+        description: 'Text shown in error notification banner',
+        defaultMessage: 'Unable to save changes. Please try again.',
+    },
+    metadataUpdateSuccessNotification: {
+        id: 'be.metadataUpdateSuccessNotification',
+        description: 'Text shown in success notification banner',
+        defaultMessage: `
+            {numSelected, plural,
+                =1 {1 document updated}
+                other {# documents updated}
             }
         `,
     },

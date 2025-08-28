@@ -238,6 +238,37 @@ export const metadataViewV2WithBulkItemActionMenuShowsItemActionMenu: Story = {
     },
 };
 
+export const sidePanelOpenWithMultipleItemsSelected: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+        },
+    },
+
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Select the first row by clicking its checkbox
+        const firstItem = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstItem).getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        // Select the second row by clicking its checkbox
+        const secondItem = canvas.getAllByRole('row', { name: /Child 1/i })[0];
+        const secondCheckbox = within(secondItem).getByRole('checkbox');
+        await userEvent.click(secondCheckbox);
+
+        const metadataButton = canvas.getByRole('button', { name: 'Metadata' });
+        await userEvent.click(metadataButton);
+    },
+};
+
 const meta: Meta<typeof ContentExplorer> = {
     title: 'Elements/ContentExplorer/tests/MetadataView/visual',
     component: ContentExplorer,
