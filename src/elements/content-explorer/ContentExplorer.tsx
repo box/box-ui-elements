@@ -34,7 +34,7 @@ import Content from './Content';
 import { isThumbnailAvailable } from '../common/utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
-import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
+import { CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH } from './constants';
 import LocalStore from '../../utils/LocalStore';
 import {
     withFeatureConsumer,
