@@ -5,6 +5,7 @@ import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
 import type { MetadataTemplateField } from '@box/metadata-editor';
 import type { MetadataFieldType } from '@box/metadata-view';
+
 import API from '../../api';
 import { areFieldValuesEqual, isEmptyValue, isMultiValuesField } from './utils';
 
@@ -16,7 +17,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
-import { FIELD_NAME, FIELD_METADATA, FIELD_EXTENSION, FIELD_PERMISSIONS } from '../../constants';
+import { FIELD_ITEM_NAME, FIELD_METADATA, FIELD_EXTENSION, FIELD_PERMISSIONS } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -28,6 +29,15 @@ import type {
 } from '../../common/types/metadata';
 import type { ElementsXhrError, JSONPatchOperations } from '../../common/types/api';
 import type { Collection, BoxItem } from '../../common/types/core';
+import {
+    getMimeTypeFilter,
+    getRangeFilter,
+    getSelectFilter,
+    getStringFilter,
+    mergeQueries,
+    mergeQueryParams,
+} from './MetadataQueryBuilder';
+import type { ExternalFilterValues } from './MetadataViewContainer';
 
 type SuccessCallback = (metadataQueryCollection: Collection, metadataTemplate: MetadataTemplate) => void;
 type ErrorCallback = (e: ElementsXhrError) => void;
@@ -232,8 +242,10 @@ export default class MetadataQueryAPIHelper {
         metadataQuery: MetadataQueryType,
         successCallback: SuccessCallback,
         errorCallback: ErrorCallback,
+        fields?: ExternalFilterValues,
     ): Promise<void> => {
-        this.metadataQuery = this.verifyQueryFields(metadataQuery);
+        this.metadataQuery = this.verifyQueryFields(metadataQuery, fields);
+
         return this.queryMetadata()
             .then(this.getTemplateSchemaInfo)
             .then(this.getDataWithTypes)
@@ -285,20 +297,114 @@ export default class MetadataQueryAPIHelper {
             .bulkUpdateMetadata(items, this.metadataTemplate, operations, successCallback, errorCallback);
     };
 
+    buildMetadataQueryParams = (filters: ExternalFilterValues) => {
+        let argIndex = 0;
+        let queries: string[] = [];
+        let queryParams: { [key: string]: number | Date | string } = {};
+
+        if (filters) {
+            Object.keys(filters).forEach(key => {
+                const filter = filters[key];
+                if (!filter) {
+                    return;
+                }
+
+                const { fieldType, value } = filter;
+
+                switch (fieldType) {
+                    case 'date':
+                    case 'float': {
+                        if (typeof value === 'object' && value !== null && 'range' in value) {
+                            const result = getRangeFilter(value, key, argIndex);
+                            queryParams = mergeQueryParams(queryParams, result.queryParams);
+                            queries = mergeQueries(queries, result.queries);
+                            argIndex += result.keysGenerated;
+                            break;
+                        }
+                        break;
+                    }
+                    case 'enum':
+                    case 'multiSelect': {
+                        const arrayValue = Array.isArray(value) ? value.map(v => String(v)) : [String(value)];
+                        let result;
+                        if (key === 'mimetype-filter') {
+                            result = getMimeTypeFilter(arrayValue, key, argIndex);
+                        } else {
+                            result = getSelectFilter(arrayValue, key, argIndex);
+                        }
+                        queryParams = mergeQueryParams(queryParams, result.queryParams);
+                        queries = mergeQueries(queries, result.queries);
+                        argIndex += result.keysGenerated;
+                        break;
+                    }
+
+                    case 'string': {
+                        if (value && value[0]) {
+                            const result = getStringFilter(value[0], key, argIndex);
+                            queryParams = mergeQueryParams(queryParams, result.queryParams);
+                            queries = mergeQueries(queries, result.queries);
+                            argIndex += result.keysGenerated;
+                        }
+                        break;
+                    }
+
+                    default:
+                        break;
+                }
+            });
+        }
+
+        const query = queries.reduce((acc, curr, index) => {
+            if (index > 0) {
+                acc += ` AND ${curr}`;
+            } else {
+                acc = curr;
+            }
+            return acc;
+        }, '');
+
+        return {
+            queryParams,
+            query,
+        };
+    };
+
+    mergeQuery = (customQuery: string, filterQuery: string): string => {
+        if (!customQuery) {
+            return filterQuery;
+        }
+        if (!filterQuery) {
+            return customQuery;
+        }
+        // Merge queries with AND operator
+        return `${customQuery} AND ${filterQuery}`;
+    };
+
     /**
      * Verify that the metadata query has required fields and update it if necessary
      * For a file item, default fields included in the response are "type", "id", "etag"
      *
      * @param {MetadataQueryType} metadataQuery metadata query object
+     * @param {ExternalFilterValues} [fields] optional filter values to apply to the metadata query
      * @return {MetadataQueryType} updated metadata query object with required fields
      */
-    verifyQueryFields = (metadataQuery: MetadataQueryType): MetadataQueryType => {
+    verifyQueryFields = (metadataQuery: MetadataQueryType, fields?: ExternalFilterValues): MetadataQueryType => {
         const clonedQuery = cloneDeep(metadataQuery);
         const clonedFields = isArray(clonedQuery.fields) ? clonedQuery.fields : [];
 
+        if (fields) {
+            const { query: filterQuery, queryParams: filteredQueryParams } = this.buildMetadataQueryParams(fields);
+            const { query: customQuery, query_params: customQueryParams } = clonedQuery;
+            const query = this.mergeQuery(customQuery, filterQuery);
+            const queryParams = mergeQueryParams(filteredQueryParams, customQueryParams);
+            if (query) {
+                clonedQuery.query = query;
+                clonedQuery.query_params = queryParams;
+            }
+        }
         // Make sure the query fields array has "name" field which is necessary to display info.
-        if (!clonedFields.includes(FIELD_NAME)) {
-            clonedFields.push(FIELD_NAME);
+        if (!clonedFields.includes(FIELD_ITEM_NAME)) {
+            clonedFields.push(FIELD_ITEM_NAME);
         }
 
         if (!clonedFields.includes(FIELD_EXTENSION)) {

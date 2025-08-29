@@ -23,37 +23,19 @@ const metadataQuery = {
 
     ancestor_folder_id: '0',
     fields: [
-        `name`,
         `${metadataSourceFieldName}.industry`,
         `${metadataSourceFieldName}.last_contacted_at`,
         `${metadataSourceFieldName}.role`,
+        `${metadataSourceFieldName}.number`,
     ],
 };
 
-const fieldsToShow = [
-    { key: `name` },
-    { key: `${metadataSourceFieldName}.industry`, canEdit: true },
-    { key: `${metadataSourceFieldName}.last_contacted_at`, canEdit: true },
-    { key: `${metadataSourceFieldName}.role`, canEdit: true },
-];
-
 const columns = mockSchema.fields.map(field => {
-    if (field.key === 'name') {
-        return {
-            textValue: field.displayName,
-            id: 'name',
-            type: 'string',
-            allowsSorting: true,
-            minWidth: 250,
-            maxWidth: 250,
-            isRowHeader: true,
-        };
-    }
-
     if (field.type === 'date') {
         return {
             textValue: field.displayName,
             id: `${metadataSourceFieldName}.${field.key}`,
+            key: `${metadataSourceFieldName}.${field.key}`,
             type: field.type,
             allowsSorting: true,
             minWidth: 200,
@@ -68,6 +50,7 @@ const columns = mockSchema.fields.map(field => {
     return {
         textValue: field.displayName,
         id: `${metadataSourceFieldName}.${field.key}`,
+        key: `${metadataSourceFieldName}.${field.key}`,
         type: field.type,
         allowsSorting: true,
         minWidth: 200,
@@ -87,7 +70,6 @@ export const metadataView: Story = {
             },
         },
         metadataQuery,
-        fieldsToShow,
         defaultView,
         features: {
             contentExplorer: {
