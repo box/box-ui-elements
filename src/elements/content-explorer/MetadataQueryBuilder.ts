@@ -33,7 +33,8 @@ const generateArgKey = (key: string, index: number): string => {
     return `arg_${purifyKey}_${index}`;
 };
 
-const escapeValue = (value: string): string => value.replace(/([_%])/g, '\\$1');
+const escapeValue = (value: string): string =>
+    value.replace(/\\/g, '\\\\').replace(/([_%])/g, '\\$1');
 
 export const getStringFilter = (filterValue: string, fieldKey: string, argIndexStart: number): QueryResult => {
     let currentArgIndex = argIndexStart;
