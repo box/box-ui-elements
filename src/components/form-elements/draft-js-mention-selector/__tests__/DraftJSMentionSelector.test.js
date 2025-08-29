@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+/* eslint-disable react/jsx-no-comment-textnodes */
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
-import { ContentState, EditorState } from 'draft-js';
+import { ContentState, EditorState, convertToRaw } from 'draft-js';
 import sinon from 'sinon';
 
 import DraftJSMentionSelector from '..';
@@ -21,6 +23,16 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
     };
 
     describe('render()', () => {
+        beforeEach(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation(() => ({
+                querySelector: () => ({ currentTime: 70 }),
+            }));
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
         test('should correctly render the component', () => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
 
@@ -40,11 +52,22 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(wrapper.find('Toggle').length).toEqual(0);
         });
 
-        test('should not toggle the time stamp if timeStampLabel is undefined', () => {
+        test('should not toggle the time stamp if timestampLabel is undefined', () => {
             const wrapper = shallow(
                 <DraftJSMentionSelector {...requiredProps} isRequired={true} timestampLabel={undefined} />,
             );
             expect(wrapper.find('Toggle').length).toEqual(0);
+        });
+
+        test('should show timestamp toggle on with timestamp if timestamplabel is defined and isRequired is true', () => {
+            const props = { ...requiredProps };
+            const wrapper = shallow(<DraftJSMentionSelector {...props} />);
+            wrapper.setProps({ ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true });
+            const instance = wrapper.instance();
+            expect(instance.state.timestampPrepended).toEqual(true);
+            expect(wrapper.find('Toggle').length).toEqual(1);
+            expect(wrapper.find('Toggle').prop('isOn')).toEqual(true);
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
         });
     });
 
@@ -377,6 +400,253 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             const instance = wrapper.instance();
 
             expect(instance.isEditorStateEmpty(editorState)).toEqual(expectedResult);
+        });
+    });
+
+    describe('getVideoTimestamp()', () => {
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should return the correct video timestamp', () => {
+            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+                return {
+                    querySelector: () => {
+                        return { currentTime: 70 };
+                    },
+                };
+            });
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
+            const instance = wrapper.instance();
+            expect(instance.getVideoTimestamp()).toEqual('00:01:10');
+        });
+
+        test('should return the correct videoe timestamp if it has not been started yet', () => {
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
+            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+                return {
+                    querySelector: () => {
+                        return <video src="http://dummy.mp4" />;
+                    },
+                };
+            });
+            const instance = wrapper.instance();
+            expect(instance.getVideoTimestamp()).toEqual('00:00:00');
+        });
+
+        test('shoudl return 00:00:00 if the video is not found', () => {
+            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+                return {
+                    querySelector: () => {
+                        return null;
+                    },
+                };
+            });
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
+            const instance = wrapper.instance();
+            expect(instance.getVideoTimestamp()).toEqual('00:00:00');
+        });
+
+        test('should return the correct precision of the timestamp', () => {
+            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+                return {
+                    querySelector: () => {
+                        return { currentTime: 176.34 };
+                    },
+                };
+            });
+            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
+            const instance = wrapper.instance();
+            expect(instance.getVideoTimestamp()).toEqual('00:02:56');
+        });
+    });
+    describe('video timestamp toggle', () => {
+        const getTimeStampedEnableComponent = () => {
+            const props = { ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true };
+            return shallow(<DraftJSMentionSelector {...props} />);
+        };
+
+        beforeEach(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+                return {
+                    querySelector: () => {
+                        return { currentTime: 70 };
+                    },
+                };
+            });
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should add timestamp to the editor state when the toggle is clicked', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            expect(instance.state.timestampPrepended).toEqual(true);
+        });
+
+        test('should remove timestamp from the editor state when the toggle is clicked off', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            wrapper.find('Toggle').simulate('change', { target: { checked: false } });
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).not.toContain('00:01:10');
+            expect(instance.state.timestampPrepended).toEqual(false);
+        });
+
+        test('should add timestamp to the beginning of the editor state when the toggle is clicked on', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
+            });
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain(
+                '00:01:10 this is coool!!!',
+            );
+        });
+
+        test('should remove timestamp from the beginning of the editor state when the toggle is clicked off', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
+            });
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            wrapper.find('Toggle').simulate('change', { target: { checked: false } });
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toEqual('this is coool!!!');
+        });
+
+        test('should add an UNEDITABLE_TIMESTAMP_TEXT entity to the editor state when the toggle is clicked on', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
+            });
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            const rawContentState = convertToRaw(instance.state.internalEditorState.getCurrentContent());
+            const entity = rawContentState.entityMap[0];
+            expect(entity.type).toEqual('UNEDITABLE_TIMESTAMP_TEXT');
+            expect(entity.data.timestamp).toEqual('00:01:10');
+        });
+
+        test('should remove the UNEDITABLE_TIMESTAMP_TEXT entity from the editor state when the toggle is clicked off', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
+            });
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            wrapper.find('Toggle').simulate('change', { target: { checked: false } });
+            const rawContentState = convertToRaw(instance.state.internalEditorState.getCurrentContent());
+            expect(rawContentState.entityMap).toEqual({});
+        });
+
+        test('decorator should recognize the UNEDITABLE_TIMESTAMP_TEXT entity', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+            expect(instance.compositeDecorator).toBeDefined();
+            expect(typeof instance.compositeDecorator.getDecorations).toBe('function');
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
+            });
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            // Verify that the decorator strategy would match this entity
+            const contentState = instance.state.internalEditorState.getCurrentContent();
+            const firstBlock = contentState.getFirstBlock();
+            let entityFound = false;
+            firstBlock.findEntityRanges(
+                character => {
+                    const entityKey = character.getEntity();
+                    if (
+                        entityKey !== null &&
+                        contentState.getEntity(entityKey).getType() === 'UNEDITABLE_TIMESTAMP_TEXT'
+                    ) {
+                        entityFound = true;
+                        return true;
+                    }
+                    return false;
+                },
+                () => {},
+            );
+            expect(entityFound).toBe(true);
+        });
+
+        test('should set toggle state to off when all content is deleted from the editor and a timestamp was present', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+
+            // Set up initial content with timestamp
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is some content')),
+            });
+
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.timestampPrepended).toEqual(true);
+
+            // Simulate user deleting all content (including timestamp)
+            const emptyEditorState = EditorState.createWithContent(ContentState.createFromText(''));
+            instance.handleChange(emptyEditorState);
+
+            // Verify that timestampPrepended is set to false when content is deleted
+            expect(instance.state.timestampPrepended).toEqual(false);
+            expect(wrapper.find('Toggle').prop('isOn')).toEqual(false);
+        });
+
+        test('should handle mantain content when timetamp is removed', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+
+            // Set up initial content with timestamp
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is some content')),
+            });
+
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.timestampPrepended).toEqual(true);
+
+            // Simulate user deleting part of the content but keeping some
+            const partialContentEditorState = EditorState.createWithContent(
+                ContentState.createFromText('some content'),
+            );
+            instance.handleChange(partialContentEditorState);
+
+            // Verify that timestampPrepended is set to false when timestamp is removed
+            expect(instance.state.timestampPrepended).toEqual(false);
+            expect(wrapper.find('Toggle').prop('isOn')).toEqual(false);
+        });
+
+        test('should handle backspace deletion of timestamp by user', () => {
+            const wrapper = getTimeStampedEnableComponent();
+            const instance = wrapper.instance();
+
+            // Set up initial content with timestamp
+            instance.setState({
+                internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is some content')),
+            });
+
+            wrapper.find('Toggle').simulate('change', { target: { checked: true } });
+            expect(instance.state.timestampPrepended).toEqual(true);
+
+            // Simulate user using backspace to delete the timestamp
+            // Create an editor state that represents the content after backspace deletion
+            const contentAfterBackspace = ContentState.createFromText('this is some content');
+            const editorStateAfterBackspace = EditorState.push(
+                instance.state.internalEditorState,
+                contentAfterBackspace,
+                'backspace-character',
+            );
+
+            instance.handleChange(editorStateAfterBackspace);
+
+            // Verify that timestampPrepended is set to false when timestamp is deleted
+            expect(instance.state.timestampPrepended).toEqual(false);
+            expect(wrapper.find('Toggle').prop('isOn')).toEqual(false);
         });
     });
 });
