@@ -1,4 +1,6 @@
+import { BoxItemSelection } from '@box/box-item-type-selector';
 import isNil from 'lodash/isNil';
+import { mapFileTypes } from './utils';
 
 type QueryResult = {
     queryParams: { [key: string]: number | Date | string };
@@ -115,9 +117,7 @@ export const getSelectFilter = (filterValue: string[], fieldKey: string, argInde
     return {
         queryParams: multiSelectQueryParams,
         queries: [
-            `(${fieldKey === 'mimetype-filter' ? 'item.extension' : fieldKey} HASANY (${Object.keys(
-                multiSelectQueryParams,
-            )
+            `(${fieldKey} HASANY (${Object.keys(multiSelectQueryParams)
                 .map(argKey => `:${argKey}`)
                 .join(', ')}))`,
         ],
@@ -134,26 +134,61 @@ export const getMimeTypeFilter = (filterValue: string[], fieldKey: string, argIn
         };
     }
 
+    // Use mapFileTypes to get the correct extensions and handle special cases
+    const mappedExtensions = mapFileTypes(filterValue as BoxItemSelection);
+    if (mappedExtensions.length === 0) {
+        return {
+            queryParams: {},
+            queries: [],
+            keysGenerated: 0,
+        };
+    }
+
     let currentArgIndex = argIndexStart;
+    const queryParams: { [key: string]: number | Date | string } = {};
+    const queries: string[] = [];
 
-    const multiSelectQueryParams = Object.fromEntries(
-        filterValue.map(value => {
-            currentArgIndex += 1;
-            // the item-type-selector is returning the extensions with the suffix 'Type', so we remove it for the query
-            return [
-                generateArgKey(fieldKey, currentArgIndex),
-                String(value.endsWith('Type') ? value.slice(0, -4) : value),
-            ];
-        }),
-    );
+    // Handle specific extensions and folder type
+    const extensions: string[] = [];
+    let hasFolder = false;
 
-    return {
-        queryParams: multiSelectQueryParams,
-        queries: [
-            `(item.extension IN (${Object.keys(multiSelectQueryParams)
+    for (const extension of mappedExtensions) {
+        if (extension === 'folder') {
+            if (!hasFolder) {
+                currentArgIndex += 1;
+                const folderArgKey = generateArgKey('mime_folderType', currentArgIndex);
+                queryParams[folderArgKey] = 'folder';
+                queries.push(`(item.type = :${folderArgKey})`);
+                hasFolder = true;
+            }
+        } else {
+            extensions.push(extension);
+        }
+    }
+
+    // Handle extensions in batch if any exist
+    if (extensions.length > 0) {
+        const extensionQueryParams = Object.fromEntries(
+            extensions.map(extension => {
+                currentArgIndex += 1;
+                return [generateArgKey(fieldKey, currentArgIndex), extension];
+            }),
+        );
+
+        Object.assign(queryParams, extensionQueryParams);
+        queries.push(
+            `(item.extension IN (${Object.keys(extensionQueryParams)
                 .map(argKey => `:${argKey}`)
                 .join(', ')}))`,
-        ],
+        );
+    }
+
+    // Combine queries with OR if multiple exist
+    const finalQueries = queries.length > 1 ? [`(${queries.join(' OR ')})`] : queries;
+
+    return {
+        queryParams,
+        queries: finalQueries,
         keysGenerated: currentArgIndex - argIndexStart,
     };
 };

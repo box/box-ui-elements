@@ -673,14 +673,20 @@ describe('elements/content-explorer/MetadataQueryAPIHelper', () => {
             const filters = {
                 'mimetype-filter': {
                     fieldType: 'enum',
-                    value: ['pdf', 'doc'],
+                    value: ['pdfType', 'documentType'],
                 },
             };
 
             const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
-            expect(result.query).toBe('(item.extension IN (:arg_mimetype_filter_1, :arg_mimetype_filter_2))');
+            expect(result.query).toBe(
+                '(item.extension IN (:arg_mimetype_filter_1, :arg_mimetype_filter_2, :arg_mimetype_filter_3, :arg_mimetype_filter_4, :arg_mimetype_filter_5, :arg_mimetype_filter_6))',
+            );
             expect(result.queryParams.arg_mimetype_filter_1).toBe('pdf');
             expect(result.queryParams.arg_mimetype_filter_2).toBe('doc');
+            expect(result.queryParams.arg_mimetype_filter_3).toBe('docx');
+            expect(result.queryParams.arg_mimetype_filter_4).toBe('gdoc');
+            expect(result.queryParams.arg_mimetype_filter_5).toBe('rtf');
+            expect(result.queryParams.arg_mimetype_filter_6).toBe('txt');
         });
 
         test('should handle multiple filters of different types', () => {

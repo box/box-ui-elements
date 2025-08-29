@@ -228,19 +228,6 @@ describe('elements/content-explorer/MetadataQueryBuilder', () => {
             });
         });
 
-        test('should handle mimetype-filter field key specially', () => {
-            const filterValue = ['pdf', 'doc'];
-            const result = getSelectFilter(filterValue, 'mimetype-filter', 0);
-            expect(result).toEqual({
-                queryParams: {
-                    arg_mimetype_filter_1: 'pdf',
-                    arg_mimetype_filter_2: 'doc',
-                },
-                queries: ['(item.extension HASANY (:arg_mimetype_filter_1, :arg_mimetype_filter_2))'],
-                keysGenerated: 2,
-            });
-        });
-
         test('should handle single value array', () => {
             const filterValue = ['single_value'];
             const result = getSelectFilter(filterValue, 'field_name', 0);
@@ -309,44 +296,51 @@ describe('elements/content-explorer/MetadataQueryBuilder', () => {
     });
 
     describe('getMimeTypeFilter', () => {
-        test('should generate mime type filter and remove "Type" suffix', () => {
-            const filterValue = ['pdfType', 'docType', 'txtType'];
+        test('should generate mime type filter using mapFileTypes', () => {
+            const filterValue = ['pdfType', 'documentType'];
             const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
             expect(result).toEqual({
                 queryParams: {
                     arg_mimetype_1: 'pdf',
                     arg_mimetype_2: 'doc',
-                    arg_mimetype_3: 'txt',
+                    arg_mimetype_3: 'docx',
+                    arg_mimetype_4: 'gdoc',
+                    arg_mimetype_5: 'rtf',
+                    arg_mimetype_6: 'txt',
                 },
-                queries: ['(item.extension IN (:arg_mimetype_1, :arg_mimetype_2, :arg_mimetype_3))'],
-                keysGenerated: 3,
+                queries: [
+                    '(item.extension IN (:arg_mimetype_1, :arg_mimetype_2, :arg_mimetype_3, :arg_mimetype_4, :arg_mimetype_5, :arg_mimetype_6))',
+                ],
+                keysGenerated: 6,
             });
         });
 
-        test('should handle values without "Type" suffix', () => {
+        test('should handle values that are not in FILE_FOLDER_TYPES_MAP', () => {
             const filterValue = ['pdf', 'doc'];
             const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
             expect(result).toEqual({
-                queryParams: {
-                    arg_mimetype_1: 'pdf',
-                    arg_mimetype_2: 'doc',
-                },
-                queries: ['(item.extension IN (:arg_mimetype_1, :arg_mimetype_2))'],
-                keysGenerated: 2,
+                queryParams: {},
+                queries: [],
+                keysGenerated: 0,
             });
         });
 
-        test('should handle mixed values with and without "Type" suffix', () => {
-            const filterValue = ['pdfType', 'doc', 'txtType'];
+        test('should handle mixed valid and invalid values', () => {
+            const filterValue = ['pdfType', 'doc', 'documentType'];
             const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
             expect(result).toEqual({
                 queryParams: {
                     arg_mimetype_1: 'pdf',
                     arg_mimetype_2: 'doc',
-                    arg_mimetype_3: 'txt',
+                    arg_mimetype_3: 'docx',
+                    arg_mimetype_4: 'gdoc',
+                    arg_mimetype_5: 'rtf',
+                    arg_mimetype_6: 'txt',
                 },
-                queries: ['(item.extension IN (:arg_mimetype_1, :arg_mimetype_2, :arg_mimetype_3))'],
-                keysGenerated: 3,
+                queries: [
+                    '(item.extension IN (:arg_mimetype_1, :arg_mimetype_2, :arg_mimetype_3, :arg_mimetype_4, :arg_mimetype_5, :arg_mimetype_6))',
+                ],
+                keysGenerated: 6,
             });
         });
 
@@ -360,16 +354,13 @@ describe('elements/content-explorer/MetadataQueryBuilder', () => {
             });
         });
 
-        test('should handle numeric values converted to strings', () => {
+        test('should handle numeric values that are not in FILE_FOLDER_TYPES_MAP', () => {
             const filterValue = ['123', '456'];
             const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
             expect(result).toEqual({
-                queryParams: {
-                    arg_mimetype_1: '123',
-                    arg_mimetype_2: '456',
-                },
-                queries: ['(item.extension IN (:arg_mimetype_1, :arg_mimetype_2))'],
-                keysGenerated: 2,
+                queryParams: {},
+                queries: [],
+                keysGenerated: 0,
             });
         });
 
@@ -402,15 +393,140 @@ describe('elements/content-explorer/MetadataQueryBuilder', () => {
         });
 
         test('should handle field names with special characters', () => {
-            const filterValue = ['pdfType', 'docType'];
+            const filterValue = ['pdfType', 'documentType'];
             const result = getMimeTypeFilter(filterValue, 'mime-type.with/special_chars', 0);
             expect(result).toEqual({
                 queryParams: {
                     arg_mime_type_with_special_chars_1: 'pdf',
                     arg_mime_type_with_special_chars_2: 'doc',
+                    arg_mime_type_with_special_chars_3: 'docx',
+                    arg_mime_type_with_special_chars_4: 'gdoc',
+                    arg_mime_type_with_special_chars_5: 'rtf',
+                    arg_mime_type_with_special_chars_6: 'txt',
                 },
                 queries: [
-                    '(item.extension IN (:arg_mime_type_with_special_chars_1, :arg_mime_type_with_special_chars_2))',
+                    '(item.extension IN (:arg_mime_type_with_special_chars_1, :arg_mime_type_with_special_chars_2, :arg_mime_type_with_special_chars_3, :arg_mime_type_with_special_chars_4, :arg_mime_type_with_special_chars_5, :arg_mime_type_with_special_chars_6))',
+                ],
+                keysGenerated: 6,
+            });
+        });
+
+        // New tests for folderType functionality
+        test('should handle folderType only', () => {
+            const filterValue = ['folderType'];
+            const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_1: 'folder',
+                },
+                queries: ['(item.type = :arg_mime_folderType_1)'],
+                keysGenerated: 1,
+            });
+        });
+
+        test('should handle folderType with file types', () => {
+            const filterValue = ['folderType', 'pdfType', 'documentType'];
+            const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_1: 'folder',
+                    arg_mimetype_2: 'pdf',
+                    arg_mimetype_3: 'doc',
+                    arg_mimetype_4: 'docx',
+                    arg_mimetype_5: 'gdoc',
+                    arg_mimetype_6: 'rtf',
+                    arg_mimetype_7: 'txt',
+                },
+                queries: [
+                    '((item.type = :arg_mime_folderType_1) OR (item.extension IN (:arg_mimetype_2, :arg_mimetype_3, :arg_mimetype_4, :arg_mimetype_5, :arg_mimetype_6, :arg_mimetype_7)))',
+                ],
+                keysGenerated: 7,
+            });
+        });
+
+        test('should handle folderType with mixed valid and invalid file types', () => {
+            const filterValue = ['folderType', 'pdfType', 'doc', 'documentType'];
+            const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_1: 'folder',
+                    arg_mimetype_2: 'pdf',
+                    arg_mimetype_3: 'doc',
+                    arg_mimetype_4: 'docx',
+                    arg_mimetype_5: 'gdoc',
+                    arg_mimetype_6: 'rtf',
+                    arg_mimetype_7: 'txt',
+                },
+                queries: [
+                    '((item.type = :arg_mime_folderType_1) OR (item.extension IN (:arg_mimetype_2, :arg_mimetype_3, :arg_mimetype_4, :arg_mimetype_5, :arg_mimetype_6, :arg_mimetype_7)))',
+                ],
+                keysGenerated: 7,
+            });
+        });
+
+        test('should handle folderType with single file type', () => {
+            const filterValue = ['folderType', 'pdfType'];
+            const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_1: 'folder',
+                    arg_mimetype_2: 'pdf',
+                },
+                queries: ['((item.type = :arg_mime_folderType_1) OR (item.extension IN (:arg_mimetype_2)))'],
+                keysGenerated: 2,
+            });
+        });
+
+        test('should handle folderType with file types using correct arg index', () => {
+            const filterValue = ['folderType', 'pdfType', 'documentType'];
+            const result = getMimeTypeFilter(filterValue, 'mimetype', 5);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_6: 'folder',
+                    arg_mimetype_7: 'pdf',
+                    arg_mimetype_8: 'doc',
+                    arg_mimetype_9: 'docx',
+                    arg_mimetype_10: 'gdoc',
+                    arg_mimetype_11: 'rtf',
+                    arg_mimetype_12: 'txt',
+                },
+                queries: [
+                    '((item.type = :arg_mime_folderType_6) OR (item.extension IN (:arg_mimetype_7, :arg_mimetype_8, :arg_mimetype_9, :arg_mimetype_10, :arg_mimetype_11, :arg_mimetype_12)))',
+                ],
+                keysGenerated: 7,
+            });
+        });
+
+        test('should handle multiple folderType entries (should only process one)', () => {
+            const filterValue = ['folderType', 'pdfType', 'folderType', 'documentType'];
+            const result = getMimeTypeFilter(filterValue, 'mimetype', 0);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_1: 'folder',
+                    arg_mimetype_2: 'pdf',
+                    arg_mimetype_3: 'doc',
+                    arg_mimetype_4: 'docx',
+                    arg_mimetype_5: 'gdoc',
+                    arg_mimetype_6: 'rtf',
+                    arg_mimetype_7: 'txt',
+                },
+                queries: [
+                    '((item.type = :arg_mime_folderType_1) OR (item.extension IN (:arg_mimetype_2, :arg_mimetype_3, :arg_mimetype_4, :arg_mimetype_5, :arg_mimetype_6, :arg_mimetype_7)))',
+                ],
+                keysGenerated: 7,
+            });
+        });
+
+        test('should handle folderType with field names containing special characters', () => {
+            const filterValue = ['folderType', 'pdfType'];
+            const result = getMimeTypeFilter(filterValue, 'mime-type.with/special_chars', 0);
+            expect(result).toEqual({
+                queryParams: {
+                    arg_mime_folderType_1: 'folder',
+                    arg_mime_type_with_special_chars_2: 'pdf',
+                },
+                queries: [
+                    '((item.type = :arg_mime_folderType_1) OR (item.extension IN (:arg_mime_type_with_special_chars_2)))',
                 ],
                 keysGenerated: 2,
             });
