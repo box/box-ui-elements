@@ -172,17 +172,11 @@ export default class MetadataQueryAPIHelper {
     };
 
     getTemplateSchemaInfo = (data: MetadataQueryResponseData): Promise<MetadataTemplateSchemaResponse | void> => {
-        const { entries } = data;
         this.metadataQueryResponseData = data;
-        if (!entries || entries.length === 0) {
-            // Don't make metadata API call to get template info
-            return Promise.resolve();
-        }
 
-        const metadata = getProp(entries, '[0].metadata');
-        this.templateScope = Object.keys(metadata)[0];
-        const instance = metadata[this.templateScope];
-        this.templateKey = Object.keys(instance)[0];
+        const [scope, key] = this.metadataQuery.from.split('.');
+        this.templateScope = scope;
+        this.templateKey = key;
 
         return this.api.getMetadataAPI(true).getSchemaByTemplateKey(this.templateKey);
     };
