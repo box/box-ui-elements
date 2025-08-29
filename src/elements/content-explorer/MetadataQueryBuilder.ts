@@ -1,6 +1,5 @@
-import { BoxItemSelection } from '@box/box-item-type-selector';
 import isNil from 'lodash/isNil';
-import { mapFileTypes } from './utils';
+import { getFileExtensions } from './utils';
 
 type QueryResult = {
     queryParams: { [key: string]: number | Date | string };
@@ -134,42 +133,31 @@ export const getMimeTypeFilter = (filterValue: string[], fieldKey: string, argIn
         };
     }
 
-    // Use mapFileTypes to get the correct extensions and handle special cases
-    const mappedExtensions = mapFileTypes(filterValue as BoxItemSelection);
-    if (mappedExtensions.length === 0) {
-        return {
-            queryParams: {},
-            queries: [],
-            keysGenerated: 0,
-        };
-    }
-
     let currentArgIndex = argIndexStart;
     const queryParams: { [key: string]: number | Date | string } = {};
     const queries: string[] = [];
 
     // Handle specific extensions and folder type
-    const extensions: string[] = [];
+    const extensions: string[][] = [];
     let hasFolder = false;
-
-    for (const extension of mappedExtensions) {
-        if (extension === 'folder') {
-            if (!hasFolder) {
-                currentArgIndex += 1;
-                const folderArgKey = generateArgKey('mime_folderType', currentArgIndex);
-                queryParams[folderArgKey] = 'folder';
-                queries.push(`(item.type = :${folderArgKey})`);
-                hasFolder = true;
-            }
+    for (const extension of filterValue) {
+        if (extension === 'folderType' && !hasFolder) {
+            currentArgIndex += 1;
+            const folderArgKey = generateArgKey('mime_folderType', currentArgIndex);
+            queryParams[folderArgKey] = 'folder';
+            queries.push(`(item.type = :${folderArgKey})`);
+            hasFolder = true;
         } else {
-            extensions.push(extension);
+            extensions.push(getFileExtensions(extension));
         }
     }
 
+    // flat the array of arrays
+    const flattenExtensions = extensions.flat();
     // Handle extensions in batch if any exist
-    if (extensions.length > 0) {
+    if (flattenExtensions.length > 0) {
         const extensionQueryParams = Object.fromEntries(
-            extensions.map(extension => {
+            flattenExtensions.map(extension => {
                 currentArgIndex += 1;
                 return [generateArgKey(fieldKey, currentArgIndex), extension];
             }),

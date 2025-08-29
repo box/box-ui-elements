@@ -189,14 +189,14 @@ describe('elements/content-explorer/MetadataQueryAPIHelper', () => {
     };
     const mdQuery = {
         ancestor_folder_id: '672838458',
-        from: 'enterprise_1234.templateKey',
+        from: `${templateScope}.${templateKey}`,
         query: 'query',
         query_params: {},
         fields: [
             FIELD_ITEM_NAME,
-            'metadata.enterprise_1234.templateKey.type',
-            'metadata.enterprise_1234.templateKey.year',
-            'metadata.enterprise_1234.templateKey.approved',
+            `metadata.${templateScope}.${templateKey}.type`,
+            `metadata.${templateScope}.${templateKey}.year`,
+            `metadata.${templateScope}.${templateKey}.approved`,
         ],
     };
 
@@ -206,6 +206,10 @@ describe('elements/content-explorer/MetadataQueryAPIHelper', () => {
         metadataQueryAPIHelper.templateScope = templateScope;
         metadataQueryAPIHelper.metadataTemplate = template;
         metadataQueryAPIHelper.metadataQuery = mdQuery;
+
+        // Reset mocks before each test
+        getSchemaByTemplateKeyFunc.mockClear();
+        getSchemaByTemplateKeyFunc.mockResolvedValue(templateSchemaResponse);
     });
 
     describe('flattenMetadata()', () => {
@@ -267,7 +271,7 @@ describe('elements/content-explorer/MetadataQueryAPIHelper', () => {
     });
 
     describe('getTemplateSchemaInfo()', () => {
-        test('should set instance properties and make xhr call to get template info when response has valid entries', async () => {
+        test('should set instance properties and make xhr call to get template info', async () => {
             const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(metadataQueryResponse);
             expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
             expect(result).toEqual(templateSchemaResponse);
@@ -276,26 +280,49 @@ describe('elements/content-explorer/MetadataQueryAPIHelper', () => {
             expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
         });
 
-        test('should not make xhr call to get metadata template info when response has zero/invalid entries', async () => {
+        test('should make xhr call to get metadata template info even when response has zero entries', async () => {
             const emptyEntriesResponse = { entries: [], next_marker: nextMarker };
             const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(emptyEntriesResponse);
-            expect(getSchemaByTemplateKeyFunc).not.toHaveBeenCalled();
-            expect(result).toBe(undefined);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
+            expect(result).toEqual(templateSchemaResponse);
             expect(metadataQueryAPIHelper.metadataQueryResponseData).toEqual(emptyEntriesResponse);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(templateScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
         });
 
-        test('should handle response with null entries', async () => {
+        test('should make xhr call to get metadata template info even when response has null entries', async () => {
             const nullEntriesResponse = { entries: null, next_marker: nextMarker };
             const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(nullEntriesResponse);
-            expect(getSchemaByTemplateKeyFunc).not.toHaveBeenCalled();
-            expect(result).toBe(undefined);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
+            expect(result).toEqual(templateSchemaResponse);
+            expect(metadataQueryAPIHelper.metadataQueryResponseData).toEqual(nullEntriesResponse);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(templateScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
         });
 
-        test('should handle response with undefined entries', async () => {
+        test('should make xhr call to get metadata template info even when response has undefined entries', async () => {
             const undefinedEntriesResponse = { next_marker: nextMarker };
             const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(undefinedEntriesResponse);
-            expect(getSchemaByTemplateKeyFunc).not.toHaveBeenCalled();
-            expect(result).toBe(undefined);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
+            expect(result).toEqual(templateSchemaResponse);
+            expect(metadataQueryAPIHelper.metadataQueryResponseData).toEqual(undefinedEntriesResponse);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(templateScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
+        });
+
+        test('should extract template scope and key from metadata query from field', async () => {
+            // Test with different scope and key in the query
+            const differentScope = 'enterprise_99999';
+            const differentKey = 'differentTemplate';
+            metadataQueryAPIHelper.metadataQuery = {
+                ...mdQuery,
+                from: `${differentScope}.${differentKey}`,
+            };
+
+            await metadataQueryAPIHelper.getTemplateSchemaInfo(metadataQueryResponse);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(differentKey);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(differentScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(differentKey);
         });
     });
 

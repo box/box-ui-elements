@@ -45,6 +45,4 @@ export const NON_FOLDER_FILE_TYPES_MAP = new Map([
     ['threedType', ['obj', 'fbx', 'stl', 'amf', 'iges']],
 ]);
 
-export const FILE_FOLDER_TYPES_MAP = new Map(NON_FOLDER_FILE_TYPES_MAP).set('folderType', ['folder']);
-
 export const NON_FOLDER_FILE_TYPES = Array.from(NON_FOLDER_FILE_TYPES_MAP.keys());
