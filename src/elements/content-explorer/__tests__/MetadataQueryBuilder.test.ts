@@ -6,6 +6,7 @@ import {
     getSelectFilter,
     getMimeTypeFilter,
 } from '../MetadataQueryBuilder';
+import { getFileExtensions } from '../utils';
 
 describe('elements/content-explorer/MetadataQueryBuilder', () => {
     describe('mergeQueryParams', () => {
@@ -530,6 +531,18 @@ describe('elements/content-explorer/MetadataQueryBuilder', () => {
                 ],
                 keysGenerated: 2,
             });
+        });
+    });
+
+    describe('getFileExtensions', () => {
+        test('should return actual file extensions for single file type', () => {
+            const result = getFileExtensions('documentType');
+            expect(result).toEqual(['doc', 'docx', 'gdoc', 'rtf', 'txt']);
+        });
+
+        test('should handle empty array input', () => {
+            const result = getFileExtensions('');
+            expect(result).toEqual([]);
         });
     });
 });
