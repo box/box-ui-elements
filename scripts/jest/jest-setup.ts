@@ -24,6 +24,10 @@ Object.defineProperty(global, 'TextEncoder', {
     value: util.TextEncoder,
 });
 
+Object.defineProperty(global, 'TextDecoder', {
+    value: util.TextDecoder,
+});
+
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
     observe: jest.fn(),
     unobserve: jest.fn(),
