@@ -11,11 +11,10 @@ import {
 } from '@box/metadata-editor';
 import type { MetadataFieldType } from '@box/metadata-view';
 import type { Selection } from 'react-aria-components';
-import { BoxItemSelection } from '@box/box-item-type-selector';
 import type { BoxItem, Collection } from '../../common/types/core';
 
 import messages from '../common/messages';
-import { FILE_FOLDER_TYPES_MAP, NON_FOLDER_FILE_TYPES } from './constants';
+import { NON_FOLDER_FILE_TYPES_MAP } from './constants';
 
 // Specific type for metadata field value in the item
 // Note: Item doesn't have field value in metadata object if that field is not set, so the value will be undefined in this case
@@ -196,17 +195,9 @@ export function useTemplateInstance(metadataTemplate: MetadataTemplate, selected
     };
 }
 
-export const mapFileTypes = (selectedFileTypes: BoxItemSelection) => {
-    const selectedFileTypesSet = new Set(selectedFileTypes);
-
-    const areAllNonFolderFileTypesSelected = NON_FOLDER_FILE_TYPES.every(key => selectedFileTypesSet.has(key));
-
-    if (areAllNonFolderFileTypesSelected) {
-        if (selectedFileTypes.includes('folderType')) {
-            return [];
-        }
-        return ['file'];
+export const getFileExtensions = (selectedFileType: string) => {
+    if (NON_FOLDER_FILE_TYPES_MAP.has(selectedFileType)) {
+        return NON_FOLDER_FILE_TYPES_MAP.get(selectedFileType).flat();
     }
-
-    return selectedFileTypes.map(fileType => FILE_FOLDER_TYPES_MAP.get(fileType as string) || []).flat();
+    return [];
 };
