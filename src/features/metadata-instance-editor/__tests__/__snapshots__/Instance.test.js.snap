@@ -416,12 +416,12 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         >
           <CascadePolicy
             canUseAIFolderExtraction={false}
-            canUseAIFolderExtractionAgentSelector={false}
             isAIFolderExtractionEnabled={false}
             isCascadingEnabled={true}
             isCascadingOverwritten={false}
             isCustomMetadata={false}
-            isExistingAIExtractionCascadePolicy={false}
+            isExistingCascadePolicy={true}
+            onAIAgentSelect={[Function]}
             onAIFolderExtractionToggle={[Function]}
             onCascadeModeChange={[Function]}
             onCascadeToggle={[Function]}

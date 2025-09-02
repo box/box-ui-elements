@@ -4,14 +4,14 @@ import ItemGrid from '../common/item-grid';
 import ItemList from '../common/item-list';
 import ProgressBar from '../common/progress-bar';
 import MetadataBasedItemList from '../../features/metadata-based-view';
-import MetadataView from './MetadataView';
+import MetadataViewContainer, { ExternalFilterValues, MetadataViewContainerProps } from './MetadataViewContainer';
 import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../common/item';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
-import type { MetadataFieldValue } from '../../common/types/metadata';
+import type { MetadataFieldValue, MetadataTemplate } from '../../common/types/metadata';
 import './Content.scss';
 
 /**
@@ -36,6 +36,12 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
     isSmall: boolean;
     isTouch: boolean;
     itemActions?: ItemAction[];
+    metadataTemplate?: MetadataTemplate;
+    metadataViewProps?: Omit<
+        MetadataViewContainerProps,
+        'hasError' | 'currentCollection' | 'metadataTemplate' | 'onMetadataFilter'
+    >;
+    onMetadataFilter?: (fields: ExternalFilterValues) => void;
     onMetadataUpdate: (
         item: BoxItem,
         field: string,
@@ -53,6 +59,9 @@ const Content = ({
     features,
     fieldsToShow = [],
     gridColumnCount,
+    metadataTemplate,
+    metadataViewProps,
+    onMetadataFilter,
     onMetadataUpdate,
     onSortChange,
     view,
@@ -65,13 +74,13 @@ const Content = ({
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
     const isGridView = !isMetadataBasedView && viewMode === VIEW_MODE_GRID; // Folder view or Recents view
-
+    const isMetadataViewV2Feature = isFeatureEnabled(features, 'contentExplorer.metadataViewV2');
     return (
         <div className="bce-content">
             {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
-            {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
-            {!isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
+            {!isMetadataViewV2Feature && isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
+            {!isMetadataViewV2Feature && !isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList
                     currentCollection={currentCollection}
                     fieldsToShow={fieldsToShow}
@@ -79,8 +88,16 @@ const Content = ({
                     {...rest}
                 />
             )}
-            {isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
-                <MetadataView />
+            {isMetadataViewV2Feature && isMetadataBasedView && (
+                <MetadataViewContainer
+                    currentCollection={currentCollection}
+                    isLoading={percentLoaded !== 100}
+                    hasError={view === VIEW_ERROR}
+                    metadataTemplate={metadataTemplate}
+                    onMetadataFilter={onMetadataFilter}
+                    onSortChange={onSortChange}
+                    {...metadataViewProps}
+                />
             )}
             {!isViewEmpty && isListView && (
                 <ItemList

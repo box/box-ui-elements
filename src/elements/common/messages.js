@@ -27,6 +27,11 @@ const messages = defineMessages({
         description: 'Generic error label.',
         defaultMessage: 'Error',
     },
+    success: {
+        id: 'be.success',
+        description: 'Generic success label.',
+        defaultMessage: 'Success',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -386,6 +391,11 @@ const messages = defineMessages({
         id: 'be.searchClear',
         description: 'Aria label for the clear button in the search box.',
         defaultMessage: 'Clear search',
+    },
+    clearSelection: {
+        id: 'be.clearSelection',
+        description: 'Aria label for the clear selection button.',
+        defaultMessage: 'Clear selection',
     },
     searchPlaceholder: {
         id: 'be.searchPlaceholder',
@@ -1088,6 +1098,37 @@ const messages = defineMessages({
         id: 'be.personalFolder',
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
+    },
+    numFilesSelected: {
+        id: 'be.numFilesSelected',
+        description: 'Text shown to indicate the number of files selected',
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 files selected}
+                one {1 file selected}
+                other {# files selected}
+            }
+        `,
+    },
+    multipleValues: {
+        id: 'be.multipleValues',
+        description: 'Display text for field when there are multiple items selected and have different value',
+        defaultMessage: 'Multiple Values',
+    },
+    metadataUpdateErrorNotification: {
+        id: 'be.metadataUpdateErrorNotification',
+        description: 'Text shown in error notification banner',
+        defaultMessage: 'Unable to save changes. Please try again.',
+    },
+    metadataUpdateSuccessNotification: {
+        id: 'be.metadataUpdateSuccessNotification',
+        description: 'Text shown in success notification banner',
+        defaultMessage: `
+            {numSelected, plural,
+                =1 {1 document updated}
+                other {# documents updated}
+            }
+        `,
     },
 });
 

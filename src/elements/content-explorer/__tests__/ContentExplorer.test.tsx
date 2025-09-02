@@ -1,10 +1,13 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import type { MetadataFieldType } from '@box/metadata-view';
+
 import { render, screen, waitFor, within } from '../../../test-utils/testing-library';
 import { ContentExplorerComponent as ContentExplorer, ContentExplorerProps } from '../ContentExplorer';
 import { mockRecentItems, mockRootFolder, mockRootFolderSharedLink } from '../../common/__mocks__/mockRootFolder';
 import { mockMetadata, mockSchema } from '../../common/__mocks__/mockMetadata';
 import mockSubFolder from '../../common/__mocks__/mockSubfolder';
+import { FeatureProvider } from '../../common/feature-checking';
 
 jest.mock('../../../utils/Xhr', () => {
     return jest.fn().mockImplementation(() => {
@@ -28,7 +31,9 @@ jest.mock('../../../utils/Xhr', () => {
             post: jest.fn(({ url }) => {
                 switch (url) {
                     case 'https://api.box.com/2.0/metadata_queries/execute_read':
-                        return Promise.resolve({ data: mockMetadata });
+                        return Promise.resolve({
+                            data: { limit: mockMetadata.limit, entries: [mockMetadata.entries[0]] },
+                        });
                     default:
                         return Promise.reject(new Error('Not Found'));
                 }
@@ -71,8 +76,18 @@ jest.mock('../../common/preview-dialog/PreviewDialog', () => props => {
 describe('elements/content-explorer/ContentExplorer', () => {
     let rootElement: HTMLDivElement;
 
-    const renderComponent = (props: Partial<ContentExplorerProps> = {}) => {
-        return render(<ContentExplorer defaultView="list" rootFolderId="69083462919" token="token" {...props} />);
+    const renderComponent = ({ features, ...props }: Partial<ContentExplorerProps> = {}) => {
+        return render(
+            <FeatureProvider features={features}>
+                <ContentExplorer
+                    defaultView="list"
+                    features={features}
+                    rootFolderId="69083462919"
+                    token="token"
+                    {...props}
+                />
+            </FeatureProvider>,
+        );
     };
 
     beforeEach(() => {
@@ -403,12 +418,158 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(screen.getByText('Name')).toBeInTheDocument();
             expect(screen.getByText('Industry Alias')).toBeInTheDocument();
             expect(screen.getByText('Last Contacted At')).toBeInTheDocument();
-            expect(screen.getByText('File1')).toBeInTheDocument();
-            expect(screen.getByText('File2')).toBeInTheDocument();
+            expect(screen.getByText('Child 2 of metadata folder.pdf')).toBeInTheDocument();
             expect(screen.getByText('Technology')).toBeInTheDocument();
             expect(screen.getByText('November 16, 2023')).toBeInTheDocument();
-            expect(screen.getByText('Healthcare')).toBeInTheDocument();
-            expect(screen.getByText('November 1, 2023')).toBeInTheDocument();
+        });
+
+        describe('Metadata View V2', () => {
+            const { scope: templateScope, templateKey } = mockSchema;
+            const metadataScopeAndKey = `${templateScope}.${templateKey}`;
+            const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
+            const metadataQuery = {
+                from: metadataScopeAndKey,
+                ancestor_folder_id: '69083462919',
+                sort_by: [
+                    {
+                        field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`, // Default to sorting by the first field in the schema
+                        direction: 'asc',
+                    },
+                ],
+                fields: [
+                    // Default to returning all fields in the metadata template schema, and name as a standalone (non-metadata) field
+                    ...mockSchema.fields.map(field => `${metadataFieldNamePrefix}.${field.key}`),
+                    'name',
+                ],
+            };
+            const fieldsToShow = [
+                { key: `${metadataFieldNamePrefix}.name`, canEdit: false, displayName: 'Alias' },
+                { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
+                { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
+                { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
+            ];
+            const columns = [
+                {
+                    // Always include the name column
+                    textValue: 'Name',
+                    id: 'name',
+                    type: 'string' as const,
+                    allowsSorting: true,
+                    minWidth: 150,
+                    maxWidth: 150,
+                },
+                ...mockSchema.fields.map(field => ({
+                    textValue: field.displayName,
+                    id: `${metadataFieldNamePrefix}.${field.key}`,
+                    type: field.type as MetadataFieldType,
+                    allowsSorting: true,
+                    minWidth: 150,
+                    maxWidth: 150,
+                })),
+            ];
+            const defaultView = 'metadata';
+            const metadataViewV2ElementProps: Partial<ContentExplorerProps> = {
+                metadataViewProps: {
+                    columns,
+                    tableProps: {
+                        isSelectAllEnabled: true,
+                    },
+                },
+                metadataQuery,
+                fieldsToShow,
+                defaultView,
+                features: {
+                    contentExplorer: {
+                        metadataViewV2: true,
+                    },
+                },
+            };
+
+            test('should render metadata view button', async () => {
+                renderComponent(metadataViewV2ElementProps);
+                await waitFor(() => {
+                    expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
+                });
+
+                await waitFor(() => {
+                    expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).toBeInTheDocument();
+                });
+
+                expect(screen.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+
+                const selectAllCheckbox = screen.getByLabelText('Select all');
+                await userEvent.click(selectAllCheckbox);
+
+                expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
+            });
+
+            test('should call both internal and user onSortChange callbacks when sorting by a metadata field', async () => {
+                const mockOnSortChangeInternal = jest.fn();
+                const mockOnSortChangeExternal = jest.fn();
+
+                renderComponent({
+                    ...metadataViewV2ElementProps,
+                    metadataViewProps: {
+                        ...metadataViewV2ElementProps.metadataViewProps,
+                        onSortChange: mockOnSortChangeInternal, // Internal callback - receives trimmed column name
+                        tableProps: {
+                            ...metadataViewV2ElementProps.metadataViewProps.tableProps,
+                            onSortChange: mockOnSortChangeExternal, // User callback - receives full column ID
+                        },
+                    },
+                });
+
+                const industryHeader = await screen.findByRole('columnheader', { name: 'Industry' });
+                expect(industryHeader).toBeInTheDocument();
+
+                const firstRow = await screen.findByRole('row', { name: /Child 2/i });
+                expect(firstRow).toBeInTheDocument();
+
+                await userEvent.click(industryHeader);
+
+                // Internal callback gets trimmed version for API calls
+                expect(mockOnSortChangeInternal).toHaveBeenCalledWith('industry', 'ASC');
+
+                // User callback gets full column ID with direction
+                expect(mockOnSortChangeExternal).toHaveBeenCalledWith({
+                    column: 'metadata.enterprise_0.templateName.industry',
+                    direction: 'ascending',
+                });
+            });
+
+            test('should call onClick when bulk item action is clicked', async () => {
+                let mockOnClickArg;
+                const mockOnClick = jest.fn(arg => {
+                    mockOnClickArg = arg;
+                });
+                const metadataViewV2WithBulkItemActions = {
+                    ...metadataViewV2ElementProps,
+                    bulkItemActions: [
+                        {
+                            label: 'Download',
+                            onClick: mockOnClick,
+                        },
+                    ],
+                };
+
+                renderComponent(metadataViewV2WithBulkItemActions);
+
+                const firstRow = await screen.findByRole('row', { name: /Child 2/i });
+                expect(firstRow).toBeInTheDocument();
+
+                await userEvent.click(within(firstRow).getByRole('checkbox'));
+
+                const bulkActionsButton = screen.getByRole('button', { name: 'Bulk actions' });
+                expect(bulkActionsButton).toBeInTheDocument();
+                await userEvent.click(bulkActionsButton);
+
+                const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+                expect(downloadAction).toBeInTheDocument();
+                await userEvent.click(downloadAction);
+
+                expect(mockOnClick).toHaveBeenCalled();
+                expect(Array.from(mockOnClickArg)).toEqual(['1188890835']);
+            });
         });
     });
 

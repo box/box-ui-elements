@@ -31,7 +31,7 @@ import type {
     FeedItems,
     FeedItemStatus,
 } from '../../../../common/types/feed';
-import type { SelectorItems, User } from '../../../../common/types/core';
+import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 
@@ -49,6 +49,7 @@ type Props = {
     approverSelectorContacts?: SelectorItems<>,
     currentFileVersionId: string,
     currentUser?: User,
+    file: BoxItem,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
@@ -94,6 +95,7 @@ const ActiveState = ({
     approverSelectorContacts,
     currentFileVersionId,
     currentUser,
+    file,
     getApproverWithQuery,
     getAvatarUrl,
     getMentionWithQuery,
@@ -137,17 +139,19 @@ const ActiveState = ({
     const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
         onReplyDelete({ ...options, parentId });
     };
-    const onReplyUpdateHandler = (parentId: string) => (
-        id: string,
-        text: string,
-        status?: FeedItemStatus,
-        hasMention?: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => {
-        onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
-    };
+    const onReplyUpdateHandler =
+        (parentId: string) =>
+        (
+            id: string,
+            text: string,
+            status?: FeedItemStatus,
+            hasMention?: boolean,
+            permissions: BoxCommentPermission,
+            onSuccess: ?Function,
+            onError: ?Function,
+        ) => {
+            onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
+        };
     const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
         onShowReplies(id, type);
     };
@@ -178,6 +182,7 @@ const ActiveState = ({
                     ...item,
                     ...replyProps,
                     currentUser,
+                    file,
                     getAvatarUrl,
                     getMentionWithQuery,
                     getUserProfileUrl,
@@ -213,6 +218,7 @@ const ActiveState = ({
                                     // $FlowFixMe
                                     <BaseComment
                                         {...commentAndAnnotationCommonProps}
+                                        file={file}
                                         onDelete={onCommentDelete}
                                         onCommentEdit={onCommentEdit}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}

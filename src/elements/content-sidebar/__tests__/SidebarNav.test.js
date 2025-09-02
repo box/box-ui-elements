@@ -1,22 +1,11 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
-import { mount } from 'enzyme';
-import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { usePromptFocus } from '@box/box-ai-content-answers';
-import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
-import AdditionalTabs from '../additional-tabs';
-import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
+
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
-import DocGenIcon from '../../../icon/fill/DocGenIcon';
-import IconChatRound from '../../../icons/general/IconChatRound';
-import IconDocInfo from '../../../icons/general/IconDocInfo';
-import IconMagicWand from '../../../icons/general/IconMagicWand';
-import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import SidebarNav from '../SidebarNav';
-import SidebarNavButton from '../SidebarNavButton';
-import SidebarNavSignButton from '../SidebarNavSignButton';
-import { render, screen } from '../../../test-utils/testing-library';
+
+import { render, screen, userEvent } from '../../../test-utils/testing-library';
 
 jest.mock('@box/box-ai-content-answers');
 
@@ -24,88 +13,52 @@ describe('elements/content-sidebar/SidebarNav', () => {
     const focusBoxAISidebarPromptMock = jest.fn();
 
     beforeEach(() => {
+        jest.clearAllMocks();
         usePromptFocus.mockReturnValue({
             focusPrompt: focusBoxAISidebarPromptMock,
         });
     });
 
-    const getWrapper = (props = {}, active = '', features = {}) =>
-        mount(
-            <MemoryRouter initialEntries={[`/${active}`]}>
+    const renderSidebarNav = ({ path = '/', props = {}, features = {} } = {}) => {
+        return render(
+            <MemoryRouter initialEntries={[path]}>
                 <FeatureProvider features={features}>
                     <SidebarNav {...props} />
                 </FeatureProvider>
             </MemoryRouter>,
-        )
-            .find('SidebarNav')
-            .at(1);
+        );
+    };
 
-    const getSidebarNav = ({ path = '/', props, features }) => (
-        <MemoryRouter initialEntries={[path]}>
-            <FeatureProvider features={features}>
-                <SidebarNav {...props} />
-            </FeatureProvider>
-        </MemoryRouter>
-    );
-
-    test('should render skills tab', () => {
-        const props = {
-            hasSkills: true,
+    describe('individual tab rendering', () => {
+        const TABS_CONFIG = {
+            skills: { testId: 'sidebarskills', propName: 'hasSkills' },
+            details: { testId: 'sidebardetails', propName: 'hasDetails' },
+            activity: { testId: 'sidebaractivity', propName: 'hasActivity' },
+            metadata: { testId: 'sidebarmetadata', propName: 'hasMetadata' },
+            boxai: { testId: 'sidebarboxai', propName: 'hasBoxAI' },
+            docgen: { testId: 'sidebardocgen', propName: 'hasDocGen' },
         };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
-        expect(wrapper.find(IconMagicWand)).toHaveLength(1);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
-        expect(wrapper.find(IconChatRound)).toHaveLength(0);
-    });
 
-    test('should render details tab', () => {
-        const props = {
-            hasDetails: true,
-        };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
-        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(1);
-        expect(wrapper.find(IconChatRound)).toHaveLength(0);
-    });
+        const tabNames = Object.keys(TABS_CONFIG);
 
-    test('should render activity tab', () => {
-        const props = {
-            hasActivity: true,
-        };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
-        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
-        expect(wrapper.find(IconChatRound)).toHaveLength(1);
-    });
+        test.each(tabNames)('should render %s tab', tabName => {
+            const { testId, propName } = TABS_CONFIG[tabName];
 
-    test('should render metadata tab', () => {
-        const props = {
-            hasMetadata: true,
-        };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
-        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(1);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
-        expect(wrapper.find(IconChatRound)).toHaveLength(0);
-    });
+            renderSidebarNav({
+                props: {
+                    [propName]: true,
+                },
+            });
 
-    test('should render box ai tab', () => {
-        const props = {
-            hasBoxAI: true,
-        };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(1);
-        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
-        expect(wrapper.find(IconChatRound)).toHaveLength(0);
+            expect(screen.getByTestId(testId)).toBeInTheDocument();
+
+            tabNames
+                .filter(name => name !== tabName)
+                .forEach(otherTabName => {
+                    const otherTab = TABS_CONFIG[otherTabName];
+                    expect(screen.queryByTestId(otherTab.testId)).not.toBeInTheDocument();
+                });
+        });
     });
 
     describe('should render box ai tab with correct disabled state and tooltip', () => {
@@ -116,16 +69,16 @@ describe('elements/content-sidebar/SidebarNav', () => {
         `(
             'given feature boxai.sidebar.showOnlyNavButton = true and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with disabled state and tooltip = $expectedTooltip',
             async ({ disabledTooltip, expectedTooltip }) => {
-                render(
-                    getSidebarNav({
-                        features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
-                        props: { hasBoxAI: true },
-                    }),
-                );
+                const user = userEvent();
+
+                renderSidebarNav({
+                    features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
+                    props: { hasBoxAI: true },
+                });
 
                 const button = screen.getByTestId('sidebarboxai');
 
-                await userEvent.hover(button);
+                await user.hover(button);
 
                 expect(button).toHaveAttribute('aria-disabled', 'true');
                 expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
@@ -133,16 +86,16 @@ describe('elements/content-sidebar/SidebarNav', () => {
         );
 
         test('given feature boxai.sidebar.showOnlyNavButton = false, should render box ai tab with default tooltip', async () => {
-            render(
-                getSidebarNav({
-                    features: { boxai: { sidebar: { showOnlyNavButton: false } } },
-                    props: { hasBoxAI: true },
-                }),
-            );
+            const user = userEvent();
+
+            renderSidebarNav({
+                features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                props: { hasBoxAI: true },
+            });
 
             const button = screen.getByTestId('sidebarboxai');
 
-            await userEvent.hover(button);
+            await user.hover(button);
 
             expect(button).not.toHaveAttribute('aria-disabled');
             expect(screen.getByText('Box AI')).toBeInTheDocument();
@@ -150,22 +103,22 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     test('should call focusBoxAISidebarPrompt when clicked on Box AI Tab', async () => {
-        render(
-            getSidebarNav({
-                features: {
-                    boxai: {
-                        sidebar: {
-                            showOnlyNavButton: false,
-                        },
+        const user = userEvent();
+
+        renderSidebarNav({
+            features: {
+                boxai: {
+                    sidebar: {
+                        showOnlyNavButton: false,
                     },
                 },
-                props: { hasBoxAI: true },
-            }),
-        );
+            },
+            props: { hasBoxAI: true },
+        });
 
         const button = screen.getByTestId('sidebarboxai');
 
-        await userEvent.click(button);
+        await user.click(button);
 
         expect(usePromptFocus).toHaveBeenCalledTimes(1);
         expect(usePromptFocus).toHaveBeenCalledWith('.be.bcs');
@@ -175,53 +128,52 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     test('should have multiple tabs', () => {
-        const props = {
-            hasActivity: true,
-            hasBoxAI: true,
-            hasMetadata: true,
-            hasSkills: true,
-        };
-        const wrapper = getWrapper(props, 'activity');
-        expect(wrapper.find(IconMagicWand)).toHaveLength(1);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(1);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
-        expect(wrapper.find(IconChatRound)).toHaveLength(1);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(1);
-        expect(wrapper.find(SidebarNavButton)).toHaveLength(4);
+        renderSidebarNav({
+            path: '/activity',
+            props: {
+                hasActivity: true,
+                hasBoxAI: true,
+                hasMetadata: true,
+                hasSkills: true,
+            },
+        });
+
+        expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+        expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
+        expect(screen.getByTestId('sidebarmetadata')).toBeInTheDocument();
+        expect(screen.getByTestId('sidebarskills')).toBeInTheDocument();
+
+        expect(screen.queryByTestId('sidebardetails')).not.toBeInTheDocument();
+
+        const navButtons = screen.getAllByRole('tab');
+        expect(navButtons).toHaveLength(4);
     });
 
     test('should render the additional tabs loading state', () => {
-        const props = {
-            additionalTabs: [],
-            hasAdditionalTabs: true,
-        };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
-        expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(1);
-        expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(5);
+        renderSidebarNav({
+            props: {
+                additionalTabs: [],
+                hasAdditionalTabs: true,
+            },
+        });
+
+        expect(screen.getByTestId('additional-tabs-overflow')).toBeInTheDocument();
+
+        const placeholders = screen.getAllByTestId('additionaltabplaceholder');
+        expect(placeholders).toHaveLength(5);
     });
 
     test('should render the Box Sign entry point if its feature is enabled', () => {
-        const props = {
-            signSidebarProps: {
-                enabled: true,
-                onClick: () => {},
+        renderSidebarNav({
+            props: {
+                signSidebarProps: {
+                    enabled: true,
+                    onClick: () => {},
+                },
             },
-        };
-        const wrapper = getWrapper(props);
+        });
 
-        expect(wrapper.exists(SidebarNavSignButton)).toBe(true);
-    });
-    test('should render docgen tab', () => {
-        const props = {
-            hasDocGen: true,
-        };
-        const wrapper = getWrapper(props);
-        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
-        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
-        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
-        expect(wrapper.find(IconChatRound)).toHaveLength(0);
-        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
-        expect(wrapper.find(DocGenIcon)).toHaveLength(1);
+        const boxSignSection = screen.getByRole('button', { name: /sign/i });
+        expect(boxSignSection).toBeInTheDocument();
     });
 });

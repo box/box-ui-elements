@@ -87,16 +87,22 @@ type MetadataType = {
     global?: MetadataSkillsTemplate,
 };
 
+type MetadataCascadePolicyConfiguration = {
+    agent: string,
+};
+
 type MetadataCascadePolicy = {
     canEdit?: boolean,
     id?: string,
     cascadePolicyType?: string,
+    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
 };
 
 type MetadataCascadingPolicyData = {
     id?: string,
     isEnabled: boolean,
     overwrite: boolean,
+    cascadePolicyConfiguration: MetadataCascadePolicyConfiguration | null,
 };
 
 type MetadataInstance = {
@@ -187,6 +193,7 @@ export type {
     MetadataQueryInstanceTypeField,
     MetadataType,
     MetadataCascadePolicy,
+    MetadataCascadePolicyConfiguration,
     MetadataCascadingPolicyData,
     MetadataInstanceV2,
     MetadataEditor,

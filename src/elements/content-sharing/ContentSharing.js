@@ -9,6 +9,8 @@
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import API from '../../api';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import SharingModal from './SharingModal';
 import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
@@ -119,4 +121,5 @@ function ContentSharing({
     );
 }
 
-export default ContentSharing;
+export { ContentSharing as ContentSharingComponent };
+export default withBlueprintModernization(ContentSharing);

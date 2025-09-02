@@ -35,6 +35,8 @@ import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
 import { withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
@@ -1420,6 +1422,7 @@ export default flow([
     withNavRouter,
     withFeatureConsumer,
     withFeatureProvider,
+    withBlueprintModernization,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
 ])(ContentPreview);

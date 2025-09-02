@@ -6,6 +6,7 @@ import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import noop from 'lodash/noop';
 
+import type { AgentType } from '@box/box-ai-agent-selector';
 import Collapsible from '../../components/collapsible/Collapsible';
 import Form from '../../components/form-elements/form/Form';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
@@ -24,7 +25,12 @@ import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
-import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+import {
+    CASCADE_POLICY_TYPE_AI_EXTRACT,
+    TEMPLATE_CUSTOM_PROPERTIES,
+    ENHANCED_AGENT_CONFIGURATION,
+    ENHANCED_AGENT_ID,
+} from './constants';
 import {
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
@@ -38,6 +44,7 @@ import type {
     MetadataFields,
     MetadataTemplate,
     MetadataCascadePolicy,
+    MetadataCascadePolicyConfiguration,
     MetadataCascadingPolicyData,
     MetadataTemplateField,
     MetadataFieldValue,
@@ -48,7 +55,6 @@ import './Instance.scss';
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction?: boolean,
-    canUseAIFolderExtractionAgentSelector?: boolean,
     cascadePolicy?: MetadataCascadePolicy, // eslint-disable-line
     data: MetadataFields,
     hasError: boolean,
@@ -69,6 +75,7 @@ type Props = {
 };
 
 type State = {
+    cascadePolicyConfiguration: MetadataCascadePolicyConfiguration | null,
     data: Object,
     errors: { [string]: React.Node },
     isAIFolderExtractionEnabled: boolean,
@@ -212,6 +219,7 @@ class Instance extends React.PureComponent<Props, State> {
             onSave,
         }: Props = this.props;
         const {
+            cascadePolicyConfiguration,
             data: currentData,
             errors,
             isAIFolderExtractionEnabled,
@@ -229,6 +237,7 @@ class Instance extends React.PureComponent<Props, State> {
             // reset state if cascading policy is removed
             isAIFolderExtractionEnabled: isCascadingEnabled ? isAIFolderExtractionEnabled : false,
         });
+
         onSave(
             id,
             this.createJSONPatch(currentData, originalData),
@@ -239,6 +248,7 @@ class Instance extends React.PureComponent<Props, State> {
                       isEnabled: isCascadingEnabled,
                       overwrite: isCascadingOverwritten,
                       isAIFolderExtractionEnabled,
+                      cascadePolicyConfiguration,
                   }
                 : undefined,
             cloneDeep(currentData),
@@ -343,6 +353,23 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Handles the selection of an AI agent
+     * @param {AgentType | null} agent - The selected agent
+     */
+    onAIAgentSelect = (agent: AgentType | null): void => {
+        // '2' is the id for the enhanced agent
+        if (agent && agent.id === ENHANCED_AGENT_ID) {
+            this.setState({
+                cascadePolicyConfiguration: {
+                    agent: ENHANCED_AGENT_CONFIGURATION,
+                },
+            });
+        } else {
+            this.setState({ cascadePolicyConfiguration: null });
+        }
+    };
+
+    /**
      * Returns the state from props
      *
      * @return {Object} - react state
@@ -351,6 +378,7 @@ class Instance extends React.PureComponent<Props, State> {
         const isCascadingEnabled = this.isCascadingEnabledThroughProps(props);
 
         return {
+            cascadePolicyConfiguration: null,
             data: cloneDeep(props.data),
             errors: {},
             isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabledThroughProps(props),
@@ -613,7 +641,6 @@ class Instance extends React.PureComponent<Props, State> {
     render() {
         const {
             canUseAIFolderExtraction = false,
-            canUseAIFolderExtractionAgentSelector = false,
             cascadePolicy = {},
             isDirty,
             isCascadingPolicyApplicable,
@@ -641,8 +668,7 @@ class Instance extends React.PureComponent<Props, State> {
         // Animate short and tall cards at consistent speeds.
         const animationDuration = (fields.length + 1) * 50;
 
-        const isExistingAIExtractionCascadePolicy =
-            this.isCascadingEnabledThroughProps(this.props) && this.isAIFolderExtractionEnabledThroughProps(this.props);
+        const isExistingCascadePolicy = this.isCascadingEnabledThroughProps(this.props);
 
         return (
             <div ref={this.collapsibleRef}>
@@ -672,16 +698,15 @@ class Instance extends React.PureComponent<Props, State> {
                                 <div className="metadata-instance-editor-instance">
                                     {isCascadingPolicyApplicable && (
                                         <CascadePolicy
+                                            cascadePolicyConfiguration={cascadePolicy?.cascadePolicyConfiguration}
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
                                             canUseAIFolderExtraction={canUseAIFolderExtraction}
-                                            canUseAIFolderExtractionAgentSelector={
-                                                canUseAIFolderExtractionAgentSelector
-                                            }
                                             isAIFolderExtractionEnabled={isAIFolderExtractionEnabled}
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
                                             isCustomMetadata={isProperties}
-                                            isExistingAIExtractionCascadePolicy={isExistingAIExtractionCascadePolicy}
+                                            isExistingCascadePolicy={isExistingCascadePolicy}
+                                            onAIAgentSelect={this.onAIAgentSelect}
                                             onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}

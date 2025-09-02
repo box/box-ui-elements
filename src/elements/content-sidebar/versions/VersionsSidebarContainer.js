@@ -9,7 +9,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import merge from 'lodash/merge';
 import noop from 'lodash/noop';
-import { generatePath, withRouter } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
 import type { MessageDescriptor } from 'react-intl';
 import { withFeatureConsumer, isFeatureEnabled } from '../../common/feature-checking';
@@ -21,17 +21,25 @@ import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
+import { withRouterIfEnabled } from '../../common/routing';
 import type { FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
-import { ViewType, type ViewTypeValues } from '../../common/types/SidebarNavigation';
+import {
+    ViewType,
+    type ViewTypeValues,
+    type InternalSidebarNavigation,
+    type InternalSidebarNavigationHandler,
+} from '../../common/types/SidebarNavigation';
 
 type Props = {
     api: API,
     features: FeatureConfig,
     fileId: string,
     hasSidebarInitialized?: boolean,
-    history: RouterHistory,
+    history?: RouterHistory,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     match: Match,
     onLoad: SidebarLoadCallback,
     onUpgradeClick?: () => void,
@@ -42,6 +50,7 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: ViewTypeValues,
+    routerDisabled?: boolean,
     versionId?: string,
 };
 
@@ -264,8 +273,20 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     }
 
     updateVersion = (versionId?: ?string): void => {
-        const { history, match } = this.props;
-        return history.push(generatePath(match.path, { ...match.params, versionId }));
+        const { history, match, routerDisabled, internalSidebarNavigationHandler, internalSidebarNavigation } =
+            this.props;
+
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            const navigationUpdate: InternalSidebarNavigation = { ...internalSidebarNavigation };
+            if (versionId) {
+                navigationUpdate.versionId = versionId;
+            } else {
+                delete navigationUpdate.versionId;
+            }
+            internalSidebarNavigationHandler(navigationUpdate);
+        } else if (history) {
+            history.push(generatePath(match.path, { ...match.params, versionId }));
+        }
     };
 
     updateVersionToCurrent = (): void => {
@@ -287,21 +308,40 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     render() {
-        const { fileId, parentName, onUpgradeClick } = this.props;
+        const {
+            fileId,
+            parentName,
+            onUpgradeClick,
+            routerDisabled,
+            internalSidebarNavigation,
+            internalSidebarNavigationHandler,
+        } = this.props;
 
         if (onUpgradeClick) {
-            return <StaticVersionsSidebar onUpgradeClick={onUpgradeClick} parentName={parentName} {...this.state} />;
+            return (
+                <StaticVersionsSidebar
+                    onUpgradeClick={onUpgradeClick}
+                    parentName={parentName}
+                    routerDisabled={routerDisabled}
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    {...this.state}
+                />
+            );
         }
 
         return (
             <VersionsSidebar
                 fileId={fileId}
+                internalSidebarNavigation={internalSidebarNavigation}
+                internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                 onDelete={this.handleActionDelete}
                 onDownload={this.handleActionDownload}
                 onPreview={this.handleActionPreview}
                 onPromote={this.handleActionPromote}
                 onRestore={this.handleActionRestore}
                 parentName={parentName}
+                routerDisabled={routerDisabled}
                 {...this.state}
             />
         );
@@ -310,4 +350,4 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
 export type VersionsSidebarProps = Props;
 export { VersionsSidebarContainer as VersionsSidebarContainerComponent };
-export default flow([withRouter, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);
+export default flow([withRouterIfEnabled, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);

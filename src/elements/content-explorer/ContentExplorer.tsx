@@ -6,9 +6,12 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
-import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { Key, Selection } from 'react-aria-components';
+import type { MetadataTemplateField } from '@box/metadata-editor';
+
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -19,7 +22,9 @@ import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
 import ThemingStyles from '../common/theming';
 import API from '../../api';
+import MetadataQueryAPIHelperV2 from './MetadataQueryAPIHelper';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
+import MetadataSidePanel from './MetadataSidePanel';
 import Footer from './Footer';
 import PreviewDialog from '../common/preview-dialog/PreviewDialog';
 import ShareDialog from './ShareDialog';
@@ -29,9 +34,14 @@ import Content from './Content';
 import { isThumbnailAvailable } from '../common/utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
-import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
+import { CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH } from './constants';
 import LocalStore from '../../utils/LocalStore';
-import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
+import {
+    withFeatureConsumer,
+    withFeatureProvider,
+    isFeatureEnabled,
+    type FeatureConfig,
+} from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -39,6 +49,7 @@ import {
     DEFAULT_HOSTNAME_STATIC,
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
+    FIELD_ITEM_NAME,
     FIELD_NAME,
     FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
@@ -67,8 +78,9 @@ import {
 import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction } from '../common/item';
 import type { Theme } from '../common/theming';
+import type { JSONPatchOperations } from '../../common/types/api';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
-import type { MetadataFieldValue } from '../../common/types/metadata';
+import type { MetadataFieldValue, MetadataTemplate } from '../../common/types/metadata';
 import type {
     View,
     DefaultView,
@@ -81,13 +93,17 @@ import type {
     BoxItemPermission,
     BoxItem,
 } from '../../common/types/core';
+import type { BulkItemAction } from '../common/sub-header/BulkItemActionMenu';
 import type { ContentPreviewProps } from '../content-preview';
 import type { ContentUploaderProps } from '../content-uploader';
+import type { ExternalFilterValues, MetadataViewContainerProps } from './MetadataViewContainer';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
+import Providers from '../common/Providers';
 
 const GRID_VIEW_MAX_COLUMNS = 7;
 const GRID_VIEW_MIN_COLUMNS = 1;
@@ -96,6 +112,7 @@ export interface ContentExplorerProps {
     apiHost?: string;
     appHost?: string;
     autoFocus?: boolean;
+    bulkItemActions?: BulkItemAction[];
     canCreateNewFolder?: boolean;
     canDelete?: boolean;
     canDownload?: boolean;
@@ -111,6 +128,7 @@ export interface ContentExplorerProps {
     defaultView?: DefaultView;
     features?: FeatureConfig;
     fieldsToShow?: FieldsToShow;
+    hasProviders?: boolean;
     initialPage?: number;
     initialPageSize?: number;
     isLarge?: boolean;
@@ -124,6 +142,10 @@ export interface ContentExplorerProps {
     measureRef?: (ref: Element | null) => void;
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
+    metadataViewProps?: Omit<
+        MetadataViewContainerProps,
+        'hasError' | 'currentCollection' | 'metadataTemplate' | 'onMetadataFilter'
+    >;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -138,11 +160,12 @@ export interface ContentExplorerProps {
     rootFolderId?: string;
     sharedLink?: string;
     sharedLinkPassword?: string;
-    sortBy?: SortBy;
+    sortBy?: SortBy | Key;
     sortDirection?: SortDirection;
     staticHost?: string;
     staticPath?: string;
     theme?: Theme;
+    title?: string;
     token: Token;
     uploadHost?: string;
 }
@@ -158,15 +181,19 @@ type State = {
     isCreateFolderModalOpen: boolean;
     isDeleteModalOpen: boolean;
     isLoading: boolean;
+    isMetadataSidePanelOpen: boolean;
     isPreviewModalOpen: boolean;
     isRenameModalOpen: boolean;
     isShareModalOpen: boolean;
     isUploadModalOpen: boolean;
     markers: Array<string | null | undefined>;
+    metadataTemplate: MetadataTemplate;
+    metadataFilters: ExternalFilterValues;
     rootName: string;
     searchQuery: string;
     selected?: BoxItem;
-    sortBy: SortBy;
+    selectedItemIds: Selection;
+    sortBy: SortBy | string;
     sortDirection: SortDirection;
     view: View;
 };
@@ -192,7 +219,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     store: LocalStore = new LocalStore();
 
-    metadataQueryAPIHelper: MetadataQueryAPIHelper;
+    metadataQueryAPIHelper: MetadataQueryAPIHelper | MetadataQueryAPIHelperV2;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -227,6 +254,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             contentSidebarProps: {},
         },
         contentUploaderProps: {},
+        metadataViewProps: {},
     };
 
     /**
@@ -281,12 +309,16 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
+            isMetadataSidePanelOpen: false,
             isPreviewModalOpen: false,
             isRenameModalOpen: false,
             isShareModalOpen: false,
             isUploadModalOpen: false,
             markers: [],
+            metadataFilters: {},
+            metadataTemplate: {},
             rootName: '',
+            selectedItemIds: new Set(),
             searchQuery: '',
             sortBy,
             sortDirection,
@@ -367,23 +399,48 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      *
      * @private
      * @param {Object} metadataQueryCollection - Metadata query response collection
+     * @param {Object} metadataTemplate - Metadata template object
      * @return {void}
      */
-    showMetadataQueryResultsSuccessCallback = (metadataQueryCollection: Collection): void => {
+    showMetadataQueryResultsSuccessCallback = (
+        metadataQueryCollection: Collection,
+        metadataTemplate: MetadataTemplate,
+    ): void => {
         const { nextMarker } = metadataQueryCollection;
+        const { metadataQuery, features } = this.props;
         const { currentCollection, currentPageNumber, markers }: State = this.state;
         const cloneMarkers = [...markers];
         if (nextMarker) {
             cloneMarkers[currentPageNumber + 1] = nextMarker;
         }
-        this.setState({
+
+        const nextState = {
             currentCollection: {
                 ...currentCollection,
                 ...metadataQueryCollection,
                 percentLoaded: 100,
             },
             markers: cloneMarkers,
-        });
+            metadataTemplate,
+        };
+
+        // if v2, fetch folder name and add to state
+        if (metadataQuery?.ancestor_folder_id && isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
+            this.api.getFolderAPI().getFolderFields(
+                metadataQuery.ancestor_folder_id,
+                ({ name }) => {
+                    this.setState({
+                        ...nextState,
+                        rootName: name || '',
+                    });
+                },
+                this.errorCallback,
+                { fields: [FIELD_NAME] },
+            );
+        } else {
+            // No folder name to fetch, update state immediately with just metadata
+            this.setState(nextState);
+        }
     };
 
     /**
@@ -393,8 +450,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
-        const { metadataQuery = {} }: ContentExplorerProps = this.props;
-        const { currentPageNumber, markers }: State = this.state;
+        const { features, metadataQuery = {} }: ContentExplorerProps = this.props;
+        const { currentPageNumber, markers, metadataFilters, sortBy, sortDirection }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 
         if (currentPageNumber === 0) {
@@ -411,19 +468,77 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             // Set limit to the query for pagination support
             metadataQueryClone.limit = DEFAULT_PAGE_SIZE;
         }
+
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
             currentCollection: this.currentUnloadedCollection(),
             view: VIEW_METADATA,
         });
-        this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
-        this.metadataQueryAPIHelper.fetchMetadataQueryResults(
-            metadataQueryClone,
-            this.showMetadataQueryResultsSuccessCallback,
-            this.errorCallback,
-        );
+
+        if (isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
+            metadataQueryClone.order_by = [
+                {
+                    // Default to the prefixed name field for metadata view v2 only, while not touching the default sortBy for other views.
+                    field_key: sortBy === FIELD_NAME ? FIELD_ITEM_NAME : sortBy,
+                    direction: sortDirection,
+                },
+            ];
+
+            this.metadataQueryAPIHelper = new MetadataQueryAPIHelperV2(this.api);
+            this.metadataQueryAPIHelper.fetchMetadataQueryResults(
+                metadataQueryClone,
+                this.showMetadataQueryResultsSuccessCallback,
+                this.errorCallback,
+                metadataFilters,
+            );
+        } else {
+            metadataQueryClone.order_by = [
+                {
+                    field_key: sortBy,
+                    direction: sortDirection,
+                },
+            ];
+            this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+            this.metadataQueryAPIHelper.fetchMetadataQueryResults(
+                metadataQueryClone,
+                this.showMetadataQueryResultsSuccessCallback,
+                this.errorCallback,
+            );
+        }
     }
+
+    /**
+     * Update selected items' metadata instances based on original and new field values in the metadata instance form
+     *
+     * @private
+     * @return {void}
+     */
+    updateMetadataV2 = async (
+        items: BoxItem[],
+        operations: JSONPatchOperations,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ) => {
+        if (items.length === 1) {
+            await this.metadataQueryAPIHelper.updateMetadataWithOperations(
+                items[0],
+                operations,
+                successCallback,
+                errorCallback,
+            );
+        } else {
+            await this.metadataQueryAPIHelper.bulkUpdateMetadata(
+                items,
+                templateOldFields,
+                templateNewFields,
+                successCallback,
+                errorCallback,
+            );
+        }
+    };
 
     /**
      * Resets the collection so that the loading bar starts showing
@@ -829,11 +944,13 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @param {string} sortDirection - sort direction
      * @return {void}
      */
-    sort = (sortBy: SortBy, sortDirection: SortDirection) => {
+    sort = (sortBy: SortBy | Key, sortDirection: SortDirection) => {
         const {
             currentCollection: { id },
+            view,
         }: State = this.state;
-        if (id) {
+
+        if (id || view === VIEW_METADATA) {
             this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
     };
@@ -1179,7 +1296,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     createFolder = (): void => {
-        this.createFolderCallback();
+        this.throttledCreateFolderCallback();
     };
 
     /**
@@ -1244,6 +1361,15 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             },
         );
     };
+
+    /**
+     * Throttled version of createFolderCallback to prevent errors from rapid clicking.
+     *
+     * @private
+     * @param {string} [name] - folder name
+     * @return {void}
+     */
+    throttledCreateFolderCallback = throttle(this.createFolderCallback, 500, { trailing: false });
 
     /**
      * Selects the clicked file and then shares it
@@ -1486,6 +1612,29 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         return maxWidthColumns;
     };
 
+    getMetadataViewProps = (): ContentExplorerProps['metadataViewProps'] => {
+        const { metadataViewProps } = this.props;
+        const { tableProps } = metadataViewProps ?? {};
+        const { onSelectionChange } = tableProps ?? {};
+        const { selectedItemIds } = this.state;
+
+        return {
+            ...metadataViewProps,
+            tableProps: {
+                ...tableProps,
+                selectedKeys: selectedItemIds,
+                onSelectionChange: (ids: Selection) => {
+                    onSelectionChange?.(ids);
+                    const isSelectionEmpty = ids !== 'all' && ids.size === 0;
+                    this.setState({
+                        selectedItemIds: ids,
+                        ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
+                    });
+                },
+            },
+        };
+    };
+
     /**
      * Change the current view mode
      *
@@ -1561,6 +1710,39 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         });
     };
 
+    clearSelectedItemIds = () => {
+        this.setState({
+            selectedItemIds: new Set(),
+            isMetadataSidePanelOpen: false,
+        });
+    };
+
+    /**
+     * Toggle metadata side panel visibility
+     *
+     * @private
+     * @return {void}
+     */
+    onMetadataSidePanelToggle = () => {
+        this.setState(prevState => ({
+            isMetadataSidePanelOpen: !prevState.isMetadataSidePanelOpen,
+        }));
+    };
+
+    /**
+     * Close metadata side panel
+     *
+     * @private
+     * @return {void}
+     */
+    closeMetadataSidePanel = () => {
+        this.setState({ isMetadataSidePanelOpen: false });
+    };
+
+    filterMetadata = (fields: ExternalFilterValues) => {
+        this.setState({ metadataFilters: fields }, this.refreshCollection);
+    };
+
     /**
      * Renders the file picker
      *
@@ -1572,6 +1754,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const {
             apiHost,
             appHost,
+            bulkItemActions,
             canCreateNewFolder,
             canDelete,
             canDownload,
@@ -1585,6 +1768,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             contentUploaderProps,
             defaultView,
             features,
+            hasProviders,
             isMedium,
             isSmall,
             isTouch,
@@ -1606,6 +1790,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             staticPath,
             previewLibraryVersion,
             theme,
+            title,
             token,
             uploadHost,
         }: ContentExplorerProps = this.props;
@@ -1619,13 +1804,16 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isCreateFolderModalOpen,
             isDeleteModalOpen,
             isLoading,
+            isMetadataSidePanelOpen,
             isPreviewModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
             isUploadModalOpen,
             markers,
+            metadataTemplate,
             rootName,
             selected,
+            selectedItemIds,
             view,
         }: State = this.state;
 
@@ -1635,6 +1823,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
         const isDefaultViewMetadata: boolean = defaultView === DEFAULT_VIEW_METADATA;
+        const isMetadataViewV2Feature = isFeatureEnabled(features, 'contentExplorer.metadataViewV2');
         const isErrorView: boolean = view === VIEW_ERROR;
 
         const viewMode = this.getViewMode();
@@ -1643,80 +1832,103 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
+        const metadataViewProps = this.getMetadataViewProps();
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <TooltipProvider container={this.rootElement}>
+                <Providers hasProviders={hasProviders}>
                     <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                            {!isDefaultViewMetadata && (
-                                <>
+                            <div className="bce-ContentExplorer-main">
+                                {!isDefaultViewMetadata && (
                                     <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
-                                    <SubHeader
-                                        view={view}
-                                        viewMode={viewMode}
-                                        rootId={rootFolderId}
-                                        isSmall={isSmall}
-                                        rootName={rootName}
-                                        currentCollection={currentCollection}
-                                        canUpload={allowUpload}
-                                        canCreateNewFolder={allowCreate}
-                                        gridColumnCount={gridColumnCount}
-                                        gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
-                                        gridMinColumns={GRID_VIEW_MIN_COLUMNS}
-                                        maxGridColumnCountForWidth={maxGridColumnCount}
-                                        onUpload={this.upload}
-                                        onCreate={this.createFolder}
-                                        onGridViewSliderChange={this.onGridViewSliderChange}
-                                        onItemClick={this.fetchFolder}
-                                        onSortChange={this.sort}
-                                        onViewModeChange={this.changeViewMode}
-                                        portalElement={this.rootElement}
-                                    />
-                                </>
-                            )}
-                            <Content
-                                canDelete={canDelete}
-                                canDownload={canDownload}
-                                canPreview={canPreview}
-                                canRename={canRename}
-                                canShare={canShare}
-                                currentCollection={currentCollection}
-                                features={features}
-                                gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
-                                isMedium={isMedium}
-                                isSmall={isSmall}
-                                isTouch={isTouch}
-                                itemActions={itemActions}
-                                fieldsToShow={fieldsToShow}
-                                onItemClick={this.onItemClick}
-                                onItemDelete={this.delete}
-                                onItemDownload={this.download}
-                                onItemPreview={this.preview}
-                                onItemRename={this.rename}
-                                onItemSelect={this.select}
-                                onItemShare={this.share}
-                                onMetadataUpdate={this.updateMetadata}
-                                onSortChange={this.sort}
-                                portalElement={this.rootElement}
-                                view={view}
-                                viewMode={viewMode}
-                            />
-                            {!isErrorView && (
-                                <Footer>
-                                    <Pagination
-                                        hasNextMarker={hasNextMarker}
-                                        hasPrevMarker={hasPreviousMarker}
-                                        isSmall={isSmall}
-                                        offset={offset}
-                                        onOffsetChange={this.paginate}
-                                        pageSize={currentPageSize}
-                                        totalCount={totalCount}
-                                        onMarkerBasedPageChange={this.markerBasedPaginate}
-                                    />
-                                </Footer>
+                                )}
+
+                                <SubHeader
+                                    bulkItemActions={bulkItemActions}
+                                    view={view}
+                                    viewMode={viewMode}
+                                    rootId={rootFolderId}
+                                    isSmall={isSmall}
+                                    rootName={rootName}
+                                    currentCollection={currentCollection}
+                                    canUpload={allowUpload}
+                                    canCreateNewFolder={allowCreate}
+                                    gridColumnCount={gridColumnCount}
+                                    gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                    gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                    maxGridColumnCountForWidth={maxGridColumnCount}
+                                    onUpload={this.upload}
+                                    onClearSelectedItemIds={this.clearSelectedItemIds}
+                                    onCreate={this.createFolder}
+                                    onGridViewSliderChange={this.onGridViewSliderChange}
+                                    onItemClick={this.fetchFolder}
+                                    onSortChange={this.sort}
+                                    onMetadataSidePanelToggle={this.onMetadataSidePanelToggle}
+                                    onViewModeChange={this.changeViewMode}
+                                    portalElement={this.rootElement}
+                                    selectedItemIds={selectedItemIds}
+                                    title={title}
+                                />
+
+                                <Content
+                                    canDelete={canDelete}
+                                    canDownload={canDownload}
+                                    canPreview={canPreview}
+                                    canRename={canRename}
+                                    canShare={canShare}
+                                    currentCollection={currentCollection}
+                                    features={features}
+                                    gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
+                                    isMedium={isMedium}
+                                    isSmall={isSmall}
+                                    isTouch={isTouch}
+                                    itemActions={itemActions}
+                                    fieldsToShow={fieldsToShow}
+                                    metadataTemplate={metadataTemplate}
+                                    metadataViewProps={metadataViewProps}
+                                    onItemClick={this.onItemClick}
+                                    onItemDelete={this.delete}
+                                    onItemDownload={this.download}
+                                    onItemPreview={this.preview}
+                                    onItemRename={this.rename}
+                                    onItemSelect={this.select}
+                                    onItemShare={this.share}
+                                    onMetadataFilter={this.filterMetadata}
+                                    onMetadataUpdate={this.updateMetadata}
+                                    onSortChange={this.sort}
+                                    portalElement={this.rootElement}
+                                    view={view}
+                                    viewMode={viewMode}
+                                />
+
+                                {!isErrorView && (
+                                    <Footer>
+                                        <Pagination
+                                            hasNextMarker={hasNextMarker}
+                                            hasPrevMarker={hasPreviousMarker}
+                                            isSmall={isSmall}
+                                            offset={offset}
+                                            onOffsetChange={this.paginate}
+                                            pageSize={currentPageSize}
+                                            totalCount={totalCount}
+                                            onMarkerBasedPageChange={this.markerBasedPaginate}
+                                        />
+                                    </Footer>
+                                )}
+                            </div>
+                            {isDefaultViewMetadata && isMetadataViewV2Feature && isMetadataSidePanelOpen && (
+                                <MetadataSidePanel
+                                    currentCollection={currentCollection}
+                                    metadataTemplate={metadataTemplate}
+                                    onClose={this.closeMetadataSidePanel}
+                                    onUpdate={this.updateMetadataV2}
+                                    refreshCollection={this.refreshCollection}
+                                    selectedItemIds={selectedItemIds}
+                                />
                             )}
                         </div>
                         {allowUpload && !!this.appElement ? (
@@ -1740,7 +1952,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                         {allowCreate && !!this.appElement ? (
                             <CreateFolderDialog
                                 isOpen={isCreateFolderModalOpen}
-                                onCreate={this.createFolderCallback}
+                                onCreate={this.throttledCreateFolderCallback}
                                 onCancel={this.closeModals}
                                 isLoading={isLoading}
                                 errorCode={errorCode}
@@ -1810,7 +2022,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                             />
                         ) : null}
                     </div>
-                </TooltipProvider>
+                </Providers>
             </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
@@ -1819,4 +2031,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider])(ContentExplorer);
+export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider, withBlueprintModernization])(
+    ContentExplorer,
+);

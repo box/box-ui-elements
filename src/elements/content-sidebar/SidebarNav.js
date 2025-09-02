@@ -35,6 +35,7 @@ import {
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
 
@@ -49,10 +50,13 @@ type Props = {
     hasDocGen?: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     intl: IntlShape,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
     onPanelChange?: (name: string, isInitialState: boolean) => void,
+    routerDisabled?: boolean,
     signSidebarProps: SignSidebarProps,
 };
 
@@ -67,10 +71,13 @@ const SidebarNav = ({
     hasMetadata,
     hasSkills,
     hasDocGen = false,
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
     intl,
     isOpen,
     onNavigate,
     onPanelChange = noop,
+    routerDisabled,
     signSidebarProps,
 }: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
@@ -91,7 +98,14 @@ const SidebarNav = ({
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
             <div className="bcs-SidebarNav-tabs">
-                <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
+                <SidebarNavTablist
+                    elementId={elementId}
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    isOpen={isOpen}
+                    onNavigate={onNavigate}
+                    routerDisabled={routerDisabled}
+                >
                     {hasBoxAI && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
@@ -161,6 +175,7 @@ const SidebarNav = ({
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
+                            data-testid="sidebardocgen"
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
@@ -177,13 +192,18 @@ const SidebarNav = ({
                 )}
 
                 {hasAdditionalTabs && (
-                    <div className="bcs-SidebarNav-overflow">
+                    <div className="bcs-SidebarNav-overflow" data-testid="additional-tabs-overflow">
                         <AdditionalTabs key={fileId} tabs={additionalTabs} />
                     </div>
                 )}
             </div>
             <div className="bcs-SidebarNav-footer">
-                <SidebarToggle isOpen={isOpen} />
+                <SidebarToggle
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    isOpen={isOpen}
+                    routerDisabled={routerDisabled}
+                />
             </div>
         </div>
     );

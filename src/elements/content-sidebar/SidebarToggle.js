@@ -5,7 +5,8 @@
  */
 
 import * as React from 'react';
-import { withRouter, type RouterHistory } from 'react-router-dom';
+import { type RouterHistory } from 'react-router-dom';
+import { withRouterIfEnabled } from '../common/routing';
 import SidebarToggleButton from '../../components/sidebar-toggle-button/SidebarToggleButton';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
@@ -53,4 +54,4 @@ const SidebarToggle = ({
 };
 
 export { SidebarToggle as SidebarToggleComponent };
-export default withRouter(SidebarToggle);
+export default withRouterIfEnabled(SidebarToggle);

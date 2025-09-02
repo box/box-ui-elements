@@ -1,41 +1,61 @@
-import { http, HttpResponse } from 'msw';
 import type { Meta, StoryObj } from '@storybook/react';
+import { http, HttpResponse } from 'msw';
+import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
+import { Sign } from '@box/blueprint-web-assets/icons/Line';
+import { expect, fn, userEvent, waitFor, within, screen } from 'storybook/test';
+
+import noop from 'lodash/noop';
+import orderBy from 'lodash/orderBy';
+
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
+import { mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
 
-const EID = '0';
-const templateName = 'templateName';
-const metadataSource = `enterprise_${EID}.${templateName}`;
-const metadataSourceFieldName = `metadata.${metadataSource}`;
+// The intent behind relying on mockMetadata is to allow a developer to paste in their own metadata template schema for use with live API calls.
+const { scope: templateScope, templateKey } = mockSchema;
 
+const metadataScopeAndKey = `${templateScope}.${templateKey}`;
+const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
+
+// This is the body of the metadata query API call.
+// https://developer.box.com/guides/metadata/queries/syntax/
 const metadataQuery = {
-    from: metadataSource,
-
-    // // Filter items in the folder by existing metadata key
-    // query: 'key = :arg1',
-    //
-    // // Display items with value
-    // query_params: { arg1: 'value' },
-
-    ancestor_folder_id: '313259567207',
+    from: metadataScopeAndKey,
+    ancestor_folder_id: '0',
+    order_by: [
+        {
+            field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`, // Default to sorting by the first field in the schema
+            direction: 'asc',
+        },
+    ],
     fields: [
-        `${metadataSourceFieldName}.name`,
-        `${metadataSourceFieldName}.industry`,
-        `${metadataSourceFieldName}.last_contacted_at`,
-        `${metadataSourceFieldName}.role`,
+        // Default to returning all fields in the metadata template schema, and name as a standalone (non-metadata) field
+        ...mockSchema.fields.map(field => `${metadataFieldNamePrefix}.${field.key}`),
     ],
 };
 
+// Used for metadata view v1
 const fieldsToShow = [
-    { key: `${metadataSourceFieldName}.name`, canEdit: false, displayName: 'Alias' },
-    { key: `${metadataSourceFieldName}.industry`, canEdit: true },
-    { key: `${metadataSourceFieldName}.last_contacted_at`, canEdit: true },
-    { key: `${metadataSourceFieldName}.role`, canEdit: true },
+    { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
+    { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
+    { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
 ];
-const defaultView = 'metadata'; // Required prop to paint the metadata view. If not provided, you'll get regular folder view.
 
-type Story = StoryObj<typeof ContentExplorer>;
+// Used for metadata view v2
+const columns = [
+    ...mockSchema.fields.map(field => ({
+        textValue: field.displayName,
+        id: `${metadataFieldNamePrefix}.${field.key}`,
+        type: field.type,
+        allowsSorting: true,
+        minWidth: 150,
+        maxWidth: 150,
+    })),
+];
+
+// Switches ContentExplorer to use Metadata View over standard, folder-based view.
+const defaultView = 'metadata';
 
 export const metadataView: Story = {
     args: {
@@ -45,21 +65,201 @@ export const metadataView: Story = {
     },
 };
 
-export const withNewMetadataView: Story = {
-    args: {
-        metadataQuery,
-        fieldsToShow,
-        defaultView,
-        features: {
-            contentExplorer: {
-                metadataViewV2: true,
-            },
+const metadataViewV2ElementProps = {
+    metadataViewProps: {
+        columns,
+    },
+    metadataQuery,
+    fieldsToShow,
+    defaultView,
+    features: {
+        contentExplorer: {
+            metadataViewV2: true,
         },
     },
 };
 
+const metadataViewV2WithInlineCustomActionsElementProps = {
+    ...metadataViewV2ElementProps,
+    metadataViewProps: {
+        columns,
+        tableProps: {
+            isSelectAllEnabled: true,
+        },
+        itemActionMenuProps: {
+            actions: [
+                {
+                    label: 'Download',
+                    onClick: noop,
+                    icon: Download,
+                },
+            ],
+            subMenuTrigger: {
+                label: 'Sign',
+                icon: Sign,
+            },
+            subMenuActions: [
+                {
+                    label: 'Request Signature',
+                    onClick: noop,
+                    icon: SignMeOthers,
+                },
+            ],
+        },
+    },
+};
+
+const metadataViewV2WithBulkItemActions = {
+    ...metadataViewV2ElementProps,
+    bulkItemActions: [
+        {
+            label: 'Download',
+            onClick: fn(),
+        },
+    ],
+    metadataViewProps: {
+        columns,
+        tableProps: {
+            isSelectAllEnabled: true,
+        },
+    },
+};
+
+export const metadataViewV2: Story = {
+    args: metadataViewV2ElementProps,
+};
+
+export const metadataViewV2SortsFromHeader: Story = {
+    args: metadataViewV2ElementProps,
+    play: async ({ canvas }) => {
+        const industryHeader = await canvas.findByRole('columnheader', { name: 'Industry' });
+        expect(industryHeader).toBeInTheDocument();
+
+        const firstRow = await canvas.findByRole('row', { name: /Child 2/i });
+        expect(firstRow).toBeInTheDocument();
+
+        await userEvent.click(industryHeader);
+    },
+};
+
+export const metadataViewV2WithCustomActions: Story = {
+    args: metadataViewV2WithInlineCustomActionsElementProps,
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const ellipsesButton = within(firstRow).getByRole('button', { name: 'Action menu' });
+        userEvent.click(ellipsesButton);
+    },
+};
+
+const initialFilterActionBarProps = {
+    initialFilterValues: {
+        industry: { value: ['Legal'] },
+        'mimetype-filter': { value: ['boxnoteType', 'documentType', 'threedType'] },
+        role: { value: ['Developer', 'Business Owner', 'Marketing'] },
+    },
+};
+
+export const metadataViewV2WithInitialFilterValues: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            actionBarProps: initialFilterActionBarProps,
+        },
+    },
+    play: async ({ canvas }) => {
+        // Wait for chips to update with initial values
+        await waitFor(() => {
+            expect(canvas.getByRole('button', { name: /Industry/i })).toHaveTextContent(/\(1\)/);
+        });
+        // Other chips should reflect initialized values
+        const contactRoleChip = canvas.getByRole('button', { name: /Contact Role/i });
+        expect(contactRoleChip).toHaveTextContent(/\(3\)/);
+
+        const fileTypeChip = canvas.getByRole('button', { name: /Box Note/i });
+        expect(fileTypeChip).toHaveTextContent(/\+2/);
+    },
+};
+
+export const sidePanelOpenWithSingleItemSelected: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+        },
+    },
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Select the first row by clicking its checkbox
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstRow).getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        const metadataButton = canvas.getByRole('button', { name: 'Metadata' });
+        await userEvent.click(metadataButton);
+    },
+};
+
+export const metadataViewV2WithBulkItemActionMenuShowsItemActionMenu: Story = {
+    args: metadataViewV2WithBulkItemActions,
+    play: async ({ canvas }) => {
+        const firstRow = await canvas.findByRole('row', { name: /Child 2/i });
+        expect(firstRow).toBeInTheDocument();
+
+        const checkbox = within(firstRow).getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        const ellipsisButton = canvas.getByRole('button', { name: 'Bulk actions' });
+        expect(ellipsisButton).toBeInTheDocument();
+        await userEvent.click(ellipsisButton);
+
+        const downloadAction = screen.getByRole('menuitem', { name: 'Download' });
+        expect(downloadAction).toBeInTheDocument();
+    },
+};
+
+export const sidePanelOpenWithMultipleItemsSelected: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+        },
+    },
+
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Select the first row by clicking its checkbox
+        const firstItem = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstItem).getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        // Select the second row by clicking its checkbox
+        const secondItem = canvas.getAllByRole('row', { name: /Child 1/i })[0];
+        const secondCheckbox = within(secondItem).getByRole('checkbox');
+        await userEvent.click(secondCheckbox);
+
+        const metadataButton = canvas.getByRole('button', { name: 'Metadata' });
+        await userEvent.click(metadataButton);
+    },
+};
+
 const meta: Meta<typeof ContentExplorer> = {
-    title: 'Elements/ContentExplorer/tests/ContentExplorer/visual/MetadataView',
+    title: 'Elements/ContentExplorer/tests/MetadataView/visual',
     component: ContentExplorer,
     args: {
         features: global.FEATURE_FLAGS,
@@ -69,15 +269,34 @@ const meta: Meta<typeof ContentExplorer> = {
     parameters: {
         msw: {
             handlers: [
-                http.post(`${DEFAULT_HOSTNAME_API}/2.0/metadata_queries/execute_read`, () => {
+                // Note that the Metadata API backend normally handles the sorting. The mocks below simulate the sorting for specific cases, but may not 100% accurately reflect the backend behavior.
+                http.post(`${DEFAULT_HOSTNAME_API}/2.0/metadata_queries/execute_read`, async ({ request }) => {
+                    const body = await request.clone().json();
+                    const orderByDirection = body.order_by[0].direction;
+                    const orderByFieldKey = body.order_by[0].field_key;
+
+                    // Hardcoded case for sorting by industry
+                    if (orderByFieldKey === `industry` && orderByDirection === 'ASC') {
+                        const sortedMetadata = orderBy(
+                            mockMetadata.entries,
+                            'metadata.enterprise_0.templateName.industry',
+                            'asc',
+                        );
+                        return HttpResponse.json({ ...mockMetadata, entries: sortedMetadata });
+                    }
                     return HttpResponse.json(mockMetadata);
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/metadata_templates/enterprise/templateName/schema`, () => {
                     return HttpResponse.json(mockSchema);
                 }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/:id`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
             ],
         },
     },
 };
+
+type Story = StoryObj<typeof meta>;
 
 export default meta;

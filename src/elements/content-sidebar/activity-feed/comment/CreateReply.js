@@ -8,7 +8,7 @@ import noop from 'lodash/noop';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
 import PlainButton from '../../../../components/plain-button';
 
-import type { SelectorItems } from '../../../../common/types/core';
+import type { SelectorItems, BoxItem } from '../../../../common/types/core';
 
 import CommentForm from '../comment-form';
 
@@ -19,6 +19,7 @@ type Props = {
     getMentionWithQuery?: (searchStr: string) => void,
     intl: IntlShape,
     isDisabled?: boolean,
+    file?: BoxItem,
     mentionSelectorContacts?: SelectorItems<>,
     onCancel: () => void,
     onClick: () => void,
@@ -37,6 +38,7 @@ const CreateReply = ({
     onCancel,
     onSubmit,
     onClick,
+    file,
     placeholder = intl.formatMessage(messages.replyInThread),
     showReplyForm,
 }: Props) => {
@@ -53,6 +55,7 @@ const CreateReply = ({
                     getMentionWithQuery={getMentionWithQuery}
                     isOpen
                     isEditing
+                    file={file}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onCancel={onCancel}
                     onFocus={onFocus}

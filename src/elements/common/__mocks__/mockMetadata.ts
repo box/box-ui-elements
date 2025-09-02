@@ -1,8 +1,7 @@
 const mockMetadata = {
     entries: [
         {
-            name: 'File1',
-            etag: '2',
+            extension: 'pdf',
             metadata: {
                 enterprise_0: {
                     templateName: {
@@ -10,20 +9,20 @@ const mockMetadata = {
                         role: ['Business Owner', 'Marketing'],
                         $template: 'templateName',
                         $parent: 'file_1188899160835',
-                        name: 'something',
                         industry: 'Technology',
                         last_contacted_at: '2023-11-16T00:00:00.000Z',
-                        $version: 6,
+                        $version: 9,
                     },
                 },
             },
-            id: '1188899160835',
-            modified_at: '2023-04-12T10:06:04-07:00',
+            name: 'Child 2 of metadata folder.pdf',
+            created_at: '2023-04-12T10:06:04-07:00',
+            etag: '3',
+            id: '1188890835',
             type: 'file',
         },
         {
-            name: 'File2',
-            etag: '1',
+            extension: 'pdf',
             metadata: {
                 enterprise_0: {
                     templateName: {
@@ -31,32 +30,112 @@ const mockMetadata = {
                         role: ['Developer'],
                         $template: 'templateName',
                         $parent: 'file_1318276254035',
-                        name: '1',
-                        industry: 'Healthcare',
+                        industry: 'Technology',
                         last_contacted_at: '2023-11-01T00:00:00.000Z',
+                        $version: 3,
+                    },
+                },
+            },
+            name: 'Child 1 of metadata folder.pdf',
+            created_at: '2023-09-26T14:04:52-07:00',
+            etag: '2',
+            id: '13182754035',
+            type: 'file',
+        },
+        {
+            extension: 'pdf',
+            metadata: {
+                enterprise_0: {
+                    templateName: {
+                        $scope: 'enterprise_0',
+                        role: ['Developer', 'Business Owner'],
+                        $template: 'templateName',
+                        $parent: 'file_1812488409191',
+                        industry: 'Legal',
+                        last_contacted_at: '2025-03-05T00:00:00.000Z',
                         $version: 1,
                     },
                 },
             },
-            id: '1318276254035',
-            modified_at: '2023-09-26T14:04:52-07:00',
+            name: 'Child of Folder 1.pdf',
+            created_at: '2025-03-24T11:19:06-07:00',
+            etag: '2',
+            id: '18124889191',
             type: 'file',
         },
         {
-            name: 'File3',
-            etag: '0',
+            extension: 'pdf',
+            metadata: {
+                enterprise_0: {
+                    templateName: {
+                        $scope: 'enterprise_0',
+                        role: ['Legal', 'Marketing'],
+                        $template: 'templateName',
+                        $parent: 'file_1812500610112',
+                        industry: 'Legal',
+                        last_contacted_at: '2025-03-11T00:00:00.000Z',
+                        $version: 3,
+                    },
+                },
+            },
+            name: 'Child 1 of metadata folder 2.pdf',
+            created_at: '2025-03-24T11:38:55-07:00',
+            etag: '1',
+            id: '18125010112',
+            type: 'file',
+        },
+        {
+            extension: 'pdf',
             metadata: {
                 enterprise_0: {
                     templateName: {
                         $scope: 'enterprise_0',
                         $template: 'templateName',
-                        $parent: 'folder_218662304788',
+                        $parent: 'file_1812508470016',
                         $version: 0,
                     },
                 },
             },
-            id: '218662304788',
-            modified_at: '2024-06-13T15:53:23-07:00',
+            name: 'Child 1 of folder 3.pdf',
+            created_at: '2025-03-24T11:50:52-07:00',
+            etag: '2',
+            id: '18125470016',
+            type: 'file',
+        },
+        {
+            name: 'Folder 1 with metadata',
+            created_at: '2025-03-24T11:18:44-07:00',
+            etag: '2',
+            metadata: {
+                enterprise_0: {
+                    templateName: {
+                        $scope: 'enterprise_0',
+                        $template: 'templateName',
+                        $parent: 'folder_313222720346',
+                        industry: 'Technology',
+                        $version: 1,
+                    },
+                },
+            },
+            id: '3132220346',
+            type: 'folder',
+        },
+        {
+            name: 'Folder 2 with metadata',
+            created_at: '2025-03-24T11:37:27-07:00',
+            etag: '1',
+            metadata: {
+                enterprise_0: {
+                    templateName: {
+                        $scope: 'enterprise_0',
+                        $template: 'templateName',
+                        $parent: 'folder_313225735088',
+                        industry: 'Healthcare',
+                        $version: 0,
+                    },
+                },
+            },
+            id: '3135735088',
             type: 'folder',
         },
     ],
@@ -72,14 +151,6 @@ const mockSchema = {
     hidden: false,
     copyInstanceOnItemCopy: false,
     fields: [
-        {
-            id: '56b6f00e-5db3-4875-a31d-14b20f63c0ea',
-            type: 'string',
-            key: 'name',
-            displayName: 'Name',
-            hidden: false,
-            description: 'The customer name',
-        },
         {
             id: '07d3c06c-5db4-4f3f-821e-19219ba70ed3',
             type: 'date',
@@ -137,6 +208,13 @@ const mockSchema = {
                     key: 'Sales',
                 },
             ],
+        },
+        {
+            id: 'c3f87bb0-44df-4689-aafe-b9ed4aecbb01',
+            type: 'float',
+            key: 'number',
+            displayName: 'Merit Count',
+            hidden: false,
         },
     ],
 };
