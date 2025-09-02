@@ -231,7 +231,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
             newTimeStampPrepended = true;
         } else {
-            // get the legnth of the timestamp text including the space
+            // get the length of the timestamp text including the space
             const timestampLength = timestampText.length + 1; // Include the space
 
             // Create a selection range for the timestamp text and space so that we know what to remove and
