@@ -71,6 +71,7 @@ type State = {
     error: ?Object,
     internalEditorState: ?EditorState,
     isTouched: boolean,
+    timestampPrepended: boolean,
 };
 
 class DraftJSMentionSelector extends React.Component<Props, State> {
@@ -436,8 +437,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
     getVideoTimestamp = () => {
         const mediaDashContainer = document.querySelector('.bp-media-dash');
-        const video = mediaDashContainer?.querySelector('video');
-        const totalSeconds = Math.floor(video?.currentTime || 0);
+        if (!mediaDashContainer) {
+            return '00:00:00';
+        }
+        const video = mediaDashContainer.querySelector('video');
+        const totalSeconds = Math.floor(video && video instanceof HTMLVideoElement ? video.currentTime : 0);
 
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
