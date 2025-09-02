@@ -29,14 +29,17 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
 
 /**
  * Scans a Draft ContentBlock for timestamp entity ranges
+ * @see docs at {@link https://draftjs.org/docs/advanced-topics-decorators.html#compositedecorator}
  * @param {ContentBlock} contentBlock
  * @param {function} callback
  * @param {ContentState} contentState
  */
-const timestampStrategy = (contentBlock, callback, contentState) => {
+const timestampStrategy = (contentBlock: any, callback: (start: number, end: number) => void, contentState: any) => {
+    if (!contentBlock || !contentState) return;
     contentBlock.findEntityRanges(character => {
         const entityKey = character.getEntity();
-        const ret = entityKey !== null && contentState.getEntity(entityKey).getType() === UNEDITABLE_TIMESTAMP_TEXT;
+        // $FlowFixMe
+        const ret = entityKey !== null && contentState?.getEntity(entityKey)?.getType() === UNEDITABLE_TIMESTAMP_TEXT;
         return ret;
     }, callback);
 };
@@ -75,6 +78,8 @@ type State = {
 };
 
 class DraftJSMentionSelector extends React.Component<Props, State> {
+    compositeDecorator: CompositeDecorator;
+
     static defaultProps = {
         isRequired: false,
         onChange: noop,
@@ -184,7 +189,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         return newState;
     }
 
-    toggleTimeStamp = (editorState, forceOn = false) => {
+    toggleTimeStamp = (editorState: ?EditorState, forceOn: boolean = false) => {
+        if (!editorState) return;
         const currentContent = editorState.getCurrentContent();
         const timestamp = this.getVideoTimestamp();
         const timestampText = `${timestamp}`;
@@ -194,7 +200,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         if (!timestampPrepended || forceOn) {
             // Create a new entity for the timestamp. It is immutable so it will not be editable.
-            const timestampEntity = currentContent.createEntity(
+            // $FlowFixMe
+            const timestampEntity = currentContent?.createEntity(
                 UNEDITABLE_TIMESTAMP_TEXT, // Entity type
                 'IMMUTABLE',
                 { timestamp },
@@ -335,7 +342,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @param {ContentBlock} block The content block to analyze
      * @returns {number} The length of the timestamp entity (including the space after it)
      */
-    getTimestampLength = (currentContent: ContentState, block: ContentBlock): number => {
+    getTimestampLength = (currentContent: any, block: any): number => {
         let timestampLength = 0;
         const characterList = block.getCharacterList();
         for (let i = 0; i < characterList.size; i += 1) {
@@ -409,10 +416,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         onChange(processedEditorState);
 
         if (internalEditorState) {
-            const newState = { internalEditorState: processedEditorState };
-            if (shouldUpdateTimeStampPrepended) {
-                newState.timestampPrepended = newTimeStampPrepended;
-            }
+            const newState = {
+                internalEditorState: processedEditorState,
+                timestampPrepended: !!shouldUpdateTimeStampPrepended && newTimeStampPrepended,
+            };
             this.setState(newState);
         } else if (shouldUpdateTimeStampPrepended) {
             this.setState({ timestampPrepended: newTimeStampPrepended });
@@ -436,12 +443,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     };
 
     getVideoTimestamp = () => {
-        const mediaDashContainer = document.querySelector('.bp-media-dash');
-        if (!mediaDashContainer) {
-            return '00:00:00';
-        }
-        const video = mediaDashContainer.querySelector('video');
-        const totalSeconds = Math.floor(video && video instanceof HTMLVideoElement ? video.currentTime : 0);
+        const mediaDashContainer: ?HTMLElement = document.querySelector('.bp-media-dash');
+        // $FlowFixMe
+        const video: ?HTMLVideoElement = mediaDashContainer?.querySelector('video');
+
+        // $FlowFixMe
+        const totalSeconds = Math.floor(video?.currentTime || 0);
 
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
