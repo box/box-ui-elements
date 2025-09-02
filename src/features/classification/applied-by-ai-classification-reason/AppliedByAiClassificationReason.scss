@@ -1,0 +1,29 @@
+$reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
+
+.AppliedByAiClassificationReason {
+    .AppliedByAiClassificationReason-headerText {
+        font-size: $reason-font-size;
+    }
+
+    .AppliedByAiClassificationReason-answer {
+        font-size: $reason-font-size;
+        line-height: var(--body-default-line-height);
+    }
+
+    .AppliedByAiClassificationReason-references {
+        > * > * {
+            font-size: $reason-font-size;
+        }
+    }
+}
+
+.AppliedByAiClassificationReason-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+}
+
+.AppliedByAiClassificationReason-references {
+    margin-top: var(--space-2);
+}

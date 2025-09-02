@@ -16,7 +16,7 @@ import partition from 'lodash/partition';
 import uniq from 'lodash/uniq';
 import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
-import { getTypedFileId } from '../utils/file';
+import { getTypedFileId, getTypedFolderId } from '../utils/file';
 import { handleOnAbort, formatMetadataFieldValue } from './utils';
 import File from './File';
 import {
@@ -91,6 +91,16 @@ class Metadata extends File {
     }
 
     /**
+     * Creates a key for the metadata template schema cache
+     *
+     * @param {string} templateKey - template key
+     * @return {string} key
+     */
+    getMetadataTemplateSchemaCacheKey(templateKey: string): string {
+        return `${CACHE_PREFIX_METADATA}template_schema_${templateKey}`;
+    }
+
+    /**
      * API URL for metadata
      *
      * @param {string} id - a Box file id
@@ -99,6 +109,21 @@ class Metadata extends File {
      */
     getMetadataUrl(id: string, scope?: string, template?: string): string {
         const baseUrl = `${this.getUrl(id)}/metadata`;
+        if (scope && template) {
+            return `${baseUrl}/${scope}/${template}`;
+        }
+        return baseUrl;
+    }
+
+    /**
+     * API URL for metadata
+     *
+     * @param {string} id - a Box folder id
+     * @param {string} field - metadata field
+     * @return {string} base url for files
+     */
+    getMetadataUrlForFolder(id: string, scope?: string, template?: string): string {
+        const baseUrl = `${this.getBaseApiUrl()}/folders/${id}/metadata`;
         if (scope && template) {
             return `${baseUrl}/${scope}/${template}`;
         }
@@ -337,9 +362,23 @@ class Metadata extends File {
      * @param {string} templateKey - template key
      * @return {Promise} Promise object of metadata template
      */
-    getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+    async getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+        const cache: APICache = this.getCache();
+        const key = this.getMetadataTemplateSchemaCacheKey(templateKey);
+
+        // Return cached value if it exists
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+
+        // Fetch from API if not cached
         const url = this.getMetadataTemplateSchemaUrl(templateKey);
-        return this.xhr.get({ url });
+        const response = await this.xhr.get({ url });
+
+        // Cache the response
+        cache.set(key, response);
+
+        return response;
     }
 
     /**
@@ -786,27 +825,33 @@ class Metadata extends File {
     }
 
     /**
-     * API for patching metadata on file
+     * API for patching metadata on item (file/folder)
      *
-     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {BoxItem} item - File/Folder object for which we are changing the description
      * @param {Object} template - Metadata template
      * @param {Array} operations - Array of JSON patch operations
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {boolean} suppressCallbacks - Boolean to decide whether suppress callbacks or not
      * @return {Promise}
      */
     async updateMetadata(
-        file: BoxItem,
+        item: BoxItem,
         template: MetadataTemplate,
         operations: JSONPatchOperations,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        suppressCallbacks?: boolean,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_UPDATE_METADATA;
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
+        if (!suppressCallbacks) {
+            // Only set callbacks when we intend to invoke them for this call
+            // so that callers performing bulk operations can suppress per-item callbacks
+            this.successCallback = successCallback;
+            this.errorCallback = errorCallback;
+        }
 
-        const { id, permissions } = file;
+        const { id, permissions, type } = item;
         if (!id || !permissions) {
             this.errorHandler(getBadItemError());
             return;
@@ -821,11 +866,14 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.put({
-                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                url:
+                    type === 'file'
+                        ? this.getMetadataUrl(id, template.scope, template.templateKey)
+                        : this.getMetadataUrlForFolder(id, template.scope, template.templateKey),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
-                id: getTypedFileId(id),
+                id: type === 'file' ? getTypedFileId(id) : getTypedFolderId(id),
                 data: operations,
             });
             if (!this.isDestroyed()) {
@@ -840,10 +888,60 @@ class Metadata extends File {
                         editor,
                     );
                 }
-                this.successHandler(editor);
+                if (!suppressCallbacks) {
+                    this.successHandler(editor);
+                }
             }
         } catch (e) {
+            if (suppressCallbacks) {
+                // Let the caller decide how to handle errors (e.g., aggregate for bulk operations)
+                throw e;
+            }
             this.errorHandler(e);
+        }
+    }
+
+    /**
+     * API for bulk patching metadata on items (file/folder)
+     *
+     * @param {BoxItem[]} items - File/Folder object for which we are changing the description
+     * @param {Object} template - Metadata template
+     * @param {Array} operations - Array of JSON patch operations for each item
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async bulkUpdateMetadata(
+        items: BoxItem[],
+        template: MetadataTemplate,
+        operations: JSONPatchOperations[],
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_UPDATE_METADATA;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        try {
+            const updatePromises = items.map(async (item, index) => {
+                try {
+                    // Suppress per-item callbacks; aggregate outcome at the bulk level only
+                    await this.updateMetadata(item, template, operations[index], successCallback, errorCallback, true);
+                } catch (e) {
+                    // Re-throw to be caught by Promise.all and handled once below
+                    throw new Error(`Failed to update metadata: ${e.message || e}`);
+                }
+            });
+
+            await Promise.all(updatePromises);
+
+            if (!this.isDestroyed()) {
+                this.successHandler();
+            }
+        } catch (e) {
+            if (!this.isDestroyed()) {
+                this.errorHandler(e);
+            }
         }
     }
 

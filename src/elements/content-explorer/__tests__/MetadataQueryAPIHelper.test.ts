@@ -8,9 +8,9 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../../common/constants';
-import { FIELD_METADATA, FIELD_NAME, FIELD_EXTENSION } from '../../../constants';
+import { FIELD_METADATA, FIELD_ITEM_NAME, FIELD_EXTENSION, FIELD_PERMISSIONS } from '../../../constants';
 
-describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
+describe('elements/content-explorer/MetadataQueryAPIHelper', () => {
     let metadataQueryAPIHelper;
     const templateScope = 'enterprise_12345';
     const templateKey = 'awesomeTemplate';
@@ -189,14 +189,14 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     };
     const mdQuery = {
         ancestor_folder_id: '672838458',
-        from: 'enterprise_1234.templateKey',
+        from: `${templateScope}.${templateKey}`,
         query: 'query',
         query_params: {},
         fields: [
-            FIELD_NAME,
-            'metadata.enterprise_1234.templateKey.type',
-            'metadata.enterprise_1234.templateKey.year',
-            'metadata.enterprise_1234.templateKey.approved',
+            FIELD_ITEM_NAME,
+            `metadata.${templateScope}.${templateKey}.type`,
+            `metadata.${templateScope}.${templateKey}.year`,
+            `metadata.${templateScope}.${templateKey}.approved`,
         ],
     };
 
@@ -206,6 +206,10 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         metadataQueryAPIHelper.templateScope = templateScope;
         metadataQueryAPIHelper.metadataTemplate = template;
         metadataQueryAPIHelper.metadataQuery = mdQuery;
+
+        // Reset mocks before each test
+        getSchemaByTemplateKeyFunc.mockClear();
+        getSchemaByTemplateKeyFunc.mockResolvedValue(templateSchemaResponse);
     });
 
     describe('flattenMetadata()', () => {
@@ -225,6 +229,29 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         test('should return empty object when instance is not found', () => {
             expect(metadataQueryAPIHelper.flattenMetadata(undefined)).toEqual({});
         });
+
+        test('should return fields even when template fields are empty', () => {
+            metadataQueryAPIHelper.metadataTemplate = { ...template, fields: [] };
+            const result = metadataQueryAPIHelper.flattenMetadata(entries[0].metadata);
+            expect(result.enterprise.fields).toHaveLength(3);
+            expect(result.enterprise.fields[0].type).toBeUndefined();
+        });
+
+        test('should handle missing template field gracefully', () => {
+            const metadataWithMissingField = {
+                [templateScope]: {
+                    [templateKey]: {
+                        $id: metadataInstanceId1,
+                        type: 'bill',
+                        // year field is missing
+                        approved: 'yes',
+                    },
+                },
+            };
+            const result = metadataQueryAPIHelper.flattenMetadata(metadataWithMissingField);
+            expect(result.enterprise.fields).toHaveLength(3);
+            expect(result.enterprise.fields.find(f => f.key.includes('year'))?.value).toBeUndefined();
+        });
     });
 
     describe('getDataWithTypes()', () => {
@@ -234,10 +261,17 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             expect(result).toEqual(dataWithTypes);
             expect(metadataQueryAPIHelper.metadataTemplate).toEqual(template);
         });
+
+        test('should handle undefined template schema response', () => {
+            metadataQueryAPIHelper.metadataQueryResponseData = metadataQueryResponse;
+            const result = metadataQueryAPIHelper.getDataWithTypes(undefined);
+            expect(result).toEqual(dataWithTypes);
+            expect(metadataQueryAPIHelper.metadataTemplate).toBeUndefined();
+        });
     });
 
     describe('getTemplateSchemaInfo()', () => {
-        test('should set instance properties and make xhr call to get template info when response has valid entries', async () => {
+        test('should set instance properties and make xhr call to get template info', async () => {
             const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(metadataQueryResponse);
             expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
             expect(result).toEqual(templateSchemaResponse);
@@ -246,12 +280,49 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
         });
 
-        test('should not make xhr call to get metadata template info when response has zero/invalid entries', async () => {
+        test('should make xhr call to get metadata template info even when response has zero entries', async () => {
             const emptyEntriesResponse = { entries: [], next_marker: nextMarker };
             const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(emptyEntriesResponse);
-            expect(getSchemaByTemplateKeyFunc).not.toHaveBeenCalled();
-            expect(result).toBe(undefined);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
+            expect(result).toEqual(templateSchemaResponse);
             expect(metadataQueryAPIHelper.metadataQueryResponseData).toEqual(emptyEntriesResponse);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(templateScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
+        });
+
+        test('should make xhr call to get metadata template info even when response has null entries', async () => {
+            const nullEntriesResponse = { entries: null, next_marker: nextMarker };
+            const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(nullEntriesResponse);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
+            expect(result).toEqual(templateSchemaResponse);
+            expect(metadataQueryAPIHelper.metadataQueryResponseData).toEqual(nullEntriesResponse);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(templateScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
+        });
+
+        test('should make xhr call to get metadata template info even when response has undefined entries', async () => {
+            const undefinedEntriesResponse = { next_marker: nextMarker };
+            const result = await metadataQueryAPIHelper.getTemplateSchemaInfo(undefinedEntriesResponse);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(templateKey);
+            expect(result).toEqual(templateSchemaResponse);
+            expect(metadataQueryAPIHelper.metadataQueryResponseData).toEqual(undefinedEntriesResponse);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(templateScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(templateKey);
+        });
+
+        test('should extract template scope and key from metadata query from field', async () => {
+            // Test with different scope and key in the query
+            const differentScope = 'enterprise_99999';
+            const differentKey = 'differentTemplate';
+            metadataQueryAPIHelper.metadataQuery = {
+                ...mdQuery,
+                from: `${differentScope}.${differentKey}`,
+            };
+
+            await metadataQueryAPIHelper.getTemplateSchemaInfo(metadataQueryResponse);
+            expect(getSchemaByTemplateKeyFunc).toHaveBeenCalledWith(differentKey);
+            expect(metadataQueryAPIHelper.templateScope).toEqual(differentScope);
+            expect(metadataQueryAPIHelper.templateKey).toEqual(differentKey);
         });
     });
 
@@ -265,6 +336,15 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
                 expect.any(Function), // reject
                 { forceFetch: true },
             );
+        });
+
+        test('should handle API errors properly', async () => {
+            const error = new Error('API Error');
+            queryMetadataFunc.mockImplementationOnce((query, resolve, reject) => {
+                reject(error);
+            });
+
+            await expect(metadataQueryAPIHelper.queryMetadata()).rejects.toThrow('API Error');
         });
     });
 
@@ -300,6 +380,17 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             expect(metadataQueryAPIHelper.getDataWithTypes).not.toHaveBeenCalled();
             expect(successCallback).not.toHaveBeenCalled();
             expect(errorCallback).toBeCalledWith(err);
+        });
+
+        test('should handle query metadata errors', async () => {
+            const err = new Error('Query failed');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadataQueryAPIHelper.queryMetadata = jest.fn().mockReturnValueOnce(Promise.reject(err));
+
+            await metadataQueryAPIHelper.fetchMetadataQueryResults(mdQuery, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith(err);
+            expect(successCallback).not.toHaveBeenCalled();
         });
     });
 
@@ -344,6 +435,30 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
         test('should get metadata instance fields array from the query', () => {
             const expectedResponse = ['type', 'year', 'approved'];
             expect(metadataQueryAPIHelper.getMetadataQueryFields()).toEqual(expectedResponse);
+        });
+
+        test('should handle query with no metadata fields', () => {
+            metadataQueryAPIHelper.metadataQuery = {
+                ...mdQuery,
+                fields: [FIELD_ITEM_NAME, 'created_at'],
+            };
+            expect(metadataQueryAPIHelper.getMetadataQueryFields()).toEqual([]);
+        });
+
+        test('should handle query with empty fields array', () => {
+            metadataQueryAPIHelper.metadataQuery = {
+                ...mdQuery,
+                fields: [],
+            };
+            expect(metadataQueryAPIHelper.getMetadataQueryFields()).toEqual([]);
+        });
+
+        test('should handle query with undefined fields', () => {
+            metadataQueryAPIHelper.metadataQuery = {
+                ...mdQuery,
+                fields: undefined,
+            };
+            expect(metadataQueryAPIHelper.getMetadataQueryFields()).toEqual([]);
         });
     });
 
@@ -396,21 +511,21 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             from: 'enterprise_1234.templateKey',
             query: 'query',
             query_params: {},
-            fields: [FIELD_NAME, 'metadata.enterprise_1234.templateKey.type'],
+            fields: [FIELD_ITEM_NAME, 'metadata.enterprise_1234.templateKey.type'],
         };
         const mdQueryWithoutExtensionField = {
             ancestor_folder_id: '672838458',
             from: 'enterprise_1234.templateKey',
             query: 'query',
             query_params: {},
-            fields: [FIELD_NAME, 'metadata.enterprise_1234.templateKey.type'],
+            fields: [FIELD_ITEM_NAME, 'metadata.enterprise_1234.templateKey.type'],
         };
         const mdQueryWithBothFields = {
             ancestor_folder_id: '672838458',
             from: 'enterprise_1234.templateKey',
             query: 'query',
             query_params: {},
-            fields: [FIELD_NAME, FIELD_EXTENSION, 'metadata.enterprise_1234.templateKey.type'],
+            fields: [FIELD_ITEM_NAME, FIELD_EXTENSION, 'metadata.enterprise_1234.templateKey.type'],
         };
         test.each`
             index | metadataQuery
@@ -424,31 +539,365 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
             ({ index, metadataQuery }) => {
                 const updatedMetadataQuery = metadataQueryAPIHelper.verifyQueryFields(metadataQuery);
                 expect(isArray(updatedMetadataQuery.fields)).toBe(true);
-                expect(includes(updatedMetadataQuery.fields, FIELD_NAME)).toBe(true);
+                expect(includes(updatedMetadataQuery.fields, FIELD_ITEM_NAME)).toBe(true);
                 expect(includes(updatedMetadataQuery.fields, FIELD_EXTENSION)).toBe(true);
+                expect(includes(updatedMetadataQuery.fields, FIELD_PERMISSIONS)).toBe(true);
 
                 if (index === 2) {
-                    // Verify "name" and "extension" are added to pre-existing fields
+                    // Verify "name", "extension" and "permission" are added to pre-existing fields
                     expect(updatedMetadataQuery.fields).toEqual([
                         ...mdQueryWithoutNameField.fields,
-                        FIELD_NAME,
+                        FIELD_ITEM_NAME,
                         FIELD_EXTENSION,
+                        FIELD_PERMISSIONS,
                     ]);
                 }
 
                 if (index === 4) {
-                    // Verify "extension" is added when "name" exists but "extension" doesn't
+                    // Verify "extension" and "permission" are added when "name" exists but "extension" and "permission" don't
                     expect(updatedMetadataQuery.fields).toEqual([
                         ...mdQueryWithoutExtensionField.fields,
                         FIELD_EXTENSION,
+                        FIELD_PERMISSIONS,
                     ]);
                 }
 
                 if (index === 5) {
-                    // No change, original query has all necessary fields
-                    expect(updatedMetadataQuery.fields).toEqual(mdQueryWithBothFields.fields);
+                    // Verify "permission" is added
+                    expect(updatedMetadataQuery.fields).toEqual([...mdQueryWithBothFields.fields, FIELD_PERMISSIONS]);
                 }
             },
         );
+
+        test('should handle query with non-array fields', () => {
+            const mdQueryWithNonArrayFields = {
+                ancestor_folder_id: '672838458',
+                from: 'enterprise_1234.templateKey',
+                query: 'query',
+                query_params: {},
+                fields: 'not-an-array',
+            };
+
+            const updatedMetadataQuery = metadataQueryAPIHelper.verifyQueryFields(mdQueryWithNonArrayFields);
+            expect(isArray(updatedMetadataQuery.fields)).toBe(true);
+            expect(includes(updatedMetadataQuery.fields, FIELD_ITEM_NAME)).toBe(true);
+            expect(includes(updatedMetadataQuery.fields, FIELD_EXTENSION)).toBe(true);
+        });
+    });
+
+    describe('buildMDQueryParams()', () => {
+        test('should return empty result when no filters provided', () => {
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams({});
+            expect(result).toEqual({
+                queryParams: {},
+                query: '',
+            });
+        });
+
+        test('should return empty result when filters is null', () => {
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(null);
+            expect(result).toEqual({
+                queryParams: {},
+                query: '',
+            });
+        });
+
+        test('should handle date/float field with greater than filter', () => {
+            const filters = {
+                year: {
+                    fieldType: 'float',
+                    value: { range: { gt: 2020 } },
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(year >= :arg_year_1)');
+            expect(result.queryParams.arg_year_1).toBe(2020);
+        });
+
+        test('should handle date/float field with less than filter', () => {
+            const filters = {
+                year: {
+                    fieldType: 'date',
+                    value: { range: { lt: 2023 } },
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(year <= :arg_year_1)');
+            expect(result.queryParams.arg_year_1).toBe(2023);
+        });
+
+        test('should handle date/float field with range array filter', () => {
+            const filters = {
+                year: {
+                    fieldType: 'float',
+                    value: { range: { gt: 2020, lt: 2023 } },
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(year >= :arg_year_1 AND year <= :arg_year_2)');
+            expect(result.queryParams.arg_year_1).toBe(2020);
+            expect(result.queryParams.arg_year_2).toBe(2023);
+        });
+
+        test('should handle enum field with single value', () => {
+            const filters = {
+                status: {
+                    fieldType: 'enum',
+                    value: 'active',
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(status HASANY (:arg_status_1))');
+            expect(result.queryParams.arg_status_1).toBe('active');
+        });
+
+        test('should handle enum field with multiple values', () => {
+            const filters = {
+                status: {
+                    fieldType: 'enum',
+                    value: ['active', 'pending'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(status HASANY (:arg_status_1, :arg_status_2))');
+            expect(result.queryParams.arg_status_1).toBe('active');
+            expect(result.queryParams.arg_status_2).toBe('pending');
+        });
+
+        test('should handle multiSelect field', () => {
+            const filters = {
+                tags: {
+                    fieldType: 'multiSelect',
+                    value: ['tag1', 'tag2'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(tags HASANY (:arg_tags_1, :arg_tags_2))');
+            expect(result.queryParams.arg_tags_1).toBe('tag1');
+            expect(result.queryParams.arg_tags_2).toBe('tag2');
+        });
+
+        test('should handle string field with search value', () => {
+            const filters = {
+                name: {
+                    fieldType: 'string',
+                    value: ['search term'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('(name ILIKE :arg_name_1)');
+            expect(result.queryParams.arg_name_1).toBe('%search term%');
+        });
+
+        test('should handle mimetype filter specifically', () => {
+            const filters = {
+                'mimetype-filter': {
+                    fieldType: 'enum',
+                    value: ['pdfType', 'documentType'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe(
+                '(item.extension IN (:arg_mimetype_filter_1, :arg_mimetype_filter_2, :arg_mimetype_filter_3, :arg_mimetype_filter_4, :arg_mimetype_filter_5, :arg_mimetype_filter_6))',
+            );
+            expect(result.queryParams.arg_mimetype_filter_1).toBe('pdf');
+            expect(result.queryParams.arg_mimetype_filter_2).toBe('doc');
+            expect(result.queryParams.arg_mimetype_filter_3).toBe('docx');
+            expect(result.queryParams.arg_mimetype_filter_4).toBe('gdoc');
+            expect(result.queryParams.arg_mimetype_filter_5).toBe('rtf');
+            expect(result.queryParams.arg_mimetype_filter_6).toBe('txt');
+        });
+
+        test('should handle multiple filters of different types', () => {
+            const filters = {
+                year: {
+                    fieldType: 'float',
+                    value: { range: { gt: 2020 } },
+                },
+                status: {
+                    fieldType: 'enum',
+                    value: ['active'],
+                },
+                name: {
+                    fieldType: 'string',
+                    value: ['search'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe(
+                '(year >= :arg_year_1) AND (status HASANY (:arg_status_2)) AND (name ILIKE :arg_name_3)',
+            );
+            expect(Object.keys(result.queryParams)).toHaveLength(3);
+        });
+
+        test('should handle filter with null/undefined value', () => {
+            const filters = {
+                field: {
+                    fieldType: 'string',
+                    value: null,
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('');
+            expect(Object.keys(result.queryParams)).toHaveLength(0);
+        });
+
+        test('should handle filter with empty string value', () => {
+            const filters = {
+                field: {
+                    fieldType: 'string',
+                    value: '',
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('');
+            expect(Object.keys(result.queryParams)).toHaveLength(0);
+        });
+
+        test('should handle unknown field type with array value', () => {
+            const filters = {
+                field: {
+                    fieldType: 'unknown',
+                    value: ['value1', 'value2'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBeFalsy();
+            expect(result.queryParams.arg_field_1).toBeUndefined();
+            expect(result.queryParams.arg_field_2).toBeUndefined();
+        });
+        test('should handle empty array values for enum/multiSelect', () => {
+            const filters = {
+                status: {
+                    fieldType: 'enum',
+                    value: [],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('');
+            expect(Object.keys(result.queryParams)).toHaveLength(0);
+        });
+
+        test('should handle empty string array for string field', () => {
+            const filters = {
+                name: {
+                    fieldType: 'string',
+                    value: [''],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.buildMetadataQueryParams(filters);
+            expect(result.query).toBe('');
+            expect(Object.keys(result.queryParams)).toHaveLength(0);
+        });
+    });
+
+    describe('verifyQueryFields with filters', () => {
+        test('should build query and query_params when filters are provided', () => {
+            const metadataQuery = {
+                ancestor_folder_id: '672838458',
+                from: 'enterprise_1234.templateKey',
+                fields: [FIELD_ITEM_NAME],
+            };
+
+            const filters = {
+                status: {
+                    fieldType: 'enum',
+                    value: ['active'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.verifyQueryFields(metadataQuery, filters);
+
+            expect(result.query).toBe('(status HASANY (:arg_status_1))');
+            expect(result.query_params).toEqual({
+                arg_status_1: 'active',
+            });
+            expect(result.fields).toContain(FIELD_ITEM_NAME);
+            expect(result.fields).toContain(FIELD_EXTENSION);
+        });
+
+        test('should handle multiple filters with AND logic', () => {
+            const metadataQuery = {
+                ancestor_folder_id: '672838458',
+                from: 'enterprise_1234.templateKey',
+                fields: [FIELD_ITEM_NAME],
+            };
+
+            const filters = {
+                status: {
+                    fieldType: 'enum',
+                    value: ['active'],
+                },
+                year: {
+                    fieldType: 'float',
+                    value: { range: { gt: 2020 } },
+                },
+            };
+
+            const result = metadataQueryAPIHelper.verifyQueryFields(metadataQuery, filters);
+
+            expect(result.query).toContain('AND');
+            expect(result.query).toContain('HASANY');
+            expect(result.query).toContain('>=');
+            expect(Object.keys(result.query_params)).toHaveLength(2);
+        });
+
+        test('should merge existing query_params with filter query params', () => {
+            const metadataQuery = {
+                ancestor_folder_id: '672838458',
+                from: 'enterprise_1234.templateKey',
+                fields: [FIELD_ITEM_NAME],
+                query: '(existing_field = :existing_param)',
+                query_params: {
+                    existing_param: 'existing_value',
+                },
+            };
+
+            const filters = {
+                status: {
+                    fieldType: 'enum',
+                    value: ['active'],
+                },
+            };
+
+            const result = metadataQueryAPIHelper.verifyQueryFields(metadataQuery, filters);
+
+            expect(result.query).toBe('(existing_field = :existing_param) AND (status HASANY (:arg_status_1))');
+            expect(result.query_params).toEqual({
+                existing_param: 'existing_value',
+                arg_status_1: 'active',
+            });
+            expect(result.fields).toContain(FIELD_ITEM_NAME);
+            expect(result.fields).toContain(FIELD_EXTENSION);
+        });
+
+        test('should not modify query when no filters provided', () => {
+            const metadataQuery = {
+                ancestor_folder_id: '672838458',
+                from: 'enterprise_1234.templateKey',
+                fields: [FIELD_ITEM_NAME],
+            };
+
+            const result = metadataQueryAPIHelper.verifyQueryFields(metadataQuery);
+
+            expect(result.query).toBeUndefined();
+            expect(result.query_params).toBeUndefined();
+            expect(result.fields).toContain(FIELD_ITEM_NAME);
+            expect(result.fields).toContain(FIELD_EXTENSION);
+        });
     });
 });

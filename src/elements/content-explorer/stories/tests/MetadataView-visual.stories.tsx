@@ -3,7 +3,9 @@ import { http, HttpResponse } from 'msw';
 import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
 import { Sign } from '@box/blueprint-web-assets/icons/Line';
 import { expect, fn, userEvent, waitFor, within, screen } from 'storybook/test';
+
 import noop from 'lodash/noop';
+import orderBy from 'lodash/orderBy';
 
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
@@ -30,13 +32,11 @@ const metadataQuery = {
     fields: [
         // Default to returning all fields in the metadata template schema, and name as a standalone (non-metadata) field
         ...mockSchema.fields.map(field => `${metadataFieldNamePrefix}.${field.key}`),
-        'name',
     ],
 };
 
 // Used for metadata view v1
 const fieldsToShow = [
-    { key: `${metadataFieldNamePrefix}.name`, canEdit: false, displayName: 'Alias' },
     { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
     { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
     { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
@@ -44,15 +44,6 @@ const fieldsToShow = [
 
 // Used for metadata view v2
 const columns = [
-    {
-        // Always include the name column
-        textValue: 'Name',
-        id: 'name',
-        type: 'string',
-        allowsSorting: true,
-        minWidth: 150,
-        maxWidth: 150,
-    },
     ...mockSchema.fields.map(field => ({
         textValue: field.displayName,
         id: `${metadataFieldNamePrefix}.${field.key}`,
@@ -138,17 +129,16 @@ export const metadataViewV2: Story = {
     args: metadataViewV2ElementProps,
 };
 
-// @TODO Assert that rows are actually sorted in a different order, once handleSortChange is implemented
 export const metadataViewV2SortsFromHeader: Story = {
     args: metadataViewV2ElementProps,
     play: async ({ canvas }) => {
-        await waitFor(() => {
-            expect(canvas.getByRole('row', { name: /Industry/i })).toBeInTheDocument();
-        });
+        const industryHeader = await canvas.findByRole('columnheader', { name: 'Industry' });
+        expect(industryHeader).toBeInTheDocument();
 
-        const firstRow = canvas.getByRole('row', { name: /Industry/i });
-        const industryHeader = within(firstRow).getByRole('columnheader', { name: 'Industry' });
-        userEvent.click(industryHeader);
+        const firstRow = await canvas.findByRole('row', { name: /Child 2/i });
+        expect(firstRow).toBeInTheDocument();
+
+        await userEvent.click(industryHeader);
     },
 };
 
@@ -166,9 +156,9 @@ export const metadataViewV2WithCustomActions: Story = {
 
 const initialFilterActionBarProps = {
     initialFilterValues: {
-        'industry-filter': { value: ['Legal'] },
+        industry: { value: ['Legal'] },
         'mimetype-filter': { value: ['boxnoteType', 'documentType', 'threedType'] },
-        'role-filter': { value: ['Developer', 'Business Owner', 'Marketing'] },
+        role: { value: ['Developer', 'Business Owner', 'Marketing'] },
     },
 };
 
@@ -237,6 +227,37 @@ export const metadataViewV2WithBulkItemActionMenuShowsItemActionMenu: Story = {
     },
 };
 
+export const sidePanelOpenWithMultipleItemsSelected: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+        },
+    },
+
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Select the first row by clicking its checkbox
+        const firstItem = canvas.getByRole('row', { name: /Child 2/i });
+        const checkbox = within(firstItem).getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        // Select the second row by clicking its checkbox
+        const secondItem = canvas.getAllByRole('row', { name: /Child 1/i })[0];
+        const secondCheckbox = within(secondItem).getByRole('checkbox');
+        await userEvent.click(secondCheckbox);
+
+        const metadataButton = canvas.getByRole('button', { name: 'Metadata' });
+        await userEvent.click(metadataButton);
+    },
+};
+
 const meta: Meta<typeof ContentExplorer> = {
     title: 'Elements/ContentExplorer/tests/MetadataView/visual',
     component: ContentExplorer,
@@ -248,7 +269,21 @@ const meta: Meta<typeof ContentExplorer> = {
     parameters: {
         msw: {
             handlers: [
-                http.post(`${DEFAULT_HOSTNAME_API}/2.0/metadata_queries/execute_read`, () => {
+                // Note that the Metadata API backend normally handles the sorting. The mocks below simulate the sorting for specific cases, but may not 100% accurately reflect the backend behavior.
+                http.post(`${DEFAULT_HOSTNAME_API}/2.0/metadata_queries/execute_read`, async ({ request }) => {
+                    const body = await request.clone().json();
+                    const orderByDirection = body.order_by[0].direction;
+                    const orderByFieldKey = body.order_by[0].field_key;
+
+                    // Hardcoded case for sorting by industry
+                    if (orderByFieldKey === `industry` && orderByDirection === 'ASC') {
+                        const sortedMetadata = orderBy(
+                            mockMetadata.entries,
+                            'metadata.enterprise_0.templateName.industry',
+                            'asc',
+                        );
+                        return HttpResponse.json({ ...mockMetadata, entries: sortedMetadata });
+                    }
                     return HttpResponse.json(mockMetadata);
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/metadata_templates/enterprise/templateName/schema`, () => {

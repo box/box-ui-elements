@@ -9,7 +9,6 @@ const mockMetadata = {
                         role: ['Business Owner', 'Marketing'],
                         $template: 'templateName',
                         $parent: 'file_1188899160835',
-                        name: 'something',
                         industry: 'Technology',
                         last_contacted_at: '2023-11-16T00:00:00.000Z',
                         $version: 9,
@@ -31,7 +30,6 @@ const mockMetadata = {
                         role: ['Developer'],
                         $template: 'templateName',
                         $parent: 'file_1318276254035',
-                        name: '1',
                         industry: 'Technology',
                         last_contacted_at: '2023-11-01T00:00:00.000Z',
                         $version: 3,
@@ -94,7 +92,6 @@ const mockMetadata = {
                         $scope: 'enterprise_0',
                         $template: 'templateName',
                         $parent: 'file_1812508470016',
-                        name: 'in folder 3 that doesnt have metadata',
                         $version: 0,
                     },
                 },
@@ -155,14 +152,6 @@ const mockSchema = {
     copyInstanceOnItemCopy: false,
     fields: [
         {
-            id: '56b6f00e-5db3-4875-a31d-14b20f63c0ea',
-            type: 'string',
-            key: 'name',
-            displayName: 'Name',
-            hidden: false,
-            description: 'The customer name',
-        },
-        {
             id: '07d3c06c-5db4-4f3f-821e-19219ba70ed3',
             type: 'date',
             key: 'last_contacted_at',
@@ -219,6 +208,13 @@ const mockSchema = {
                     key: 'Sales',
                 },
             ],
+        },
+        {
+            id: 'c3f87bb0-44df-4689-aafe-b9ed4aecbb01',
+            type: 'float',
+            key: 'number',
+            displayName: 'Merit Count',
+            hidden: false,
         },
     ],
 };

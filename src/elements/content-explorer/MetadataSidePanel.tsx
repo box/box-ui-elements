@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { IconButton, SidePanel, Text } from '@box/blueprint-web';
+import { IconButton, SidePanel, Text, useNotification } from '@box/blueprint-web';
 import { XMark } from '@box/blueprint-web-assets/icons/Fill/index';
 import { FileDefault } from '@box/blueprint-web-assets/icons/Line/index';
 import {
@@ -10,12 +10,13 @@ import {
     JSONPatchOperations,
     MetadataInstance,
     MetadataInstanceForm,
+    type MetadataTemplateField,
 } from '@box/metadata-editor';
 
 import type { Selection } from 'react-aria-components';
-import type { Collection } from '../../common/types/core';
+import type { BoxItem, Collection } from '../../common/types/core';
 import type { MetadataTemplate } from '../../common/types/metadata';
-import { getTemplateInstance, useSelectedItemText } from './utils';
+import { useTemplateInstance, useSelectedItemText } from './utils';
 
 import messages from '../common/messages';
 
@@ -23,17 +24,29 @@ import './MetadataSidePanel.scss';
 
 export interface MetadataSidePanelProps {
     currentCollection: Collection;
-    onClose: () => void;
     metadataTemplate: MetadataTemplate;
+    onClose: () => void;
+    onUpdate: (
+        items: BoxItem[],
+        operations: JSONPatchOperations,
+        templateOldFields: MetadataTemplateField[],
+        templateNewFields: MetadataTemplateField[],
+        successCallback: () => void,
+        errorCallback: ErrorCallback,
+    ) => Promise<void>;
+    refreshCollection: () => void;
     selectedItemIds: Selection;
 }
 
 const MetadataSidePanel = ({
     currentCollection,
-    onClose,
-    selectedItemIds,
     metadataTemplate,
+    onClose,
+    onUpdate,
+    refreshCollection,
+    selectedItemIds,
 }: MetadataSidePanelProps) => {
+    const { addNotification } = useNotification();
     const { formatMessage } = useIntl();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
@@ -43,7 +56,7 @@ const MetadataSidePanel = ({
         selectedItemIds === 'all'
             ? currentCollection.items
             : currentCollection.items.filter(item => selectedItemIds.has(item.id));
-    const templateInstance = getTemplateInstance(metadataTemplate, selectedItems);
+    const templateInstance = useTemplateInstance(metadataTemplate, selectedItems, isEditing);
 
     const handleMetadataInstanceEdit = () => {
         setIsEditing(true);
@@ -53,19 +66,47 @@ const MetadataSidePanel = ({
         setIsEditing(false);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleMetadataInstanceFormChange = (values: FormValues) => {
-        // TODO: Implement on form change
-    };
-
     const handleMetadataInstanceFormDiscardUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(false);
         setIsEditing(false);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleUpdateMetadataSuccess = () => {
+        addNotification({
+            closeButtonAriaLabel: formatMessage(messages.close),
+            sensitivity: 'foreground',
+            styledText: formatMessage(messages.metadataUpdateSuccessNotification, {
+                numSelected: selectedItems.length,
+            }),
+            typeIconAriaLabel: formatMessage(messages.success),
+            variant: 'success',
+        });
+        setIsEditing(false);
+        refreshCollection();
+    };
+
+    const handleUpdateMetadataError = () => {
+        addNotification({
+            closeButtonAriaLabel: formatMessage(messages.close),
+            sensitivity: 'foreground',
+            styledText: formatMessage(messages.metadataUpdateErrorNotification),
+            typeIconAriaLabel: formatMessage(messages.error),
+            variant: 'error',
+        });
+    };
+
     const handleMetadataInstanceFormSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
-        // TODO: Implement onSave callback
+        const { fields: templateNewFields } = values.metadata;
+        const { fields: templateOldFields } = templateInstance;
+
+        await onUpdate(
+            selectedItems,
+            operations,
+            templateOldFields,
+            templateNewFields,
+            handleUpdateMetadataSuccess,
+            handleUpdateMetadataError,
+        );
     };
 
     return (
@@ -99,7 +140,7 @@ const MetadataSidePanel = ({
                                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                                 selectedTemplateInstance={templateInstance}
                                 onCancel={handleMetadataInstanceFormCancel}
-                                onChange={handleMetadataInstanceFormChange}
+                                onChange={null}
                                 onDelete={null}
                                 onDiscardUnsavedChanges={handleMetadataInstanceFormDiscardUnsavedChanges}
                                 onSubmit={handleMetadataInstanceFormSubmit}

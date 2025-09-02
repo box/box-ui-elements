@@ -4,7 +4,7 @@ import ItemGrid from '../common/item-grid';
 import ItemList from '../common/item-list';
 import ProgressBar from '../common/progress-bar';
 import MetadataBasedItemList from '../../features/metadata-based-view';
-import MetadataViewContainer, { MetadataViewContainerProps } from './MetadataViewContainer';
+import MetadataViewContainer, { ExternalFilterValues, MetadataViewContainerProps } from './MetadataViewContainer';
 import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
@@ -37,7 +37,11 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
     isTouch: boolean;
     itemActions?: ItemAction[];
     metadataTemplate?: MetadataTemplate;
-    metadataViewProps?: Omit<MetadataViewContainerProps, 'currentCollection'>;
+    metadataViewProps?: Omit<
+        MetadataViewContainerProps,
+        'hasError' | 'currentCollection' | 'metadataTemplate' | 'onMetadataFilter'
+    >;
+    onMetadataFilter?: (fields: ExternalFilterValues) => void;
     onMetadataUpdate: (
         item: BoxItem,
         field: string,
@@ -57,6 +61,7 @@ const Content = ({
     gridColumnCount,
     metadataTemplate,
     metadataViewProps,
+    onMetadataFilter,
     onMetadataUpdate,
     onSortChange,
     view,
@@ -89,6 +94,8 @@ const Content = ({
                     isLoading={percentLoaded !== 100}
                     hasError={view === VIEW_ERROR}
                     metadataTemplate={metadataTemplate}
+                    onMetadataFilter={onMetadataFilter}
+                    onSortChange={onSortChange}
                     {...metadataViewProps}
                 />
             )}
