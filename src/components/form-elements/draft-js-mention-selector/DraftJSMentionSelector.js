@@ -416,10 +416,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         onChange(processedEditorState);
 
         if (internalEditorState) {
-            const newState = {
-                internalEditorState: processedEditorState,
-                timestampPrepended: !!shouldUpdateTimeStampPrepended && newTimeStampPrepended,
-            };
+            let newState = { internalEditorState: processedEditorState };
+            if (shouldUpdateTimeStampPrepended) {
+                newState = { internalEditorState: processedEditorState, timestampPrepended: newTimeStampPrepended };
+            }
+
             this.setState(newState);
         } else if (shouldUpdateTimeStampPrepended) {
             this.setState({ timestampPrepended: newTimeStampPrepended });
