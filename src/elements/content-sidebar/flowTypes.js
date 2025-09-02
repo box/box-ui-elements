@@ -35,13 +35,15 @@ type AdditionalSidebarTab = {
 
 type CustomSidebarPanel = {
     id: string, // Unique identifier for the panel
-    path: string, // routh path for the panel
+    path: string, // route path for the panel
     component: React.ComponentType<any>, // The component to render
     title: string, // Panel title
     isDisabled?: boolean, // Whether the panel is disabled (default: false)
     icon?: React.ComponentType<any> | React.Element<any>, // Optional icon for the nav button
     navButtonProps?: Object, // Additional props for the nav button
 };
+
+type CustomSidebarPanels = Array<CustomSidebarPanel>;
 
 type Translations = {
     onTranslate?: Function,
@@ -60,6 +62,7 @@ export type {
     ClassificationInfo,
     ContentInsights,
     CustomSidebarPanel,
+    CustomSidebarPanels,
     NavigateOptions,
     AdditionalSidebarTab,
     AdditionalSidebarTabFtuxData,

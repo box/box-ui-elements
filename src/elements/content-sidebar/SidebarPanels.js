@@ -254,7 +254,9 @@ class SidebarPanels extends React.Component<Props, State> {
                 : // if box-ai is not default panel, put it at the bottom
                   [...DEFAULT_SIDEBAR_VIEWS, boxAiCustomPanelPath, ...otherCustomPanelPaths];
         }
-        return DEFAULT_SIDEBAR_VIEWS;
+
+        // No box-ai panel, but there are other custom panels - add them at the bottom
+        return [...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths];
     };
 
     render() {
