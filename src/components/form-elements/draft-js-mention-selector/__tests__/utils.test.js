@@ -108,7 +108,7 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
         const rawContentEntityWithTimestamp = {
             blocks: [
                 {
-                    text: '10:00:00 comment timestamp`',
+                    text: '10:00:00 comment timestamp',
                     type: 'unstyled',
                     entityRanges: [{ offset: 0, length: 10, key: 'first' }],
                 },
@@ -193,11 +193,11 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
         const rawContentEntityWithTimestampAndMention = {
             blocks: [
                 {
-                    text: '10:00:00 comment timestamp` @Becky',
+                    text: '10:00:00 comment timestamp @Becky',
                     type: 'unstyled',
                     entityRanges: [
-                        { offset: 0, length: 10, key: 'first' },
-                        { offset: 28, length: 6, key: 'second' },
+                        { offset: 0, length: 9, key: 'first' },
+                        { offset: 27, length: 6, key: 'second' },
                     ],
                 },
             ],
@@ -225,8 +225,8 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
             ${rawContentOneEntity}                     | ${{ text: 'Hey @[1:Becky]', hasMention: true }}
             ${rawContentTwoEntities}                   | ${{ text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }}
             ${rawContentTwoEntitiesOneLineBreak}       | ${{ text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }}
-            ${rawContentEntityWithTimestamp}           | ${{ text: '10:00:00 comment timestamp`', hasMention: false }}
-            ${rawContentEntityWithTimestampAndMention} | ${{ text: '10:00:00 comment timestamp` @[1:Becky]', hasMention: true }}
+            ${rawContentEntityWithTimestamp}           | ${{ text: '10:00:00 comment timestamp', hasMention: false }}
+            ${rawContentEntityWithTimestampAndMention} | ${{ text: '10:00:00 comment timestamp @[1:Becky]', hasMention: true }}
         `('should return the correct result', ({ rawContent, expected }) => {
             const blocks = convertFromRaw(rawContent);
 

@@ -74,6 +74,11 @@ const messages = defineMessages({
         defaultMessage: 'Comment with timestamp',
         description: 'Label for toggle to add video timestamp to comment',
     },
+    videoTimestampLabel: {
+        id: 'be.contentSidebar.activityFeed.commentForm.videoTimestampLabel',
+        defaultMessage: 'Video timestamp',
+        description: 'Label for video timestamp in comment',
+    },
 });
 
 export default messages;
