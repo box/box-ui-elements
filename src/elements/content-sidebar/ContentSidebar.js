@@ -16,11 +16,18 @@ import Internationalize from '../common/Internationalize';
 import Sidebar from './Sidebar';
 import NavRouter from '../common/nav-router';
 import SidebarUtils from './SidebarUtils';
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
+import {
+    CLIENT_NAME_CONTENT_SIDEBAR,
+    CLIENT_VERSION,
+    DEFAULT_HOSTNAME_API,
+    ORIGIN_CONTENT_SIDEBAR,
+} from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
 import { withErrorBoundary } from '../common/error-boundary';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import {
     isFeatureEnabled as isFeatureEnabledInContext,
     withFeatureConsumer,
@@ -163,6 +170,7 @@ class ContentSidebar extends React.Component<Props, State> {
             sharedLink,
             sharedLinkPassword,
             token,
+            version: CLIENT_VERSION,
         });
 
         /* eslint-disable react/prop-types */
@@ -432,6 +440,7 @@ export { ContentSidebar as ContentSidebarComponent };
 export default flow([
     withFeatureConsumer,
     withFeatureProvider,
+    withBlueprintModernization,
     withLogger(ORIGIN_CONTENT_SIDEBAR),
     withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),
 ])(ContentSidebar);

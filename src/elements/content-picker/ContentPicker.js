@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
+import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
@@ -18,6 +19,8 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 // $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 import Pagination from '../../features/pagination';
@@ -27,6 +30,7 @@ import Content from './Content';
 import Footer from './Footer';
 import {
     CLIENT_NAME_CONTENT_PICKER,
+    CLIENT_VERSION,
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_PAGE_NUMBER,
@@ -228,6 +232,7 @@ class ContentPicker extends Component<Props, State> {
             sharedLinkPassword,
             token,
             uploadHost,
+            version: CLIENT_VERSION,
         });
 
         this.id = uniqueid('bcp_');
@@ -1345,4 +1350,4 @@ class ContentPicker extends Component<Props, State> {
 }
 
 export { ContentPicker as ContentPickerComponent };
-export default makeResponsive(ContentPicker);
+export default flow([makeResponsive, withBlueprintModernization])(ContentPicker);

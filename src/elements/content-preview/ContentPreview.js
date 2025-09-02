@@ -35,6 +35,8 @@ import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
 import { withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
@@ -51,6 +53,7 @@ import {
     DEFAULT_LOCALE,
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
+    CLIENT_VERSION,
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
@@ -296,6 +299,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             token,
+            version: CLIENT_VERSION,
         });
         this.state = {
             ...this.initialState,
@@ -1418,6 +1422,7 @@ export default flow([
     withNavRouter,
     withFeatureConsumer,
     withFeatureProvider,
+    withBlueprintModernization,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
 ])(ContentPreview);
