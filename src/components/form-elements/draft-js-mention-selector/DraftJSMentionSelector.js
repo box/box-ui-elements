@@ -198,6 +198,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         let newTimeStampPrepended;
         const { timestampPrepended } = this.state;
 
+        // If timestamp is already prepended and forceOn is true, do not toggle it.
+        if (timestampPrepended && forceOn) {
+            return;
+        }
+
         if (!timestampPrepended || forceOn) {
             // Create a new entity for the timestamp. It is immutable so it will not be editable.
             // $FlowFixMe
