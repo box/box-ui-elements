@@ -143,7 +143,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         }
 
         // If timestamplabel is set and isRequired is true then force the timestamp
-        // to be added to the editor state as that is the spceified default behavior for video comments
+        // to be added to the editor state as that is the specified default behavior for video comments
         if (
             this.props.timestampLabel &&
             this.props.isRequired !== prevProps.isRequired &&
