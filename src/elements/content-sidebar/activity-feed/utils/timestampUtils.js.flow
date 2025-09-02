@@ -1,0 +1,5 @@
+// @flow
+declare export function convertTimestampToSeconds(timestamp: number): number;
+declare export function convertMillisecondsToHHMMSS(timestampInMilliseconds: number): string;
+declare export function convertSecondsToHHMMSS(seconds: number): string;
+declare export function formatTimestamp(text: string, timestamp: string): React$Element<any> | string;

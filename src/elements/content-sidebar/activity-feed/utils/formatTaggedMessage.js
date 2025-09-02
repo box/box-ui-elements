@@ -7,13 +7,16 @@ import * as React from 'react';
 import { Link } from '../../../../components/link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from '../common/user-link';
+import { formatTimestamp } from './timestampUtils';
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
 // urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
 // NOTE: There are useless escapes in the regex below, should probably remove them when safe
-// eslint-disable-next-line
-const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
+/* eslint-disable */
+const splitRegex =
+    /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
+/* eslint-disable */
 
 /**
  * Formats a message a string and replaces the following:
@@ -54,6 +57,15 @@ const formatTaggedMessage = (
             );
         }
 
+        // Check for timestamp in first item only
+        if (contentIndex === 0 && !shouldReturnString) {
+            const timestampMatch = text.match(/#\[timestamp:\d+,versionId:\d+\]/);
+            const timestamp = timestampMatch && timestampMatch[0];
+            if (timestamp) {
+                return formatTimestamp(text, timestamp);
+            }
+        }
+
         if (!shouldReturnString) {
             // attempt url match
             // NOTE: There are useless escapes in the regex below, should probably remove them when safe
@@ -74,7 +86,11 @@ const formatTaggedMessage = (
         return text;
     });
 
-    return shouldReturnString ? contentItems.join('') : contentItems;
+    if (shouldReturnString) {
+        return contentItems.join('');
+    }
+
+    return contentItems;
 };
 
 export default formatTaggedMessage;
