@@ -16,7 +16,6 @@ const DraftTimestampItem = ({ children, entityKey, contentState }: Props) => {
     const { timestamp } = entity.getData();
     const videoTimestampLabel = intl.formatMessage(messages.commentTimestampLabel);
     const videoTimestampLabelText = `${videoTimestampLabel}: ${timestamp}`;
-    console.log('videoTimestampLabelText', videoTimestampLabel);
     return (
         <div
             className="bcs-CommentTimestamp-entity"
