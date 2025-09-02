@@ -36,6 +36,8 @@ import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
 import IntelligenceAPI from './Intelligence';
+// $FlowFixMe
+import ZipDownloadAPI from './ZipDownload';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { ItemType } from '../common/types/core';
 import type { APIOptions } from '../common/types/api';
@@ -203,6 +205,8 @@ class APIFactory {
      * @property {IntelligenceAPI}
      */
     intelligenceAPI: IntelligenceAPI;
+
+    zipDownloadAPI: ZipDownloadAPI;
 
     /**
      * [constructor]
@@ -856,6 +860,11 @@ class APIFactory {
 
         this.intelligenceAPI = new IntelligenceAPI(this.options);
         return this.intelligenceAPI;
+    }
+
+    getZipDownloadAPI(): ZipDownloadAPI {
+        this.zipDownloadAPI = new ZipDownloadAPI(this.options);
+        return this.zipDownloadAPI;
     }
 }
 
