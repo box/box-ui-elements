@@ -9,6 +9,7 @@ import {
 } from '@box/metadata-filter';
 import {
     MetadataView,
+    PredefinedFilterName,
     type FilterValues,
     type MetadataViewProps,
     type MetadataFieldType,
@@ -18,6 +19,7 @@ import { type Key } from '@react-types/shared';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { SortDescriptor } from 'react-aria-components';
+
 import { FIELD_ITEM_NAME } from '../../constants';
 import type { Collection } from '../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../common/types/metadata';
@@ -207,6 +209,11 @@ const MetadataViewContainer = ({
             initialFilterValues,
             onFilterSubmit: handleFilterSubmit,
             filterGroups,
+
+            predefinedFilterOptions: {
+                [PredefinedFilterName.KeywordSearchFilterGroup]: { isDisabled: true },
+                [PredefinedFilterName.LocationFilterGroup]: { isDisabled: true },
+            },
         };
     }, [actionBarProps, initialFilterValues, handleFilterSubmit, filterGroups]);
 
