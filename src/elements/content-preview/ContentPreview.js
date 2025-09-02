@@ -53,6 +53,7 @@ import {
     DEFAULT_LOCALE,
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
+    CLIENT_VERSION,
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
@@ -298,6 +299,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             token,
+            version: CLIENT_VERSION,
         });
         this.state = {
             ...this.initialState,
