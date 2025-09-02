@@ -64,6 +64,7 @@ import {
     TYPE_WEBLINK,
     TYPE_FOLDER,
     CLIENT_NAME_CONTENT_EXPLORER,
+    CLIENT_VERSION,
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
@@ -292,6 +293,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             sharedLinkPassword,
             token,
             uploadHost,
+            version: CLIENT_VERSION,
         });
 
         this.id = uniqueid('bce_');
