@@ -64,7 +64,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     isOpen
                     {...props}
                 />
-                ,
             </MemoryRouter>
         );
     };
