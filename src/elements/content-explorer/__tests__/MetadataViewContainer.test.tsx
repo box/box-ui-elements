@@ -34,12 +34,6 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
 
     const mockMetadataTemplateFields: MetadataTemplateField[] = [
         {
-            id: 'field1',
-            key: 'item.name',
-            displayName: 'Name',
-            type: 'string',
-        },
-        {
             id: 'field2',
             key: 'industry',
             displayName: 'Industry',
@@ -96,6 +90,30 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             {
                 textValue: 'Industry',
                 id: 'industry',
+                type: 'string',
+                allowsSorting: true,
+                minWidth: 250,
+                maxWidth: 250,
+            },
+            {
+                textValue: 'Contact Role',
+                id: 'role',
+                type: 'string',
+                allowsSorting: true,
+                minWidth: 250,
+                maxWidth: 250,
+            },
+            {
+                textValue: 'Status',
+                id: 'status',
+                type: 'string',
+                allowsSorting: true,
+                minWidth: 250,
+                maxWidth: 250,
+            },
+            {
+                textValue: 'Price',
+                id: 'price',
                 type: 'string',
                 allowsSorting: true,
                 minWidth: 250,
@@ -264,9 +282,10 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             actionBarProps: { initialFilterValues },
         });
 
-        expect(screen.getByRole('button', { name: 'All Filters 3' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'All Filters 2' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Industry/i })).toHaveTextContent(/\(1\)/);
-        expect(screen.getByRole('button', { name: /Category/i })).toHaveTextContent(/\(2\)/);
+        // Category filter should not be present since there's no corresponding column
+        expect(screen.queryByRole('button', { name: /Category/i })).not.toBeInTheDocument();
     });
 
     test('should handle empty metadata template fields', () => {
@@ -335,12 +354,6 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             ...mockMetadataTemplate,
             fields: [
                 {
-                    id: 'field1',
-                    key: 'name',
-                    displayName: 'File Name',
-                    type: 'string',
-                },
-                {
                     id: 'field2',
                     key: 'industry',
                     displayName: 'Industry',
@@ -350,11 +363,11 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             ],
         };
 
-        renderComponent({ metadataTemplate: templateWithoutOptions });
+        renderComponent({
+            metadataTemplate: templateWithoutOptions,
+        });
 
         expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
-        expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(1); // Only the one added by component
-        expect(screen.getByRole('button', { name: 'File Name' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Industry' })).toBeInTheDocument();
     });
 
@@ -545,5 +558,54 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
                 within(screen.getByRole('dialog')).queryByRole('button', { name: /location/i }),
             ).not.toBeInTheDocument();
         });
+    });
+
+    test('should filter fields based on columns provided', () => {
+        const template: MetadataTemplate = {
+            ...mockMetadataTemplate,
+            fields: [
+                {
+                    id: 'field1',
+                    key: 'status',
+                    displayName: 'Status',
+                    type: 'enum',
+                    options: [
+                        { id: 's1', key: 'Active' },
+                        { id: 's2', key: 'Inactive' },
+                    ],
+                },
+                {
+                    id: 'field2',
+                    key: 'price',
+                    displayName: 'Price',
+                    type: 'float',
+                },
+                {
+                    id: 'field3',
+                    key: 'category',
+                    displayName: 'Category',
+                    type: 'multiSelect',
+                    options: [
+                        { id: 'c1', key: 'tech' },
+                        { id: 'c2', key: 'finance' },
+                    ],
+                },
+            ],
+        };
+
+        // Only provide columns for 'status' and 'price', not 'category'
+        renderComponent({
+            metadataTemplate: template,
+        });
+
+        // Should show filters for fields that have corresponding columns
+        expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Status' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Price' })).toBeInTheDocument();
+
+        // Should NOT show filter for 'category' since there's no corresponding column
+        expect(screen.queryByRole('button', { name: 'Category' })).not.toBeInTheDocument();
+        // Should NOT show filter for 'industry' since it's not in the provided columns
+        expect(screen.queryByRole('button', { name: 'Industry' })).not.toBeInTheDocument();
     });
 });
