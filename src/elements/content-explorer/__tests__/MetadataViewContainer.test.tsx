@@ -9,6 +9,11 @@ import MetadataViewContainer, {
     type ExternalFilterValues,
 } from '../MetadataViewContainer';
 
+Object.defineProperty(Element.prototype, 'scrollTo', {
+    value: jest.fn(),
+    writable: true,
+});
+
 describe('elements/content-explorer/MetadataViewContainer', () => {
     const mockItems = [
         {
@@ -105,7 +110,10 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
         return render(<MetadataViewContainer {...defaultProps} {...props} />);
     };
 
+    let user;
+
     beforeEach(() => {
+        user = userEvent();
         jest.clearAllMocks();
     });
 
@@ -144,11 +152,11 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             onMetadataFilter: jest.fn(),
         });
 
-        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Developer' }));
+        await user.click(screen.getByRole('button', { name: /Contact Role/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Developer' }));
         // Re-open the chip to select a second value (menu closes after submit)
-        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Marketing' }));
+        await user.click(screen.getByRole('button', { name: /Contact Role/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Marketing' }));
 
         await waitFor(() => expect(onFilterSubmit).toHaveBeenCalledTimes(2));
         const firstCall = onFilterSubmit.mock.calls[0][0];
@@ -183,8 +191,8 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             onMetadataFilter,
         });
 
-        await userEvent().click(screen.getByRole('button', { name: /Status/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
+        await user.click(screen.getByRole('button', { name: /Status/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
 
         await waitFor(() => {
             expect(onMetadataFilter).toHaveBeenCalledTimes(1);
@@ -221,8 +229,8 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             onMetadataFilter,
         });
 
-        await userEvent().click(screen.getByRole('button', { name: /Status/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
+        await user.click(screen.getByRole('button', { name: /Status/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
 
         await waitFor(() => {
             expect(onMetadataFilter).toHaveBeenCalledTimes(1);
@@ -382,8 +390,8 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
         });
 
         // Test enum filter
-        await userEvent().click(screen.getByRole('button', { name: /Status/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
+        await user.click(screen.getByRole('button', { name: /Status/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
 
         await waitFor(() => {
             expect(onMetadataFilter).toHaveBeenCalledTimes(1);
@@ -517,6 +525,25 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
 
             expect(result['category-filter'].value).toEqual(['tech', 'finance']);
             expect(result['category-filter'].fieldType).toBe('multiSelect');
+        });
+    });
+
+    describe('predefined filter options', () => {
+        test('should only show metadata template filters in sidepanel', async () => {
+            renderComponent();
+
+            expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
+
+            await user.click(screen.getByRole('button', { name: 'All Filters' }));
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+            expect(within(screen.getByRole('dialog')).getByRole('button', { name: 'File Type' })).toBeInTheDocument();
+
+            // Should NOT show predefined filters that are disabled
+            expect(within(screen.getByRole('dialog')).queryByPlaceholderText('Enter keywords')).not.toBeInTheDocument();
+            expect(
+                within(screen.getByRole('dialog')).queryByRole('button', { name: /location/i }),
+            ).not.toBeInTheDocument();
         });
     });
 });
