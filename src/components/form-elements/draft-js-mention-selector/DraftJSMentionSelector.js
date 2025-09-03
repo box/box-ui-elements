@@ -348,19 +348,37 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @returns {number} The length of the timestamp entity (including the space after it)
      */
     getTimestampLength = (currentContent: any, block: any): number => {
+        if (!block || !currentContent) {
+            return 0;
+        }
         let timestampLength = 0;
+
+        // make sure the first character in the block belongs to a timestamp entity
         const characterList = block.getCharacterList();
+        const firstCharacter = characterList.get(0);
+        const firstCharacterEntity = firstCharacter?.getEntity();
+        const firstCharacterEntityType = firstCharacterEntity
+            ? currentContent.getEntity(firstCharacterEntity).getType()
+            : null;
+        if (firstCharacterEntityType !== UNEDITABLE_TIMESTAMP_TEXT) {
+            return 0;
+        }
+
+        // get the length of the timestamp entity. While the
         for (let i = 0; i < characterList.size; i += 1) {
             const char = characterList.get(i);
             if (char && char.getEntity()) {
                 const entity = currentContent.getEntity(char.getEntity());
                 if (entity.getType() === UNEDITABLE_TIMESTAMP_TEXT) {
-                    timestampLength = i + 1; // Include the space after timestamp
-                    break;
+                    timestampLength = i + 1;
                 }
+            } else {
+                break;
             }
         }
-        return timestampLength;
+
+        // Include the space after the timestamp
+        return timestampLength ? timestampLength + 1 : 0;
     };
 
     /**
@@ -374,12 +392,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const blockKey = selection.getStartKey();
         const block = currentContent.getBlockForKey(blockKey);
         const startOffset = selection.getStartOffset();
-
-        // Find the timestamp length (including the space after it)
         const timestampLength = this.getTimestampLength(currentContent, block);
-
-        // If cursor is positioned before or within the timestamp, move it after
-        if (startOffset < timestampLength) {
+        // If cursor is positioned before the timestamp, move it after
+        if (startOffset === 0 && timestampLength > 0) {
             const newSelection = SelectionState.createEmpty(blockKey).merge({
                 anchorOffset: timestampLength,
                 focusOffset: timestampLength,
