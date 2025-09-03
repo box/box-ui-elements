@@ -1653,7 +1653,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     > => {
         const { metadataViewProps } = this.props;
         const { onSelectionChange } = metadataViewProps ?? {};
-        const { selectedItemIds } = this.state;
+        const { currentPageNumber, markers, selectedItemIds } = this.state;
+        const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
+        const hasPrevMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
         return {
             ...metadataViewProps,
@@ -1665,6 +1667,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                     selectedItemIds: ids,
                     ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
                 });
+            },
+            paginationProps: {
+                onMarkerBasedPageChange: this.markerBasedPaginate,
+                hasNextMarker,
+                hasPrevMarker,
+                type: 'marker',
             },
         };
     };
@@ -1941,7 +1949,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     viewMode={viewMode}
                                 />
 
-                                {!isErrorView && (
+                                {!isErrorView && !isMetadataViewV2Feature && (
                                     <Footer>
                                         <Pagination
                                             hasNextMarker={hasNextMarker}
