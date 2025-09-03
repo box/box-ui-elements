@@ -416,9 +416,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // Check if timestamp entity is still present in the content
         let processedEditorState = nextEditorState;
-        let shouldUpdateTimeStampPrepended = false;
-        let newTimeStampPrepended = timestampPrepended;
-
+        let shouldToggleTimestampPrependedStateOff = false;
+        // Update the timestamp prepended state to false if the timestamp entity is no longer present in the content
+        // This can happen when the user deletes it with the backapsce key. Also ensure that the cursor is after the timestamp if it is present
         if (timestampPrepended) {
             const currentContent = nextEditorState.getCurrentContent();
             const firstBlock = currentContent.getFirstBlock();
@@ -426,8 +426,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             const timestampEntityFound = timestampLength > 0;
             // If timestamp entity is no longer present, update the state
             if (!timestampEntityFound) {
-                newTimeStampPrepended = false;
-                shouldUpdateTimeStampPrepended = true;
+                shouldToggleTimestampPrependedStateOff = true;
             } else {
                 processedEditorState = this.ensureCursorAfterTimestamp(nextEditorState);
             }
@@ -437,13 +436,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         if (internalEditorState) {
             let newState = { internalEditorState: processedEditorState };
-            if (shouldUpdateTimeStampPrepended) {
-                newState = { internalEditorState: processedEditorState, timestampPrepended: newTimeStampPrepended };
+            if (shouldToggleTimestampPrependedStateOff) {
+                newState = { internalEditorState: processedEditorState, timestampPrepended: false };
             }
-
             this.setState(newState);
-        } else if (shouldUpdateTimeStampPrepended) {
-            this.setState({ timestampPrepended: newTimeStampPrepended });
+        } else if (shouldToggleTimestampPrependedStateOff) {
+            this.setState({ timestampPrepended: false });
         }
     };
 

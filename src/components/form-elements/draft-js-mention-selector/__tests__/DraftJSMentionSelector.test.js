@@ -316,6 +316,19 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             spySetState = jest.spyOn(instance, 'setState');
         };
 
+        const setupWithTimestamp = props => {
+            mockOnChange = jest.fn();
+            wrapper = shallow(
+                <DraftJSMentionSelector
+                    {...props}
+                    timestampLabel="Toggle Timestamp"
+                    isRequired={true}
+                    onChange={mockOnChange}
+                />,
+            );
+            instance = wrapper.instance();
+        };
+
         test('should call onChange and setState if internal editor state exists', () => {
             setup({ ...requiredProps });
             const dummyEditorState = EditorState.createEmpty();
@@ -334,6 +347,45 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
             expect(mockOnChange).toHaveBeenCalledWith(dummyEditorState);
             expect(spySetState).not.toHaveBeenCalled();
+        });
+
+        test('should keep timestamp prepended state when content changes but timestamp entity is still present', () => {
+            const dummyEditorState = EditorState.createWithContent(ContentState.createFromText('hello'));
+            // add more text to the editor state
+            setupWithTimestamp({ ...requiredProps });
+            expect(instance.state.timestampPrepended).toEqual(false);
+            // set the timestamp prepended state to true
+            instance.toggleTimeStamp(dummyEditorState, true);
+            expect(instance.state.timestampPrepended).toEqual(true);
+            const editorState = instance.state.internalEditorState;
+            // copy the editor state
+            const newEditorStateWithTimestamp = EditorState.createWithContent(editorState.getCurrentContent());
+
+            instance.handleChange(newEditorStateWithTimestamp);
+            expect(instance.state.timestampPrepended).toEqual(true);
+        });
+
+        test('should update timestamp prepended state to false when content changes and timestamp entity is no longer present', () => {
+            const dummyEditorStateWithoutTimestamp = EditorState.createWithContent(
+                ContentState.createFromText('hello'),
+            );
+            setupWithTimestamp({ ...requiredProps, editorState: dummyEditorStateWithoutTimestamp });
+            instance.toggleTimeStamp(dummyEditorStateWithoutTimestamp, true);
+            // set the timestamp prepended state to true
+            expect(instance.state.timestampPrepended).toEqual(true);
+            instance.handleChange(dummyEditorStateWithoutTimestamp);
+            expect(instance.state.timestampPrepended).toEqual(false);
+        });
+
+        test('should still set timestamp prepended state to false when content changes and no editor state is present', () => {
+            const dummyEditorStateWithoutTimestamp = EditorState.createWithContent(
+                ContentState.createFromText('hello'),
+            );
+            setupWithTimestamp({ ...requiredProps, editorState: dummyEditorStateWithoutTimestamp });
+            instance.toggleTimeStamp(dummyEditorStateWithoutTimestamp, true);
+            instance.setState({ internalEditorState: null });
+            instance.handleChange(dummyEditorStateWithoutTimestamp);
+            expect(instance.state.timestampPrepended).toEqual(false);
         });
     });
 
