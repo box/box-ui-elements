@@ -1419,24 +1419,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@4.61.5":
-  version "4.61.5"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.61.5.tgz#7e2813fc39f8940f63881ed24df1f8509f340c27"
-  integrity sha512-BFQ8ek2y/tPVWuq1tDxPJfuFgLQsYlGxtas5k/bKHDK5XBQrfktPqzusqjif9doVERhB/pKWZ34XMNmjVtzHzA==
+"@box/blueprint-web-assets@^4.65.0":
+  version "4.65.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.65.1.tgz#1b04a960667ff633bec51aab47a22d40834cc37c"
+  integrity sha512-7SrAXmp76TgVAryIgekEhGkToWf6ALD24RxeJWS+NO11fGT0OdLfSM7rs1QvUPQ2IXMe3QRfrK+Mc9kFUEMuOg==
 
-"@box/blueprint-web-assets@^4.60.0":
-  version "4.62.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.62.1.tgz#76e870dfeadf7d985c275c2b1371a3c5af60f0ad"
-  integrity sha512-ftIs27yZhIXsVt/88BR5+j4gxe01/td5o5qDTZpUrvUL1Kr1DTGP71xkZx7Jaor0tazcWZUfibmEfN97KJ2Yyw==
-
-"@box/blueprint-web@12.43.0":
-  version "12.43.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.43.0.tgz#9febd397c1d5d4cfee936dd070a50a0b352eadcc"
-  integrity sha512-PQ3eAwhE+J2XalLIwQ67TKC1wwpszOM+MYYRzv3Xs/occm0uCeS5ry9F8tsA7KTjHsGSlbR4lIlmycKOBIwv5w==
+"@box/blueprint-web@^12.64.2":
+  version "12.64.2"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.64.2.tgz#e0081dc0840e2ffab35a70e3c2d2a86b75574416"
+  integrity sha512-IaYstuyDvcm/FbW6ltyVzQkQJjasjQWUJOH9+wWlvaI+gUO71jLNtgEVwJtPIykXuk53XP3KG/Vii7Am5I17lw==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.60.0"
+    "@box/blueprint-web-assets" "^4.65.0"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
