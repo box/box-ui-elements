@@ -83,9 +83,7 @@ const metadataViewV2WithInlineCustomActionsElementProps = {
     ...metadataViewV2ElementProps,
     metadataViewProps: {
         columns,
-        tableProps: {
-            isSelectAllEnabled: true,
-        },
+        isSelectionEnabled: true,
         itemActionMenuProps: {
             actions: [
                 {
@@ -119,9 +117,7 @@ const metadataViewV2WithBulkItemActions = {
     ],
     metadataViewProps: {
         columns,
-        tableProps: {
-            isSelectAllEnabled: true,
-        },
+        isSelectionEnabled: true,
     },
 };
 
@@ -189,9 +185,7 @@ export const sidePanelOpenWithSingleItemSelected: Story = {
         ...metadataViewV2ElementProps,
         metadataViewProps: {
             columns,
-            tableProps: {
-                isSelectAllEnabled: true,
-            },
+            isSelectionEnabled: true,
         },
     },
     play: async ({ canvas }) => {
@@ -232,9 +226,7 @@ export const sidePanelOpenWithMultipleItemsSelected: Story = {
         ...metadataViewV2ElementProps,
         metadataViewProps: {
             columns,
-            tableProps: {
-                isSelectAllEnabled: true,
-            },
+            isSelectionEnabled: true,
         },
     },
 

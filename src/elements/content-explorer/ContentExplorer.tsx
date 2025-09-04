@@ -1649,23 +1649,19 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     getMetadataViewProps = (): ContentExplorerProps['metadataViewProps'] => {
         const { metadataViewProps } = this.props;
-        const { tableProps } = metadataViewProps ?? {};
-        const { onSelectionChange } = tableProps ?? {};
+        const { onSelectionChange } = metadataViewProps ?? {};
         const { selectedItemIds } = this.state;
 
         return {
             ...metadataViewProps,
-            tableProps: {
-                ...tableProps,
-                selectedKeys: selectedItemIds,
-                onSelectionChange: (ids: Selection) => {
-                    onSelectionChange?.(ids);
-                    const isSelectionEmpty = ids !== 'all' && ids.size === 0;
-                    this.setState({
-                        selectedItemIds: ids,
-                        ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
-                    });
-                },
+            selectedKeys: selectedItemIds,
+            onSelectionChange: (ids: Selection) => {
+                onSelectionChange?.(ids);
+                const isSelectionEmpty = ids !== 'all' && ids.size === 0;
+                this.setState({
+                    selectedItemIds: ids,
+                    ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
+                });
             },
         };
     };
