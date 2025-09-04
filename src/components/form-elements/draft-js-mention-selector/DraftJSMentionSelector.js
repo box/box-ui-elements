@@ -203,8 +203,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         }
 
         // check if the timestamp entity is already present in the content
-        const timestampLength = this.getTimestampLength(currentContent, currentContent.getFirstBlock());
-        const isTimestampEntityPresent = timestampLength > 0;
+        const timestampLengthIncludingSpace = this.getTimestampLength(currentContent, currentContent.getFirstBlock());
+        const isTimestampEntityPresent = timestampLengthIncludingSpace > 0;
         if ((!timestampToggledOn || forceOn) && !isTimestampEntityPresent) {
             // get the current timestamp
             const timestamp = this.getVideoTimestamp();
@@ -226,7 +226,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             // First insert the timestamp text followed by a space
             updatedContent = Modifier.insertText(currentContent, selectionAtStart, `${timestampText} `);
 
-            // Then apply the entity to the inserted text (excluding the space)
+            // Then select the timestamp text not including the space
             const selectionWithTimestamp = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: timestampText.length,
@@ -235,17 +235,17 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             // Get the entity key for the timestamp entity
             const entityKey = timestampEntity.getLastCreatedEntityKey();
 
-            // Apply the timestamp entity to the timestamp text not including the space. This will ensure that the timestamp is uneditable and that
+            // Apply the timestamp entity to selected timestamp text. This will ensure that the timestamp is uneditable and that
             // the decorator will apply the proper styling to the timestamp.
             updatedContent = Modifier.applyEntity(updatedContent, selectionWithTimestamp, entityKey);
 
             newtimestampToggledOn = true;
         } else {
             // Create a selection range for the timestamp text and space so that we know what to remove and
-            // to move it from the beginning of the input box
+            // to move it from the beginning of the input box. This usess the timestsamp length that we calculated earlier.
             const selectionToRemove = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
-                focusOffset: timestampLength,
+                focusOffset: timestampLengthIncludingSpace,
             });
 
             // Remove the timestamp text and space. No need for an entity key because we are not applying any entity to the text.
@@ -254,7 +254,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         }
 
         // Position cursor after the timestamp and space (if adding) or at the beginning (if removing)
-        const cursorOffset = newtimestampToggledOn ? timestampLength : 0;
+        const cursorOffset = newtimestampToggledOn ? timestampLengthIncludingSpace : 0;
         // Create a selection that ensures the cursor is outside any entity. This is important because we want to ensure
         // that the cursor is not inside the timestamp component when if it is displayed
         const finalSelection = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
