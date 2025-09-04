@@ -1614,14 +1614,14 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     getMetadataViewProps = (): ContentExplorerProps['metadataViewProps'] => {
         const { metadataViewProps } = this.props;
-        const { onSelectionChange: onSelectionChangeExternal } = metadataViewProps ?? {};
+        const { onSelectionChange } = metadataViewProps ?? {};
         const { selectedItemIds } = this.state;
 
         return {
             ...metadataViewProps,
             selectedKeys: selectedItemIds,
             onSelectionChange: (ids: Selection) => {
-                onSelectionChangeExternal?.(ids);
+                onSelectionChange?.(ids);
                 const isSelectionEmpty = ids !== 'all' && ids.size === 0;
                 this.setState({
                     selectedItemIds: ids,
