@@ -124,6 +124,20 @@ build_assets() {
     printf "${green}Built locales!${end}"
 }
 
+set_assets_version() {
+    printf "${blue}Setting version in assets...${end}"
+
+    # Replace the version variable in the transpiled output
+    sed "s/__VERSION__/'$VERSION'/g" es/constants.js > es/constants.js.tmp && mv es/constants.js.tmp es/constants.js
+
+    # Replace the version placeholder in the bundled output
+    for file in dist/*.js; do
+        sed "s/0.0.0-semantically-released/$VERSION/g" ${file} > ${file}.tmp && mv ${file}.tmp ${file}
+    done
+
+    printf "${green}Set assets to ${VERSION}!${end}"
+}
+
 push_to_npm() {
     printf "${blue}Publishing assets to npmjs...${end}"
     npm publish --access public --tag "$DIST" || return 1
@@ -250,6 +264,9 @@ push_new_release() {
         printf "${red}No need to run a release!${end}"
         return 0
     fi
+
+    # Set the version in the build assets
+    set_assets_version || return 1
 
     # package.json should be the only updated and uncommitted file
     check_uncommitted_files_ignoring_package_json || return 1
