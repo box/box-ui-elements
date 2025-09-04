@@ -471,9 +471,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const metadataViewV2ElementProps: Partial<ContentExplorerProps> = {
                 metadataViewProps: {
                     columns,
-                    tableProps: {
-                        isSelectAllEnabled: true,
-                    },
+                    isSelectionEnabled: true,
                 },
                 metadataQuery,
                 fieldsToShow,

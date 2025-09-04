@@ -65,9 +65,7 @@ export const metadataView: Story = {
     args: {
         metadataViewProps: {
             columns,
-            tableProps: {
-                isSelectAllEnabled: true,
-            },
+            isSelectionEnabled: true,
         },
         metadataQuery,
         defaultView,
