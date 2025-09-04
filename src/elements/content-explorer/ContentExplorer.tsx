@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
 import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
@@ -423,6 +424,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             markers: cloneMarkers,
             metadataTemplate,
         };
+
+        this.validateSelectedItemIds(metadataQueryCollection.items || []);
 
         // if v2, fetch folder name and add to state
         if (metadataQuery?.ancestor_folder_id && isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
@@ -1011,6 +1014,35 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     }
 
     /**
+     * Validates selectedItemIds to ensure all selected IDs exist in current items
+     * This should be called whenever currentCollection changes
+     *
+     * @private
+     * @param {BoxItem[]} items - current items in the collection
+     * @return {void}
+     */
+    validateSelectedItemIds = (items: BoxItem[]): void => {
+        const { selectedItemIds } = this.state;
+
+        if (selectedItemIds === 'all' || selectedItemIds.size === 0) {
+            // If all/none items are selected, no need to change anything
+            return;
+        }
+
+        const validSelectedIds = new Set<string>();
+
+        items.forEach(item => {
+            if (selectedItemIds.has(item.id)) {
+                validSelectedIds.add(item.id);
+            }
+        });
+
+        if (!isEqual(validSelectedIds, selectedItemIds)) {
+            this.setState({ selectedItemIds: validSelectedIds });
+        }
+    };
+
+    /**
      * Attempts to generate a thumbnail for the given item and assigns the
      * item its thumbnail url if successful
      *
@@ -1046,6 +1078,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const newCollection = { ...currentCollection } as const;
 
         newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
+
+        this.validateSelectedItemIds(newCollection.items);
+
         this.setState({ currentCollection: newCollection });
     };
 
@@ -1696,6 +1731,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             }
             return clonedItem;
         });
+
+        this.validateSelectedItemIds(updatedItems);
 
         this.setState({
             currentCollection: {
