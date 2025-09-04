@@ -118,8 +118,9 @@ describe('elements/common/sub-header/SubHeaderRight', () => {
         );
 
         test('should call onClick when a bulk item action is clicked', async () => {
-            const mockOnClick = jest.fn();
             const user = userEvent();
+            const mockOnClick = jest.fn();
+
             const features = {
                 contentExplorer: {
                     metadataViewV2: true, // enable the feature flag
