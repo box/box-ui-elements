@@ -145,7 +145,7 @@ export interface ContentExplorerProps {
     metadataQuery?: MetadataQuery;
     metadataViewProps?: Omit<
         MetadataViewContainerProps,
-        'hasError' | 'currentCollection' | 'metadataTemplate' | 'onMetadataFilter'
+        'hasError' | 'currentCollection' | 'metadataTemplate' | 'selectedKeys'
     >;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
@@ -1647,7 +1647,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         return maxWidthColumns;
     };
 
-    getMetadataViewProps = (): ContentExplorerProps['metadataViewProps'] => {
+    getMetadataViewProps = (): Omit<
+        MetadataViewContainerProps,
+        'hasError' | 'currentCollection' | 'metadataTemplate'
+    > => {
         const { metadataViewProps } = this.props;
         const { onSelectionChange } = metadataViewProps ?? {};
         const { selectedItemIds } = this.state;

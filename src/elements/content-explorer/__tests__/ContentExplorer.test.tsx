@@ -442,12 +442,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     'name',
                 ],
             };
-            const fieldsToShow = [
-                { key: `${metadataFieldNamePrefix}.name`, canEdit: false, displayName: 'Alias' },
-                { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
-                { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
-                { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
-            ];
+
             const columns = [
                 {
                     // Always include the name column
@@ -472,9 +467,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 metadataViewProps: {
                     columns,
                     isSelectionEnabled: true,
+                    onMetadataFilter: jest.fn(),
                 },
                 metadataQuery,
-                fieldsToShow,
                 defaultView,
                 features: {
                     contentExplorer: {

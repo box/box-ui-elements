@@ -155,6 +155,17 @@ const MetadataViewContainer = ({
         const clonedTemplate = cloneDeep(metadataTemplate);
         let fields = clonedTemplate?.fields || [];
 
+        // Filter fields to only include those that have corresponding columns
+        const columnIds = newColumns.map(col => col.id);
+        fields = fields.filter((field: MetadataTemplateField) => {
+            // For metadata fields, check if the column ID matches the field key
+            // Column IDs for metadata fields are typically in format: metadata.template.fieldKey
+            return columnIds.some(columnId => {
+                const trimmedColumnId = trimMetadataFieldPrefix(columnId);
+                return trimmedColumnId === field.key;
+            });
+        });
+
         // Check if item_name field already exists to avoid duplicates
         const hasItemNameField = fields.some((field: MetadataTemplateField) => field.key === ITEM_FILTER_NAME);
 
@@ -185,7 +196,7 @@ const MetadataViewContainer = ({
                     }) || [],
             },
         ];
-    }, [formatMessage, metadataTemplate]);
+    }, [formatMessage, metadataTemplate, newColumns]);
 
     const initialFilterValues = React.useMemo(
         () => transformInitialFilterValuesToInternal(initialFilterValuesProp),
@@ -202,20 +213,6 @@ const MetadataViewContainer = ({
         },
         [onFilterSubmit, onMetadataFilter],
     );
-
-    const transformedActionBarProps = React.useMemo(() => {
-        return {
-            ...actionBarProps,
-            initialFilterValues,
-            onFilterSubmit: handleFilterSubmit,
-            filterGroups,
-
-            predefinedFilterOptions: {
-                [PredefinedFilterName.KeywordSearchFilterGroup]: { isDisabled: true },
-                [PredefinedFilterName.LocationFilterGroup]: { isDisabled: true },
-            },
-        };
-    }, [actionBarProps, initialFilterValues, handleFilterSubmit, filterGroups]);
 
     // Create a wrapper function that calls both. The wrapper function should follow the signature of onSortChange from RAC
     const handleSortChange = React.useCallback(
@@ -238,6 +235,22 @@ const MetadataViewContainer = ({
         },
         [onSortChangeInternal, tableProps],
     );
+
+    const transformedActionBarProps = React.useMemo(() => {
+        return {
+            ...actionBarProps,
+            initialFilterValues,
+            onFilterSubmit: handleFilterSubmit,
+            filterGroups,
+            sortDropdownProps: {
+                onSortChange: handleSortChange,
+            },
+            predefinedFilterOptions: {
+                [PredefinedFilterName.KeywordSearchFilterGroup]: { isDisabled: true },
+                [PredefinedFilterName.LocationFilterGroup]: { isDisabled: true },
+            },
+        };
+    }, [actionBarProps, initialFilterValues, handleFilterSubmit, handleSortChange, filterGroups]);
 
     // Create new tableProps with our wrapper function
     const newTableProps = {
