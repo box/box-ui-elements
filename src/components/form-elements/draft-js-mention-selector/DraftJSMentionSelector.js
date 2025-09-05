@@ -74,7 +74,7 @@ type State = {
     error: ?Object,
     internalEditorState: ?EditorState,
     isTouched: boolean,
-    timestampToggledOn: boolean,
+    isTimestampToggledOn: boolean,
 };
 
 class DraftJSMentionSelector extends React.Component<Props, State> {
