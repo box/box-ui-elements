@@ -17,6 +17,11 @@ const messages = defineMessages({
         description: 'Message for screenReader users when a certain number of users is being tagged',
         id: 'boxui.draftjs.mentionSelector.usersFound',
     },
+    commentTimestampLabel: {
+        defaultMessage: 'Comment Timestamp',
+        description: 'Label for comment timestamp in the comment form',
+        id: 'boxui.draftjs.mentionSelector.commentTimestampLabel',
+    },
 });
 
 export default messages;
