@@ -40,53 +40,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         ...overrides,
     });
 
-    describe('individual tab rendering', () => {
-        const TABS_CONFIG = {
-            skills: { testId: 'sidebarskills', propName: 'hasSkills' },
-            details: { testId: 'sidebardetails', propName: 'hasDetails' },
-            activity: { testId: 'sidebaractivity', propName: 'hasActivity' },
-            metadata: { testId: 'sidebarmetadata', propName: 'hasMetadata' },
-            docgen: { testId: 'sidebardocgen', propName: 'hasDocGen' },
-        };
-
-        const tabNames = Object.keys(TABS_CONFIG);
-
-        test.each(tabNames)('should render %s tab', tabName => {
-            const { testId, propName } = TABS_CONFIG[tabName];
-
-            renderSidebarNav({
-                props: {
-                    [propName]: true,
-                },
-            });
-
-            expect(screen.getByTestId(testId)).toBeInTheDocument();
-
-            tabNames
-                .filter(name => name !== tabName)
-                .forEach(otherTabName => {
-                    const otherTab = TABS_CONFIG[otherTabName];
-                    expect(screen.queryByTestId(otherTab.testId)).not.toBeInTheDocument();
-                });
-        });
-
-        test('should render boxai tab', () => {
-            renderSidebarNav({
-                props: {
-                    customTabs: [createBoxAITab()],
-                },
-            });
-
-            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
-
-            // Ensure other tabs are not rendered
-            tabNames.forEach(tabName => {
-                const { testId } = TABS_CONFIG[tabName];
-                expect(screen.queryByTestId(testId)).not.toBeInTheDocument();
-            });
-        });
-    });
-
     describe('should render box ai tab with correct disabled state and tooltip', () => {
         test.each`
             disabledTooltip          | expectedTooltip

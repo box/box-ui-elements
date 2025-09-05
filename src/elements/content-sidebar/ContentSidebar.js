@@ -379,9 +379,6 @@ class ContentSidebar extends React.Component<Props, State> {
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
-        
-        // Filter out falsy values from customSidebarPanels array
-        const filteredCustomSidebarPanels = customSidebarPanels ? customSidebarPanels.filter(Boolean) : undefined;
 
         if (!file || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors)) {
             return null;
@@ -398,7 +395,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
-                                customSidebarPanels={filteredCustomSidebarPanels}
+                                customSidebarPanels={customSidebarPanels}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
                                 file={file}

@@ -89,7 +89,7 @@ const SidebarNav = ({
     };
     const boxAiTab = customTabs ? customTabs.find(tab => tab.id === SIDEBAR_VIEW_BOXAI) : undefined;
     const otherCustomTabs = customTabs ? customTabs.filter(tab => tab.id !== SIDEBAR_VIEW_BOXAI) : [];
-    const hasOtherCustomTabs = otherCustomTabs && otherCustomTabs.length > 0;
+    const hasOtherCustomTabs = otherCustomTabs.length > 0;
 
     const sidebarTabs = [
         boxAiTab && (

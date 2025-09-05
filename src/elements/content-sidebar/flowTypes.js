@@ -34,13 +34,13 @@ type AdditionalSidebarTab = {
 };
 
 type CustomSidebarPanel = {
-    id: string, // Unique identifier for the panel
-    path: string, // route path for the panel
-    component: React.ComponentType<any>, // The component to render
-    title: string, // Panel title
-    isDisabled?: boolean, // Whether the panel is disabled (default: false)
-    icon?: React.ComponentType<any> | React.Element<any>, // Optional icon for the nav button
-    navButtonProps?: Object, // Additional props for the nav button
+    id: string,
+    path: string,
+    component: React.ComponentType<any>,
+    title: string,
+    isDisabled?: boolean,
+    icon?: React.ComponentType<any> | React.Element<any>,
+    navButtonProps?: Object,
 };
 
 type CustomSidebarPanels = Array<CustomSidebarPanel>;

@@ -245,17 +245,10 @@ class SidebarPanels extends React.Component<Props, State> {
         const otherCustomPanels = customPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI);
         const otherCustomPanelPaths = otherCustomPanels.map(panel => panel.path);
 
-        if (boxAiCustomPanel) {
-            // special case for box-ai custom panel
-            const boxAiCustomPanelPath = boxAiCustomPanel.path;
-            return shouldBoxAIBeDefaultPanel
-                ? // if box-ai is default panel, put it at the top
-                  [boxAiCustomPanelPath, ...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths]
-                : // if box-ai is not default panel, put it at the bottom
-                  [...DEFAULT_SIDEBAR_VIEWS, boxAiCustomPanelPath, ...otherCustomPanelPaths];
+        if (boxAiCustomPanel && shouldBoxAIBeDefaultPanel) {
+            return [boxAiCustomPanel.path, ...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths];
         }
 
-        // No box-ai panel, but there are other custom panels - add them at the bottom
         return [...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths];
     };
 
@@ -339,8 +332,8 @@ class SidebarPanels extends React.Component<Props, State> {
                             component: CustomPanelComponent,
                             isDisabled,
                         } = customPanel;
-                        // Guard clause: return early if panel is disabled
-                        if (isDisabled) {
+
+                        if (isDisabled || !CustomPanelComponent) {
                             return null;
                         }
 
