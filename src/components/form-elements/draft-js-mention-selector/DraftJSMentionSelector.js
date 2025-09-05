@@ -149,7 +149,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             this.props.isRequired !== prevProps.isRequired &&
             this.props.isRequired === true
         ) {
-            this.toggleTimeStamp(currentEditorState, true);
+            this.toggleTimestamp(currentEditorState, true);
         }
     }
 
@@ -189,7 +189,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         return newState;
     }
 
-    toggleTimeStamp = (editorState: ?EditorState, forceOn: boolean = false) => {
+    toggleTimestamp = (editorState: ?EditorState, forceOn: boolean = false) => {
         if (!editorState) return;
         const currentContent = editorState.getCurrentContent();
 
@@ -485,7 +485,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             timestampLabel,
         } = this.props;
         const { contacts, internalEditorState, error, timestampToggledOn } = this.state;
-        const { handleBlur, handleChange, handleFocus, toggleTimeStamp } = this;
+        const { handleBlur, handleChange, handleFocus, toggleTimestamp } = this;
         const rawEditorState: EditorState = internalEditorState || externalEditorState;
         const editorState: EditorState = this.getEditorStateWithDecorator(rawEditorState);
 
@@ -523,7 +523,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                             className="bcs-CommentTimestamp-toggle"
                             label={timestampLabel}
                             isOn={timestampToggledOn}
-                            onChange={() => toggleTimeStamp(editorState)}
+                            onChange={() => toggleTimestamp(editorState)}
                         />
                     )}
                 </FormInput>

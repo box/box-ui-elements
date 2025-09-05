@@ -355,7 +355,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             setupWithTimestamp({ ...requiredProps });
             expect(instance.state.timestampToggledOn).toEqual(false);
             // set the timestamp prepended state to true
-            instance.toggleTimeStamp(dummyEditorState, true);
+            instance.toggleTimestamp(dummyEditorState, true);
             expect(instance.state.timestampToggledOn).toEqual(true);
             const editorState = instance.state.internalEditorState;
             // copy the editor state
@@ -370,7 +370,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                 ContentState.createFromText('hello'),
             );
             setupWithTimestamp({ ...requiredProps, editorState: dummyEditorStateWithoutTimestamp });
-            instance.toggleTimeStamp(dummyEditorStateWithoutTimestamp, true);
+            instance.toggleTimestamp(dummyEditorStateWithoutTimestamp, true);
             // set the timestamp prepended state to true
             expect(instance.state.timestampToggledOn).toEqual(true);
             instance.handleChange(dummyEditorStateWithoutTimestamp);
@@ -382,7 +382,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                 ContentState.createFromText('hello'),
             );
             setupWithTimestamp({ ...requiredProps, editorState: dummyEditorStateWithoutTimestamp });
-            instance.toggleTimeStamp(dummyEditorStateWithoutTimestamp, true);
+            instance.toggleTimestamp(dummyEditorStateWithoutTimestamp, true);
             instance.setState({ internalEditorState: null });
             instance.handleChange(dummyEditorStateWithoutTimestamp);
             expect(instance.state.timestampToggledOn).toEqual(false);
@@ -513,7 +513,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
     });
     describe('video timestamp toggle', () => {
-        const getTimeStampedEnableComponent = () => {
+        const getTimestampedEnableComponent = () => {
             const props = { ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true };
             return shallow(<DraftJSMentionSelector {...props} />);
         };
@@ -533,7 +533,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should add timestamp to the editor state when the toggle is clicked', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
@@ -541,7 +541,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should remove timestamp from the editor state when the toggle is clicked off', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
@@ -551,7 +551,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should add timestamp to the beginning of the editor state when the toggle is clicked on', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
@@ -563,7 +563,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should remove timestamp from the beginning of the editor state when the toggle is clicked off', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
@@ -575,7 +575,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should add an UNEDITABLE_TIMESTAMP_TEXT entity to the editor state when the toggle is clicked on', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
@@ -588,7 +588,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should remove the UNEDITABLE_TIMESTAMP_TEXT entity from the editor state when the toggle is clicked off', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
@@ -600,7 +600,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('decorator should recognize the UNEDITABLE_TIMESTAMP_TEXT entity', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             expect(instance.compositeDecorator).toBeDefined();
             expect(typeof instance.compositeDecorator.getDecorations).toBe('function');
@@ -630,7 +630,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should set toggle state to off when all content is deleted from the editor and a timestamp was present', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
 
             // Set up initial content with timestamp
@@ -651,7 +651,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should handle mantain content when timetamp is removed', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
 
             // Set up initial content with timestamp
@@ -674,7 +674,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should handle backspace deletion of timestamp by user', () => {
-            const wrapper = getTimeStampedEnableComponent();
+            const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
 
             // Set up initial content with timestamp
