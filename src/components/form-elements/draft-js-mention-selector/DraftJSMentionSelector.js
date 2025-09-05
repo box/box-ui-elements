@@ -109,7 +109,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             isTouched: false,
             internalEditorState: props.editorState ? null : EditorState.createEmpty(this.compositeDecorator),
             error: null,
-            timestampToggledOn: false,
+            isTimestampToggledOn: false,
         };
     }
 
@@ -194,18 +194,18 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const currentContent = editorState.getCurrentContent();
 
         let updatedContent;
-        let newtimestampToggledOn;
-        const { timestampToggledOn } = this.state;
+        let newIsTimestampToggledOn;
+        const { isTimestampToggledOn } = this.state;
 
         // If timestamp is already prepended and forceOn is true, do not toggle it.
-        if (timestampToggledOn && forceOn) {
+        if (isTimestampToggledOn && forceOn) {
             return;
         }
 
         // check if the timestamp entity is already present in the content
         const timestampLengthIncludingSpace = this.getTimestampLength(currentContent, currentContent.getFirstBlock());
         const isTimestampEntityPresent = timestampLengthIncludingSpace > 0;
-        if ((!timestampToggledOn || forceOn) && !isTimestampEntityPresent) {
+        if ((!isTimestampToggledOn || forceOn) && !isTimestampEntityPresent) {
             // get the current timestamp
             const timestamp = this.getVideoTimestamp();
             const timestampText = `${timestamp}`;
@@ -239,7 +239,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             // the decorator will apply the proper styling to the timestamp.
             updatedContent = Modifier.applyEntity(updatedContent, selectionWithTimestamp, entityKey);
 
-            newtimestampToggledOn = true;
+            newIsTimestampToggledOn = true;
         } else {
             // Create a selection range for the timestamp text and space so that we know what to remove and
             // to move it from the beginning of the input box. This usess the timestsamp length that we calculated earlier.
@@ -250,11 +250,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
             // Remove the timestamp text and space. No need for an entity key because we are not applying any entity to the text.
             updatedContent = Modifier.replaceText(currentContent, selectionToRemove, '');
-            newtimestampToggledOn = false;
+            newIsTimestampToggledOn = false;
         }
 
         // Position cursor after the timestamp and space (if adding) or at the beginning (if removing)
-        const cursorOffset = newtimestampToggledOn ? timestampLengthIncludingSpace : 0;
+        const cursorOffset = newIsTimestampToggledOn ? timestampLengthIncludingSpace : 0;
         // Create a selection that ensures the cursor is outside any entity. This is important because we want to ensure
         // that the cursor is not inside the timestamp component when if it is displayed
         const finalSelection = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
@@ -269,7 +269,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // Update state with new timestamp status
         this.setState({
-            timestampToggledOn: newtimestampToggledOn,
+            isTimestampToggledOn: newIsTimestampToggledOn,
         });
 
         // handle the change in the editor state
@@ -400,7 +400,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @returns {void}
      */
     handleChange = (nextEditorState: EditorState) => {
-        const { internalEditorState, timestampToggledOn }: State = this.state;
+        const { internalEditorState, isTimestampToggledOn }: State = this.state;
         const { onChange }: Props = this.props;
 
         // Check if timestamp entity is still present in the content
@@ -408,7 +408,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         let shouldToggletimestampToggledOnStateOff = false;
         // Update the timestamp prepended state to false if the timestamp entity is no longer present in the content
         // This can happen when the user deletes it with the backapsce key. Also ensure that the cursor is after the timestamp if it is present
-        if (timestampToggledOn) {
+        if (isTimestampToggledOn) {
             const currentContent = nextEditorState.getCurrentContent();
             const firstBlock = currentContent.getFirstBlock();
             const timestampLength = this.getTimestampLength(currentContent, firstBlock);
@@ -426,11 +426,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         if (internalEditorState) {
             let newState = { internalEditorState: processedEditorState };
             if (shouldToggletimestampToggledOnStateOff) {
-                newState = { internalEditorState: processedEditorState, timestampToggledOn: false };
+                newState = { internalEditorState: processedEditorState, isTimestampToggledOn: false };
             }
             this.setState(newState);
         } else if (shouldToggletimestampToggledOnStateOff) {
-            this.setState({ timestampToggledOn: false });
+            this.setState({ isTimestampToggledOn: false });
         }
     };
 
@@ -484,7 +484,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             onReturn,
             timestampLabel,
         } = this.props;
-        const { contacts, internalEditorState, error, timestampToggledOn } = this.state;
+        const { contacts, internalEditorState, error, isTimestampToggledOn: timestampToggledOn } = this.state;
         const { handleBlur, handleChange, handleFocus, toggleTimestamp } = this;
         const rawEditorState: EditorState = internalEditorState || externalEditorState;
         const editorState: EditorState = this.getEditorStateWithDecorator(rawEditorState);
