@@ -121,8 +121,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     componentDidUpdate(prevProps: Props, prevState: State) {
         const { internalEditorState: prevInternalEditorState } = prevState;
         const { internalEditorState } = this.state;
-        const { editorState: prevEditorStateFromProps } = prevProps;
-        const { editorState } = this.props;
+        const { editorState: prevEditorStateFromProps, isRequired: prevIsRequiredFromProps } = prevProps;
+        const { editorState, timestampLabel, isRequired } = this.props;
 
         // Determine whether we're working with the internal editor state or
         // external editor state passed in from props
@@ -144,11 +144,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // If timestamplabel is set and isRequired is true then force the timestamp
         // to be added to the editor state as that is the specified default behavior for video comments
-        if (
-            this.props.timestampLabel &&
-            this.props.isRequired !== prevProps.isRequired &&
-            this.props.isRequired === true
-        ) {
+        if (timestampLabel && isRequired !== prevIsRequiredFromProps && isRequired === true) {
             this.toggleTimestamp(currentEditorState, true);
         }
     }
