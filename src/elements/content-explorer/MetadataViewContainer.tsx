@@ -8,6 +8,7 @@ import {
     RangeType,
 } from '@box/metadata-filter';
 import {
+    IconColumnVariant,
     MetadataView,
     PredefinedFilterName,
     type FilterValues,
@@ -255,6 +256,7 @@ const MetadataViewContainer = ({
     // Create new tableProps with our wrapper function
     const newTableProps = {
         ...tableProps,
+        iconColumnVariant: IconColumnVariant.INLINE,
         onSortChange: handleSortChange,
     };
 
