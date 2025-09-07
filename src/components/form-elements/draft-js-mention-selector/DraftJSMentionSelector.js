@@ -142,6 +142,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             }
         }
 
+        // if isRequired is false then the comment box will be closed and we want
+        // to make sure that isTimestampToggledOn is alawys set to false in this casee
+        if (isRequired !== prevIsRequiredFromProps && isRequired === false) {
+            this.setState({ isTimestampToggledOn: false });
+        }
+
         // If timestamplabel is set and isRequired is true then force the timestamp
         // to be added to the editor state as that is the specified default behavior for video comments
         if (timestampLabel && isRequired !== prevIsRequiredFromProps && isRequired === true) {
@@ -252,7 +258,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         // Position cursor after the timestamp and space (if adding) or at the beginning (if removing)
         const cursorOffset = newIsTimestampToggledOn ? timestampLengthIncludingSpace : 0;
         // Create a selection that ensures the cursor is outside any entity. This is important because we want to ensure
-        // that the cursor is not inside the timestamp component when if it is displayed
+        // that the cursor is not inside the timestamp component when it is displayed
         const finalSelection = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
             anchorOffset: cursorOffset,
             focusOffset: cursorOffset,
@@ -400,10 +406,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { onChange }: Props = this.props;
 
         // Check if timestamp entity is still present in the content
-        let processedEditorState = nextEditorState;
-        let shouldToggletimestampToggledOnStateOff = false;
-        // Update the timestamp prepended state to false if the timestamp entity is no longer present in the content
-        // This can happen when the user deletes it with the backapsce key. Also ensure that the cursor is after the timestamp if it is present
+        // Update the timestamp prepended state to false if the timestamp entity is no longer present in the editor content
+        // This can happen when the user deletes it with the backspace key.
         if (isTimestampToggledOn) {
             const currentContent = nextEditorState.getCurrentContent();
             const firstBlock = currentContent.getFirstBlock();
@@ -411,22 +415,23 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             const timestampEntityFound = timestampLength > 0;
             // If timestamp entity is no longer present, update the state
             if (!timestampEntityFound) {
-                shouldToggletimestampToggledOnStateOff = true;
+                this.setState({ isTimestampToggledOn: false });
             } else {
-                processedEditorState = this.ensureCursorAfterTimestamp(nextEditorState);
+                // check if the timestamp entity is at the beginning of the content, if not do not update the editor state.
+                // This is to prevent the user from inserting text before the timestamp entity
+                const characterList = firstBlock.getCharacterList();
+                const firstChar = characterList.get(0);
+                if (firstChar && !firstChar.getEntity()) {
+                    return;
+                }
             }
         }
 
-        onChange(processedEditorState);
+        onChange(nextEditorState);
 
         if (internalEditorState) {
-            let newState = { internalEditorState: processedEditorState };
-            if (shouldToggletimestampToggledOnStateOff) {
-                newState = { internalEditorState: processedEditorState, isTimestampToggledOn: false };
-            }
+            const newState = { internalEditorState: nextEditorState };
             this.setState(newState);
-        } else if (shouldToggletimestampToggledOnStateOff) {
-            this.setState({ isTimestampToggledOn: false });
         }
     };
 
