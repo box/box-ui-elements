@@ -95,10 +95,10 @@ const SidebarNav = ({
         boxAiTab && (
             <SidebarNavButton
                 key={boxAiTab.id}
-                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                 data-target-id={`SidebarNavButton-${boxAiTab.id}`}
                 data-testid={`sidebar${boxAiTab.id}`}
                 {...boxAiTab.navButtonProps}
+                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                 isDisabled={boxAiTab.isDisabled}
                 onClick={handleSidebarNavButtonClick}
                 sidebarView={boxAiTab.path}

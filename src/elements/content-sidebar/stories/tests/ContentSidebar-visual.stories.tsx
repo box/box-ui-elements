@@ -1,8 +1,9 @@
-import ContentSidebar from '../../ContentSidebar';
+import type { StoryObj } from '@storybook/react';
+import ContentSidebarComponent from '../../ContentSidebar';
 
 export default {
     title: 'Elements/ContentSidebar/tests/visual-regression-tests',
-    component: ContentSidebar,
+    component: ContentSidebarComponent,
     args: {
         detailsSidebarProps: {
             hasProperties: true,
@@ -27,7 +28,7 @@ export const Modernization = {
     },
 };
 
-export const ContentSidebarWithBoxAIDisabled = {
+export const ContentSidebar: StoryObj<typeof ContentSidebarComponent> = {
     args: {
         features: {
             ...global.FEATURE_FLAGS,

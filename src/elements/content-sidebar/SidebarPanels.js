@@ -249,7 +249,7 @@ class SidebarPanels extends React.Component<Props, State> {
             return [boxAiCustomPanel.path, ...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths];
         }
 
-        return [...DEFAULT_SIDEBAR_VIEWS, ...otherCustomPanelPaths];
+        return [...DEFAULT_SIDEBAR_VIEWS, ...customPanels.map(panel => panel.path)];
     };
 
     render() {
