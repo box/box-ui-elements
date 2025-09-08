@@ -122,7 +122,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { internalEditorState: prevInternalEditorState } = prevState;
         const { internalEditorState } = this.state;
         const { editorState: prevEditorStateFromProps, isRequired: prevIsRequiredFromProps } = prevProps;
-        const { editorState, timestampLabel, isRequired } = this.props;
+        const { editorState, isRequired } = this.props;
 
         // Determine whether we're working with the internal editor state or
         // external editor state passed in from props
@@ -144,16 +144,21 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // if isRequired is false then the comment box will be closed and we want
         // to make sure that isTimestampToggledOn is alawys set to false in this casee
-        if (isRequired !== prevIsRequiredFromProps && isRequired === false) {
+        if (this.getIsVideoTimestampEnabled() && isRequired !== prevIsRequiredFromProps && isRequired === false) {
             this.setState({ isTimestampToggledOn: false });
         }
 
         // If timestamplabel is set and isRequired is true then force the timestamp
         // to be added to the editor state as that is the specified default behavior for video comments
-        if (timestampLabel && isRequired !== prevIsRequiredFromProps && isRequired === true) {
+        if (this.getIsVideoTimestampEnabled() && isRequired !== prevIsRequiredFromProps && isRequired === true) {
             this.toggleTimestamp(currentEditorState, true);
         }
     }
+
+    getIsVideoTimestampEnabled = () => {
+        const { timestampLabel } = this.props;
+        return timestampLabel !== undefined && timestampLabel !== null && timestampLabel.trim() !== '';
+    };
 
     // Ensure external editor state has the decorator applied
     getEditorStateWithDecorator(editorState: EditorState): EditorState {
@@ -204,9 +209,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             return;
         }
 
-        // check if the timestamp entity is already present in the content
         const timestampLengthIncludingSpace = this.getTimestampLength(currentContent, currentContent.getFirstBlock());
         const isTimestampEntityPresent = timestampLengthIncludingSpace > 0;
+
+        // check if we need to toggle the timestamp on and that the timestamp entity is nove already present in the content
         if ((!isTimestampToggledOn || forceOn) && !isTimestampEntityPresent) {
             // get the current timestamp
             const timestamp = this.getVideoTimestamp();
@@ -244,7 +250,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             newIsTimestampToggledOn = true;
         } else {
             // Create a selection range for the timestamp text and space so that we know what to remove and
-            // to move it from the beginning of the input box. This usess the timestsamp length that we calculated earlier.
+            // remove it from the beginning of the input box. This usess the timestsamp length that we calculated earlier.
             const selectionToRemove = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: timestampLengthIncludingSpace,
@@ -358,7 +364,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         let timestampLength = 0;
         const characterList = block.getCharacterList();
 
-        // get the length of the timestamp entity. While the
+        // get the length of the timestamp entity. This will include the space after the timestamp.
         for (let i = 0; i < characterList.size; i += 1) {
             const char = characterList.get(i);
             if (char && char.getEntity()) {
@@ -373,30 +379,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     };
 
     /**
-     * Ensures cursor is never positioned before the timestamp entity
-     * @param {EditorState} editorState The editor state to process
-     * @returns {EditorState} The processed editor state with corrected cursor position
-     */
-    ensureCursorAfterTimestamp = (editorState: EditorState): EditorState => {
-        const currentContent = editorState.getCurrentContent();
-        const selection = editorState.getSelection();
-        const blockKey = selection.getStartKey();
-        const block = currentContent.getBlockForKey(blockKey);
-        const startOffset = selection.getStartOffset();
-        const timestampLength = this.getTimestampLength(currentContent, block);
-        // If cursor is positioned before the timestamp, move it after
-        if (startOffset === 0 && timestampLength > 0) {
-            const newSelection = SelectionState.createEmpty(blockKey).merge({
-                anchorOffset: timestampLength,
-                focusOffset: timestampLength,
-            });
-            return EditorState.forceSelection(editorState, newSelection);
-        }
-
-        return editorState;
-    };
-
-    /**
      * Updates editorState, rechecks validity
      * @param {EditorState} nextEditorState The new editor state to set in the state
      * @returns {void}
@@ -405,10 +387,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { internalEditorState, isTimestampToggledOn }: State = this.state;
         const { onChange }: Props = this.props;
 
-        // Check if timestamp entity is still present in the content
+        // Check if timestamp entity is still present in the content if video timestamping is enabled.
         // Update the timestamp prepended state to false if the timestamp entity is no longer present in the editor content
         // This can happen when the user deletes it with the backspace key.
-        if (isTimestampToggledOn) {
+        if (this.getIsVideoTimestampEnabled() && isTimestampToggledOn) {
             const currentContent = nextEditorState.getCurrentContent();
             const firstBlock = currentContent.getFirstBlock();
             const timestampLength = this.getTimestampLength(currentContent, firstBlock);
@@ -417,8 +399,8 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             if (!timestampEntityFound) {
                 this.setState({ isTimestampToggledOn: false });
             } else {
-                // check if the timestamp entity is at the beginning of the content, if not do not update the editor state.
-                // This is to prevent the user from inserting text before the timestamp entity
+                // Check if the timestamp entity is at the beginning of the content, if not do not update the editor state.
+                // This is to prevent the user from inserting text before the timestamp entity.
                 const characterList = firstBlock.getCharacterList();
                 const firstChar = characterList.get(0);
                 if (firstChar && !firstChar.getEntity()) {
@@ -519,7 +501,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         startMentionMessage={startMentionMessage}
                     />
 
-                    {isRequired && timestampLabel && (
+                    {isRequired && this.getIsVideoTimestampEnabled() && (
                         <Toggle
                             className="bcs-CommentTimestamp-toggle"
                             label={timestampLabel}
