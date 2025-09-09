@@ -20,8 +20,8 @@
 }
 
 .bdl-Classification-appliedByAiDetails {
-    margin-bottom: 20px;
-    margin-top: 3px;
+    margin-bottom: var(--space-5);
+    margin-top: var(--space-05);
 
     &.bdl-AppliedByAiClassificationReason {
         padding: var(--space-3);

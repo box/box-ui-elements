@@ -92,7 +92,7 @@ describe('features/classification/Classification', () => {
                 name: classificationLabelName,
                 definition,
                 messageStyle,
-                onClick: () => {},
+                onClick: jest.fn(),
             });
 
             const buttonElement = screen.getByRole('button', { name: classificationLabelName });
