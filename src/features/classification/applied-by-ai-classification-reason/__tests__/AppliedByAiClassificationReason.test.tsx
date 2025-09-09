@@ -5,7 +5,7 @@ import AppliedByAiClassificationReason from '../AppliedByAiClassificationReason'
 
 import messages from '../messages';
 
-describe('AppliedByAiClassificationReason', () => {
+describe('features/classification/applied-by-ai-classification-reason/AppliedByAiClassificationReason', () => {
     let defaultProps;
     let modifiedAtDisplayDate;
 

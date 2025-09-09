@@ -73,7 +73,7 @@ const Classification = ({
     const isModifiedMessageVisible =
         isClassified && hasModifiedAt && isValidDate(modifiedDate) && hasModifiedBy && messageStyle === STYLE_INLINE;
     const hasAiClassificationReason =
-        messageStyle === STYLE_INLINE && isClassified && (isLoadingAppliedBy || aiClassificationReason);
+        messageStyle === STYLE_INLINE && isClassified && (isLoadingAppliedBy || Boolean(aiClassificationReason));
     const shouldRenderModificationDetails = isModifiedMessageVisible || hasAiClassificationReason;
 
     const formattedModifiedAt = isModifiedMessageVisible && (
@@ -82,7 +82,8 @@ const Classification = ({
 
     const modifiedByMessage = isImportedClassification ? messages.importedBy : messages.modifiedBy;
 
-    const modificationTitleLabel = shouldUseAppliedByLabels ? messages.appliedByTitle : messages.modifiedByLabel;
+    const modificationTitleLabel =
+        shouldUseAppliedByLabels || hasAiClassificationReason ? messages.appliedByTitle : messages.modifiedByLabel;
 
     const modifiedByDetails = shouldUseAppliedByLabels ? (
         <FormattedMessage

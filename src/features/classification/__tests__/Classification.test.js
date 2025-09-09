@@ -31,7 +31,7 @@ describe('features/classification/Classification', () => {
     test('should render a classified badge with definition for inline message style', () => {
         renderComponent();
 
-        const badgeHeading = screen.getByRole('heading', { name: classificationLabelName });
+        const badgeHeading = screen.getByRole('heading', { level: 1, name: classificationLabelName });
         const definitionLabel = screen.getByText(messages.definition.defaultMessage);
         const definitionDetail = screen.getByText(definition);
 
@@ -45,7 +45,7 @@ describe('features/classification/Classification', () => {
             definition: undefined,
         });
 
-        const badgeHeading = screen.getByRole('heading', { name: classificationLabelName });
+        const badgeHeading = screen.getByRole('heading', { level: 1, name: classificationLabelName });
         const definitionText = screen.queryByText(messages.definition.defaultMessage);
 
         expect(badgeHeading).toBeVisible();
@@ -53,18 +53,12 @@ describe('features/classification/Classification', () => {
     });
 
     test('should not render any elements when classification does not exist for tooltip message style', () => {
-        renderComponent({
+        const { container } = renderComponent({
             name: undefined,
             messageStyle: 'tooltip',
         });
 
-        const badgeHeading = screen.queryByRole('heading', { name: classificationLabelName });
-        const definitionText = screen.queryByText(messages.definition.defaultMessage);
-        const missingText = screen.queryByText(messages.missing.defaultMessage);
-
-        expect(badgeHeading).not.toBeInTheDocument();
-        expect(definitionText).not.toBeInTheDocument();
-        expect(missingText).not.toBeInTheDocument();
+        expect(container.firstChild).toBeEmptyDOMElement();
     });
 
     test('should render not classified message when there is no classification for inline message style', () => {
@@ -84,7 +78,7 @@ describe('features/classification/Classification', () => {
             messageStyle: 'tooltip',
         });
 
-        const badgeHeading = screen.getByRole('heading', { name: classificationLabelName });
+        const badgeHeading = screen.getByRole('heading', { level: 1, name: classificationLabelName });
         const definitionLabel = screen.queryByText(messages.definition.defaultMessage);
 
         expect(badgeHeading).toBeVisible();
@@ -133,7 +127,7 @@ describe('features/classification/Classification', () => {
         ${false}                 | ${'Applied by TestUser on January 15, 2024'}
         ${true}                  | ${'Imported from TestUser on January 15, 2024'}
     `(
-        `should render classification last modified plaintext details as $expectedMessageText when provided
+        `should render classification last modified plaintext details as "$expectedMessageText" when provided
         modified props and isImportedClassification $isImportedClassification for inline message style`,
         ({ isImportedClassification, expectedMessageText }) => {
             renderComponent({
@@ -240,7 +234,7 @@ describe('features/classification/Classification', () => {
     });
 
     test.each([true, false, undefined])(
-        'should render AI reasoning when provided aiClassificationReason prop regardless of shouldUseAppliedByLabels value: %s',
+        'should render AI reasoning with expected label when provided aiClassificationReason prop regardless of shouldUseAppliedByLabels value: %s',
         shouldUseAppliedByLabels => {
             const expectedCitationsCount = 5;
             const expectedCitations = Array.from({ length: expectedCitationsCount }, () => ({
@@ -264,6 +258,7 @@ describe('features/classification/Classification', () => {
             });
 
             const boxAiIcon = screen.getByTestId('box-ai-icon');
+            const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
             const appliedByDetails = screen.getByText('Box AI on January 15, 2024'); // expected text based on provided mocks
             const reasonText = screen.getByText(aiClassificationReason.answer);
             const citationsLabel = screen.queryByTestId('content-answers-references-label');
@@ -271,6 +266,7 @@ describe('features/classification/Classification', () => {
             const modifiedByPlaintext = screen.queryByTestId('classification-modifiedby');
 
             expect(boxAiIcon).toBeVisible();
+            expect(appliedByTitle).toBeVisible();
             expect(appliedByDetails).toBeVisible();
             expect(reasonText).toBeVisible();
             expect(citationsLabel).toBeVisible();
@@ -326,41 +322,16 @@ describe('features/classification/Classification', () => {
         expect(importedDetailText).not.toBeInTheDocument();
     });
 
-    test('should not render modification details when modifiedAt is invalid date', () => {
+    test.each`
+        testDescription                      | modifiedAt        | modifiedBy
+        ${'when modifiedAt is invalid date'} | ${'invalid-date'} | ${modifiedBy}
+        ${'when modifiedAt is empty string'} | ${''}             | ${modifiedBy}
+        ${'when modifiedBy is not provided'} | ${modifiedAt}     | ${undefined}
+        ${'when modifiedAt is not provided'} | ${undefined}      | ${modifiedBy}
+    `('should not render modification details $testDescription', ({ modifiedAtParam, modifiedByParam }) => {
         renderComponent({
-            modifiedAt: 'invalid-date',
-            modifiedBy,
-        });
-
-        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
-
-        expect(modifiedByDetailsSection).not.toBeInTheDocument();
-    });
-
-    test('should not render modification details when modifiedAt is empty string', () => {
-        renderComponent({
-            modifiedAt: '',
-            modifiedBy,
-        });
-
-        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
-
-        expect(modifiedByDetailsSection).not.toBeInTheDocument();
-    });
-
-    test('should not render modification details when modifiedBy is not provided', () => {
-        renderComponent({
-            modifiedAt,
-        });
-
-        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
-
-        expect(modifiedByDetailsSection).not.toBeInTheDocument();
-    });
-
-    test('should not render modification details when modifiedAt is not provided', () => {
-        renderComponent({
-            modifiedBy,
+            modifiedAt: modifiedAtParam,
+            modifiedBy: modifiedByParam,
         });
 
         const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
@@ -392,13 +363,15 @@ describe('features/classification/Classification', () => {
         });
 
         const loadingIndicators = document.querySelectorAll('.crawler');
-        const modifiedByClassificationLabel = screen.getByText(messages.modifiedByLabel.defaultMessage);
+        const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
+        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel.defaultMessage);
 
         expect(loadingIndicators).toHaveLength(1);
         expect(loadingIndicators[0]).toBeVisible();
+        expect(appliedByTitle).toBeVisible();
 
-        // Assert the non-applied by label is used when the prop is not set
-        expect(modifiedByClassificationLabel).toBeVisible();
+        // Assert the non-applied by label is not used applied by is being loaded
+        expect(modifiedByClassificationLabel).not.toBeInTheDocument();
     });
 
     test('should not render loading indicator for applied by when item is not classified', () => {

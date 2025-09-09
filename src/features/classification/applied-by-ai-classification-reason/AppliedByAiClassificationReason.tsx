@@ -1,9 +1,10 @@
 import React from 'react';
+import { FormattedDate, FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
 import { AnswerContent, References } from '@box/box-ai-content-answers';
 import { Card, Text, TooltipProvider } from '@box/blueprint-web';
 import BoxAIIconColor from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
-import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import { isValidDate } from '../../../utils/datetime';
 import type { AiClassificationReason } from '../types';
@@ -31,7 +32,7 @@ const AppliedByAiClassificationReason = ({
 
     return (
         <TooltipProvider>
-            <Card className={`AppliedByAiClassificationReason ${className}`}>
+            <Card className={classNames('bdl-IconSecurityClassification', className)}>
                 <h3 className="AppliedByAiClassificationReason-header">
                     <BoxAIIconColor data-testid="box-ai-icon" height={Size5} width={Size5} />
                     <Text
