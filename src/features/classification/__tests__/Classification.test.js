@@ -323,7 +323,7 @@ describe('features/classification/Classification', () => {
     });
 
     test.each`
-        testDescription                      | modifiedAt        | modifiedBy
+        testDescription                      | modifiedAtParam   | modifiedByParam
         ${'when modifiedAt is invalid date'} | ${'invalid-date'} | ${modifiedBy}
         ${'when modifiedAt is empty string'} | ${''}             | ${modifiedBy}
         ${'when modifiedBy is not provided'} | ${modifiedAt}     | ${undefined}
