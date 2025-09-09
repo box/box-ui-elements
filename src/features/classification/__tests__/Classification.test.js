@@ -291,7 +291,7 @@ describe('features/classification/Classification', () => {
         const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
         const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
         const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
-        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel);
+        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel.defaultMessage);
         const longModifiedByText = screen.queryByText('Applied by TestUser on January 15, 2024');
 
         expect(modifiedByDetailsSection).toBeVisible();
@@ -314,7 +314,7 @@ describe('features/classification/Classification', () => {
         const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
         const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
         const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
-        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel);
+        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel.defaultMessage);
         const importedDetailText = screen.queryByText('Imported from TestUser on January 15, 2024');
 
         expect(modifiedByDetailsSection).toBeVisible();

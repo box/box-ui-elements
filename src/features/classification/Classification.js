@@ -13,8 +13,7 @@ import messages from './messages';
 
 import './Classification.scss';
 
-import type { Controls, ControlsFormat } from './flowTypes';
-import type { AiClassificationReason } from './types';
+import type { AiClassificationReason, Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
