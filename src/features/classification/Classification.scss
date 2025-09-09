@@ -18,3 +18,12 @@
 .bdl-Classification-missingMessage {
     color: $bdl-gray-80;
 }
+
+.bdl-Classification-appliedByAiDetails {
+    margin-bottom: 20px;
+    margin-top: 3px;
+
+    &.AppliedByAiClassificationReason {
+        padding: var(--space-3);
+    }
+}

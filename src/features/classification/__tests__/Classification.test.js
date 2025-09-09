@@ -1,129 +1,163 @@
 import * as React from 'react';
 
+import { render, screen } from '../../../test-utils/testing-library';
 import Classification from '../Classification';
-import ClassifiedBadge from '../ClassifiedBadge';
-import SecurityControls from '../security-controls';
-import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
 
 import messages from '../messages';
+import securityControlsMessages from '../security-controls/messages';
 
 describe('features/classification/Classification', () => {
-    const getWrapper = (props = {}) => shallow(<Classification {...props} />);
+    let classificationLabelName;
+    let defaultProps;
+    let definition;
+    let modifiedAt;
+    let modifiedBy;
+
+    beforeEach(() => {
+        classificationLabelName = 'Confidential';
+        definition = 'fubar';
+        modifiedAt = '2024-01-15T10:30:00Z';
+        modifiedBy = 'TestUser';
+
+        defaultProps = {
+            name: classificationLabelName,
+            definition,
+            messageStyle: 'inline',
+        };
+    });
+
+    const renderComponent = (props = {}) => render(<Classification {...defaultProps} {...props} />);
+
+    test('should render a classified badge with definition for inline message style', () => {
+        renderComponent();
+
+        const badgeHeading = screen.getByRole('heading', { name: classificationLabelName });
+        const definitionLabel = screen.getByText(messages.definition.defaultMessage);
+        const definitionDetail = screen.getByText(definition);
+
+        expect(badgeHeading).toBeVisible();
+        expect(definitionLabel).toBeVisible();
+        expect(definitionDetail).toBeVisible();
+    });
 
     test('should render a classified badge with no definition', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
+        renderComponent({
+            definition: undefined,
         });
-        expect(wrapper).toMatchSnapshot();
+
+        const badgeHeading = screen.getByRole('heading', { name: classificationLabelName });
+        const definitionText = screen.queryByText(messages.definition.defaultMessage);
+
+        expect(badgeHeading).toBeVisible();
+        expect(definitionText).not.toBeInTheDocument();
     });
 
-    test('should render empty when classification does not exist but is editable', () => {
-        const wrapper = getWrapper();
-        expect(wrapper.find(ClassifiedBadge).length).toBe(0);
-        expect(wrapper.find('.bdl-Classification-definition').length).toBe(0);
-        expect(wrapper.find('.bdl-Classification-missingMessage').length).toBe(0);
-    });
-
-    test('should render not classified message', () => {
-        const wrapper = getWrapper({
-            messageStyle: 'inline',
-        });
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render a classified badge with an inline definition', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
-        });
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render a classified badge with definition in tooltip', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
+    test('should not render any elements when classification does not exist for tooltip message style', () => {
+        renderComponent({
+            name: undefined,
             messageStyle: 'tooltip',
         });
-        expect(wrapper).toMatchSnapshot();
+
+        const badgeHeading = screen.queryByRole('heading', { name: classificationLabelName });
+        const definitionText = screen.queryByText(messages.definition.defaultMessage);
+        const missingText = screen.queryByText(messages.missing.defaultMessage);
+
+        expect(badgeHeading).not.toBeInTheDocument();
+        expect(definitionText).not.toBeInTheDocument();
+        expect(missingText).not.toBeInTheDocument();
     });
 
-    test('should render a classified badge with click functionality', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
+    test('should render not classified message when there is no classification for inline message style', () => {
+        renderComponent({
+            name: undefined,
+        });
+
+        const missingMessage = screen.getByText(messages.missing.defaultMessage);
+
+        expect(missingMessage).toBeVisible();
+    });
+
+    test('should render a classified badge without definition for tooltip message style', () => {
+        renderComponent({
+            name: classificationLabelName,
+            definition,
             messageStyle: 'tooltip',
-            onClick: () => {},
         });
-        expect(wrapper).toMatchSnapshot();
+
+        const badgeHeading = screen.getByRole('heading', { name: classificationLabelName });
+        const definitionLabel = screen.queryByText(messages.definition.defaultMessage);
+
+        expect(badgeHeading).toBeVisible();
+        expect(definitionLabel).not.toBeInTheDocument();
     });
 
-    test('should not render classification last modified information when modified props are not provided', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
-        });
-        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
-    });
-
-    test('should not render classification last modified information when message is tooltip', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'tooltip',
-            modifiedAt: '2020-07-16T00:51:10.000Z',
-            modifiedBy: 'A User',
-        });
-        expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(false);
-    });
-
-    test.each`
-        isImportedClassification | expectedModifedByMessageId
-        ${undefined}             | ${messages.modifiedBy.id}
-        ${false}                 | ${messages.modifiedBy.id}
-        ${true}                  | ${messages.importedBy.id}
-    `(
-        `should render classification last modified information with message id ($expectedModifedByMessageId)
-        when it has modifiedBy (and isImportedClassification: $isImportedClassification) and message style is inline`,
-        ({ isImportedClassification, expectedModifedByMessageId }) => {
-            const wrapper = getWrapper({
-                name: 'Confidential',
-                definition: 'fubar',
-                isImportedClassification,
-                messageStyle: 'inline',
-                modifiedAt: '2020-07-16T00:51:10.000Z',
-                modifiedBy: 'A User',
+    test.each(['tooltip', 'inline'])(
+        'should render a classified badge with click functionality for %s message style',
+        messageStyle => {
+            renderComponent({
+                name: classificationLabelName,
+                definition,
+                messageStyle,
+                onClick: () => {},
             });
 
-            const modifiedByFormattedMsg = wrapper.find('FormattedMessage');
+            const buttonElement = screen.getByRole('button', { name: classificationLabelName });
 
-            expect(wrapper.exists('[data-testid="classification-modifiedby"]')).toBe(true);
-            expect(modifiedByFormattedMsg.prop('id')).toEqual(expectedModifedByMessageId);
-            expect(modifiedByFormattedMsg).toMatchSnapshot();
+            expect(buttonElement).toBeVisible();
         },
     );
 
-    test('should render a classified badge with security controls when provided and message style is inline', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
-            controls: {
-                sharedLink: {
-                    accessLevel: 'collabOnly',
-                },
-            },
-        });
-        expect(wrapper).toMatchSnapshot();
+    test('should not render classification last modified details when modified props are not provided', () => {
+        renderComponent();
+
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+
+        expect(modifiedByDetailsSection).not.toBeInTheDocument();
     });
 
-    test('should not render security controls when message style is tooltip', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
+    test('should not render classification last modified details when modified props are provided in tooltip message style', () => {
+        renderComponent({
+            messageStyle: 'tooltip',
+            modifiedAt,
+            modifiedBy,
+        });
+
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+
+        expect(modifiedByDetailsSection).not.toBeInTheDocument();
+    });
+
+    test.each`
+        isImportedClassification | expectedMessageText
+        ${undefined}             | ${'Applied by TestUser on January 15, 2024'}
+        ${false}                 | ${'Applied by TestUser on January 15, 2024'}
+        ${true}                  | ${'Imported from TestUser on January 15, 2024'}
+    `(
+        `should render classification last modified plaintext details as $expectedMessageText when provided
+        modified props and isImportedClassification $isImportedClassification for inline message style`,
+        ({ isImportedClassification, expectedMessageText }) => {
+            renderComponent({
+                isImportedClassification,
+                modifiedAt,
+                modifiedBy,
+            });
+
+            const modifiedByClassificationLabel = screen.getByText(messages.modifiedByLabel.defaultMessage);
+            const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
+            const messageText = screen.getByText(expectedMessageText);
+            const appliedByTitle = screen.queryByText(messages.appliedByTitle.defaultMessage);
+
+            expect(modifiedByClassificationLabel).toBeVisible();
+            expect(modifiedByDetailsSection).toBeVisible();
+            expect(messageText).toBeVisible();
+
+            // Assert the alternative text labels is not used when associated prop (shouldUseAppliedByLabels) is not provided
+            expect(appliedByTitle).not.toBeInTheDocument();
+        },
+    );
+
+    test('should render security controls when provided for inline message style', () => {
+        renderComponent({
             controls: {
                 sharedLink: {
                     accessLevel: 'collabOnly',
@@ -131,27 +165,43 @@ describe('features/classification/Classification', () => {
             },
         });
 
-        expect(wrapper.find(SecurityControls)).toHaveLength(1);
-        wrapper.setProps({ messageStyle: 'tooltip' });
-        expect(wrapper.find(SecurityControls)).toHaveLength(0);
+        const restrictionsLabel = screen.getByText(securityControlsMessages.securityControlsLabel.defaultMessage);
+        const sharingRestriction = screen.getByText(securityControlsMessages.shortSharing.defaultMessage);
+
+        expect(restrictionsLabel).toBeVisible();
+        expect(sharingRestriction).toBeVisible();
+    });
+
+    test('should not render security controls for tooltip message style', () => {
+        renderComponent({
+            messageStyle: 'tooltip',
+            controls: {
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+            },
+        });
+
+        const restrictionsLabel = screen.queryByText(securityControlsMessages.securityControlsLabel.defaultMessage);
+        const sharingRestriction = screen.queryByText(securityControlsMessages.shortSharing.defaultMessage);
+
+        expect(restrictionsLabel).not.toBeInTheDocument();
+        expect(sharingRestriction).not.toBeInTheDocument();
     });
 
     test('should render loading indicator when isLoadingControls is true and controls are not provided', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
+        renderComponent({
             isLoadingControls: true,
         });
-        expect(wrapper.find(LoadingIndicator)).toHaveLength(1);
-        expect(wrapper.find(SecurityControls)).toHaveLength(0);
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicators).toHaveLength(1);
+        expect(loadingIndicators[0]).toBeVisible();
     });
 
     test('should render loading indicator when isLoadingControls is true and controls are provided', () => {
-        const wrapper = getWrapper({
-            name: 'Confidential',
-            definition: 'fubar',
-            messageStyle: 'inline',
+        renderComponent({
             isLoadingControls: true,
             controls: {
                 sharedLink: {
@@ -159,25 +209,237 @@ describe('features/classification/Classification', () => {
                 },
             },
         });
-        expect(wrapper.find(LoadingIndicator)).toHaveLength(1);
-        expect(wrapper.find(SecurityControls)).toHaveLength(0);
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicators).toHaveLength(1);
+        expect(loadingIndicators[0]).toBeVisible();
     });
 
-    test('should not render loading indicator when item is not classified', () => {
-        const wrapper = getWrapper({
+    test('should not render loading indicator for security controls when item is not classified', () => {
+        renderComponent({
+            name: undefined,
             messageStyle: 'inline',
             isLoadingControls: true,
         });
-        expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
-        expect(wrapper.find(SecurityControls)).toHaveLength(0);
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicators).toHaveLength(0);
     });
 
-    test('should not render loading indicator when message style is not inline', () => {
-        const wrapper = getWrapper({
+    test('should not render loading indicator for security controls when not inline message style', () => {
+        renderComponent({
             messageStyle: 'tooltip',
             isLoadingControls: true,
         });
-        expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
-        expect(wrapper.find(SecurityControls)).toHaveLength(0);
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicators).toHaveLength(0);
+    });
+
+    test.each([true, false, undefined])(
+        'should render AI reasoning when provided aiClassificationReason prop regardless of shouldUseAppliedByLabels value: %s',
+        shouldUseAppliedByLabels => {
+            const expectedCitationsCount = 5;
+            const expectedCitations = Array.from({ length: expectedCitationsCount }, () => ({
+                content: 'file content for citation',
+                fileId: 'fileId',
+                location: 'cited location',
+                title: 'file title',
+            }));
+
+            const aiClassificationReason = {
+                answer: 'This file is marked as Internal Only because it contains non-public financial results.',
+                modifiedAt,
+                citations: expectedCitations,
+            };
+
+            renderComponent({
+                aiClassificationReason,
+                modifiedAt: '2024-01-30T10:30:00Z', // This prop is ignored when using aiClassificationReason
+                modifiedBy: 'Box AI Service', // This prop is ignored when using aiClassificationReason
+                shouldUseAppliedByLabels,
+            });
+
+            const boxAiIcon = screen.getByTestId('box-ai-icon');
+            const appliedByDetails = screen.getByText('Box AI on January 15, 2024'); // expected text based on provided mocks
+            const reasonText = screen.getByText(aiClassificationReason.answer);
+            const citationsLabel = screen.queryByTestId('content-answers-references-label');
+            const citationElements = screen.getAllByTestId('content-answers-citation-status');
+            const modifiedByPlaintext = screen.queryByTestId('classification-modifiedby');
+
+            expect(boxAiIcon).toBeVisible();
+            expect(appliedByDetails).toBeVisible();
+            expect(reasonText).toBeVisible();
+            expect(citationsLabel).toBeVisible();
+            expect(citationElements).toHaveLength(expectedCitationsCount);
+
+            // Assert the plaintext version of modified by details is not rendered
+            expect(modifiedByPlaintext).not.toBeInTheDocument();
+        },
+    );
+
+    test('should render modification details using Applied By format when shouldUseAppliedByLabels is true', () => {
+        renderComponent({
+            shouldUseAppliedByLabels: true,
+            modifiedAt,
+            modifiedBy,
+        });
+
+        const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
+        const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
+        const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
+        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel);
+        const longModifiedByText = screen.queryByText('Applied by TestUser on January 15, 2024');
+
+        expect(modifiedByDetailsSection).toBeVisible();
+        expect(appliedByTitle).toBeVisible();
+        expect(appliedByDetails).toBeVisible();
+
+        // Assert the default modification detail format is not rendered
+        expect(modifiedByClassificationLabel).not.toBeInTheDocument();
+        expect(longModifiedByText).not.toBeInTheDocument();
+    });
+
+    test('should render modification details using Applied By format for imported classification when shouldUseAppliedByLabels is true', () => {
+        renderComponent({
+            shouldUseAppliedByLabels: true,
+            isImportedClassification: true,
+            modifiedAt,
+            modifiedBy,
+        });
+
+        const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
+        const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
+        const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
+        const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel);
+        const importedDetailText = screen.queryByText('Imported from TestUser on January 15, 2024');
+
+        expect(modifiedByDetailsSection).toBeVisible();
+        expect(appliedByTitle).toBeVisible();
+        expect(appliedByDetails).toBeVisible();
+
+        // Assert the default modification detail format is not rendered
+        expect(modifiedByClassificationLabel).not.toBeInTheDocument();
+        expect(importedDetailText).not.toBeInTheDocument();
+    });
+
+    test('should not render modification details when modifiedAt is invalid date', () => {
+        renderComponent({
+            modifiedAt: 'invalid-date',
+            modifiedBy,
+        });
+
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+
+        expect(modifiedByDetailsSection).not.toBeInTheDocument();
+    });
+
+    test('should not render modification details when modifiedAt is empty string', () => {
+        renderComponent({
+            modifiedAt: '',
+            modifiedBy,
+        });
+
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+
+        expect(modifiedByDetailsSection).not.toBeInTheDocument();
+    });
+
+    test('should not render modification details when modifiedBy is not provided', () => {
+        renderComponent({
+            modifiedAt,
+        });
+
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+
+        expect(modifiedByDetailsSection).not.toBeInTheDocument();
+    });
+
+    test('should not render modification details when modifiedAt is not provided', () => {
+        renderComponent({
+            modifiedBy,
+        });
+
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+
+        expect(modifiedByDetailsSection).not.toBeInTheDocument();
+    });
+
+    test('should render loading indicator when isLoadingAppliedBy is true when provided base modification details', () => {
+        renderComponent({
+            isLoadingAppliedBy: true,
+            modifiedAt,
+            modifiedBy,
+            shouldUseAppliedByLabels: true,
+        });
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+        const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
+
+        expect(loadingIndicators).toHaveLength(1);
+        expect(loadingIndicators[0]).toBeVisible();
+        expect(appliedByTitle).toBeVisible();
+    });
+
+    test('should render loading indicator when isLoadingAppliedBy is true without base modification details', () => {
+        renderComponent({
+            isLoadingAppliedBy: true,
+            modifiedAt: undefined,
+            modifiedBy: undefined,
+        });
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+        const modifiedByClassificationLabel = screen.getByText(messages.modifiedByLabel.defaultMessage);
+
+        expect(loadingIndicators).toHaveLength(1);
+        expect(loadingIndicators[0]).toBeVisible();
+
+        // Assert the non-applied by label is used when the prop is not set
+        expect(modifiedByClassificationLabel).toBeVisible();
+    });
+
+    test('should not render loading indicator for applied by when item is not classified', () => {
+        renderComponent({
+            name: undefined,
+            messageStyle: 'inline',
+            isLoadingAppliedBy: true,
+            modifiedAt,
+            modifiedBy,
+        });
+
+        const loadingIndicator = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicator).toHaveLength(0);
+    });
+
+    test('should not render loading indicator for applied by when not inline message style', () => {
+        renderComponent({
+            messageStyle: 'tooltip',
+            isLoadingAppliedBy: true,
+            modifiedAt,
+            modifiedBy,
+        });
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicators).toHaveLength(0);
+    });
+
+    test('should render two loading indicators when both isLoadingAppliedBy and isLoadingControls are true', () => {
+        renderComponent({
+            isLoadingAppliedBy: true,
+            isLoadingControls: true,
+            modifiedAt,
+            modifiedBy,
+        });
+
+        const loadingIndicators = document.querySelectorAll('.crawler');
+
+        expect(loadingIndicators).toHaveLength(2);
+        expect(loadingIndicators[0]).toBeVisible();
+        expect(loadingIndicators[1]).toBeVisible();
     });
 });
