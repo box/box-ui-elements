@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { CompositeDecorator, EditorState, Modifier, SelectionState } from 'draft-js';
+import { CompositeDecorator, EditorState, Modifier, SelectionState, ContentState } from 'draft-js';
 import noop from 'lodash/noop';
 
 import DraftJSMentionSelectorCore from './DraftJSMentionSelectorCore';
@@ -200,7 +200,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const timestampLengthIncludingSpace = this.getTimestampLength(currentContent, currentContent.getFirstBlock());
         const isTimestampEntityPresent = timestampLengthIncludingSpace > 0;
 
-        // check if we need to toggle the timestamp on and that the timestamp entity is nove already present in the content
+        // check if we need to toggle the timestamp on and that the timestamp entity is not already present in the content
         if ((!isTimestampToggledOn || forceOn) && !isTimestampEntityPresent) {
             // get the current timestamp
             const timestamp = this.getVideoTimestamp();
@@ -345,7 +345,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @param {ContentBlock} block The content block to analyze
      * @returns {number} The length of the timestamp entity (including the space after it)
      */
-    getTimestampLength = (currentContent: any, block: any): number => {
+    getTimestampLength = (currentContent: ContentState, block: any): number => {
         if (!block || !currentContent) {
             return 0;
         }
@@ -493,7 +493,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         startMentionMessage={startMentionMessage}
                     />
 
-                    {isRequired && this.getIsVideoTimestampEnabled() && (
+                    {isRequired && timestampLabel && (
                         <Toggle
                             className="bcs-CommentTimestamp-toggle"
                             label={timestampLabel}
