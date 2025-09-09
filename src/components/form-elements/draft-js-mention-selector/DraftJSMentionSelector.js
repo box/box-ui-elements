@@ -38,9 +38,11 @@ const timestampStrategy = (contentBlock: any, callback: (start: number, end: num
     if (!contentBlock || !contentState) return;
     contentBlock.findEntityRanges(character => {
         const entityKey = character.getEntity();
+        const hasEntityKey = entityKey !== null;
         // $FlowFixMe
-        const ret = entityKey !== null && contentState?.getEntity(entityKey)?.getType() === UNEDITABLE_TIMESTAMP_TEXT;
-        return ret;
+        const entityType = hasEntityKey && contentState?.getEntity(entityKey)?.getType();
+        const timeStampEntityFound = entityType === UNEDITABLE_TIMESTAMP_TEXT;
+        return timeStampEntityFound;
     }, callback);
 };
 
@@ -159,20 +161,6 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const { timestampLabel } = this.props;
         return timestampLabel !== undefined && timestampLabel !== null && timestampLabel.trim() !== '';
     };
-
-    // Ensure external editor state has the decorator applied
-    getEditorStateWithDecorator(editorState: EditorState): EditorState {
-        if (!editorState) return editorState;
-
-        // Check if the editor state already has our decorator
-        const currentDecorator = editorState.getDecorator();
-        if (currentDecorator === this.compositeDecorator) {
-            return editorState;
-        }
-
-        // Apply our decorator to the editor state
-        return EditorState.set(editorState, { decorator: this.compositeDecorator });
-    }
 
     getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState) {
         const isPreviousEditorStateEmpty = this.isEditorStateEmpty(previousEditorState);
@@ -469,8 +457,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         } = this.props;
         const { contacts, internalEditorState, error, isTimestampToggledOn: timestampToggledOn } = this.state;
         const { handleBlur, handleChange, handleFocus, toggleTimestamp } = this;
-        const rawEditorState: EditorState = internalEditorState || externalEditorState;
-        const editorState: EditorState = this.getEditorStateWithDecorator(rawEditorState);
+        let editorState: EditorState = internalEditorState || externalEditorState;
+
+        // Ensure the editor state has the composite decorator
+        if (editorState.getDecorator() !== this.compositeDecorator) {
+            editorState = EditorState.set(editorState, { decorator: this.compositeDecorator });
+        }
 
         return (
             <div
