@@ -159,7 +159,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
     getIsVideoTimestampEnabled = () => {
         const { timestampLabel } = this.props;
-        return timestampLabel !== undefined && timestampLabel !== null && timestampLabel.trim() !== '';
+        return !!timestampLabel && timestampLabel.trim() !== '';
     };
 
     getDerivedStateFromEditorState(currentEditorState: EditorState, previousEditorState: EditorState) {
@@ -493,9 +493,10 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         startMentionMessage={startMentionMessage}
                     />
 
-                    {isRequired && timestampLabel && (
+                    {isRequired && this.getIsVideoTimestampEnabled() && (
                         <Toggle
                             className="bcs-CommentTimestamp-toggle"
+                            // $FlowFixMe - timestampLabel is guaranteed to be defined when getIsVideoTimestampEnabled() returns true
                             label={timestampLabel}
                             isOn={timestampToggledOn}
                             onChange={() => toggleTimestamp(editorState)}
