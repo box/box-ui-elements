@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { render, screen } from '../../../test-utils/testing-library';
+import { render, screen, waitFor } from '../../../test-utils/testing-library';
 import Classification from '../Classification';
 
 import messages from '../messages';
@@ -235,7 +235,7 @@ describe('features/classification/Classification', () => {
 
     test.each([true, false, undefined])(
         'should render AI reasoning with expected label when provided aiClassificationReason prop regardless of shouldUseAppliedByLabels value: %s',
-        shouldUseAppliedByLabels => {
+        async shouldUseAppliedByLabels => {
             const expectedCitationsCount = 5;
             const expectedCitations = Array.from({ length: expectedCitationsCount }, () => ({
                 content: 'file content for citation',
@@ -257,11 +257,12 @@ describe('features/classification/Classification', () => {
                 shouldUseAppliedByLabels,
             });
 
-            const boxAiIcon = screen.getByTestId('box-ai-icon');
+            // Wait for the async component to load
+            const boxAiIcon = await waitFor(() => screen.getByTestId('box-ai-icon'));
             const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
             const appliedByDetails = screen.getByText('Box AI on January 15, 2024'); // expected text based on provided mocks
             const reasonText = screen.getByText(aiClassificationReason.answer);
-            const citationsLabel = screen.queryByTestId('content-answers-references-label');
+            const citationsLabel = screen.getByTestId('content-answers-references-label');
             const citationElements = screen.getAllByTestId('content-answers-citation-status');
             const modifiedByPlaintext = screen.queryByTestId('classification-modifiedby');
 
