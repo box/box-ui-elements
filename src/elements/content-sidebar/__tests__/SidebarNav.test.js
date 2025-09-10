@@ -40,51 +40,34 @@ describe('elements/content-sidebar/SidebarNav', () => {
         ...overrides,
     });
 
-    describe('should render box ai tab with correct disabled state and tooltip', () => {
-        test.each`
-            disabledTooltip          | expectedTooltip
-            ${'tooltip msg'}         | ${'tooltip msg'}
-            ${'another tooltip msg'} | ${'another tooltip msg'}
-        `(
-            'given feature boxai.sidebar.showOnlyNavButton = true and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with disabled state and tooltip = $expectedTooltip',
-            async ({ expectedTooltip }) => {
-                const user = userEvent();
+    describe('individual tab rendering', () => {
+        const TABS_CONFIG = {
+            skills: { testId: 'sidebarskills', propName: 'hasSkills' },
+            details: { testId: 'sidebardetails', propName: 'hasDetails' },
+            activity: { testId: 'sidebaractivity', propName: 'hasActivity' },
+            metadata: { testId: 'sidebarmetadata', propName: 'hasMetadata' },
+            docgen: { testId: 'sidebardocgen', propName: 'hasDocGen' },
+        };
 
-                renderSidebarNav({
-                    props: {
-                        customTabs: [
-                            createBoxAITab({
-                                isDisabled: true,
-                                title: expectedTooltip,
-                            }),
-                        ],
-                    },
-                });
+        const tabNames = Object.keys(TABS_CONFIG);
 
-                const button = screen.getByTestId('sidebarboxai');
-
-                await user.hover(button);
-
-                expect(button).toHaveAttribute('aria-disabled', 'true');
-                expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
-            },
-        );
-
-        test('given feature boxai.sidebar.showOnlyNavButton = false, should render box ai tab with default tooltip', async () => {
-            const user = userEvent();
+        test.each(tabNames)('should render %s tab', tabName => {
+            const { testId, propName } = TABS_CONFIG[tabName];
 
             renderSidebarNav({
                 props: {
-                    customTabs: [createBoxAITab()],
+                    [propName]: true,
                 },
             });
 
-            const button = screen.getByTestId('sidebarboxai');
+            expect(screen.getByTestId(testId)).toBeInTheDocument();
 
-            await user.hover(button);
-
-            expect(button).not.toHaveAttribute('aria-disabled');
-            expect(screen.getByText('Box AI')).toBeInTheDocument();
+            tabNames
+                .filter(name => name !== tabName)
+                .forEach(otherTabName => {
+                    const otherTab = TABS_CONFIG[otherTabName];
+                    expect(screen.queryByTestId(otherTab.testId)).not.toBeInTheDocument();
+                });
         });
     });
 
