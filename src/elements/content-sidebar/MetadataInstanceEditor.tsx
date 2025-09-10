@@ -5,7 +5,8 @@ import {
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
 import { TaxonomyOptionsFetcher } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
-import React from 'react';
+import React, { useContext } from 'react';
+import PreviewContext, { type PreviewContextType } from '../content-preview/PreviewContext';
 import {
     ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
     ERROR_CODE_UNKNOWN,
@@ -51,6 +52,9 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     template,
     isAdvancedExtractAgentEnabled = false,
 }) => {
+    const previewContext: PreviewContextType | null = useContext(PreviewContext);
+    const customRef = previewContext?.previewBodyRef;
+
     return (
         <MetadataInstanceForm
             // TODO investigate if this property should be optional and by default false
@@ -71,6 +75,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+            customRef={customRef}
         />
     );
 };
