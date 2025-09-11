@@ -132,9 +132,9 @@ export const metadataDropdownPositioning = {
                 http.get(mockGlobalMetadataTemplates.url, () =>
                     HttpResponse.json(mockGlobalMetadataTemplates.response),
                 ),
-                mockFileRequest,
-                mockUserRequest,
-                mockEventRequest,
+                http.get(mockFileRequest.url, () => HttpResponse.json(mockFileRequest.response)),
+                +http.get(mockUserRequest.url, () => HttpResponse.json(mockUserRequest.response)),
+                +http.get(mockEventRequest.url, () => HttpResponse.json(mockEventRequest.response)),
             ],
         },
     },
