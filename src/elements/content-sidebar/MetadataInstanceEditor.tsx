@@ -75,7 +75,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
-            customRef={customRef.current}
+            customRef={customRef?.current}
         />
     );
 };
