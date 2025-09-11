@@ -80,6 +80,7 @@ const Content = ({
             {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
             {!isMetadataViewV2Feature && isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
+            {isMetadataViewV2Feature && view === VIEW_ERROR && <EmptyView view={view} isLoading={false} />}
             {!isMetadataViewV2Feature && !isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList
                     currentCollection={currentCollection}
