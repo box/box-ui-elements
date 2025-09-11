@@ -216,6 +216,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     previewBodyRef = React.createRef<HTMLDivElement>();
 
+    previewContextValue = { previewBodyRef: this.previewBodyRef };
+
     previewContainer: ?HTMLDivElement;
 
     mouseMoveTimeoutID: TimeoutID;
@@ -1332,7 +1334,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: API)}>
-                    <PreviewContext.Provider value={{ previewBodyRef: this.previewBodyRef }}>
+                    <PreviewContext.Provider value={this.previewContextValue}>
                         <Providers hasProviders={hasProviders}>
                             <div
                                 id={this.id}
