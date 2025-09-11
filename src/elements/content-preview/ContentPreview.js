@@ -26,6 +26,7 @@ import Internationalize from '../common/Internationalize';
 import AsyncLoad from '../common/async-load';
 // $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
+// $FlowFixMe TypeScript file
 import PreviewContext from './PreviewContext';
 import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
@@ -213,7 +214,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
     contentSidebar: { current: null | { refresh: Function } } = React.createRef();
 
-    previewBodyRef: { current: null | HTMLDivElement } = React.createRef();
+    previewBodyRef = React.createRef<HTMLDivElement>();
 
     previewContainer: ?HTMLDivElement;
 
@@ -1331,7 +1332,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: API)}>
-                    <PreviewContext.Provider value={{ previewBodyRef: this.previewBodyRef.current }}>
+                    <PreviewContext.Provider value={{ previewBodyRef: this.previewBodyRef }}>
                         <Providers hasProviders={hasProviders}>
                             <div
                                 id={this.id}
