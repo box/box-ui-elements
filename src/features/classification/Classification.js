@@ -2,25 +2,30 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { isValidDate } from '../../utils/datetime';
+import AppliedByAiClassificationReason from './applied-by-ai-classification-reason/AppliedByAiClassificationReason';
+import ClassifiedBadge from './ClassifiedBadge';
 import Label from '../../components/label/Label';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import ClassifiedBadge from './ClassifiedBadge';
 import SecurityControls from './security-controls';
+import { isValidDate } from '../../utils/datetime';
+
 import messages from './messages';
+
 import './Classification.scss';
 
-import type { Controls, ControlsFormat } from './flowTypes';
+import type { AiClassificationReason, Controls, ControlsFormat } from './flowTypes';
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
 type Props = {
+    aiClassificationReason?: AiClassificationReason,
     className?: string,
     color?: string,
     controls?: Controls,
     controlsFormat?: ControlsFormat,
     definition?: string,
     isImportedClassification?: boolean,
+    isLoadingAppliedBy?: boolean,
     isLoadingControls?: boolean,
     itemName?: string,
     maxAppCount?: number,
@@ -30,15 +35,18 @@ type Props = {
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
     shouldDisplayAppsAsIntegrations?: boolean,
+    shouldUseAppliedByLabels?: boolean,
 };
 
 const Classification = ({
+    aiClassificationReason,
     className = '',
     color,
     controls,
     controlsFormat,
     definition,
     isImportedClassification = false,
+    isLoadingAppliedBy = false,
     isLoadingControls,
     itemName = '',
     maxAppCount,
@@ -48,6 +56,7 @@ const Classification = ({
     name,
     onClick,
     shouldDisplayAppsAsIntegrations = false,
+    shouldUseAppliedByLabels = false,
 }: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
@@ -63,12 +72,50 @@ const Classification = ({
     const modifiedDate = new Date(modifiedAt || 0);
     const isModifiedMessageVisible =
         isClassified && hasModifiedAt && isValidDate(modifiedDate) && hasModifiedBy && messageStyle === STYLE_INLINE;
+    const hasAiClassificationReason =
+        messageStyle === STYLE_INLINE && isClassified && (isLoadingAppliedBy || Boolean(aiClassificationReason));
+    const shouldRenderModificationDetails = isModifiedMessageVisible || hasAiClassificationReason;
 
     const formattedModifiedAt = isModifiedMessageVisible && (
         <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
     );
 
     const modifiedByMessage = isImportedClassification ? messages.importedBy : messages.modifiedBy;
+
+    const modificationTitleLabel =
+        shouldUseAppliedByLabels || hasAiClassificationReason ? messages.appliedByTitle : messages.modifiedByLabel;
+
+    const modifiedByDetails = shouldUseAppliedByLabels ? (
+        <FormattedMessage
+            {...messages.appliedByDetails}
+            values={{ appliedAt: formattedModifiedAt, appliedBy: modifiedBy }}
+        />
+    ) : (
+        <FormattedMessage {...modifiedByMessage} values={{ modifiedAt: formattedModifiedAt, modifiedBy }} />
+    );
+
+    const renderModificationDetails = () => {
+        if (isLoadingAppliedBy) {
+            return <LoadingIndicator />;
+        }
+
+        if (aiClassificationReason) {
+            return (
+                <AppliedByAiClassificationReason
+                    answer={aiClassificationReason.answer}
+                    citations={aiClassificationReason.citations}
+                    className="bdl-Classification-appliedByAiDetails"
+                    modifiedAt={aiClassificationReason.modifiedAt}
+                />
+            );
+        }
+
+        return (
+            <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
+                {modifiedByDetails}
+            </p>
+        );
+    };
 
     return (
         <article className={`bdl-Classification ${className}`}>
@@ -90,15 +137,8 @@ const Classification = ({
                     <FormattedMessage {...messages.missing} />
                 </span>
             )}
-            {isModifiedMessageVisible && (
-                <Label text={<FormattedMessage {...messages.modifiedByLabel} />}>
-                    <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
-                        <FormattedMessage
-                            {...modifiedByMessage}
-                            values={{ modifiedAt: formattedModifiedAt, modifiedBy }}
-                        />
-                    </p>
-                </Label>
+            {shouldRenderModificationDetails && (
+                <Label text={<FormattedMessage {...modificationTitleLabel} />}>{renderModificationDetails()}</Label>
             )}
 
             {isSecurityControlsEnabled && (

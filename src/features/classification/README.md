@@ -50,3 +50,18 @@ Renders a classification badge with classification definition.
     name="Confidential"
 />
 ```
+
+**Classification with AI reasoning details**
+```jsx
+<Classification
+    aiClassificationReason={{
+        answer: "This document contains sensitive financial information including quarterly earnings data and strategic business plans that require confidential handling.",
+        modifiedAt: "2024-01-15T10:30:00Z",
+        citations: []
+    }}
+    definition="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+    messageStyle="inline"
+    name="Confidential"
+/>
+```
+Make sure that TooltipProvider is in context when using aiClassificationReason with empty citations.

@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { render, screen } from '../../../../test-utils/testing-library';
+import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import AppliedByAiClassificationReason from '../AppliedByAiClassificationReason';
 
 import messages from '../messages';
 
-describe('AppliedByAiClassificationReason', () => {
+describe('features/classification/applied-by-ai-classification-reason/AppliedByAiClassificationReason', () => {
     let defaultProps;
     let modifiedAtDisplayDate;
 
@@ -45,16 +45,25 @@ describe('AppliedByAiClassificationReason', () => {
         expect(noReferencesIconContainer).toBeNull();
     });
 
-    test('should render no references icon when an empty citations array provided', () => {
+    test('should render no references icon and display tooltip on hover when provided empty citations array', async () => {
+        const user = userEvent();
         renderComponent({ citations: [] });
 
-        const noReferencesIconContainer = screen.queryByTestId('content-answers-references-no-references');
+        const noReferencesIconContainer = screen.getByTestId('content-answers-references-no-references');
         const noReferencesIcon = noReferencesIconContainer.querySelector('svg');
 
+        // Verify the icon is visible
         expect(noReferencesIcon).toBeVisible();
+
+        // Verify tooltip appears on hover
+        await user.hover(noReferencesIconContainer);
+
+        const tooltip = await screen.findByRole('tooltip');
+        expect(tooltip).toBeVisible();
+        expect(tooltip).toHaveTextContent('Response based on general document analysis');
     });
 
-    test('should render references when non-empty citations are provided', () => {
+    test('should render references when provided non-empty citations', () => {
         const expectedCitationsCount = 5;
         const expectedCitations = Array.from({ length: expectedCitationsCount }, () => ({
             content: 'file content for citation',
