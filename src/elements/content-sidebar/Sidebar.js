@@ -35,7 +35,7 @@ import type { SignSidebarProps } from './SidebarNavSign';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
-import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
+import { SIDEBAR_VIEW_DOCGEN, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import API from '../../api';
 
 type Props = {
@@ -323,8 +323,12 @@ class Sidebar extends React.Component<Props, State> {
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
+        const hasBoxAI = customSidebarPanels
+            ? !!customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI)
+            : false;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
+            'bcs-is-wider': hasBoxAI,
         });
         const defaultPanel = this.getDefaultPanel();
 
