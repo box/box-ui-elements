@@ -53,7 +53,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isAdvancedExtractAgentEnabled = false,
 }) => {
     const previewContext: PreviewContextType | null = useContext(PreviewContext);
-    const customRef = previewContext?.previewBodyRef;
+    const customRef = previewContext?.previewBodyRef?.current;
 
     return (
         <MetadataInstanceForm
@@ -75,7 +75,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
-            customRef={customRef?.current}
+            customRef={customRef}
         />
     );
 };
