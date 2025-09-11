@@ -137,7 +137,7 @@ describe('features/classification/Classification', () => {
             });
 
             const modifiedByClassificationLabel = screen.getByText(messages.modifiedByLabel.defaultMessage);
-            const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
+            const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
             const messageText = screen.getByText(expectedMessageText);
             const appliedByTitle = screen.queryByText(messages.appliedByTitle.defaultMessage);
 
@@ -235,7 +235,7 @@ describe('features/classification/Classification', () => {
 
     test.each([true, false, undefined])(
         'should render AI reasoning with expected label when provided aiClassificationReason prop regardless of shouldUseAppliedByLabels value: %s',
-        shouldUseAppliedByLabels => {
+        async shouldUseAppliedByLabels => {
             const expectedCitationsCount = 5;
             const expectedCitations = Array.from({ length: expectedCitationsCount }, () => ({
                 content: 'file content for citation',
@@ -257,7 +257,8 @@ describe('features/classification/Classification', () => {
                 shouldUseAppliedByLabels,
             });
 
-            const boxAiIcon = screen.getByTestId('box-ai-icon');
+            // Wait for the async component to load
+            const boxAiIcon = await screen.findByTestId('box-ai-icon');
             const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
             const appliedByDetails = screen.getByText('Box AI on January 15, 2024'); // expected text based on provided mocks
             const reasonText = screen.getByText(aiClassificationReason.answer);
@@ -284,7 +285,7 @@ describe('features/classification/Classification', () => {
             modifiedBy,
         });
 
-        const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
         const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
         const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
         const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel.defaultMessage);
@@ -307,7 +308,7 @@ describe('features/classification/Classification', () => {
             modifiedBy,
         });
 
-        const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
+        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
         const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
         const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
         const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel.defaultMessage);
