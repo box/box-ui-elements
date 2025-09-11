@@ -1,79 +1,85 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 
 import makeDroppable from '../makeDroppable';
 
-jest.mock('react-dom', () => ({
-    findDOMNode: jest.fn(),
-}));
-
 describe('elements/common/droppable/makeDroppable', () => {
-    const WrappedComponent = () => <div />;
+    const WrappedComponent = React.forwardRef((props, ref) => <div ref={ref} />);
     const MakeDroppableComponent = makeDroppable({
         dropValidator: jest.fn(),
         onDrop: jest.fn(),
     })(WrappedComponent);
 
-    const addEventListenerMock = jest.fn();
-    const testElement = document.createElement('div');
-    testElement.addEventListener = addEventListenerMock;
-
     const getWrapper = (props = {}) => shallow(<MakeDroppableComponent className="test" {...props} />);
 
     beforeEach(() => {
-        ReactDOM.findDOMNode.mockImplementation(() => testElement);
+        jest.clearAllMocks();
     });
 
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
-
-    describe('removeEventListeners()', () => {
-        test('should remove 4 of event listeners on the element', () => {
+    describe('setDroppableRef()', () => {
+        test('should add 4 event listeners when ref callback is called with element', () => {
             const wrapper = getWrapper();
-            const removeEventListener = jest.fn();
-            const element = {
-                foo: 'bar',
-                removeEventListener,
-            };
+            const instance = wrapper.instance();
+            const testElement = document.createElement('div');
+            const addEventListenerMock = jest.fn();
+            testElement.addEventListener = addEventListenerMock;
 
-            wrapper.instance().removeEventListeners(element);
-
-            expect(removeEventListener).toBeCalledTimes(4);
-        });
-    });
-
-    describe('componentDidMount()', () => {
-        test('should add 4 event listeners on the test element when the wrapped droppable element is not null for the first time', () => {
-            getWrapper();
+            // Call the actual setDroppableRef method with test element
+            instance.setDroppableRef(testElement);
 
             expect(addEventListenerMock).toBeCalledTimes(4);
-        });
-    });
-
-    describe('componentDidUpdate()', () => {
-        test('should verify the instance attritute droppableEl is assigned when the wrapped element is not null', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            instance.componentDidUpdate();
-
             expect(instance.droppableEl).toEqual(testElement);
         });
 
-        test('should remove all event listeners on previous droppable element and assign the new droppable element to the instance after the wrapped element is changed', () => {
+        test('should verify the instance attribute droppableEl is assigned when the wrapped element is not null', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            const spanElement = document.createElement('span');
-            const spanRemoveEventListenerMock = jest.fn();
-            spanElement.removeEventListener = spanRemoveEventListenerMock;
+            const testElement = document.createElement('div');
+            const addEventListenerMock = jest.fn();
+            testElement.addEventListener = addEventListenerMock;
 
-            instance.droppableEl = spanElement;
-            instance.componentDidUpdate();
+            // Initially droppableEl should be null
+            expect(instance.droppableEl).toBe(null);
 
-            expect(spanRemoveEventListenerMock).toBeCalledTimes(4);
+            // Call setDroppableRef with a valid element
+            instance.setDroppableRef(testElement);
+
+            // Verify droppableEl is assigned to the element
             expect(instance.droppableEl).toEqual(testElement);
+            expect(addEventListenerMock).toBeCalledTimes(4);
+        });
+
+        test('should remove listeners from old element and add to new element', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const oldElement = document.createElement('span');
+            const oldRemoveEventListenerMock = jest.fn();
+            oldElement.removeEventListener = oldRemoveEventListenerMock;
+
+            const newElement = document.createElement('div');
+            const newAddEventListenerMock = jest.fn();
+            newElement.addEventListener = newAddEventListenerMock;
+
+            instance.droppableEl = oldElement;
+            instance.setDroppableRef(newElement);
+
+            expect(oldRemoveEventListenerMock).toBeCalledTimes(4);
+            expect(newAddEventListenerMock).toBeCalledTimes(4);
+            expect(instance.droppableEl).toEqual(newElement);
+        });
+
+        test('should handle null element (unmount)', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const oldElement = document.createElement('div');
+            const oldRemoveEventListenerMock = jest.fn();
+            oldElement.removeEventListener = oldRemoveEventListenerMock;
+
+            instance.droppableEl = oldElement;
+            instance.setDroppableRef(null);
+
+            expect(oldRemoveEventListenerMock).toBeCalledTimes(4);
+            expect(instance.droppableEl).toBeNull();
         });
     });
 });

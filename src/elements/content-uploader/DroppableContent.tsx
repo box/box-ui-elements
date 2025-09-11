@@ -50,33 +50,28 @@ const dropDefinition = {
     },
 } as const;
 
-const DroppableContent = makeDroppable(dropDefinition)(({
-    addFiles,
-    canDrop,
-    isFolderUploadEnabled,
-    isOver,
-    isTouch,
-    items,
-    onClick,
-    view,
-}: DroppableContentProps) => {
-    const handleSelectFiles = ({ target: { files } }) => addFiles(files);
-    const hasItems = items.length > 0;
+const DroppableContentComponent = React.forwardRef<HTMLDivElement, DroppableContentProps>(
+    ({ addFiles, canDrop, isFolderUploadEnabled, isOver, isTouch, items, onClick, view }, ref) => {
+        const handleSelectFiles = ({ target: { files } }) => addFiles(files);
+        const hasItems = items.length > 0;
 
-    return (
-        <div className="bcu-droppable-content" data-testid="bcu-droppable-content">
-            <ItemList items={items} onClick={onClick} />
-            <UploadState
-                canDrop={canDrop}
-                hasItems={hasItems}
-                isFolderUploadEnabled={isFolderUploadEnabled}
-                isOver={isOver}
-                isTouch={isTouch}
-                onSelect={handleSelectFiles}
-                view={view}
-            />
-        </div>
-    );
-});
+        return (
+            <div ref={ref} className="bcu-droppable-content" data-testid="bcu-droppable-content">
+                <ItemList items={items} onClick={onClick} />
+                <UploadState
+                    canDrop={canDrop}
+                    hasItems={hasItems}
+                    isFolderUploadEnabled={isFolderUploadEnabled}
+                    isOver={isOver}
+                    isTouch={isTouch}
+                    onSelect={handleSelectFiles}
+                    view={view}
+                />
+            </div>
+        );
+    },
+);
+
+const DroppableContent = makeDroppable(dropDefinition)(DroppableContentComponent);
 
 export default DroppableContent;
