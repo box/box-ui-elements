@@ -164,15 +164,36 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 },
             });
 
-            // Box AI should be rendered first (special handling)
             expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
-
-            // Other custom tabs should be rendered at the end
             expect(screen.getByTestId('sidebarcustomtab1')).toBeInTheDocument();
             expect(screen.getByTestId('sidebarcustomtab2')).toBeInTheDocument();
 
             const navButtons = screen.getAllByRole('tab');
             expect(navButtons).toHaveLength(3);
+
+            // Verify Box AI is rendered first in the DOM order
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[1]).toHaveAttribute('data-testid', 'sidebarcustomtab1');
+            expect(navButtons[2]).toHaveAttribute('data-testid', 'sidebarcustomtab2');
+        });
+
+        test('should render Box AI first even when passed in different order', () => {
+            const customTab1 = createCustomTab('customtab1');
+            const customTab2 = createCustomTab('customtab2');
+            const boxAiTab = createBoxAITab();
+
+            renderSidebarNav({
+                props: {
+                    customTabs: [customTab1, boxAiTab, customTab2],
+                },
+            });
+
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(3);
+
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[1]).toHaveAttribute('data-testid', 'sidebarcustomtab1');
+            expect(navButtons[2]).toHaveAttribute('data-testid', 'sidebarcustomtab2');
         });
 
         test('should render custom tabs with regular tabs', () => {
@@ -187,18 +208,17 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 },
             });
 
-            // Box AI should be first
             expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
-
-            // Regular tabs
             expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
             expect(screen.getByTestId('sidebarmetadata')).toBeInTheDocument();
-
-            // Custom tab should be at the end
             expect(screen.getByTestId('sidebaranalytics')).toBeInTheDocument();
 
             const navButtons = screen.getAllByRole('tab');
             expect(navButtons).toHaveLength(4);
+
+            // Verify order: Box AI first, regular tabs, then custom tabs at the end
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[3]).toHaveAttribute('data-testid', 'sidebaranalytics');
         });
 
         test('should handle custom tabs with different properties', () => {
@@ -242,7 +262,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(screen.getByTestId('sidebarreports')).toBeInTheDocument();
             expect(screen.getByTestId('sidebarsettings')).toBeInTheDocument();
 
-            // Box AI should not be present
             expect(screen.queryByTestId('sidebarboxai')).not.toBeInTheDocument();
 
             const navButtons = screen.getAllByRole('tab');
@@ -261,7 +280,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
             expect(screen.getByTestId('sidebarmetadata')).toBeInTheDocument();
 
-            // No custom tabs should be present
             expect(screen.queryByTestId('sidebarboxai')).not.toBeInTheDocument();
 
             const navButtons = screen.getAllByRole('tab');

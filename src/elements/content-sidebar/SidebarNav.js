@@ -105,9 +105,12 @@ const SidebarNav = ({
                 tooltip={boxAiTab.title ?? boxAiTab.id}
             >
                 {boxAiTab.icon &&
-                    (React.isValidElement(boxAiTab.icon)
-                        ? boxAiTab.icon
-                        : React.createElement((boxAiTab.icon: any), { className: 'bcs-SidebarNav-icon' }))}
+                    (React.isValidElement(boxAiTab.icon) ? (
+                        boxAiTab.icon
+                    ) : (
+                        // $FlowFixMe: Flow doesn't understand dynamic component creation
+                        <boxAiTab.icon className="bcs-SidebarNav-icon" />
+                    ))}
             </SidebarNavButton>
         ),
         hasActivity && (
@@ -205,9 +208,12 @@ const SidebarNav = ({
                     tooltip={customTabTitle ?? customTabId}
                 >
                     {CustomTabIcon &&
-                        (React.isValidElement(CustomTabIcon)
-                            ? CustomTabIcon
-                            : React.createElement((CustomTabIcon: any), { className: 'bcs-SidebarNav-icon' }))}
+                        (React.isValidElement(CustomTabIcon) ? (
+                            CustomTabIcon
+                        ) : (
+                            // $FlowFixMe: Flow doesn't understand dynamic component creation
+                            <CustomTabIcon className="bcs-SidebarNav-icon" />
+                        ))}
                 </SidebarNavButton>
             );
 

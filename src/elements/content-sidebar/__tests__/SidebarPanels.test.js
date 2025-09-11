@@ -684,6 +684,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
 
             // Box AI should be rendered (since path is /boxai)
             expect(wrapper.exists('BoxAISidebar')).toBe(true);
+
+            // Other custom panels should not be rendered
+            expect(wrapper.exists('CustomPanel[id="custom1"]')).toBe(false);
+            expect(wrapper.exists('CustomPanel[id="custom2"]')).toBe(false);
         });
 
         test('should render custom panels with regular panels', () => {

@@ -291,7 +291,8 @@ class SidebarPanels extends React.Component<Props, State> {
 
         // Build eligibility for custom panels
         const customPanelEligibility = {};
-        if (hasCustomPanels && customPanels) {
+        if (hasCustomPanels) {
+            // $FlowFixMe: customPanels is checked for existence in hasCustomPanels
             customPanels.forEach(({ path, isDisabled }) => {
                 customPanelEligibility[path] = !isDisabled;
             });
@@ -324,7 +325,7 @@ class SidebarPanels extends React.Component<Props, State> {
         return (
             <Switch>
                 {hasCustomPanels &&
-                    customPanels &&
+                    // $FlowFixMe: customPanels is checked for existence in hasCustomPanels
                     customPanels.map(customPanel => {
                         const {
                             id: customPanelId,
