@@ -27,9 +27,9 @@
 
     /* Prevent any child elements from receiving pointer events */
     * {
-        pointer-events: none !important;
-        user-select: none !important;
-        cursor: default !important;
+        pointer-events: none;
+        user-select: none;
+        cursor: default;
     }
 
     /* Additional styles to ensure uneditability */
