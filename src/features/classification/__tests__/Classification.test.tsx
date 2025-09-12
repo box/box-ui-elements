@@ -137,7 +137,7 @@ describe('features/classification/Classification', () => {
             });
 
             const modifiedByClassificationLabel = screen.getByText(messages.modifiedByLabel.defaultMessage);
-            const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+            const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
             const messageText = screen.getByText(expectedMessageText);
             const appliedByTitle = screen.queryByText(messages.appliedByTitle.defaultMessage);
 
@@ -308,7 +308,7 @@ describe('features/classification/Classification', () => {
             modifiedBy,
         });
 
-        const modifiedByDetailsSection = screen.queryByTestId('classification-modifiedby');
+        const modifiedByDetailsSection = screen.getByTestId('classification-modifiedby');
         const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
         const appliedByDetails = screen.getByText('TestUser on January 15, 2024');
         const modifiedByClassificationLabel = screen.queryByText(messages.modifiedByLabel.defaultMessage);
