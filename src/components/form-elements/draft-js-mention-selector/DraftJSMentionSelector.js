@@ -35,7 +35,9 @@ const mentionStrategy = (contentBlock, callback, contentState) => {
  * @param {ContentState} contentState
  */
 const timestampStrategy = (contentBlock: any, callback: (start: number, end: number) => void, contentState: any) => {
-    if (!contentBlock || !contentState) return;
+    if (!contentBlock || !contentState) {
+        return;
+    }
     contentBlock.findEntityRanges(character => {
         const entityKey = character.getEntity();
         const hasEntityKey = entityKey !== null;
@@ -122,8 +124,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        // if video timestamping is enabled  we need to check if a timestamp entity is present in the editor state
-        // and if it is then set the isTimestampToggledOn state to true.
+        // if video timestamping is enabled we need to check if a timestamp entity is present in the editor state passed in via props
+        // and if it is then set the isTimestampToggledOn state to true. This happens when the user is edeting a comment
+        // that has a timestamp entity.
         if (this.getIsVideoTimestampEnabled()) {
             const { isTimestampToggledOn, internalEditorState } = this.state;
             const { editorState: externalEditorState } = this.props;
@@ -165,7 +168,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         }
 
         // if isRequired is false then the comment box will be closed and we want
-        // to make sure that isTimestampToggledOn is alawys set to false in this casee
+        // to make sure that isTimestampToggledOn is always set to false in this casee
         if (this.getIsVideoTimestampEnabled() && isRequired !== prevIsRequiredFromProps && isRequired === false) {
             this.setState({ isTimestampToggledOn: false });
         }
@@ -227,9 +230,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             const { fileVersionId } = this.props;
             const timestampText = `${timestamp}`;
             // Create a new entity for the timestamp. It is immutable so it will not be editable. Adding
-            // timestampInMilliseconds to the entity data. This will be used to when the comment form is submitted
-            // so that we can store the timestamp in the comments in milliseconds format. We will get the time in
-            // milliseconds from the timestamp entity when the comment form is submitted.
+            // timestampInMilliseconds, and fileVersionId to the entity data which will be used when the comment form is submitted
+            // and will be added to the text of the comment. This will let us filter out timetsamped comments based on version and also
+            // be able to click the timestamp button in comments in the sidebar and got to the proper place in the video.
             // $FlowFixMe
             const timestampEntity = currentContent?.createEntity(
                 UNEDITABLE_TIMESTAMP_TEXT, // Entity type
@@ -262,7 +265,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             newIsTimestampToggledOn = true;
         } else {
             // Create a selection range for the timestamp text and space so that we know what to remove and
-            // remove it from the beginning of the input box. This usess the timestsamp length that we calculated earlier.
+            // remove it from the beginning of the input box. This uses the timestsamp length that we calculated earlier.
             const selectionToRemove = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
                 anchorOffset: 0,
                 focusOffset: timestampLengthIncludingSpace,

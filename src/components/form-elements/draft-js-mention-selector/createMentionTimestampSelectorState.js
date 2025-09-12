@@ -20,7 +20,7 @@ const getMentionFromText = (text: string) => {
 };
 
 const getTimestampFromText = (text: string) => {
-    const timestampRegex = /#\[timestamp:(\d+),versionId:(\d+)\]/i;
+    const timestampRegex = /#\[timestamp:(\d+),versionId:(\d+)\]/;
     const matchArray = text.match(timestampRegex);
     if (!matchArray) {
         return null;

@@ -45,6 +45,13 @@ describe('components/form-elements/draft-js-mention-selector/createMentionTimest
         );
     });
 
+    test('doesnt restore timestamp from string if it doesnt match the the proper format', () => {
+        const stringWithTimestamp = `#[Timestamp:10000,VersionId:123] comment timestamp`;
+        const editorState = createMentionTimestampSelectorState(stringWithTimestamp);
+        const contentStateRaw = convertToRaw(editorState.getCurrentContent());
+        expect(contentStateRaw.entityMap).toEqual({});
+    });
+
     test('restores mentions and timestamp from string', () => {
         const stringWithMentionsAndTimestamp = `#[timestamp:10000,versionId:123] Hey @[123:Jim] you and @[456:Pam] check this out`;
         const editorState = createMentionTimestampSelectorState(stringWithMentionsAndTimestamp);
