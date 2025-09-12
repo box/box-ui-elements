@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import AppliedByAiClassificationReason from './applied-by-ai-classification-reason/AppliedByAiClassificationReason';
+import AsyncLoad from '../../elements/common/async-load';
 import ClassifiedBadge from './ClassifiedBadge';
 import Label from '../../components/label/Label';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
@@ -17,6 +17,14 @@ import type { AiClassificationReason, Controls, ControlsFormat } from './flowTyp
 
 const STYLE_INLINE: 'inline' = 'inline';
 const STYLE_TOOLTIP: 'tooltip' = 'tooltip';
+
+const LoadableAppliedByAiClassificationReason = AsyncLoad({
+    loader: () =>
+        import(
+            /* webpackMode: "lazy", webpackChunkName: "applied-by-ai-classification-reason" */ './applied-by-ai-classification-reason/AppliedByAiClassificationReason'
+        ),
+});
+
 type Props = {
     aiClassificationReason?: AiClassificationReason,
     className?: string,
