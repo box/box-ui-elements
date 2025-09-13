@@ -41,7 +41,7 @@ describe('components/form-elements/draft-js-mention-selector/createMentionTimest
         expect(contentStateRaw.entityMap[0].data.fileVersionId).toEqual('123');
 
         expect(contentStateRaw.blocks).toEqual(
-            expect.arrayContaining([expect.objectContaining({ text: `00:00:10 comment timestamp` })]),
+            expect.arrayContaining([expect.objectContaining({ text: `0:00:10 comment timestamp` })]),
         );
     });
 
@@ -68,9 +68,7 @@ describe('components/form-elements/draft-js-mention-selector/createMentionTimest
         expect(contentStateRaw.entityMap[2].data.id).toEqual('456');
 
         expect(contentStateRaw.blocks).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ text: `00:00:10 Hey @Jim you and @Pam check this out` }),
-            ]),
+            expect.arrayContaining([expect.objectContaining({ text: `0:00:10 Hey @Jim you and @Pam check this out` })]),
         );
     });
 
@@ -88,9 +86,7 @@ describe('components/form-elements/draft-js-mention-selector/createMentionTimest
         expect(contentStateRaw.entityMap[3].type).toEqual('MENTION');
         expect(contentStateRaw.entityMap[3].data.id).toEqual('1906');
         expect(contentStateRaw.blocks).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ text: `00:00:10 Hey @Jim you and @Pam check this out` }),
-            ]),
+            expect.arrayContaining([expect.objectContaining({ text: `0:00:10 Hey @Jim you and @Pam check this out` })]),
         );
         expect(contentStateRaw.blocks).toEqual(
             expect.arrayContaining([expect.objectContaining({ text: ` it's so cool and @Brian you too` })]),

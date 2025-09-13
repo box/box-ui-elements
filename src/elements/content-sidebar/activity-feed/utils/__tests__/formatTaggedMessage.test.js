@@ -16,16 +16,15 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
         );
         const timestamp = taggedMessage[0];
         const [button, text] = timestamp.props.children;
-        expect(timestamp.props.children[0]).toBe(button);
-        expect(timestamp.props.children[1]).toBe(text);
-
+        expect(button.props.children.props.children).toBe('0:02:03');
+        expect(text).toBe(' with some text ');
         const mention = taggedMessage[1];
         expect(mention.type).toBe(UserLink);
         expect(mention.props.id).toBe('3203255873');
         expect(mention.props.name).toBe('@test user');
     });
 
-    test('should return correct timestamp for first item when shouldReturnString is false', () => {
+    test('should return correct value when shouldReturnString is false', () => {
         const taggedMessage = formatTaggedMessage('with some text @[3203255873:test user]', 123, false);
         const text = taggedMessage[0];
         expect(text).toBe('with some text ');

@@ -22,15 +22,18 @@ const convertTimestampToSeconds = (timestamp: number): number => {
  * @param timestampInMilliseconds The timestamp in milliseconds
  * @returns The formatted timestamp string in HH:MM:SS format
  */
-const convertMillisecondsToHHMMSS = (timestampInMilliseconds: number): string => {
+const convertMillisecondsToHMMSS = (timestampInMilliseconds: number): string => {
     // detect if the timestamp is a number
+
+    // convert to HMMSS based on locale
     if (!timestampInMilliseconds || timestampInMilliseconds < 0) {
-        return '00:00:00';
+        return '0:00:00';
     }
     const hours = Math.floor(timestampInMilliseconds / 3600000);
     const minutes = Math.floor((timestampInMilliseconds % 3600000) / 60000);
     const seconds = Math.floor((timestampInMilliseconds % 60000) / 1000);
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    // timestamp in the format 1:23:45
+    return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
 
 /**
@@ -38,11 +41,11 @@ const convertMillisecondsToHHMMSS = (timestampInMilliseconds: number): string =>
  * @param seconds number of seconds
  * @returns The formatted timestamp string in HH:MM:SS format
  */
-const convertSecondsToHHMMSS = (seconds: number): string => {
+const convertSecondsToHMMSS = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secondsValue = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secondsValue.toString().padStart(2, '0')}`;
+    return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${secondsValue.toString().padStart(2, '0')}`;
 };
 
 /**
@@ -66,7 +69,7 @@ const formatTimestamp = (text: string, timestamp: string): React.ReactElement | 
         return textAfterTimestamp;
     }
     // convert milliseconds to HH:MM:SS
-    const timestampInHHMMSS = convertMillisecondsToHHMMSS(timestampInMilliseconds);
+    const timestampInHHMMSS = convertMillisecondsToHMMSS(timestampInMilliseconds);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -102,4 +105,4 @@ const formatTimestamp = (text: string, timestamp: string): React.ReactElement | 
     );
 };
 
-export { convertTimestampToSeconds, convertMillisecondsToHHMMSS, convertSecondsToHHMMSS, formatTimestamp };
+export { convertTimestampToSeconds, convertMillisecondsToHMMSS, convertSecondsToHMMSS, formatTimestamp };

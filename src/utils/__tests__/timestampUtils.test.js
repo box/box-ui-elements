@@ -1,52 +1,52 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import {
     convertTimestampToSeconds,
-    convertMillisecondsToHHMMSS,
-    convertSecondsToHHMMSS,
+    convertMillisecondsToHMMSS,
+    convertSecondsToHMMSS,
     formatTimestamp,
 } from '../timestampUtils.tsx';
 
-describe('elements/content-sidebar/ActivityFeed/utils/timestampUtils', () => {
-    describe('convertMillisecondsToHHMMSS', () => {
+describe('utils/timestampUtils', () => {
+    describe('convertMillisecondsToHMMSS', () => {
         test('should convert milliseconds to HH:MM:SS format correctly', () => {
-            expect(convertMillisecondsToHHMMSS(0)).toBe('00:00:00');
-            expect(convertMillisecondsToHHMMSS(1000)).toBe('00:00:01');
-            expect(convertMillisecondsToHHMMSS(60000)).toBe('00:01:00');
-            expect(convertMillisecondsToHHMMSS(3600000)).toBe('01:00:00');
+            expect(convertMillisecondsToHMMSS(0)).toBe('0:00:00');
+            expect(convertMillisecondsToHMMSS(1000)).toBe('0:00:01');
+            expect(convertMillisecondsToHMMSS(60000)).toBe('0:01:00');
+            expect(convertMillisecondsToHMMSS(3600000)).toBe('1:00:00');
         });
 
         test('should handle complex time values correctly', () => {
-            expect(convertMillisecondsToHHMMSS(3661000)).toBe('01:01:01');
-            expect(convertMillisecondsToHHMMSS(7325000)).toBe('02:02:05');
-            expect(convertMillisecondsToHHMMSS(90061000)).toBe('25:01:01');
+            expect(convertMillisecondsToHMMSS(3661000)).toBe('1:01:01');
+            expect(convertMillisecondsToHMMSS(7325000)).toBe('2:02:05');
+            expect(convertMillisecondsToHMMSS(90061000)).toBe('25:01:01');
         });
 
         test('should properly pad single digits with zeros', () => {
-            expect(convertMillisecondsToHHMMSS(5000)).toBe('00:00:05');
-            expect(convertMillisecondsToHHMMSS(65000)).toBe('00:01:05');
-            expect(convertMillisecondsToHHMMSS(3665000)).toBe('01:01:05');
+            expect(convertMillisecondsToHMMSS(5000)).toBe('0:00:05');
+            expect(convertMillisecondsToHMMSS(65000)).toBe('0:01:05');
+            expect(convertMillisecondsToHMMSS(3665000)).toBe('1:01:05');
         });
 
         test('should handle edge cases', () => {
-            expect(convertMillisecondsToHHMMSS(999)).toBe('00:00:00');
-            expect(convertMillisecondsToHHMMSS(59999)).toBe('00:00:59');
-            expect(convertMillisecondsToHHMMSS(3599999)).toBe('00:59:59');
+            expect(convertMillisecondsToHMMSS(999)).toBe('0:00:00');
+            expect(convertMillisecondsToHMMSS(59999)).toBe('0:00:59');
+            expect(convertMillisecondsToHMMSS(3599999)).toBe('0:59:59');
         });
 
         test('should handle large values correctly', () => {
-            expect(convertMillisecondsToHHMMSS(86400000)).toBe('24:00:00');
-            expect(convertMillisecondsToHHMMSS(90000000)).toBe('25:00:00');
-            expect(convertMillisecondsToHHMMSS(3661000000)).toBe('1016:56:40');
+            expect(convertMillisecondsToHMMSS(86400000)).toBe('24:00:00');
+            expect(convertMillisecondsToHMMSS(90000000)).toBe('25:00:00');
+            expect(convertMillisecondsToHMMSS(3661000000)).toBe('1016:56:40');
         });
 
         test('should handle fractional milliseconds by truncating', () => {
-            expect(convertMillisecondsToHHMMSS(1500.7)).toBe('00:00:01');
-            expect(convertMillisecondsToHHMMSS(65000.9)).toBe('00:01:05');
+            expect(convertMillisecondsToHMMSS(1500.7)).toBe('0:00:01');
+            expect(convertMillisecondsToHMMSS(65000.9)).toBe('0:01:05');
         });
 
         test('should handle invalid input', () => {
-            expect(convertMillisecondsToHHMMSS(NaN)).toBe('00:00:00');
-            expect(convertMillisecondsToHHMMSS(-1)).toBe('00:00:00');
+            expect(convertMillisecondsToHMMSS(NaN)).toBe('0:00:00');
+            expect(convertMillisecondsToHMMSS(-1)).toBe('0:00:00');
         });
     });
 
@@ -70,27 +70,27 @@ describe('elements/content-sidebar/ActivityFeed/utils/timestampUtils', () => {
 
     describe('convertSecondsToHHMMSS', () => {
         test('should convert seconds to HH:MM:SS format correctly', () => {
-            expect(convertSecondsToHHMMSS(0)).toBe('00:00:00');
-            expect(convertSecondsToHHMMSS(1)).toBe('00:00:01');
-            expect(convertSecondsToHHMMSS(60)).toBe('00:01:00');
-            expect(convertSecondsToHHMMSS(3600)).toBe('01:00:00');
+            expect(convertSecondsToHMMSS(0)).toBe('0:00:00');
+            expect(convertSecondsToHMMSS(1)).toBe('0:00:01');
+            expect(convertSecondsToHMMSS(60)).toBe('0:01:00');
+            expect(convertSecondsToHMMSS(3600)).toBe('1:00:00');
         });
 
         test('should handle complex time values correctly', () => {
-            expect(convertSecondsToHHMMSS(3661)).toBe('01:01:01');
-            expect(convertSecondsToHHMMSS(7325)).toBe('02:02:05');
-            expect(convertSecondsToHHMMSS(90061)).toBe('25:01:01');
+            expect(convertSecondsToHMMSS(3661)).toBe('1:01:01');
+            expect(convertSecondsToHMMSS(7325)).toBe('2:02:05');
+            expect(convertSecondsToHMMSS(90061)).toBe('25:01:01');
         });
 
-        test('should properly pad single digits with zeros', () => {
-            expect(convertSecondsToHHMMSS(5)).toBe('00:00:05');
-            expect(convertSecondsToHHMMSS(65)).toBe('00:01:05');
-            expect(convertSecondsToHHMMSS(3665)).toBe('01:01:05');
+        test('should properly pad single minutes with zeros', () => {
+            expect(convertSecondsToHMMSS(5)).toBe('0:00:05');
+            expect(convertSecondsToHMMSS(65)).toBe('0:01:05');
+            expect(convertSecondsToHMMSS(3665)).toBe('1:01:05');
         });
 
         test('should handle large values correctly', () => {
-            expect(convertSecondsToHHMMSS(86400)).toBe('24:00:00');
-            expect(convertSecondsToHHMMSS(90000)).toBe('25:00:00');
+            expect(convertSecondsToHMMSS(86400)).toBe('24:00:00');
+            expect(convertSecondsToHMMSS(90000)).toBe('25:00:00');
         });
     });
 
@@ -128,7 +128,7 @@ describe('elements/content-sidebar/ActivityFeed/utils/timestampUtils', () => {
             expect(link.type).toBe('a');
             expect(link.props.href).toBe('#');
             expect(link.props.onClick).toBeDefined();
-            expect(link.props.children).toBe('00:02:03');
+            expect(link.props.children).toBe('0:02:03');
             expect(text).toBe(' with some text');
         });
 
@@ -150,7 +150,7 @@ describe('elements/content-sidebar/ActivityFeed/utils/timestampUtils', () => {
             expect(button.type).toBe('div');
             expect(text).toBe('');
             const link = button.props.children;
-            expect(link.props.children).toBe('00:02:03');
+            expect(link.props.children).toBe('0:02:03');
         });
 
         test('should handle empty timestamp match', () => {

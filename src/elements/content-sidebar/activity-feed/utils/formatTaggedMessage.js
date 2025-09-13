@@ -4,10 +4,10 @@
  */
 
 import * as React from 'react';
+import { formatTimestamp } from '../../../../utils/timestampUtils';
 import { Link } from '../../../../components/link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from '../common/user-link';
-import { formatTimestamp } from './timestampUtils';
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
@@ -34,7 +34,7 @@ const formatTaggedMessage = (
     itemID: string,
     shouldReturnString: boolean,
     getUserProfileUrl?: Function,
-): React.Node | string => {
+): Node | string => {
     const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
         // attempt mention match

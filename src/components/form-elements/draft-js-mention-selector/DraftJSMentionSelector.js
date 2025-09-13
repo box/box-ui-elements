@@ -11,6 +11,7 @@ import * as messages from '../input-messages';
 import type { SelectorItems } from '../../../common/types/core';
 import Toggle from '../../toggle/Toggle';
 import { UNEDITABLE_TIMESTAMP_TEXT } from './utils';
+import { convertSecondsToHMMSS } from '../../../utils/timestampUtils';
 
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated
@@ -461,14 +462,11 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         // $FlowFixMe
         const totalSeconds = Math.floor(currentTime || 0);
+        const timestampToDisplay = convertSecondsToHMMSS(totalSeconds);
 
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        const timestamp = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         const timestampInMilliseconds = Math.floor(currentTime * 1000);
 
-        return { timestamp, timestampInMilliseconds };
+        return { timestamp: timestampToDisplay, timestampInMilliseconds };
     };
 
     render() {
