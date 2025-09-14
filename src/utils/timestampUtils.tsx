@@ -90,7 +90,7 @@ const formatTimestamp = (text: string, timestamp: string): React.ReactElement | 
         React.createElement(
             'div',
             {
-                className: 'timestamp-button',
+                className: 'bcs-ActivityMessage-timestamp',
             },
             React.createElement(
                 'a',
