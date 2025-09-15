@@ -2,8 +2,11 @@ import formatTaggedMessage from '../formatTaggedMessage';
 import UserLink from '../../common/user-link';
 
 describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () => {
+    const mockIntl = {
+        formatMessage: () => 'Seek to video timestamp',
+    };
     test('should return correct result when shouldReturnString is true', () => {
-        const actualResult = formatTaggedMessage('test @[3203255873:test user]', 123, true);
+        const actualResult = formatTaggedMessage('test @[3203255873:test user]', 123, true, undefined, mockIntl);
         const expectedResult = 'test @test user';
         expect(actualResult).toEqual(expectedResult);
     });
@@ -13,6 +16,8 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
             '#[timestamp:123000,versionId:123] with some text @[3203255873:test user]',
             123,
             false,
+            undefined,
+            mockIntl,
         );
         const timestamp = taggedMessage[0];
         const [button, text] = timestamp.props.children;
@@ -25,7 +30,13 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
     });
 
     test('should return correct value when shouldReturnString is false', () => {
-        const taggedMessage = formatTaggedMessage('with some text @[3203255873:test user]', 123, false);
+        const taggedMessage = formatTaggedMessage(
+            'with some text @[3203255873:test user]',
+            123,
+            false,
+            undefined,
+            mockIntl,
+        );
         const text = taggedMessage[0];
         expect(text).toBe('with some text ');
         const mention = taggedMessage[1];

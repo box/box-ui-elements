@@ -138,7 +138,7 @@ describe('utils/timestampUtils', () => {
         test('should handle click event to set the video current time and pause the video', () => {
             const commentText = ' #[timestamp:123000,versionId:123] with some text';
             const timestamp = '#[timestamp:123000,versionId:123]';
-            const result = formatTimestamp(commentText, timestamp);
+            const result = formatTimestamp(commentText, timestamp, mockIntl);
             const [div] = result.props.children;
             const button = div.props.children;
             const { onClick } = button.props;
@@ -147,7 +147,7 @@ describe('utils/timestampUtils', () => {
             expect(mockPause).toHaveBeenCalled();
         });
         test('should handle empty text', () => {
-            const result = formatTimestamp('', '#[timestamp:123000,versionId:123]');
+            const result = formatTimestamp('', '#[timestamp:123000,versionId:123]', mockIntl);
             expect(result).toBeDefined();
             const [button, text] = result.props.children;
             expect(button.type).toBe('div');
