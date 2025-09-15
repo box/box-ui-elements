@@ -27,14 +27,14 @@ const splitRegex =
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
  * @param {Function} [getUserProfileUrl] The method to generate a user profile url
- * @returns {String|React.Node}
+ * @returns {String|Array<React.Node|String>}
  */
 const formatTaggedMessage = (
     tagged_message: string,
     itemID: string,
     shouldReturnString: boolean,
     getUserProfileUrl?: Function,
-): Node | string => {
+): string | Array<React.Node | string> => {
     const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
         // attempt mention match
