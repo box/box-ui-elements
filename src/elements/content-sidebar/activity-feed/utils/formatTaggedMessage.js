@@ -14,10 +14,9 @@ import UserLink from '../common/user-link';
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
 // urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
 // NOTE: There are useless escapes in the regex below, should probably remove them when safe
-/* eslint-disable */
+/* eslint-disable no-useless-escape */
 const splitRegex =
     /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
-/* eslint-disable */
 
 /**
  * Formats a message a string and replaces the following:
