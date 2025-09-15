@@ -86,7 +86,7 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
         }
     };
 
-    const timestampLabel = intl?.formatMessage(messages.commentMessageTimestampLabel);
+    const timestampLabel = intl.formatMessage(messages.commentMessageTimestampLabel);
     return React.createElement(
         React.Fragment,
         null,
