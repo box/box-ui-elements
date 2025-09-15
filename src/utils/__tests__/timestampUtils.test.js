@@ -97,6 +97,7 @@ describe('utils/timestampUtils', () => {
     describe('formatTimestamp', () => {
         let mockVideo;
         let mockPause;
+        let mockIntl;
         beforeEach(() => {
             mockPause = jest.fn();
             mockVideo = { currentTime: 0, pause: mockPause };
@@ -110,6 +111,10 @@ describe('utils/timestampUtils', () => {
 
                 return null;
             });
+
+            mockIntl = {
+                formatMessage: () => 'Seek to video timestamp',
+            };
         });
 
         afterEach(() => {
@@ -119,14 +124,13 @@ describe('utils/timestampUtils', () => {
         test('should format timestamp correctly', () => {
             const commentText = '#[timestamp:123000,versionId:123] with some text';
             const timestamp = '#[timestamp:123000,versionId:123]';
-            const contentKey = 'test-key';
-            const result = formatTimestamp(commentText, timestamp, contentKey);
+            const result = formatTimestamp(commentText, timestamp, mockIntl);
             expect(result).toBeDefined();
-            const [button, text] = result.props.children;
-            expect(button.type).toBe('div');
-            expect(button.props.onClick).toBeDefined();
-            const child = button.props.children;
-            expect(child.type).toBe('span');
+            const [container, text] = result.props.children;
+            expect(container.type).toBe('div');
+            const child = container.props.children;
+            expect(child.props.onClick).toBeDefined();
+            expect(child.type).toBe('button');
             expect(child.props.children).toBe('0:02:03');
             expect(text).toBe(' with some text');
         });
@@ -135,7 +139,8 @@ describe('utils/timestampUtils', () => {
             const commentText = ' #[timestamp:123000,versionId:123] with some text';
             const timestamp = '#[timestamp:123000,versionId:123]';
             const result = formatTimestamp(commentText, timestamp);
-            const [button] = result.props.children;
+            const [div] = result.props.children;
+            const button = div.props.children;
             const { onClick } = button.props;
             onClick({ preventDefault: jest.fn() });
             expect(mockVideo.currentTime).toBe(123);

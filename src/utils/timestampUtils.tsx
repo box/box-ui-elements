@@ -3,6 +3,8 @@
  */
 
 import * as React from 'react';
+import { IntlShape } from 'react-intl';
+import messages from '../elements/content-sidebar/activity-feed/common/activity-message/messages';
 
 /**
  * Converts a timestamp representation to seconds
@@ -55,7 +57,7 @@ const convertSecondsToHMMSS = (seconds: number): string => {
  * @param contentKey The key to use for the React Fragment
  * @returns A React Fragment with formatted timestamp
  */
-const formatTimestamp = (text: string, timestamp: string): React.ReactElement | string => {
+const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): React.ReactElement | string => {
     const textAfterTimestamp = text.replace(timestamp ?? '', '');
     const strippedTimestamp = timestamp.replace(/#\[|\]/g, '');
     if (!strippedTimestamp) {
@@ -84,6 +86,7 @@ const formatTimestamp = (text: string, timestamp: string): React.ReactElement | 
         }
     };
 
+    const timestampLabel = intl?.formatMessage(messages.commentMessageTimestampLabel);
     return React.createElement(
         React.Fragment,
         null,
@@ -91,9 +94,16 @@ const formatTimestamp = (text: string, timestamp: string): React.ReactElement | 
             'div',
             {
                 className: 'bcs-ActivityMessage-timestamp',
-                onClick: handleClick,
             },
-            React.createElement('span', {}, timestampInHHMMSS),
+            React.createElement(
+                'button',
+                {
+                    'aria-label': timestampLabel,
+                    type: 'button',
+                    onClick: handleClick,
+                },
+                timestampInHHMMSS,
+            ),
         ),
         textAfterTimestamp,
     );

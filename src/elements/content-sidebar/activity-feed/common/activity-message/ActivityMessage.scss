@@ -14,19 +14,23 @@
 }
 
 .bcs-ActivityMessage-timestamp {
-    color: $bdl-box-blue-80;
-    font-size: $bdl-fontSize--dejaBlue;
-    line-height: $bdl-line-height;
-    border-radius: $bdl-border-radius-size;
-    background-color: $bdl-box-blue-10;
-    padding: 4px;
     display: inline-block;
-    border: none;
 
-    &:hover {
-        background-color: $bdl-box-blue-10 !important;
+    button {
+        color: $bdl-box-blue-110;
+        font-size: $bdl-fontSize--dejaBlue;
+        line-height: $bdl-line-height;
+        border-radius: $bdl-border-radius-size;
+        background-color: $bdl-box-blue-10;
+        padding: 4px;
+        display: inline-block;
         border: none;
-        cursor: pointer;
+
+        &:hover {
+            background-color: $bdl-box-blue-10 !important;
+            border: none;
+            cursor: pointer;
+        }
     }
 }
 

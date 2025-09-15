@@ -34,6 +34,7 @@ const formatTaggedMessage = (
     itemID: string,
     shouldReturnString: boolean,
     getUserProfileUrl?: Function,
+    intl: IntlShape,
 ): string | Array<React.Node | string> => {
     const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
@@ -62,7 +63,7 @@ const formatTaggedMessage = (
             const timestampMatch = text.match(/#\[timestamp:\d+,versionId:\d+\]/);
             const timestamp = timestampMatch && timestampMatch[0];
             if (timestamp) {
-                return formatTimestamp(text, timestamp);
+                return formatTimestamp(text, timestamp, intl);
             }
         }
 
