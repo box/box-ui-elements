@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import type { IntlShape } from 'react-intl';
 import { formatTimestamp } from '../../../../utils/timestampUtils';
 import { Link } from '../../../../components/link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
@@ -26,7 +27,8 @@ const splitRegex =
  * @param {String} tagged_message The message string to format
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
- * @param {Function} [getUserProfileUrl] The method to generate a user profile url
+ * @param {Function} [getUserProfileUrl] The
+ * @param {IntlShape} intl The intl object method to add the timestamp aria label
  * @returns {String|Array<React.Node|String>}
  */
 const formatTaggedMessage = (
