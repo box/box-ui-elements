@@ -91,15 +91,9 @@ const formatTimestamp = (text: string, timestamp: string): React.ReactElement | 
             'div',
             {
                 className: 'bcs-ActivityMessage-timestamp',
+                onClick: handleClick,
             },
-            React.createElement(
-                'a',
-                {
-                    href: '#',
-                    onClick: handleClick,
-                },
-                timestampInHHMMSS,
-            ),
+            React.createElement('span', {}, timestampInHHMMSS),
         ),
         textAfterTimestamp,
     );

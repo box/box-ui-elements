@@ -124,11 +124,10 @@ describe('utils/timestampUtils', () => {
             expect(result).toBeDefined();
             const [button, text] = result.props.children;
             expect(button.type).toBe('div');
-            const link = button.props.children;
-            expect(link.type).toBe('a');
-            expect(link.props.href).toBe('#');
-            expect(link.props.onClick).toBeDefined();
-            expect(link.props.children).toBe('0:02:03');
+            expect(button.props.onClick).toBeDefined();
+            const child = button.props.children;
+            expect(child.type).toBe('span');
+            expect(child.props.children).toBe('0:02:03');
             expect(text).toBe(' with some text');
         });
 
@@ -137,8 +136,7 @@ describe('utils/timestampUtils', () => {
             const timestamp = '#[timestamp:123000,versionId:123]';
             const result = formatTimestamp(commentText, timestamp);
             const [button] = result.props.children;
-            const link = button.props.children;
-            const { onClick } = link.props;
+            const { onClick } = button.props;
             onClick({ preventDefault: jest.fn() });
             expect(mockVideo.currentTime).toBe(123);
             expect(mockPause).toHaveBeenCalled();
@@ -149,8 +147,8 @@ describe('utils/timestampUtils', () => {
             const [button, text] = result.props.children;
             expect(button.type).toBe('div');
             expect(text).toBe('');
-            const link = button.props.children;
-            expect(link.props.children).toBe('0:02:03');
+            const child = button.props.children;
+            expect(child.props.children).toBe('0:02:03');
         });
 
         test('should handle empty timestamp match', () => {
