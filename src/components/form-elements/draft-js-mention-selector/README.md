@@ -39,9 +39,7 @@ The component hierarchy from topmost to bottommost is:
 
 ### Restoring Editor State
 
-Use `createMentionTimestampSelector(tagged_message)` instead of `EditorState.createFromContent()` when restoring content that already contains mentions.
-
-This will parse the tagged message and create `type: MENTION` or `type: UNEDITABLE_TIMESTAMP_TEXT` entities. It returns an EditorState instance.
+Use `createMentionTimestampSelectorState(tagged_message)` instead of `EditorState.createFromContent()` when restoring content that already contains mentions or timestamps. This will parse the tagged message and create `type: MENTION` or `type: UNEDITABLE_TIMESTAMP_TEXT` entities. It returns an EditorState instance.
 
 ### Examples
 
