@@ -461,10 +461,12 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
         const currentTime = video?.currentTime || 0;
 
-        // $FlowFixMe
+        // We need to get the nubmer of seconds in HMMSS format to display in the timestamp button
+        // and the timestamp in milliseconds to use when the comment form is submitted. This is because
+        // milliseconds are more precise than seconds and we need to make sure that we go to the right frame
+        // when the comment timestamp is clicked in the sidebar.
         const totalSeconds = Math.floor(currentTime);
         const timestampToDisplay = convertSecondsToHMMSS(totalSeconds);
-
         const timestampInMilliseconds = Math.floor(currentTime * 1000);
 
         return { timestamp: timestampToDisplay, timestampInMilliseconds };
