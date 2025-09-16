@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { convertTimestampToSeconds, convertMillisecondsToHMMSS, convertSecondsToHMMSS } from '../timestamp';
 
-describe('utils/timestampUtils', () => {
+describe('utils/timestamp', () => {
     describe('convertMillisecondsToHMMSS', () => {
         test('should convert milliseconds to HH:MM:SS format correctly', () => {
             expect(convertMillisecondsToHMMSS(0)).toBe('0:00:00');
