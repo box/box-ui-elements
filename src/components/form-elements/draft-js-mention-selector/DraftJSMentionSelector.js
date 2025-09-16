@@ -535,6 +535,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     {isRequired && this.getIsVideoTimestampEnabled() && (
                         <Toggle
                             className="bcs-CommentTimestamp-toggle"
+                            data-target-id="Toggle-CommentTimestamp"
                             // $FlowFixMe - timestampLabel is guaranteed to be defined when getIsVideoTimestampEnabled() returns true
                             label={timestampLabel}
                             isOn={timestampToggledOn}
