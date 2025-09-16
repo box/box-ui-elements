@@ -1,11 +1,12 @@
 @import '../../../styles/variables';
+@import '@box/blueprint-web-assets/tokens/tokens';
 
 .bcs-CommentTimestamp-entity {
-    color: $bdl-box-blue-110;
+    color: var(--box-blue-110);
     font-size: $bdl-fontSize--dejaBlue;
     line-height: $bdl-line-height;
     border-radius: $bdl-border-radius-size;
-    background-color: $bdl-box-blue-10;
+    background-color: var(--box-blue-10);
     cursor: default;
     padding: 4px;
     display: inline-block;

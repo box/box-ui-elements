@@ -11,7 +11,7 @@ import * as messages from '../input-messages';
 import type { SelectorItems } from '../../../common/types/core';
 import Toggle from '../../toggle/Toggle';
 import { UNEDITABLE_TIMESTAMP_TEXT } from './utils';
-import { convertSecondsToHMMSS } from '../../../utils/timestampUtils';
+import { convertSecondsToHMMSS } from '../../../utils/timestamp';
 
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated
@@ -126,7 +126,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
 
     componentDidMount() {
         // if video timestamping is enabled we need to check if a timestamp entity is present in the editor state passed in via props
-        // and if it is then set the isTimestampToggledOn state to true. This happens when the user is edeting a comment
+        // and if it is then set the isTimestampToggledOn state to true. This will happen when the user is editing a comment
         // that has a timestamp entity.
         if (this.getIsVideoTimestampEnabled()) {
             const { isTimestampToggledOn, internalEditorState } = this.state;

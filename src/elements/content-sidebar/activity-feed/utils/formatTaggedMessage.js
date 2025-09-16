@@ -5,10 +5,73 @@
 
 import * as React from 'react';
 import type { IntlShape } from 'react-intl';
-import { formatTimestamp } from '../../../../utils/timestampUtils';
 import { Link } from '../../../../components/link';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from '../common/user-link';
+import messages from '../common/activity-message/messages';
+import { convertTimestampToSeconds, convertMillisecondsToHMMSS } from '../../../../utils/timestamp';
+
+/**
+ * Formats text containing a timestamp by wrapping the timestamp in a Link component
+ * @param text The text containing the timestamp
+ * @param timestamp The timestamp string
+ * @param intl The intl object method to add the timestamp aria label
+ * @returns A React Fragment with formatted timestamp
+ */
+const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): React$Element<any> | string => {
+    if (!timestamp || typeof timestamp !== 'string') {
+        return text;
+    }
+    const textAfterTimestamp = text.replace(timestamp ?? '', '');
+    const strippedTimestamp = timestamp.replace(/#\[|\]/g, '');
+    if (!strippedTimestamp) {
+        return text;
+    }
+
+    const timeStampSection = /timestamp:\d+/.exec(timestamp);
+    const timeStampValue = timeStampSection && timeStampSection[0] ? timeStampSection[0].split(':')[1] : null;
+    const timestampInMilliseconds = parseInt(timeStampValue, 10);
+    if (Number.isNaN(timestampInMilliseconds)) {
+        return textAfterTimestamp;
+    }
+    // convert milliseconds to HH:MM:SS
+    const timestampInHHMMSS = convertMillisecondsToHMMSS(timestampInMilliseconds);
+
+    const handleClick = (e: SyntheticMouseEvent<HTMLButtonElement>): void => {
+        e.preventDefault();
+        const videoContainer = document.querySelector('.bp-media-dash');
+        if (videoContainer) {
+            const video = videoContainer.querySelector('video');
+            if (video && video instanceof HTMLVideoElement) {
+                const totalSeconds = convertTimestampToSeconds(timestampInMilliseconds);
+                video.currentTime = totalSeconds;
+                video.pause();
+            }
+        }
+    };
+
+    const timestampLabel = intl.formatMessage(messages.activityMessageTimestampLabel);
+    return React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(
+            'div',
+            {
+                className: 'bcs-ActivityMessage-timestamp',
+            },
+            React.createElement(
+                'button',
+                {
+                    'aria-label': timestampLabel,
+                    type: 'button',
+                    onClick: handleClick,
+                },
+                timestampInHHMMSS,
+            ),
+        ),
+        textAfterTimestamp,
+    );
+};
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
@@ -17,7 +80,7 @@ import UserLink from '../common/user-link';
 /* eslint-disable no-useless-escape */
 const splitRegex =
     /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
-
+// eslint-enable no-useless-escape
 /**
  * Formats a message a string and replaces the following:
  * - all occurrence of mention patterns with a UserLink component

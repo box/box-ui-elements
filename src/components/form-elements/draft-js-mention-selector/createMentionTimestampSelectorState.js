@@ -2,7 +2,7 @@
 import { ContentState, EditorState, Modifier, SelectionState } from 'draft-js';
 import DraftMentionDecorator from './DraftMentionDecorator';
 import { UNEDITABLE_TIMESTAMP_TEXT } from './utils';
-import { convertMillisecondsToHMMSS } from '../../../utils/timestampUtils';
+import { convertMillisecondsToHMMSS } from '../../../utils/timestamp';
 
 // returns data for first mention in a string
 const getMentionFromText = (text: string) => {

@@ -3,7 +3,6 @@ export const white = '#fff'; // white
 export const black = '#000'; // black
 export const countBadgeBackground = '#e9163c'; // countBadgeBackground
 export const bdlBoxBlue = '#0061d5'; // bdl-box-blue
-export const bdlBoxBlue110 = '#0057C0'; // bdl-box-blue-110
 export const bdlBoxBlue80 = '#3381dd'; // bdl-box-blue-80
 export const bdlBoxBlue50 = '#7fb0ea'; // bdl-box-blue-50
 export const bdlBoxBlue40 = '#99c0ee'; // bdl-box-blue-40

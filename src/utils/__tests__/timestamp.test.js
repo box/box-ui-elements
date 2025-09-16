@@ -1,10 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import {
-    convertTimestampToSeconds,
-    convertMillisecondsToHMMSS,
-    convertSecondsToHMMSS,
-    formatTimestamp,
-} from '../timestampUtils.tsx';
+import { convertTimestampToSeconds, convertMillisecondsToHMMSS, convertSecondsToHMMSS } from '../timestamp';
 
 describe('utils/timestampUtils', () => {
     describe('convertMillisecondsToHMMSS', () => {
@@ -91,76 +86,6 @@ describe('utils/timestampUtils', () => {
         test('should handle large values correctly', () => {
             expect(convertSecondsToHMMSS(86400)).toBe('24:00:00');
             expect(convertSecondsToHMMSS(90000)).toBe('25:00:00');
-        });
-    });
-
-    describe('formatTimestamp', () => {
-        let mockVideo;
-        let mockPause;
-        let mockIntl;
-        beforeEach(() => {
-            mockPause = jest.fn();
-            mockVideo = { currentTime: 0, pause: mockPause };
-
-            const mockMediaDashContainer = { querySelector: () => mockVideo };
-
-            jest.spyOn(document, 'querySelector').mockImplementation(query => {
-                if (query === '.bp-media-dash') {
-                    return mockMediaDashContainer;
-                }
-
-                return null;
-            });
-
-            mockIntl = {
-                formatMessage: () => 'Seek to video timestamp',
-            };
-        });
-
-        afterEach(() => {
-            jest.restoreAllMocks();
-        });
-
-        test('should format timestamp correctly', () => {
-            const commentText = '#[timestamp:123000,versionId:123] with some text';
-            const timestamp = '#[timestamp:123000,versionId:123]';
-            const result = formatTimestamp(commentText, timestamp, mockIntl);
-            expect(result).toBeDefined();
-            const [container, text] = result.props.children;
-            expect(container.type).toBe('div');
-            const child = container.props.children;
-            expect(child.props.onClick).toBeDefined();
-            expect(child.type).toBe('button');
-            expect(child.props.children).toBe('0:02:03');
-            expect(text).toBe(' with some text');
-        });
-
-        test('should handle click event to set the video current time and pause the video', () => {
-            const commentText = ' #[timestamp:123000,versionId:123] with some text';
-            const timestamp = '#[timestamp:123000,versionId:123]';
-            const result = formatTimestamp(commentText, timestamp, mockIntl);
-            const [div] = result.props.children;
-            const button = div.props.children;
-            const { onClick } = button.props;
-            onClick({ preventDefault: jest.fn() });
-            expect(mockVideo.currentTime).toBe(123);
-            expect(mockPause).toHaveBeenCalled();
-        });
-        test('should handle empty text', () => {
-            const result = formatTimestamp('', '#[timestamp:123000,versionId:123]', mockIntl);
-            expect(result).toBeDefined();
-            const [button, text] = result.props.children;
-            expect(button.type).toBe('div');
-            expect(text).toBe('');
-            const child = button.props.children;
-            expect(child.props.children).toBe('0:02:03');
-        });
-
-        test('should handle empty timestamp match', () => {
-            const text = 'Check this out';
-            const timestampMatch = '';
-            const result = formatTimestamp(text, timestampMatch);
-            expect(result).toBe('Check this out');
         });
     });
 });
