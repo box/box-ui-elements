@@ -41,8 +41,9 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
         e.preventDefault();
         const videoContainer = document.querySelector('.bp-media-dash');
         if (videoContainer) {
-            const video = videoContainer.querySelector('video');
-            if (video && video instanceof HTMLVideoElement) {
+            // $FlowFixMe: querySelector('video') returns an HTMLVideoElement
+            const video: ?HTMLVideoElement = videoContainer.querySelector('video');
+            if (video) {
                 const totalSeconds = convertTimestampToSeconds(timestampInMilliseconds);
                 video.currentTime = totalSeconds;
                 video.pause();
