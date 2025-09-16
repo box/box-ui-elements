@@ -52,25 +52,15 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
     };
 
     const timestampLabel = intl.formatMessage(messages.activityMessageTimestampLabel);
-    return React.createElement(
-        React.Fragment,
-        null,
-        React.createElement(
-            'div',
-            {
-                className: 'bcs-ActivityMessage-timestamp',
-            },
-            React.createElement(
-                'button',
-                {
-                    'aria-label': timestampLabel,
-                    type: 'button',
-                    onClick: handleClick,
-                },
-                timestampInHHMMSS,
-            ),
-        ),
-        textAfterTimestamp,
+    return (
+        <>
+            <div className="bcs-ActivityMessage-timestamp bfoxx">
+                <button aria-label={timestampLabel} type="button" onClick={handleClick}>
+                    {timestampInHHMMSS}
+                </button>
+            </div>
+            {textAfterTimestamp}
+        </>
     );
 };
 
