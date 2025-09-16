@@ -132,7 +132,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             const { isTimestampToggledOn, internalEditorState } = this.state;
             const { editorState: externalEditorState } = this.props;
             const currentEditorState = internalEditorState || externalEditorState;
-            // it video timestamping is enabled and the editor state is being passed in check if a timestamp entity is present
+            // if video timestamping is enabled and the editor state is being passed in check if a timestamp entity is present
             // and if it is then set the isTimestampToggledOn state to true.
             if (!isTimestampToggledOn && currentEditorState) {
                 const currentContent = currentEditorState.getCurrentContent();
