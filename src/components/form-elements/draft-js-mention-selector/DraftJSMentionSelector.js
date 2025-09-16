@@ -13,6 +13,11 @@ import Toggle from '../../toggle/Toggle';
 import { UNEDITABLE_TIMESTAMP_TEXT } from './utils';
 import { convertSecondsToHMMSS } from '../../../utils/timestamp';
 
+type videoTimestamp = {
+    timestamp: string,
+    timestampInMilliseconds: number,
+};
+
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated
  * @see docs at {@link https://draftjs.org/docs/advanced-topics-decorators.html#compositedecorator}
@@ -457,7 +462,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         this.handleValidityStateUpdateHandler();
     };
 
-    getVideoTimestamp = (): { timestamp: string, timestampInMilliseconds: number } => {
+    getVideoTimestamp = (): videoTimestamp => {
         const mediaDashContainer: ?HTMLElement = document.querySelector('.bp-media-dash');
         // $FlowFixMe
         const video: ?HTMLVideoElement = mediaDashContainer?.querySelector('video');
