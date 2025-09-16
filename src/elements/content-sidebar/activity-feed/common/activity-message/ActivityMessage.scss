@@ -1,4 +1,5 @@
 @import '../../../../../styles/variables';
+@import '@box/blueprint-web-assets/tokens/tokens';
 
 .bcs-ActivityMessage {
     white-space: pre-wrap;
@@ -17,17 +18,17 @@
     display: inline-block;
 
     button {
-        color: var(--box-blue-110);
+        color: var(--box-blue-110, #0057c0);
         font-size: $bdl-fontSize--dejaBlue;
         line-height: $bdl-line-height;
         border-radius: $bdl-border-radius-size;
-        background-color: var(--box-blue-10);
+        background-color: $bdl-box-blue-10;
         padding: 4px;
         display: inline-block;
         border: none;
 
         &:hover {
-            background-color: var(--box-blue-10);
+            background-color: $bdl-box-blue-10;
             border: none;
             cursor: pointer;
         }
