@@ -461,7 +461,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         const currentTime = video?.currentTime || 0;
 
         // $FlowFixMe
-        const totalSeconds = Math.floor(currentTime || 0);
+        const totalSeconds = Math.floor(currentTime);
         const timestampToDisplay = convertSecondsToHMMSS(totalSeconds);
 
         const timestampInMilliseconds = Math.floor(currentTime * 1000);

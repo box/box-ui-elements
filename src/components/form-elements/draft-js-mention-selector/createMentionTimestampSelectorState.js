@@ -32,7 +32,7 @@ const getTimestampFromText = (text: string) => {
     const start = text.indexOf(fullMatch);
     const end = start + fullMatch.length;
     const data = {
-        timestampInMilliseconds: parseInt(timestamp, 10),
+        timestampInMilliseconds,
         fileVersionId: versionId,
         content: timestampToDisplay,
     };
@@ -42,13 +42,13 @@ const getTimestampFromText = (text: string) => {
 // processes timestamp entity and updates content state
 const processTimestampEntity = (contentState: ContentState, contentBlock: any, timestamp: any) => {
     const { data, start, end } = timestamp;
-    contentState.createEntity(UNEDITABLE_TIMESTAMP_TEXT, 'IMMUTABLE', data);
-    const timestampEntityKey = contentState.getLastCreatedEntityKey();
+    const contentStateWithEntity = contentState.createEntity(UNEDITABLE_TIMESTAMP_TEXT, 'IMMUTABLE', data);
+    const timestampEntityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const timestampRange = SelectionState.createEmpty(contentBlock.getKey()).merge({
         anchorOffset: start,
         focusOffset: end,
     });
-    return Modifier.replaceText(contentState, timestampRange, data.content, null, timestampEntityKey);
+    return Modifier.replaceText(contentStateWithEntity, timestampRange, data.content, null, timestampEntityKey);
 };
 
 // creates draftjs state with mentions parsed into entities
