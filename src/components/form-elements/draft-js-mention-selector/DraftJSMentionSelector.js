@@ -378,6 +378,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @returns {number} The length of the timestamp entity (including the space after it)
      */
     getTimestampLength = (currentContent: ContentState): number => {
+        // $FlowFixMe
         const block = currentContent?.getFirstBlock();
         if (!currentContent || !block) {
             return 0;
