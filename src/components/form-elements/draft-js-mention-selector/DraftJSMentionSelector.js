@@ -221,7 +221,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             return;
         }
 
-        const timestampLengthIncludingSpace = this.getTimestampLength(currentContent, currentContent.getFirstBlock());
+        const timestampLengthIncludingSpace = this.getTimestampLength(currentContent);
         const isTimestampEntityPresent = timestampLengthIncludingSpace > 0;
 
         // check if we need to toggle the timestamp on and that the timestamp entity is not already present in the content
@@ -368,7 +368,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     };
 
     getIsTimestampEntityPresent = (currentContent: ContentState): boolean => {
-        return this.getTimestampLength(currentContent, currentContent.getFirstBlock()) > 0;
+        return this.getTimestampLength(currentContent) > 0;
     };
 
     /**
@@ -377,8 +377,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
      * @param {ContentBlock} block The content block to analyze
      * @returns {number} The length of the timestamp entity (including the space after it)
      */
-    getTimestampLength = (currentContent: ContentState, block: any): number => {
-        if (!block || !currentContent) {
+    getTimestampLength = (currentContent: ContentState): number => {
+        const block = currentContent?.getFirstBlock();
+        if (!currentContent || !block) {
             return 0;
         }
         let timestampLength = 0;
@@ -413,7 +414,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
         if (this.getIsVideoTimestampEnabled() && isTimestampToggledOn) {
             const currentContent = nextEditorState.getCurrentContent();
             const firstBlock = currentContent.getFirstBlock();
-            const timestampLength = this.getTimestampLength(currentContent, firstBlock);
+            const timestampLength = this.getTimestampLength(currentContent);
             const timestampEntityFound = timestampLength > 0;
             // If timestamp entity is no longer present, update the state
             if (!timestampEntityFound) {
