@@ -235,20 +235,22 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             // and will be added to the text of the comment. This will let us filter out timetsamped comments based on version and also
             // be able to click the timestamp button in comments in the sidebar and got to the proper place in the video.
             // $FlowFixMe
-            const timestampEntity = currentContent?.createEntity(
+            const contentWithTimestampEntity = currentContent.createEntity(
                 UNEDITABLE_TIMESTAMP_TEXT, // Entity type
                 'IMMUTABLE',
                 { timestampInMilliseconds, fileVersionId },
             );
 
             // Create a selection at the very beginning of the input box for the timestamp
-            const selectionAtStart = SelectionState.createEmpty(currentContent.getFirstBlock().getKey()).merge({
+            const selectionAtStart = SelectionState.createEmpty(
+                contentWithTimestampEntity.getFirstBlock().getKey(),
+            ).merge({
                 anchorOffset: 0,
                 focusOffset: 0,
             });
 
             // First insert the timestamp text followed by a space
-            updatedContent = Modifier.insertText(currentContent, selectionAtStart, `${timestampText} `);
+            updatedContent = Modifier.insertText(contentWithTimestampEntity, selectionAtStart, `${timestampText} `);
 
             // Then select the timestamp text not including the space
             const selectionWithTimestamp = SelectionState.createEmpty(updatedContent.getFirstBlock().getKey()).merge({
@@ -257,7 +259,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             });
 
             // Get the entity key for the timestamp entity
-            const entityKey = timestampEntity.getLastCreatedEntityKey();
+            const entityKey = contentWithTimestampEntity.getLastCreatedEntityKey();
 
             // Apply the timestamp entity to selected timestamp text. This will ensure that the timestamp is uneditable and that
             // the decorator will apply the proper styling to the timestamp.
