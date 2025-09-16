@@ -490,7 +490,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(timestampInMilliseconds).toEqual(0);
         });
 
-        test('shoudl return 0:00:00 if the video is not found', () => {
+        test('should return 0:00:00 if the video is not found', () => {
             jest.spyOn(document, 'querySelector').mockImplementation(() => {
                 return {
                     querySelector: () => {
