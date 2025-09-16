@@ -28,9 +28,9 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
         return text;
     }
 
-    const timeStampSection = /timestamp:\d+/.exec(timestamp);
-    const timeStampValue = timeStampSection && timeStampSection[0] ? timeStampSection[0].split(':')[1] : null;
-    const timestampInMilliseconds = parseInt(timeStampValue, 10);
+    const timestampSection = /timestamp:\d+/.exec(timestamp);
+    const timestampValue = timestampSection && timestampSection[0] ? timestampSection[0].split(':')[1] : null;
+    const timestampInMilliseconds = parseInt(timestampValue, 10);
     if (Number.isNaN(timestampInMilliseconds)) {
         return textAfterTimestamp;
     }
@@ -90,7 +90,7 @@ const splitRegex =
  * @param {String} tagged_message The message string to format
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
- * @param {Function} [getUserProfileUrl] The
+ * @param {Function} [getUserProfileUrl] The method to generate a user profile url
  * @param {IntlShape} intl The intl object method to add the timestamp aria label
  * @returns {String|Array<React.Node|String>}
  */

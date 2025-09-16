@@ -49,6 +49,7 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
         let mockVideo;
         let mockPause;
         let mockIntlForTimestamp;
+
         beforeEach(() => {
             mockPause = jest.fn();
             mockVideo = { currentTime: 0, pause: mockPause };

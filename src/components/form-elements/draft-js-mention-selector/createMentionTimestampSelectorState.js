@@ -4,8 +4,32 @@ import DraftMentionDecorator from './DraftMentionDecorator';
 import { UNEDITABLE_TIMESTAMP_TEXT } from './utils';
 import { convertMillisecondsToHMMSS } from '../../../utils/timestamp';
 
+type timestampData = {
+    timestampInMilliseconds: number,
+    fileVersionId: string,
+    content: string,
+};
+
+type mentionData = {
+    id: string,
+    name: string,
+    content: string,
+};
+
+type timestampResult = {
+    start: number,
+    end: number,
+    data: timestampData,
+} | null;
+
+type mentionResult = {
+    start: number,
+    end: number,
+    data: mentionData,
+} | null;
+
 // returns data for first mention in a string
-const getMentionFromText = (text: string) => {
+const getMentionFromText = (text: string): mentionResult => {
     // RegEx.exec() is stateful, so we create a new regex instance each time
     const mentionRegex = /([@＠﹫])\[(\d+):([^\]]+)]/gi;
     const matchArray = mentionRegex.exec(text);
@@ -19,7 +43,7 @@ const getMentionFromText = (text: string) => {
     return { start, end, data };
 };
 
-const getTimestampFromText = (text: string) => {
+const getTimestampFromText = (text: string): timestampResult => {
     const timestampRegex = /#\[timestamp:(\d+),versionId:(\d+)\]/;
     const matchArray = text.match(timestampRegex);
     if (!matchArray) {
@@ -40,7 +64,14 @@ const getTimestampFromText = (text: string) => {
 };
 
 // processes timestamp entity and updates content state
-const processTimestampEntity = (contentState: ContentState, contentBlock: any, timestamp: any) => {
+const processTimestampEntity = (
+    contentState: ContentState,
+    contentBlock: any,
+    timestamp: timestampResult,
+): ContentState => {
+    if (!timestamp) {
+        return contentState;
+    }
     const { data, start, end } = timestamp;
     const contentStateWithEntity = contentState.createEntity(UNEDITABLE_TIMESTAMP_TEXT, 'IMMUTABLE', data);
     const timestampEntityKey = contentStateWithEntity.getLastCreatedEntityKey();
@@ -52,7 +83,7 @@ const processTimestampEntity = (contentState: ContentState, contentBlock: any, t
 };
 
 // creates draftjs state with mentions parsed into entities
-const createMentionTimestampSelectorState = (message: string = '') => {
+const createMentionTimestampSelectorState = (message: string = ''): EditorState => {
     let contentState = ContentState.createFromText(message);
     let contentBlock = contentState.getFirstBlock();
 

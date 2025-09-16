@@ -2,6 +2,9 @@
  * @file Utility functions for timestamp formatting and conversion
  */
 
+// @ts-ignore: ONE_HOUR_MS is a constant from a non ts file
+import { ONE_HOUR_MS } from '../constants';
+
 /**
  * Converts a timestamp representation to seconds
  * @param timestamp The timestamp in milliseconds
@@ -21,14 +24,11 @@ const convertTimestampToSeconds = (timestamp: number): number => {
  * @returns The formatted timestamp string in HH:MM:SS format
  */
 const convertMillisecondsToHMMSS = (timestampInMilliseconds: number): string => {
-    // detect if the timestamp is a number
-
-    // convert to HMMSS based on locale
     if (!timestampInMilliseconds || timestampInMilliseconds < 0) {
         return '0:00:00';
     }
-    const hours = Math.floor(timestampInMilliseconds / 3600000);
-    const minutes = Math.floor((timestampInMilliseconds % 3600000) / 60000);
+    const hours = Math.floor(timestampInMilliseconds / ONE_HOUR_MS);
+    const minutes = Math.floor((timestampInMilliseconds % ONE_HOUR_MS) / 60000);
     const seconds = Math.floor((timestampInMilliseconds % 60000) / 1000);
     // timestamp in the format 1:23:45
     return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;

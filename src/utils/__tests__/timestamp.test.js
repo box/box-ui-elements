@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/media-has-caption */
 import { convertTimestampToSeconds, convertMillisecondsToHMMSS, convertSecondsToHMMSS } from '../timestamp';
 
 describe('utils/timestamp', () => {
