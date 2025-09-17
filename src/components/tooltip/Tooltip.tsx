@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
-import TetherComponent from 'react-tether';
+import TetherComponent, { type TetherProps } from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
 import CloseButton from './CloseButton';
@@ -143,7 +143,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             if (!prevState.isShown && this.state.isShown) {
                 // capture event so that tooltip closes before any other floating components that can be closed by
                 // "Escape" key(e.g. Modal, Menu, etc.)
-                document.addEventListener('keydown', this.handleKeyDown, true);
+                // document.addEventListener('keydown', this.handleKeyDown, true);
             }
             if (prevState.isShown && !this.state.isShown) {
                 document.removeEventListener('keydown', this.handleKeyDown, true);
@@ -312,22 +312,19 @@ class Tooltip extends React.Component<TooltipProps, State> {
             'with-close-button': withCloseButton,
         });
 
-        const tetherProps: {
-            attachment: TetherPosition;
-            bodyElement: HTMLElement;
-            classPrefix: string;
-            constraints: {};
-            enabled: boolean | undefined;
-            targetAttachment: TetherPosition;
+        const tetherProps: Pick<
+            TetherProps,
+            'attachment' | 'targetAttachment' | 'constraints' | 'renderElementTo' | 'classPrefix' | 'enabled'
+        > & {
             offset?: string;
             className?: string;
         } = {
             attachment: tetherPosition.attachment,
-            bodyElement: bodyEl,
             classPrefix: 'tooltip',
             constraints,
-            enabled: showTooltip,
             targetAttachment: tetherPosition.targetAttachment,
+            renderElementTo: bodyEl,
+            enabled: true,
         };
 
         if (tetherElementClassName) {
@@ -345,46 +342,74 @@ class Tooltip extends React.Component<TooltipProps, State> {
             </>
         );
 
-        const tooltip = stopBubble ? (
-            <div
-                className={classes}
-                id={this.tooltipID}
-                onClick={this.handleTooltipEvent}
-                onContextMenu={this.handleTooltipEvent}
-                onKeyPress={this.handleTooltipEvent}
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-                role="presentation"
-            >
+        const renderTooltip = (ref: React.RefObject<HTMLDivElement>) => {
+            if (!showTooltip) {
+                return null;
+            }
+            return stopBubble ? (
                 <div
-                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                    className={classes}
+                    id={this.tooltipID}
+                    onClick={this.handleTooltipEvent}
+                    onContextMenu={this.handleTooltipEvent}
+                    onKeyPress={this.handleTooltipEvent}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}
+                    role="presentation"
+                    ref={ref}
+                >
+                    <div
+                        role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                        aria-live="polite"
+                        aria-hidden={ariaHidden || isLabelMatchingTooltipText}
+                        data-testid="bdl-Tooltip"
+                    >
+                        {tooltipInner}
+                    </div>
+                </div>
+            ) : (
+                <div
                     aria-live="polite"
                     aria-hidden={ariaHidden || isLabelMatchingTooltipText}
+                    className={classes}
                     data-testid="bdl-Tooltip"
+                    id={this.tooltipID}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}
+                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                    ref={ref}
                 >
                     {tooltipInner}
                 </div>
-            </div>
-        ) : (
-            <div
-                aria-live="polite"
-                aria-hidden={ariaHidden || isLabelMatchingTooltipText}
-                className={classes}
-                data-testid="bdl-Tooltip"
-                id={this.tooltipID}
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
-            >
-                {tooltipInner}
-            </div>
-        );
+            );
+        };
 
         return (
-            <TetherComponent ref={this.tetherRef} {...tetherProps}>
-                {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && tooltip}
-            </TetherComponent>
+            <TetherComponent
+                {...tetherProps}
+                ref={this.tetherRef}
+                renderElementTo={bodyEl ?? (document.body as HTMLElement)}
+                renderTarget={(ref: React.MutableRefObject<HTMLElement>) => {
+                    return (
+                        <span
+                            ref={node => {
+                                if (!node) {
+                                    ref.current = null;
+                                    return;
+                                }
+                                const first =
+                                    (node.querySelector('*') as HTMLElement | null) ||
+                                    (node.firstElementChild as HTMLElement | null);
+                                ref.current = first;
+                            }}
+                            {...componentProps}
+                        >
+                            {children}
+                        </span>
+                    );
+                }}
+                renderElement={renderTooltip}
+            />
         );
     }
 }

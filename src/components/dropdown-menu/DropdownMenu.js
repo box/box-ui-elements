@@ -270,10 +270,13 @@ class DropdownMenu extends React.Component<Props, State> {
                 constraints={constraints}
                 enabled={isOpen}
                 targetAttachment={tetherTargetAttachment || targetAttachment}
-            >
-                {React.cloneElement(menuButton, menuButtonProps)}
-                {isOpen && React.cloneElement(menu, menuProps)}
-            </TetherComponent>
+                renderTarget={(ref: HTMLDivElement) => (
+                    <span ref={ref}>{React.cloneElement(menuButton, menuButtonProps)}</span>
+                )}
+                renderElement={(ref: HTMLDivElement) => {
+                    return isOpen ? <span ref={ref}>{isOpen && React.cloneElement(menu, menuProps)}</span> : null;
+                }}
+            />
         );
     }
 }
