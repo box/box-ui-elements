@@ -54,7 +54,7 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
     const timestampLabel = intl.formatMessage(messages.activityMessageTimestampLabel);
     return (
         <>
-            <div className="bcs-ActivityMessage-timestamp bfoxx">
+            <div className="bcs-ActivityMessage-timestamp">
                 <button aria-label={timestampLabel} type="button" onClick={handleClick}>
                     {timestampInHHMMSS}
                 </button>
