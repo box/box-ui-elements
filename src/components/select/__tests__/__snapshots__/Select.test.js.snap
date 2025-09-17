@@ -104,11 +104,11 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
           isDisabled={false}
           isShown={false}
           position="middle-right"
+          targetWrapperClassName="tooltip-icon-container"
           text="hello!!!"
           theme="default"
         >
           <PlainButton
-            className="tooltip-icon-container"
             onClick={[Function]}
             type="button"
           >

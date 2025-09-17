@@ -80,11 +80,8 @@ describe('components/text-input/TextInput', () => {
 
     test('should render Tooltip with tetherElementClassName', () => {
         const className = 'tether-element-class-name';
-        const wrapper = shallow(<TextInput error="error" label="label" tooltipTetherClassName={className} />);
-        const tetherEl = wrapper
-            .find('Tooltip')
-            .dive()
-            .find('TetherComponent');
+        const wrapper = mount(<TextInput error="error" label="label" tooltipTetherClassName={className} />);
+        const tetherEl = wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
 
         expect(tetherEl.prop('className')).toBe(className);
     });

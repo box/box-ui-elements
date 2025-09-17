@@ -298,7 +298,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should not allow user to delete if the task permissions do not allow it', () => {
-        const wrapper = shallow(
+        const wrapper = mount(
             <Task
                 {...task}
                 permissions={{ can_delete: false, can_update: true }}
@@ -308,14 +308,13 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 onDelete={jest.fn()}
             />,
         );
-        wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
-        wrapper.update();
-        expect(wrapper.find('MenuItem[data-testid="delete-task"]')).toHaveLength(0);
-        expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(1);
+        wrapper.find('button[data-testid="task-actions-menu"]').simulate('click');
+        expect(wrapper.find('MenuItem[data-testid="delete-task"]').exists()).toBe(false);
+        expect(wrapper.find('MenuItem[data-testid="edit-task"]').exists()).toBe(true);
     });
 
     test('should not allow user to edit if the permissions do not allow it', () => {
-        const wrapper = shallow(
+        const wrapper = mount(
             <Task
                 {...task}
                 permissions={{ can_delete: true, can_update: false }}
@@ -325,10 +324,9 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 onEdit={jest.fn()}
             />,
         );
-        wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
-        wrapper.update();
-        expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(0);
-        expect(wrapper.find('MenuItem[data-testid="delete-task"]')).toHaveLength(1);
+        wrapper.find('button[data-testid="task-actions-menu"]').simulate('click');
+        expect(wrapper.find('MenuItem[data-testid="edit-task"]').exists()).toBe(false);
+        expect(wrapper.find('MenuItem[data-testid="delete-task"]').exists()).toBe(true);
     });
 
     test('should show inline error for error prop', () => {

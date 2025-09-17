@@ -23,9 +23,8 @@ exports[`components/tooltip/Tooltip render() should match snapshot when stopBubb
 `;
 
 exports[`components/tooltip/Tooltip render() should not render the close button if wasClosedByUser state is true 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
     [
@@ -35,21 +34,16 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
       },
     ]
   }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={<body />}
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div>
-    Hello
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/tooltip/Tooltip render() should not render with close button if isShown is false 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
     [
@@ -59,21 +53,16 @@ exports[`components/tooltip/Tooltip render() should not render with close button
       },
     ]
   }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={<body />}
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div>
-    Hello
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/tooltip/Tooltip render() should not render with close button if showCloseButton is false 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
     [
@@ -83,29 +72,11 @@ exports[`components/tooltip/Tooltip render() should not render with close button
       },
     ]
   }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={<body />}
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip3"
-  >
-    Hello
-  </div>
-  <div
-    aria-hidden={false}
-    aria-live="polite"
-    className="tooltip bdl-Tooltip"
-    data-testid="bdl-Tooltip"
-    id="tooltip3"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    role="tooltip"
-  >
-    hi
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/tooltip/Tooltip render() should render children only when tooltip is disabled 1`] = `
@@ -115,9 +86,8 @@ exports[`components/tooltip/Tooltip render() should render children only when to
 `;
 
 exports[`components/tooltip/Tooltip render() should render children wrapped in tether when tooltip has text missing 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
     [
@@ -127,27 +97,217 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
       },
     ]
   }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={
+    <body>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip7"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        data-tether-id="1"
+        style="top: 0px; left: 0px; position: absolute;"
+      />
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip8"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip testing"
+          data-testid="bdl-Tooltip"
+          id="tooltip9"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip15"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip16"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip17"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip18"
+          role="tooltip"
+        >
+          test
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip19"
+          role="tooltip"
+        >
+          test
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip20"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip21"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip22"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip23"
+          role="tooltip"
+        >
+          Im a long tooltip description
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip is-error"
+          data-testid="bdl-Tooltip"
+          id="tooltip24"
+        >
+          hi
+        </div>
+      </div>
+    </body>
+  }
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    Hello
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/tooltip/Tooltip render() should render correctly with callout theme 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
     [
@@ -157,35 +317,16 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
       },
     ]
   }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={<body />}
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip5"
-  >
-    Hello
-  </div>
-  <div
-    aria-hidden={false}
-    aria-live="polite"
-    className="tooltip bdl-Tooltip is-callout"
-    data-testid="bdl-Tooltip"
-    id="tooltip5"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    role="tooltip"
-  >
-    hi
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/tooltip/Tooltip render() should render correctly with tetherElementClassName 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   className="tether-element-class-name"
   classPrefix="tooltip"
   constraints={
@@ -196,27 +337,251 @@ exports[`components/tooltip/Tooltip render() should render correctly with tether
       },
     ]
   }
-  enabled={false}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={
+    <body>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip7"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        data-tether-id="1"
+        style="top: 0px; left: 0px; position: absolute;"
+      />
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip8"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip testing"
+          data-testid="bdl-Tooltip"
+          id="tooltip9"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip15"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip16"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip17"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip18"
+          role="tooltip"
+        >
+          test
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip19"
+          role="tooltip"
+        >
+          test
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip20"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="true"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip21"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip22"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip23"
+          role="tooltip"
+        >
+          Im a long tooltip description
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip is-error"
+          data-testid="bdl-Tooltip"
+          id="tooltip24"
+        >
+          hi
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          class="tooltip bdl-Tooltip"
+          id="tooltip27"
+          role="presentation"
+        >
+          <div
+            aria-hidden="false"
+            aria-live="polite"
+            data-testid="bdl-Tooltip"
+            role="tooltip"
+          >
+            hi
+          </div>
+        </div>
+      </div>
+      <div
+        class="tooltip-element tooltip-enabled tooltip-abutted tooltip-abutted-left tooltip-abutted-right tooltip-abutted-top tooltip-abutted-bottom tooltip-element-attached-bottom tooltip-element-attached-center tooltip-target-attached-top tooltip-target-attached-center"
+        style="top: 0px; left: 0px; position: absolute; transform: translateX(0px) translateY(0px) translateZ(0);"
+      >
+        <div
+          aria-hidden="false"
+          aria-live="polite"
+          class="tooltip bdl-Tooltip"
+          data-testid="bdl-Tooltip"
+          id="tooltip28"
+          role="tooltip"
+        >
+          hi
+        </div>
+      </div>
+    </body>
+  }
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div
-    onBlur={[Function]}
-    onFocus={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    tabIndex="0"
-  >
-    Hello
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/tooltip/Tooltip render() should render with close button if isShown and showCloseButton are true 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
-  bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
     [
@@ -226,30 +591,9 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
       },
     ]
   }
-  enabled={true}
-  renderElementTag="div"
-  renderElementTo={null}
+  renderElement={[Function]}
+  renderElementTo={<body />}
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div
-    aria-describedby="tooltip1"
-  >
-    Hello
-  </div>
-  <div
-    aria-hidden={false}
-    aria-live="polite"
-    className="tooltip bdl-Tooltip with-close-button"
-    data-testid="bdl-Tooltip"
-    id="tooltip1"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    role="tooltip"
-  >
-    hi
-    <CloseButton
-      onClick={[Function]}
-    />
-  </div>
-</TetherComponent>
+/>
 `;

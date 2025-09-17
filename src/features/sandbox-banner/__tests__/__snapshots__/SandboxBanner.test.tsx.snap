@@ -6,17 +6,14 @@ exports[`features/sandbox-banner/SandboxBanner should correctly render default e
   constrainToWindow={true}
   isDisabled={false}
   position="top-center"
+  targetWrapperClassName="bdl-SandboxBanner"
   text="foo"
   theme="default"
 >
   <div
-    className="bdl-SandboxBanner"
+    className="bdl-SandboxBanner-text"
   >
-    <div
-      className="bdl-SandboxBanner-text"
-    >
-      foo
-    </div>
+    foo
   </div>
 </Tooltip>
 `;

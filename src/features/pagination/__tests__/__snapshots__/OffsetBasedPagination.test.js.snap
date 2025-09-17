@@ -35,9 +35,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             isResponsive={false}
             isRightAligned={true}
           >
-            <TetherComponent
+            <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -49,50 +48,55 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 ]
               }
               enabled={false}
-              renderElementTag="div"
-              renderElementTo={null}
+              renderElement={[Function]}
+              renderElementTo={<body />}
+              renderTarget={[Function]}
               targetAttachment="bottom right"
             >
-              <Button
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="bdl-Pagination-toggle"
-                id="menubutton2"
-                isLoading={false}
-                key=".$menubutton2"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                showRadar={false}
-                type="submit"
+              <div
+                className="bdl-DropdownMenu-target"
               >
-                <button
+                <Button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  className="btn bdl-Pagination-toggle"
+                  className="bdl-Pagination-toggle"
                   id="menubutton2"
+                  isLoading={false}
+                  key="menubutton2"
                   onClick={[Function]}
                   onKeyDown={[Function]}
+                  showRadar={false}
                   type="submit"
                 >
-                  <span
-                    className="btn-content"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className="btn bdl-Pagination-toggle"
+                    id="menubutton2"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    type="submit"
                   >
-                    <FormattedMessage
-                      defaultMessage="{pageNumber} of {pageCount}"
-                      id="be.pagination.pageStatus"
-                      values={
-                        {
-                          "pageCount": 5,
-                          "pageNumber": 1,
-                        }
-                      }
+                    <span
+                      className="btn-content"
                     >
-                      <div />
-                    </FormattedMessage>
-                  </span>
-                </button>
-              </Button>
-            </TetherComponent>
+                      <FormattedMessage
+                        defaultMessage="{pageNumber} of {pageCount}"
+                        id="be.pagination.pageStatus"
+                        values={
+                          {
+                            "pageCount": 5,
+                            "pageNumber": 1,
+                          }
+                        }
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </span>
+                  </button>
+                </Button>
+              </div>
+            </d>
           </DropdownMenu>
         </PaginationMenu>
       </div>
@@ -183,9 +187,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -195,70 +198,73 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageForward
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-forward "
+                        <IconPageForward
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-forward "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageForward>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-forward "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageForward>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
         </div>
@@ -303,9 +309,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             isResponsive={false}
             isRightAligned={true}
           >
-            <TetherComponent
+            <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -317,50 +322,55 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 ]
               }
               enabled={false}
-              renderElementTag="div"
-              renderElementTo={null}
+              renderElement={[Function]}
+              renderElementTo={<body />}
+              renderTarget={[Function]}
               targetAttachment="bottom right"
             >
-              <Button
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="bdl-Pagination-toggle"
-                id="menubutton7"
-                isLoading={false}
-                key=".$menubutton7"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                showRadar={false}
-                type="submit"
+              <div
+                className="bdl-DropdownMenu-target"
               >
-                <button
+                <Button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  className="btn bdl-Pagination-toggle"
+                  className="bdl-Pagination-toggle"
                   id="menubutton7"
+                  isLoading={false}
+                  key="menubutton7"
                   onClick={[Function]}
                   onKeyDown={[Function]}
+                  showRadar={false}
                   type="submit"
                 >
-                  <span
-                    className="btn-content"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className="btn bdl-Pagination-toggle"
+                    id="menubutton7"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    type="submit"
                   >
-                    <FormattedMessage
-                      defaultMessage="{pageNumber} of {pageCount}"
-                      id="be.pagination.pageStatus"
-                      values={
-                        {
-                          "pageCount": 5,
-                          "pageNumber": 1,
-                        }
-                      }
+                    <span
+                      className="btn-content"
                     >
-                      <div />
-                    </FormattedMessage>
-                  </span>
-                </button>
-              </Button>
-            </TetherComponent>
+                      <FormattedMessage
+                        defaultMessage="{pageNumber} of {pageCount}"
+                        id="be.pagination.pageStatus"
+                        values={
+                          {
+                            "pageCount": 5,
+                            "pageNumber": 1,
+                          }
+                        }
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </span>
+                  </button>
+                </Button>
+              </div>
+            </d>
           </DropdownMenu>
         </PaginationMenu>
       </div>
@@ -451,9 +461,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -463,70 +472,73 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageForward
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-forward "
+                        <IconPageForward
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-forward "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageForward>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-forward "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageForward>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
         </div>
@@ -571,9 +583,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             isResponsive={false}
             isRightAligned={true}
           >
-            <TetherComponent
+            <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -585,50 +596,55 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 ]
               }
               enabled={false}
-              renderElementTag="div"
-              renderElementTo={null}
+              renderElement={[Function]}
+              renderElementTo={<body />}
+              renderTarget={[Function]}
               targetAttachment="bottom right"
             >
-              <Button
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="bdl-Pagination-toggle"
-                id="menubutton12"
-                isLoading={false}
-                key=".$menubutton12"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                showRadar={false}
-                type="submit"
+              <div
+                className="bdl-DropdownMenu-target"
               >
-                <button
+                <Button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  className="btn bdl-Pagination-toggle"
+                  className="bdl-Pagination-toggle"
                   id="menubutton12"
+                  isLoading={false}
+                  key="menubutton12"
                   onClick={[Function]}
                   onKeyDown={[Function]}
+                  showRadar={false}
                   type="submit"
                 >
-                  <span
-                    className="btn-content"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className="btn bdl-Pagination-toggle"
+                    id="menubutton12"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    type="submit"
                   >
-                    <FormattedMessage
-                      defaultMessage="{pageNumber} of {pageCount}"
-                      id="be.pagination.pageStatus"
-                      values={
-                        {
-                          "pageCount": 5,
-                          "pageNumber": 1,
-                        }
-                      }
+                    <span
+                      className="btn-content"
                     >
-                      <div />
-                    </FormattedMessage>
-                  </span>
-                </button>
-              </Button>
-            </TetherComponent>
+                      <FormattedMessage
+                        defaultMessage="{pageNumber} of {pageCount}"
+                        id="be.pagination.pageStatus"
+                        values={
+                          {
+                            "pageCount": 5,
+                            "pageNumber": 1,
+                          }
+                        }
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </span>
+                  </button>
+                </Button>
+              </div>
+            </d>
           </DropdownMenu>
         </PaginationMenu>
       </div>
@@ -719,9 +735,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -731,70 +746,73 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageForward
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-forward "
+                        <IconPageForward
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-forward "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageForward>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-forward "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageForward>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
         </div>
@@ -839,9 +857,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             isResponsive={false}
             isRightAligned={true}
           >
-            <TetherComponent
+            <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -853,50 +870,55 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 ]
               }
               enabled={false}
-              renderElementTag="div"
-              renderElementTo={null}
+              renderElement={[Function]}
+              renderElementTo={<body />}
+              renderTarget={[Function]}
               targetAttachment="bottom right"
             >
-              <Button
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="bdl-Pagination-toggle"
-                id="menubutton17"
-                isLoading={false}
-                key=".$menubutton17"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                showRadar={false}
-                type="submit"
+              <div
+                className="bdl-DropdownMenu-target"
               >
-                <button
+                <Button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  className="btn bdl-Pagination-toggle"
+                  className="bdl-Pagination-toggle"
                   id="menubutton17"
+                  isLoading={false}
+                  key="menubutton17"
                   onClick={[Function]}
                   onKeyDown={[Function]}
+                  showRadar={false}
                   type="submit"
                 >
-                  <span
-                    className="btn-content"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className="btn bdl-Pagination-toggle"
+                    id="menubutton17"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    type="submit"
                   >
-                    <FormattedMessage
-                      defaultMessage="{pageNumber} of {pageCount}"
-                      id="be.pagination.pageStatus"
-                      values={
-                        {
-                          "pageCount": 5,
-                          "pageNumber": 2,
-                        }
-                      }
+                    <span
+                      className="btn-content"
                     >
-                      <div />
-                    </FormattedMessage>
-                  </span>
-                </button>
-              </Button>
-            </TetherComponent>
+                      <FormattedMessage
+                        defaultMessage="{pageNumber} of {pageCount}"
+                        id="be.pagination.pageStatus"
+                        values={
+                          {
+                            "pageCount": 5,
+                            "pageNumber": 2,
+                          }
+                        }
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </span>
+                  </button>
+                </Button>
+              </div>
+            </d>
           </DropdownMenu>
         </PaginationMenu>
       </div>
@@ -928,9 +950,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -940,71 +961,74 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageBack
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-back "
+                        <IconPageBack
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-back "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                              transform="rotate(180 4 7)"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageBack>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-back "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                                transform="rotate(180 4 7)"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageBack>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
           <Tooltip
@@ -1029,9 +1053,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -1041,70 +1064,73 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageForward
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-forward "
+                        <IconPageForward
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-forward "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageForward>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-forward "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageForward>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
         </div>
@@ -1149,9 +1175,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             isResponsive={false}
             isRightAligned={true}
           >
-            <TetherComponent
+            <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -1163,50 +1188,55 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 ]
               }
               enabled={false}
-              renderElementTag="div"
-              renderElementTo={null}
+              renderElement={[Function]}
+              renderElementTo={<body />}
+              renderTarget={[Function]}
               targetAttachment="bottom right"
             >
-              <Button
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="bdl-Pagination-toggle"
-                id="menubutton23"
-                isLoading={false}
-                key=".$menubutton23"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                showRadar={false}
-                type="submit"
+              <div
+                className="bdl-DropdownMenu-target"
               >
-                <button
+                <Button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  className="btn bdl-Pagination-toggle"
+                  className="bdl-Pagination-toggle"
                   id="menubutton23"
+                  isLoading={false}
+                  key="menubutton23"
                   onClick={[Function]}
                   onKeyDown={[Function]}
+                  showRadar={false}
                   type="submit"
                 >
-                  <span
-                    className="btn-content"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className="btn bdl-Pagination-toggle"
+                    id="menubutton23"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    type="submit"
                   >
-                    <FormattedMessage
-                      defaultMessage="{pageNumber} of {pageCount}"
-                      id="be.pagination.pageStatus"
-                      values={
-                        {
-                          "pageCount": 5,
-                          "pageNumber": 4,
-                        }
-                      }
+                    <span
+                      className="btn-content"
                     >
-                      <div />
-                    </FormattedMessage>
-                  </span>
-                </button>
-              </Button>
-            </TetherComponent>
+                      <FormattedMessage
+                        defaultMessage="{pageNumber} of {pageCount}"
+                        id="be.pagination.pageStatus"
+                        values={
+                          {
+                            "pageCount": 5,
+                            "pageNumber": 4,
+                          }
+                        }
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </span>
+                  </button>
+                </Button>
+              </div>
+            </d>
           </DropdownMenu>
         </PaginationMenu>
       </div>
@@ -1238,9 +1268,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -1250,71 +1279,74 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageBack
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-back "
+                        <IconPageBack
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-back "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                              transform="rotate(180 4 7)"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageBack>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-back "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                                transform="rotate(180 4 7)"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageBack>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
           <Tooltip
@@ -1339,9 +1371,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -1351,70 +1382,73 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageForward
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-forward "
+                        <IconPageForward
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-forward "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageForward>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-forward "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageForward>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
         </div>
@@ -1459,9 +1493,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             isResponsive={false}
             isRightAligned={true}
           >
-            <TetherComponent
+            <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -1473,50 +1506,55 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 ]
               }
               enabled={false}
-              renderElementTag="div"
-              renderElementTo={null}
+              renderElement={[Function]}
+              renderElementTo={<body />}
+              renderTarget={[Function]}
               targetAttachment="bottom right"
             >
-              <Button
-                aria-expanded="false"
-                aria-haspopup="true"
-                className="bdl-Pagination-toggle"
-                id="menubutton29"
-                isLoading={false}
-                key=".$menubutton29"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                showRadar={false}
-                type="submit"
+              <div
+                className="bdl-DropdownMenu-target"
               >
-                <button
+                <Button
                   aria-expanded="false"
                   aria-haspopup="true"
-                  className="btn bdl-Pagination-toggle"
+                  className="bdl-Pagination-toggle"
                   id="menubutton29"
+                  isLoading={false}
+                  key="menubutton29"
                   onClick={[Function]}
                   onKeyDown={[Function]}
+                  showRadar={false}
                   type="submit"
                 >
-                  <span
-                    className="btn-content"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className="btn bdl-Pagination-toggle"
+                    id="menubutton29"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    type="submit"
                   >
-                    <FormattedMessage
-                      defaultMessage="{pageNumber} of {pageCount}"
-                      id="be.pagination.pageStatus"
-                      values={
-                        {
-                          "pageCount": 5,
-                          "pageNumber": 5,
-                        }
-                      }
+                    <span
+                      className="btn-content"
                     >
-                      <div />
-                    </FormattedMessage>
-                  </span>
-                </button>
-              </Button>
-            </TetherComponent>
+                      <FormattedMessage
+                        defaultMessage="{pageNumber} of {pageCount}"
+                        id="be.pagination.pageStatus"
+                        values={
+                          {
+                            "pageCount": 5,
+                            "pageNumber": 5,
+                          }
+                        }
+                      >
+                        <div />
+                      </FormattedMessage>
+                    </span>
+                  </button>
+                </Button>
+              </div>
+            </d>
           </DropdownMenu>
         </PaginationMenu>
       </div>
@@ -1548,9 +1586,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               theme="default"
             >
-              <TetherComponent
+              <d
                 attachment="bottom center"
-                bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
                   [
@@ -1560,71 +1597,74 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                     },
                   ]
                 }
-                enabled={false}
-                renderElementTag="div"
-                renderElementTo={null}
+                renderElement={[Function]}
+                renderElementTo={<body />}
+                renderTarget={[Function]}
                 targetAttachment="top center"
               >
-                <Button
-                  className=""
-                  isDisabled={false}
-                  isLoading={false}
-                  key=".0"
-                  onBlur={[Function]}
-                  onClick={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                  onMouseLeave={[Function]}
-                  showRadar={false}
-                  tabIndex="0"
-                  type="submit"
+                <div
+                  className="bdl-Tooltip-target"
                 >
-                  <button
-                    className="btn"
+                  <Button
+                    className=""
+                    isDisabled={false}
+                    isLoading={false}
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
+                    showRadar={false}
                     tabIndex="0"
                     type="submit"
                   >
-                    <span
-                      className="btn-content"
+                    <button
+                      className="btn"
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      tabIndex="0"
+                      type="submit"
                     >
-                      <IconPageBack
-                        height={9}
-                        width={6}
+                      <span
+                        className="btn-content"
                       >
-                        <AccessibleSVG
-                          className="icon-page-back "
+                        <IconPageBack
                           height={9}
-                          viewBox="0 0 8 13"
                           width={6}
                         >
-                          <svg
-                            aria-hidden="true"
+                          <AccessibleSVG
                             className="icon-page-back "
-                            focusable="false"
                             height={9}
-                            role="presentation"
                             viewBox="0 0 8 13"
                             width={6}
                           >
-                            <path
-                              className="fill-color"
-                              d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
-                              fill="#000000"
-                              fillRule="evenodd"
-                              transform="rotate(180 4 7)"
-                            />
-                          </svg>
-                        </AccessibleSVG>
-                      </IconPageBack>
-                    </span>
-                  </button>
-                </Button>
-              </TetherComponent>
+                            <svg
+                              aria-hidden="true"
+                              className="icon-page-back "
+                              focusable="false"
+                              height={9}
+                              role="presentation"
+                              viewBox="0 0 8 13"
+                              width={6}
+                            >
+                              <path
+                                className="fill-color"
+                                d="M.1 11.3l4.6-4.5L.1 2.2 1.5.8l6 6-6 6-1.4-1.5z"
+                                fill="#000000"
+                                fillRule="evenodd"
+                                transform="rotate(180 4 7)"
+                              />
+                            </svg>
+                          </AccessibleSVG>
+                        </IconPageBack>
+                      </span>
+                    </button>
+                  </Button>
+                </div>
+              </d>
             </Tooltip>
           </Tooltip>
           <Tooltip

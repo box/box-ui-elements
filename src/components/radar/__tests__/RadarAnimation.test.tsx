@@ -1,14 +1,19 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow, ReactWrapper } from 'enzyme';
 import RadarAnimation, { RadarAnimationProps, RadarAnimationPosition } from '../RadarAnimation';
 
 describe('components/radar/RadarAnimation', () => {
-    const getWrapper = (props: {}) =>
-        shallow<RadarAnimation>(
+    const renderWrapper = (props: Partial<RadarAnimationProps> & Record<string, unknown> = {}) => {
+        return mount<RadarAnimation>(
             <RadarAnimation {...props}>
                 <div>Hello</div>
             </RadarAnimation>,
         );
+    };
+
+    const findTetherComponent = (wrapper: ReactWrapper) => {
+        return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
+    };
     [
         {
             // description:
@@ -52,13 +57,17 @@ describe('components/radar/RadarAnimation', () => {
         },
     ].forEach(({ position }) => {
         test(`should render correctly with ${position} positioning`, () => {
-            const wrapper = getWrapper({ position } as RadarAnimationProps);
+            const wrapper = shallow<RadarAnimation>(
+                <RadarAnimation position={position}>
+                    <div>Hello</div>
+                </RadarAnimation>,
+            );
             expect(wrapper).toMatchSnapshot();
         });
     });
 
     test('should spread the rest of the props to the radar node', () => {
-        const wrapper = getWrapper({
+        const wrapper = renderWrapper({
             'data-resin-target': 'radaranimation1',
         });
         expect(wrapper.find('.radar').prop('data-resin-target')).toBe('radaranimation1');
@@ -66,44 +75,41 @@ describe('components/radar/RadarAnimation', () => {
 
     test('should render with custom offset when provided', () => {
         const offset = '0 10px';
-        const wrapper = getWrapper({
+        const wrapper = renderWrapper({
             offset,
         });
 
-        expect(wrapper.prop('offset')).toEqual(offset);
+        const tetherComponent = findTetherComponent(wrapper);
+        expect(tetherComponent.prop('offset')).toEqual(offset);
     });
 
     test('should render correctly with tetherElementClassName', () => {
         expect(
-            getWrapper({
-                tetherElementClassName: 'tether-element-class-name',
-            }),
+            shallow<RadarAnimation>(
+                <RadarAnimation tetherElementClassName="tether-element-class-name">
+                    <div>Hello</div>
+                </RadarAnimation>,
+            ),
         ).toMatchSnapshot();
     });
 
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
-            expect(
-                getWrapper({} as RadarAnimationProps)
-                    .find('.radar')
-                    .exists(),
-            ).toBe(true);
+            const wrapper = renderWrapper({});
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should be shown when isShown is true', () => {
-            expect(
-                getWrapper({ isShown: true } as RadarAnimationProps)
-                    .find('.radar')
-                    .exists(),
-            ).toBe(true);
+            const wrapper = renderWrapper({ isShown: true });
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should not be shown when isShown is false', () => {
-            expect(
-                getWrapper({ isShown: false } as RadarAnimationProps)
-                    .find('.radar')
-                    .exists(),
-            ).toBe(false);
+            const wrapper = renderWrapper({ isShown: false });
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('enabled')).toBe(false);
         });
     });
 
@@ -111,7 +117,7 @@ describe('components/radar/RadarAnimation', () => {
         test.each([true, false])('should only position the tether when shown', isShown => {
             const positionTetherMock = jest.fn();
 
-            const wrapper = getWrapper({ isShown } as RadarAnimationProps);
+            const wrapper = renderWrapper({ isShown });
             // @ts-ignore: react-tether shenanigans
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
 

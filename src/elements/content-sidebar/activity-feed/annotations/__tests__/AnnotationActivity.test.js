@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
@@ -46,7 +46,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         mentionSelectorContacts,
     };
 
-    const getWrapper = (props = {}) => shallow(<AnnotationActivity {...mockActivity} {...props} />);
+    const getWrapper = (props = {}) => mount(<AnnotationActivity {...mockActivity} {...props} />);
 
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
@@ -84,7 +84,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             const wrapper = getWrapper({ item });
 
             expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
-            expect(wrapper.find('AnnotationActivityLink').props()).toMatchObject({
+            expect(wrapper.find('AnnotationActivityLink').first().props()).toMatchObject({
                 'data-resin-target': 'annotationLink',
                 message: {
                     ...messages.annotationActivityPageItem,
@@ -109,19 +109,24 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         const wrapper = getWrapper({ ...mockActivity, ...activity });
 
-        wrapper.find(AnnotationActivityMenu).dive().simulate('click');
-        wrapper.find(AnnotationActivityMenu).dive().find('MenuItem').simulate('click');
+        React.act(() => {
+            wrapper.find(AnnotationActivityMenu).prop('onEdit')();
+        });
+        wrapper.update();
         expect(wrapper.exists('ForwardRef(withFeatureConsumer(CommentForm))')).toBe(true);
 
         // Firing the onCancel prop will remove the CommentForm
-        wrapper.find('ForwardRef(withFeatureConsumer(CommentForm))').props().onCancel();
+        React.act(() => {
+            wrapper.find('ForwardRef(withFeatureConsumer(CommentForm))').props().onCancel();
+        });
+        wrapper.update();
         expect(wrapper.exists('ForwardRef(withFeatureConsumer(CommentForm))')).toBe(false);
     });
 
     test('should correctly render annotation activity of another file version', () => {
         const wrapper = getWrapper({ isCurrentVersion: false });
 
-        expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
+        expect(wrapper.find('AnnotationActivityLink').first().prop('message')).toEqual({
             ...messages.annotationActivityVersionLink,
             values: { number: '2' },
         });
@@ -129,7 +134,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
     test('should render version unavailable if file version is null', () => {
         const wrapper = getWrapper({ item: { ...mockAnnotation, file_version: null } });
-        const activityLink = wrapper.find('AnnotationActivityLink');
+        const activityLink = wrapper.find('AnnotationActivityLink').first();
 
         expect(activityLink.prop('message')).toEqual({
             ...messages.annotationActivityVersionUnavailable,
@@ -233,7 +238,9 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             const wrapper = getWrapper({ item });
 
-            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            React.act(() => {
+                wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            });
 
             expect(wrapper.exists(DeleteConfirmation));
         });
@@ -246,8 +253,14 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             const wrapper = getWrapper({ item });
 
-            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
-            wrapper.find(DeleteConfirmation).prop('onDeleteCancel')();
+            React.act(() => {
+                wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            });
+            wrapper.update();
+            React.act(() => {
+                wrapper.find(DeleteConfirmation).prop('onDeleteCancel')();
+            });
+            wrapper.update();
 
             expect(wrapper.exists(DeleteConfirmation)).toBe(false);
         });
@@ -262,8 +275,14 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             const wrapper = getWrapper({ item, onDelete });
 
-            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
-            wrapper.find(DeleteConfirmation).prop('onDeleteConfirm')();
+            React.act(() => {
+                wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            });
+            wrapper.update();
+            React.act(() => {
+                wrapper.find(DeleteConfirmation).prop('onDeleteConfirm')();
+            });
+            wrapper.update();
 
             expect(onDelete).toHaveBeenCalledWith({ id: mockAnnotation.id, permissions });
             expect(wrapper.exists(DeleteConfirmation)).toBe(false);
@@ -316,7 +335,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
 
-            wrapper.find(AnnotationActivityMenu).prop('onMenuOpen')();
+            React.act(() => {
+                wrapper.find(AnnotationActivityMenu).prop('onMenuOpen')();
+            });
+            wrapper.update();
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
         });
@@ -326,7 +348,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
 
-            wrapper.find(AnnotationActivityMenu).prop('onEdit')();
+            React.act(() => {
+                wrapper.find(AnnotationActivityMenu).prop('onEdit')();
+            });
+            wrapper.update();
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
         });
@@ -342,7 +367,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(false);
 
-            wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            React.act(() => {
+                wrapper.find(AnnotationActivityMenu).prop('onDelete')();
+            });
+            wrapper.update();
 
             expect(wrapper.find(SelectableActivityCard).prop('isDisabled')).toBe(true);
         });

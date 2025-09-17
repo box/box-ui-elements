@@ -19,7 +19,7 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
     <MediaBody
       className="bcs-AppActivity-body"
     >
-      <TetherComponent
+      <d
         attachment="top right"
         className="bcs-AppActivity-confirm"
         constraints={
@@ -30,26 +30,10 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
             },
           ]
         }
-        renderElementTag="div"
-        renderElementTo={null}
+        renderElement={[Function]}
+        renderTarget={[Function]}
         targetAttachment="bottom right"
-      >
-        <MediaMenu
-          isDisabled={false}
-        >
-          <MenuItem
-            onClick={[Function]}
-          >
-            <IconTrash
-              color="#4e4e4e"
-            />
-            <FormattedMessage
-              defaultMessage="Delete"
-              id="be.appActivity.deleteMenuItem"
-            />
-          </MenuItem>
-        </MediaMenu>
-      </TetherComponent>
+      />
       <figcaption
         className="bcs-AppActivity-headline"
       >

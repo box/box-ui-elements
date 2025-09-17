@@ -93,7 +93,12 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         const childrenWithProps = React.cloneElement(children, { isActive: isActiveValue });
 
         return (
-            <TooltipComponent {...tooltipProps}>
+            <Tooltip
+                position="middle-left"
+                text={tooltip}
+                isTabbable={false}
+                targetWrapperClassName="bcs-NavButton-target"
+            >
                 <Button
                     accessibleWhenDisabled={true}
                     aria-controls={`${id}-content`}
@@ -143,7 +148,12 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 const childrenWithProps = React.cloneElement(children, { isActive: isActiveValue });
 
                 return (
-                    <TooltipComponent {...tooltipProps}>
+                    <Tooltip
+                        targetWrapperClassName="bcs-NavButton-target"
+                        position="middle-left"
+                        text={tooltip}
+                        isTabbable={false}
+                    >
                         <Button
                             accessibleWhenDisabled={true}
                             aria-controls={`${id}-content`}
