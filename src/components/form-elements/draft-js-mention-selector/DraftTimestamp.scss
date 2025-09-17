@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
 .bcs-CommentTimestamp-entity {
-    color: $bdl-box-blue-80;
+    color: var(--box-blue-110, #0057c0);
     font-size: $bdl-fontSize--dejaBlue;
     line-height: $bdl-line-height;
     border-radius: $bdl-border-radius-size;

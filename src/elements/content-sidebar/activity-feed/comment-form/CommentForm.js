@@ -12,7 +12,7 @@ import type { IntlShape } from 'react-intl';
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
-    createMentionSelectorState,
+    createMentionTimestampSelectorState,
     getFormattedCommentText,
 } from '../../../../components/form-elements/draft-js-mention-selector';
 import Form from '../../../../components/form-elements/form/Form';
@@ -53,8 +53,8 @@ export type CommentFormProps = {
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
     shouldFocusOnOpen
-        ? EditorState.moveFocusToEnd(createMentionSelectorState(message))
-        : createMentionSelectorState(message);
+        ? EditorState.moveFocusToEnd(createMentionTimestampSelectorState(message))
+        : createMentionTimestampSelectorState(message);
 
 type State = {
     commentEditorState: any,
@@ -115,7 +115,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
      */
     getFormattedCommentText = (): { hasMention: boolean, text: string } => {
         const { commentEditorState } = this.state;
-
         return getFormattedCommentText(commentEditorState);
     };
 
@@ -139,13 +138,12 @@ class CommentForm extends React.Component<CommentFormProps, State> {
             features = {},
             file,
         } = this.props;
-
         // Get feature configuration from context
         const timestampCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
-
         // Use feature config to determine if time stamped comments are enabled
         const istimestampedCommentsEnabled = timestampCommentsConfig?.enabled === true;
         const isVideo = FILE_EXTENSIONS.video.includes(file?.extension);
+        const versionId = file?.file_version?.id;
         const allowVideoTimestamps = isVideo && istimestampedCommentsEnabled;
         const timestampLabel = allowVideoTimestamps ? formatMessage(messages.commentTimestampLabel) : undefined;
         const { commentEditorState } = this.state;
@@ -172,6 +170,7 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                             isDisabled={isDisabled}
                             isRequired={isOpen}
                             name="commentText"
+                            fileVersionId={versionId}
                             label={formatMessage(messages.commentLabel)}
                             timestampLabel={timestampLabel}
                             description={formatMessage(messages.atMentionTipDescription)}
