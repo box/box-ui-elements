@@ -198,33 +198,44 @@ const AnnotationActivity = ({
                 {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </SelectableActivityCard>
-            <TetherComponent {...tetherProps}>
-                {isMenuVisible && (
-                    <AnnotationActivityMenu
-                        canDelete={canDelete}
-                        canEdit={canEdit}
-                        canResolve={canResolve}
-                        className="bcs-AnnotationActivity-menu"
-                        id={id}
-                        isDisabled={isConfirmingDelete}
-                        status={status}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                        onMenuClose={handleMenuClose}
-                        onMenuOpen={handleMenuOpen}
-                        onStatusChange={handleStatusChange}
-                    />
+            <TetherComponent
+                {...tetherProps}
+                renderTarget={ref => (
+                    <div ref={ref} style={{ display: 'inline-block' }}>
+                        {isMenuVisible && (
+                            <AnnotationActivityMenu
+                                canDelete={canDelete}
+                                canEdit={canEdit}
+                                canResolve={canResolve}
+                                className="bcs-AnnotationActivity-menu"
+                                id={id}
+                                isDisabled={isConfirmingDelete}
+                                status={status}
+                                onDelete={handleDelete}
+                                onEdit={handleEdit}
+                                onMenuClose={handleMenuClose}
+                                onMenuOpen={handleMenuOpen}
+                                onStatusChange={handleStatusChange}
+                            />
+                        )}
+                    </div>
                 )}
-                {isConfirmingDelete && (
-                    <DeleteConfirmation
-                        data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
-                        isOpen={isConfirmingDelete}
-                        message={messages.annotationActivityDeletePrompt}
-                        onDeleteCancel={handleDeleteCancel}
-                        onDeleteConfirm={handleDeleteConfirm}
-                    />
-                )}
-            </TetherComponent>
+                renderElement={ref => {
+                    return isConfirmingDelete ? (
+                        <div ref={ref}>
+                            {isConfirmingDelete && (
+                                <DeleteConfirmation
+                                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
+                                    isOpen={isConfirmingDelete}
+                                    message={messages.annotationActivityDeletePrompt}
+                                    onDeleteCancel={handleDeleteCancel}
+                                    onDeleteConfirm={handleDeleteConfirm}
+                                />
+                            )}
+                        </div>
+                    ) : null;
+                }}
+            />
         </>
     );
 };

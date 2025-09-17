@@ -5880,6 +5880,11 @@
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.12.tgz#bc2cab12e87978eee89fb21576b670350d6d86ab"
   integrity sha512-bTHG8fcxEqv1M9+TD14P8ok8hjxoOCkfKc8XXLaaD05kI7ohpeI956jtDOD3XHKBQrlyPughUtzm1jtVhHpA5Q==
 
+"@types/tether@^1.4.6":
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/@types/tether/-/tether-1.4.9.tgz#c35997f4cc50c3b3cd2da3926180f60ad3a38b3b"
+  integrity sha512-ugBFJlmykvwofTYZIci+5oixX2aqw/3lMqYN90v3NRupTgpVLa16StBgewjSXe/I5tWSiGrttlb66iBeDgPQgg==
+
 "@types/tough-cookie@*", "@types/tough-cookie@^4.0.5":
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.5.tgz#cb6e2a691b70cb177c6e3ae9c1d2e8b2ea8cd304"
@@ -16899,13 +16904,13 @@ react-style-singleton@^2.2.1, react-style-singleton@^2.2.2:
     get-nonce "^1.0.0"
     tslib "^2.0.0"
 
-react-tether@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-1.0.5.tgz#6d106e0039b1aa0e14d1266925486cd9cff2d217"
-  integrity sha512-dehXHK82Xx0aXZldYiGR6dzlIAruAvnDvtp5O6AyT1EC1TTMYem/kIXNHsyjFNEA1hhhL7c98GmP6ANYVbq+GQ==
+react-tether@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-tether/-/react-tether-3.0.3.tgz#a902c61474f3fa58859c48898ef8cbb3a5f99869"
+  integrity sha512-PVwIcPsCtB/PUtB3mMGcGbbcBQfoXfGae/h/24NwwLHp9RB//Ihv7fNKr2GJO9teaiCrzDReBm9S7fV/ER2h8g==
   dependencies:
-    prop-types "^15.6.2"
-    tether "^1.4.5"
+    "@types/tether" "^1.4.6"
+    tether "^1.4.7"
 
 react-textarea-autosize@^8.5.3:
   version "8.5.3"
@@ -18831,7 +18836,7 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-tether@^1.4.5:
+tether@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.7.tgz#d56a818590d8fe72e387f77a67f93ab96d8e1fb2"
   integrity sha512-Z0J1aExjoFU8pybVkQAo/vD2wfSO63r+XOPfWQMC5qtf1bI7IWqNk4MiyBcgvvnY8kqnY06dVdvwTK2S3PU/Fw==

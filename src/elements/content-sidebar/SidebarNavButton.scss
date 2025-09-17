@@ -3,7 +3,7 @@
 
 .bcs .bcs-NavButton {
     @include bdl-SidebarNavButton;
-    
+
     border-radius: 0;
 
     &::before {
@@ -24,7 +24,7 @@
     }
 
     // Style disabled buttons with proper visual feedback
-    &[aria-disabled="true"] {
+    &[aria-disabled='true'] {
         cursor: default;
     }
 
@@ -37,7 +37,7 @@
             fill: $blue;
         }
     }
-    
+
     // Blueprint button focus override
     &:not(:disabled)[data-focus-visible] {
         border-radius: var(--radius-1);
@@ -57,4 +57,8 @@
             height: 2px;
         }
     }
+}
+
+.bcs-NavButton-target {
+    display: block;
 }

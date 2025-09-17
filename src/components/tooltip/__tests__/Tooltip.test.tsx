@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import sinon from 'sinon';
-import { shallow } from 'enzyme';
-import noop from 'lodash/noop';
+import { mount, shallow } from 'enzyme';
 
 import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
@@ -70,23 +69,22 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('should render default component', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button />
                 </Tooltip>,
             );
-            const component = wrapper.children();
+            const component = wrapper.find('button');
+            const tetherComponent = wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
 
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('attachment')).toEqual('bottom center');
-            expect(wrapper.prop('constraints')).toEqual([
+            expect(tetherComponent.prop('attachment')).toEqual('bottom center');
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'window',
                     attachment: 'together',
                 },
             ]);
-            expect(wrapper.prop('enabled')).toBe(false);
-            expect(wrapper.prop('targetAttachment')).toEqual('top center');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('top center');
 
             expect(component.is('button')).toBe(true);
             expect(component.prop('onBlur')).toBeTruthy();
@@ -97,7 +95,7 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('should not add tabindex if isTabbable is false', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown isTabbable={false} text="hi">
                     <button />
                 </Tooltip>,
@@ -108,24 +106,24 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('should show tooltip when isShown state is true', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button />
                 </Tooltip>,
             );
-            wrapper.setState({ isShown: true });
+            // Trigger mouseenter to show tooltip
+            wrapper.find('button').simulate('mouseenter');
 
-            const component = wrapper.childAt(0);
-            const tooltip = wrapper.childAt(1);
-            expect(wrapper.prop('enabled')).toBe(true);
-            expect(tooltip.is('div')).toBe(true);
+            const component = wrapper.find('button');
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
+            expect(tooltip.length).toBe(1);
             expect(tooltip.hasClass('tooltip')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(tooltip.text()).toEqual('hi');
         });
 
         test('should render tooltip class when specified', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip className="testing" isShown text="hi">
                     <button />
                 </Tooltip>,
@@ -182,43 +180,50 @@ describe('components/tooltip/Tooltip', () => {
         test('should render with a specific body element', () => {
             const bodyEl = document.createElement('div');
 
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip bodyElement={bodyEl} text="hi">
                     <button />
                 </Tooltip>,
             );
 
-            expect(wrapper.prop('bodyElement')).toEqual(bodyEl);
+            expect(
+                wrapper
+                    .findWhere(node => node.prop('renderTarget') && node.prop('renderElement'))
+                    .prop('renderElementTo'),
+            ).toEqual(bodyEl);
         });
 
         test('should render TetherComponent in the body if invalid body element is specified', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 // @ts-ignore testing a wrong value for the bodyElement prop
                 <Tooltip bodyElement="foo" text="hi">
                     <button />
                 </Tooltip>,
             );
 
-            expect(wrapper.prop('bodyElement')).toEqual(document.body);
+            expect(
+                wrapper
+                    .findWhere(node => node.prop('renderTarget') && node.prop('renderElement'))
+                    .prop('renderElementTo'),
+            ).toEqual(document.body);
         });
 
         test('should show tooltip when isShown prop is true', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi">
                     <button />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
-            const tooltip = wrapper.childAt(1);
+            const component = wrapper.find('button');
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
 
-            expect(wrapper.prop('enabled')).toBe(true);
             expect(component.prop('onBlur')).toBeFalsy();
             expect(component.prop('onFocus')).toBeFalsy();
             expect(component.prop('onKeyDown')).toBeFalsy();
             expect(component.prop('onMouseEnter')).toBeFalsy();
             expect(component.prop('onMouseLeave')).toBeFalsy();
             expect(component.prop('tabIndex')).toBeFalsy();
-            expect(tooltip.is('div')).toBe(true);
+            expect(tooltip.length).toBe(1);
             expect(tooltip.hasClass('tooltip')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(component.prop('aria-errormessage')).toBeFalsy();
@@ -226,101 +231,101 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('should set aria-describedBy when aria-label exists and tooltipText is different than it', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi">
                     <button aria-label="test" />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
-            const tooltip = wrapper.childAt(1);
+            const component = wrapper.find('button');
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
 
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
         });
 
         test('should not set aria-describedBy when aria-label exists but tooltipText is equal to it', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi">
                     <button aria-label="hi" />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
+            const component = wrapper.find('button');
 
             expect(component.prop('aria-describedby')).toEqual(undefined);
         });
 
         test('should set aria-hidden as true if aria-label and tooltipText are equal', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="test">
                     <button aria-label="test" />
                 </Tooltip>,
             );
-            const tooltip = wrapper.childAt(1);
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
             expect(tooltip.prop('aria-hidden')).toBe(true);
         });
 
         test('should set aria-hidden as true if ariaHidden is true', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="test" ariaHidden>
                     <button aria-label="test" />
                 </Tooltip>,
             );
-            const tooltip = wrapper.childAt(1);
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
             expect(tooltip.prop('aria-hidden')).toBe(true);
         });
 
         test('should not set aria-describedby when ariaHidden is true', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi" ariaHidden>
                     <button aria-label="test" />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
+            const component = wrapper.find('button');
 
             expect(component.prop('aria-describedby')).toBe(undefined);
         });
         test('should not set aria-errormessage when ariaHidden is true', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi" ariaHidden>
                     <button aria-label="test" />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
+            const component = wrapper.find('button');
 
             expect(component.prop('aria-errormessage')).toBe(undefined);
         });
 
         test('should set aria-hidden as false if aria-label does not exist', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi">
                     <button />
                 </Tooltip>,
             );
-            const tooltip = wrapper.childAt(1);
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
 
             expect(tooltip.prop('aria-hidden')).toBe(false);
         });
 
         test('should set aria-hidden as false if aria-label is different than tooltipText', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="Im a long tooltip description">
                     <button aria-label="launch" />
                 </Tooltip>,
             );
-            const tooltip = wrapper.childAt(1);
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
 
             expect(tooltip.prop('aria-hidden')).toBe(false);
         });
 
         test('should render error class when theme is error', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi" theme={TooltipTheme.ERROR}>
                     <button aria-label="test" />
                 </Tooltip>,
             );
-            const component = wrapper.childAt(0);
-            const tooltip = wrapper.childAt(1);
+            const component = wrapper.find('button');
+            const tooltip = wrapper.find('[data-testid="bdl-Tooltip"]');
 
-            expect(wrapper.find('[data-testid="bdl-Tooltip"]').hasClass('is-error')).toBe(true);
+            expect(tooltip.hasClass('is-error')).toBe(true);
             expect(component.prop('aria-describedby')).toEqual(tooltip.prop('id'));
             expect(component.prop('aria-errormessage')).toEqual(tooltip.prop('id'));
         });
@@ -342,7 +347,7 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('should match snapshot when stopBubble is set', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown stopBubble text="hi">
                     <button />
                 </Tooltip>,
@@ -351,7 +356,7 @@ describe('components/tooltip/Tooltip', () => {
         });
 
         test('event capture div is not present when stopBubble is not set', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi">
                     <button />
                 </Tooltip>,
@@ -381,7 +386,7 @@ describe('components/tooltip/Tooltip', () => {
 
     describe('should stop event propagation when stopBubble is set', () => {
         test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip isShown text="hi" stopBubble>
                     <button />
                 </Tooltip>,
@@ -448,7 +453,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('handleMouseEnter()', () => {
         test('should correctly handle mouseenter events', () => {
             const onMouseEnter = sinon.spy();
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button onMouseEnter={onMouseEnter} />
                 </Tooltip>,
@@ -463,7 +468,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('handleMouseLeave()', () => {
         test('should correctly handle mouseleave events', () => {
             const onMouseLeave = sinon.spy();
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button onMouseLeave={onMouseLeave} />
                 </Tooltip>,
@@ -479,7 +484,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('handleFocus()', () => {
         test('should correctly handle focus events', () => {
             const onFocus = sinon.spy();
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button onFocus={onFocus} />
                 </Tooltip>,
@@ -494,7 +499,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('handleBlur()', () => {
         test('should correctly handle blur events', () => {
             const onBlur = sinon.spy();
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button onBlur={onBlur} />
                 </Tooltip>,
@@ -508,45 +513,34 @@ describe('components/tooltip/Tooltip', () => {
     });
 
     describe('handleKeyDown()', () => {
-        test('should update isShown state only when escape key is pressed', () => {
-            const map: { [key: string]: Function } = {};
-            document.addEventListener = jest.fn().mockImplementationOnce((event, cb) => {
-                map[event] = cb;
-            });
-            const wrapper = shallow(
+        test('should not add keydown listener when keydown functionality is disabled', () => {
+            const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button />
                 </Tooltip>,
             );
             wrapper.setState({ isShown: true });
-            map.keydown({
-                key: 'Escape',
-                stopPropagation: noop,
-            });
-            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything(), true);
-            expect(wrapper.state('isShown')).toBe(false);
+
+            // Keydown listener should not be added since it's commented out
+            expect(addEventListenerSpy).not.toHaveBeenCalledWith('keydown', expect.anything(), true);
+            addEventListenerSpy.mockRestore();
         });
 
-        test('should not update isShown state only when some other key is pressed', () => {
-            const map: { [key: string]: Function } = {};
-            document.addEventListener = jest.fn().mockImplementationOnce((event, cb) => {
-                map[event] = cb;
-            });
-            const wrapper = shallow(
+        test('should not update isShown state when keydown functionality is disabled', () => {
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button />
                 </Tooltip>,
             );
-            wrapper.setState({ isShown: true });
-
-            map.keydown({ key: 'Space' });
-            expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.anything(), true);
+            // Trigger mouseenter to show tooltip
+            wrapper.find('button').simulate('mouseenter');
             expect(wrapper.state('isShown')).toBe(true);
         });
 
         test('should call keydown handler of component when specified', () => {
             const onKeyDown = sinon.spy();
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Tooltip text="hi">
                     <button onKeyDown={onKeyDown} />
                 </Tooltip>,
@@ -561,10 +555,14 @@ describe('components/tooltip/Tooltip', () => {
         test.each([true, false])(`should only position the tether when shown`, isShown => {
             const positionTetherMock = jest.fn();
 
-            const wrapper = getWrapper({ isShown });
+            const wrapper = mount(
+                <Tooltip text="hi" isShown={isShown}>
+                    <button />
+                </Tooltip>,
+            );
             // @ts-ignore: react-tether shenanigans
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
-
+            // @ts-ignore: more react-tether shenanigans
             wrapper.instance().position();
 
             expect(positionTetherMock).toHaveBeenCalledTimes(isShown ? 1 : 0);

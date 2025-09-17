@@ -11,7 +11,11 @@ type Props = {
 const FooterIndicator = ({ indicatorText }: Props) => {
     return (
         <div className="bdl-FooterIndicator">
-            <Tooltip position={TooltipPosition.TOP_RIGHT} text={indicatorText}>
+            <Tooltip
+                targetWrapperClassName="bdl-FooterIndicator-tooltipTarget"
+                position={TooltipPosition.TOP_RIGHT}
+                text={indicatorText}
+            >
                 <div className="bdl-FooterIndicator-content">
                     <span className="bdl-FooterIndicator-iconWrapper">
                         <IconPuzzlePiece height={14} width={14} />

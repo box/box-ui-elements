@@ -351,6 +351,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToWindow={true}
       isDisabled={false}
       position="top-right"
+      targetWrapperClassName="usm-ftux-toggle-tooltip-target"
       text="Create and copy link for sharing"
       theme="default"
     >

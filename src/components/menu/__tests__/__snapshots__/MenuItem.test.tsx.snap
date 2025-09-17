@@ -8,6 +8,7 @@ exports[`components/menu/MenuItem render() should render a RadarAnimation if sho
   constrainToWindow={true}
   isShown={true}
   position="middle-right"
+  targetWrapperClassName="bdl-MenuItem-radarTarget"
 >
   <li
     className="menu-item"

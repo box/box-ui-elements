@@ -11,7 +11,11 @@ import classNames from 'classnames';
 import { Button } from '@box/blueprint-web';
 import Tooltip from '../../components/tooltip/Tooltip';
 import { isLeftClick } from '../../utils/dom';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler, ViewTypeValues } from '../common/types/SidebarNavigation';
+import type {
+    InternalSidebarNavigation,
+    InternalSidebarNavigationHandler,
+    ViewTypeValues,
+} from '../common/types/SidebarNavigation';
 import './SidebarNavButton.scss';
 
 type Props = {
@@ -51,31 +55,39 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         // Mimic router behavior using internalSidebarNavigation
         const isMatch = !!internalSidebarNavigation && internalSidebarNavigation.sidebar === sidebarView;
         const isActiveValue = isMatch && !!isOpen;
-        
+
         // Mimic isExactMatch: true when no extra navigation parameters are present
-        const hasExtraParams = internalSidebarNavigation && (
-            internalSidebarNavigation.versionId ||
-            internalSidebarNavigation.activeFeedEntryType ||
-            internalSidebarNavigation.activeFeedEntryId ||
-            internalSidebarNavigation.fileVersionId
-        );
+        const hasExtraParams =
+            internalSidebarNavigation &&
+            (internalSidebarNavigation.versionId ||
+                internalSidebarNavigation.activeFeedEntryType ||
+                internalSidebarNavigation.activeFeedEntryId ||
+                internalSidebarNavigation.fileVersionId);
         const isExactMatch = isMatch && !hasExtraParams;
-        
+
         const handleNavButtonClick = event => {
             onClick(sidebarView);
-            
+
             // Mimic router navigation behavior
             if (internalSidebarNavigationHandler && !event.defaultPrevented && isLeftClick(event)) {
                 const replace = isExactMatch;
-                internalSidebarNavigationHandler({
-                    sidebar: sidebarView,
-                    open: true,
-                }, replace);
+                internalSidebarNavigationHandler(
+                    {
+                        sidebar: sidebarView,
+                        open: true,
+                    },
+                    replace,
+                );
             }
         };
 
         return (
-            <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+            <Tooltip
+                position="middle-left"
+                text={tooltip}
+                isTabbable={false}
+                targetWrapperClassName="bcs-NavButton-target"
+            >
                 <Button
                     accessibleWhenDisabled={true}
                     aria-controls={`${id}-content`}
@@ -122,7 +134,12 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 };
 
                 return (
-                    <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+                    <Tooltip
+                        targetWrapperClassName="bcs-NavButton-target"
+                        position="middle-left"
+                        text={tooltip}
+                        isTabbable={false}
+                    >
                         <Button
                             accessibleWhenDisabled={true}
                             aria-controls={`${id}-content`}
