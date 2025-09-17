@@ -30,9 +30,23 @@ const AppliedByAiClassificationReason = ({
         <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
     );
 
+    const hasContent = Boolean(answer) || Boolean(citations);
+
     return (
-        <Card className={classNames('bdl-AppliedByAiClassificationReason', className)}>
-            <h3 className="bdl-AppliedByAiClassificationReason-header">
+        <Card
+            className={classNames(
+                'bdl-AppliedByAiClassificationReason',
+                {
+                    'bdl-AppliedByAiClassificationReason--noContent': !hasContent,
+                },
+                className,
+            )}
+        >
+            <h3
+                className={classNames('bdl-AppliedByAiClassificationReason-header', {
+                    'bdl-AppliedByAiClassificationReason-header--noContent': !hasContent,
+                })}
+            >
                 <BoxAIIconColor data-testid="box-ai-icon" height={Size5} width={Size5} />
                 <Text
                     className="bdl-AppliedByAiClassificationReason-headerText"
@@ -50,7 +64,7 @@ const AppliedByAiClassificationReason = ({
                     )}
                 </Text>
             </h3>
-            <AnswerContent className="bdl-AppliedByAiClassificationReason-answer" answer={answer} />
+            {answer && <AnswerContent className="bdl-AppliedByAiClassificationReason-answer" answer={answer} />}
             {citations && (
                 <div className="bdl-AppliedByAiClassificationReason-references">
                     <References citations={citations} />
