@@ -67,7 +67,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             expect(instance.state.isTimestampToggledOn).toEqual(true);
             expect(wrapper.find('Toggle').length).toEqual(1);
             expect(wrapper.find('Toggle').prop('isOn')).toEqual(true);
-            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
         });
     });
 
@@ -470,7 +470,9 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
             const instance = wrapper.instance();
-            expect(instance.getVideoTimestamp()).toEqual('00:01:10');
+            const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
+            expect(timestamp).toEqual('0:01:10');
+            expect(timestampInMilliseconds).toEqual(70000);
         });
 
         test('should return the correct videoe timestamp if it has not been started yet', () => {
@@ -483,10 +485,12 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                 };
             });
             const instance = wrapper.instance();
-            expect(instance.getVideoTimestamp()).toEqual('00:00:00');
+            const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
+            expect(timestamp).toEqual('0:00:00');
+            expect(timestampInMilliseconds).toEqual(0);
         });
 
-        test('shoudl return 00:00:00 if the video is not found', () => {
+        test('should return 0:00:00 if the video is not found', () => {
             jest.spyOn(document, 'querySelector').mockImplementation(() => {
                 return {
                     querySelector: () => {
@@ -496,7 +500,9 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
             const instance = wrapper.instance();
-            expect(instance.getVideoTimestamp()).toEqual('00:00:00');
+            const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
+            expect(timestamp).toEqual('0:00:00');
+            expect(timestampInMilliseconds).toEqual(0);
         });
 
         test('should return the correct precision of the timestamp', () => {
@@ -509,12 +515,19 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
             const instance = wrapper.instance();
-            expect(instance.getVideoTimestamp()).toEqual('00:02:56');
+            const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
+            expect(timestamp).toEqual('0:02:56');
+            expect(timestampInMilliseconds).toEqual(176340);
         });
     });
     describe('video timestamp toggle', () => {
         const getTimestampedEnableComponent = () => {
-            const props = { ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true };
+            const props = {
+                ...requiredProps,
+                timestampLabel: 'Toggle Timestamp',
+                isRequired: true,
+                fileVersionId: '123',
+            };
             return shallow(<DraftJSMentionSelector {...props} />);
         };
 
@@ -536,7 +549,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
-            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
             expect(instance.state.isTimestampToggledOn).toEqual(true);
         });
 
@@ -544,9 +557,9 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             const wrapper = getTimestampedEnableComponent();
             const instance = wrapper.instance();
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
-            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
             wrapper.find('Toggle').simulate('change', { target: { checked: false } });
-            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).not.toContain('00:01:10');
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).not.toContain('0:01:10');
             expect(instance.state.isTimestampToggledOn).toEqual(false);
         });
 
@@ -558,7 +571,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             });
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain(
-                '00:01:10 this is coool!!!',
+                '0:01:10 this is coool!!!',
             );
         });
 
@@ -569,7 +582,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
             });
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
-            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('00:01:10');
+            expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
             wrapper.find('Toggle').simulate('change', { target: { checked: false } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toEqual('this is coool!!!');
         });
@@ -584,7 +597,8 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             const rawContentState = convertToRaw(instance.state.internalEditorState.getCurrentContent());
             const entity = rawContentState.entityMap[0];
             expect(entity.type).toEqual('UNEDITABLE_TIMESTAMP_TEXT');
-            expect(entity.data.timestamp).toEqual('00:01:10');
+            expect(entity.data.timestampInMilliseconds).toEqual(70000);
+            expect(entity.data.fileVersionId).toEqual('123');
         });
 
         test('should remove the UNEDITABLE_TIMESTAMP_TEXT entity from the editor state when the toggle is clicked off', () => {

@@ -107,6 +107,10 @@ function addMention(editorState: EditorState, activeMention: Mention | null, men
     return editorStateWithLink;
 }
 
+const constructTimestampString = (timestampInMilliseconds: number, fileVersionId: string): string => {
+    return `#[timestamp:${timestampInMilliseconds},versionId:${fileVersionId}] `;
+};
+
 /**
  * Formats the editor's text such that it will be accepted by the server.
  */
@@ -136,11 +140,15 @@ function getFormattedCommentText(editorState: EditorState): { hasMention: boolea
                 if (entityKey) {
                     const entity = contentState.getEntity(entityKey);
                     const isMention = entity.getType() === 'MENTION';
-
+                    const isTimestamp = entity.getType() === UNEDITABLE_TIMESTAMP_TEXT;
                     if (isMention) {
                         const stringToAdd = `@[${entity.getData().id}:${text.substring(start + 1, end)}]`;
                         blockMapStringArr.push(stringToAdd);
                         hasMention = true;
+                    } else if (isTimestamp) {
+                        const { timestampInMilliseconds, fileVersionId } = entity.getData();
+                        const stringToAdd = constructTimestampString(timestampInMilliseconds, fileVersionId);
+                        blockMapStringArr.push(stringToAdd);
                     } else {
                         // For timestamp and other entity types, add the raw text
                         blockMapStringArr.push(text.substring(start, end));

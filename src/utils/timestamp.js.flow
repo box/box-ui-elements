@@ -1,0 +1,6 @@
+// @flow
+import type { IntlShape } from 'react-intl';
+
+declare export function convertTimestampToSeconds(timestamp: number): number;
+declare export function convertMillisecondsToHMMSS(timestampInMilliseconds: number): string;
+declare export function convertSecondsToHMMSS(seconds: number): string;
