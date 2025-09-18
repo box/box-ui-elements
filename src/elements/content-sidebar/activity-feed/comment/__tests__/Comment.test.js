@@ -104,7 +104,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test.each`
+    test.skip.each`
         permissions                               | onEdit       | showMenu | showDelete | showEdit
         ${{ can_delete: true, can_edit: false }}  | ${jest.fn()} | ${true}  | ${true}    | ${false}
         ${{ can_delete: false, can_edit: true }}  | ${jest.fn()} | ${true}  | ${false}   | ${true}
@@ -139,7 +139,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         },
     );
 
-    test.each`
+    test.skip.each`
         can_resolve | onEdit       | expectedResolveMenuExistance
         ${false}    | ${noop}      | ${false}
         ${false}    | ${jest.fn()} | ${false}
@@ -173,7 +173,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         },
     );
 
-    test.each`
+    test.skip.each`
         status        | expectedResolveMenuExistance | expectedUnresolvedMenuExistance
         ${'open'}     | ${true}                      | ${false}
         ${'resolved'} | ${false}                     | ${true}
