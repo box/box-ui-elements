@@ -140,7 +140,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             const tetherComponent = findTetherComponent(wrapper);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
-            expect(tetherComponent.prop('bodyElement')).toEqual(document.body);
+            expect(tetherComponent.prop('renderElementTo')).toEqual(document.body);
             expect(tetherComponent.prop('classPrefix')).toEqual('dropdown-menu');
             expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
             expect(tetherComponent.prop('constraints')).toEqual([]);
@@ -153,7 +153,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             const tetherComponent = findTetherComponent(wrapper);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
-            expect(tetherComponent.prop('bodyElement')).toEqual(document.body);
+            expect(tetherComponent.prop('renderElementTo')).toEqual(document.body);
             expect(tetherComponent.prop('classPrefix')).toEqual('dropdown-menu');
             expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
             expect(tetherComponent.prop('constraints')).toEqual([]);
@@ -176,7 +176,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             const tetherComponent = findTetherComponent(wrapper);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
-            expect(tetherComponent.prop('bodyElement')).toEqual(bodyEl);
+            expect(tetherComponent.prop('renderElementTo')).toEqual(bodyEl);
             expect(tetherComponent.prop('classPrefix')).toEqual('dropdown-menu');
             expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
             expect(tetherComponent.prop('constraints')).toEqual([]);

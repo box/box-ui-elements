@@ -37,7 +37,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
           >
             <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -50,6 +49,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               enabled={false}
               renderElement={[Function]}
+              renderElementTo={<body />}
               renderTarget={[Function]}
               targetAttachment="bottom right"
             >
@@ -307,7 +307,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
           >
             <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -320,6 +319,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               enabled={false}
               renderElement={[Function]}
+              renderElementTo={<body />}
               renderTarget={[Function]}
               targetAttachment="bottom right"
             >
@@ -577,7 +577,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
           >
             <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -590,6 +589,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               enabled={false}
               renderElement={[Function]}
+              renderElementTo={<body />}
               renderTarget={[Function]}
               targetAttachment="bottom right"
             >
@@ -847,7 +847,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
           >
             <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -860,6 +859,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               enabled={false}
               renderElement={[Function]}
+              renderElementTo={<body />}
               renderTarget={[Function]}
               targetAttachment="bottom right"
             >
@@ -1159,7 +1159,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
           >
             <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -1172,6 +1171,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               enabled={false}
               renderElement={[Function]}
+              renderElementTo={<body />}
               renderTarget={[Function]}
               targetAttachment="bottom right"
             >
@@ -1471,7 +1471,6 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
           >
             <d
               attachment="top right"
-              bodyElement={<body />}
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
@@ -1484,6 +1483,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               }
               enabled={false}
               renderElement={[Function]}
+              renderElementTo={<body />}
               renderTarget={[Function]}
               targetAttachment="bottom right"
             >

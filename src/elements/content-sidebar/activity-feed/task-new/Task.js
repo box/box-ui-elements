@@ -326,7 +326,7 @@ class Task extends React.Component<Props, State> {
                                     </span>
                                 )}
                                 renderElement={ref => {
-                                    isConfirmingDelete ? (
+                                    return isConfirmingDelete ? (
                                         <span ref={ref}>
                                             <DeleteConfirmation
                                                 data-resin-component={ACTIVITY_TARGETS.TASK_OPTIONS}

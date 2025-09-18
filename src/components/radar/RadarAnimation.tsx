@@ -59,7 +59,7 @@ const positions = {
 
 export interface RadarAnimationProps {
     /** A React element to put the radar on */
-    children: React.ReactNode;
+    children: React.ReactElement;
     /** A CSS class for the radar */
     className?: string;
     /** Whether to constrain the radar to the element's scroll parent. Defaults to `false` */

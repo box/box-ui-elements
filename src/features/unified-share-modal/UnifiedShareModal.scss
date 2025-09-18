@@ -201,6 +201,10 @@
                 white-space: nowrap;
             }
         }
+
+        > span {
+            width: 100%; // This fixes a width issue with Tooltip wrapper
+        }
     }
 
     .shared-link-field-row {
