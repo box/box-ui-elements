@@ -122,7 +122,7 @@ describe('features/classification/applied-by-ai-classification-reason/AppliedByA
             },
         ];
 
-        renderComponent({
+        const { container } = renderComponent({
             answer: undefined,
             citations: expectedCitations,
         });
@@ -133,7 +133,7 @@ describe('features/classification/applied-by-ai-classification-reason/AppliedByA
             name: messages.appliedByBoxAiOnDate.defaultMessage.replace('{modifiedAt}', modifiedAtDisplayDate),
         });
         const citationsLabel = screen.getByTestId('content-answers-references-label');
-        const answerContent = document.querySelector('.bdl-AppliedByAiClassificationReason-answer');
+        const answerContent = container.querySelector('.bdl-AppliedByAiClassificationReason-answer');
 
         expect(boxAiIcon).toBeVisible();
         expect(appliedByWithDate).toBeVisible();
@@ -147,15 +147,15 @@ describe('features/classification/applied-by-ai-classification-reason/AppliedByA
         ${null}      | ${'null'}
         ${''}        | ${'empty string'}
     `('should not render AnswerContent when answer is $description', ({ answerValue }) => {
-        renderComponent({ answer: answerValue });
+        const { container } = renderComponent({ answer: answerValue });
 
-        const answerContent = document.querySelector('.bdl-AppliedByAiClassificationReason-answer');
+        const answerContent = container.querySelector('.bdl-AppliedByAiClassificationReason-answer');
 
         expect(answerContent).toBeNull();
     });
 
     test('should render minimal label when no props are provided', () => {
-        renderComponent({
+        const { container } = renderComponent({
             answer: undefined,
             citations: undefined,
             modifiedAt: undefined,
@@ -166,7 +166,7 @@ describe('features/classification/applied-by-ai-classification-reason/AppliedByA
             level: 3,
             name: messages.appliedByBoxAi.defaultMessage,
         });
-        const answerContent = document.querySelector('.bdl-AppliedByAiClassificationReason-answer');
+        const answerContent = container.querySelector('.bdl-AppliedByAiClassificationReason-answer');
         const citationsLabel = screen.queryByTestId('content-answers-references-label');
 
         expect(boxAiIcon).toBeVisible();

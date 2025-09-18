@@ -17,11 +17,6 @@ $reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
     }
 }
 
-.bdl-AppliedByAiClassificationReason--noContent {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
 .bdl-AppliedByAiClassificationReason-header {
     display: flex;
     align-items: center;
@@ -29,11 +24,16 @@ $reason-font-size: 13px; // Overriding Blueprint to match current sidebar styles
     margin: 0 0 var(--space-2);
 }
 
-.bdl-AppliedByAiClassificationReason-header--noContent {
-    margin-top: var(--space-2);
-    margin-bottom: var(--space-2);
-}
-
 .bdl-AppliedByAiClassificationReason-references {
     margin-top: var(--space-2);
+}
+
+.bdl-AppliedByAiClassificationReason--noContent {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .bdl-AppliedByAiClassificationReason-header {
+        margin-top: var(--space-2);
+        margin-bottom: var(--space-2);
+    }
 }

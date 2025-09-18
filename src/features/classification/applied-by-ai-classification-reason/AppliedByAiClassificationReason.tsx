@@ -42,11 +42,7 @@ const AppliedByAiClassificationReason = ({
                 className,
             )}
         >
-            <h3
-                className={classNames('bdl-AppliedByAiClassificationReason-header', {
-                    'bdl-AppliedByAiClassificationReason-header--noContent': !hasContent,
-                })}
-            >
+            <h3 className="bdl-AppliedByAiClassificationReason-header">
                 <BoxAIIconColor data-testid="box-ai-icon" height={Size5} width={Size5} />
                 <Text
                     className="bdl-AppliedByAiClassificationReason-headerText"
