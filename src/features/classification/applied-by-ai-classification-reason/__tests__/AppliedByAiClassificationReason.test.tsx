@@ -111,4 +111,67 @@ describe('features/classification/applied-by-ai-classification-reason/AppliedByA
 
         expect(reasonText).toBeVisible();
     });
+
+    test('should render title and citations only when answer is not provided', () => {
+        const expectedCitations = [
+            {
+                content: 'file content for citation',
+                fileId: 'fileId',
+                location: 'cited location',
+                title: 'file title',
+            },
+        ];
+
+        const { container } = renderComponent({
+            answer: undefined,
+            citations: expectedCitations,
+        });
+
+        const boxAiIcon = screen.getByTestId('box-ai-icon');
+        const appliedByWithDate = screen.getByRole('heading', {
+            level: 3,
+            name: messages.appliedByBoxAiOnDate.defaultMessage.replace('{modifiedAt}', modifiedAtDisplayDate),
+        });
+        const citationsLabel = screen.getByTestId('content-answers-references-label');
+        const answerContent = container.querySelector('.bdl-AppliedByAiClassificationReason-answer');
+
+        expect(boxAiIcon).toBeVisible();
+        expect(appliedByWithDate).toBeVisible();
+        expect(citationsLabel).toBeVisible();
+        expect(answerContent).toBeNull();
+    });
+
+    test.each`
+        answerValue  | description
+        ${undefined} | ${'undefined'}
+        ${null}      | ${'null'}
+        ${''}        | ${'empty string'}
+    `('should not render AnswerContent when answer is $description', ({ answerValue }) => {
+        const { container } = renderComponent({ answer: answerValue });
+
+        const answerContent = container.querySelector('.bdl-AppliedByAiClassificationReason-answer');
+
+        expect(answerContent).toBeNull();
+    });
+
+    test('should render minimal label when no props are provided', () => {
+        const { container } = renderComponent({
+            answer: undefined,
+            citations: undefined,
+            modifiedAt: undefined,
+        });
+
+        const boxAiIcon = screen.getByTestId('box-ai-icon');
+        const appliedByWithoutDate = screen.getByRole('heading', {
+            level: 3,
+            name: messages.appliedByBoxAi.defaultMessage,
+        });
+        const answerContent = container.querySelector('.bdl-AppliedByAiClassificationReason-answer');
+        const citationsLabel = screen.queryByTestId('content-answers-references-label');
+
+        expect(boxAiIcon).toBeVisible();
+        expect(appliedByWithoutDate).toBeVisible();
+        expect(answerContent).toBeNull();
+        expect(citationsLabel).toBeNull();
+    });
 });
