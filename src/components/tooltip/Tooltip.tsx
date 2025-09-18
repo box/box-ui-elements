@@ -143,7 +143,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             if (!prevState.isShown && this.state.isShown) {
                 // capture event so that tooltip closes before any other floating components that can be closed by
                 // "Escape" key(e.g. Modal, Menu, etc.)
-                // document.addEventListener('keydown', this.handleKeyDown, true);
+                document.addEventListener('keydown', this.handleKeyDown, true);
             }
             if (prevState.isShown && !this.state.isShown) {
                 document.removeEventListener('keydown', this.handleKeyDown, true);
@@ -314,7 +314,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         const tetherProps: Pick<
             TetherProps,
-            'attachment' | 'targetAttachment' | 'constraints' | 'renderElementTo' | 'classPrefix' | 'enabled'
+            'attachment' | 'targetAttachment' | 'constraints' | 'renderElementTo' | 'classPrefix'
         > & {
             offset?: string;
             className?: string;
@@ -324,7 +324,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
             constraints,
             targetAttachment: tetherPosition.targetAttachment,
             renderElementTo: bodyEl,
-            enabled: true,
         };
 
         if (tetherElementClassName) {
@@ -390,6 +389,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 ref={this.tetherRef}
                 renderElementTo={bodyEl ?? (document.body as HTMLElement)}
                 renderTarget={(ref: React.MutableRefObject<HTMLElement>) => {
+                    const child = React.Children.only(children);
                     return (
                         <span
                             ref={node => {
@@ -402,9 +402,8 @@ class Tooltip extends React.Component<TooltipProps, State> {
                                     (node.firstElementChild as HTMLElement | null);
                                 ref.current = first;
                             }}
-                            {...componentProps}
                         >
-                            {children}
+                            {React.cloneElement(child as React.ReactElement, componentProps)}
                         </span>
                     );
                 }}
