@@ -1,8 +1,0 @@
-@import '../../styles/variables';
-@import './mixins';
-
-.bdl-RoundPill {
-    &.is-custom {
-        @include bdl-RoundPill($border-color: $bdl-watermelon-red-50, $selected-border-color: $bdl-watermelon-red-50);
-    }
-}
