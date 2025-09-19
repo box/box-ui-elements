@@ -21,11 +21,22 @@ export default {
         config: { showEmailSharedLinkForm: false, showInviteCollaboratorMessageSection: false },
         displayInModal: false,
         itemType: TYPE_FILE,
+        itemID: global.FILE_ID,
+        token: global.TOKEN,
     },
     argTypes: {
         itemType: {
             options: [TYPE_FILE, TYPE_FOLDER],
             control: { type: 'select' },
+        },
+    },
+};
+
+export const ContentSharingV2Enabled: StoryObj<typeof BoxAISidebar> = {
+    args: {
+        features: {
+            ...global.FEATURE_FLAGS,
+            contentSharingV2: true,
         },
     },
 };
