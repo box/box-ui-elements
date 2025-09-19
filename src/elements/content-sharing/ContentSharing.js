@@ -11,8 +11,9 @@ import * as React from 'react';
 import API from '../../api';
 // $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
-import { isFeatureEnabled } from '../common/feature-checking';
+import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
 import SharingModal from './SharingModal';
+// $FlowFixMe
 import { ContentSharingV2 } from './ContentSharingV2';
 import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
@@ -39,6 +40,8 @@ type ContentSharingProps = {
      * the modal will appear on page load. See ContentSharing.stories.js for examples.
      */
     displayInModal: boolean,
+    /** features - Features for the element */
+    features?: FeatureConfig,
     /** itemID - Box file or folder ID */
     itemID: string,
     /** itemType - "file" or "folder" */
