@@ -2,7 +2,7 @@ import * as React from 'react';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import ContentSharingV2 from '../ContentSharingV2';
 
-export const Basic = {};
+export const basic = {};
 
 export default {
     title: 'Elements/ContentSharingV2',
@@ -16,6 +16,11 @@ export default {
         itemType: {
             options: [TYPE_FILE, TYPE_FOLDER],
             control: { type: 'select' },
+        },
+    },
+    parameters: {
+        chromatic: {
+            disableSnapshot: true,
         },
     },
 };
