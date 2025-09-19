@@ -14,10 +14,10 @@ import { withBlueprintModernization } from '../common/withBlueprintModernization
 import { isFeatureEnabled } from '../common/feature-checking';
 import SharingModal from './SharingModal';
 // $FlowFixMe
-import { ContentSharingV2 } from './ContentSharingV2';
+import ContentSharingV2 from './ContentSharingV2';
 import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
-import type { ItemType, StringMap } from '../../common/types/core';
 
+import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 
@@ -46,6 +46,8 @@ type ContentSharingProps = {
     displayInModal: boolean,
     /** features - Features for the element */
     features?: FeatureConfig,
+    /** hasProviders - Whether the element has providers for USM already */
+    hasProviders?: boolean,
     /** itemID - Box file or folder ID */
     itemID: string,
     /** itemType - "file" or "folder" */
@@ -76,6 +78,7 @@ function ContentSharing({
     customButton,
     displayInModal,
     features = {},
+    hasProviders = true,
     itemID,
     itemType,
     language,
@@ -113,7 +116,13 @@ function ContentSharing({
 
     if (isFeatureEnabled(features, 'contentSharingV2')) {
         return (
-            <ContentSharingV2 itemID={itemID} itemType={itemType} language={language} messages={messages}>
+            <ContentSharingV2
+                itemID={itemID}
+                itemType={itemType}
+                hasProviders={hasProviders}
+                language={language}
+                messages={messages}
+            >
                 {children}
             </ContentSharingV2>
         );

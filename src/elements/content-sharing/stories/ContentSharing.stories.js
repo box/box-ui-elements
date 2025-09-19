@@ -13,6 +13,16 @@ export const withCustomButton = {
     },
 };
 
+export const withContentSharingV2Enabled = {
+    args: {
+        children: <button>Open Unified Share Modal</button>,
+        features: {
+            ...global.FEATURE_FLAGS,
+            contentSharingV2: true,
+        },
+    },
+};
+
 export default {
     title: 'Elements/ContentSharing',
     component: ContentSharing,
@@ -28,16 +38,6 @@ export default {
         itemType: {
             options: [TYPE_FILE, TYPE_FOLDER],
             control: { type: 'select' },
-        },
-    },
-};
-
-export const ContentSharingV2Enabled: StoryObj = {
-    args: {
-        children: <button>Open Unified Share Modal</button>,
-        features: {
-            ...global.FEATURE_FLAGS,
-            contentSharingV2: true,
         },
     },
 };
