@@ -7,14 +7,7 @@ import Providers from '../common/Providers';
 
 import type { ContentSharingV2Props } from './types';
 
-function ContentSharingV2({
-    children,
-    itemID,
-    itemType,
-    language,
-    messages,
-    hasProviders = true,
-}: ContentSharingV2Props) {
+function ContentSharingV2({ children, itemID, itemType, language, messages }: ContentSharingV2Props) {
     // Retrieve item from API later
     const mockItem = {
         id: itemID,
@@ -24,7 +17,7 @@ function ContentSharingV2({
 
     return (
         <Internationalize language={language} messages={messages}>
-            <Providers hasProviders={hasProviders}>
+            <Providers hasProviders>
                 <UnifiedShareModal item={mockItem}>{children}</UnifiedShareModal>
             </Providers>
         </Internationalize>
