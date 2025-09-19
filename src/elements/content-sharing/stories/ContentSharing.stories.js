@@ -32,8 +32,9 @@ export default {
     },
 };
 
-export const ContentSharingV2Enabled: StoryObj<typeof BoxAISidebar> = {
+export const ContentSharingV2Enabled: StoryObj = {
     args: {
+        children: <button>Open Unified Share Modal</button>,
         features: {
             ...global.FEATURE_FLAGS,
             contentSharingV2: true,

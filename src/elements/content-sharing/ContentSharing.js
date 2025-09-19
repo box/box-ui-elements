@@ -11,13 +11,15 @@ import * as React from 'react';
 import API from '../../api';
 // $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
-import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
+import { isFeatureEnabled } from '../common/feature-checking';
 import SharingModal from './SharingModal';
 // $FlowFixMe
 import { ContentSharingV2 } from './ContentSharingV2';
 import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
+
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
@@ -26,6 +28,8 @@ import '../common/modal.scss';
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
+    /** children - Children for the element to open the Unified Share Modal */
+    children?: React.Element<any>,
     /** config - Configuration object that shows/hides features in the USM */
     config?: USMConfig,
     /**
@@ -67,6 +71,7 @@ const createAPI = (apiHost, itemID, itemType, token) =>
 
 function ContentSharing({
     apiHost = DEFAULT_HOSTNAME_API,
+    children,
     config,
     customButton,
     displayInModal,
@@ -107,7 +112,11 @@ function ContentSharing({
     }, [config, customButton, displayInModal, itemID, itemType, language, launchButton, messages, isVisible]);
 
     if (isFeatureEnabled(features, 'contentSharingV2')) {
-        return <ContentSharingV2 itemID={itemID} itemType={itemType} language={language} messages={messages} />;
+        return (
+            <ContentSharingV2 itemID={itemID} itemType={itemType} language={language} messages={messages}>
+                {children}
+            </ContentSharingV2>
+        );
     }
 
     return (
