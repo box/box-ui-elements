@@ -17,7 +17,7 @@ type CitationType = {
 };
 
 type AiClassificationReason = {
-    answer: string,
+    answer?: string,
     modifiedAt?: string,
     citations?: CitationType[],
 };
