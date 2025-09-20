@@ -168,10 +168,20 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         };
 
         return (
-            <TetherComponent {...tetherProps}>
-                {React.isValidElement(menuTarget) ? React.cloneElement(menuTarget, menuTargetProps) : null}
-                {isOpen && React.isValidElement(menu) ? React.cloneElement(menu, menuProps) : null}
-            </TetherComponent>
+            <TetherComponent
+                {...tetherProps}
+                renderElementTo={document.body}
+                renderTarget={ref => {
+                    return React.isValidElement(menuTarget) ? (
+                        <span ref={ref}>{React.cloneElement(menuTarget, menuTargetProps)}</span>
+                    ) : null;
+                }}
+                renderElement={ref => {
+                    return isOpen && React.isValidElement(menu) ? (
+                        <span ref={ref}>{React.cloneElement(menu, menuProps)}</span>
+                    ) : null;
+                }}
+            />
         );
     }
 }

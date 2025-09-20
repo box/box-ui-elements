@@ -21,13 +21,18 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     FakeMenu.displayName = 'FakeMenu';
     /* eslint-enable */
 
-    const getWrapper = (props = {}) =>
-        shallow(
+    const renderWrapper = (props = {}) => {
+        return mount(
             <DropdownMenu {...props}>
                 <FakeButton />
                 <FakeMenu />
             </DropdownMenu>,
         );
+    };
+
+    const findTetherComponent = wrapper => {
+        return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
+    };
 
     afterEach(() => {
         sandbox.verifyAndRestore();
@@ -57,7 +62,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should correctly render a single child button with correct props', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -76,7 +81,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should set aria-expanded="true" and aria-controls=menuID when menu is open', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -84,7 +89,9 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(0);
+            act(() => {
+                instance.openMenuAndSetFocusIndex(0);
+            });
             wrapper.update();
 
             const button = wrapper.find(FakeButton);
@@ -93,7 +100,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should not render child menu when menu is closed', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -105,7 +112,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should correctly render a single child menu with correct props when menu is open', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -113,7 +120,9 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(1);
+            act(() => {
+                instance.openMenuAndSetFocusIndex(1);
+            });
             wrapper.update();
 
             const menu = wrapper.find(FakeMenu);
@@ -126,125 +135,95 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should render TetherComponent with correct props with correct default values', () => {
-            const wrapper = shallow(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper();
 
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('attachment')).toEqual('top left');
-            expect(wrapper.prop('bodyElement')).toEqual(document.body);
-            expect(wrapper.prop('classPrefix')).toEqual('dropdown-menu');
-            expect(wrapper.prop('targetAttachment')).toEqual('bottom left');
-            expect(wrapper.prop('constraints')).toEqual([]);
-            expect(wrapper.prop('enabled')).toBe(false);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.length).toBe(1);
+            expect(tetherComponent.prop('attachment')).toEqual('top left');
+            expect(tetherComponent.prop('renderElementTo')).toEqual(document.body);
+            expect(tetherComponent.prop('classPrefix')).toEqual('dropdown-menu');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
+            expect(tetherComponent.prop('constraints')).toEqual([]);
+            expect(tetherComponent.prop('enabled')).toBe(false);
         });
 
         test('should render TetherComponent in the body if invalid body element is specified', () => {
-            const wrapper = shallow(
-                <DropdownMenu bodyElement="foo">
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ bodyElement: 'foo' });
 
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('attachment')).toEqual('top left');
-            expect(wrapper.prop('bodyElement')).toEqual(document.body);
-            expect(wrapper.prop('classPrefix')).toEqual('dropdown-menu');
-            expect(wrapper.prop('targetAttachment')).toEqual('bottom left');
-            expect(wrapper.prop('constraints')).toEqual([]);
-            expect(wrapper.prop('enabled')).toBe(false);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.length).toBe(1);
+            expect(tetherComponent.prop('attachment')).toEqual('top left');
+            expect(tetherComponent.prop('renderElementTo')).toEqual(document.body);
+            expect(tetherComponent.prop('classPrefix')).toEqual('dropdown-menu');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
+            expect(tetherComponent.prop('constraints')).toEqual([]);
+            expect(tetherComponent.prop('enabled')).toBe(false);
         });
 
         test('should render className in the className is specified', () => {
-            const wrapper = shallow(
-                <DropdownMenu className="foo">
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ className: 'foo' });
 
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('className')).toEqual('foo');
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.length).toBe(1);
+            expect(tetherComponent.prop('className')).toEqual('foo');
         });
 
         test('should render TetherComponent with a specific body element', () => {
             const bodyEl = document.createElement('div');
 
-            const wrapper = shallow(
-                <DropdownMenu bodyElement={bodyEl}>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ bodyElement: bodyEl });
 
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('attachment')).toEqual('top left');
-            expect(wrapper.prop('bodyElement')).toEqual(bodyEl);
-            expect(wrapper.prop('classPrefix')).toEqual('dropdown-menu');
-            expect(wrapper.prop('targetAttachment')).toEqual('bottom left');
-            expect(wrapper.prop('constraints')).toEqual([]);
-            expect(wrapper.prop('enabled')).toBe(false);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.length).toBe(1);
+            expect(tetherComponent.prop('attachment')).toEqual('top left');
+            expect(tetherComponent.prop('renderElementTo')).toEqual(bodyEl);
+            expect(tetherComponent.prop('classPrefix')).toEqual('dropdown-menu');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
+            expect(tetherComponent.prop('constraints')).toEqual([]);
+            expect(tetherComponent.prop('enabled')).toBe(false);
         });
 
         test('should render TetherComponent with correct props when right aligned', () => {
-            const wrapper = shallow(
-                <DropdownMenu isRightAligned>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ isRightAligned: true });
 
-            expect(wrapper.prop('attachment')).toEqual('top right');
-            expect(wrapper.prop('targetAttachment')).toEqual('bottom right');
-            expect(wrapper.prop('enabled')).toBe(false);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('attachment')).toEqual('top right');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('bottom right');
+            expect(tetherComponent.prop('enabled')).toBe(false);
         });
 
         test('should render TetherComponent with attachment and targetAttachment props passed in as tetherAttachment and tetherTargetAttachment', () => {
             const tetherAttachment = 'middle left';
             const tetherTargetAttachment = 'middle right';
-            const wrapper = shallow(
-                <DropdownMenu
-                    isRightAligned
-                    tetherAttachment={tetherAttachment}
-                    tetherTargetAttachment={tetherTargetAttachment}
-                >
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({
+                isRightAligned: true,
+                tetherAttachment,
+                tetherTargetAttachment,
+            });
 
-            expect(wrapper.prop('attachment')).toEqual(tetherAttachment);
-            expect(wrapper.prop('targetAttachment')).toEqual(tetherTargetAttachment);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('attachment')).toEqual(tetherAttachment);
+            expect(tetherComponent.prop('targetAttachment')).toEqual(tetherTargetAttachment);
         });
 
         test('should render TetherComponent with enabled prop when menu is open', () => {
-            const wrapper = shallow(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper();
 
             const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(0);
+            act(() => {
+                instance.openMenuAndSetFocusIndex(0);
+            });
             wrapper.update();
 
-            expect(wrapper.prop('enabled')).toBe(true);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should render TetherComponent with scrollParent constraint when constrainToScrollParent=true', () => {
-            const wrapper = shallow(
-                <DropdownMenu constrainToScrollParent>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ constrainToScrollParent: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
                     attachment: 'together',
@@ -253,14 +232,10 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should render TetherComponent with window constraint when constrainToScrollParent=true', () => {
-            const wrapper = shallow(
-                <DropdownMenu constrainToWindow>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ constrainToWindow: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'window',
                     attachment: 'together',
@@ -269,14 +244,10 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should render TetherComponent with scrollParent and window constraints when constrainToScrollParent=true and constrainToWindow=true', () => {
-            const wrapper = shallow(
-                <DropdownMenu constrainToScrollParent constrainToWindow>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ constrainToScrollParent: true, constrainToWindow: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
                     attachment: 'together',
@@ -289,14 +260,10 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should render TetherComponent with window constraints and pinned when constrainToWindowWithPin=true', () => {
-            const wrapper = shallow(
-                <DropdownMenu constrainToWindowWithPin>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ constrainToWindowWithPin: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'window',
                     attachment: 'together',
@@ -306,14 +273,10 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should render TetherComponent with window constraints, pinned and scroll parent when constrainToWindowWithPin=true and constrainToScrollParent=true', () => {
-            const wrapper = shallow(
-                <DropdownMenu constrainToScrollParent constrainToWindowWithPin>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper({ constrainToScrollParent: true, constrainToWindowWithPin: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
                     attachment: 'together',
@@ -329,46 +292,30 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
     describe('openMenuAndSetFocusIndex()', () => {
         test('should call setState() with correct values', () => {
-            const wrapper = shallow(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper();
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({
-                    isOpen: true,
-                    initialFocusIndex: 1,
-                });
+            sandbox.mock(instance).expects('setState').withArgs({
+                isOpen: true,
+                initialFocusIndex: 1,
+            });
             instance.openMenuAndSetFocusIndex(1);
         });
     });
 
     describe('closeMenu()', () => {
         test('should call setState() with correct values', () => {
-            const wrapper = shallow(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper();
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({
-                    isOpen: false,
-                });
+            sandbox.mock(instance).expects('setState').withArgs({
+                isOpen: false,
+            });
             instance.closeMenu();
         });
     });
 
     describe('handleButtonClick()', () => {
         test('should call openMenuAndSetFocusIndex(null) when menu is currently closed', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -376,10 +323,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('openMenuAndSetFocusIndex')
-                .withArgs(null);
+            sandbox.mock(instance).expects('openMenuAndSetFocusIndex').withArgs(null);
 
             wrapper.find(FakeButton).simulate('click', {
                 preventDefault: sandbox.mock(),
@@ -393,7 +337,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 stopPropagation: jest.fn(),
             };
             const onMenuClose = jest.fn();
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu onMenuClose={onMenuClose}>
                     <FakeButton />
                     <FakeMenu />
@@ -401,13 +345,15 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             const instance = wrapper.instance();
-            instance.openMenuAndSetFocusIndex(1);
+            act(() => {
+                instance.openMenuAndSetFocusIndex(1);
+            });
 
             wrapper.find(FakeButton).simulate('click', event);
 
             expect(event.stopPropagation).toBeCalled();
             expect(event.preventDefault).toBeCalled();
-            expect(onMenuClose).toBeCalledWith(event);
+            expect(onMenuClose).toBeCalled();
         });
     });
 
@@ -424,7 +370,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             },
         ].forEach(({ key }) => {
             test('should call openMenuAndSetFocus(0) when an open keystroke is pressed', () => {
-                const wrapper = shallow(
+                const wrapper = mount(
                     <DropdownMenu>
                         <FakeButton />
                         <FakeMenu />
@@ -432,10 +378,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 );
 
                 const instance = wrapper.instance();
-                sandbox
-                    .mock(instance)
-                    .expects('openMenuAndSetFocusIndex')
-                    .withArgs(0);
+                sandbox.mock(instance).expects('openMenuAndSetFocusIndex').withArgs(0);
 
                 wrapper.find(FakeButton).simulate('keydown', {
                     key,
@@ -447,8 +390,15 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
         test('shoud not stop esc propagation if dropdown is closed', () => {
             const onMenuClose = jest.fn();
-            const wrapper = getWrapper({ onMenuClose });
-            wrapper.setState({ isOpen: false });
+            const wrapper = mount(
+                <DropdownMenu onMenuClose={onMenuClose}>
+                    <FakeButton />
+                    <FakeMenu />
+                </DropdownMenu>,
+            );
+            act(() => {
+                wrapper.setState({ isOpen: false });
+            });
 
             wrapper.find(FakeButton).simulate('keydown', {
                 key: KEYS.escape,
@@ -461,8 +411,15 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
         test('should stop esc propagation if dropdown is open', () => {
             const onMenuClose = jest.fn();
-            const wrapper = getWrapper({ onMenuClose });
-            wrapper.setState({ isOpen: true });
+            const wrapper = mount(
+                <DropdownMenu onMenuClose={onMenuClose}>
+                    <FakeButton />
+                    <FakeMenu />
+                </DropdownMenu>,
+            );
+            act(() => {
+                wrapper.setState({ isOpen: true });
+            });
 
             wrapper.find(FakeButton).simulate('keydown', {
                 key: KEYS.escape,
@@ -474,7 +431,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         });
 
         test('should call openMenuAndSetFocus(-1) to last item when "up" is pressed', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <DropdownMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -482,10 +439,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('openMenuAndSetFocusIndex')
-                .withArgs(-1);
+            sandbox.mock(instance).expects('openMenuAndSetFocusIndex').withArgs(-1);
 
             wrapper.find(FakeButton).simulate('keydown', {
                 key: 'ArrowUp',
@@ -497,12 +451,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
     describe('handleMenuClose()', () => {
         test('should call closeMenu() and focusButton() when called', () => {
-            const wrapper = shallow(
-                <DropdownMenu>
-                    <FakeButton />
-                    <FakeMenu />
-                </DropdownMenu>,
-            );
+            const wrapper = renderWrapper();
 
             const instance = wrapper.instance();
             sandbox.mock(instance).expects('closeMenu');

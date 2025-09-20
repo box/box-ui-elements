@@ -43,7 +43,8 @@
 
     &,
     & > .bdl-targeted-click-through {
-        > .btn {
+        > .btn,
+        > * > .btn {
             margin: 5px 0 5px -1px;
             border-radius: 0;
 
@@ -64,17 +65,20 @@
             }
         }
 
-        > .btn:first-child {
+        > .btn:first-child,
+        > *:first-child > .btn {
             border-top-left-radius: $bdl-border-radius-size-med;
             border-bottom-left-radius: $bdl-border-radius-size-med;
         }
 
-        > .btn:last-child {
+        > .btn:last-child,
+        > *:last-child > .btn {
             border-top-right-radius: $bdl-border-radius-size-med;
             border-bottom-right-radius: $bdl-border-radius-size-med;
         }
 
-        > .btn.is-selected {
+        > .btn.is-selected,
+        > * > .btn.is-selected {
             z-index: 2; /* place on top of siblings */
             color: $bdl-gray-80;
             background-color: $bdl-gray-10;
@@ -82,7 +86,8 @@
             box-shadow: none;
         }
 
-        > .btn:focus {
+        > .btn:focus,
+        > * > .btn:focus {
             z-index: 3; /* place on top of all other buttons for accessibility */
         }
     }
@@ -98,7 +103,7 @@
                 border: 1px solid $bdl-gray-30;
                 box-shadow: none;
                 cursor: default;
-                opacity: .4;
+                opacity: 0.4;
             }
 
             > .btn-primary {

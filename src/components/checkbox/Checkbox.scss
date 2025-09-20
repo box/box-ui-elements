@@ -75,8 +75,10 @@
 .checkbox-tooltip-wrapper {
     display: inline-flex;
     vertical-align: text-bottom;
+    line-height: 0.1; // This keeps the tooltip wrapper height consistent with the child element
 
-    > .info-tooltip {
+    > .info-tooltip,
+    > * > .info-tooltip {
         position: relative;
         display: inline-block;
         flex: none;

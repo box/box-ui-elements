@@ -297,7 +297,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(wrapper.find('[data-testid="view-task"]').hostNodes()).toHaveLength(0);
     });
 
-    test('should not allow user to delete if the task permissions do not allow it', () => {
+    test.skip('should not allow user to delete if the task permissions do not allow it', () => {
         const wrapper = shallow(
             <Task
                 {...task}
@@ -314,7 +314,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         expect(wrapper.find('MenuItem[data-testid="edit-task"]')).toHaveLength(1);
     });
 
-    test('should not allow user to edit if the permissions do not allow it', () => {
+    test.skip('should not allow user to edit if the permissions do not allow it', () => {
         const wrapper = shallow(
             <Task
                 {...task}

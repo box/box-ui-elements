@@ -15,18 +15,20 @@ exports[`components/Media compound component 1`] = `
   <div
     class="bdl-Media-body"
   >
-    <button
-      aria-expanded="false"
-      aria-haspopup="true"
-      aria-label="Options"
-      class="btn-plain bdl-Media-menu"
-      id="menubutton2"
-      type="button"
-    >
-      <div
-        data-test-id="icon-ellipsis"
-      />
-    </button>
+    <span>
+      <button
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="Options"
+        class="btn-plain bdl-Media-menu"
+        id="menubutton2"
+        type="button"
+      >
+        <div
+          data-test-id="icon-ellipsis"
+        />
+      </button>
+    </span>
     <div>
       <b>
         Yo Yo Ma

@@ -264,16 +264,30 @@ class DropdownMenu extends React.Component<Props, State> {
         return (
             <TetherComponent
                 attachment={tetherAttachment || attachment}
-                bodyElement={bodyEl}
                 className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
                 classPrefix="dropdown-menu"
                 constraints={constraints}
                 enabled={isOpen}
+                renderElementTo={bodyEl}
                 targetAttachment={tetherTargetAttachment || targetAttachment}
-            >
-                {React.cloneElement(menuButton, menuButtonProps)}
-                {isOpen && React.cloneElement(menu, menuProps)}
-            </TetherComponent>
+                renderTarget={ref => (
+                    <span
+                        ref={node => {
+                            if (!node) {
+                                ref.current = null;
+                                return;
+                            }
+                            const first = node.querySelector('*') || node.firstElementChild;
+                            ref.current = first;
+                        }}
+                    >
+                        {React.cloneElement(menuButton, menuButtonProps)}
+                    </span>
+                )}
+                renderElement={ref => {
+                    return isOpen ? <span ref={ref}>{React.cloneElement(menu, menuProps)}</span> : null;
+                }}
+            />
         );
     }
 }

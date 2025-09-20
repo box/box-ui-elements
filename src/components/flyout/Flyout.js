@@ -488,14 +488,32 @@ class Flyout extends React.Component<Props, State> {
         }
 
         return (
-            <TetherComponent {...tetherProps}>
-                {React.cloneElement(overlayButton, overlayButtonProps)}
-                {isVisible && (
-                    <FlyoutContext.Provider value={{ closeOverlay: this.closeOverlay }}>
-                        {React.cloneElement(overlayContent, overlayProps)}
-                    </FlyoutContext.Provider>
+            <TetherComponent
+                {...tetherProps}
+                renderTarget={ref => (
+                    <span
+                        ref={node => {
+                            if (!node) {
+                                ref.current = null;
+                                return;
+                            }
+                            const first = node.querySelector('*') || node.firstElementChild;
+                            ref.current = first;
+                        }}
+                    >
+                        {React.cloneElement(overlayButton, overlayButtonProps)}
+                    </span>
                 )}
-            </TetherComponent>
+                renderElement={ref => {
+                    return isVisible ? (
+                        <span ref={ref}>
+                            <FlyoutContext.Provider value={{ closeOverlay: this.closeOverlay }}>
+                                {React.cloneElement(overlayContent, overlayProps)}
+                            </FlyoutContext.Provider>
+                        </span>
+                    ) : null;
+                }}
+            />
         );
     }
 }
