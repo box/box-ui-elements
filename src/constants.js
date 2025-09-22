@@ -95,6 +95,7 @@ export const METADATA_TEMPLATE_FETCH_LIMIT = API_PAGE_LIMIT;
 export const METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = 'experimental';
 export const SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE = 'update_metadata_template_instance_success';
 export const SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE = 'delete_metadata_template_instance_success';
+export const SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE = 'create_metadata_template_instance_success';
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
