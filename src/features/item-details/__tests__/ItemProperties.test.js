@@ -3,7 +3,6 @@ import { render, screen } from '../../../test-utils/testing-library';
 import { ITEM_TYPE_FOLDER, ITEM_TYPE_FILE } from '../../../common/constants';
 
 import ItemProperties from '../ItemProperties';
-import messages from '../messages';
 
 jest.mock('../EditableDescription', () => {
     return function MockEditableDescription({ value, textAreaProps }) {
@@ -42,10 +41,10 @@ describe('features/item-details/ItemProperties', () => {
 
         expect(screen.getByTestId('retention-policy')).toBeInTheDocument();
 
-        expect(screen.queryByText(messages.description.defaultMessage)).not.toBeInTheDocument();
-        expect(screen.queryByText(messages.url.defaultMessage)).not.toBeInTheDocument();
-        expect(screen.queryByText(messages.owner.defaultMessage)).not.toBeInTheDocument();
-        expect(screen.queryByText(messages.size.defaultMessage)).not.toBeInTheDocument();
+        expect(screen.queryByText('Description')).not.toBeInTheDocument();
+        expect(screen.queryByText('URL')).not.toBeInTheDocument();
+        expect(screen.queryByText('Owner')).not.toBeInTheDocument();
+        expect(screen.queryByText('Size')).not.toBeInTheDocument();
     });
 
     test('should render all properties when specified', () => {
@@ -61,15 +60,15 @@ describe('features/item-details/ItemProperties', () => {
             uploader: 'Test Uploader',
         });
 
-        expect(screen.getByText(messages.description.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.owner.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.enterpriseOwner.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.uploader.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.created.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.modified.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.archived.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.size.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByText(messages.deleted.defaultMessage)).toBeInTheDocument();
+        expect(screen.getByText('Description')).toBeInTheDocument();
+        expect(screen.getByText('Owner')).toBeInTheDocument();
+        expect(screen.getByText('Enterprise Owner')).toBeInTheDocument();
+        expect(screen.getByText('Uploader')).toBeInTheDocument();
+        expect(screen.getByText('Created')).toBeInTheDocument();
+        expect(screen.getByText('Modified')).toBeInTheDocument();
+        expect(screen.getByText('Archived')).toBeInTheDocument();
+        expect(screen.getByText('Size')).toBeInTheDocument();
+        expect(screen.getByText('Deleted')).toBeInTheDocument();
 
         expect(screen.getByTestId('readonly-description')).toHaveTextContent('Hi testing this link http://box.com');
         expect(screen.getByText('Test Owner')).toBeInTheDocument();
@@ -77,16 +76,16 @@ describe('features/item-details/ItemProperties', () => {
         expect(screen.getByText('Test Uploader')).toBeInTheDocument();
         expect(screen.getByText('3.3 KB')).toBeInTheDocument();
 
-        const createdLabel = screen.getByText(messages.created.defaultMessage);
+        const createdLabel = screen.getByText('Created');
         expect(createdLabel.nextElementSibling).toHaveTextContent(/Dec 12, 2012/);
 
-        const modifiedLabel = screen.getByText(messages.modified.defaultMessage);
+        const modifiedLabel = screen.getByText('Modified');
         expect(modifiedLabel.nextElementSibling).toHaveTextContent(/Apr 4, 2016/);
 
-        const archivedLabel = screen.getByText(messages.archived.defaultMessage);
+        const archivedLabel = screen.getByText('Archived');
         expect(archivedLabel.nextElementSibling).toHaveTextContent(/Sep 20, 2024/);
 
-        const deletedLabel = screen.getByText(messages.deleted.defaultMessage);
+        const deletedLabel = screen.getByText('Deleted');
         expect(deletedLabel.nextElementSibling).toHaveTextContent(/Feb 7, 2013/);
     });
 
@@ -101,7 +100,7 @@ describe('features/item-details/ItemProperties', () => {
                 onDescriptionChange: mockOnDescriptionChange,
             });
 
-            expect(screen.getByText(messages.description.defaultMessage)).toBeInTheDocument();
+            expect(screen.getByText('Description')).toBeInTheDocument();
             expect(screen.getByTestId('editable-description')).toHaveValue('test description');
             expect(screen.getByTestId('editable-description')).toHaveAttribute('data-resin-target', 'description');
         });
@@ -116,7 +115,7 @@ describe('features/item-details/ItemProperties', () => {
                 onDescriptionChange: mockOnDescriptionChange,
             });
 
-            expect(screen.getByText(messages.description.defaultMessage)).toBeInTheDocument();
+            expect(screen.getByText('Description')).toBeInTheDocument();
             expect(screen.getByTestId('editable-description')).toHaveValue('');
             expect(screen.getByTestId('editable-description')).toHaveAttribute('data-resin-target', 'description');
         });
@@ -126,7 +125,7 @@ describe('features/item-details/ItemProperties', () => {
                 description: 'readonly description',
             });
 
-            expect(screen.getByText(messages.description.defaultMessage)).toBeInTheDocument();
+            expect(screen.getByText('Description')).toBeInTheDocument();
             expect(screen.getByTestId('readonly-description')).toHaveTextContent('readonly description');
         });
     });
@@ -135,7 +134,7 @@ describe('features/item-details/ItemProperties', () => {
         test('should render readonly url when only url is specified', () => {
             renderComponent({ url: 'box.com' });
 
-            expect(screen.getByText(messages.url.defaultMessage)).toBeInTheDocument();
+            expect(screen.getByText('URL')).toBeInTheDocument();
             expect(screen.getByText('box.com')).toBeInTheDocument();
             expect(screen.queryByTestId('editable-url')).not.toBeInTheDocument();
         });
@@ -147,7 +146,7 @@ describe('features/item-details/ItemProperties', () => {
                 url: 'box.com',
             });
 
-            expect(screen.getByText(messages.url.defaultMessage)).toBeInTheDocument();
+            expect(screen.getByText('URL')).toBeInTheDocument();
             expect(screen.getByTestId('editable-url')).toHaveValue('box.com');
             expect(screen.queryByText('box.com')).not.toBeInTheDocument();
         });
