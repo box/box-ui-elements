@@ -10,6 +10,7 @@ import {
     FIELD_PERMISSIONS_CAN_UPLOAD,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
+    SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 
@@ -270,7 +271,7 @@ describe('useSidebarMetadataFetcher', () => {
         await waitFor(() => result.current.handleCreateMetadataInstance(newTemplateInstance, successCallback));
 
         expect(successCallback).toHaveBeenCalled();
-        expect(onSuccessMock).not.toHaveBeenCalled();
+        expect(onSuccessMock).toHaveBeenCalledWith(SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE, true);
     });
 
     test('should handle metadata instance creation error', async () => {
