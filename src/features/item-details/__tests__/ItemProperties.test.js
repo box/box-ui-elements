@@ -37,9 +37,9 @@ describe('features/item-details/ItemProperties', () => {
         renderComponent();
 
         const propertiesList = document.querySelector('.item-properties');
-        expect(propertiesList).toBeInTheDocument();
+        expect(propertiesList).toBeVisible();
 
-        expect(screen.getByTestId('retention-policy')).toBeInTheDocument();
+        expect(screen.getByTestId('retention-policy')).toBeVisible();
 
         expect(screen.queryByText('Description')).not.toBeInTheDocument();
         expect(screen.queryByText('URL')).not.toBeInTheDocument();
@@ -60,21 +60,21 @@ describe('features/item-details/ItemProperties', () => {
             uploader: 'Test Uploader',
         });
 
-        expect(screen.getByText('Description')).toBeInTheDocument();
-        expect(screen.getByText('Owner')).toBeInTheDocument();
-        expect(screen.getByText('Enterprise Owner')).toBeInTheDocument();
-        expect(screen.getByText('Uploader')).toBeInTheDocument();
-        expect(screen.getByText('Created')).toBeInTheDocument();
-        expect(screen.getByText('Modified')).toBeInTheDocument();
-        expect(screen.getByText('Archived')).toBeInTheDocument();
-        expect(screen.getByText('Size')).toBeInTheDocument();
-        expect(screen.getByText('Deleted')).toBeInTheDocument();
+        expect(screen.getByText('Description')).toBeVisible();
+        expect(screen.getByText('Owner')).toBeVisible();
+        expect(screen.getByText('Enterprise Owner')).toBeVisible();
+        expect(screen.getByText('Uploader')).toBeVisible();
+        expect(screen.getByText('Created')).toBeVisible();
+        expect(screen.getByText('Modified')).toBeVisible();
+        expect(screen.getByText('Archived')).toBeVisible();
+        expect(screen.getByText('Size')).toBeVisible();
+        expect(screen.getByText('Deleted')).toBeVisible();
 
         expect(screen.getByTestId('readonly-description')).toHaveTextContent('Hi testing this link http://box.com');
-        expect(screen.getByText('Test Owner')).toBeInTheDocument();
-        expect(screen.getByText('Test Enterprise Owner')).toBeInTheDocument();
-        expect(screen.getByText('Test Uploader')).toBeInTheDocument();
-        expect(screen.getByText('3.3 KB')).toBeInTheDocument();
+        expect(screen.getByText('Test Owner')).toBeVisible();
+        expect(screen.getByText('Test Enterprise Owner')).toBeVisible();
+        expect(screen.getByText('Test Uploader')).toBeVisible();
+        expect(screen.getByText('3.3 KB')).toBeVisible();
 
         const createdLabel = screen.getByText('Created');
         expect(createdLabel.nextElementSibling).toHaveTextContent(/Dec 12, 2012/);
@@ -100,7 +100,7 @@ describe('features/item-details/ItemProperties', () => {
                 onDescriptionChange: mockOnDescriptionChange,
             });
 
-            expect(screen.getByText('Description')).toBeInTheDocument();
+            expect(screen.getByText('Description')).toBeVisible();
             expect(screen.getByTestId('editable-description')).toHaveValue('test description');
             expect(screen.getByTestId('editable-description')).toHaveAttribute('data-resin-target', 'description');
         });
@@ -115,7 +115,7 @@ describe('features/item-details/ItemProperties', () => {
                 onDescriptionChange: mockOnDescriptionChange,
             });
 
-            expect(screen.getByText('Description')).toBeInTheDocument();
+            expect(screen.getByText('Description')).toBeVisible();
             expect(screen.getByTestId('editable-description')).toHaveValue('');
             expect(screen.getByTestId('editable-description')).toHaveAttribute('data-resin-target', 'description');
         });
@@ -125,7 +125,7 @@ describe('features/item-details/ItemProperties', () => {
                 description: 'readonly description',
             });
 
-            expect(screen.getByText('Description')).toBeInTheDocument();
+            expect(screen.getByText('Description')).toBeVisible();
             expect(screen.getByTestId('readonly-description')).toHaveTextContent('readonly description');
         });
     });
@@ -134,8 +134,8 @@ describe('features/item-details/ItemProperties', () => {
         test('should render readonly url when only url is specified', () => {
             renderComponent({ url: 'box.com' });
 
-            expect(screen.getByText('URL')).toBeInTheDocument();
-            expect(screen.getByText('box.com')).toBeInTheDocument();
+            expect(screen.getByText('URL')).toBeVisible();
+            expect(screen.getByText('box.com')).toBeVisible();
             expect(screen.queryByTestId('editable-url')).not.toBeInTheDocument();
         });
 
@@ -146,7 +146,7 @@ describe('features/item-details/ItemProperties', () => {
                 url: 'box.com',
             });
 
-            expect(screen.getByText('URL')).toBeInTheDocument();
+            expect(screen.getByText('URL')).toBeVisible();
             expect(screen.getByTestId('editable-url')).toHaveValue('box.com');
             expect(screen.queryByText('box.com')).not.toBeInTheDocument();
         });
@@ -156,13 +156,13 @@ describe('features/item-details/ItemProperties', () => {
         test('should render size when size is specified', () => {
             renderComponent({ size: '1.5 MB' });
 
-            expect(screen.getByText('1.5 MB')).toBeInTheDocument();
+            expect(screen.getByText('1.5 MB')).toBeVisible();
         });
 
         test('should render files count when filesCount is specified', () => {
             renderComponent({ size: '1.5 MB', filesCount: 10, type: ITEM_TYPE_FOLDER });
 
-            expect(screen.getByText('10 Files')).toBeInTheDocument();
+            expect(screen.getByText('10 Files')).toBeVisible();
         });
 
         test('should not render files count when size is not specified', () => {
@@ -185,14 +185,14 @@ describe('features/item-details/ItemProperties', () => {
         test('should render proper text for singular files count', () => {
             renderComponent({ size: '1.5 MB', filesCount: 1, type: ITEM_TYPE_FOLDER });
 
-            expect(screen.getByText('1 File')).toBeInTheDocument();
+            expect(screen.getByText('1 File')).toBeVisible();
         });
 
         test('should work properly for zero values', () => {
             renderComponent({ size: '0 B', filesCount: 0, type: ITEM_TYPE_FOLDER });
 
-            expect(screen.getByText('0 B')).toBeInTheDocument();
-            expect(screen.getByText('0 Files')).toBeInTheDocument();
+            expect(screen.getByText('0 B')).toBeVisible();
+            expect(screen.getByText('0 Files')).toBeVisible();
         });
     });
 });
