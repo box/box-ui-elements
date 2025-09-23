@@ -127,7 +127,9 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
             <div />
           </FormattedMessage>
           <dd>
-            1 B
+            <div>
+              1 B
+            </div>
           </dd>
           <RetentionPolicy
             dispositionTime={1556317461}
