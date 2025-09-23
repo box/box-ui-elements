@@ -177,6 +177,11 @@ describe('features/item-details/ItemProperties', () => {
             expect(screen.queryByText('10 Files')).not.toBeInTheDocument();
         });
 
+        test('should not render files count when filesCount is null', () => {
+            renderComponent({ size: '1.5 MB', filesCount: null, type: ITEM_TYPE_FOLDER });
+            expect(screen.queryByText(/Files$/)).not.toBeInTheDocument();
+        });
+
         test('should render proper text for singular files count', () => {
             renderComponent({ size: '1.5 MB', filesCount: 1, type: ITEM_TYPE_FOLDER });
 

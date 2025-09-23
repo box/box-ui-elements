@@ -113,7 +113,7 @@ const ItemProperties = ({
                     <FormattedMessage tagName="dt" {...messages.size} />
                     <dd>
                         <div>{size}</div>
-                        {filesCount !== null && type === ITEM_TYPE_FOLDER ? (
+                        {typeof filesCount === 'number' && type === ITEM_TYPE_FOLDER ? (
                             <FormattedMessage values={{ filesCount }} {...messages.filesCountLabel} />
                         ) : null}
                     </dd>
