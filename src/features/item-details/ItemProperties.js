@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import uniqueid from 'lodash/uniqueId';
 import { FormattedDate, FormattedMessage } from 'react-intl';
+import { Text } from '@box/blueprint-web';
 import { ITEM_TYPE_FOLDER } from '../../common/constants';
 
 import EditableDescription from './EditableDescription';
@@ -112,7 +113,7 @@ const ItemProperties = ({
                 <>
                     <FormattedMessage tagName="dt" {...messages.size} />
                     <dd>
-                        <div>{size}</div>
+                        <Text>{size}</Text>
                         {typeof filesCount === 'number' && type === ITEM_TYPE_FOLDER ? (
                             <FormattedMessage values={{ filesCount }} {...messages.filesCountLabel} />
                         ) : null}
