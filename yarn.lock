@@ -1549,10 +1549,10 @@
   resolved "https://registry.yarnpkg.com/@box/types/-/types-0.2.1.tgz#cd0a3915b2306e4cf581f6091b95f5d2db75ea60"
   integrity sha512-wd6nRR9QxBl7lYKJ/Hix0AKg1PNC3leZWOJ9Nt+d4j45WxCYBiCemZAtY2ekL5BITpVw8vlLmquzSpPhDTeO5A==
 
-"@box/unified-share-modal@^0.48.8":
-  version "0.48.8"
-  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-0.48.8.tgz#d166ec081788e142fd90332f1c96bc17890d79a8"
-  integrity sha512-zF1kAc9inyQnKkMPyghiRkpqeA5w4NO3fyuRRq0QIXwP0Xt8edZsD/sLj2sXmRzNw/9W2Qz/7wih3p+xzrEUxg==
+"@box/unified-share-modal@^0.50.0":
+  version "0.50.1"
+  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-0.50.1.tgz#b234c0c9985e52351fa227fb4bbbc6a519f0f8a5"
+  integrity sha512-m4NQMJnQWUeYVg62dwtZenyatjBdIye8UjLdBIAc0e7OKz2K6mpwBGe6/GzES1T/VKCw7Y4VWTfqqk9jPlBoxA==
 
 "@box/user-selector@^1.23.25":
   version "1.23.25"

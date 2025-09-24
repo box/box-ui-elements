@@ -117,6 +117,7 @@ function ContentSharing({
     if (isFeatureEnabled(features, 'contentSharingV2')) {
         return (
             <ContentSharingV2
+                api={api}
                 itemID={itemID}
                 itemType={itemType}
                 hasProviders={hasProviders}

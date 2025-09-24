@@ -152,3 +152,126 @@ export type ConvertCollabOptions = {
     isCurrentUserOwner: boolean,
     ownerEmail: ?string,
 };
+
+// ContentSharingV2 types
+interface Enterprise {
+    name?: string;
+}
+
+export interface User {
+    id: string;
+    enterprise: Enterprise;
+}
+
+export interface SharedLink {
+    /**
+     * The access level of the shared link.
+     */
+    access?: AccessLevelType;
+    /**
+     * The available access levels for the shared link. The allowed levels are dependent on the Enterprise settings.
+     */
+    accessLevels?: (AccessLevel | AccessLevelType)[];
+    /**
+     * The expiration timestamp of the shared link to indicate when the item will be unshared.
+     */
+    expiresAt?: number;
+    /**
+     * The permission level of the shared link.
+     */
+    permission?: PermissionLevelType;
+    /**
+     * The available permission levels for the shared link. The allowed levels are dependent on the Item and Enterprise settings.
+     */
+    permissionLevels?: (PermissionLevel | PermissionLevelType)[];
+    /**
+     * The configuration options and permissions for managing the shared link settings.
+     */
+    settings?: SharedLinkSettings;
+    /**
+     * The URL that can be used to access the shared item.
+     */
+    url: string;
+    /**
+     * The static domain portion of the shared link. Used with `vanityName` to preview the custom URL.
+     */
+    vanityDomain?: string;
+    /**
+     * The custom name of the shared link. Used with `vanityDomain` to preview the custom URL.
+     */
+    vanityName?: string;
+}
+
+export interface CollaborationRole {
+    /**
+     * The description for the role. Supported roles have default descriptions.
+     */
+    description?: string;
+    /**
+     * The ID of the role. The value must be one of the supported roles within the Enterprise.
+     *
+     * If the value does not match a supported role, the role is treated as a custom collaboration role.
+     */
+    id: InvitationRole | string;
+    /**
+     * When `true`, the role will be the default selected collaboration role.
+     */
+    isDefault?: boolean;
+    /**
+     * When `true`, the role will be disabled when selecting a collaboration role.
+     */
+    isDisabled?: boolean;
+    /**
+     * The label for the role. Supported roles have default labels.
+     */
+    label?: string;
+}
+
+export interface Classification {
+    colorId: number;
+    definition: string;
+    name: string;
+    restrictions?: string;
+}
+
+export interface Item {
+    /**
+     * The classification of the item.
+     */
+    classification?: Classification;
+    /**
+     * The ID of the item.
+     */
+    id: string;
+    /**
+     * The name of the item.
+     */
+    name: string;
+    /**
+     * The permissions that the current user has for the item.
+     */
+    permissions?: {
+        /**
+         * When `true`, the user can invite collaborators on the item.
+         */
+        canInviteCollaborator?: boolean,
+        /**
+         * When `true`, the user can change the access level of the shared link.
+         */
+        canSetShareAccess?: boolean,
+        /**
+         * When `true`, the user can create a shared link for the item.
+         */
+        canShare?: boolean,
+    };
+    /**
+     * The type of the item.
+     */
+    type: ItemType;
+}
+
+export interface ItemData {
+    collaborationRoles: CollaborationRole[];
+    item: Item;
+    sharedLink: SharedLink;
+}
