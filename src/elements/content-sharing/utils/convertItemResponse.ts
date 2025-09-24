@@ -2,7 +2,7 @@ import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD } from '../
 import { getAllowedAccessLevels, getAllowedPermissionLevels } from '../utils';
 import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../utils/constants';
 
-import type { ContentSharingItemAPIResponse, ItemData, SharedLink } from '../types';
+import type { ContentSharingItemAPIResponse, ItemData } from '../types';
 
 export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ItemData => {
     const {
@@ -37,9 +37,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
     const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
 
-    // The "canInvite" property is necessary even if the item does not have a shared link,
-    // because it allows users to invite individual collaborators.
-    let sharedLink: SharedLink = { canInvite: !!canInvite };
+    let sharedLink;
     if (shared_link) {
         const {
             access,
@@ -72,7 +70,6 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
                 isPasswordAvailable,
                 isPasswordEnabled,
             },
-            canInvite: !!canInvite,
             url,
             vanityDomain: vanityUrl,
             vanityName: vanityName || '',

@@ -2,6 +2,7 @@ import * as React from 'react';
 import isEmpty from 'lodash/isEmpty';
 
 import { UnifiedShareModal } from '@box/unified-share-modal';
+import type { CollaborationRole, Item, SharedLink, User } from '@box/unified-share-modal';
 
 import API from '../../api';
 import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
@@ -11,7 +12,6 @@ import { CONTENT_SHARING_ITEM_FIELDS } from './constants';
 import { convertItemResponse } from './utils';
 
 import type { ItemType, StringMap } from '../../common/types/core';
-import type { CollaborationRole, Item, SharedLink, User } from './types';
 
 export interface ContentSharingV2Props {
     /** api - API instance */
