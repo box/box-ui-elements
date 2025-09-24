@@ -127,8 +127,6 @@ describe('elements/content-sharing/ContentSharingV2', () => {
                 },
             );
         });
-
-        // TODO: Figure out why classification is not being rendered in the DOM
         expect(await screen.findByText('BLUE')).toBeVisible();
     });
 });
