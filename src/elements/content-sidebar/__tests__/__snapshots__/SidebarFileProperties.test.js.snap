@@ -127,9 +127,13 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
             <div />
           </FormattedMessage>
           <dd>
-            <div>
-              1 B
-            </div>
+            <Text>
+              <p
+                className="bp_text_module_textReset--61489 bp_text_module_breakWord--61489 bp_text_module_bodyDefault--61489 bp_text_module_textOnLightDefault--61489"
+              >
+                1 B
+              </p>
+            </Text>
           </dd>
           <RetentionPolicy
             dispositionTime={1556317461}
