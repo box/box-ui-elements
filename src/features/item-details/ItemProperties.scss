@@ -21,7 +21,11 @@
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
-        transition: background-color .2s, border-color .2s, margin-left .2s, padding .2s;
+        transition:
+            background-color .2s,
+            border-color .2s,
+            margin-left .2s,
+            padding .2s;
         resize: none;
 
         &:hover {
@@ -48,7 +52,10 @@
             padding: 0;
             border: none;
             box-shadow: none;
-            transition: border .2s, height .2s, padding .2s;
+            transition:
+                border .2s,
+                height .2s,
+                padding .2s;
 
             &:focus {
                 height: 32px;
@@ -59,6 +66,7 @@
     }
 
     .bdl-RetentionLink {
+        display: inline;
         margin-left: 4px;
     }
 

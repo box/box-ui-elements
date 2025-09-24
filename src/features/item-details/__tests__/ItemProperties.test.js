@@ -74,4 +74,17 @@ describe('features/item-details/ItemProperties', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render retention policy details when specified', () => {
+        const wrapper = getWrapper({
+            retentionPolicyProps: {
+                dispositionTime: 1741475146,
+                openModal: () => {},
+                policyType: 'finite',
+                retentionPolicyDescription: 'Test Description',
+            },
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

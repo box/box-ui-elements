@@ -214,3 +214,16 @@ exports[`features/item-details/ItemProperties should render readonly url when on
   <RetentionPolicy />
 </dl>
 `;
+
+exports[`features/item-details/ItemProperties should render retention policy details when specified 1`] = `
+<dl
+  className="item-properties"
+>
+  <RetentionPolicy
+    dispositionTime={1741475146}
+    openModal={[Function]}
+    policyType="finite"
+    retentionPolicyDescription="Test Description"
+  />
+</dl>
+`;
