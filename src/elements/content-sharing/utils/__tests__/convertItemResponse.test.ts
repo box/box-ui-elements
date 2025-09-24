@@ -33,9 +33,6 @@ describe('convertItemResponse', () => {
                 },
                 type: 'file',
             },
-            sharedLink: {
-                canInvite: true,
-            },
         });
     });
 
@@ -76,7 +73,6 @@ describe('convertItemResponse', () => {
                     isPasswordAvailable: true,
                     isPasswordEnabled: true,
                 },
-                canInvite: true,
                 url: 'https://example.com/shared-link',
                 vanityDomain: 'https://example.com/vanity-url',
                 vanityName: 'vanity-name',
