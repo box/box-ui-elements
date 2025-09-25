@@ -1488,6 +1488,11 @@
     "@box/tree" "^0.45.4"
     react-accessible-treeview "2.9.0"
 
+"@box/copy-input@^0.22.12":
+  version "0.22.12"
+  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-0.22.12.tgz#919f9f1d0ddc0a95a1a8dd5effcf31f1b338b64b"
+  integrity sha512-hBXiYidsXsBKu2CsWT0FwcaA4KL5ZMigISpThfoqurtoB94yZjq+E+sBSEBKnwB44KdPI/EQ24Z+jWeEaxlIeQ==
+
 "@box/frontend@^11.0.1":
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-11.0.1.tgz#0d83557dc820c576396ca89d661cc61ff01dd809"
@@ -1543,6 +1548,16 @@
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@box/types/-/types-0.2.1.tgz#cd0a3915b2306e4cf581f6091b95f5d2db75ea60"
   integrity sha512-wd6nRR9QxBl7lYKJ/Hix0AKg1PNC3leZWOJ9Nt+d4j45WxCYBiCemZAtY2ekL5BITpVw8vlLmquzSpPhDTeO5A==
+
+"@box/unified-share-modal@^0.48.8":
+  version "0.48.8"
+  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-0.48.8.tgz#d166ec081788e142fd90332f1c96bc17890d79a8"
+  integrity sha512-zF1kAc9inyQnKkMPyghiRkpqeA5w4NO3fyuRRq0QIXwP0Xt8edZsD/sLj2sXmRzNw/9W2Qz/7wih3p+xzrEUxg==
+
+"@box/user-selector@^1.23.25":
+  version "1.23.25"
+  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-1.23.25.tgz#95c9e56d67b4f313cce5891c3a0b51b6152d0cc2"
+  integrity sha512-QXQ+tAaRY0KQzUZWL0hbNcYAkePwFeTcmqRDZnaBo8s5i0SVVuGO6vUA/Kt9LGLAJirp1ZPks8ECSZmSVvJlVg==
 
 "@bundled-es-modules/cookie@^2.0.1":
   version "2.0.1"

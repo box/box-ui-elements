@@ -1,6 +1,6 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 
 import CollapsableMessage from './CollapsableMessage';
 import LoadingIndicator, { LoadingIndicatorSize } from '../../../../../components/loading-indicator';
@@ -17,7 +17,7 @@ import type { FeatureConfig } from '../../../../common/feature-checking';
 
 import './ActivityMessage.scss';
 
-export interface ActivityMessageProps {
+export interface ActivityMessageProps extends WrappedComponentProps {
     features: FeatureConfig;
     getUserProfileUrl?: GetProfileUrlCallback;
     id: string;
@@ -35,7 +35,7 @@ type State = {
 };
 
 class ActivityMessage extends React.Component<ActivityMessageProps, State> {
-    static defaultProps = {
+    static readonly defaultProps = {
         isEdited: false,
         translationEnabled: false,
     };
@@ -90,6 +90,7 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
             features,
             getUserProfileUrl,
             id,
+            intl,
             isEdited,
             tagged_message,
             translatedTaggedMessage,
@@ -109,7 +110,7 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
         ) : (
             <div className="bcs-ActivityMessage">
                 <MessageWrapper>
-                    {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
+                    {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl, intl)}
                     {isEdited && (
                         <span className="bcs-ActivityMessage-edited">
                             <FormattedMessage {...messages.activityMessageEdited} />
@@ -123,4 +124,4 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
 }
 
 export { ActivityMessage };
-export default withFeatureConsumer(ActivityMessage);
+export default withFeatureConsumer(injectIntl(ActivityMessage));

@@ -256,7 +256,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         const instance = wrapper.instance();
 
         expect(wrapper.find('CommentForm').length).toEqual(0);
-        expect(wrapper.find('ActivityMessage').length).toEqual(1);
+        expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
 
         expect(wrapper.state('isEditing')).toBe(false);
@@ -264,7 +264,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         wrapper.find('MenuItem[data-testid="edit-comment"]').simulate('click');
         wrapper.update();
 
-        expect(wrapper.find('ActivityMessage').length).toEqual(0);
+        expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').length).toEqual(0);
         expect(wrapper.state('isEditing')).toBe(true);
 
         instance.commentFormFocusHandler();
