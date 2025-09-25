@@ -4,42 +4,22 @@ import { ITEM_TYPE_FOLDER, ITEM_TYPE_FILE } from '../../../common/constants';
 
 import ItemProperties from '../ItemProperties';
 
-jest.mock('../EditableDescription', () => {
-    return function MockEditableDescription({ value, textAreaProps }) {
-        return <textarea data-testid="editable-description" value={value} {...textAreaProps} readOnly />;
-    };
-});
-
-jest.mock('../EditableURL', () => {
-    return function MockEditableURL({ value }) {
-        return <input data-testid="editable-url" value={value} readOnly />;
-    };
-});
-
-jest.mock('../ReadonlyDescription', () => {
-    return function MockReadonlyDescription({ value }) {
-        return <div data-testid="readonly-description">{value}</div>;
-    };
-});
-
-jest.mock('../RetentionPolicy', () => {
-    return function MockRetentionPolicy(props) {
-        return <div data-testid="retention-policy" {...props} />;
-    };
-});
-
 describe('features/item-details/ItemProperties', () => {
     const renderComponent = (props = {}) => {
         return render(<ItemProperties {...props} />);
     };
 
     test('should render empty properties list and RetentionPolicy when no properties are specified', () => {
-        renderComponent();
+        renderComponent({
+            retentionPolicyProps: {
+                retentionPolicyDescription: 'Retention policy description',
+            },
+        });
 
         const propertiesList = document.querySelector('.item-properties');
         expect(propertiesList).toBeVisible();
 
-        expect(screen.getByTestId('retention-policy')).toBeVisible();
+        expect(screen.getByText('Retention policy description')).toBeVisible();
 
         expect(screen.queryByText('Description')).not.toBeInTheDocument();
         expect(screen.queryByText('URL')).not.toBeInTheDocument();
@@ -58,6 +38,9 @@ describe('features/item-details/ItemProperties', () => {
             size: '3.3 KB',
             trashedAt: '2013-02-07T10:49:34-08:00',
             uploader: 'Test Uploader',
+            retentionPolicyProps: {
+                retentionPolicyDescription: 'Retention policy description',
+            },
         });
 
         expect(screen.getByText('Description')).toBeVisible();
@@ -70,11 +53,12 @@ describe('features/item-details/ItemProperties', () => {
         expect(screen.getByText('Size')).toBeVisible();
         expect(screen.getByText('Deleted')).toBeVisible();
 
-        expect(screen.getByTestId('readonly-description')).toHaveTextContent('Hi testing this link http://box.com');
+        expect(screen.getByText('Description')).toBeVisible();
         expect(screen.getByText('Test Owner')).toBeVisible();
         expect(screen.getByText('Test Enterprise Owner')).toBeVisible();
         expect(screen.getByText('Test Uploader')).toBeVisible();
         expect(screen.getByText('3.3 KB')).toBeVisible();
+        expect(screen.getByText('Retention policy description')).toBeVisible();
 
         const createdLabel = screen.getByText('Created');
         expect(createdLabel.nextElementSibling).toHaveTextContent(/Dec 12, 2012/);
@@ -101,8 +85,9 @@ describe('features/item-details/ItemProperties', () => {
             });
 
             expect(screen.getByText('Description')).toBeVisible();
-            expect(screen.getByTestId('editable-description')).toHaveValue('test description');
-            expect(screen.getByTestId('editable-description')).toHaveAttribute('data-resin-target', 'description');
+            expect(screen.getByDisplayValue('test description')).toBeVisible();
+            expect(screen.getByDisplayValue('test description')).not.toBeDisabled();
+            expect(screen.getByDisplayValue('test description')).toHaveAttribute('data-resin-target', 'description');
         });
 
         test('should render editable description when onDescriptionChange is specified with empty description', () => {
@@ -116,8 +101,9 @@ describe('features/item-details/ItemProperties', () => {
             });
 
             expect(screen.getByText('Description')).toBeVisible();
-            expect(screen.getByTestId('editable-description')).toHaveValue('');
-            expect(screen.getByTestId('editable-description')).toHaveAttribute('data-resin-target', 'description');
+            expect(screen.getByDisplayValue('')).toBeVisible();
+            expect(screen.getByDisplayValue('')).not.toBeDisabled();
+            expect(screen.getByDisplayValue('')).toHaveAttribute('data-resin-target', 'description');
         });
 
         test('should render readonly description when only description is provided', () => {
@@ -126,7 +112,7 @@ describe('features/item-details/ItemProperties', () => {
             });
 
             expect(screen.getByText('Description')).toBeVisible();
-            expect(screen.getByTestId('readonly-description')).toHaveTextContent('readonly description');
+            expect(screen.queryByDisplayValue('readonly description')).not.toBeInTheDocument();
         });
     });
 
@@ -134,7 +120,6 @@ describe('features/item-details/ItemProperties', () => {
         test('should render readonly url when only url is specified', () => {
             renderComponent({ url: 'box.com' });
 
-            expect(screen.getByText('URL')).toBeVisible();
             expect(screen.getByText('box.com')).toBeVisible();
             expect(screen.queryByTestId('editable-url')).not.toBeInTheDocument();
         });
@@ -146,9 +131,8 @@ describe('features/item-details/ItemProperties', () => {
                 url: 'box.com',
             });
 
-            expect(screen.getByText('URL')).toBeVisible();
-            expect(screen.getByTestId('editable-url')).toHaveValue('box.com');
-            expect(screen.queryByText('box.com')).not.toBeInTheDocument();
+            expect(screen.getByDisplayValue('box.com')).toBeVisible();
+            expect(screen.getByDisplayValue('box.com')).not.toBeDisabled();
         });
     });
 
