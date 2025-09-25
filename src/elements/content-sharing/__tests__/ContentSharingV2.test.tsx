@@ -47,7 +47,7 @@ const getWrapper = (props): RenderResult =>
             itemType={MOCK_ITEM.type}
             hasProviders={true}
             {...props}
-        ></ContentSharingV2>,
+        />,
     );
 
 describe('elements/content-sharing/ContentSharingV2', () => {
@@ -127,6 +127,6 @@ describe('elements/content-sharing/ContentSharingV2', () => {
                 },
             );
         });
-        expect(await screen.findByText('BLUE')).toBeVisible();
+        expect(screen.getByText('BLUE')).toBeVisible();
     });
 });
