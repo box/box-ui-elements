@@ -13,9 +13,11 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         name,
         permissions,
         shared_link,
-        shared_link_features: { password: isPasswordAvailable },
+        shared_link_features,
         type,
     } = itemAPIData;
+
+    const { password: isPasswordAvailable } = shared_link_features;
 
     const {
         can_download: isDownloadSettingAvailable,
@@ -67,7 +69,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
                 canChangeVanityName: false, // vanity URLs cannot be set via the API,
                 isDownloadAvailable: isDownloadSettingAvailable,
                 isDownloadEnabled: isDownloadAllowed,
-                isPasswordAvailable,
+                isPasswordAvailable: isPasswordAvailable ?? false,
                 isPasswordEnabled,
             },
             url,
