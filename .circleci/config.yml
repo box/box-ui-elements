@@ -135,20 +135,15 @@ workflows:
       - lint:
           requires:
             - setup
-          context: github-checks
       - flow:
           requires:
             - setup
-          context: github-checks
       - build-unit-tests:
           requires:
             - setup
-          context: github-checks
       - e2e-tests:
           requires:
             - setup
-          context: github-checks
       - chromatic-deploy:
           requires:
             - setup
-          context: github-checks
