@@ -7,8 +7,8 @@ declare module '@box/blueprint-web-assets/icons/Medium' {
   declare export var AlertCircle: React$ComponentType<any>;
   declare export var AlertTriangle: React$ComponentType<any>;
   declare export var XMark: React$ComponentType<any>;
-  declare export var BoxAiAdvancedColor: React$ComponentType<any>;
-  declare export var BoxAiColor: React$ComponentType<any>;
+  declare export var BoxAiAdvancedLogo24: React$ComponentType<any>;
+  declare export var BoxAiLogo24: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/icons/Content' {

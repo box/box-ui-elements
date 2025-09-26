@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 // $FlowFixMe
-import { BoxAiAdvancedColor, BoxAiColor } from '@box/blueprint-web-assets/icons/Medium';
+import { BoxAiAdvancedLogo24, BoxAiLogo24 } from '@box/blueprint-web-assets/icons/Logo';
 import { type AgentType } from '@box/box-ai-agent-selector';
 
 // $FlowFixMe
@@ -76,7 +76,7 @@ const CascadePolicy = ({
                 id: ENHANCED_AGENT_ID,
                 name: formatMessage(messages.enhancedAgentName),
                 isEnterpriseDefault: false,
-                customIcon: BoxAiAdvancedColor,
+                customIcon: BoxAiAdvancedLogo24,
                 isSelected: isEnhancedAgentSelected,
             },
         ],
@@ -174,7 +174,7 @@ const CascadePolicy = ({
                 <div className="metadata-cascade-editor" data-testid="ai-folder-extraction">
                     <div className="metadata-cascade-enable">
                         <div>
-                            <BoxAiColor className="metadata-cascade-ai-logo" width={16} height={16} />
+                            <BoxAiLogo24 className="metadata-cascade-ai-logo" width={16} height={16} />
                             <FormattedMessage tagName="strong" {...messages.enableAIAutofill} />
                             <Toggle
                                 aria-label={formatMessage(messages.enableAIAutofill)}
