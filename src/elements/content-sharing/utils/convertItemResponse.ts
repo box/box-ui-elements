@@ -1,5 +1,6 @@
 import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD } from '../../../constants';
-import { getAllowedAccessLevels, getAllowedPermissionLevels } from '../utils';
+import { getAllowedAccessLevels } from './getAllowedAccessLevels';
+import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
 import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../utils/constants';
 
 import type { ContentSharingItemAPIResponse, ItemData } from '../types';
