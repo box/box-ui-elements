@@ -44,6 +44,11 @@ const messages = defineMessages({
             'Warning message in the sidebar that this file will be automatically deleted on a certain date, {expiration} is the date',
         id: 'boxui.itemDetails.fileExpiration',
     },
+    filesCountLabel: {
+        defaultMessage: '{filesCount, plural, one {# File} other {# Files}}',
+        description: 'Label for files count under item properties in the sidebar',
+        id: 'boxui.itemDetails.filesCountLabel',
+    },
     folderExpiration: {
         defaultMessage: 'This folder will be deleted on {expiration}.',
         description:
