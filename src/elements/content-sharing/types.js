@@ -1,4 +1,6 @@
 // @flow
+import type { CollaborationRole, Item, SharedLink } from '@box/unified-share-modal';
+
 import type {
     Access,
     BoxItemClassification,
@@ -152,3 +154,9 @@ export type ConvertCollabOptions = {
     isCurrentUserOwner: boolean,
     ownerEmail: ?string,
 };
+
+export interface ItemData {
+    collaborationRoles: CollaborationRole[];
+    item: Item;
+    sharedLink: SharedLink;
+}
