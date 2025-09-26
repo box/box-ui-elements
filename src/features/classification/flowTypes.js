@@ -9,6 +9,19 @@ import {
     SHARED_LINK_ACCESS_LEVEL,
 } from './constants';
 
+type CitationType = {
+    content: string | number,
+    fileId: string | number,
+    location: string | number,
+    title?: string | number,
+};
+
+type AiClassificationReason = {
+    answer?: string,
+    modifiedAt?: string,
+    citations?: CitationType[],
+};
+
 type DownloadManagedUserAccessLevel = $Values<typeof MANAGED_USERS_ACCESS_LEVEL> | null;
 
 type SharedLinkAccessLevel = $Values<typeof SHARED_LINK_ACCESS_LEVEL> | null;
@@ -70,6 +83,7 @@ type MessageItem = {
 };
 
 export type {
+    AiClassificationReason,
     ApplicationRestriction,
     Controls,
     ControlsFormat,

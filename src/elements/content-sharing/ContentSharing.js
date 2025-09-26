@@ -11,10 +11,15 @@ import * as React from 'react';
 import API from '../../api';
 // $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
+import { isFeatureEnabled } from '../common/feature-checking';
 import SharingModal from './SharingModal';
-import { CLIENT_NAME_CONTENT_SHARING, DEFAULT_HOSTNAME_API } from '../../constants';
+// $FlowFixMe
+import ContentSharingV2 from './ContentSharingV2';
+import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
+
 import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
@@ -23,6 +28,8 @@ import '../common/modal.scss';
 type ContentSharingProps = {
     /** apiHost - API hostname. Defaults to https://api.box.com */
     apiHost: string,
+    /** children - Children for the element to open the Unified Share Modal */
+    children?: React.Element<any>,
     /** config - Configuration object that shows/hides features in the USM */
     config?: USMConfig,
     /**
@@ -37,6 +44,10 @@ type ContentSharingProps = {
      * the modal will appear on page load. See ContentSharing.stories.js for examples.
      */
     displayInModal: boolean,
+    /** features - Features for the element */
+    features?: FeatureConfig,
+    /** hasProviders - Whether the element has providers for USM already */
+    hasProviders?: boolean,
     /** itemID - Box file or folder ID */
     itemID: string,
     /** itemType - "file" or "folder" */
@@ -57,13 +68,17 @@ const createAPI = (apiHost, itemID, itemType, token) =>
         clientName: CLIENT_NAME_CONTENT_SHARING,
         id: `${itemType}_${itemID}`,
         token,
+        version: CLIENT_VERSION,
     });
 
 function ContentSharing({
     apiHost = DEFAULT_HOSTNAME_API,
+    children,
     config,
     customButton,
     displayInModal,
+    features = {},
+    hasProviders = true,
     itemID,
     itemType,
     language,
@@ -98,6 +113,20 @@ function ContentSharing({
             );
         }
     }, [config, customButton, displayInModal, itemID, itemType, language, launchButton, messages, isVisible]);
+
+    if (isFeatureEnabled(features, 'contentSharingV2')) {
+        return (
+            <ContentSharingV2
+                itemID={itemID}
+                itemType={itemType}
+                hasProviders={hasProviders}
+                language={language}
+                messages={messages}
+            >
+                {children}
+            </ContentSharingV2>
+        );
+    }
 
     return (
         <>

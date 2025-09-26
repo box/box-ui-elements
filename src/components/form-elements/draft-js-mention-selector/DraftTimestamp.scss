@@ -1,0 +1,42 @@
+@import '../../../styles/variables';
+
+.bcs-CommentTimestamp-entity {
+    color: var(--box-blue-110, #0057c0);
+    font-size: $bdl-fontSize--dejaBlue;
+    line-height: $bdl-line-height;
+    border-radius: $bdl-border-radius-size;
+    background-color: $bdl-box-blue-10;
+    cursor: default;
+    padding: 4px;
+    display: inline-block;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+
+    /* Additional rules to prevent cursor interaction */
+    &::before,
+    &::after {
+        pointer-events: none;
+        user-select: none;
+    }
+
+    /* Prevent any child elements from receiving pointer events */
+    * {
+        pointer-events: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /* Additional styles to ensure uneditability */
+    &[contenteditable='false'] {
+        outline: none;
+        -webkit-user-modify: read-only;
+        -moz-user-modify: read-only;
+        -ms-user-modify: read-only;
+    }
+}

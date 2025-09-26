@@ -27,6 +27,11 @@ const messages = defineMessages({
         defaultMessage: '\\ (edited)',
         description: 'Label indicating that message was edited, should be lowercase, should have escaped leading space',
     },
+    activityMessageTimestampLabel: {
+        id: 'be.contentSidebar.activityFeed.common.timestampLabel',
+        defaultMessage: 'Seek to video timestamp',
+        description: 'Accessibility label for timestamp button that allows jumping to a specific time in media',
+    },
 });
 
 export default messages;

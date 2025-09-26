@@ -9,6 +9,11 @@ import MetadataViewContainer, {
     type ExternalFilterValues,
 } from '../MetadataViewContainer';
 
+Object.defineProperty(Element.prototype, 'scrollTo', {
+    value: jest.fn(),
+    writable: true,
+});
+
 describe('elements/content-explorer/MetadataViewContainer', () => {
     const mockItems = [
         {
@@ -28,12 +33,6 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
     ];
 
     const mockMetadataTemplateFields: MetadataTemplateField[] = [
-        {
-            id: 'field1',
-            key: 'item.name',
-            displayName: 'Name',
-            type: 'string',
-        },
         {
             id: 'field2',
             key: 'industry',
@@ -96,6 +95,30 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
                 minWidth: 250,
                 maxWidth: 250,
             },
+            {
+                textValue: 'Contact Role',
+                id: 'role',
+                type: 'string',
+                allowsSorting: true,
+                minWidth: 250,
+                maxWidth: 250,
+            },
+            {
+                textValue: 'Status',
+                id: 'status',
+                type: 'string',
+                allowsSorting: true,
+                minWidth: 250,
+                maxWidth: 250,
+            },
+            {
+                textValue: 'Price',
+                id: 'price',
+                type: 'string',
+                allowsSorting: true,
+                minWidth: 250,
+                maxWidth: 250,
+            },
         ],
         metadataTemplate: mockMetadataTemplate,
         onMetadataFilter: jest.fn(),
@@ -105,7 +128,10 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
         return render(<MetadataViewContainer {...defaultProps} {...props} />);
     };
 
+    let user;
+
     beforeEach(() => {
+        user = userEvent();
         jest.clearAllMocks();
     });
 
@@ -144,11 +170,11 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             onMetadataFilter: jest.fn(),
         });
 
-        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Developer' }));
+        await user.click(screen.getByRole('button', { name: /Contact Role/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Developer' }));
         // Re-open the chip to select a second value (menu closes after submit)
-        await userEvent().click(screen.getByRole('button', { name: /Contact Role/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Marketing' }));
+        await user.click(screen.getByRole('button', { name: /Contact Role/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Marketing' }));
 
         await waitFor(() => expect(onFilterSubmit).toHaveBeenCalledTimes(2));
         const firstCall = onFilterSubmit.mock.calls[0][0];
@@ -183,8 +209,8 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             onMetadataFilter,
         });
 
-        await userEvent().click(screen.getByRole('button', { name: /Status/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
+        await user.click(screen.getByRole('button', { name: /Status/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
 
         await waitFor(() => {
             expect(onMetadataFilter).toHaveBeenCalledTimes(1);
@@ -221,8 +247,8 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             onMetadataFilter,
         });
 
-        await userEvent().click(screen.getByRole('button', { name: /Status/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
+        await user.click(screen.getByRole('button', { name: /Status/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
 
         await waitFor(() => {
             expect(onMetadataFilter).toHaveBeenCalledTimes(1);
@@ -256,9 +282,10 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             actionBarProps: { initialFilterValues },
         });
 
-        expect(screen.getByRole('button', { name: 'All Filters 3' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'All Filters 2' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Industry/i })).toHaveTextContent(/\(1\)/);
-        expect(screen.getByRole('button', { name: /Category/i })).toHaveTextContent(/\(2\)/);
+        // Category filter should not be present since there's no corresponding column
+        expect(screen.queryByRole('button', { name: /Category/i })).not.toBeInTheDocument();
     });
 
     test('should handle empty metadata template fields', () => {
@@ -327,12 +354,6 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             ...mockMetadataTemplate,
             fields: [
                 {
-                    id: 'field1',
-                    key: 'name',
-                    displayName: 'File Name',
-                    type: 'string',
-                },
-                {
                     id: 'field2',
                     key: 'industry',
                     displayName: 'Industry',
@@ -342,11 +363,11 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             ],
         };
 
-        renderComponent({ metadataTemplate: templateWithoutOptions });
+        renderComponent({
+            metadataTemplate: templateWithoutOptions,
+        });
 
         expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
-        expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(1); // Only the one added by component
-        expect(screen.getByRole('button', { name: 'File Name' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Industry' })).toBeInTheDocument();
     });
 
@@ -382,8 +403,8 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
         });
 
         // Test enum filter
-        await userEvent().click(screen.getByRole('button', { name: /Status/ }));
-        await userEvent().click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
+        await user.click(screen.getByRole('button', { name: /Status/ }));
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemcheckbox', { name: 'Active' }));
 
         await waitFor(() => {
             expect(onMetadataFilter).toHaveBeenCalledTimes(1);
@@ -518,5 +539,73 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             expect(result['category-filter'].value).toEqual(['tech', 'finance']);
             expect(result['category-filter'].fieldType).toBe('multiSelect');
         });
+    });
+
+    describe('predefined filter options', () => {
+        test('should only show metadata template filters in sidepanel', async () => {
+            renderComponent();
+
+            expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
+
+            await user.click(screen.getByRole('button', { name: 'All Filters' }));
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+            expect(within(screen.getByRole('dialog')).getByRole('button', { name: 'File Type' })).toBeInTheDocument();
+
+            // Should NOT show predefined filters that are disabled
+            expect(within(screen.getByRole('dialog')).queryByPlaceholderText('Enter keywords')).not.toBeInTheDocument();
+            expect(
+                within(screen.getByRole('dialog')).queryByRole('button', { name: /location/i }),
+            ).not.toBeInTheDocument();
+        });
+    });
+
+    test('should filter fields based on columns provided', () => {
+        const template: MetadataTemplate = {
+            ...mockMetadataTemplate,
+            fields: [
+                {
+                    id: 'field1',
+                    key: 'status',
+                    displayName: 'Status',
+                    type: 'enum',
+                    options: [
+                        { id: 's1', key: 'Active' },
+                        { id: 's2', key: 'Inactive' },
+                    ],
+                },
+                {
+                    id: 'field2',
+                    key: 'price',
+                    displayName: 'Price',
+                    type: 'float',
+                },
+                {
+                    id: 'field3',
+                    key: 'category',
+                    displayName: 'Category',
+                    type: 'multiSelect',
+                    options: [
+                        { id: 'c1', key: 'tech' },
+                        { id: 'c2', key: 'finance' },
+                    ],
+                },
+            ],
+        };
+
+        // Only provide columns for 'status' and 'price', not 'category'
+        renderComponent({
+            metadataTemplate: template,
+        });
+
+        // Should show filters for fields that have corresponding columns
+        expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Status' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Price' })).toBeInTheDocument();
+
+        // Should NOT show filter for 'category' since there's no corresponding column
+        expect(screen.queryByRole('button', { name: 'Category' })).not.toBeInTheDocument();
+        // Should NOT show filter for 'industry' since it's not in the provided columns
+        expect(screen.queryByRole('button', { name: 'Industry' })).not.toBeInTheDocument();
     });
 });

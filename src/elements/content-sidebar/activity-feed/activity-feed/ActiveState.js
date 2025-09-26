@@ -254,6 +254,7 @@ const ActiveState = ({
                                             getAvatarUrl={getAvatarUrl}
                                             getMentionWithQuery={getMentionWithQuery}
                                             getUserProfileUrl={getUserProfileUrl}
+                                            file={file}
                                             mentionSelectorContacts={mentionSelectorContacts}
                                             onDelete={onCommentDelete}
                                             onEdit={onCommentEdit}

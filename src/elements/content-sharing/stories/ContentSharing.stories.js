@@ -13,6 +13,16 @@ export const withCustomButton = {
     },
 };
 
+export const withContentSharingV2Enabled = {
+    args: {
+        children: <button>Open Unified Share Modal</button>,
+        features: {
+            ...global.FEATURE_FLAGS,
+            contentSharingV2: true,
+        },
+    },
+};
+
 export default {
     title: 'Elements/ContentSharing',
     component: ContentSharing,
@@ -21,11 +31,18 @@ export default {
         config: { showEmailSharedLinkForm: false, showInviteCollaboratorMessageSection: false },
         displayInModal: false,
         itemType: TYPE_FILE,
+        itemID: global.FILE_ID,
+        token: global.TOKEN,
     },
     argTypes: {
         itemType: {
             options: [TYPE_FILE, TYPE_FOLDER],
             control: { type: 'select' },
+        },
+    },
+    parameters: {
+        chromatic: {
+            disableSnapshot: true,
         },
     },
 };

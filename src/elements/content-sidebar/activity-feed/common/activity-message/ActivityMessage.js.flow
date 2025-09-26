@@ -12,6 +12,7 @@ import { withFeatureConsumer, isFeatureEnabled } from '../../../../common/featur
 
 import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import type { FeatureConfig } from '../../../../common/feature-checking';
+import type { IntlShape } from 'react-intl';
 
 import './ActivityMessage.scss';
 
@@ -19,6 +20,7 @@ type Props = {
     features: FeatureConfig,
     getUserProfileUrl?: GetProfileUrlCallback,
     id: string,
+    intl: IntlShape,
     isEdited?: boolean,
     onTranslate?: Function,
     tagged_message: string,
@@ -88,6 +90,7 @@ class ActivityMessage extends React.Component<Props, State> {
             features,
             getUserProfileUrl,
             id,
+            intl,
             isEdited,
             tagged_message,
             translatedTaggedMessage,
@@ -107,7 +110,7 @@ class ActivityMessage extends React.Component<Props, State> {
         ) : (
             <div className="bcs-ActivityMessage">
                 <MessageWrapper>
-                    {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
+                    {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl, intl)}
                     {isEdited && (
                         <span className="bcs-ActivityMessage-edited">
                             <FormattedMessage {...messages.activityMessageEdited} />

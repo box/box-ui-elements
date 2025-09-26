@@ -105,6 +105,23 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
             },
         };
 
+        const rawContentEntityWithTimestamp = {
+            blocks: [
+                {
+                    text: '00:00:10 comment timestamp',
+                    type: 'unstyled',
+                    entityRanges: [{ offset: 0, length: 9, key: 'first' }],
+                },
+            ],
+            entityMap: {
+                first: {
+                    type: 'UNEDITABLE_TIMESTAMP_TEXT',
+                    mutability: 'IMMUTABLE',
+                    data: { timestampInMilliseconds: 10000, fileVersionId: '123' },
+                },
+            },
+        };
+
         const rawContentOneEntity = {
             blocks: [
                 {
@@ -174,17 +191,44 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
             },
         };
 
+        const rawContentEntityWithTimestampAndMention = {
+            blocks: [
+                {
+                    text: '00:00:10 comment timestamp @Becky',
+                    type: 'unstyled',
+                    entityRanges: [
+                        { offset: 0, length: 9, key: 'first' },
+                        { offset: 27, length: 6, key: 'second' },
+                    ],
+                },
+            ],
+            entityMap: {
+                first: {
+                    type: 'UNEDITABLE_TIMESTAMP_TEXT',
+                    mutability: 'IMMUTABLE',
+                    data: { timestampInMilliseconds: 10000, fileVersionId: '123' },
+                },
+                second: {
+                    type: 'MENTION',
+                    mutability: 'IMMUTABLE',
+                    data: { id: 1 },
+                },
+            },
+        };
+
         // Test cases in order
         // no entities in the editor
         // one entity in the editor
         // two entities in the editor
         // two entities and a linebreak in the editor
         test.each`
-            rawContent                           | expected
-            ${rawContentNoEntities}              | ${{ text: 'Hey there', hasMention: false }}
-            ${rawContentOneEntity}               | ${{ text: 'Hey @[1:Becky]', hasMention: true }}
-            ${rawContentTwoEntities}             | ${{ text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }}
-            ${rawContentTwoEntitiesOneLineBreak} | ${{ text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }}
+            rawContent                                 | expected
+            ${rawContentNoEntities}                    | ${{ text: 'Hey there', hasMention: false }}
+            ${rawContentOneEntity}                     | ${{ text: 'Hey @[1:Becky]', hasMention: true }}
+            ${rawContentTwoEntities}                   | ${{ text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }}
+            ${rawContentTwoEntitiesOneLineBreak}       | ${{ text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }}
+            ${rawContentEntityWithTimestamp}           | ${{ text: '#[timestamp:10000,versionId:123] comment timestamp', hasMention: false }}
+            ${rawContentEntityWithTimestampAndMention} | ${{ text: '#[timestamp:10000,versionId:123] comment timestamp @[1:Becky]', hasMention: true }}
         `('should return the correct result', ({ rawContent, expected }) => {
             const blocks = convertFromRaw(rawContent);
 

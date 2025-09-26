@@ -442,12 +442,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     'name',
                 ],
             };
-            const fieldsToShow = [
-                { key: `${metadataFieldNamePrefix}.name`, canEdit: false, displayName: 'Alias' },
-                { key: `${metadataFieldNamePrefix}.industry`, canEdit: true },
-                { key: `${metadataFieldNamePrefix}.last_contacted_at`, canEdit: true },
-                { key: `${metadataFieldNamePrefix}.role`, canEdit: true },
-            ];
+
             const columns = [
                 {
                     // Always include the name column
@@ -471,12 +466,10 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const metadataViewV2ElementProps: Partial<ContentExplorerProps> = {
                 metadataViewProps: {
                     columns,
-                    tableProps: {
-                        isSelectAllEnabled: true,
-                    },
+                    isSelectionEnabled: true,
+                    onMetadataFilter: jest.fn(),
                 },
                 metadataQuery,
-                fieldsToShow,
                 defaultView,
                 features: {
                     contentExplorer: {
@@ -519,20 +512,20 @@ describe('elements/content-explorer/ContentExplorer', () => {
                     },
                 });
 
-                const industryHeader = await screen.findByRole('columnheader', { name: 'Industry' });
-                expect(industryHeader).toBeInTheDocument();
+                const lastContactedAtHeader = await screen.findByRole('columnheader', { name: 'Last Contacted At' });
+                expect(lastContactedAtHeader).toBeInTheDocument();
 
                 const firstRow = await screen.findByRole('row', { name: /Child 2/i });
                 expect(firstRow).toBeInTheDocument();
 
-                await userEvent.click(industryHeader);
+                await userEvent.click(lastContactedAtHeader);
 
                 // Internal callback gets trimmed version for API calls
-                expect(mockOnSortChangeInternal).toHaveBeenCalledWith('industry', 'ASC');
+                expect(mockOnSortChangeInternal).toHaveBeenCalledWith('last_contacted_at', 'ASC');
 
                 // User callback gets full column ID with direction
                 expect(mockOnSortChangeExternal).toHaveBeenCalledWith({
-                    column: 'metadata.enterprise_0.templateName.industry',
+                    column: 'metadata.enterprise_0.templateName.last_contacted_at',
                     direction: 'ascending',
                 });
             });

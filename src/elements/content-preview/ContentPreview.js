@@ -26,6 +26,8 @@ import Internationalize from '../common/Internationalize';
 import AsyncLoad from '../common/async-load';
 // $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
+// $FlowFixMe TypeScript file
+import PreviewContext from './PreviewContext';
 import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
@@ -53,6 +55,7 @@ import {
     DEFAULT_LOCALE,
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
+    CLIENT_VERSION,
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
@@ -211,6 +214,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     // Defines a generic type for ContentSidebar, since an import would interfere with code splitting
     contentSidebar: { current: null | { refresh: Function } } = React.createRef();
 
+    previewBodyRef = React.createRef<HTMLDivElement>();
+
+    previewContextValue = { previewBodyRef: this.previewBodyRef };
+
     previewContainer: ?HTMLDivElement;
 
     mouseMoveTimeoutID: TimeoutID;
@@ -298,6 +305,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             token,
+            version: CLIENT_VERSION,
         });
         this.state = {
             ...this.initialState,
@@ -1326,82 +1334,88 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: API)}>
-                    <Providers hasProviders={hasProviders}>
-                        <div
-                            id={this.id}
-                            className={styleClassName}
-                            ref={measureRef}
-                            onKeyDown={this.onKeyDown}
-                            tabIndex={0}
-                        >
-                            <ThemingStyles theme={theme} />
-                            {hasHeader && (
-                                <PreviewHeader
-                                    file={file}
-                                    logoUrl={logoUrl}
-                                    token={token}
-                                    onClose={onHeaderClose}
-                                    onPrint={this.print}
-                                    canDownload={this.canDownload()}
-                                    canPrint={canPrint}
-                                    onDownload={this.download}
-                                    contentAnswersProps={contentAnswersProps}
-                                    contentOpenWithProps={contentOpenWithProps}
-                                    canAnnotate={this.canAnnotate()}
-                                    selectedVersion={selectedVersion}
-                                />
-                            )}
-                            <div className="bcpr-body">
-                                <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
-                                    {file && (
-                                        <Measure bounds onResize={this.onResize}>
-                                            {({ measureRef: previewRef }) => (
-                                                <div ref={previewRef} className="bcpr-content" />
-                                            )}
-                                        </Measure>
-                                    )}
-                                    <PreviewMask
-                                        errorCode={errorCode}
-                                        extension={currentExtension}
-                                        isLoading={isLoading}
-                                    />
-                                    <PreviewNavigation
-                                        collection={collection}
-                                        currentIndex={this.getFileIndex()}
-                                        onNavigateLeft={this.navigateLeft}
-                                        onNavigateRight={this.navigateRight}
-                                    />
-                                </div>
-                                {file && (
-                                    <LoadableSidebar
-                                        {...contentSidebarProps}
-                                        apiHost={apiHost}
+                    <PreviewContext.Provider value={this.previewContextValue}>
+                        <Providers hasProviders={hasProviders}>
+                            <div
+                                id={this.id}
+                                className={styleClassName}
+                                ref={measureRef}
+                                onKeyDown={this.onKeyDown}
+                                tabIndex={0}
+                            >
+                                <ThemingStyles theme={theme} />
+                                {hasHeader && (
+                                    <PreviewHeader
+                                        file={file}
+                                        logoUrl={logoUrl}
                                         token={token}
-                                        cache={this.api.getCache()}
-                                        fileId={currentFileId}
-                                        getPreview={this.getPreview}
-                                        getViewer={this.getViewer}
-                                        history={history}
-                                        isDefaultOpen={isLarge || isVeryLarge}
-                                        language={language}
-                                        ref={this.contentSidebar}
-                                        sharedLink={sharedLink}
-                                        sharedLinkPassword={sharedLinkPassword}
-                                        requestInterceptor={requestInterceptor}
-                                        responseInterceptor={responseInterceptor}
-                                        onAnnotationSelect={this.handleAnnotationSelect}
-                                        onVersionChange={this.onVersionChange}
+                                        onClose={onHeaderClose}
+                                        onPrint={this.print}
+                                        canDownload={this.canDownload()}
+                                        canPrint={canPrint}
+                                        onDownload={this.download}
+                                        contentAnswersProps={contentAnswersProps}
+                                        contentOpenWithProps={contentOpenWithProps}
+                                        canAnnotate={this.canAnnotate()}
+                                        selectedVersion={selectedVersion}
+                                    />
+                                )}
+                                <div className="bcpr-body" ref={this.previewBodyRef}>
+                                    <div
+                                        className="bcpr-container"
+                                        onMouseMove={this.onMouseMove}
+                                        ref={this.containerRef}
+                                    >
+                                        {file && (
+                                            <Measure bounds onResize={this.onResize}>
+                                                {({ measureRef: previewRef }) => (
+                                                    <div ref={previewRef} className="bcpr-content" />
+                                                )}
+                                            </Measure>
+                                        )}
+                                        <PreviewMask
+                                            errorCode={errorCode}
+                                            extension={currentExtension}
+                                            isLoading={isLoading}
+                                        />
+                                        <PreviewNavigation
+                                            collection={collection}
+                                            currentIndex={this.getFileIndex()}
+                                            onNavigateLeft={this.navigateLeft}
+                                            onNavigateRight={this.navigateRight}
+                                        />
+                                    </div>
+                                    {file && (
+                                        <LoadableSidebar
+                                            {...contentSidebarProps}
+                                            apiHost={apiHost}
+                                            token={token}
+                                            cache={this.api.getCache()}
+                                            fileId={currentFileId}
+                                            getPreview={this.getPreview}
+                                            getViewer={this.getViewer}
+                                            history={history}
+                                            isDefaultOpen={isLarge || isVeryLarge}
+                                            language={language}
+                                            ref={this.contentSidebar}
+                                            sharedLink={sharedLink}
+                                            sharedLinkPassword={sharedLinkPassword}
+                                            requestInterceptor={requestInterceptor}
+                                            responseInterceptor={responseInterceptor}
+                                            onAnnotationSelect={this.handleAnnotationSelect}
+                                            onVersionChange={this.onVersionChange}
+                                        />
+                                    )}
+                                </div>
+                                {isReloadNotificationVisible && (
+                                    <ReloadNotification
+                                        onClose={this.closeReloadNotification}
+                                        onClick={this.loadFileFromStage}
                                     />
                                 )}
                             </div>
-                            {isReloadNotificationVisible && (
-                                <ReloadNotification
-                                    onClose={this.closeReloadNotification}
-                                    onClick={this.loadFileFromStage}
-                                />
-                            )}
-                        </div>
-                    </Providers>
+                        </Providers>
+                    </PreviewContext.Provider>
                 </APIContext.Provider>
             </Internationalize>
         );

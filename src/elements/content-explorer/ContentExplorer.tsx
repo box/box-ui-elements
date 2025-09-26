@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
 import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
@@ -64,6 +65,7 @@ import {
     TYPE_WEBLINK,
     TYPE_FOLDER,
     CLIENT_NAME_CONTENT_EXPLORER,
+    CLIENT_VERSION,
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
@@ -143,7 +145,7 @@ export interface ContentExplorerProps {
     metadataQuery?: MetadataQuery;
     metadataViewProps?: Omit<
         MetadataViewContainerProps,
-        'hasError' | 'currentCollection' | 'metadataTemplate' | 'onMetadataFilter'
+        'hasError' | 'currentCollection' | 'metadataTemplate' | 'selectedKeys'
     >;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
@@ -292,6 +294,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             sharedLinkPassword,
             token,
             uploadHost,
+            version: CLIENT_VERSION,
         });
 
         this.id = uniqueid('bce_');
@@ -421,6 +424,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             markers: cloneMarkers,
             metadataTemplate,
         };
+
+        this.validateSelectedItemIds(metadataQueryCollection.items || []);
 
         // if v2, fetch folder name and add to state
         if (metadataQuery?.ancestor_folder_id && isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
@@ -1009,6 +1014,35 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     }
 
     /**
+     * Validates selectedItemIds to ensure all selected IDs exist in current items
+     * This should be called whenever currentCollection changes
+     *
+     * @private
+     * @param {BoxItem[]} items - current items in the collection
+     * @return {void}
+     */
+    validateSelectedItemIds = (items: BoxItem[]): void => {
+        const { selectedItemIds } = this.state;
+
+        if (selectedItemIds === 'all' || selectedItemIds.size === 0) {
+            // If all/none items are selected, no need to change anything
+            return;
+        }
+
+        const validSelectedIds = new Set<string>();
+
+        items.forEach(item => {
+            if (selectedItemIds.has(item.id)) {
+                validSelectedIds.add(item.id);
+            }
+        });
+
+        if (!isEqual(validSelectedIds, selectedItemIds)) {
+            this.setState({ selectedItemIds: validSelectedIds });
+        }
+    };
+
+    /**
      * Attempts to generate a thumbnail for the given item and assigns the
      * item its thumbnail url if successful
      *
@@ -1044,6 +1078,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const newCollection = { ...currentCollection } as const;
 
         newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
+
+        this.validateSelectedItemIds(newCollection.items);
+
         this.setState({ currentCollection: newCollection });
     };
 
@@ -1610,25 +1647,32 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         return maxWidthColumns;
     };
 
-    getMetadataViewProps = (): ContentExplorerProps['metadataViewProps'] => {
+    getMetadataViewProps = (): Omit<
+        MetadataViewContainerProps,
+        'hasError' | 'currentCollection' | 'metadataTemplate'
+    > => {
         const { metadataViewProps } = this.props;
-        const { tableProps } = metadataViewProps ?? {};
-        const { onSelectionChange } = tableProps ?? {};
-        const { selectedItemIds } = this.state;
+        const { onSelectionChange } = metadataViewProps ?? {};
+        const { currentPageNumber, markers, selectedItemIds } = this.state;
+        const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
+        const hasPrevMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
         return {
             ...metadataViewProps,
-            tableProps: {
-                ...tableProps,
-                selectedKeys: selectedItemIds,
-                onSelectionChange: (ids: Selection) => {
-                    onSelectionChange?.(ids);
-                    const isSelectionEmpty = ids !== 'all' && ids.size === 0;
-                    this.setState({
-                        selectedItemIds: ids,
-                        ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
-                    });
-                },
+            selectedKeys: selectedItemIds,
+            onSelectionChange: (ids: Selection) => {
+                onSelectionChange?.(ids);
+                const isSelectionEmpty = ids !== 'all' && ids.size === 0;
+                this.setState({
+                    selectedItemIds: ids,
+                    ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
+                });
+            },
+            paginationProps: {
+                onMarkerBasedPageChange: this.markerBasedPaginate,
+                hasNextMarker,
+                hasPrevMarker,
+                type: 'marker',
             },
         };
     };
@@ -1698,6 +1742,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             }
             return clonedItem;
         });
+
+        this.validateSelectedItemIds(updatedItems);
 
         this.setState({
             currentCollection: {
@@ -1903,7 +1949,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     viewMode={viewMode}
                                 />
 
-                                {!isErrorView && (
+                                {!isErrorView && !isMetadataViewV2Feature && (
                                     <Footer>
                                         <Pagination
                                             hasNextMarker={hasNextMarker}
