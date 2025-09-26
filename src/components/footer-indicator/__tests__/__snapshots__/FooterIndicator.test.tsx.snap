@@ -9,6 +9,7 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
     constrainToWindow={true}
     isDisabled={false}
     position="top-right"
+    targetWrapperClassName="bdl-FooterIndicator-tooltipTarget"
     text="abcdefghijklmnopqrstuvwxyz"
     theme="default"
   >

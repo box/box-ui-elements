@@ -10,10 +10,8 @@ type Props = {
 
 const SandboxBanner = ({ children }: Props) => {
     return (
-        <Tooltip text={children}>
-            <div className="bdl-SandboxBanner">
-                <div className="bdl-SandboxBanner-text">{children}</div>
-            </div>
+        <Tooltip targetWrapperClassName="bdl-SandboxBanner" text={children}>
+            <div className="bdl-SandboxBanner-text">{children}</div>
         </Tooltip>
     );
 };

@@ -117,3 +117,7 @@ $radar-animation-offset: 1px;
 .radar-animation-element {
     z-index: $overlay-z-index;
 }
+
+.bdl-RadarAnimation-target {
+    display: inline-block;
+}
