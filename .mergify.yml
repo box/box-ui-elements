@@ -18,10 +18,17 @@ queue_rules:
           - label != do-not-merge
           - status-success = license/cla
           - status-success = lint_pull_request
-          - status-success = lint_test_build
+          - "check-success = ci/circleci: lint"
+          - "check-success = ci/circleci: flow"
+          - "check-success = ci/circleci: build-unit-tests"
+          - "check-success = ci/circleci: e2e-tests"
+          - "check-success = ci/circleci: chromatic-deploy"
       merge_conditions:
-          - status-success = lint_pull_request
-          - status-success = lint_test_build
+          - "check-success = ci/circleci: lint"
+          - "check-success = ci/circleci: flow"
+          - "check-success = ci/circleci: build-unit-tests"
+          - "check-success = ci/circleci: e2e-tests"
+          - "check-success = ci/circleci: chromatic-deploy"
       merge_method: squash
 
     - name: Automatic strict merge
@@ -31,13 +38,20 @@ queue_rules:
           - label != do-not-merge
           - status-success = license/cla
           - status-success = lint_pull_request
-          - status-success = lint_test_build
+          - "check-success = ci/circleci: lint"
+          - "check-success = ci/circleci: flow"
+          - "check-success = ci/circleci: build-unit-tests"
+          - "check-success = ci/circleci: e2e-tests"
+          - "check-success = ci/circleci: chromatic-deploy"
           - branch-protection-review-decision = APPROVED
           - "#approved-reviews-by >= 2"
           - "#changes-requested-reviews-by = 0"
           - "#review-threads-unresolved = 0"
       merge_conditions:
           - status-success = license/cla
-          - status-success = lint_pull_request
-          - status-success = lint_test_build
+          - "check-success = ci/circleci: lint"
+          - "check-success = ci/circleci: flow"
+          - "check-success = ci/circleci: build-unit-tests"
+          - "check-success = ci/circleci: e2e-tests"
+          - "check-success = ci/circleci: chromatic-deploy"
       merge_method: squash
