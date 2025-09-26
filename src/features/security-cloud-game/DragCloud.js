@@ -33,6 +33,7 @@ const DragCloud = ({
     updateLiveText,
     updatePosition,
 }) => {
+    const nodeRef = React.useRef({});
     const [isMoving, setIsMoving] = useState(false);
 
     const dragCloudClasses = classNames('bdl-DragCloud', {
@@ -137,8 +138,22 @@ const DragCloud = ({
     const onDrag = throttle((e, { x, y }) => updatePosition({ x, y }), 100, { leading: true, trailing: true });
 
     return (
-        <Draggable bounds="parent" disabled={disabled} onDrag={onDrag} onStop={onDrop} position={position}>
-            <div className={dragCloudClasses} onBlur={onBlur} onKeyDown={onKeyDown} role="button" tabIndex={0}>
+        <Draggable
+            nodeRef={nodeRef}
+            bounds="parent"
+            disabled={disabled}
+            onDrag={onDrag}
+            onStop={onDrop}
+            position={position}
+        >
+            <div
+                ref={nodeRef}
+                className={dragCloudClasses}
+                onBlur={onBlur}
+                onKeyDown={onKeyDown}
+                role="button"
+                tabIndex={0}
+            >
                 <IconCloud
                     filter={{ id: 'drop-shadow', definition: <DropShadowFilter /> }}
                     height={cloudSize}
