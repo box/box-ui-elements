@@ -118,6 +118,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
       >
         <dl
           className="item-properties"
+          data-testid="item-properties"
         >
           <FormattedMessage
             defaultMessage="Size"
