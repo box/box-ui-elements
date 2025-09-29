@@ -6,6 +6,7 @@ pull_request_rules:
       conditions:
           - -draft
           - base = master
+          - author != mergify[bot]
           - label != do-not-merge
           - status-success = license/cla
           - status-success = lint_pull_request
@@ -18,6 +19,7 @@ queue_rules:
     - name: Automatic boxmoji merge
       queue_conditions:
           - author = boxmoji
+          - author != mergify[bot]
           - title ~= ^(fix)\(i18n\)?:\supdate translations$
           - files ~= ^i18n/
           - status-success = lint_test_build
@@ -27,6 +29,7 @@ queue_rules:
 
     - name: Automatic strict merge
       queue_conditions:
+          - author != mergify[bot]
           - title ~= ^(build|ci|chore|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?:\s.+$
           - label = ready-to-merge
           - "#approved-reviews-by >= 2"
