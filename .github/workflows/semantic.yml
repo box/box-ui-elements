@@ -9,6 +9,7 @@ on:
 
 jobs:
     main:
+        if: github.actor != 'mergify[bot]'
         name: lint_pull_request
         runs-on: ubuntu-latest
         steps:
