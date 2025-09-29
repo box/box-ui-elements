@@ -48,3 +48,10 @@ export const ContentSidebarWithBoxAIEnabled: StoryObj<typeof BoxAISidebar> = {
         },
     },
 };
+
+export const ContentSidebarDetailsTab: StoryObj<typeof BoxAISidebar> = {
+    args: {
+        hasActivityFeed: false,
+        hasMetadata: false,
+    },
+};
