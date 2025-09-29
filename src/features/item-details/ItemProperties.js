@@ -42,7 +42,7 @@ const ItemProperties = ({
     const descriptionId = uniqueid('description_');
 
     return (
-        <dl className="item-properties">
+        <dl className="item-properties" data-testid="item-properties">
             {description || onDescriptionChange ? (
                 <>
                     <FormattedMessage {...messages.description}>

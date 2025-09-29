@@ -16,7 +16,7 @@ describe('features/item-details/ItemProperties', () => {
             },
         });
 
-        const propertiesList = document.querySelector('.item-properties');
+        const propertiesList = screen.getByTestId('item-properties');
         expect(propertiesList).toBeVisible();
 
         expect(screen.getByText('Retention policy description')).toBeVisible();
