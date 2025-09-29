@@ -72,7 +72,19 @@ jobs:
       - build-locales
       - run:
           name: Commit lint
-          command: /buie/scripts/commitlint.sh
+          command: |
+            if [ -n "${CIRCLE_PULL_REQUEST}" ]; then
+              CIRCLE_PR_NUMBER="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+              PULL_REQUEST_DETAILS=$(curl -s https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pulls/${CIRCLE_PR_NUMBER})
+              AUTHOR=$(node -pe 'JSON.parse(process.argv[1]).user.login' "${PULL_REQUEST_DETAILS}")
+              if [ "$AUTHOR" != "mergify[bot]" ]; then
+                /buie/scripts/commitlint.sh
+              else
+                echo "Skipping commitlint for Mergify bot PR"
+              fi
+            else
+              /buie/scripts/commitlint.sh
+            fi
       - run:
           name: Code lint
           command: yarn --cwd /buie lint
