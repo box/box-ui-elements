@@ -171,6 +171,12 @@ export interface ContentExplorerProps {
     uploadHost?: string;
 }
 
+enum SidePanelState {
+    CLOSED = 'CLOSED',
+    OPEN = 'OPEN',
+    EDITING = 'EDITING',
+}
+
 type State = {
     currentCollection: Collection;
     currentOffset: number;
@@ -182,7 +188,6 @@ type State = {
     isCreateFolderModalOpen: boolean;
     isDeleteModalOpen: boolean;
     isLoading: boolean;
-    isMetadataSidePanelOpen: boolean;
     isPreviewModalOpen: boolean;
     isRenameModalOpen: boolean;
     isShareModalOpen: boolean;
@@ -194,6 +199,7 @@ type State = {
     searchQuery: string;
     selected?: BoxItem;
     selectedItemIds: Selection;
+    sidePanelState: SidePanelState;
     sortBy: SortBy | string;
     sortDirection: SortDirection;
     view: View;
@@ -310,7 +316,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
-            isMetadataSidePanelOpen: false,
+            sidePanelState: SidePanelState.CLOSED,
             isPreviewModalOpen: false,
             isRenameModalOpen: false,
             isShareModalOpen: false,
@@ -1022,23 +1028,21 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     validateSelectedItemIds = (items: BoxItem[]): void => {
+        const { onSelectionChange: onSelectionChangeExternal } = this.props.metadataViewProps ?? {};
         const { selectedItemIds } = this.state;
 
-        if (selectedItemIds === 'all' || selectedItemIds.size === 0) {
-            // If all/none items are selected, no need to change anything
-            return;
+        let validSelectedIds = new Set<string>();
+
+        if (selectedItemIds === 'all') {
+            validSelectedIds = new Set(items.map(item => item.id));
+        } else if (selectedItemIds.size > 0) {
+            validSelectedIds = new Set(items.filter(item => selectedItemIds.has(item.id)).map(item => item.id));
         }
 
-        const validSelectedIds = new Set<string>();
-
-        items.forEach(item => {
-            if (selectedItemIds.has(item.id)) {
-                validSelectedIds.add(item.id);
-            }
-        });
-
         if (!isEqual(validSelectedIds, selectedItemIds)) {
+            onSelectionChangeExternal?.(validSelectedIds);
             this.setState({ selectedItemIds: validSelectedIds });
+            this.closeSidePanel();
         }
     };
 
@@ -1511,6 +1515,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen: false,
             isUploadModalOpen: false,
             isPreviewModalOpen: false,
+            sidePanelState: SidePanelState.CLOSED,
         });
 
         const {
@@ -1652,7 +1657,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         'hasError' | 'currentCollection' | 'metadataTemplate'
     > => {
         const { metadataViewProps } = this.props;
-        const { onSelectionChange } = metadataViewProps ?? {};
         const { currentPageNumber, markers, selectedItemIds } = this.state;
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPrevMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
@@ -1660,14 +1664,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         return {
             ...metadataViewProps,
             selectedKeys: selectedItemIds,
-            onSelectionChange: (ids: Selection) => {
-                onSelectionChange?.(ids);
-                const isSelectionEmpty = ids !== 'all' && ids.size === 0;
-                this.setState({
-                    selectedItemIds: ids,
-                    ...(isSelectionEmpty && { isMetadataSidePanelOpen: false }),
-                });
-            },
+            onSelectionChange: this.handleSelectedIdsChange,
             paginationProps: {
                 onMarkerBasedPageChange: this.markerBasedPaginate,
                 hasNextMarker,
@@ -1754,11 +1751,37 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         });
     };
 
+    handleSelectedIdsChange = (ids: Selection) => {
+        const { onSelectionChange: onSelectionChangeExternal } = this.props.metadataViewProps ?? {};
+        const { sidePanelState } = this.state;
+
+        // Prevent changing selection when in edit mode
+        if (sidePanelState === SidePanelState.EDITING) {
+            return;
+        }
+
+        onSelectionChangeExternal?.(ids);
+
+        this.setState({
+            selectedItemIds: ids,
+        });
+
+        const isSelectionEmpty = ids !== 'all' && ids.size === 0;
+        if (isSelectionEmpty) {
+            this.closeSidePanel();
+        }
+    };
+
     clearSelectedItemIds = () => {
+        const { onSelectionChange: onSelectionChangeExternal } = this.props.metadataViewProps ?? {};
+
+        onSelectionChangeExternal?.(new Set());
+
         this.setState({
             selectedItemIds: new Set(),
-            isMetadataSidePanelOpen: false,
         });
+
+        this.closeSidePanel();
     };
 
     /**
@@ -1767,20 +1790,23 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @private
      * @return {void}
      */
-    onMetadataSidePanelToggle = () => {
+    onSidePanelToggle = () => {
         this.setState(prevState => ({
-            isMetadataSidePanelOpen: !prevState.isMetadataSidePanelOpen,
+            sidePanelState:
+                prevState.sidePanelState === SidePanelState.CLOSED ? SidePanelState.OPEN : SidePanelState.CLOSED,
         }));
     };
 
-    /**
-     * Close metadata side panel
-     *
-     * @private
-     * @return {void}
-     */
-    closeMetadataSidePanel = () => {
-        this.setState({ isMetadataSidePanelOpen: false });
+    closeSidePanel = () => {
+        this.setState({
+            sidePanelState: SidePanelState.CLOSED,
+        });
+    };
+
+    onMetadataEditingChange = (isEditing: boolean) => {
+        this.setState({
+            sidePanelState: isEditing ? SidePanelState.EDITING : SidePanelState.OPEN,
+        });
     };
 
     filterMetadata = (fields: ExternalFilterValues) => {
@@ -1848,7 +1874,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isCreateFolderModalOpen,
             isDeleteModalOpen,
             isLoading,
-            isMetadataSidePanelOpen,
+            sidePanelState,
             isPreviewModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
@@ -1877,6 +1903,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
         const metadataViewProps = this.getMetadataViewProps();
+
+        const isSidePanelOpen = sidePanelState !== SidePanelState.CLOSED;
+        const isEditing = sidePanelState === SidePanelState.EDITING;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1911,7 +1940,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     onGridViewSliderChange={this.onGridViewSliderChange}
                                     onItemClick={this.fetchFolder}
                                     onSortChange={this.sort}
-                                    onMetadataSidePanelToggle={this.onMetadataSidePanelToggle}
+                                    onSidePanelToggle={this.onSidePanelToggle}
                                     onViewModeChange={this.changeViewMode}
                                     portalElement={this.rootElement}
                                     selectedItemIds={selectedItemIds}
@@ -1927,6 +1956,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     currentCollection={currentCollection}
                                     features={features}
                                     gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
+                                    isEditing={isEditing}
                                     isMedium={isMedium}
                                     isSmall={isSmall}
                                     isTouch={isTouch}
@@ -1964,11 +1994,13 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     </Footer>
                                 )}
                             </div>
-                            {isDefaultViewMetadata && isMetadataViewV2Feature && isMetadataSidePanelOpen && (
+                            {isDefaultViewMetadata && isMetadataViewV2Feature && isSidePanelOpen && (
                                 <MetadataSidePanel
                                     currentCollection={currentCollection}
+                                    isEditing={isEditing}
                                     metadataTemplate={metadataTemplate}
-                                    onClose={this.closeMetadataSidePanel}
+                                    onClose={this.closeSidePanel}
+                                    onEditingChange={this.onMetadataEditingChange}
                                     onUpdate={this.updateMetadataV2}
                                     refreshCollection={this.refreshCollection}
                                     selectedItemIds={selectedItemIds}

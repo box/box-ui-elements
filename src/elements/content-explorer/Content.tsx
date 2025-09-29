@@ -32,6 +32,7 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
     features?: FeatureConfig;
     fieldsToShow?: FieldsToShow;
     gridColumnCount?: number;
+    isEditing?: boolean;
     isMedium: boolean;
     isSmall: boolean;
     isTouch: boolean;
@@ -59,6 +60,7 @@ const Content = ({
     features,
     fieldsToShow = [],
     gridColumnCount,
+    isEditing = false,
     metadataTemplate,
     metadataViewProps,
     onMetadataFilter,
@@ -94,6 +96,7 @@ const Content = ({
                     currentCollection={currentCollection}
                     isLoading={percentLoaded !== 100}
                     hasError={view === VIEW_ERROR}
+                    isEditing={isEditing}
                     metadataTemplate={metadataTemplate}
                     onMetadataFilter={onMetadataFilter}
                     onSortChange={onSortChange}
