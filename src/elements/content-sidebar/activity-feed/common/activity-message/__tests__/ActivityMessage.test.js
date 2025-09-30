@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
+import { createIntl } from 'react-intl';
 
 import { ActivityMessage } from '../ActivityMessage';
 
@@ -183,5 +184,34 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         const wrapper = shallow(<ActivityMessage id="123" {...comment} />);
 
         expect(wrapper.exists({ id: 'be.contentSidebar.activityFeed.common.editedMessage' })).toBe(expected);
+    });
+
+    describe('video annotation', () => {
+        test('should render timestamp with text when annotationsMillisecondTimestamp is provided', () => {
+            const onClick = jest.fn();
+            const videoAnnotation = {
+                annotationsMillisecondTimestamp: '0:01:00',
+                tagged_message: 'test',
+                onClick,
+            };
+
+            const intl = createIntl({ locale: 'en' });
+            const wrapper = mount(<ActivityMessage id="123" {...videoAnnotation} intl={intl} />);
+            expect(wrapper.find('button[aria-label="Seek to video timestamp"]').length).toBe(1);
+            expect(wrapper.find('button[aria-label="Seek to video timestamp"]').text()).toBe('0:01:00');
+            wrapper.find('button[aria-label="Seek to video timestamp"]').simulate('click');
+            expect(onClick).toHaveBeenCalled();
+        });
+
+        test('should render original message when annotationsMillisecondTimestamp is not provided', () => {
+            const comment = {
+                annotationsMillisecondTimestamp: undefined,
+                tagged_message: 'test',
+            };
+            const intl = createIntl({ locale: 'en' });
+            const wrapper = mount(<ActivityMessage id="123" {...comment} intl={intl} />);
+            expect(wrapper.find('button[aria-label="Seek to video timestamp"]').length).toBe(0);
+            expect(wrapper.find('.bcs-ActivityMessage').text()).toBe('test');
+        });
     });
 });
