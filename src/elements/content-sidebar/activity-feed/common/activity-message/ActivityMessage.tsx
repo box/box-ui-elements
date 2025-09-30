@@ -28,7 +28,7 @@ export interface ActivityMessageProps extends WrappedComponentProps {
     translatedTaggedMessage?: string;
     translationEnabled?: boolean;
     translationFailed?: boolean | null;
-    annotationsMillisecondTimestamp?: number;
+    annotationsMillisecondTimestamp?: string;
 }
 
 type State = {
@@ -132,8 +132,6 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
             </div>
         );
     }
-
-    d;
 }
 
 export { ActivityMessage };
