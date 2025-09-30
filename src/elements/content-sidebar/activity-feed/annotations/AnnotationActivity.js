@@ -129,7 +129,7 @@ const AnnotationActivity = ({
     };
 
     const isVideoAnnotation = target?.location?.type === 'frame';
-    const annotationsMillisecondTimestampInHHMMSS = isVideoAnnotation
+    const annotationsMillisecondTimestampInHMMSS = isVideoAnnotation
         ? convertMillisecondsToHMMSS(target.location.value)
         : null;
 
@@ -195,7 +195,7 @@ const AnnotationActivity = ({
                             <ActivityMessage
                                 getUserProfileUrl={getUserProfileUrl}
                                 id={id}
-                                annotationsMillisecondTimestamp={annotationsMillisecondTimestampInHHMMSS}
+                                annotationsMillisecondTimestamp={annotationsMillisecondTimestampInHMMSS}
                                 onClick={handleSelect}
                                 isEdited={isEdited && !isResolved}
                                 tagged_message={message}
