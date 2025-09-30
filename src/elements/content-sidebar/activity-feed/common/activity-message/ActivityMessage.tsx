@@ -28,7 +28,7 @@ export interface ActivityMessageProps extends WrappedComponentProps {
     translatedTaggedMessage?: string;
     translationEnabled?: boolean;
     translationFailed?: boolean | null;
-    annotationsMillisecondTimestamp?: string;
+    annotationsMillisecondTimestamp?: string | null;
 }
 
 type State = {

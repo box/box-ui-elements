@@ -129,8 +129,10 @@ const AnnotationActivity = ({
     };
 
     const isVideoAnnotation = target?.location?.type === 'frame';
-    const annotationsMillisecondTimestampInHHMMSS =
-        isVideoAnnotation && convertMillisecondsToHMMSS(target.location.value);
+    const annotationsMillisecondTimestampInHHMMSS = isVideoAnnotation
+        ? convertMillisecondsToHMMSS(target.location.value)
+        : null;
+
     return (
         <>
             <SelectableActivityCard
