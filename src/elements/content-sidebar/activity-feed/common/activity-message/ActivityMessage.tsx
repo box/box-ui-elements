@@ -7,7 +7,7 @@ import LoadingIndicator, { LoadingIndicatorSize } from '../../../../../component
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
 
-import formatTaggedMessage from '../../utils/formatTaggedMessage';
+import formatTaggedMessage, { renderTimestampWithText } from '../../utils/formatTaggedMessage';
 import { withFeatureConsumer, isFeatureEnabled } from '../../../../common/feature-checking';
 
 import messages from './messages';
@@ -22,11 +22,13 @@ export interface ActivityMessageProps extends WrappedComponentProps {
     getUserProfileUrl?: GetProfileUrlCallback;
     id: string;
     isEdited?: boolean;
+    onClick?: () => void;
     onTranslate?: ({ id, tagged_message }: { id: string; tagged_message: string }) => void;
     tagged_message: string;
     translatedTaggedMessage?: string;
     translationEnabled?: boolean;
     translationFailed?: boolean | null;
+    annotationsMillisecondTimestamp?: number;
 }
 
 type State = {
@@ -92,6 +94,8 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
             id,
             intl,
             isEdited,
+            onClick = noop,
+            annotationsMillisecondTimestamp,
             tagged_message,
             translatedTaggedMessage,
             translationEnabled,
@@ -110,7 +114,14 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
         ) : (
             <div className="bcs-ActivityMessage">
                 <MessageWrapper>
-                    {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl, intl)}
+                    {annotationsMillisecondTimestamp
+                        ? renderTimestampWithText(
+                              annotationsMillisecondTimestamp,
+                              onClick,
+                              intl,
+                              ` ${commentToDisplay}`,
+                          )
+                        : formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl, intl)}
                     {isEdited && (
                         <span className="bcs-ActivityMessage-edited">
                             <FormattedMessage {...messages.activityMessageEdited} />
@@ -121,6 +132,8 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
             </div>
         );
     }
+
+    d;
 }
 
 export { ActivityMessage };
