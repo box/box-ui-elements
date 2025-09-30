@@ -105,4 +105,4 @@ Keep in mind that we like to see one issue addressed per pull request, as this h
 
 ### Step 8: Add `ready-to-merge` label
 
-After your pull request has been approved and the check statuses are green, please add the `ready-to-merge` label instead of using the merge button. This will add your pull request to the merge queue and merge your pull request when it is safe. If you are unable to add the `ready-to-merge` label, please ask an approver or maintainer for assistance.
+After your pull request has been approved and the check statuses are green, please add the `ready-to-merge` label instead of using the merge button. This will add your pull request to the merge queue and merge your pull request when it is safe. If you are unable to add the `ready-to-merge` label, please ask an approver or maintainer for assistance
