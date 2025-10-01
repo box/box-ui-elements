@@ -10,26 +10,11 @@ import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
 jest.mock('../SidebarUtils');
 
 describe('elements/content-sidebar/SidebarPanels', () => {
-    // Helper function to create Box AI custom panel
-    const createBoxAIPanel = (overrides = {}) => {
-        // Create a mock component that matches what the test expects
-        const BoxAISidebar = () => <div data-testid="boxai-sidebar" />;
-        BoxAISidebar.displayName = 'BoxAISidebar';
-
-        return {
-            id: 'boxai',
-            path: 'boxai',
-            component: BoxAISidebar,
-            isDisabled: false,
-            ...overrides,
-        };
-    };
-
-    const getWrapper = ({ path = '/', customPanels, ...rest } = {}) => {
-        return mount(
+    const getWrapper = ({ path = '/', ...rest } = {}) =>
+        mount(
             <SidebarPanels
                 file={{ id: '1234' }}
-                customPanels={customPanels}
+                hasBoxAI
                 hasDocGen
                 hasActivity
                 hasDetails
@@ -47,26 +32,24 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 },
             },
         );
-    };
 
-    const getSidebarPanels = ({ path = '/', customPanels, ...props }) => {
-        return (
-            <MemoryRouter initialEntries={[path]}>
-                <SidebarPanels
-                    file={{ id: '1234' }}
-                    customPanels={customPanels}
-                    hasDocGen
-                    hasActivity
-                    hasDetails
-                    hasMetadata
-                    hasSkills
-                    hasVersions
-                    isOpen
-                    {...props}
-                />
-            </MemoryRouter>
-        );
-    };
+    const getSidebarPanels = ({ path = '/', ...props }) => (
+        <MemoryRouter initialEntries={[path]}>
+            <SidebarPanels
+                file={{ id: '1234' }}
+                hasBoxAI
+                hasDocGen
+                hasActivity
+                hasDetails
+                hasMetadata
+                hasSkills
+                hasVersions
+                isOpen
+                {...props}
+            />
+            ,
+        </MemoryRouter>
+    );
 
     describe('render', () => {
         test.each`
@@ -91,8 +74,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/nonsense'}                       | ${'DocGenSidebar'}
             ${'/'}                               | ${'DocGenSidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
-            const customPanels = sidebar === 'BoxAISidebar' ? [createBoxAIPanel()] : undefined;
-            const wrapper = getWrapper({ path, customPanels });
+            const wrapper = getWrapper({ path });
             expect(wrapper.exists(sidebar)).toBe(true);
         });
 
@@ -105,7 +87,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ({ path, sidebar }) => {
                 const wrapper = getWrapper({
                     features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                    customPanels: [createBoxAIPanel()],
                     path,
                 });
                 expect(wrapper.exists(sidebar)).toBe(true);
@@ -126,12 +107,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             'should render $sidebar and call onPanelChange with $expectedPanelName given the path = "/" and defaultPanel = $defaultPanel',
             ({ defaultPanel, sidebar, expectedPanelName }) => {
                 const onPanelChange = jest.fn();
-                const customPanels = expectedPanelName === 'boxai' ? [createBoxAIPanel()] : undefined;
                 render(
                     getSidebarPanels({
                         defaultPanel,
                         onPanelChange,
-                        customPanels,
                     }),
                 );
                 expect(screen.getByTestId(sidebar)).toBeInTheDocument();
@@ -152,7 +131,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         defaultPanel,
                         features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
                         onPanelChange,
-                        customPanels: [createBoxAIPanel()],
                     }),
                 );
                 expect(screen.getByTestId(sidebar)).toBeInTheDocument();
@@ -184,8 +162,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expectedPanelName,
             }) => {
                 const onPanelChange = jest.fn();
-                // Only provide BoxAI custom panel when hasBoxAI is true and showOnlyNavButton is false
-                const customPanels = hasBoxAI && !showOnlyBoxAINavButton ? [createBoxAIPanel()] : undefined;
                 render(
                     getSidebarPanels({
                         features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
@@ -195,7 +171,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         hasMetadata,
                         hasSkills,
                         hasDocGen,
-                        customPanels,
+                        hasBoxAI,
                         onPanelChange,
                     }),
                 );
@@ -228,8 +204,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expectedPanelName,
             }) => {
                 const onPanelChange = jest.fn();
-                // Only provide BoxAI custom panel when hasBoxAI is true and showOnlyNavButton is false
-                const customPanels = hasBoxAI && !showOnlyBoxAINavButton ? [createBoxAIPanel()] : undefined;
                 render(
                     getSidebarPanels({
                         features: {
@@ -246,7 +220,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         hasMetadata,
                         hasSkills,
                         hasDocGen,
-                        customPanels,
+                        hasBoxAI,
                         onPanelChange,
                     }),
                 );
@@ -279,13 +253,11 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 'should render $sidebar and call onPanelChange with $expectedPanelName given the path = $path and defaultPanel = $defaultPanel',
                 ({ path, sidebar, defaultPanel, expectedPanelName }) => {
                     const onPanelChange = jest.fn();
-                    const customPanels = expectedPanelName === 'boxai' ? [createBoxAIPanel()] : undefined;
                     render(
                         getSidebarPanels({
                             defaultPanel,
                             onPanelChange,
                             path,
-                            customPanels,
                         }),
                     );
                     expect(screen.getByTestId(sidebar)).toBeInTheDocument();
@@ -317,12 +289,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/'}                               | ${'docgen'}
         `('should call onPanelChange with $expectedPanelName given the path = $path', ({ path, expectedPanelName }) => {
             const onPanelChange = jest.fn();
-            const customPanels = expectedPanelName === 'boxai' ? [createBoxAIPanel()] : undefined;
             render(
                 getSidebarPanels({
                     path,
                     onPanelChange,
-                    customPanels,
                 }),
             );
             expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
@@ -341,7 +311,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
                         path,
                         onPanelChange,
-                        customPanels: [createBoxAIPanel()],
                     }),
                 );
                 expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
@@ -383,17 +352,16 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expectedPanelName,
             }) => {
                 const onPanelChange = jest.fn();
-                const customPanels = hasBoxAI && !showOnlyBoxAINavButton ? [createBoxAIPanel()] : undefined;
                 render(
                     getSidebarPanels({
                         features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
                         hasActivity,
+                        hasBoxAI,
                         hasDetails,
                         hasDocGen,
                         hasMetadata,
                         hasSkills,
                         hasVersions,
-                        customPanels,
                         onPanelChange,
                         path,
                     }),
@@ -437,7 +405,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expectedPanelName,
             }) => {
                 const onPanelChange = jest.fn();
-                const customPanels = hasBoxAI && !showOnlyBoxAINavButton ? [createBoxAIPanel()] : undefined;
                 render(
                     getSidebarPanels({
                         features: {
@@ -449,12 +416,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                             },
                         },
                         hasActivity,
+                        hasBoxAI,
                         hasDetails,
                         hasDocGen,
                         hasMetadata,
                         hasSkills,
                         hasVersions,
-                        customPanels,
                         onPanelChange,
                         path,
                     }),
@@ -490,12 +457,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
 
         test('should render nothing if all sidebars are disabled', () => {
             const wrapper = getWrapper({
+                hasBoxAI: false,
                 hasActivity: false,
                 hasDetails: false,
                 hasMetadata: false,
                 hasSkills: false,
                 hasVersions: false,
-                hasDocGen: false,
             });
             expect(wrapper.isEmptyRender()).toBe(true);
         });
@@ -568,28 +535,28 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         describe('boxai sidebar', () => {
-            test('should render, given feature boxai.sidebar.shouldBeDefaultPanel = true and customPanels includes Box AI and feature boxai.sidebar.showOnlyNavButton = false', () => {
+            test('should render, given feature boxai.sidebar.shouldBeDefaultPanel = true and hasBoxAI = true and feature boxai.sidebar.showOnlyNavButton = false', () => {
                 render(
                     getSidebarPanels({
                         features: { boxai: { sidebar: { shouldBeDefaultPanel: true, showOnlyNavButton: false } } },
-                        customPanels: [createBoxAIPanel()],
+                        hasBoxAI: true,
                     }),
                 );
                 expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
             });
 
             test.each`
-                customPanels            | showOnlyNavButton
-                ${[createBoxAIPanel()]} | ${true}
-                ${undefined}            | ${true}
-                ${undefined}            | ${false}
+                hasBoxAI | showOnlyNavButton
+                ${true}  | ${true}
+                ${false} | ${true}
+                ${false} | ${false}
             `(
-                'should not render, given customPanels = $customPanels and feature boxai.sidebar.showOnlyNavButton = $showOnlyNavButton',
-                ({ customPanels, showOnlyNavButton }) => {
+                'should not render, given hasBoxAI = $hasBoxAI and feature boxai.sidebar.showOnlyNavButton = $showOnlyNavButton',
+                ({ hasBoxAI, showOnlyNavButton }) => {
                     render(
                         getSidebarPanels({
                             features: { boxai: { sidebar: { showOnlyNavButton } } },
-                            customPanels,
+                            hasBoxAI,
                         }),
                     );
                     expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
@@ -657,164 +624,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
             wrapper.setProps({ location: { pathname } });
             expect(onVersionChange).toBeCalledWith(null);
-        });
-    });
-
-    describe('multiple customPanels rendering', () => {
-        // Helper function to create custom panels for testing
-        const createCustomPanel = (id, overrides = {}) => ({
-            id,
-            path: id,
-            component: () => <div data-testid={`${id}-sidebar`} />,
-            isDisabled: false,
-            ...overrides,
-        });
-
-        test('should render multiple custom panels including Box AI', () => {
-            const customPanels = [
-                createBoxAIPanel(),
-                createCustomPanel('custom1', { title: 'Custom Panel 1' }),
-                createCustomPanel('custom2', { title: 'Custom Panel 2' }),
-            ];
-
-            const wrapper = getWrapper({
-                path: '/boxai',
-                customPanels,
-            });
-
-            // Box AI should be rendered (since path is /boxai)
-            expect(wrapper.exists('BoxAISidebar')).toBe(true);
-
-            // Other custom panels should not be rendered
-            expect(wrapper.exists('CustomPanel[id="custom1"]')).toBe(false);
-            expect(wrapper.exists('CustomPanel[id="custom2"]')).toBe(false);
-        });
-
-        test('should render custom panels with regular panels', () => {
-            const customPanels = [
-                createCustomPanel('analytics', { title: 'Analytics Panel' }),
-                createCustomPanel('reports', { title: 'Reports Panel' }),
-            ];
-
-            const wrapper = getWrapper({
-                path: '/analytics',
-                customPanels,
-                hasActivity: true,
-                hasMetadata: true,
-            });
-
-            // Custom panel should be rendered
-            expect(wrapper.find('div[data-testid="analytics-sidebar"]')).toHaveLength(1);
-        });
-
-        test('should handle custom panels with different properties', () => {
-            const disabledPanel = createCustomPanel('disabled', {
-                isDisabled: true,
-                title: 'Disabled Panel',
-            });
-            const enabledPanel = createCustomPanel('enabled', {
-                title: 'Enabled Panel',
-            });
-
-            const wrapper = getWrapper({
-                path: '/enabled',
-                customPanels: [disabledPanel, enabledPanel],
-            });
-
-            // Enabled panel should be rendered
-            expect(wrapper.find('div[data-testid="enabled-sidebar"]')).toHaveLength(1);
-
-            // Try to navigate to disabled panel - should fall back to default
-            const disabledWrapper = getWrapper({
-                path: '/disabled',
-                customPanels: [disabledPanel, enabledPanel],
-            });
-
-            // Should not render the disabled panel, should fall back to default
-            expect(disabledWrapper.find('div[data-testid="disabled-sidebar"]')).toHaveLength(0);
-        });
-
-        test('should render custom panels without Box AI', () => {
-            const customPanels = [
-                createCustomPanel('workflow', { title: 'Workflow Panel' }),
-                createCustomPanel('integration', { title: 'Integration Panel' }),
-            ];
-
-            const wrapper = getWrapper({
-                path: '/workflow',
-                customPanels,
-            });
-
-            // Custom panel should be rendered
-            expect(wrapper.find('div[data-testid="workflow-sidebar"]')).toHaveLength(1);
-        });
-
-        test('should handle empty custom panels array', () => {
-            const wrapper = getWrapper({
-                path: '/activity',
-                customPanels: [],
-                hasActivity: true,
-            });
-
-            // Should render regular activity panel
-            expect(wrapper.exists('ActivitySidebar')).toBe(true);
-        });
-
-        test('should handle custom panels with Box AI in different positions', () => {
-            const customPanels = [
-                createCustomPanel('before', { title: 'Before Box AI' }),
-                createBoxAIPanel(),
-                createCustomPanel('after', { title: 'After Box AI' }),
-            ];
-
-            // Test Box AI panel
-            const boxAIWrapper = getWrapper({
-                path: '/boxai',
-                customPanels,
-            });
-            expect(boxAIWrapper.exists('BoxAISidebar')).toBe(true);
-
-            // Test custom panel before Box AI
-            const beforeWrapper = getWrapper({
-                path: '/before',
-                customPanels,
-            });
-            expect(beforeWrapper.find('div[data-testid="before-sidebar"]')).toHaveLength(1);
-
-            // Test custom panel after Box AI
-            const afterWrapper = getWrapper({
-                path: '/after',
-                customPanels,
-            });
-            expect(afterWrapper.find('div[data-testid="after-sidebar"]')).toHaveLength(1);
-        });
-
-        test('should call onPanelChange with correct panel names for custom panels', () => {
-            const onPanelChange = jest.fn();
-            const customPanels = [createCustomPanel('dashboard', { title: 'Dashboard' }), createBoxAIPanel()];
-
-            // Test custom panel
-            render(
-                getSidebarPanels({
-                    path: '/dashboard',
-                    customPanels,
-                    onPanelChange,
-                }),
-            );
-            expect(onPanelChange).toHaveBeenCalledWith('dashboard', true);
-
-            // Reset mock
-            onPanelChange.mockClear();
-
-            // Test Box AI panel
-            render(
-                getSidebarPanels({
-                    path: '/boxai',
-                    customPanels,
-                    onPanelChange,
-                }),
-            );
-            expect(onPanelChange).toHaveBeenCalledWith('boxai', true);
         });
     });
 });
