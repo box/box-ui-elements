@@ -1,10 +1,10 @@
 import { type StoryObj } from '@storybook/react';
-import ContentSidebar from '../../ContentSidebar';
+import ContentSidebarComponent from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebarContent';
 
 export default {
     title: 'Elements/ContentSidebar/tests/visual-regression-tests',
-    component: ContentSidebar,
+    component: ContentSidebarComponent,
     args: {
         detailsSidebarProps: {
             hasProperties: true,
