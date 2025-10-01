@@ -36,3 +36,10 @@ export const ContentSidebar: StoryObj<typeof ContentSidebarComponent> = {
         },
     },
 };
+
+export const ContentSidebarDetailsTab: StoryObj<typeof ContentSidebarComponent> = {
+    args: {
+        hasActivityFeed: false,
+        hasMetadata: false,
+    },
+};
