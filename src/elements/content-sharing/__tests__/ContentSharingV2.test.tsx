@@ -58,14 +58,9 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     test('should see the correct elements for files', async () => {
         getWrapper({});
         await waitFor(() => {
-            expect(getDefaultFileMock).toHaveBeenCalledWith(
-                MOCK_ITEM.id,
-                expect.any(Function),
-                {},
-                {
-                    fields: CONTENT_SHARING_ITEM_FIELDS,
-                },
-            );
+            expect(getDefaultFileMock).toHaveBeenCalledWith(MOCK_ITEM.id, expect.any(Function), expect.any(Function), {
+                fields: CONTENT_SHARING_ITEM_FIELDS,
+            });
         });
 
         expect(screen.getByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
@@ -79,7 +74,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             expect(getDefaultFolderMock).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
                 expect.any(Function),
-                {},
+                expect.any(Function),
                 {
                     fields: CONTENT_SHARING_ITEM_FIELDS,
                 },
@@ -99,7 +94,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             expect(getFileMockWithSharedLink).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
                 expect.any(Function),
-                {},
+                expect.any(Function),
                 {
                     fields: CONTENT_SHARING_ITEM_FIELDS,
                 },
@@ -121,7 +116,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             expect(getFileMockWithClassification).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
                 expect.any(Function),
-                {},
+                expect.any(Function),
                 {
                     fields: CONTENT_SHARING_ITEM_FIELDS,
                 },
