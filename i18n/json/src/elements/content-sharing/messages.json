@@ -1,0 +1,57 @@
+[
+  {
+    "id": "be.contentSharing.badRequestError",
+    "description": "Message that appears when the request for the ContentSharing Element is malformed.",
+    "defaultMessage": "The request for this item was malformed."
+  },
+  {
+    "id": "be.contentSharing.loadingError",
+    "description": "Message that appears when the ContentSharing Element cannot be loaded.",
+    "defaultMessage": "Could not load shared link for this item."
+  },
+  {
+    "id": "be.contentSharing.noAccessError",
+    "description": "Message that appears when the user cannot access the item for the ContentSharing Element.",
+    "defaultMessage": "You do not have access to this item."
+  },
+  {
+    "id": "be.contentSharing.notFoundError",
+    "description": "Message that appears when the item for the ContentSharing Element cannot be found.",
+    "defaultMessage": "Could not find shared link for this item."
+  },
+  {
+    "id": "be.contentSharing.sharedLinkUpdateError",
+    "description": "Message that appears when the shared link in the ContentSharing Element cannot be updated.",
+    "defaultMessage": "Could not update the shared link for this item."
+  },
+  {
+    "id": "be.contentSharing.sharedLinkSettingsUpdateSuccess",
+    "description": "Message that appears when the shared link settings in the ContentSharing Element were successfully updated.",
+    "defaultMessage": "The shared link for this item was successfully updated."
+  },
+  {
+    "id": "be.contentSharing.sharedLinkRemovalSuccess",
+    "description": "Message that appears when the shared link in the ContentSharing Element was removed.",
+    "defaultMessage": "The shared link for this item was removed."
+  },
+  {
+    "id": "be.contentSharing.collaboratorsLoadingError",
+    "description": "Message that appears when collaborators cannot be retrieved in the ContentSharing Element.",
+    "defaultMessage": "Could not retrieve collaborators for this item."
+  },
+  {
+    "id": "be.contentSharing.getContactsError",
+    "description": "Message that appears when users cannot be retrieved in the ContentSharing Element.",
+    "defaultMessage": "Could not retrieve contacts."
+  },
+  {
+    "id": "be.contentSharing.sendInvitesError",
+    "description": "Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.",
+    "defaultMessage": "Could not send invites."
+  },
+  {
+    "id": "be.contentSharing.sendInvitesSuccess",
+    "description": "Message that appears when collaborators were added to the shared link in the ContentSharing Element.",
+    "defaultMessage": "Successfully invited collaborators."
+  }
+]

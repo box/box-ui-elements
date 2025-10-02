@@ -1,0 +1,42 @@
+[
+  {
+    "id": "be.activitySidebar.activityFeed.annotationMissingError",
+    "description": "Text to show when an annotation activity no longer exists",
+    "defaultMessage": "This comment no longer exists"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.feedInlineErrorTitle",
+    "description": "Error title",
+    "defaultMessage": "Error"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.taskMissingError",
+    "description": "Text to show when a task no longer exists",
+    "defaultMessage": "This task no longer exists"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.commentMissingError",
+    "description": "Text to show when comment no longer exists",
+    "defaultMessage": "This comment no longer exists"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.showReplies",
+    "description": "Text to show to get more replies of comment or annotation",
+    "defaultMessage": "See {repliesToLoadCount, plural, one {# reply} other {# replies}}"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.hideReplies",
+    "description": "Text to show to hide more replies of comment or annotation",
+    "defaultMessage": "Hide replies"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.reply",
+    "description": "Text to show on button to start replying to comment",
+    "defaultMessage": "Reply"
+  },
+  {
+    "id": "be.activitySidebar.activityFeed.replyInThread",
+    "description": "Text to show on reply form input placeholder",
+    "defaultMessage": "Reply in thread"
+  }
+]

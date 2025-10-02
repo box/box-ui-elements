@@ -1,0 +1,187 @@
+[
+  {
+    "id": "be.sidebarVersions.fileRequestDisplayName",
+    "description": "name of the File Request feature used to translate when a File Request is uploaded by the service",
+    "defaultMessage": "File Request"
+  },
+  {
+    "id": "be.sidebarVersions.empty",
+    "description": "Message to display when no versions are available",
+    "defaultMessage": "No prior versions are available for this file."
+  },
+  {
+    "id": "be.sidebarVersions.priorWeek",
+    "description": "Header to display for group of versions created in the prior week",
+    "defaultMessage": "Last Week"
+  },
+  {
+    "id": "be.sidebarVersions.thisMonth",
+    "description": "Header to display for group of versions created in the current month",
+    "defaultMessage": "This Month"
+  },
+  {
+    "id": "be.sidebarVersions.today",
+    "description": "Header to display for group of versions created yesterday",
+    "defaultMessage": "Today"
+  },
+  {
+    "id": "be.sidebarVersions.yesterday",
+    "description": "Header to display for group of versions created today",
+    "defaultMessage": "Yesterday"
+  },
+  {
+    "id": "be.sidebarVersions.title",
+    "description": "Title for the preview versions sidebar",
+    "defaultMessage": "Version History"
+  },
+  {
+    "id": "be.sidebarVersions.current",
+    "description": "Label for the current version item in the version history list.",
+    "defaultMessage": "Current Version"
+  },
+  {
+    "id": "be.sidebarVersions.delete",
+    "description": "Label for the version delete action.",
+    "defaultMessage": "Delete"
+  },
+  {
+    "id": "be.sidebarVersions.deleteError",
+    "description": "Error message for the version delete action.",
+    "defaultMessage": "File version could not be deleted."
+  },
+  {
+    "id": "be.sidebarVersions.disabledByRetention",
+    "description": "Tooltip message for actions disabled by retention policy.",
+    "defaultMessage": "Disabled by retention policy"
+  },
+  {
+    "id": "be.sidebarVersions.download",
+    "description": "Label for the version download action.",
+    "defaultMessage": "Download"
+  },
+  {
+    "id": "be.sidebarVersions.downloadError",
+    "description": "Error message for the version download action.",
+    "defaultMessage": "File version could not be downloaded."
+  },
+  {
+    "id": "be.sidebarVersions.preview",
+    "description": "Label for the version preview action.",
+    "defaultMessage": "Preview"
+  },
+  {
+    "id": "be.sidebarVersions.promote",
+    "description": "Label for the version promote action.",
+    "defaultMessage": "Make Current"
+  },
+  {
+    "id": "be.sidebarVersions.promoteError",
+    "description": "Error message for the version promote action.",
+    "defaultMessage": "File version could not be made current."
+  },
+  {
+    "id": "be.sidebarVersions.restore",
+    "description": "Label for the version restore action.",
+    "defaultMessage": "Restore"
+  },
+  {
+    "id": "be.sidebarVersions.restoreError",
+    "description": "Error message for the version restored action.",
+    "defaultMessage": "File version could not be restored."
+  },
+  {
+    "id": "be.sidebarVersions.toggle",
+    "description": "Label for the version actions dropdown menu toggle button.",
+    "defaultMessage": "Toggle Actions Menu"
+  },
+  {
+    "id": "be.sidebarVersions.deletedBy",
+    "description": "Message displayed for a deleted version. {name} is the user who performed the action.",
+    "defaultMessage": "Deleted by {name}"
+  },
+  {
+    "id": "be.sidebarVersions.fetchError",
+    "description": "Error message for the versions fetch call.",
+    "defaultMessage": "File versions could not be retrieved."
+  },
+  {
+    "id": "be.sidebarVersions.notAvailable",
+    "description": "Error message with upsell for the versions fetch call for users who dont have the version feature.",
+    "defaultMessage": "Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans."
+  },
+  {
+    "id": "be.sidebarVersions.versionLimitExceeded",
+    "description": "Text displayed if a version exceeds the user's maximum allowed version count",
+    "defaultMessage": "You are limited to the last {versionLimit, number} {versionLimit, plural, one {version} other {versions}}."
+  },
+  {
+    "id": "be.sidebarVersions.versionNumberBadge",
+    "description": "Text to display in the version badge.",
+    "defaultMessage": "V{versionNumber}"
+  },
+  {
+    "id": "be.sidebarVersions.versionNumberLabel",
+    "description": "Label given to the version badge for screen readers.",
+    "defaultMessage": "Version number {versionNumber}"
+  },
+  {
+    "id": "be.sidebarVersions.promotedBy",
+    "description": "Message displayed for a restored version. {name} is the user who performed the action.",
+    "defaultMessage": "Promoted from v{versionPromoted} by {name}"
+  },
+  {
+    "id": "be.sidebarVersions.restoredBy",
+    "description": "Message displayed for a restored version. {name} is the user who performed the action.",
+    "defaultMessage": "Restored by {name}"
+  },
+  {
+    "id": "be.sidebarVersions.serverError",
+    "description": "Heading for inline error messages displayed due to a remote server issue.",
+    "defaultMessage": "Server Error"
+  },
+  {
+    "id": "be.sidebarVersions.upgradeLink",
+    "description": "Text on the upgrade button shown when user does not have access to Version History",
+    "defaultMessage": "Upgrade Now"
+  },
+  {
+    "id": "be.sidebarVersions.uploadedBy",
+    "description": "Message displayed for an uploaded version. {name} is the user who performed the action.",
+    "defaultMessage": "Uploaded by {name}"
+  },
+  {
+    "id": "be.sidebarVersions.versionUserUnknown",
+    "description": "Name displayed for unknown or deleted users.",
+    "defaultMessage": "Unknown"
+  },
+  {
+    "id": "be.sidebarVersions.versionMaxEntries",
+    "description": "Max supported entries for version history",
+    "defaultMessage": "Version history is limited to the last {maxVersions} entries."
+  },
+  {
+    "id": "be.sidebarVersions.versionRetentionDelete",
+    "description": "Message describing when the version will be deleted due to an applied retention policy.",
+    "defaultMessage": "Will be deleted {time} by retention policy."
+  },
+  {
+    "id": "be.sidebarVersions.versionRetentionIndefinite",
+    "description": "Message describing that the version retention policy is indefinite and will not expire.",
+    "defaultMessage": "Retained indefinitely by retention policy."
+  },
+  {
+    "id": "be.sidebarVersions.versionRetentionRemove",
+    "description": "Message describing when the version retention policy will expire.",
+    "defaultMessage": "Retention policy expires on {time}."
+  },
+  {
+    "id": "be.sidebarVersions.versionUpsell",
+    "description": "Upgrade message shown when user does not have access to Version History",
+    "defaultMessage": "Sorry, version history is not available with your current account plan. To access versioning, select from one of our paid plans."
+  },
+  {
+    "id": "be.sidebarVersions.upgradeButton",
+    "description": "Text on the upgrade button shown when user does not have access to Version History",
+    "defaultMessage": "Upgrade"
+  }
+]

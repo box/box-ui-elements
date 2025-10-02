@@ -1,0 +1,7 @@
+[
+  {
+    "id": "be.activityFeed.fullDateTime",
+    "description": "Full date time and time stamp",
+    "defaultMessage": "{time, date, full} at {time, time, short}"
+  }
+]

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "boxui.share.accessType",
+    "description": "Title for \"Access Type\" menu, in all capital letters",
+    "defaultMessage": "ACCESS TYPE"
+  },
+  {
+    "id": "boxui.share.canEdit",
+    "description": "Label for a shared link permission level",
+    "defaultMessage": "Can edit"
+  },
+  {
+    "id": "boxui.share.canView",
+    "description": "Label for a shared link permission level",
+    "defaultMessage": "Can view"
+  },
+  {
+    "id": "boxui.share.enterAtLeastOneEmail",
+    "description": "Error message when user tries to send shared link as email without entering any recipients",
+    "defaultMessage": "Enter at least one valid email"
+  },
+  {
+    "id": "boxui.share.emailSharedLink",
+    "description": "Field label for shared link recipient list (title-case)",
+    "defaultMessage": "Email Shared Link"
+  },
+  {
+    "id": "boxui.share.removeLink",
+    "description": "Label for option to remove shared link",
+    "defaultMessage": "Remove Link"
+  },
+  {
+    "id": "boxui.share.settingsButtonLabel",
+    "description": "Accessible label for button that loads share settings popup",
+    "defaultMessage": "Open shared link settings popup"
+  },
+  {
+    "id": "boxui.share.sharedLinkLabel",
+    "description": "Label for field to copy shared link URL (title-case)",
+    "defaultMessage": "Shared Link"
+  },
+  {
+    "id": "boxui.share.sharedLinkModalTitle",
+    "description": "Title for shared link modal (title-case)",
+    "defaultMessage": "Shared Link for {itemName}"
+  },
+  {
+    "id": "boxui.share.message",
+    "description": "Label for \"Message\" text box to email the shared link (title-case)",
+    "defaultMessage": "Message"
+  },
+  {
+    "id": "boxui.share.peopleWithTheLink",
+    "description": "Label for \"People with the link\" option",
+    "defaultMessage": "People with the link"
+  },
+  {
+    "id": "boxui.share.peopleInEnterprise",
+    "description": "This string describes the access level of a file or folder, or who can see the item. {enterpriseName} is the company name",
+    "defaultMessage": "People in {enterpriseName}"
+  },
+  {
+    "id": "boxui.share.peopleInYourCompany",
+    "description": "Label for \"People in your company\" option",
+    "defaultMessage": "People in your company"
+  },
+  {
+    "id": "boxui.share.peopleInThisFolder",
+    "description": "Label for \"People in this folder\" option",
+    "defaultMessage": "People in this folder"
+  },
+  {
+    "id": "boxui.share.peopleInThisFile",
+    "description": "Label for \"People in this file\" option",
+    "defaultMessage": "People in this file"
+  },
+  {
+    "id": "boxui.share.removeLinkConfirmationTitle",
+    "description": "Label for confirmation modal to remove a shared link (title-case)",
+    "defaultMessage": "Remove Shared Link"
+  },
+  {
+    "id": "boxui.share.removeLinkConfirmationDescription",
+    "description": "Description for confirmation modal to remove a shared link",
+    "defaultMessage": "This will permanently remove the shared link. If this item is embedded on other sites it will also become inaccessible. Any custom properties, settings and expirations will be removed as well. Do you want to continue?"
+  },
+  {
+    "id": "boxui.share.sharedLinkExpirationTooltip",
+    "description": "Tooltip describing when this shared link will expire. {expiration, date, long} is the formatted date",
+    "defaultMessage": "This link will expire on {expiration, date, long}"
+  },
+  {
+    "id": "boxui.share.peopleWithLinkCanDownloadFolder",
+    "description": "Description of an open shared link for a folder with view and download permissions",
+    "defaultMessage": "Anyone with the link can view this folder and download its contents."
+  },
+  {
+    "id": "boxui.share.peopleWithLinkCanViewFolder",
+    "description": "Description of an open shared link for a folder with view permissions",
+    "defaultMessage": "Anyone with the link can view this folder."
+  },
+  {
+    "id": "boxui.share.peopleWithLinkCanEditFile",
+    "description": "Description of an open shared link for a file with edit permissions (implies view and download permissions as well)",
+    "defaultMessage": "Anyone with the link can edit and download this file."
+  },
+  {
+    "id": "boxui.share.peopleWithLinkCanDownloadFile",
+    "description": "Description of an open shared link for a file with view and download permissions",
+    "defaultMessage": "Anyone with the link can view and download this file."
+  },
+  {
+    "id": "boxui.share.peopleWithLinkCanViewFile",
+    "description": "Description of an open shared link for a file with view permissions",
+    "defaultMessage": "Anyone with the link can view this file."
+  },
+  {
+    "id": "boxui.share.peopleInSpecifiedCompanyCanDownloadFolder",
+    "description": "Description of a specific company shared link for a folder with view and download permissions. {company} is the company name",
+    "defaultMessage": "Anyone in {company} with the link can view this folder and download its contents."
+  },
+  {
+    "id": "boxui.share.peopleInSpecifiedCompanyCanViewFolder",
+    "description": "Description of an specific company shared link for a folder with view permissions. {company} is the company name",
+    "defaultMessage": "Anyone in {company} with the link can view this folder."
+  },
+  {
+    "id": "boxui.share.peopleInCompanyCanDownloadFolder",
+    "description": "Description of a company shared link for a folder with view and download permissions",
+    "defaultMessage": "Anyone in your company with the link can view this folder and download its contents."
+  },
+  {
+    "id": "boxui.share.peopleInCompanyCanViewFolder",
+    "description": "Description of a company shared link for a folder with view permissions",
+    "defaultMessage": "Anyone in your company with the link can view this folder."
+  },
+  {
+    "id": "boxui.share.peopleInSpecifiedCompanyCanEditFile",
+    "description": "Description of a specific company shared link for a file with edit permissions (implies view and download permissions as well). {company} is the company name",
+    "defaultMessage": "Anyone in {company} with the link can edit and download this file."
+  },
+  {
+    "id": "boxui.share.peopleInSpecifiedCompanyCanDownloadFile",
+    "description": "Description of a specific company shared link for a file with view and download permissions. {company} is the company name",
+    "defaultMessage": "Anyone in {company} with the link can view and download this file."
+  },
+  {
+    "id": "boxui.share.peopleInSpecifiedCompanyCanViewFile",
+    "description": "Description of an specific company shared link for a file with view permissions. {company} is the company name",
+    "defaultMessage": "Anyone in {company} with the link can view this file."
+  },
+  {
+    "id": "boxui.share.peopleInCompanyCanEditFile",
+    "description": "Description of a company shared link for a file with edit permissions (implies view and download permissions as well)",
+    "defaultMessage": "Anyone in your company with the link can edit and download this file."
+  },
+  {
+    "id": "boxui.share.peopleInCompanyCanDownloadFile",
+    "description": "Description of a company shared link for a file with view and download permissions",
+    "defaultMessage": "Anyone in your company with the link can view and download this file."
+  },
+  {
+    "id": "boxui.share.peopleInCompanyCanViewFile",
+    "description": "Description of a company shared link for a file with view permissions",
+    "defaultMessage": "Anyone in your company with the link can view this file."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanPreviewAndDownloadFolder",
+    "description": "Description of a collaborator-only shared link for a folder with view and download permissions",
+    "defaultMessage": "Any collaborator on this folder with the link can view this folder and download its contents."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanPreviewFolder",
+    "description": "Description of a collaborator-only shared link for a folder with view permissions",
+    "defaultMessage": "Any collaborator on this folder with the link can view this folder."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanDownloadFolder",
+    "description": "Description of a collaborator-only shared link for a folder with download permissions",
+    "defaultMessage": "Any collaborator on this folder with the link can download this folder."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanAccessFolder",
+    "description": "Description of a collaborator-only shared link for a folder with no permissions",
+    "defaultMessage": "Any collaborator on the folder with the link can access this folder."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanEditFile",
+    "description": "Description of a collaborator-only shared link for a file with edit permissions (implies view and download permissions as well)",
+    "defaultMessage": "Any collaborator on this file with the link can edit this file and download its contents."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanPreviewAndDownloadFile",
+    "description": "Description of a collaborator-only shared link for a file with view and download permissions",
+    "defaultMessage": "Any collaborator on this file with the link can view this file and download its contents."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanPreviewFile",
+    "description": "Description of a collaborator-only shared link for a file with view permissions",
+    "defaultMessage": "Any collaborator on this file with the link can view this file."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanDownloadFile",
+    "description": "Description of a collaborator-only shared link for a file with download permissions",
+    "defaultMessage": "Any collaborator on this file with the link can download this file."
+  },
+  {
+    "id": "boxui.share.peopleInItemCanAccessFile",
+    "description": "Description of a collaborator-only shared link for a file with no permissions",
+    "defaultMessage": "Any collaborator on the file with the link can access this file."
+  }
+]

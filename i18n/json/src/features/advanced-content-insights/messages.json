@@ -1,0 +1,17 @@
+[
+  {
+    "id": "boxui.advancedContentInsights.advancedContentInsightsTitleEnabled",
+    "description": "Advanced Content Insights toggle title",
+    "defaultMessage": "Engagement Insights is activated"
+  },
+  {
+    "id": "boxui.advancedContentInsights.advancedContentInsightsTitleDisabled",
+    "description": "Advanced Content Insights toggle title",
+    "defaultMessage": "Activate Engagement Insights"
+  },
+  {
+    "id": "boxui.advancedContentInsights.advancedContentInsightsDescription",
+    "description": "Description text about advanced content insights.",
+    "defaultMessage": "Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details."
+  }
+]

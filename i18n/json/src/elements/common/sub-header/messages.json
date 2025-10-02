@@ -1,0 +1,12 @@
+[
+  {
+    "id": "boxui.subHeader.bulkItemActionMenuAriaLabel",
+    "description": "Aria-label for the dropdown menu that shows actions for selected items",
+    "defaultMessage": "Bulk actions"
+  },
+  {
+    "id": "boxui.subHeader.metadata",
+    "description": "Text for metadata button that will open the metadata side panel",
+    "defaultMessage": "Metadata"
+  }
+]

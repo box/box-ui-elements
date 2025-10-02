@@ -1,0 +1,17 @@
+[
+  {
+    "id": "boxui.searchForm.clearButtonTitle",
+    "description": "Title for a clear button",
+    "defaultMessage": "Clear"
+  },
+  {
+    "id": "boxui.searchForm.searchButtonTitle",
+    "description": "Title for a search button",
+    "defaultMessage": "Search"
+  },
+  {
+    "id": "boxui.searchForm.searchLabel",
+    "description": "Label for a search input",
+    "defaultMessage": "Search query"
+  }
+]

@@ -1,0 +1,127 @@
+[
+  {
+    "id": "boxui.share.sharedLinkSettings.allowDownloadLabel",
+    "description": "Label for option to enable downloads on a shared link",
+    "defaultMessage": "Allow users with the shared link to download this item"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.allowDownloadTitle",
+    "description": "Title for Allow Download section",
+    "defaultMessage": "Allow Download"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.directLinkLabel",
+    "description": "Title for Direct Link section",
+    "defaultMessage": "Direct Link"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.directDownloadBlockedByAccessPolicyWithClassification",
+    "description": "Text to show that direct link download is disabled due to applied shield access policy with classification",
+    "defaultMessage": "Download has been disabled for content due to the classification."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.directDownloadBlockedByMaliciousContent",
+    "description": "Text to show that direct link download is disabled due to security policy",
+    "defaultMessage": "Download for this content has been disabled due to a security policy."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.directDownloadBlockedByAccessPolicyWithoutClassification",
+    "description": "Text to show that direct link download is disabled due to applied shield access policy without classification",
+    "defaultMessage": "Download has been disabled for content without classification."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.inaccessibleSettingsNotice",
+    "description": "Notice shown at top of modal when one or more settings are unavailable due to permission settings",
+    "defaultMessage": "Certain settings may not be available for this item due to permissions."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.modalTitle",
+    "description": "Title for shared link settings modal (title-case)",
+    "defaultMessage": "Shared Link Settings"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.customURLLabel",
+    "description": "Label for Custom URL text input field",
+    "defaultMessage": "Non-private custom URL"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.expirationTitle",
+    "description": "Title for Link Expiration section",
+    "defaultMessage": "Link Expiration"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.expirationLabel",
+    "description": "Label for option to enable expiration on a shared link",
+    "defaultMessage": "Disable Shared Link on"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.passwordLabel",
+    "description": "Label for checkbox to enable password on shared link",
+    "defaultMessage": "Require password"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.passwordPlaceholder",
+    "description": "Placeholder for text input to enter a password",
+    "defaultMessage": "Enter a password"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.passwordTitle",
+    "description": "Title for section to add password to shared link",
+    "defaultMessage": "Password Protect"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.vanityNamePlaceholder",
+    "description": "Placeholder for Custom URL text input field",
+    "defaultMessage": "Enter a custom path (12 or more characters)"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.vanityNameNotSet",
+    "description": "Text to show when a custom URL has not been set",
+    "defaultMessage": "The custom URL has not been set"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.vanityURLWarning",
+    "description": "Text field for implications of using the custom (vanity) URL as a notice",
+    "defaultMessage": "Custom URLs should not be used when sharing sensitive content."
+  },
+  {
+    "id": "boxui.share.vanityURLEnableText",
+    "description": "Text label for custom URL section",
+    "defaultMessage": "Publish content broadly with a custom, non-private URL"
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.sharedLinkWarningText",
+    "description": "Text displayed stating that content shared openly may be exposed to the public",
+    "defaultMessage": "This content is publicly available to anyone with the link."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.accessLevel.withLinkViewDownload",
+    "description": "Text to show when the access level of people with link and user can view and download",
+    "defaultMessage": "This content is publicly available to anyone with the link, and can be viewed or downloaded."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.accessLevel.withLinkView",
+    "description": "Text to show when the access level of people with link and user can view only",
+    "defaultMessage": "This content is publicly available to anyone with the link, and can be viewed."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.accessLevel.inCompanyViewDownload",
+    "description": "Text to show when the access level of people in company and user can view and download",
+    "defaultMessage": "This content is available to anyone within your company with the link, and can be viewed or downloaded."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.accessLevel.inCompanyView",
+    "description": "Text to show when the access level of people in company and user can view only",
+    "defaultMessage": "This content is available to anyone within your company with the link, and can be viewed."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.accessLevel.inItem",
+    "description": "Text to show when the access level of people collaborate on the item",
+    "defaultMessage": "This content is available to invited collaborators with the link."
+  },
+  {
+    "id": "boxui.share.sharedLinkSettings.sharedLinkSettingWarningLinkText",
+    "description": "Text for the link used to navigate users to the relevant community article",
+    "defaultMessage": "Learn more about shared link settings."
+  }
+]

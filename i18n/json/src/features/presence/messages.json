@@ -1,0 +1,82 @@
+[
+  {
+    "id": "boxui.presence.activeNow",
+    "description": "Description for someone who is currently viewing or editing a document",
+    "defaultMessage": "Active now"
+  },
+  {
+    "id": "boxui.presence.timeSinceLastAccessed",
+    "description": "Description for when someone last viewed a document, {timeAgo} is a relative time like 2 months ago",
+    "defaultMessage": "Viewed {timeAgo}"
+  },
+  {
+    "id": "boxui.presence.timeSinceLastPreviewed",
+    "description": "Description for when someone last previewed a document, {timeAgo} is a relative time like 2 months ago",
+    "defaultMessage": "Previewed {timeAgo}"
+  },
+  {
+    "id": "boxui.presence.timeSinceLastCommented",
+    "description": "Description for when someone last commented on a document, {timeAgo} is a relative time like 2 months ago",
+    "defaultMessage": "Commented {timeAgo}"
+  },
+  {
+    "id": "boxui.presence.timeSinceLastModified",
+    "description": "Description for when someone last edited a document, {timeAgo} is a relative time like 2 months ago",
+    "defaultMessage": "Edited {timeAgo}"
+  },
+  {
+    "id": "boxui.presence.accessedInTheLastMinute",
+    "description": "Description for when someone last viewed a document less than a minute ago",
+    "defaultMessage": "Viewed less than a minute ago"
+  },
+  {
+    "id": "boxui.presence.previewedIntheLastMinute",
+    "description": "Description for when someone last previewed a document less than a minute ago",
+    "defaultMessage": "Previewed less than a minute ago"
+  },
+  {
+    "id": "boxui.presence.commentedIntheLastMinute",
+    "description": "Description for when someone last commented on a document less than a minute ago",
+    "defaultMessage": "Commented less than a minute ago"
+  },
+  {
+    "id": "boxui.presence.modifiedIntheLastMinute",
+    "description": "Description for when someone last edited a document less than a minute ago",
+    "defaultMessage": "Edited less than a minute ago"
+  },
+  {
+    "id": "boxui.presence.getLinkButton",
+    "description": "Text on button to get shared link for the item",
+    "defaultMessage": "Get Link"
+  },
+  {
+    "id": "boxui.presence.inviteButton",
+    "description": "Text on button to invite collaborators to this item",
+    "defaultMessage": "Invite People"
+  },
+  {
+    "id": "boxui.presence.recentActivity",
+    "description": "Header on presence dropdown list that represents recent activity on the item",
+    "defaultMessage": "Recent Activity"
+  },
+  {
+    "id": "boxui.presence.previewPresenceFlyoutCopy",
+    "description": "Tooltip text visible on page load, to prompt the user to press a button to view activity",
+    "defaultMessage": "Quickly see who has commented on, edited, or viewed this file."
+  },
+  {
+    "id": "boxui.presence.previewPresenceFlyoutActivityCTA",
+    "description": "Text on button embedded within tooltip that is visible on page load",
+    "defaultMessage": "View Recent Activity"
+  },
+  {
+    "id": "boxui.presence.previewPresenceFlyoutAccessStatsLink",
+    "description": "Text for link at footer of the Recent Activity panel",
+    "defaultMessage": "See all activity"
+  },
+  {
+    "id": "boxui.presence.toggleButtonLabel",
+    "description": "Description of the button to toggle the presence overlay with recent activity",
+    "defaultMessage": "Recent Activity"
+  }
+]

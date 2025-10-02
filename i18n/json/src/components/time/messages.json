@@ -1,0 +1,32 @@
+[
+  {
+    "id": "boxui.readableTime.eventTime",
+    "description": "The time that an event occurred",
+    "defaultMessage": "{time, date, medium}"
+  },
+  {
+    "id": "boxui.readableTime.eventTimeToday",
+    "description": "The time that an event occurred today",
+    "defaultMessage": "Today at {time, time, short}"
+  },
+  {
+    "id": "boxui.readableTime.eventTimeYesterday",
+    "description": "The time that an event occurred yesterday",
+    "defaultMessage": "Yesterday at {time, time, short}"
+  },
+  {
+    "id": "boxui.readableTime.eventTimeDate",
+    "description": "The time that an event occurred at a given date with the year included",
+    "defaultMessage": "{time, date, medium} at {time, time, short}"
+  },
+  {
+    "id": "boxui.readableTime.eventTimeDateShort",
+    "description": "The time that an event occurred at a given date without the year included",
+    "defaultMessage": "{date} at {time, time, short}"
+  },
+  {
+    "id": "boxui.readableTime.eventTimeWeekdayLong",
+    "description": "The time that an event occurred at a given date with the weekday included",
+    "defaultMessage": "{weekday}, {time, date, medium}"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "id": "be.additionalTab.blockedByShieldAccessPolicy",
+    "description": "Text to display when app is disabled by applied access policy",
+    "defaultMessage": "Use of this app is blocked due to a security policy."
+  }
+]

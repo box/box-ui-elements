@@ -1,0 +1,12 @@
+[
+  {
+    "id": "boxui.classification.appliedByBoxAi",
+    "description": "Title of the card that shows the reason why the AI classification was applied when no date is available.",
+    "defaultMessage": "Box AI"
+  },
+  {
+    "id": "boxui.classification.appliedByBoxAiOnDate",
+    "description": "Title of the card that shows the reason why the AI classification was applied on a specific date.",
+    "defaultMessage": "Box AI on {modifiedAt}"
+  }
+]
