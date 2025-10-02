@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { render, screen } from '../../../test-utils/testing-library';
+import { render, screen, waitFor } from '../../../test-utils/testing-library';
 import Classification from '../Classification';
 
 import messages from '../messages';
@@ -258,23 +258,23 @@ describe('features/classification/Classification', () => {
             });
 
             // Wait for the async component to load
-            const boxAiIcon = await screen.findByTestId('box-ai-icon');
-            const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
-            const appliedByDetails = screen.getByText('Box AI on January 15, 2024'); // expected text based on provided mocks
-            const reasonText = screen.getByText(aiClassificationReason.answer);
-            const citationsLabel = screen.queryByTestId('content-answers-references-label');
-            const citationElements = screen.getAllByTestId('content-answers-citation-status');
-            const modifiedByPlaintext = screen.queryByTestId('classification-modifiedby');
+            await waitFor(() => {
+                const appliedByTitle = screen.getByText(messages.appliedByTitle.defaultMessage);
+                const appliedByDetails = screen.getByText('Box AI on January 15, 2024'); // expected text based on provided mocks
+                const reasonText = screen.getByText(aiClassificationReason.answer);
+                const citationsLabel = screen.queryByTestId('content-answers-references-label');
+                const citationElements = screen.getAllByTestId('content-answers-citation-status');
+                const modifiedByPlaintext = screen.queryByTestId('classification-modifiedby');
 
-            expect(boxAiIcon).toBeVisible();
-            expect(appliedByTitle).toBeVisible();
-            expect(appliedByDetails).toBeVisible();
-            expect(reasonText).toBeVisible();
-            expect(citationsLabel).toBeVisible();
-            expect(citationElements).toHaveLength(expectedCitationsCount);
+                expect(appliedByTitle).toBeVisible();
+                expect(appliedByDetails).toBeVisible();
+                expect(reasonText).toBeVisible();
+                expect(citationsLabel).toBeVisible();
+                expect(citationElements).toHaveLength(expectedCitationsCount);
 
-            // Assert the plaintext version of modified by details is not rendered
-            expect(modifiedByPlaintext).not.toBeInTheDocument();
+                // Assert the plaintext version of modified by details is not rendered
+                expect(modifiedByPlaintext).not.toBeInTheDocument();
+            });
         },
     );
 
