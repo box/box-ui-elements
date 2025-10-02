@@ -1,10 +1,10 @@
 import { type StoryObj } from '@storybook/react';
-import ContentSidebar from '../../ContentSidebar';
+import ContentSidebarComponent from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebarContent';
 
 export default {
     title: 'Elements/ContentSidebar/tests/visual-regression-tests',
-    component: ContentSidebar,
+    component: ContentSidebarComponent,
     args: {
         detailsSidebarProps: {
             hasProperties: true,
@@ -46,5 +46,12 @@ export const ContentSidebarWithBoxAIEnabled: StoryObj<typeof BoxAISidebar> = {
             'boxai.sidebar.enabled': true,
             'metadata.redesign.enabled': true,
         },
+    },
+};
+
+export const ContentSidebarDetailsTab: StoryObj<typeof ContentSidebarComponent> = {
+    args: {
+        hasActivityFeed: false,
+        hasMetadata: false,
     },
 };

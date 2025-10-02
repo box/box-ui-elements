@@ -23,6 +23,7 @@ import {
     FIELD_PERMISSIONS,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
+    SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
 
 import messages from '../../common/messages';
@@ -178,17 +179,18 @@ function useSidebarMetadataFetcher(
 
     const handleCreateMetadataInstance = React.useCallback(
         async (templateInstance: MetadataTemplateInstance, successCallback: () => void): Promise<void> => {
-            await api
-                .getMetadataAPI(false)
-                .createMetadataRedesign(
-                    file,
-                    templateInstance,
-                    successCallback,
-                    (error: ElementsXhrError, code: string) =>
-                        onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
-                );
+            await api.getMetadataAPI(false).createMetadataRedesign(
+                file,
+                templateInstance,
+                () => {
+                    successCallback();
+                    onSuccess(SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE, true);
+                },
+                (error: ElementsXhrError, code: string) =>
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
+            );
         },
-        [api, file, onApiError],
+        [api, file, onApiError, onSuccess],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(

@@ -6,6 +6,10 @@ pull_request_rules:
       conditions:
           - -draft
           - base = master
+          - label != do-not-merge
+          - status-success = license/cla
+          - status-success = lint_pull_request
+          - status-success = lint_test_build
       actions:
           queue:
 
@@ -15,12 +19,6 @@ queue_rules:
           - author = boxmoji
           - title ~= ^(fix)\(i18n\)?:\supdate translations$
           - files ~= ^i18n/
-          - label != do-not-merge
-          - status-success = license/cla
-          - status-success = lint_pull_request
-          - status-success = lint_test_build
-      merge_conditions:
-          - status-success = lint_pull_request
           - status-success = lint_test_build
       merge_method: squash
 
@@ -28,16 +26,9 @@ queue_rules:
       queue_conditions:
           - title ~= ^(build|ci|chore|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?:\s.+$
           - label = ready-to-merge
-          - label != do-not-merge
-          - status-success = license/cla
-          - status-success = lint_pull_request
           - status-success = lint_test_build
           - branch-protection-review-decision = APPROVED
           - "#approved-reviews-by >= 2"
           - "#changes-requested-reviews-by = 0"
           - "#review-threads-unresolved = 0"
-      merge_conditions:
-          - status-success = license/cla
-          - status-success = lint_pull_request
-          - status-success = lint_test_build
       merge_method: squash

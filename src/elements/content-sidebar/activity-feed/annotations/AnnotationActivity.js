@@ -24,6 +24,7 @@ import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../commo
 import type { SelectorItems, User, BoxItem } from '../../../../common/types/core';
 
 import IconAnnotation from '../../../../icons/two-toned/IconAnnotation';
+import { convertMillisecondsToHMMSS } from '../../../../utils/timestamp';
 
 import './AnnotationActivity.scss';
 
@@ -127,6 +128,11 @@ const AnnotationActivity = ({
         targetAttachment: 'bottom right',
     };
 
+    const isVideoAnnotation = target?.location?.type === 'frame';
+    const annotationsMillisecondTimestampInHMMSS = isVideoAnnotation
+        ? convertMillisecondsToHMMSS(target.location.value)
+        : null;
+
     return (
         <>
             <SelectableActivityCard
@@ -158,7 +164,7 @@ const AnnotationActivity = ({
                         </div>
                         <div className="bcs-AnnotationActivity-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />
-                            {hasVersions && (
+                            {hasVersions && !isVideoAnnotation && (
                                 <AnnotationActivityLink
                                     className="bcs-AnnotationActivity-link"
                                     data-resin-target="annotationLink"
@@ -189,6 +195,8 @@ const AnnotationActivity = ({
                             <ActivityMessage
                                 getUserProfileUrl={getUserProfileUrl}
                                 id={id}
+                                annotationsMillisecondTimestamp={annotationsMillisecondTimestampInHMMSS}
+                                onClick={handleSelect}
                                 isEdited={isEdited && !isResolved}
                                 tagged_message={message}
                             />

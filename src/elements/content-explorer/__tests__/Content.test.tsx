@@ -90,7 +90,7 @@ describe('Content Component', () => {
         expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
 
-    describe('contentExplorer.metadataViewV2 feature', () => {
+    describe('MetadataView V2 feature', () => {
         const features = {
             contentExplorer: { metadataViewV2: true },
         };
@@ -122,6 +122,32 @@ describe('Content Component', () => {
             });
 
             expect(screen.getByText('MetadataViewContainer')).toBeInTheDocument();
+        });
+
+        describe('EmptyView rendering for VIEW_ERROR with metadataViewV2 feature', () => {
+            test('renders EmptyView with isLoading=false when metadataViewV2 feature is enabled and view is VIEW_ERROR', () => {
+                // This test verifies that the EmptyView receives isLoading={false}
+                // We can verify this by checking that the loading message is not shown
+                renderComponent({
+                    features,
+                    view: VIEW_ERROR,
+                });
+
+                // Should show error message, not loading message
+                expect(screen.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
+                expect(screen.queryByText('Please wait while the items load...')).not.toBeInTheDocument();
+            });
+
+            test('does not render EmptyView when metadataViewV2 feature is enabled but view is not VIEW_ERROR', () => {
+                renderComponent({
+                    features,
+                    view: VIEW_FOLDER,
+                });
+
+                expect(
+                    screen.queryByText('A network error has occurred while trying to load.'),
+                ).not.toBeInTheDocument();
+            });
         });
     });
 });

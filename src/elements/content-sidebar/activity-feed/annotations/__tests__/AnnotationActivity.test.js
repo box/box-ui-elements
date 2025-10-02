@@ -395,4 +395,153 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             expect(event.stopPropagation).not.toHaveBeenCalled();
         });
     });
+
+    describe('video annotations', () => {
+        const mockVideoAnnotation = {
+            ...mockAnnotation,
+            target: {
+                location: {
+                    type: 'frame',
+                    value: 60000, // 1 minute in milliseconds
+                },
+            },
+        };
+
+        test('should detect video annotation when target location type is frame', () => {
+            const wrapper = getWrapper({ item: mockVideoAnnotation });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBe('0:01:00');
+        });
+
+        test('should not show version link for video annotations even when hasVersions is true', () => {
+            const wrapper = getWrapper({
+                item: mockVideoAnnotation,
+                hasVersions: true,
+                isCurrentVersion: true,
+            });
+
+            expect(wrapper.exists('AnnotationActivityLink')).toBe(false);
+        });
+
+        test('should pass correct timestamp format to ActivityMessage for video annotations', () => {
+            const videoAnnotationWithTimestamp = {
+                ...mockVideoAnnotation,
+                target: {
+                    location: {
+                        type: 'frame',
+                        value: 3661000, // 1 hour, 1 minute, 1 second
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({ item: videoAnnotationWithTimestamp });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBe('1:01:01');
+        });
+
+        test('should handle zero timestamp for video annotations', () => {
+            const videoAnnotationWithZeroTimestamp = {
+                ...mockVideoAnnotation,
+                target: {
+                    location: {
+                        type: 'frame',
+                        value: 0,
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({ item: videoAnnotationWithZeroTimestamp });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBe('0:00:00');
+        });
+
+        test('should handle undefined timestamp for video annotations', () => {
+            const videoAnnotationWithUndefinedTimestamp = {
+                ...mockVideoAnnotation,
+                target: {
+                    location: {
+                        type: 'frame',
+                        value: undefined,
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({ item: videoAnnotationWithUndefinedTimestamp });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBe('0:00:00');
+        });
+
+        test('should not pass timestamp to ActivityMessage for non-video annotations', () => {
+            const regularAnnotation = {
+                ...mockAnnotation,
+                target: {
+                    location: {
+                        type: 'page',
+                        value: 1,
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({ item: regularAnnotation });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBeFalsy();
+        });
+
+        test('should not pass timestamp to ActivityMessage when target location type is missing', () => {
+            const annotationWithoutType = {
+                ...mockAnnotation,
+                target: {
+                    location: {
+                        value: 60000,
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({ item: annotationWithoutType });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBeFalsy();
+        });
+
+        test('should not pass timestamp to ActivityMessage when target is missing', () => {
+            const annotationWithoutTarget = {
+                ...mockAnnotation,
+                target: {
+                    location: {
+                        value: 1,
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({ item: annotationWithoutTarget });
+            const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+
+            expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBeFalsy();
+        });
+
+        test('should show version link for non-video annotations when hasVersions is true', () => {
+            const regularAnnotation = {
+                ...mockAnnotation,
+                target: {
+                    location: {
+                        type: 'page',
+                        value: 1,
+                    },
+                },
+            };
+
+            const wrapper = getWrapper({
+                item: regularAnnotation,
+                hasVersions: true,
+                isCurrentVersion: true,
+            });
+
+            expect(wrapper.exists('AnnotationActivityLink')).toBe(true);
+        });
+    });
 });
