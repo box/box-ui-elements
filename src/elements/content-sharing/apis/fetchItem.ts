@@ -5,7 +5,7 @@ import { CONTENT_SHARING_ITEM_FIELDS } from '../constants';
 
 import type { FetchItemProps } from '../types';
 
-export const fetchItem = async ({ api, itemID, itemType }: FetchItemProps): Promise<Item> => {
+export const fetchItem = async ({ api, itemID, itemType }: FetchItemProps): Promise<Item | null> => {
     if (itemType === TYPE_FILE) {
         return new Promise((resolve, reject) => {
             api.getFileAPI().getFile(itemID, resolve, reject, { fields: CONTENT_SHARING_ITEM_FIELDS });

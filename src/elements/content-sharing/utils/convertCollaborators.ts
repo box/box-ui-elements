@@ -44,7 +44,7 @@ export const convertCollab = ({
         isExternal,
         isPending: false,
         name: collabName,
-        role: `${role[0].toUpperCase()}${role.slice(1)}`,
+        role: role ? `${role[0].toUpperCase()}${role.slice(1)}` : '',
         userId: collabId.toString(),
     };
 };
@@ -53,9 +53,8 @@ export const convertCollabsResponse = (collabsAPIData: Collaborations, avatarURL
     const { entries = [] } = collabsAPIData;
     if (!entries.length) return [];
 
-    const {
-        created_by: { id: currentUserID, login: ownerEmail },
-    } = entries[0];
+    const { created_by } = entries[0];
+    const { id: currentUserID, login: ownerEmail } = created_by || {};
     return entries.flatMap(collab => {
         const converted = convertCollab({ collab, currentUserID, ownerEmail, avatarURLMap });
         return converted ? [converted] : [];

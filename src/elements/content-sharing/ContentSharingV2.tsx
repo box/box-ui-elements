@@ -49,7 +49,6 @@ function ContentSharingV2({
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback(itemData => {
-        console.log('handleGetItemSuccess itemData', itemData);
         const {
             collaborationRoles: collaborationRolesFromAPI,
             item: itemFromAPI,

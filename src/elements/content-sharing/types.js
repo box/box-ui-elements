@@ -168,7 +168,7 @@ export interface BaseFetchProps {
 }
 
 export interface FetchItemProps extends BaseFetchProps {
-    itemType: ItemType | Collaboration[];
+    itemType: ItemType;
 }
 
 export interface FetchCollaboratorsProps extends BaseFetchProps {

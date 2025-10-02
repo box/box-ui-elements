@@ -144,6 +144,7 @@ export const createMockAPI = (
                 successCallback(userResponse);
             }, 100);
         },
+        getAvatarUrlWithAccessToken: userID => mockAvatarURLMap[userID] ?? null,
     };
 
     const getFileCollaborationsAPI = () => ({
