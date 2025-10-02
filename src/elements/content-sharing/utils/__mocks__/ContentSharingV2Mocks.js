@@ -39,24 +39,28 @@ export const collabUser1 = {
     id: 456,
     login: 'dparrot@example.com',
     name: 'Detective Parrot',
-    type: 'user',
+    role: 'editor',
 };
 
 export const collabUser2 = {
     id: 457,
     login: 'rqueen@example.com',
     name: 'Raccoon Queen',
-    type: 'user',
 };
 
 export const collabUser3 = {
     id: 458,
     login: 'dpenguin@example.com',
     name: 'Dancing Penguin',
-    type: 'user',
 };
 
-export const MOCK_COLLABORATORS = [collabUser1, collabUser2, collabUser3];
+export const collabUser4 = {
+    id: mockCurrentUserID,
+    login: mockOwnerEmail,
+    name: 'Astronaut Otter',
+};
+
+export const MOCK_COLLABORATORS = [collabUser4, collabUser1, collabUser2, collabUser3];
 
 export const MOCK_COLLABORATIONS_RESPONSE = {
     entries: MOCK_COLLABORATORS.map(user => ({
@@ -69,7 +73,7 @@ export const MOCK_COLLABORATIONS_RESPONSE = {
             name: 'Astronaut Otter',
             type: 'user',
         },
-        role: 'editor',
+        role: user.id === mockCurrentUserID ? 'owner' : 'editor',
         status: 'accepted',
         type: user.type,
     })),

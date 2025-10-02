@@ -7,13 +7,13 @@ export const fetchAvatars = async ({ api, itemID, collaborators }: FetchCollabor
     const avatarPromises = collaborators.map(async collab => {
         if (!collab?.accessible_by) return;
         const {
-            accessible_by: { id: userID },
+            accessible_by: { id: userId },
         } = collab;
         try {
-            const url = await usersAPI.getAvatarUrlWithAccessToken(userID.toString(), itemID);
-            avatarURLMap[userID] = url;
+            const url = await usersAPI.getAvatarUrlWithAccessToken(userId.toString(), itemID);
+            avatarURLMap[userId] = url;
         } catch {
-            avatarURLMap[userID] = null;
+            avatarURLMap[userId] = null;
         }
     });
 
