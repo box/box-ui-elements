@@ -1,6 +1,10 @@
 .email-shared-link {
     .bdl-PillSelectorDropdown {
         margin: 0;
+
+        .bdl-Tooltip-target {
+            display: block;
+        }
     }
 
     .text-area-container {
@@ -8,10 +12,14 @@
         height: 0;
         margin: 0;
         overflow: hidden;
+
+        .bdl-Tooltip-target {
+            display: block;
+        }
     }
 
     .text-area-container {
-        transition: height .2s;
+        transition: height 0.2s;
     }
 
     .bdl-PillSelector,

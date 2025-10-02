@@ -241,8 +241,9 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             React.act(() => {
                 wrapper.find(AnnotationActivityMenu).prop('onDelete')();
             });
+            wrapper.update();
 
-            expect(wrapper.exists(DeleteConfirmation));
+            expect(wrapper.exists(DeleteConfirmation)).toBe(true);
         });
 
         test('should close the DeleteConfirmation when cancel is selected', () => {

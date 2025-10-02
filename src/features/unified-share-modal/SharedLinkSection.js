@@ -304,6 +304,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         showCloseButton
                         text={tooltips['shared-link-copy-button']}
                         theme="callout"
+                        targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
                     >
                         <TextInputWithCopyButton
                             aria-label={intl.formatMessage(messages.sharedLinkURLLabel)}

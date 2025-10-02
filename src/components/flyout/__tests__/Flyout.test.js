@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
+import TetherComponent from 'react-tether';
 import sinon from 'sinon';
 
 import Flyout from '../Flyout';
@@ -43,10 +44,6 @@ describe('components/flyout/Flyout', () => {
                 <FakeOverlay />
             </Flyout>,
         );
-    };
-
-    const findTetherComponent = wrapper => {
-        return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
     };
 
     afterEach(() => {
@@ -142,7 +139,7 @@ describe('components/flyout/Flyout', () => {
         test('should render TetherComponent with correct props with correct default values', () => {
             const wrapper = renderWrapper();
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
             expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
@@ -160,7 +157,7 @@ describe('components/flyout/Flyout', () => {
             });
             wrapper.update();
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
@@ -168,7 +165,7 @@ describe('components/flyout/Flyout', () => {
             const offset = 'wooot';
             const wrapper = renderWrapper({ offset });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('offset')).toEqual(offset);
         });
 
@@ -176,7 +173,7 @@ describe('components/flyout/Flyout', () => {
             const className = 'the-class-name';
             const wrapper = renderWrapper({ className });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('classes')).toEqual({
                 element: `flyout-overlay ${className}`,
             });
@@ -185,14 +182,14 @@ describe('components/flyout/Flyout', () => {
         test('should render TetherComponent without scrollParent constraint when constrainToScrollParent=false', () => {
             const wrapper = renderWrapper({ constrainToScrollParent: false });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([]);
         });
 
         test('should render TetherComponent with window constraint when constrainToWindow=true', () => {
             const wrapper = renderWrapper({ constrainToWindow: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
@@ -208,7 +205,7 @@ describe('components/flyout/Flyout', () => {
         test('should render TetherComponent with window constraint when constrainToWindowWithPin=true', () => {
             const wrapper = renderWrapper({ constrainToWindowWithPin: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
@@ -259,7 +256,7 @@ describe('components/flyout/Flyout', () => {
             test('should set tether offset correctly when offset props is not passed in', () => {
                 const wrapper = renderWrapper({ position });
 
-                const tetherComponent = findTetherComponent(wrapper);
+                const tetherComponent = wrapper.find(TetherComponent);
                 expect(tetherComponent.prop('offset')).toEqual(offset);
             });
         });
@@ -904,7 +901,7 @@ describe('components/flyout/Flyout', () => {
         test('should have correct className when isResponsive is true', () => {
             const wrapper = renderWrapper({ isResponsive: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('classes')).toEqual({
                 element: `flyout-overlay bdl-Flyout--responsive`,
             });

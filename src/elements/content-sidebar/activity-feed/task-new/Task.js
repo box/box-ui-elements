@@ -294,7 +294,7 @@ class Task extends React.Component<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                                 renderTarget={ref => (
-                                    <div ref={ref} style={{ display: 'inline-block' }}>
+                                    <div ref={ref} className="bcs-Task-menuTarget">
                                         <Media.Menu
                                             isDisabled={isConfirmingDelete}
                                             data-testid="task-actions-menu"

@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
+import TetherComponent from 'react-tether';
 import sinon from 'sinon';
 
 import DropdownMenu from '../DropdownMenu';
@@ -28,10 +29,6 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 <FakeMenu />
             </DropdownMenu>,
         );
-    };
-
-    const findTetherComponent = wrapper => {
-        return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
     };
 
     afterEach(() => {
@@ -137,7 +134,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with correct props with correct default values', () => {
             const wrapper = renderWrapper();
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
             expect(tetherComponent.prop('renderElementTo')).toEqual(document.body);
@@ -150,7 +147,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent in the body if invalid body element is specified', () => {
             const wrapper = renderWrapper({ bodyElement: 'foo' });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
             expect(tetherComponent.prop('renderElementTo')).toEqual(document.body);
@@ -163,7 +160,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render className in the className is specified', () => {
             const wrapper = renderWrapper({ className: 'foo' });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('className')).toEqual('foo');
         });
@@ -173,7 +170,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
 
             const wrapper = renderWrapper({ bodyElement: bodyEl });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
             expect(tetherComponent.prop('renderElementTo')).toEqual(bodyEl);
@@ -186,7 +183,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with correct props when right aligned', () => {
             const wrapper = renderWrapper({ isRightAligned: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('attachment')).toEqual('top right');
             expect(tetherComponent.prop('targetAttachment')).toEqual('bottom right');
             expect(tetherComponent.prop('enabled')).toBe(false);
@@ -201,7 +198,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 tetherTargetAttachment,
             });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('attachment')).toEqual(tetherAttachment);
             expect(tetherComponent.prop('targetAttachment')).toEqual(tetherTargetAttachment);
         });
@@ -215,14 +212,14 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             });
             wrapper.update();
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should render TetherComponent with scrollParent constraint when constrainToScrollParent=true', () => {
             const wrapper = renderWrapper({ constrainToScrollParent: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
@@ -234,7 +231,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with window constraint when constrainToScrollParent=true', () => {
             const wrapper = renderWrapper({ constrainToWindow: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'window',
@@ -246,7 +243,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with scrollParent and window constraints when constrainToScrollParent=true and constrainToWindow=true', () => {
             const wrapper = renderWrapper({ constrainToScrollParent: true, constrainToWindow: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
@@ -262,7 +259,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with window constraints and pinned when constrainToWindowWithPin=true', () => {
             const wrapper = renderWrapper({ constrainToWindowWithPin: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'window',
@@ -275,7 +272,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with window constraints, pinned and scroll parent when constrainToWindowWithPin=true and constrainToScrollParent=true', () => {
             const wrapper = renderWrapper({ constrainToScrollParent: true, constrainToWindowWithPin: true });
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
@@ -388,7 +385,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             });
         });
 
-        test('shoud not stop esc propagation if dropdown is closed', () => {
+        test('should not stop esc propagation if dropdown is closed', () => {
             const onMenuClose = jest.fn();
             const wrapper = mount(
                 <DropdownMenu onMenuClose={onMenuClose}>

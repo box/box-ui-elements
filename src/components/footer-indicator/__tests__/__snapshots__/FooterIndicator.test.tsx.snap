@@ -4,32 +4,30 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
 <div
   className="bdl-FooterIndicator"
 >
-  <Tooltip
-    constrainToScrollParent={false}
-    constrainToWindow={true}
-    isDisabled={false}
-    position="top-right"
-    targetWrapperClassName="bdl-FooterIndicator-tooltipTarget"
-    text="abcdefghijklmnopqrstuvwxyz"
-    theme="default"
-  >
-    <div
-      className="bdl-FooterIndicator-content"
+  <TooltipProvider>
+    <Tooltip
+      align="end"
+      content="abcdefghijklmnopqrstuvwxyz"
+      side="top"
     >
-      <span
-        className="bdl-FooterIndicator-iconWrapper"
+      <div
+        className="bdl-FooterIndicator-content"
       >
-        <IconPuzzlePiece
-          height={14}
-          width={14}
-        />
-      </span>
-      <span
-        className="bdl-FooterIndicator-text"
-      >
-        abcdefghijklmnopqrstuvwxyz
-      </span>
-    </div>
-  </Tooltip>
+        <span
+          className="bdl-FooterIndicator-iconWrapper"
+        >
+          <IconPuzzlePiece
+            height={14}
+            width={14}
+          />
+        </span>
+        <span
+          className="bdl-FooterIndicator-text"
+        >
+          abcdefghijklmnopqrstuvwxyz
+        </span>
+      </div>
+    </Tooltip>
+  </TooltipProvider>
 </div>
 `;

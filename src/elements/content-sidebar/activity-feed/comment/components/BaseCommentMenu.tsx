@@ -55,7 +55,7 @@ export const BaseCommentMenu = ({
             constraints={[{ to: 'scrollParent', attachment: 'together' }]}
             targetAttachment="bottom right"
             renderTarget={ref => (
-                <div ref={ref} style={{ display: 'inline-block' }}>
+                <div ref={ref} className="bcs-BaseCommentMenu-target">
                     <Media.Menu
                         className="bcs-BaseCommentMenu"
                         data-testid="comment-actions-menu"

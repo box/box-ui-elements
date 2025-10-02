@@ -497,7 +497,7 @@ class Flyout extends React.Component<Props, State> {
                 )}
                 renderElement={ref => {
                     return isVisible ? (
-                        <div ref={ref}>
+                        <div ref={ref} style={{ outline: 'none' }}>
                             <FlyoutContext.Provider value={{ closeOverlay: this.closeOverlay }}>
                                 {React.cloneElement(overlayContent, overlayProps)}
                             </FlyoutContext.Provider>

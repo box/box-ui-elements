@@ -5,7 +5,7 @@ import { usePromptFocus } from '@box/box-ai-content-answers';
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
 import SidebarNav from '../SidebarNav';
 
-import { render, screen, userEvent } from '../../../test-utils/testing-library';
+import { render, screen, userEvent, waitFor } from '../../../test-utils/testing-library';
 
 jest.mock('@box/box-ai-content-answers');
 
@@ -81,7 +81,9 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 await user.hover(button);
 
                 expect(button).toHaveAttribute('aria-disabled', 'true');
-                expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
+                await waitFor(() => {
+                    expect(screen.getByRole('tooltip', { name: expectedTooltip })).toBeInTheDocument();
+                });
             },
         );
 
@@ -98,7 +100,9 @@ describe('elements/content-sidebar/SidebarNav', () => {
             await user.hover(button);
 
             expect(button).not.toHaveAttribute('aria-disabled');
-            expect(screen.getByText('Box AI')).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.getByRole('tooltip', { name: 'Box AI' })).toBeInTheDocument();
+            });
         });
     });
 

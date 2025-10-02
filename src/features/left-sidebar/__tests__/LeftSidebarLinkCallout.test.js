@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
+import TetherComponent from 'react-tether';
 import sinon from 'sinon';
 
 import LeftSidebarLinkCallout from '../LeftSidebarLinkCallout';
-
-const findTetherComponent = wrapper => {
-    return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
-};
 
 describe('components/tooltip/LeftSidebarLinkCallout', () => {
     const sandbox = sinon.sandbox.create();
@@ -50,7 +47,7 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
                     <span>Test Child</span>
                 </LeftSidebarLinkCallout>,
             );
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             const btn = tetherComponent.find('.nav-link-callout-close-button').first();
             btn.simulate('click');
         });
@@ -77,7 +74,7 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
                 </LeftSidebarLinkCallout>,
             );
 
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             const callout = tetherComponent.find('.nav-link-callout');
             expect(callout.props().className).toContain('testClass');
         });

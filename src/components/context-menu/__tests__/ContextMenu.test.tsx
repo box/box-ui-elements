@@ -2,6 +2,7 @@
 // @ts-ignore
 import React, { act } from 'react';
 import { mount, shallow, ReactWrapper } from 'enzyme';
+import TetherComponent from 'react-tether';
 import sinon from 'sinon';
 
 import ContextMenu, { ContextMenuProps, ContextMenuState } from '../ContextMenu';
@@ -110,8 +111,7 @@ describe('components/context-menu/ContextMenu', () => {
                 </ContextMenu>,
             );
 
-            // Find the TetherComponent by looking for one with renderTarget prop
-            const tetherComponent = wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.length).toBe(1);
             expect(tetherComponent.prop('attachment')).toEqual('top left');
             expect(tetherComponent.prop('targetAttachment')).toEqual('top left');

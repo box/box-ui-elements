@@ -1,5 +1,6 @@
-import * as React from 'react';
 import { mount, shallow } from 'enzyme';
+import * as React from 'react';
+import TetherComponent from 'react-tether';
 
 import TextArea from '../TextArea';
 
@@ -73,7 +74,7 @@ describe('components/text-area/TextArea', () => {
     test('should render Tooltip with tetherElementClassName', () => {
         const className = 'tether-element-class-name';
         const wrapper = mount(<TextArea error="error" label="label" tooltipTetherClassName={className} />);
-        const tetherEl = wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
+        const tetherEl = wrapper.find(TetherComponent);
 
         expect(tetherEl.prop('className')).toBe(className);
     });

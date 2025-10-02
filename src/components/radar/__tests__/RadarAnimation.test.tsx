@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { mount, shallow, ReactWrapper } from 'enzyme';
-import RadarAnimation, { RadarAnimationProps, RadarAnimationPosition } from '../RadarAnimation';
+import { mount, shallow } from 'enzyme';
+import TetherComponent from 'react-tether';
+import RadarAnimation, { RadarAnimationPosition } from '../RadarAnimation';
 
 describe('components/radar/RadarAnimation', () => {
-    const renderWrapper = (props: Partial<RadarAnimationProps> & Record<string, unknown> = {}) => {
+    const renderWrapper = (props: {}) => {
         return mount<RadarAnimation>(
             <RadarAnimation {...props}>
                 <div>Hello</div>
@@ -11,9 +12,6 @@ describe('components/radar/RadarAnimation', () => {
         );
     };
 
-    const findTetherComponent = (wrapper: ReactWrapper) => {
-        return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
-    };
     [
         {
             // description:
@@ -79,7 +77,7 @@ describe('components/radar/RadarAnimation', () => {
             offset,
         });
 
-        const tetherComponent = findTetherComponent(wrapper);
+        const tetherComponent = wrapper.find(TetherComponent);
         expect(tetherComponent.prop('offset')).toEqual(offset);
     });
 
@@ -96,19 +94,19 @@ describe('components/radar/RadarAnimation', () => {
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
             const wrapper = renderWrapper({});
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should be shown when isShown is true', () => {
             const wrapper = renderWrapper({ isShown: true });
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should not be shown when isShown is false', () => {
             const wrapper = renderWrapper({ isShown: false });
-            const tetherComponent = findTetherComponent(wrapper);
+            const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(false);
         });
     });

@@ -187,7 +187,7 @@ class Comment extends React.Component<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                                 renderTarget={ref => (
-                                    <div ref={ref}>
+                                    <div ref={ref} className="bcs-Comment-menuTarget">
                                         <Media.Menu
                                             isDisabled={isConfirmingDelete}
                                             data-testid="comment-actions-menu"
@@ -243,9 +243,9 @@ class Comment extends React.Component<Props, State> {
                                         </Media.Menu>
                                     </div>
                                 )}
-                                renderElement={ref => {
-                                    return isConfirmingDelete ? (
-                                        <div ref={ref} style={{ display: 'inline-block' }}>
+                                renderElement={ref =>
+                                    isConfirmingDelete ? (
+                                        <div ref={ref}>
                                             <DeleteConfirmation
                                                 data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
                                                 isOpen={isConfirmingDelete}
@@ -254,8 +254,8 @@ class Comment extends React.Component<Props, State> {
                                                 onDeleteConfirm={this.handleDeleteConfirm}
                                             />
                                         </div>
-                                    ) : null;
-                                }}
+                                    ) : null
+                                }
                             />
                         )}
                         <div className="bcs-Comment-headline">

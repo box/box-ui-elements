@@ -147,7 +147,7 @@ class AppActivity extends React.PureComponent<Props, State> {
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
                                 renderTarget={ref => (
-                                    <div ref={ref} style={{ display: 'inline-block' }}>
+                                    <div ref={ref} className="bcs-AppActivity-confirmTarget">
                                         <Media.Menu isDisabled={isConfirmingDelete}>
                                             <MenuItem onClick={this.handleDeleteClick}>
                                                 <IconTrash color={bdlGray80} />

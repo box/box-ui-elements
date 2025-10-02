@@ -3,6 +3,7 @@
 import * as React from 'react';
 import sinon from 'sinon';
 import { mount, shallow } from 'enzyme';
+import TetherComponent from 'react-tether';
 
 import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
@@ -75,7 +76,7 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
             const component = wrapper.find('button');
-            const tetherComponent = wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
+            const tetherComponent = wrapper.find(TetherComponent);
 
             expect(tetherComponent.prop('attachment')).toEqual('bottom center');
             expect(tetherComponent.prop('constraints')).toEqual([
@@ -186,11 +187,7 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
 
-            expect(
-                wrapper
-                    .findWhere(node => node.prop('renderTarget') && node.prop('renderElement'))
-                    .prop('renderElementTo'),
-            ).toEqual(bodyEl);
+            expect(wrapper.find(TetherComponent).prop('renderElementTo')).toEqual(bodyEl);
         });
 
         test('should render TetherComponent in the body if invalid body element is specified', () => {
@@ -201,11 +198,7 @@ describe('components/tooltip/Tooltip', () => {
                 </Tooltip>,
             );
 
-            expect(
-                wrapper
-                    .findWhere(node => node.prop('renderTarget') && node.prop('renderElement'))
-                    .prop('renderElementTo'),
-            ).toEqual(document.body);
+            expect(wrapper.find(TetherComponent).prop('renderElementTo')).toEqual(document.body);
         });
 
         test('should show tooltip when isShown prop is true', () => {
