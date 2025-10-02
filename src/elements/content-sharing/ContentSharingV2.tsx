@@ -2,16 +2,16 @@ import * as React from 'react';
 import isEmpty from 'lodash/isEmpty';
 
 import { UnifiedShareModal } from '@box/unified-share-modal';
-import type { CollaborationRole, Item, SharedLink, User } from '@box/unified-share-modal';
+import type { CollaborationRole, Collaborator, Item, SharedLink, User } from '@box/unified-share-modal';
 
 import API from '../../api';
-import { FIELD_ENTERPRISE, FIELD_HOSTNAME, TYPE_FILE, TYPE_FOLDER } from '../../constants';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
-import { CONTENT_SHARING_ITEM_FIELDS } from './constants';
-import { convertItemResponse } from './utils';
+import { fetchAvatars, fetchCollaborators, fetchCurrentUser, fetchItem } from './apis';
+import { convertCollabsResponse, convertItemResponse } from './utils';
 
-import type { ItemType, StringMap } from '../../common/types/core';
+import type { Collaborations, ItemType, StringMap } from '../../common/types/core';
+import type { AvatarURLMap } from './types';
 
 export interface ContentSharingV2Props {
     /** api - API instance */
@@ -39,13 +39,17 @@ function ContentSharingV2({
     language,
     messages,
 }: ContentSharingV2Props) {
+    const [avatarURLMap, setAvatarURLMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [sharedLink, setSharedLink] = React.useState<SharedLink | null>(null);
     const [currentUser, setCurrentUser] = React.useState<User | null>(null);
     const [collaborationRoles, setCollaborationRoles] = React.useState<CollaborationRole[] | null>(null);
+    const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
+    const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback(itemData => {
+        console.log('handleGetItemSuccess itemData', itemData);
         const {
             collaborationRoles: collaborationRolesFromAPI,
             item: itemFromAPI,
@@ -62,70 +66,72 @@ function ContentSharingV2({
         setSharedLink(null);
         setCurrentUser(null);
         setCollaborationRoles(null);
+        setAvatarURLMap(null);
+        setCollaborators(null);
+        setCollaboratorsData(null);
     }, [api]);
 
     // Get initial data for the item
     React.useEffect(() => {
-        const getItem = () => {
-            if (itemType === TYPE_FILE) {
-                api.getFileAPI().getFile(
-                    itemID,
-                    handleGetItemSuccess,
-                    {},
-                    {
-                        fields: CONTENT_SHARING_ITEM_FIELDS,
-                    },
-                );
-            } else if (itemType === TYPE_FOLDER) {
-                api.getFolderAPI().getFolderFields(
-                    itemID,
-                    handleGetItemSuccess,
-                    {},
-                    {
-                        fields: CONTENT_SHARING_ITEM_FIELDS,
-                    },
-                );
-            }
-        };
+        if (!api || isEmpty(api) || item || sharedLink) return;
 
-        if (api && !isEmpty(api) && !item && !sharedLink) {
-            getItem();
-        }
+        (async () => {
+            const itemData = await fetchItem({ api, itemID, itemType });
+            handleGetItemSuccess(itemData);
+        })();
     }, [api, item, itemID, itemType, sharedLink, handleGetItemSuccess]);
 
-    // Get initial data for the user
+    // Get current user
     React.useEffect(() => {
+        if (!api || isEmpty(api) || item || sharedLink || currentUser) return;
+
         const getUserSuccess = userData => {
             const { enterprise, id } = userData;
             setCurrentUser({
                 id,
-                enterprise: {
-                    name: enterprise ? enterprise.name : '',
-                },
+                enterprise: { name: enterprise ? enterprise.name : '' },
             });
         };
 
-        const getUserData = () => {
-            api.getUsersAPI(false).getUser(
-                itemID,
-                getUserSuccess,
-                {},
-                {
-                    params: {
-                        fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME].toString(),
-                    },
-                },
-            );
-        };
-
-        if (api && !isEmpty(api) && item && sharedLink && !currentUser) {
-            getUserData();
-        }
+        (async () => {
+            const userData = await fetchCurrentUser({ api, itemID });
+            getUserSuccess(userData);
+        })();
     }, [api, currentUser, item, itemID, itemType, sharedLink]);
 
-    const config = {
-        sharedLinkEmail: false,
-    };
+    // Get collaborators
+    React.useEffect(() => {
+        if (!api || isEmpty(api) || item || collaboratorsData) return;
+
+        (async () => {
+            try {
+                const response = await fetchCollaborators({ api, itemID, itemType });
+                setCollaboratorsData(response);
+            } catch {
+                setCollaboratorsData({ entries: [], next_marker: null });
+            }
+        })();
+    }, [api, collaboratorsData, item, itemID, itemType]);
+
+    // Get avatars when collaborators are available
+    React.useEffect(() => {
+        if (avatarURLMap || !collaboratorsData || !collaboratorsData.entries) return;
+
+        (async () => {
+            const response = await fetchAvatars({ api, itemID, collaborators: collaboratorsData.entries });
+            setAvatarURLMap(response);
+        })();
+    }, [api, avatarURLMap, collaboratorsData, itemID]);
+
+    // Return processed data when both are ready
+    React.useEffect(() => {
+        if (collaboratorsData && avatarURLMap) {
+            const collaboratorsWithAvatars = convertCollabsResponse(collaboratorsData, avatarURLMap);
+            setCollaborators(collaboratorsWithAvatars);
+        }
+    }, [collaboratorsData, avatarURLMap]);
+
+    const config = { sharedLinkEmail: false };
 
     return (
         <Internationalize language={language} messages={messages}>
@@ -134,6 +140,7 @@ function ContentSharingV2({
                     <UnifiedShareModal
                         config={config}
                         collaborationRoles={collaborationRoles}
+                        collaborators={collaborators}
                         currentUser={currentUser}
                         item={item}
                         sharedLink={sharedLink}
