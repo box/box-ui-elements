@@ -131,7 +131,7 @@ function ContentSharingV2({
     }, [collaboratorsData, avatarURLMap]);
 
     const config = { sharedLinkEmail: false };
-    console.log('collaborators', collaborators);
+
     return (
         <Internationalize language={language} messages={messages}>
             <Providers hasProviders={hasProviders}>
