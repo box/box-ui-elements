@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/plain-button/index.ts"],"sourcesContent":["import { PlainButtonProps as Props } from './PlainButton';\n\nexport { default } from './PlainButton';\nexport type PlainButtonProps = Props;\n"],"mappings":"AAEA,SAASA,OAAO,QAAQ,eAAe","ignoreList":[]}

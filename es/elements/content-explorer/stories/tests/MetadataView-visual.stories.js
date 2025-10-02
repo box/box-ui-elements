@@ -1,0 +1,315 @@
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+import { http, HttpResponse } from 'msw';
+import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
+import { Sign } from '@box/blueprint-web-assets/icons/Line';
+import { expect, fn, userEvent, waitFor, within, screen } from 'storybook/test';
+import noop from 'lodash/noop';
+import orderBy from 'lodash/orderBy';
+import ContentExplorer from '../../ContentExplorer';
+import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
+import { mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
+
+// The intent behind relying on mockMetadata is to allow a developer to paste in their own metadata template schema for use with live API calls.
+const {
+  scope: templateScope,
+  templateKey
+} = mockSchema;
+const metadataScopeAndKey = `${templateScope}.${templateKey}`;
+const metadataFieldNamePrefix = `metadata.${metadataScopeAndKey}`;
+
+// This is the body of the metadata query API call.
+// https://developer.box.com/guides/metadata/queries/syntax/
+const metadataQuery = {
+  from: metadataScopeAndKey,
+  ancestor_folder_id: '0',
+  order_by: [{
+    field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`,
+    // Default to sorting by the first field in the schema
+    direction: 'asc'
+  }],
+  fields: [
+  // Default to returning all fields in the metadata template schema, and name as a standalone (non-metadata) field
+  ...mockSchema.fields.map(field => `${metadataFieldNamePrefix}.${field.key}`)]
+};
+
+// Used for metadata view v1
+const fieldsToShow = [{
+  key: `${metadataFieldNamePrefix}.industry`,
+  canEdit: true
+}, {
+  key: `${metadataFieldNamePrefix}.last_contacted_at`,
+  canEdit: true
+}, {
+  key: `${metadataFieldNamePrefix}.role`,
+  canEdit: true
+}];
+
+// Used for metadata view v2
+const columns = [...mockSchema.fields.map(field => ({
+  textValue: field.displayName,
+  id: `${metadataFieldNamePrefix}.${field.key}`,
+  type: field.type,
+  allowsSorting: true,
+  minWidth: 150,
+  maxWidth: 150
+}))];
+
+// Switches ContentExplorer to use Metadata View over standard, folder-based view.
+const defaultView = 'metadata';
+export const metadataView = {
+  args: {
+    metadataQuery,
+    fieldsToShow,
+    defaultView
+  }
+};
+const metadataViewV2ElementProps = {
+  metadataViewProps: {
+    columns
+  },
+  metadataQuery,
+  fieldsToShow,
+  defaultView,
+  features: {
+    contentExplorer: {
+      metadataViewV2: true
+    }
+  }
+};
+const metadataViewV2WithInlineCustomActionsElementProps = _objectSpread(_objectSpread({}, metadataViewV2ElementProps), {}, {
+  metadataViewProps: {
+    columns,
+    isSelectionEnabled: true,
+    itemActionMenuProps: {
+      actions: [{
+        label: 'Download',
+        onClick: noop,
+        icon: Download
+      }],
+      subMenuTrigger: {
+        label: 'Sign',
+        icon: Sign
+      },
+      subMenuActions: [{
+        label: 'Request Signature',
+        onClick: noop,
+        icon: SignMeOthers
+      }]
+    }
+  }
+});
+const metadataViewV2WithBulkItemActions = _objectSpread(_objectSpread({}, metadataViewV2ElementProps), {}, {
+  bulkItemActions: [{
+    label: 'Download',
+    onClick: fn()
+  }],
+  metadataViewProps: {
+    columns,
+    isSelectionEnabled: true
+  }
+});
+export const metadataViewV2 = {
+  args: metadataViewV2ElementProps
+};
+export const metadataViewV2SortsFromHeader = {
+  args: metadataViewV2ElementProps,
+  play: async ({
+    canvas
+  }) => {
+    const industryHeader = await canvas.findByRole('columnheader', {
+      name: 'Industry'
+    });
+    expect(industryHeader).toBeInTheDocument();
+    const firstRow = await canvas.findByRole('row', {
+      name: /Child 2/i
+    });
+    expect(firstRow).toBeInTheDocument();
+    await userEvent.click(industryHeader);
+  }
+};
+export const metadataViewV2WithCustomActions = {
+  args: metadataViewV2WithInlineCustomActionsElementProps,
+  play: async ({
+    canvas
+  }) => {
+    await waitFor(() => {
+      expect(canvas.getByRole('row', {
+        name: /Child 2/i
+      })).toBeInTheDocument();
+    });
+    const firstRow = canvas.getByRole('row', {
+      name: /Child 2/i
+    });
+    const ellipsesButton = within(firstRow).getByRole('button', {
+      name: 'Action menu'
+    });
+    userEvent.click(ellipsesButton);
+  }
+};
+const initialFilterActionBarProps = {
+  initialFilterValues: {
+    industry: {
+      value: ['Legal']
+    },
+    'mimetype-filter': {
+      value: ['boxnoteType', 'documentType', 'threedType']
+    },
+    role: {
+      value: ['Developer', 'Business Owner', 'Marketing']
+    }
+  }
+};
+export const metadataViewV2WithInitialFilterValues = {
+  args: _objectSpread(_objectSpread({}, metadataViewV2ElementProps), {}, {
+    metadataViewProps: {
+      columns,
+      actionBarProps: initialFilterActionBarProps
+    }
+  }),
+  play: async ({
+    canvas
+  }) => {
+    // Wait for chips to update with initial values
+    await waitFor(() => {
+      expect(canvas.getByRole('button', {
+        name: /Industry/i
+      })).toHaveTextContent(/\(1\)/);
+    });
+    // Other chips should reflect initialized values
+    const contactRoleChip = canvas.getByRole('button', {
+      name: /Contact Role/i
+    });
+    expect(contactRoleChip).toHaveTextContent(/\(3\)/);
+    const fileTypeChip = canvas.getByRole('button', {
+      name: /Box Note/i
+    });
+    expect(fileTypeChip).toHaveTextContent(/\+2/);
+  }
+};
+export const sidePanelOpenWithSingleItemSelected = {
+  args: _objectSpread(_objectSpread({}, metadataViewV2ElementProps), {}, {
+    metadataViewProps: {
+      columns,
+      isSelectionEnabled: true
+    }
+  }),
+  play: async ({
+    canvas
+  }) => {
+    await waitFor(() => {
+      expect(canvas.getByRole('row', {
+        name: /Child 2/i
+      })).toBeInTheDocument();
+    });
+
+    // Select the first row by clicking its checkbox
+    const firstRow = canvas.getByRole('row', {
+      name: /Child 2/i
+    });
+    const checkbox = within(firstRow).getByRole('checkbox');
+    await userEvent.click(checkbox);
+    const metadataButton = canvas.getByRole('button', {
+      name: 'Metadata'
+    });
+    await userEvent.click(metadataButton);
+  }
+};
+export const metadataViewV2WithBulkItemActionMenuShowsItemActionMenu = {
+  args: metadataViewV2WithBulkItemActions,
+  play: async ({
+    canvas
+  }) => {
+    const firstRow = await canvas.findByRole('row', {
+      name: /Child 2/i
+    });
+    expect(firstRow).toBeInTheDocument();
+    const checkbox = within(firstRow).getByRole('checkbox');
+    await userEvent.click(checkbox);
+    const ellipsisButton = canvas.getByRole('button', {
+      name: 'Bulk actions'
+    });
+    expect(ellipsisButton).toBeInTheDocument();
+    await userEvent.click(ellipsisButton);
+    const downloadAction = screen.getByRole('menuitem', {
+      name: 'Download'
+    });
+    expect(downloadAction).toBeInTheDocument();
+  }
+};
+export const sidePanelOpenWithMultipleItemsSelected = {
+  args: _objectSpread(_objectSpread({}, metadataViewV2ElementProps), {}, {
+    metadataViewProps: {
+      columns,
+      isSelectionEnabled: true
+    }
+  }),
+  play: async ({
+    canvas
+  }) => {
+    await waitFor(() => {
+      expect(canvas.getByRole('row', {
+        name: /Child 2/i
+      })).toBeInTheDocument();
+    });
+
+    // Select the first row by clicking its checkbox
+    const firstItem = canvas.getByRole('row', {
+      name: /Child 2/i
+    });
+    const checkbox = within(firstItem).getByRole('checkbox');
+    await userEvent.click(checkbox);
+
+    // Select the second row by clicking its checkbox
+    const secondItem = canvas.getAllByRole('row', {
+      name: /Child 1/i
+    })[0];
+    const secondCheckbox = within(secondItem).getByRole('checkbox');
+    await userEvent.click(secondCheckbox);
+    const metadataButton = canvas.getByRole('button', {
+      name: 'Metadata'
+    });
+    await userEvent.click(metadataButton);
+  }
+};
+const meta = {
+  title: 'Elements/ContentExplorer/tests/MetadataView/visual',
+  component: ContentExplorer,
+  args: {
+    features: global.FEATURE_FLAGS,
+    rootFolderId: global.FOLDER_ID,
+    token: global.TOKEN
+  },
+  parameters: {
+    msw: {
+      handlers: [
+      // Note that the Metadata API backend normally handles the sorting. The mocks below simulate the sorting for specific cases, but may not 100% accurately reflect the backend behavior.
+      http.post(`${DEFAULT_HOSTNAME_API}/2.0/metadata_queries/execute_read`, async ({
+        request
+      }) => {
+        const body = await request.clone().json();
+        const orderByDirection = body.order_by[0].direction;
+        const orderByFieldKey = body.order_by[0].field_key;
+
+        // Hardcoded case for sorting by industry
+        if (orderByFieldKey === `industry` && orderByDirection === 'ASC') {
+          const sortedMetadata = orderBy(mockMetadata.entries, 'metadata.enterprise_0.templateName.industry', 'asc');
+          return HttpResponse.json(_objectSpread(_objectSpread({}, mockMetadata), {}, {
+            entries: sortedMetadata
+          }));
+        }
+        return HttpResponse.json(mockMetadata);
+      }), http.get(`${DEFAULT_HOSTNAME_API}/2.0/metadata_templates/enterprise/templateName/schema`, () => {
+        return HttpResponse.json(mockSchema);
+      }), http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/:id`, () => {
+        return HttpResponse.json(mockRootFolder);
+      })]
+    }
+  }
+};
+export default meta;
+//# sourceMappingURL=MetadataView-visual.stories.js.map

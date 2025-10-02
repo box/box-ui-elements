@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../../src/elements/content-sidebar/skills/transcript/index.js"],"sourcesContent":["// @flow\nexport { default } from './Transcript';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,cAAc","ignoreList":[]}

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../src/elements/common/create-folder-dialog/index.ts"],"sourcesContent":["export { default } from './CreateFolderDialog';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,sBAAsB","ignoreList":[]}

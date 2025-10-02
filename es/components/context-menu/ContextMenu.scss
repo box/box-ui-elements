@@ -1,0 +1,13 @@
+@import '../../styles/variables';
+
+.context-menu-element {
+    z-index: $menu-z-index;
+
+    &.context-menu-element-attached-right,
+    &.context-menu-element-attached-left,
+    &.context-menu-element-attached-center {
+        .aria-menu {
+            @include bdl-openComponentAnimation($bdl-transitionDurationBase);
+        }
+    }
+}

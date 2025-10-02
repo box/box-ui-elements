@@ -1,0 +1,28 @@
+@import '../variables';
+
+.be-inline-breadcrumbs {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    color: $bdl-gray-65;
+    font-size: 11px;
+
+    .be-breadcrumbs {
+        padding-right: 0;
+    }
+
+    .be-breadcrumb {
+        &:first-child {
+            min-width: auto;
+        }
+
+        .be & .btn-plain {
+            color: inherit;
+            font-size: 11px;
+        }
+    }
+
+    .be-breadcrumb-more {
+        min-width: 16px;
+    }
+}

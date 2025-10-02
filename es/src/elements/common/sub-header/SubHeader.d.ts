@@ -1,0 +1,34 @@
+import * as React from 'react';
+import type { Selection } from 'react-aria-components';
+import type { BulkItemAction } from './BulkItemActionMenu';
+import type { ViewMode } from '../flowTypes';
+import type { View, Collection } from '../../../common/types/core';
+import './SubHeader.scss';
+export interface SubHeaderProps {
+    bulkItemActions?: BulkItemAction[];
+    canCreateNewFolder: boolean;
+    canUpload: boolean;
+    currentCollection: Collection;
+    gridColumnCount?: number;
+    gridMaxColumns?: number;
+    gridMinColumns?: number;
+    isSmall: boolean;
+    maxGridColumnCountForWidth?: number;
+    onClearSelectedItemIds: () => void;
+    onCreate: () => void;
+    onGridViewSliderChange?: (newSliderValue: number) => void;
+    onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
+    onSortChange: (sortBy: string, sortDirection: string) => void;
+    onMetadataSidePanelToggle?: () => void;
+    onUpload: () => void;
+    onViewModeChange?: (viewMode: ViewMode) => void;
+    portalElement?: HTMLElement;
+    rootId: string;
+    rootName?: string;
+    selectedItemIds: Selection;
+    title?: string;
+    view: View;
+    viewMode?: ViewMode;
+}
+declare const SubHeader: ({ bulkItemActions, canCreateNewFolder, canUpload, currentCollection, gridColumnCount, gridMaxColumns, gridMinColumns, maxGridColumnCountForWidth, onGridViewSliderChange, isSmall, onClearSelectedItemIds, onCreate, onItemClick, onSortChange, onMetadataSidePanelToggle, onUpload, onViewModeChange, portalElement, rootId, rootName, selectedItemIds, title, view, viewMode, }: SubHeaderProps) => React.JSX.Element;
+export default SubHeader;

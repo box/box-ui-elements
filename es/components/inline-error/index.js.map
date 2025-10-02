@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/inline-error/index.js"],"sourcesContent":["// @flow\nexport { default } from './InlineError';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,eAAe","ignoreList":[]}

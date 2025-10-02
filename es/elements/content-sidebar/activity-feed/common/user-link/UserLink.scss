@@ -1,0 +1,8 @@
+@import '../../../../../styles/variables';
+
+.bcs-UserLink,
+.bcs-UserLink.link {
+    color: $bdl-gray;
+    font-weight: bold;
+    white-space: normal;
+}

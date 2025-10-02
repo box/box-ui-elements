@@ -1,0 +1,1 @@
+{"version":3,"file":"flowTypes.js","names":[],"sources":["../../../../src/elements/common/feature-checking/flowTypes.js"],"sourcesContent":["// @flow\nexport type FeatureOptions = {\n    [key: string]: any,\n};\n\nexport type FeatureConfig = {\n    [key: string]: FeatureOptions,\n};\n"],"mappings":"","ignoreList":[]}

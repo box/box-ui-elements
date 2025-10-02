@@ -1,0 +1,66 @@
+@import '../../styles/variables';
+
+@keyframes bdl-PreviewLoadingRing-spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@mixin bdl-PreviewLoadingRing-theme($color) {
+    .bdl-PreviewLoadingRing-border {
+        &::before {
+            background:
+                linear-gradient(0deg, rgba($color, 1) 50%, rgba($color, 0.9) 100%) 0 0 no-repeat,
+                linear-gradient(90deg, rgba($color, 0.9) 0%, rgba($color, 0.6) 100%) 100% 0 no-repeat,
+                linear-gradient(180deg, rgba($color, 0.6) 0%, rgba($color, 0.3) 100%) 100% 100% no-repeat,
+                linear-gradient(360deg, rgba($color, 0.3) 0%, rgba($color, 0) 100%) 0 100% no-repeat;
+            background-size: 50% 50%;
+        }
+    }
+
+    .bdl-PreviewLoadingRing-content {
+        background-color: $color;
+    }
+}
+
+.bdl-PreviewLoadingRing {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+
+    &.bdl-PreviewLoadingRing--dark {
+        @include bdl-PreviewLoadingRing-theme($black);
+    }
+
+    &.bdl-PreviewLoadingRing--light {
+        @include bdl-PreviewLoadingRing-theme($white);
+    }
+}
+
+.bdl-PreviewLoadingRing-border,
+.bdl-PreviewLoadingRing-content {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.bdl-PreviewLoadingRing-border {
+    inset: 0;
+    background-color: $bdl-box-blue; // Color of the ring
+    animation: bdl-PreviewLoadingRing-spin 1s infinite linear;
+
+    &::before {
+        position: absolute;
+        inset: -1px;
+        border-radius: 50%;
+        content: '';
+    }
+}
+
+.bdl-PreviewLoadingRing-content {
+    inset: 3px;
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,6 @@
+@import '../../styles/variables';
+@import '../../styles/mixins/overlay';
+
+.datalist-item {
+    @include bdl-Overlay-listItemContainer;
+}

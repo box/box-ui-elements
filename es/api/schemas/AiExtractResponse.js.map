@@ -1,0 +1,1 @@
+{"version":3,"file":"AiExtractResponse.js","names":[],"sources":["../../../src/api/schemas/AiExtractResponse.js"],"sourcesContent":["/**\n * @flow\n * @author Box\n */\n\nexport interface AiExtractResponse {}\n"],"mappings":"","ignoreList":[]}

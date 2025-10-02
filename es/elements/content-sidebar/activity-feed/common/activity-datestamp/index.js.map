@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../../../src/elements/content-sidebar/activity-feed/common/activity-datestamp/index.ts"],"sourcesContent":["export { default } from './ActivityDatestamp';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,qBAAqB","ignoreList":[]}

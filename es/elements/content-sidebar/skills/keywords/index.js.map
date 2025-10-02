@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../../src/elements/content-sidebar/skills/keywords/index.js"],"sourcesContent":["// @flow\nexport { default } from './Keywords';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,YAAY","ignoreList":[]}

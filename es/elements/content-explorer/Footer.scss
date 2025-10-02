@@ -1,0 +1,13 @@
+@import '../common/variables';
+
+.bce-Footer {
+    align-content: center;
+    height: 70px;
+    padding: 0 20px;
+    border-top: 1px solid var(--border-divider-border);
+
+    &:empty {
+        display: none;
+        flex-basis: 0;
+    }
+}

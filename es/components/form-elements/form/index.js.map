@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default","FormInput"],"sources":["../../../../src/components/form-elements/form/index.js"],"sourcesContent":["// @flow\nexport { default as FormInput } from './FormInput';\nexport { default } from './Form';\n"],"mappings":"AACA,SAASA,OAAO,IAAIC,SAAS,QAAQ,aAAa;AAClD,SAASD,OAAO,QAAQ,QAAQ","ignoreList":[]}

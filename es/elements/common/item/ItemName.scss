@@ -1,0 +1,11 @@
+@import '../variables';
+
+.be-item-label {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    color: var(--gray-black);
+    white-space: nowrap;
+    text-align: left;
+    text-overflow: ellipsis;
+}

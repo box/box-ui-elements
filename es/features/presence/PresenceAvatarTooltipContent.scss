@@ -1,0 +1,14 @@
+.bdl-PresenceAvatarTooltipContent {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.bdl-PresenceAvatarTooltipContent-name {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.bdl-PresenceAvatarTooltipContent-event {
+    font-size: 11px;
+}

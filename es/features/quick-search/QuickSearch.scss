@@ -1,0 +1,24 @@
+@import '../../styles/variables';
+
+.quick-search {
+    display: inline-block;
+    width: 100%;
+    transition: width 0.25s linear;
+
+    .selector-dropdown-wrapper {
+        width: 100%;
+    }
+
+    ul.overlay {
+        @include bdl-transition($bdl-transitionDurationBase, transform);
+
+        margin-top: $bdl-grid-unit * 2;
+        padding: 0;
+        overflow: hidden auto;
+        transform: scaleY(0);
+    }
+
+    .is-visible > ul.overlay {
+        transform: scaleY(1);
+    }
+}

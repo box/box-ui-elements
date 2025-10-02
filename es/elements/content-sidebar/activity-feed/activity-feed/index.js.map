@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../../src/elements/content-sidebar/activity-feed/activity-feed/index.js"],"sourcesContent":["// @flow\nexport { default } from './ActivityFeed';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,gBAAgB","ignoreList":[]}

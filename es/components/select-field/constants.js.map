@@ -1,0 +1,1 @@
+{"version":3,"file":"constants.js","names":["CLEAR"],"sources":["../../../src/components/select-field/constants.js"],"sourcesContent":["// @flow\nconst CLEAR: '__clear__' = '__clear__'; // value of clear option used in select-field components\n\nexport default CLEAR;\n"],"mappings":"AACA,MAAMA,KAAkB,GAAG,WAAW,CAAC,CAAC;;AAExC,eAAeA,KAAK","ignoreList":[]}

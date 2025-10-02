@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/api/box-edit/index.js"],"sourcesContent":["// @flow\nexport { default } from './BoxEdit';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,WAAW","ignoreList":[]}

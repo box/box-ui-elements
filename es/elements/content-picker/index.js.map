@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default","ContentPickerPopup"],"sources":["../../../src/elements/content-picker/index.js"],"sourcesContent":["// @flow\nexport { default } from './ContentPicker';\nexport { default as ContentPickerPopup } from './ContentPickerPopup';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,iBAAiB;AACzC,SAASA,OAAO,IAAIC,kBAAkB,QAAQ,sBAAsB","ignoreList":[]}

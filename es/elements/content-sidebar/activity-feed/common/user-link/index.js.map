@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../../../src/elements/content-sidebar/activity-feed/common/user-link/index.js"],"sourcesContent":["// @flow\nexport { default } from './UserLink';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,YAAY","ignoreList":[]}

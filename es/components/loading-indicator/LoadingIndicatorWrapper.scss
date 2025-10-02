@@ -1,0 +1,24 @@
+@import '../../styles/variables';
+
+.loading-indicator-wrapper {
+    position: relative;
+
+    .loading-indicator-veil {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+
+        &.is-with-center-crawler {
+            align-items: center;
+        }
+
+        &.blur-content {
+            background-color: rgba($bdl-gray-02, 0.75);
+        }
+
+        &.hide-content {
+            background-color: $white;
+        }
+    }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/footer-indicator/index.tsx"],"sourcesContent":["export { default } from './FooterIndicator';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,mBAAmB","ignoreList":[]}

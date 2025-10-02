@@ -1,0 +1,1 @@
+{"version":3,"file":"props.js","names":[],"sources":["../../../src/components/select-field/props.js"],"sourcesContent":["// @flow\n\nexport type SelectOptionValueProp = string | number | null;\n\nexport type SelectOptionProp = {\n    displayText: string,\n    id?: string,\n    value: SelectOptionValueProp,\n};\n"],"mappings":"","ignoreList":[]}

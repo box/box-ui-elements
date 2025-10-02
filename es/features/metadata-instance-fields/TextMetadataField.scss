@@ -1,0 +1,9 @@
+@import '../../styles/variables';
+
+.bdl-TextMetadataField {
+    &.text-input-container {
+        input[type='text'] {
+            width: 100%;
+        }
+    }
+}

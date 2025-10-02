@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../src/elements/content-preview/preview-header/index.js"],"sourcesContent":["// @flow\nexport { default } from './PreviewHeader';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,iBAAiB","ignoreList":[]}

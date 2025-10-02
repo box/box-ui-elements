@@ -1,0 +1,25 @@
+@import '../../styles/variables';
+
+.bdl-Classification {
+    .bdl-Label,
+    .label {
+        margin-top: 12px;
+        font-weight: normal;
+    }
+}
+
+.bdl-Classification-definition {
+    max-height: $bdl-line-height * 5;
+    margin-top: 3px;
+    overflow-y: auto;
+    line-height: $bdl-line-height;
+}
+
+.bdl-Classification-missingMessage {
+    color: $bdl-gray-80;
+}
+
+.bdl-Classification-appliedByAiDetails {
+    margin-bottom: var(--space-5);
+    margin-top: var(--space-05);
+}

@@ -1,0 +1,26 @@
+@import '../variables';
+
+.be-sub-header-right {
+    display: flex;
+    align-items: center;
+
+    .be-btn-sort {
+        margin-left: 7px;
+
+        .bce:not(.be-is-small) & {
+            display: none;
+        }
+    }
+
+    .be-btn-add {
+        margin-left: 7px;
+    }
+
+    .bdl-ViewModeChangeButton {
+        margin-left: 7px;
+    }
+
+    .be-BulkItemActionMenu-trigger {
+        margin-right: var(--space-2);
+    }
+}

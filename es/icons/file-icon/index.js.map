@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/icons/file-icon/index.tsx"],"sourcesContent":["export { default } from './FileIcon';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,YAAY","ignoreList":[]}

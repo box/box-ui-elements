@@ -1,0 +1,76 @@
+@import '../common/variables';
+
+$sidebarWidth: $sidebarContentWidth + 1px; // 1px extra to account for the margin left
+$sidebarIncreasedWidth: $sidebarContentIncreasedWidth + 1px;
+$sidebarScrollContentWidth: 323px; // 17px less than the total width for scroll bar
+$sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
+
+.bcs-content {
+    position: relative;
+    width: $sidebarWidth;
+    margin-left: -1px; // -1px to make nav button hover not have blank space
+    border-left: 1px solid $bdl-gray-10;
+
+    .bcs-content-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: $sidebarHeaderHeight;
+        margin: 0;
+        padding: 0 $sidebarActivityFeedSpacingHorizontal;
+        border-bottom: 1px solid $bdl-gray-10;
+
+        .bcs-title {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+            font-size: 16px;
+        }
+    }
+
+    .bcs-content-subheader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: $sidebarSubHeaderHeight;
+        margin: 0 $sidebarActivityFeedSpacingHorizontal;
+        padding: 0;
+        border-bottom: 1px solid $bdl-gray-10;
+    }
+
+    .bcs-content-subheader + .bcs-scroll-content-wrapper {
+        top: $sidebarHeaderHeight + $sidebarSubHeaderHeight; // when subheader is provided
+    }
+
+    .bcs-scroll-content-wrapper {
+        position: absolute; // Prevents non-sidebar parts from re-painting
+        inset: $sidebarHeaderHeight 0 0 0; // Same as title above
+        overflow: hidden auto;
+    }
+
+    .bcs-scroll-content {
+        // Styles can be overriden by each sidebar
+        width: $sidebarScrollContentWidth;
+    }
+}
+
+.bcs-is-wider .bcs-content {
+    width: $sidebarIncreasedWidth;
+
+    .bcs-scroll-content {
+        width: $sidebarScrollContentIncreasedWidth;
+    }
+}
+
+@include breakpoint($medium-screen) {
+    .bcs-content,
+    .bcs-is-wider .bcs-content {
+        flex-basis: 100%;
+        width: auto;
+
+        .bcs-scroll-content {
+            width: auto;
+        }
+    }
+}

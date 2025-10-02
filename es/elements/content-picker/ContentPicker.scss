@@ -1,0 +1,7 @@
+@import '../common/variables';
+
+.be {
+    &.bcp {
+        min-width: $minimumWidth;
+    }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","names":[],"sources":["../../../src/components/pill-selector-dropdown/types.ts"],"sourcesContent":["export interface SuggestedPillType {\n    email: string;\n    id: number;\n    name: string;\n    text?: string;\n    type?: string;\n    value?: string;\n}\n"],"mappings":"","ignoreList":[]}

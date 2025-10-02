@@ -1,0 +1,17 @@
+.quick-search-selector {
+    position: relative;
+
+    > .search-input {
+        width: 100%;
+        padding-right: 25px;
+    }
+
+    > .loading-indicator {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        bottom: 0;
+        height: 10px;
+        margin: auto 0;
+    }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","names":[],"sources":["../../../src/features/unified-share-modal/types.ts"],"sourcesContent":["export interface ContactType {\n    email?: string;\n    id: string;\n    isExternalUser?: boolean;\n    name?: string;\n    text?: string;\n    type?: string | null | undefined;\n    value?: string;\n}\n"],"mappings":"","ignoreList":[]}

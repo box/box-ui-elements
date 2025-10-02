@@ -1,0 +1,37 @@
+@import '../variables';
+
+.be-logo {
+    padding-left: 20px;
+
+    .be-logo-custom {
+        max-width: 240px;
+        max-height: 40px;
+
+        .be-is-small & {
+            max-width: 75px;
+        }
+    }
+
+    .be-logo-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 208px;
+        height: 48px;
+        background-color: var(--gray-10);
+        border: 1px dashed;
+
+        .be-is-small & {
+            width: 60px;
+        }
+
+        span {
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+    }
+
+    svg {
+        display: block;
+    }
+}

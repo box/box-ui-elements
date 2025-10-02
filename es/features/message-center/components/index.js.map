@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../src/features/message-center/components/index.js"],"sourcesContent":["// @flow\nexport { default } from './MessageCenter';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,iBAAiB","ignoreList":[]}

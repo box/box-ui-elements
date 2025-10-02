@@ -1,0 +1,112 @@
+@import './variables';
+
+.be-modal {
+    .be-modal-btns {
+        display: flex;
+        justify-content: center;
+        padding: 15px 0 0;
+
+        .btn {
+            @include bdl-Button--large;
+
+            margin-left: 8px;
+        }
+    }
+
+    .be-modal-error {
+        color: $red;
+    }
+}
+
+.be-modal-wrapper-content,
+.be-modal-dialog-content-full-bleed {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    background-color: $white;
+    border: 0 none;
+    border-radius: 0;
+    outline: none;
+}
+
+.be-modal-wrapper-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: $darker-black;
+}
+
+.be-modal-create-folder .be-modal-dialog-content,
+.be-modal-rename .be-modal-dialog-content,
+.be-modal-share .be-modal-dialog-content,
+.be-modal-delete .be-modal-dialog-content {
+    /*
+        These tokens are pasted from blueprint modal.module.scss.
+        We need these because we use a custom modal component instead of the Blueprint modal root component.
+        This should be removed once we can fully migrate to the Blueprint component.
+    */
+    --modal-overlay-background: var(--overlay-modal-overlay);
+    --modal-content-background: var(--gray-white);
+    --modal-min-width-non-fullscreen: calc(460px - 2 * var(--space-8));
+    --modal-max-height-non-fullscreen: calc(100vh - 2 * var(--space-8));
+    --modal-max-width-small: 460px;
+    --modal-max-width-medium: 540px;
+    --modal-max-width-large: 620px;
+    --modal-max-width-xlarge: 768px;
+    --modal-margin: 0 var(--space-8);
+    --modal-border-radius: var(--radius-4);
+    --modal-close-button-color: var(--gray-65);
+    --modal-close-button-offset-top: var(--space-4);
+    --modal-close-button-offset-right: var(--space-4);
+    --modal-close-button-on-color-background: var(--surface-cta-surface-tertiary);
+    --modal-close-button-on-color-background-hover: var(--surface-cta-surface-icon-hover);
+    --modal-close-button-on-color-background-pressed: var(--surface-cta-surface-icon-pressed);
+    --modal-back-button-color: var(--gray-65);
+    --modal-back-button-margin-top-start: var(--space-4);
+    --modal-back-button-margin-inline-start: var(--space-4);
+    --modal-back-button-size-non-fullscreen: var(--size-10);
+    --modal-title-gap: var(--space-2);
+    --modal-title-padding: var(--space-5) var(--space-12) var(--space-5) var(--space-4);
+    --modal-title-padding-non-fullscreen: var(--space-6) var(--space-16) var(--space-6) var(--space-6);
+    --modal-body-padding: var(--space-6) var(--space-4) var(--space-4);
+    --modal-body-padding-non-fullscreen: var(--space-6) var(--space-6) var(--space-4);
+    --modal-divider-line-border: var(--border-1) solid var(--border-divider-border);
+    --modal-divider-line-offset-right: var(--space-4);
+    --modal-divider-line-offset-left: var(--space-4);
+    --modal-divider-line-offset-right-non-fullscreen: var(--space-6);
+    --modal-divider-line-offset-left-non-fullscreen: var(--space-6);
+    --modal-footer-padding: var(--space-4);
+    --modal-footer-padding-non-fullscreen: var(--space-6);
+    --modal-footer-button-margin-inline-start: var(--space-3);
+
+    padding: 0;
+    border-radius: var(--radius-4);
+}
+
+.be-modal-rename .be-modal-dialog-content {
+    input[type='text'] {
+        width: 100%;
+    }
+}
+
+.be-modal-dialog-content {
+    @extend .be-modal-wrapper-content;
+
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 400px;
+    margin-right: -50%;
+    padding: 25px;
+    border-radius: $bdl-border-radius-size;
+    transform: translate(-50%, -50%);
+
+    .be-is-small & {
+        width: 340px;
+    }
+}
+
+.be-modal-dialog-overlay {
+    @extend .be-modal-wrapper-overlay;
+
+    position: absolute;
+}

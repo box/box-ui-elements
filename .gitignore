@@ -3,8 +3,6 @@
 *.iml
 *.log
 *.swp
-dist/
-es/
 i18n/*.js
 i18n/bundles/
 i18n/json/

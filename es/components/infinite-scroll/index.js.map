@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/infinite-scroll/index.tsx"],"sourcesContent":["export { default } from './InfiniteScroll';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,kBAAkB","ignoreList":[]}

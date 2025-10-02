@@ -1,0 +1,1 @@
+{"version":3,"file":"getTestImageSrc.js","names":["testImageSrc"],"sources":["../../../src/components/image-tooltip/getTestImageSrc.js"],"sourcesContent":["import testImageSrc from './__tests__/test-image.png';\n\nexport default testImageSrc;\n"],"mappings":"AAAA,OAAOA,YAAY,MAAM,4BAA4B;AAErD,eAAeA,YAAY","ignoreList":[]}

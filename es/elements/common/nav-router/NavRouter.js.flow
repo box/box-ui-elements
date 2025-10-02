@@ -1,0 +1,32 @@
+/**
+ * @flow
+ * @file Common Router Navigation Component
+ * @author Box
+ */
+import * as React from 'react';
+import { MemoryRouter, Router } from 'react-router-dom';
+import type { RouterHistory } from 'react-router-dom';
+import { isFeatureEnabled, type FeatureConfig } from '../feature-checking';
+
+type Props = {
+    children: React.Node,
+    features?: FeatureConfig,
+    history?: RouterHistory,
+    initialEntries?: Array<any>,
+};
+
+const NavRouter = ({ children, features, history, ...rest }: Props) => {
+    const isRouterDisabled = isFeatureEnabled(features, 'routerDisabled.value');
+    
+    if (isRouterDisabled) {
+        return <>{children}</>;
+    }
+
+    if (history) {
+        return <Router history={history}>{children}</Router>;
+    }
+
+    return <MemoryRouter {...rest}>{children}</MemoryRouter>;
+};
+
+export default NavRouter;

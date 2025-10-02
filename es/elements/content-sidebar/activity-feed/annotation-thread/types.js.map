@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","names":[],"sources":["../../../../../src/elements/content-sidebar/activity-feed/annotation-thread/types.js"],"sourcesContent":["// @flow\nimport type { MessageDescriptor } from 'react-intl';\n\nexport type AnnotationThreadError = {\n    message: MessageDescriptor,\n    title: MessageDescriptor,\n};\n"],"mappings":"","ignoreList":[]}

@@ -1,0 +1,78 @@
+@import '../common/variables';
+
+$sidebarTabsWidth: 60px;
+$sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
+$sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
+$sidebarDefaultErrorWidth: $sidebarContentWidth - 16px; // 16px is the compined 8px left and right margin on the .be-default-error
+$sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
+
+.be {
+    &.bcs {
+        display: flex;
+        width: auto;
+        min-width: $sidebarTabsWidth;
+        max-width: $sidebarWidth;
+        background-color: $white;
+
+        &.bcs-is-wider {
+            max-width: $sidebarIncreasedWidth;
+        }
+    }
+
+    .bcs-loading {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        width: 10px;
+        margin: 0 auto;
+        font-size: 0;
+        white-space: nowrap;
+    }
+
+    .be-default-error {
+        min-width: $sidebarDefaultErrorWidth;
+    }
+
+    &.bcs-is-open {
+        .bcs-loading {
+            width: $sidebarWidth;
+        }
+    }
+
+    &.bcs-is-wider {
+        .be-default-error {
+            min-width: $sidebarDefaultErrorIncreasedWidth;
+        }
+
+        &.bcs-is-open {
+            .bcs-loading {
+                width: $sidebarIncreasedWidth;
+            }
+        }
+    }
+}
+
+@include breakpoint($medium-screen) {
+    .be {
+        &.bcs {
+            flex-basis: 100%;
+            flex-direction: column;
+            width: 100%;
+            min-width: 0;
+            max-width: none;
+            max-height: 48px;
+            transition: max-height .5s ease-in-out 0s;
+
+            &.bcs-is-wider {
+                max-width: none;
+            }
+        }
+
+        &.bcs-is-open {
+            position: absolute;
+            bottom: 0;
+            z-index: 5; // Stack sidebar above annotations. See z-index values https://github.com/box/box-annotations/blob/master/src/common/BaseAnnotator.scss
+            max-height: 100%;
+        }
+    }
+}

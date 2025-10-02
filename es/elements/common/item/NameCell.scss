@@ -1,0 +1,9 @@
+@import '../variables';
+
+.be-item-name {
+    overflow: hidden;
+    line-height: 15px;
+    white-space: normal;
+    text-align: left;
+    text-overflow: ellipsis;
+}

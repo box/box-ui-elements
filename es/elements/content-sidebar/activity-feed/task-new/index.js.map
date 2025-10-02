@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default","TaskComponent"],"sources":["../../../../../src/elements/content-sidebar/activity-feed/task-new/index.js"],"sourcesContent":["// @flow\nexport { default } from './Task';\nexport { TaskComponent } from './Task';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,QAAQ;AAChC,SAASC,aAAa,QAAQ,QAAQ","ignoreList":[]}

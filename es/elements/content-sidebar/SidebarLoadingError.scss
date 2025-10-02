@@ -1,0 +1,11 @@
+@import '../common/variables';
+
+.be {
+    .bcs-loading-error {
+        width: $sidebarContentWidth;
+    }
+
+    .bcs-is-wider .bcs-loading-error {
+        width: $sidebarContentIncreasedWidth;
+    }
+}

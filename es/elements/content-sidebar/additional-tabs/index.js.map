@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../src/elements/content-sidebar/additional-tabs/index.js"],"sourcesContent":["// @flow\nexport { default } from './AdditionalTabs';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,kBAAkB","ignoreList":[]}

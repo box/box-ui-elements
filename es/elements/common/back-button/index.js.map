@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default","BackButton"],"sources":["../../../../src/elements/common/back-button/index.js"],"sourcesContent":["export { default as BackButton } from './BackButton';\nexport { default } from './BackButton';\n"],"mappings":"AAAA,SAASA,OAAO,IAAIC,UAAU,QAAQ,cAAc;AACpD,SAASD,OAAO,QAAQ,cAAc","ignoreList":[]}

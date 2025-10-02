@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/label/index.tsx"],"sourcesContent":["export { default } from './Label';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,SAAS","ignoreList":[]}

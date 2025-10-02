@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/scroll-wrapper/index.js"],"sourcesContent":["// @flow\n\nexport { default } from './ScrollWrapper';\n"],"mappings":"AAEA,SAASA,OAAO,QAAQ,iBAAiB","ignoreList":[]}

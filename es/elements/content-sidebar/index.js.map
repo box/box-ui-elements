@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/elements/content-sidebar/index.js"],"sourcesContent":["// @flow\nexport { default } from './ContentSidebar';\nexport type { ContentSidebarProps } from './ContentSidebar';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,kBAAkB","ignoreList":[]}

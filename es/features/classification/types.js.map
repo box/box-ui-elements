@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","names":[],"sources":["../../../src/features/classification/types.ts"],"sourcesContent":["import type { CitationType } from '@box/box-ai-content-answers';\n\nexport type AiClassificationReason = {\n    answer?: string;\n    modifiedAt?: string;\n    citations?: CitationType[];\n};\n"],"mappings":"","ignoreList":[]}

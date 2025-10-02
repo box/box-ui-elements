@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default","CheckboxField"],"sources":["../../../src/components/checkbox/index.ts"],"sourcesContent":["export { default } from './Checkbox';\nexport { default as CheckboxField } from './CheckboxField';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,YAAY;AACpC,SAASA,OAAO,IAAIC,aAAa,QAAQ,iBAAiB","ignoreList":[]}

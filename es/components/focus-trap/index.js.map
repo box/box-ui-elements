@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/focus-trap/index.js"],"sourcesContent":["// @flow\nexport { default } from './FocusTrap';\n"],"mappings":"AACA,SAASA,OAAO,QAAQ,aAAa","ignoreList":[]}

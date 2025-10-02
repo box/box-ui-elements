@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../../src/elements/content-sidebar/activity-feed/task-form/index.js"],"sourcesContent":["// @flow\nexport * from './TaskForm';\nexport { default } from './TaskForm';\n"],"mappings":"AACA,cAAc,YAAY;AAC1B,SAASA,OAAO,QAAQ,YAAY","ignoreList":[]}

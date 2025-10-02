@@ -1,0 +1,10 @@
+.metadata-instance-editor {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .collapsible-card {
+        margin-top: 10px;
+    }
+}

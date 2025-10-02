@@ -1,0 +1,3 @@
+// @flow
+export { default } from './Tooltip';
+export type { Position, Props as TooltipProps } from './Tooltip';

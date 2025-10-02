@@ -1,0 +1,33 @@
+const FILE_EXTENSIONS = {
+  audio: ['aac', 'aif', 'aifc', 'aiff', 'amr', 'au', 'flac', 'm3u', 'm4a', 'mid', 'mp3', 'ra', 'wav', 'wma', 'wpl'],
+  boxcanvas: ['boxcanvas'],
+  boxnote: ['boxnote'],
+  code: ['as', 'as3', 'asm', 'aspx', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'cxx', 'db', 'diff', 'erb', 'groovy', 'h', 'haml', 'hh', 'htm', 'html', 'java', 'js', 'json', 'less', 'm', 'make', 'md', 'ml', 'mm', 'php', 'pl', 'plist', 'properties', 'py', 'rb', 'sass', 'scala', 'scm', 'script', 'sh', 'sml', 'sql', 'wabba', 'yaml'],
+  document: ['dot', 'dotx', 'msg', 'odt', 'rtf', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl'],
+  'docuworks-binder': ['xbd'],
+  'docuworks-file': ['xdw'],
+  dwg: ['dwg', 'dwgzip'],
+  'excel-spreadsheet': ['xls', 'xlsb', 'xlsm', 'xlsx'],
+  'google-docs': ['gdoc'],
+  'google-sheets': ['gsheet'],
+  'google-slides': ['gslide', 'gslides'],
+  illustrator: ['ai'],
+  image: ['bmp', 'gdraw', 'gif', 'jpeg', 'jpg', 'png', 'ps', 'svg', 'svs', 'tif', 'tiff', 'heic', 'heif'],
+  indesign: ['idml', 'indd', 'indt', 'inx'],
+  keynote: ['key'],
+  numbers: ['numbers'],
+  pages: ['pages'],
+  pdf: ['pdf'],
+  photoshop: ['psd'],
+  'powerpoint-presentation': ['ppt', 'pptm', 'pptx'],
+  presentation: ['odp', 'otp', 'pot', 'potx'],
+  spreadsheet: ['csv', 'ods', 'tsv', 'xlt', 'xltx'],
+  text: ['txt', 'vi', 'vim', 'webdoc'],
+  threed: ['3ds', 'dae', 'fbx', 'obj', 'ply', 'stl'],
+  vector: ['eps'],
+  video: ['3g2', '3gp', 'avi', 'flv', 'm2ts', 'm2v', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'mts', 'ogg', 'qt', 'wmv'],
+  'word-document': ['doc', 'docm', 'docx'],
+  zip: ['rar', 'tgz', 'zip']
+};
+export { FILE_EXTENSIONS };
+//# sourceMappingURL=constants.js.map

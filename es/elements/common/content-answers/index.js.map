@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../../src/elements/common/content-answers/index.ts"],"sourcesContent":["export { default } from './ContentAnswers';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,kBAAkB","ignoreList":[]}

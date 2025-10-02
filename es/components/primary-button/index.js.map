@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":["default"],"sources":["../../../src/components/primary-button/index.ts"],"sourcesContent":["export { default } from './PrimaryButton';\n"],"mappings":"AAAA,SAASA,OAAO,QAAQ,iBAAiB","ignoreList":[]}

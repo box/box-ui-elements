@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","names":[],"sources":["../../../../src/features/in-app-messenger/types/index.js"],"sourcesContent":["// @flow\n\nexport type { PreviewTitleBodyTwoButtonsParams } from './template-params';\nexport type { MessageActions } from './message-actions';\n"],"mappings":"","ignoreList":[]}

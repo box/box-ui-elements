@@ -1,0 +1,31 @@
+import * as React from 'react';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ContentPreviewProps } from '../../content-preview';
+import type { Token, BoxItem, Collection } from '../../../common/types/core';
+import type APICache from '../../../utils/Cache';
+export interface PreviewDialogProps {
+    apiHost: string;
+    appElement: HTMLElement;
+    appHost: string;
+    cache: APICache;
+    canDownload: boolean;
+    contentPreviewProps: ContentPreviewProps;
+    currentCollection: Collection;
+    isOpen: boolean;
+    isTouch: boolean;
+    item: BoxItem;
+    onCancel: () => void;
+    onDownload: (item: BoxItem) => void;
+    onPreview: (data: unknown) => void;
+    parentElement: HTMLElement;
+    previewLibraryVersion: string;
+    requestInterceptor?: (response: AxiosResponse) => void;
+    responseInterceptor?: (config: AxiosRequestConfig) => void;
+    sharedLink?: string;
+    sharedLinkPassword?: string;
+    staticHost: string;
+    staticPath: string;
+    token: Token;
+}
+declare const PreviewDialog: ({ apiHost, appElement, appHost, cache, canDownload, contentPreviewProps, currentCollection, isOpen, item, onCancel, onDownload, onPreview, parentElement, previewLibraryVersion, requestInterceptor, responseInterceptor, sharedLink, sharedLinkPassword, staticHost, staticPath, token, }: PreviewDialogProps) => React.JSX.Element;
+export default PreviewDialog;
