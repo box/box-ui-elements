@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { expect, screen, userEvent, within } from 'storybook/test';
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
 
 import { TYPE_FILE } from '../../../../constants';
 import {
@@ -52,14 +52,16 @@ export const withCollaborators = {
     },
     play: async context => {
         await withModernization.play(context);
-        const sharedWithAvatars = screen.getByRole('button', { name: 'Shared with D R D' });
-        expect(sharedWithAvatars).toBeVisible();
-        await userEvent.click(sharedWithAvatars);
+        await waitFor(async () => {
+            const sharedWithAvatars = screen.getByRole('button', { name: 'Shared with D R D' });
+            expect(sharedWithAvatars).toBeVisible();
+            await userEvent.click(sharedWithAvatars);
 
-        expect(screen.getByRole('link', { name: 'Manage All' })).toBeVisible();
-        expect(screen.getByRole('grid', { name: 'Collaborators' })).toBeVisible();
-        expect(screen.getByRole('row', { name: /Detective Parrot/ })).toBeVisible();
-        expect(screen.getByRole('button', { name: 'Done' })).toBeVisible();
+            expect(screen.getByRole('link', { name: 'Manage All' })).toBeVisible();
+            expect(screen.getByRole('grid', { name: 'Collaborators' })).toBeVisible();
+            expect(screen.getByRole('row', { name: /Detective Parrot/ })).toBeVisible();
+            expect(screen.getByRole('button', { name: 'Done' })).toBeVisible();
+        });
     },
 };
 
