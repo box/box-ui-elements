@@ -25,6 +25,8 @@ import './MetadataSidePanel.scss';
 export interface MetadataSidePanelProps {
     currentCollection: Collection;
     metadataTemplate: MetadataTemplate;
+    isEditing: boolean;
+    onEditingChange: (isEditing: boolean) => void;
     onClose: () => void;
     onUpdate: (
         items: BoxItem[],
@@ -41,6 +43,8 @@ export interface MetadataSidePanelProps {
 const MetadataSidePanel = ({
     currentCollection,
     metadataTemplate,
+    isEditing,
+    onEditingChange,
     onClose,
     onUpdate,
     refreshCollection,
@@ -48,7 +52,6 @@ const MetadataSidePanel = ({
 }: MetadataSidePanelProps) => {
     const { addNotification } = useNotification();
     const { formatMessage } = useIntl();
-    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
 
     const selectedItemText = useSelectedItemText(currentCollection, selectedItemIds);
@@ -59,16 +62,16 @@ const MetadataSidePanel = ({
     const templateInstance = useTemplateInstance(metadataTemplate, selectedItems, isEditing);
 
     const handleMetadataInstanceEdit = () => {
-        setIsEditing(true);
+        onEditingChange(true);
     };
 
     const handleMetadataInstanceFormCancel = () => {
-        setIsEditing(false);
+        onEditingChange(false);
     };
 
     const handleMetadataInstanceFormDiscardUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(false);
-        setIsEditing(false);
+        onEditingChange(false);
     };
 
     const handleUpdateMetadataSuccess = () => {
@@ -81,7 +84,7 @@ const MetadataSidePanel = ({
             typeIconAriaLabel: formatMessage(messages.success),
             variant: 'success',
         });
-        setIsEditing(false);
+        onEditingChange(false);
         refreshCollection();
     };
 
