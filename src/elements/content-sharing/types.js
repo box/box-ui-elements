@@ -1,6 +1,7 @@
 // @flow
 import type { CollaborationRole, Item, SharedLink } from '@box/unified-share-modal';
 
+import API from '../../api';
 import type {
     Access,
     BoxItemClassification,
@@ -159,4 +160,17 @@ export interface ItemData {
     collaborationRoles: CollaborationRole[];
     item: Item;
     sharedLink: SharedLink;
+}
+
+export interface BaseFetchProps {
+    api: API;
+    itemID: string;
+}
+
+export interface FetchItemProps extends BaseFetchProps {
+    itemType: ItemType;
+}
+
+export interface FetchCollaboratorsProps extends BaseFetchProps {
+    collaborators: Collaboration[];
 }

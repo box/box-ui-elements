@@ -1,7 +1,7 @@
 import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD } from '../../../constants';
+import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../constants';
 import { getAllowedAccessLevels } from './getAllowedAccessLevels';
 import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
-import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../utils/constants';
 
 import type { ContentSharingItemAPIResponse, ItemData } from '../types';
 
@@ -9,6 +9,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
     const {
         allowed_invitee_roles,
         allowed_shared_link_access_levels,
+        allowed_shared_link_access_levels_disabled_reasons,
         classification,
         id,
         name,
@@ -59,7 +60,10 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             access,
-            accessLevels: getAllowedAccessLevels(allowed_shared_link_access_levels),
+            accessLevels: getAllowedAccessLevels(
+                allowed_shared_link_access_levels,
+                allowed_shared_link_access_levels_disabled_reasons,
+            ),
             expiresAt: expirationTimestamp,
             permission,
             permissionLevels: getAllowedPermissionLevels(canChangeAccessLevel, isDownloadSettingAvailable, permission),
