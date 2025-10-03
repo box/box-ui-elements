@@ -72,7 +72,7 @@ function ContentSharingV2({
 
     // Get initial data for the item
     React.useEffect(() => {
-        if (!api || isEmpty(api) || item || sharedLink) return;
+        if (!api || isEmpty(api) || item) return;
 
         (async () => {
             const itemData = await fetchItem({ api, itemID, itemType });
@@ -82,7 +82,7 @@ function ContentSharingV2({
 
     // Get current user
     React.useEffect(() => {
-        if (!api || isEmpty(api) || item || sharedLink || currentUser) return;
+        if (!api || isEmpty(api) || !item || currentUser) return;
 
         const getUserSuccess = userData => {
             const { enterprise, id } = userData;
@@ -100,7 +100,7 @@ function ContentSharingV2({
 
     // Get collaborators
     React.useEffect(() => {
-        if (!api || isEmpty(api) || item || collaboratorsData) return;
+        if (!api || isEmpty(api) || !item || collaboratorsData) return;
 
         (async () => {
             try {
