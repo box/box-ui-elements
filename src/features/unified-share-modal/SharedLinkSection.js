@@ -200,12 +200,8 @@ class SharedLinkSection extends React.Component<Props, State> {
     getAllowedPermissionLevels = (): Array<permissionLevelType> => {
         const { isAllowEditSharedLinkForFileEnabled, sharedLink } = this.props;
 
-        const {
-            canChangeAccessLevel,
-            isEditSettingAvailable,
-            isDownloadSettingAvailable,
-            permissionLevel,
-        } = sharedLink;
+        const { canChangeAccessLevel, isEditSettingAvailable, isDownloadSettingAvailable, permissionLevel } =
+            sharedLink;
 
         let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
@@ -430,14 +426,8 @@ class SharedLinkSection extends React.Component<Props, State> {
     }
 
     renderSharedLinkSettingsLink() {
-        const {
-            intl,
-            onDismissTooltip,
-            onSettingsClick,
-            showSharedLinkSettingsCallout,
-            trackingProps,
-            tooltips,
-        } = this.props;
+        const { intl, onDismissTooltip, onSettingsClick, showSharedLinkSettingsCallout, trackingProps, tooltips } =
+            this.props;
         const { sharedLinkSettingsButtonProps } = trackingProps;
 
         return (
@@ -537,7 +527,11 @@ class SharedLinkSection extends React.Component<Props, State> {
                     );
                 }
                 return (
-                    <Tooltip position="top-right" text={intl.formatMessage(messages.sharedLinkDisabledTooltipCopy)}>
+                    <Tooltip
+                        targetWrapperClassName="usm-ftux-toggle-tooltip-target"
+                        position="top-right"
+                        text={intl.formatMessage(messages.sharedLinkDisabledTooltipCopy)}
+                    >
                         {toggleComponent}
                     </Tooltip>
                 );

@@ -13,6 +13,7 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
     isDisabled={true}
     isTabbable={false}
     position="middle-right"
+    targetWrapperClassName="bdl-CollapsibleSidebar-menuItemToolTipTarget"
     text="bar"
     theme="default"
   >

@@ -19,6 +19,10 @@
     margin-top: 5px;
 }
 
+.bdl-DropdownMenu-target {
+    display: inline-block;
+}
+
 @include breakpoint($medium-screen) {
     .bdl-DropdownMenu--responsive {
         &.dropdown-menu-enabled {
