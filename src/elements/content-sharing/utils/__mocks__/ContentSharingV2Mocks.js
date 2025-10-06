@@ -32,8 +32,8 @@ export const mockAvatarURLMap = {
 };
 
 export const mockOwnerEmail = 'aotter@example.com';
-
-export const mockCurrentUserID = 789;
+export const mockOwnerName = 'Astronaut Otter';
+export const mockOwnerId = 789;
 
 export const collabUser1 = {
     id: 456,
@@ -44,7 +44,7 @@ export const collabUser1 = {
 
 export const collabUser2 = {
     id: 457,
-    login: 'rqueen@example.com',
+    login: 'rqueen@external.com',
     name: 'Raccoon Queen',
 };
 
@@ -54,13 +54,13 @@ export const collabUser3 = {
     name: 'Dancing Penguin',
 };
 
-export const collabUser4 = {
-    id: mockCurrentUserID,
+export const mockOwner = {
+    id: mockOwnerId,
     login: mockOwnerEmail,
-    name: 'Astronaut Otter',
+    name: mockOwnerName,
 };
 
-export const MOCK_COLLABORATORS = [collabUser4, collabUser1, collabUser2, collabUser3];
+export const MOCK_COLLABORATORS = [collabUser1, collabUser2, collabUser3];
 
 export const MOCK_COLLABORATIONS_RESPONSE = {
     entries: MOCK_COLLABORATORS.map(user => ({
@@ -68,12 +68,12 @@ export const MOCK_COLLABORATIONS_RESPONSE = {
         accessible_by: user,
         expires_at: user.expires_at,
         created_by: {
-            id: mockCurrentUserID,
+            id: mockOwnerId,
             login: mockOwnerEmail,
-            name: 'Astronaut Otter',
+            name: mockOwnerName,
             type: 'user',
         },
-        role: user.id === mockCurrentUserID ? 'owner' : 'editor',
+        role: user.id === mockOwnerId ? 'owner' : 'editor',
         status: 'accepted',
         type: user.type,
     })),
@@ -99,6 +99,7 @@ export const DEFAULT_ITEM_API_RESPONSE = {
     classification: null,
     id: MOCK_ITEM.id,
     name: MOCK_ITEM.name,
+    owned_by: mockOwner,
     permissions: MOCK_PERMISSIONS,
     shared_link: null,
     shared_link_features: { password: true },

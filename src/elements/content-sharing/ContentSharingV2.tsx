@@ -46,17 +46,21 @@ function ContentSharingV2({
     const [collaborationRoles, setCollaborationRoles] = React.useState<CollaborationRole[] | null>(null);
     const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
+    const [owner, setOwner] = React.useState({ ownerId: '', ownerEmail: '', ownerName: '' });
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback(itemData => {
         const {
             collaborationRoles: collaborationRolesFromAPI,
             item: itemFromAPI,
+            owned_by,
             sharedLink: sharedLinkFromAPI,
         } = convertItemResponse(itemData);
+
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
         setCollaborationRoles(collaborationRolesFromAPI);
+        setOwner({ ownerId: owned_by.id, ownerEmail: owned_by.login, ownerName: owned_by.name });
     }, []);
 
     // Reset state if the API has changed
@@ -122,13 +126,17 @@ function ContentSharingV2({
         })();
     }, [api, avatarURLMap, collaboratorsData, itemID]);
 
-    // Return processed data when both are ready
     React.useEffect(() => {
-        if (collaboratorsData && avatarURLMap) {
-            const collaboratorsWithAvatars = convertCollabsResponse(collaboratorsData, avatarURLMap);
+        if (avatarURLMap && collaboratorsData && currentUser && owner) {
+            const collaboratorsWithAvatars = convertCollabsResponse(
+                collaboratorsData,
+                currentUser.id,
+                owner,
+                avatarURLMap,
+            );
             setCollaborators(collaboratorsWithAvatars);
         }
-    }, [collaboratorsData, avatarURLMap]);
+    }, [avatarURLMap, collaboratorsData, currentUser, owner]);
 
     const config = { sharedLinkEmail: false };
 

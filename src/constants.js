@@ -200,6 +200,7 @@ export const PERMISSION_CAN_VIEW_ANNOTATIONS = 'can_view_annotations';
 
 /* --------------------- Invitee roles --------------------------- */
 export const INVITEE_ROLE_EDITOR: 'editor' = 'editor';
+export const INVITEE_ROLE_OWNER: 'owner' = 'owner';
 
 /* ------------- Delimiters for bread crumbs ---------------- */
 export const DELIMITER_SLASH: 'slash' = 'slash';
