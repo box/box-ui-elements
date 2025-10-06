@@ -2,6 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import uniqueid from 'lodash/uniqueId';
 import { FormattedDate, FormattedMessage } from 'react-intl';
+import { Text } from '@box/blueprint-web';
+import { ITEM_TYPE_FOLDER } from '../../common/constants';
 
 import EditableDescription from './EditableDescription';
 import EditableURL from './EditableURL';
@@ -31,14 +33,16 @@ const ItemProperties = ({
     owner,
     retentionPolicyProps = {},
     size,
+    filesCount,
     trashedAt,
+    type,
     uploader,
     url,
 }) => {
     const descriptionId = uniqueid('description_');
 
     return (
-        <dl className="item-properties">
+        <dl className="item-properties" data-testid="item-properties">
             {description || onDescriptionChange ? (
                 <>
                     <FormattedMessage {...messages.description}>
@@ -108,7 +112,12 @@ const ItemProperties = ({
             {size ? (
                 <>
                     <FormattedMessage tagName="dt" {...messages.size} />
-                    <dd>{size}</dd>
+                    <dd>
+                        <Text>{size}</Text>
+                        {typeof filesCount === 'number' && type === ITEM_TYPE_FOLDER ? (
+                            <FormattedMessage values={{ filesCount }} {...messages.filesCountLabel} />
+                        ) : null}
+                    </dd>
                 </>
             ) : null}
             {trashedAt ? (
@@ -147,8 +156,12 @@ ItemProperties.propTypes = {
     retentionPolicyProps: PropTypes.object,
     /** use the getFileSize util to get a localized human-readable string from the number of bytes */
     size: PropTypes.string,
+    /** the number of files in a folder */
+    filesCount: PropTypes.number,
     /** the datetime this item was deleted or moved to trash, accepts any value that can be passed to the Date() constructor */
     trashedAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    /** the type of the item */
+    type: PropTypes.string,
     /** the name of the user who uploaded this item */
     uploader: PropTypes.string,
     /** the URL for the item when the item is a weblink */
