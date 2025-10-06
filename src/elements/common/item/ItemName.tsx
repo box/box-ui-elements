@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { TextButton } from '@box/blueprint-web';
 import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
 import type { BoxItem } from '../../../common/types/core';
+import { PlainButton } from '../../../components';
 
 import './ItemName.scss';
 
@@ -20,9 +20,9 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: ItemNameProps
     const onItemClick = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
-        <TextButton className="be-item-label" inheritFont onClick={onItemClick} onFocus={onItemFocus}>
+        <PlainButton className="be-item-label" onClick={onItemClick} onFocus={onItemFocus}>
             {name}
-        </TextButton>
+        </PlainButton>
     ) : (
         <span className="be-item-label">{name}</span>
     );
