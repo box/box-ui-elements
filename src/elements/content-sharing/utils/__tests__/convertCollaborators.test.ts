@@ -14,11 +14,12 @@ import type { Collaborations } from '../../../../common/types/core';
 
 const ownerEmailDomain = 'example.com';
 const ownerFromAPI = {
-    ownerId: mockOwnerId,
-    ownerEmail: mockOwnerEmail,
-    ownerName: mockOwnerName,
+    id: mockOwnerId,
+    email: mockOwnerEmail,
+    name: mockOwnerName,
 };
 const itemOwner = {
+    id: mockOwnerEmail,
     status: STATUS_ACCEPTED,
     role: 'owner',
     accessible_by: {
@@ -124,7 +125,7 @@ describe('convertCollaborators', () => {
                 email: 'aotter@example.com',
                 hasCustomAvatar: false,
                 hasCustomRole: true,
-                id: '0',
+                id: 'aotter@example.com',
                 isCurrentUser: true,
                 isExternal: false,
                 isPending: false,
@@ -197,7 +198,7 @@ describe('convertCollaborators', () => {
                     expiresAt: undefined,
                     hasCustomAvatar: false,
                     hasCustomRole: true,
-                    id: '0',
+                    id: 'aotter@example.com',
                     isCurrentUser: true,
                     isExternal: false,
                     isPending: false,
@@ -221,7 +222,7 @@ describe('convertCollaborators', () => {
                 },
                 {
                     avatarUrl: undefined, // does not exist in the avatar URL map
-                    email: 'rqueen@external.com',
+                    email: 'rqueen@external.example.com',
                     expiresAt: null,
                     hasCustomAvatar: false,
                     hasCustomRole: true,

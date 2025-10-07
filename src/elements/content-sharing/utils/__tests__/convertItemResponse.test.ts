@@ -36,7 +36,7 @@ describe('convertItemResponse', () => {
                 },
                 type: 'file',
             },
-            owned_by: {
+            ownedBy: {
                 id: mockOwnerId,
                 login: mockOwnerEmail,
                 name: mockOwnerName,

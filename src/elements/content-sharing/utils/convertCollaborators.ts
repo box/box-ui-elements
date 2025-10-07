@@ -24,7 +24,7 @@ export const convertCollab = ({
 
     const {
         accessible_by: { id: collabId, login: collabEmail, name: collabName },
-        id = 0,
+        id,
         expires_at: executeAt,
         role,
     } = collab;
@@ -53,17 +53,18 @@ export const convertCollab = ({
 export const convertCollabsResponse = (
     collabsAPIData: Collaborations,
     currentUserId: string,
-    owner: { ownerId: string; ownerEmail: string; ownerName: string },
+    owner: { id: string; email: string; name: string },
     avatarURLMap?: AvatarURLMap,
 ): Collaborator[] => {
     const { entries = [] } = collabsAPIData;
     if (!entries.length) return [];
 
-    const { ownerId, ownerEmail, ownerName } = owner;
+    const { id: ownerId, email: ownerEmail, name: ownerName } = owner;
     const isCurrentUserOwner = currentUserId === ownerId;
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
     const itemOwner = {
+        id: ownerEmail,
         status: STATUS_ACCEPTED,
         role: INVITEE_ROLE_OWNER,
         accessible_by: {

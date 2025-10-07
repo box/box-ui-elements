@@ -44,7 +44,7 @@ export const collabUser1 = {
 
 export const collabUser2 = {
     id: 457,
-    login: 'rqueen@external.com',
+    login: 'rqueen@external.example.com',
     name: 'Raccoon Queen',
 };
 

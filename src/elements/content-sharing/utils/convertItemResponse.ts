@@ -13,7 +13,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         classification,
         id,
         name,
-        owned_by,
+        owned_by: ownedBy,
         permissions,
         shared_link,
         shared_link_features,
@@ -100,6 +100,6 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             type,
         },
         sharedLink,
-        owned_by,
+        ownedBy,
     };
 };
