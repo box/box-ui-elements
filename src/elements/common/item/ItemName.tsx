@@ -20,7 +20,15 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: ItemNameProps
     const onItemClick = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
-        <TextButton className="be-item-label" inheritFont onClick={onItemClick} onFocus={onItemFocus}>
+        <TextButton
+            className="be-item-label"
+            inheritFont
+            onClick={event => {
+                event.stopPropagation();
+                onItemClick();
+            }}
+            onFocus={onItemFocus}
+        >
             {name}
         </TextButton>
     ) : (
