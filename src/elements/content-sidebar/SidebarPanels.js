@@ -173,7 +173,10 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions', value: any) => {
+    setBoxAiSidebarCacheValue = (
+        key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions',
+        value: any,
+    ) => {
         this.boxAiSidebarCache[key] = value;
     };
 
