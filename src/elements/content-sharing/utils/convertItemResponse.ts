@@ -96,6 +96,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
                 canInviteCollaborator: !!canInvite,
                 canSetShareAccess: canChangeAccessLevel,
                 canShare: !!canShare,
+                ...permissions,
             },
             type,
         },
