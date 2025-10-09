@@ -108,6 +108,7 @@ function transformInternalFieldsToPublic(fields: FilterValues): ExternalFilterVa
 export interface MetadataViewContainerProps extends Omit<MetadataViewProps, 'items' | 'actionBarProps'> {
     actionBarProps?: ActionBarProps;
     currentCollection: Collection;
+    isEditing?: boolean;
     metadataTemplate: MetadataTemplate;
     onMetadataFilter: (fields: ExternalFilterValues) => void;
     /* Internally controlled onSortChange prop for the MetadataView component. */
@@ -118,6 +119,7 @@ const MetadataViewContainer = ({
     actionBarProps,
     columns,
     currentCollection,
+    isEditing = false,
     metadataTemplate,
     onMetadataFilter,
     onSortChange: onSortChangeInternal,
@@ -265,6 +267,7 @@ const MetadataViewContainer = ({
             columns={newColumns}
             items={items}
             tableProps={newTableProps}
+            areSelectionCheckboxesDisabled={isEditing}
             {...rest}
         />
     );
