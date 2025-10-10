@@ -31,7 +31,7 @@ const mockItem = {
 const mockSetItem = jest.fn();
 const mockSetSharedLink = jest.fn();
 
-describe('content-sharing/hooks/useSharingService', () => {
+describe('elements/content-sharing/hooks/useSharingService', () => {
     beforeEach(() => {
         (createSharingService as jest.Mock).mockReturnValue(mockSharingService);
         (convertItemResponse as jest.Mock).mockReturnValue({

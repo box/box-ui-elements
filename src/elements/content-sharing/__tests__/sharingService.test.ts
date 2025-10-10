@@ -2,7 +2,7 @@ import { PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../consta
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import { convertSharedLinkPermissions, createSharingService } from '../sharingService';
 
-describe('content-sharing/sharingService', () => {
+describe('elements/content-sharing/sharingService', () => {
     describe('convertSharedLinkPermissions', () => {
         test.each([
             [PERMISSION_CAN_DOWNLOAD, { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false }],

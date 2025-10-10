@@ -96,11 +96,14 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
                 canInviteCollaborator: !!canInvite,
                 canSetShareAccess: canChangeAccessLevel,
                 canShare: !!canShare,
-                ...permissions,
             },
             type,
         },
         sharedLink,
+        sharingService: {
+            can_set_share_access: canChangeAccessLevel,
+            can_share: canShare,
+        },
         ownedBy,
     };
 };

@@ -51,7 +51,7 @@ jest.mock('../hooks/useSharingService', () => ({
     useSharingService: jest.fn().mockReturnValue({ sharingService: null }),
 }));
 
-const getWrapper = (props): RenderResult =>
+const renderComponent = (props = {}): RenderResult =>
     render(
         <ContentSharingV2
             api={defaultAPIMock}
@@ -68,7 +68,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     test('should see the correct elements for files', async () => {
-        getWrapper({});
+        renderComponent();
         await waitFor(() => {
             expect(getDefaultFileMock).toHaveBeenCalledWith(MOCK_ITEM.id, expect.any(Function), expect.any(Function), {
                 fields: CONTENT_SHARING_ITEM_FIELDS,
@@ -80,7 +80,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     test('should see the correct elements for folders', async () => {
-        getWrapper({ itemType: 'folder' });
+        renderComponent({ itemType: 'folder' });
         await waitFor(() => {
             expect(getDefaultFolderMock).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
@@ -101,7 +101,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             ...defaultAPIMock,
             getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
         };
-        getWrapper({ api: apiWithSharedLink });
+        renderComponent({ api: apiWithSharedLink });
         await waitFor(() => {
             expect(getFileMockWithSharedLink).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
@@ -125,7 +125,8 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             ...defaultAPIMock,
             getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithClassification }),
         };
-        getWrapper({ api: apiWithClassification });
+
+        renderComponent({ api: apiWithClassification });
         await waitFor(() => {
             expect(getFileMockWithClassification).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
@@ -140,7 +141,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     test('should process collaborators with avatars correctly', async () => {
-        getWrapper({});
+        renderComponent();
 
         await waitFor(() => {
             expect(getCollaborationsMock).toHaveBeenCalledWith(
@@ -163,7 +164,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             useSharingService: jest.fn().mockReturnValue({ sharingService: mockSharingService }),
         });
 
-        getWrapper({});
+        renderComponent();
         await waitFor(() => {
             expect(screen.getByRole('heading', { name: /Box Development Guide.pdf/i })).toBeVisible();
         });

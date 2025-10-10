@@ -33,10 +33,6 @@ describe('convertItemResponse', () => {
                     canInviteCollaborator: true,
                     canSetShareAccess: true,
                     canShare: true,
-                    can_download: true,
-                    can_invite_collaborator: true,
-                    can_set_share_access: true,
-                    can_share: true,
                 },
                 type: 'file',
             },
@@ -44,6 +40,10 @@ describe('convertItemResponse', () => {
                 id: mockOwnerId,
                 login: mockOwnerEmail,
                 name: mockOwnerName,
+            },
+            sharingService: {
+                can_set_share_access: true,
+                can_share: true,
             },
         });
     });
