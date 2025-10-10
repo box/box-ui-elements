@@ -3,7 +3,7 @@ import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
 
 export const convertSharedLinkPermissions = (permissionLevel: string) => {
     if (!permissionLevel) {
-        return null;
+        return {};
     }
 
     return {
