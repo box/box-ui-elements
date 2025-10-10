@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, RenderResult, screen, waitFor } from '@testing-library/react';
+import { render, type RenderResult, screen, waitFor } from '@testing-library/react';
 
 import { useSharingService } from '../hooks/useSharingService';
 import {
@@ -161,7 +161,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         };
 
         (useSharingService as jest.Mock).mockReturnValue({
-            useSharingService: jest.fn().mockReturnValue({ sharingService: mockSharingService }),
+            sharingService: mockSharingService,
         });
 
         renderComponent();
