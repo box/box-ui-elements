@@ -100,6 +100,10 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             type,
         },
         sharedLink,
+        sharingService: {
+            can_set_share_access: canChangeAccessLevel,
+            can_share: canShare,
+        },
         ownedBy,
     };
 };

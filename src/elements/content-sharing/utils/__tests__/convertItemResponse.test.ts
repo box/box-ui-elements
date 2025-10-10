@@ -41,6 +41,10 @@ describe('convertItemResponse', () => {
                 login: mockOwnerEmail,
                 name: mockOwnerName,
             },
+            sharingService: {
+                can_set_share_access: true,
+                can_share: true,
+            },
         });
     });
 

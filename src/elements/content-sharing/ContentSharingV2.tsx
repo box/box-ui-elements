@@ -8,6 +8,7 @@ import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
 import { fetchAvatars, fetchCollaborators, fetchCurrentUser, fetchItem } from './apis';
+import { useSharingService } from './hooks/useSharingService';
 import { convertCollabsResponse, convertItemResponse } from './utils';
 
 import type { Collaborations, ItemType, StringMap } from '../../common/types/core';
@@ -48,18 +49,20 @@ function ContentSharingV2({
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
     const [owner, setOwner] = React.useState({ id: '', email: '', name: '' });
 
+    const { sharingService } = useSharingService(api, item, itemID, itemType, setItem, setSharedLink);
+
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback(itemData => {
         const {
-            collaborationRoles: collaborationRolesFromAPI,
-            item: itemFromAPI,
+            collaborationRoles: collaborationRolesFromApi,
+            item: itemFromApi,
             ownedBy,
-            sharedLink: sharedLinkFromAPI,
+            sharedLink: sharedLinkFromApi,
         } = convertItemResponse(itemData);
 
-        setItem(itemFromAPI);
-        setSharedLink(sharedLinkFromAPI);
-        setCollaborationRoles(collaborationRolesFromAPI);
+        setItem(itemFromApi);
+        setSharedLink(sharedLinkFromApi);
+        setCollaborationRoles(collaborationRolesFromApi);
         setOwner({ id: ownedBy.id, email: ownedBy.login, name: ownedBy.name });
     }, []);
 
@@ -151,6 +154,7 @@ function ContentSharingV2({
                         currentUser={currentUser}
                         item={item}
                         sharedLink={sharedLink}
+                        sharingService={sharingService}
                     >
                         {children}
                     </UnifiedShareModal>
