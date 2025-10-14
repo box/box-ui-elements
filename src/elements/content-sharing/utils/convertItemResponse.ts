@@ -65,7 +65,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
                 allowed_shared_link_access_levels,
                 allowed_shared_link_access_levels_disabled_reasons,
             ),
-            expiresAt: expirationTimestamp,
+            expiresAt: expirationTimestamp ? new Date(expirationTimestamp).getTime() : null, // convert to milliseconds
             permission,
             permissionLevels: getAllowedPermissionLevels(canChangeAccessLevel, isDownloadSettingAvailable, permission),
             settings: {

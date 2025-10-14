@@ -1,5 +1,5 @@
 // @flow
-import type { CollaborationRole, Item, SharedLink } from '@box/unified-share-modal';
+import type { CollaborationRole, DateValue, Item, SharedLink } from '@box/unified-share-modal';
 
 import API from '../../api';
 import type {
@@ -173,4 +173,13 @@ export interface FetchItemProps extends BaseFetchProps {
 
 export interface FetchCollaboratorsProps extends BaseFetchProps {
     collaborators: Collaboration[];
+}
+
+export interface SharedLinkSettings {
+    expiration: ?DateValue;
+    isDownloadEnabled: boolean;
+    isExpirationEnabled: boolean;
+    isPasswordEnabled: boolean;
+    password: string;
+    vanityName: string;
 }

@@ -4,9 +4,18 @@ import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { convertItemResponse } from '../utils/convertItemResponse';
 import { createSharingService } from '../sharingService';
 
-export const useSharingService = (api, item, itemId, itemType, setItem, setSharedLink) => {
+export const useSharingService = ({
+    api,
+    item,
+    itemId,
+    itemType,
+    sharedLink,
+    sharingServiceProps,
+    setItem,
+    setSharedLink,
+}) => {
     const itemApiInstance = React.useMemo(() => {
-        if (!item) {
+        if (!item || !sharedLink) {
             return null;
         }
 
@@ -19,16 +28,19 @@ export const useSharingService = (api, item, itemId, itemType, setItem, setShare
         }
 
         return null;
-    }, [api, item, itemType]);
+    }, [api, item, itemType, sharedLink]);
 
     const sharingService = React.useMemo(() => {
         if (!itemApiInstance) {
             return null;
         }
 
-        const itemData = {
+        const options = {
             id: itemId,
-            permissions: item.permissions,
+            access: sharedLink.access,
+            permissions: sharingServiceProps,
+            serverURL: sharedLink.serverURL,
+            isDownloadAvailable: sharedLink.settings?.isDownloadAvailable ?? false,
         };
 
         const handleSuccess = updatedItemData => {
@@ -37,8 +49,8 @@ export const useSharingService = (api, item, itemId, itemType, setItem, setShare
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
         };
 
-        return createSharingService({ itemApiInstance, itemData, onSuccess: handleSuccess });
-    }, [itemApiInstance, item, itemId, setItem, setSharedLink]);
+        return createSharingService({ itemApiInstance, onSuccess: handleSuccess, options });
+    }, [itemApiInstance, itemId, sharedLink, sharingServiceProps, setItem, setSharedLink]);
 
     return { sharingService };
 };

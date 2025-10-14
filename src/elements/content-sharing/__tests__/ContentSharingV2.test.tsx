@@ -158,6 +158,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     test('should render UnifiedShareModal when sharingService is available', async () => {
         const mockSharingService = {
             changeSharedLinkPermission: jest.fn(),
+            updateSharedLink: jest.fn(),
         };
 
         (useSharingService as jest.Mock).mockReturnValue({

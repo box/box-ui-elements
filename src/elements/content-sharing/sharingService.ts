@@ -1,22 +1,48 @@
-import { PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../constants';
+import type { API } from '../../api';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from './constants';
+import { convertSharedLinkPermissions, convertSharedLinkSettings } from './utils';
 
-export const convertSharedLinkPermissions = (permissionLevel: string) => {
-    if (!permissionLevel) {
-        return {};
-    }
+import type { SharedLinkSettings } from './types';
 
-    return {
-        [PERMISSION_CAN_DOWNLOAD]: permissionLevel === PERMISSION_CAN_DOWNLOAD,
-        [PERMISSION_CAN_PREVIEW]: permissionLevel === PERMISSION_CAN_PREVIEW,
+export interface ItemData {
+    id: string;
+    permissions: {
+        can_set_share_access: boolean;
+        can_share: boolean;
     };
-};
+}
 
-export const createSharingService = ({ itemApiInstance, itemData, onSuccess }) => {
+export interface Options extends ItemData {
+    access?: string;
+    isDownloadAvailable?: boolean;
+    serverURL?: string;
+}
+
+export interface CreateSharingServiceProps {
+    itemApiInstance: API;
+    onSuccess: (itemData: ItemData) => void;
+    options: Options;
+}
+
+export const createSharingService = ({ itemApiInstance, onSuccess, options }: CreateSharingServiceProps) => {
+    const { id, permissions } = options;
+
     const changeSharedLinkPermission = async (permissionLevel: string) => {
         return itemApiInstance.updateSharedLink(
-            itemData,
+            { id, permissions },
             { permissions: convertSharedLinkPermissions(permissionLevel) },
+            onSuccess,
+            {},
+            CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+        );
+    };
+
+    const updateSharedLink = async (sharedLinkSettings: SharedLinkSettings) => {
+        const { access, isDownloadAvailable, serverURL } = options;
+
+        return itemApiInstance.updateSharedLink(
+            { id, permissions },
+            convertSharedLinkSettings(sharedLinkSettings, access, isDownloadAvailable, serverURL),
             onSuccess,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
@@ -25,5 +51,6 @@ export const createSharingService = ({ itemApiInstance, itemData, onSuccess }) =
 
     return {
         changeSharedLinkPermission,
+        updateSharedLink,
     };
 };
