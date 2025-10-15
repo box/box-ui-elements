@@ -43,24 +43,24 @@ export const useSharingService = ({
             isDownloadAvailable: sharedLink.settings?.isDownloadAvailable ?? false,
         };
 
-        const handleUpdateSharedLinkSuccess = updatedItemData => {
+        const handleUpdateSharedLink = updatedItemData => {
             const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(updatedItemData);
             setItem(prevItem => ({ ...prevItem, ...updatedItem }));
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
         };
 
-        const handleRemoveSharedLinkSuccess = itemData => {
+        const handleRemoveSharedLink = itemData => {
             const { item: updatedItem } = convertItemResponse(itemData);
             setItem(prevItem => ({ ...prevItem, ...updatedItem }));
             setSharedLink({});
         };
 
-        const onSuccess = {
-            handleUpdateSharedLinkSuccess,
-            handleRemoveSharedLinkSuccess,
-        };
-
-        return createSharingService({ itemApiInstance, onSuccess, options });
+        return createSharingService({
+            itemApiInstance,
+            onUpdateSharedLink: handleUpdateSharedLink,
+            onRemoveSharedLink: handleRemoveSharedLink,
+            options,
+        });
     }, [itemApiInstance, itemId, sharedLink, sharingServiceProps, setItem, setSharedLink]);
 
     return { sharingService };

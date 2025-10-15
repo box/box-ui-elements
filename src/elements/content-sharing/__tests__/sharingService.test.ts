@@ -10,15 +10,14 @@ const mockItemApiInstance = {
     share: jest.fn(),
 };
 const options = { id: '123', permissions: { can_set_share_access: true, can_share: true } };
-const mockOnSuccess = {
-    handleUpdateSharedLinkSuccess: jest.fn(),
-    handleRemoveSharedLinkSuccess: jest.fn(),
-};
+const mockOnUpdateSharedLink = jest.fn();
+const mockOnRemoveSharedLink = jest.fn();
 
 const createSharingServiceWrapper = () => {
     return createSharingService({
         itemApiInstance: mockItemApiInstance,
-        onSuccess: mockOnSuccess,
+        onUpdateSharedLink: mockOnUpdateSharedLink,
+        onRemoveSharedLink: mockOnRemoveSharedLink,
         options,
     });
 };
@@ -59,7 +58,7 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 { permissions: expectedPermissions },
-                mockOnSuccess.handleUpdateSharedLinkSuccess,
+                mockOnUpdateSharedLink,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
@@ -82,7 +81,7 @@ describe('elements/content-sharing/sharingService', () => {
                 expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                     options,
                     access,
-                    mockOnSuccess.handleUpdateSharedLinkSuccess,
+                    mockOnUpdateSharedLink,
                     {},
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
@@ -104,7 +103,7 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                 options,
                 undefined,
-                mockOnSuccess.handleUpdateSharedLinkSuccess,
+                mockOnUpdateSharedLink,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
@@ -118,14 +117,14 @@ describe('elements/content-sharing/sharingService', () => {
             expect(typeof service.deleteSharedLink).toBe('function');
         });
 
-        test('should call share with ACCESS_NONE and handleRemoveSharedLinkSuccess when deleteSharedLink is called', async () => {
+        test('should call share with ACCESS_NONE and onRemoveSharedLink when deleteSharedLink is called', async () => {
             const service = createSharingServiceWrapper();
             await service.deleteSharedLink();
 
             expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                 options,
                 ACCESS_NONE,
-                mockOnSuccess.handleRemoveSharedLinkSuccess,
+                mockOnRemoveSharedLink,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
@@ -168,7 +167,7 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 expectedConvertedSettings,
-                mockOnSuccess.handleUpdateSharedLinkSuccess,
+                mockOnUpdateSharedLink,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
@@ -186,7 +185,8 @@ describe('elements/content-sharing/sharingService', () => {
 
             const service = createSharingService({
                 itemApiInstance: mockItemApiInstance,
-                onSuccess: mockOnSuccess,
+                onUpdateSharedLink: mockOnUpdateSharedLink,
+                onRemoveSharedLink: mockOnRemoveSharedLink,
                 options: {
                     ...options,
                     access: 'open',
@@ -215,7 +215,7 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 mockConvertedSharedLinkSettings,
-                mockOnSuccess.handleUpdateSharedLinkSuccess,
+                mockOnUpdateSharedLink,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );

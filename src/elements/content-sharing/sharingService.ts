@@ -19,24 +19,26 @@ export interface Options extends ItemData {
     serverURL?: string;
 }
 
-export interface CreateSharingServiceProps {
+export interface CreateSharingServiceArgs {
     itemApiInstance: API;
-    onSuccess: {
-        handleUpdateSharedLinkSuccess: (itemData: ItemData) => void;
-        handleRemoveSharedLinkSuccess: (itemData: ItemData) => void;
-    };
+    onUpdateSharedLink: (itemData: ItemData) => void;
+    onRemoveSharedLink: (itemData: ItemData) => void;
     options: Options;
 }
 
-export const createSharingService = ({ itemApiInstance, onSuccess, options }: CreateSharingServiceProps) => {
+export const createSharingService = ({
+    itemApiInstance,
+    onUpdateSharedLink,
+    onRemoveSharedLink,
+    options,
+}: CreateSharingServiceArgs) => {
     const { id, permissions } = options;
-    const { handleUpdateSharedLinkSuccess, handleRemoveSharedLinkSuccess } = onSuccess;
 
     const changeSharedLinkAccess = async (access: string) => {
         return itemApiInstance.share(
             { id, permissions },
             access,
-            handleUpdateSharedLinkSuccess,
+            onUpdateSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
         );
@@ -46,7 +48,7 @@ export const createSharingService = ({ itemApiInstance, onSuccess, options }: Cr
         return itemApiInstance.updateSharedLink(
             { id, permissions },
             { permissions: convertSharedLinkPermissions(permissionLevel) },
-            handleUpdateSharedLinkSuccess,
+            onUpdateSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
         );
@@ -58,7 +60,7 @@ export const createSharingService = ({ itemApiInstance, onSuccess, options }: Cr
         return itemApiInstance.updateSharedLink(
             { id, permissions },
             convertSharedLinkSettings(sharedLinkSettings, access, isDownloadAvailable, serverURL),
-            handleUpdateSharedLinkSuccess,
+            onUpdateSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
         );
@@ -67,8 +69,8 @@ export const createSharingService = ({ itemApiInstance, onSuccess, options }: Cr
     const createSharedLink = async () => {
         return itemApiInstance.share(
             { id, permissions },
-            undefined,
-            handleUpdateSharedLinkSuccess,
+            options.access ?? undefined, // if "access" is undefined, the backend will set the default access level for the shared link
+            onUpdateSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
         );
@@ -78,17 +80,17 @@ export const createSharingService = ({ itemApiInstance, onSuccess, options }: Cr
         return itemApiInstance.share(
             { id, permissions },
             ACCESS_NONE,
-            handleRemoveSharedLinkSuccess,
+            onRemoveSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
         );
     };
 
     return {
-        deleteSharedLink,
+        createSharedLink,
         changeSharedLinkAccess,
         changeSharedLinkPermission,
-        createSharedLink,
+        deleteSharedLink,
         updateSharedLink,
     };
 };
