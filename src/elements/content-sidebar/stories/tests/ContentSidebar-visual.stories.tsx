@@ -23,7 +23,7 @@ export default {
     },
 };
 
-export const Modernization = {
+export const withModernization = {
     args: {
         enableModernizedComponents: true,
     },
