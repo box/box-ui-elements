@@ -43,13 +43,23 @@ function ContentSharingV2({
     const [avatarURLMap, setAvatarURLMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [sharedLink, setSharedLink] = React.useState<SharedLink | null>(null);
+    const [sharingServiceProps, setSharingServiceProps] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState<User | null>(null);
     const [collaborationRoles, setCollaborationRoles] = React.useState<CollaborationRole[] | null>(null);
     const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
     const [owner, setOwner] = React.useState({ id: '', email: '', name: '' });
 
-    const { sharingService } = useSharingService(api, item, itemID, itemType, setItem, setSharedLink);
+    const { sharingService } = useSharingService({
+        api,
+        item,
+        itemId: itemID,
+        itemType,
+        sharedLink,
+        sharingServiceProps,
+        setItem,
+        setSharedLink,
+    });
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback(itemData => {
@@ -58,10 +68,12 @@ function ContentSharingV2({
             item: itemFromApi,
             ownedBy,
             sharedLink: sharedLinkFromApi,
+            sharingService: sharingServicePropsFromApi,
         } = convertItemResponse(itemData);
 
         setItem(itemFromApi);
         setSharedLink(sharedLinkFromApi);
+        setSharingServiceProps(sharingServicePropsFromApi);
         setCollaborationRoles(collaborationRolesFromApi);
         setOwner({ id: ownedBy.id, email: ownedBy.login, name: ownedBy.name });
     }, []);
@@ -92,11 +104,12 @@ function ContentSharingV2({
         if (!api || isEmpty(api) || !item || currentUser) return;
 
         const getUserSuccess = userData => {
-            const { enterprise, id } = userData;
+            const { id, enterprise, hostname } = userData;
             setCurrentUser({
                 id,
                 enterprise: { name: enterprise ? enterprise.name : '' },
             });
+            setSharedLink(prevSharedLink => ({ ...prevSharedLink, serverURL: hostname ? `${hostname}v/` : '' }));
         };
 
         (async () => {
