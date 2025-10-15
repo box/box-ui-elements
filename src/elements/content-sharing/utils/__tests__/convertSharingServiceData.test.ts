@@ -5,9 +5,21 @@ import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
 } from '../../../../constants';
+import { convertISOStringToUTCDate } from '../../../../utils/datetime';
 import { convertSharedLinkPermissions, convertSharedLinkSettings } from '../convertSharingServiceData';
 
+jest.mock('../../../../utils/datetime');
+
 describe('elements/content-sharing/utils/convertSharingServiceData', () => {
+    beforeEach(() => {
+        // Mock convertISOStringToUTCDate to return a the same date as the expiration date to simplify the test logic
+        (convertISOStringToUTCDate as jest.Mock).mockReturnValue(new Date('2024-12-31T23:59:59Z'));
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     describe('convertSharedLinkPermissions', () => {
         test.each([
             [PERMISSION_CAN_DOWNLOAD, { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false }],

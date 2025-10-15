@@ -65,14 +65,14 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
                 allowed_shared_link_access_levels,
                 allowed_shared_link_access_levels_disabled_reasons,
             ),
-            expiresAt: expirationTimestamp ? new Date(expirationTimestamp).getTime() : null, // convert to milliseconds
+            expiresAt: expirationTimestamp ? new Date(expirationTimestamp).getTime() : undefined, // convert to milliseconds
             permission,
             permissionLevels: getAllowedPermissionLevels(canChangeAccessLevel, isDownloadSettingAvailable, permission),
             settings: {
                 canChangeDownload,
                 canChangeExpiration,
                 canChangePassword,
-                canChangeVanityName: false, // vanity URLs cannot be set via the API,
+                canChangeVanityName: false, // vanity URLs cannot be set via the API
                 isDownloadAvailable: isDownloadSettingAvailable,
                 isDownloadEnabled: isDownloadAllowed,
                 isPasswordAvailable: isPasswordAvailable ?? false,

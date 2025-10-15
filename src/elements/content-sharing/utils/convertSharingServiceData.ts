@@ -1,4 +1,5 @@
 import { ACCESS_COLLAB, ACCESS_OPEN, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../constants';
+import { convertISOStringToUTCDate } from '../../../utils/datetime';
 
 import type { SharedLinkSettings } from '../types';
 
@@ -40,7 +41,10 @@ export const convertSharedLinkSettings = (
     const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, password, vanityName } = newSettings;
 
     const convertedSettings: ConvertSharedLinkSettingsReturnType = {
-        unshared_at: expiration && isExpirationEnabled ? new Date(expiration).toISOString() : null,
+        unshared_at:
+            expiration && isExpirationEnabled
+                ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
+                : null,
         vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : '',
     };
 
