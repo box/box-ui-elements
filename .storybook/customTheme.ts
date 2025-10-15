@@ -27,6 +27,6 @@ export default create({
     barBg: vars.bdlBoxBlue,
 
     brandTitle: 'Box Elements',
-    brandUrl: 'https://opensource.box.com/box-ui-elements/storybook',
+    brandUrl: 'https://opensource.box.com/box-ui-elements/',
     brandImage: 'https://repository-images.githubusercontent.com/95743138/c161b500-021b-11ea-8bf9-3aa8776acdec',
 });
