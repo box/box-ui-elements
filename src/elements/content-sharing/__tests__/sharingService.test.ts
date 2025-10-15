@@ -1,4 +1,4 @@
-import { PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../constants';
+import { ACCESS_NONE, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import { createSharingService } from '../sharingService';
 import { convertSharedLinkPermissions, convertSharedLinkSettings } from '../utils';
@@ -7,9 +7,21 @@ jest.mock('../utils');
 
 const mockItemApiInstance = {
     updateSharedLink: jest.fn(),
+    share: jest.fn(),
 };
 const options = { id: '123', permissions: { can_set_share_access: true, can_share: true } };
-const mockOnSuccess = jest.fn();
+const mockOnSuccess = {
+    handleUpdateSharedLinkSuccess: jest.fn(),
+    handleRemoveSharedLinkSuccess: jest.fn(),
+};
+
+const createSharingServiceWrapper = () => {
+    return createSharingService({
+        itemApiInstance: mockItemApiInstance,
+        onSuccess: mockOnSuccess,
+        options,
+    });
+};
 
 describe('elements/content-sharing/sharingService', () => {
     beforeEach(() => {
@@ -29,23 +41,13 @@ describe('elements/content-sharing/sharingService', () => {
 
     describe('changeSharedLinkPermission', () => {
         test('should return an object with changeSharedLinkPermission method', () => {
-            const service = createSharingService({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: mockOnSuccess,
-                options,
-            });
-
+            const service = createSharingServiceWrapper();
             expect(service).toHaveProperty('changeSharedLinkPermission');
             expect(typeof service.changeSharedLinkPermission).toBe('function');
         });
 
         test('should call updateSharedLink with correct parameters when changeSharedLinkPermission is called', async () => {
-            const service = createSharingService({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: mockOnSuccess,
-                options,
-            });
-
+            const service = createSharingServiceWrapper();
             const permissionLevel = PERMISSION_CAN_DOWNLOAD;
             const expectedPermissions = {
                 [PERMISSION_CAN_DOWNLOAD]: true,
@@ -57,7 +59,73 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 { permissions: expectedPermissions },
-                mockOnSuccess,
+                mockOnSuccess.handleUpdateSharedLinkSuccess,
+                {},
+                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+            );
+        });
+    });
+
+    describe('changeSharedLinkAccess', () => {
+        test('should return an object with changeSharedLinkAccess method', () => {
+            const service = createSharingServiceWrapper();
+            expect(service).toHaveProperty('changeSharedLinkAccess');
+            expect(typeof service.changeSharedLinkAccess).toBe('function');
+        });
+
+        test.each(['open', 'company', 'collaborators'])(
+            'should call share with correct parameters when changeSharedLinkAccess is called',
+            async access => {
+                const service = createSharingServiceWrapper();
+                await service.changeSharedLinkAccess(access);
+
+                expect(mockItemApiInstance.share).toHaveBeenCalledWith(
+                    options,
+                    access,
+                    mockOnSuccess.handleUpdateSharedLinkSuccess,
+                    {},
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+            },
+        );
+    });
+
+    describe('createSharedLink', () => {
+        test('should return an object with createSharedLink method', () => {
+            const service = createSharingServiceWrapper();
+            expect(service).toHaveProperty('createSharedLink');
+            expect(typeof service.createSharedLink).toBe('function');
+        });
+
+        test('should call share with correct parameters when createSharedLink is called', async () => {
+            const service = createSharingServiceWrapper();
+            await service.createSharedLink();
+
+            expect(mockItemApiInstance.share).toHaveBeenCalledWith(
+                options,
+                undefined,
+                mockOnSuccess.handleUpdateSharedLinkSuccess,
+                {},
+                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+            );
+        });
+    });
+
+    describe('deleteSharedLink', () => {
+        test('should return an object with deleteSharedLink method', () => {
+            const service = createSharingServiceWrapper();
+            expect(service).toHaveProperty('deleteSharedLink');
+            expect(typeof service.deleteSharedLink).toBe('function');
+        });
+
+        test('should call share with ACCESS_NONE and handleRemoveSharedLinkSuccess when deleteSharedLink is called', async () => {
+            const service = createSharingServiceWrapper();
+            await service.deleteSharedLink();
+
+            expect(mockItemApiInstance.share).toHaveBeenCalledWith(
+                options,
+                ACCESS_NONE,
+                mockOnSuccess.handleRemoveSharedLinkSuccess,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
@@ -66,22 +134,14 @@ describe('elements/content-sharing/sharingService', () => {
 
     describe('updateSharedLink', () => {
         test('should return an object with updateSharedLink method', () => {
-            const service = createSharingService({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: mockOnSuccess,
-                options,
-            });
+            const service = createSharingServiceWrapper();
 
             expect(service).toHaveProperty('updateSharedLink');
             expect(typeof service.updateSharedLink).toBe('function');
         });
 
         test('should call updateSharedLink with basic shared link settings', async () => {
-            const service = createSharingService({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: mockOnSuccess,
-                options,
-            });
+            const service = createSharingServiceWrapper();
 
             const sharedLinkSettings = {
                 expiration: null,
@@ -108,7 +168,7 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 expectedConvertedSettings,
-                mockOnSuccess,
+                mockOnSuccess.handleUpdateSharedLinkSuccess,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
@@ -155,18 +215,14 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 mockConvertedSharedLinkSettings,
-                mockOnSuccess,
+                mockOnSuccess.handleUpdateSharedLinkSuccess,
                 {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
 
         test('should handle shared link settings correctly', async () => {
-            const service = createSharingService({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: mockOnSuccess,
-                options,
-            });
+            const service = createSharingServiceWrapper();
 
             const expirationDate = new Date('2024-12-31T23:59:59Z');
             const sharedLinkSettings = {

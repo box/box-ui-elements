@@ -43,13 +43,38 @@ export const useSharingService = ({
             isDownloadAvailable: sharedLink.settings?.isDownloadAvailable ?? false,
         };
 
-        const handleSuccess = updatedItemData => {
+        const handleUpdateSharedLinkSuccess = updatedItemData => {
             const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(updatedItemData);
             setItem(prevItem => ({ ...prevItem, ...updatedItem }));
             setSharedLink(prevSharedLink => ({ ...prevSharedLink, ...updatedSharedLink }));
         };
 
-        return createSharingService({ itemApiInstance, onSuccess: handleSuccess, options });
+        /**
+         * Handle a successful shared link removal request.
+         *
+         * Most of the data for the shared link will be removed, with the exception of the "canInvite", "serverURL"
+         * and "enterpriseName" properties, both of which are still necessary for rendering the form-only version of ContentSharing.
+         * We retain "serverURL" and "enterpriseName" from the previous shared link, to avoid having to make another call to the Users API.
+         */
+        const handleRemoveSharedLinkSuccess = itemData => {
+            const { item: updatedItem, sharedLink: updatedSharedLink } = convertItemResponse(itemData);
+            setItem(prevItem => ({ ...prevItem, ...updatedItem }));
+            setSharedLink(prevSharedLink => {
+                return {
+                    ...updatedSharedLink,
+                    serverURL: prevSharedLink ? prevSharedLink.serverURL : '',
+                    enterpriseName:
+                        prevSharedLink && prevSharedLink.enterpriseName ? prevSharedLink.enterpriseName : '',
+                };
+            });
+        };
+
+        const onSuccess = {
+            handleUpdateSharedLinkSuccess,
+            handleRemoveSharedLinkSuccess,
+        };
+
+        return createSharingService({ itemApiInstance, onSuccess, options });
     }, [itemApiInstance, itemId, sharedLink, sharingServiceProps, setItem, setSharedLink]);
 
     return { sharingService };

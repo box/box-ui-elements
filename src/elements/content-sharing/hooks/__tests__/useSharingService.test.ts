@@ -12,11 +12,12 @@ const mockApi = {
     getFileAPI: jest.fn(),
     getFolderAPI: jest.fn(),
 };
-const mockItemApiInstance = {
-    updateSharedLink: jest.fn(),
-};
 const mockSharingService = {
+    deleteSharedLink: jest.fn(),
+    changeSharedLinkAccess: jest.fn(),
     changeSharedLinkPermission: jest.fn(),
+    createSharedLink: jest.fn(),
+    updateSharedLink: jest.fn(),
 };
 
 const mockItemId = '123';
@@ -41,6 +42,11 @@ const mockSharedLink = {
 const mockSharingServiceProps = {
     can_set_share_access: true,
     can_share: true,
+};
+
+const mockConvertedData = {
+    item: mockItem,
+    sharedLink: mockSharedLink,
 };
 
 const mockSetItem = jest.fn();
@@ -104,7 +110,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
     describe('when itemType is TYPE_FILE', () => {
         beforeEach(() => {
-            mockApi.getFileAPI.mockReturnValue(mockItemApiInstance);
+            mockApi.getFileAPI.mockReturnValue({});
         });
 
         test('should create file API instance and sharing service', () => {
@@ -114,8 +120,11 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
             expect(result.current.sharingService).toBe(mockSharingService);
             expect(createSharingService).toHaveBeenCalledWith({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: expect.any(Function),
+                itemApiInstance: {},
+                onSuccess: {
+                    handleRemoveSharedLinkSuccess: expect.any(Function),
+                    handleUpdateSharedLinkSuccess: expect.any(Function),
+                },
                 options: {
                     access: mockSharedLink.access,
                     isDownloadAvailable: mockSharedLink.settings.isDownloadAvailable,
@@ -126,22 +135,28 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             });
         });
 
-        test('should handle success callback correctly', () => {
-            const mockConvertedData = {
-                item: {
-                    id: mockItemId,
-                    permissions: { can_download: false, can_preview: true },
-                },
-                sharedLink: {},
-            };
-
+        test('should handle update shared link success callback correctly', () => {
             (convertItemResponse as jest.Mock).mockReturnValue(mockConvertedData);
             renderHookWithProps();
 
-            // Get the onSuccess callback that was passed to mock createSharingService
-            const onSuccessCallback = (createSharingService as jest.Mock).mock.calls[0][0].onSuccess;
-            onSuccessCallback(mockConvertedData);
+            // Get the onSuccess callbacks that were passed to mock createSharingService
+            const onSuccessCallbacks = (createSharingService as jest.Mock).mock.calls[0][0].onSuccess;
+            onSuccessCallbacks.handleUpdateSharedLinkSuccess(mockConvertedData);
 
+            expect(convertItemResponse).toHaveBeenCalledWith(mockConvertedData);
+            expect(mockSetItem).toHaveBeenCalledTimes(1);
+            expect(mockSetSharedLink).toHaveBeenCalledTimes(1);
+        });
+
+        test('should handle remove shared link success callback correctly', () => {
+            (convertItemResponse as jest.Mock).mockReturnValue(mockConvertedData);
+            renderHookWithProps();
+
+            // Get the onSuccess callbacks that were passed to mock createSharingService
+            const onSuccessCallbacks = (createSharingService as jest.Mock).mock.calls[0][0].onSuccess;
+            onSuccessCallbacks.handleRemoveSharedLinkSuccess(mockConvertedData);
+
+            expect(convertItemResponse).toHaveBeenCalledWith(mockConvertedData);
             expect(mockSetItem).toHaveBeenCalledTimes(1);
             expect(mockSetSharedLink).toHaveBeenCalledTimes(1);
         });
@@ -149,7 +164,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
     describe('when itemType is TYPE_FOLDER', () => {
         beforeEach(() => {
-            mockApi.getFolderAPI.mockReturnValue(mockItemApiInstance);
+            mockApi.getFolderAPI.mockReturnValue({});
         });
 
         test('should create folder API instance and sharing service', () => {
@@ -159,8 +174,11 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             expect(mockApi.getFileAPI).not.toHaveBeenCalled();
             expect(result.current.sharingService).toBe(mockSharingService);
             expect(createSharingService).toHaveBeenCalledWith({
-                itemApiInstance: mockItemApiInstance,
-                onSuccess: expect.any(Function),
+                itemApiInstance: {},
+                onSuccess: {
+                    handleRemoveSharedLinkSuccess: expect.any(Function),
+                    handleUpdateSharedLinkSuccess: expect.any(Function),
+                },
                 options: {
                     access: mockSharedLink.access,
                     isDownloadAvailable: mockSharedLink.settings.isDownloadAvailable,
@@ -169,6 +187,32 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                     serverURL: mockSharedLink.serverURL,
                 },
             });
+        });
+
+        test('should handle update shared link success callback correctly for folders', () => {
+            (convertItemResponse as jest.Mock).mockReturnValue(mockConvertedData);
+            renderHookWithProps({ itemType: TYPE_FOLDER });
+
+            // Get the onSuccess callbacks that were passed to mock createSharingService
+            const onSuccessCallbacks = (createSharingService as jest.Mock).mock.calls[0][0].onSuccess;
+            onSuccessCallbacks.handleUpdateSharedLinkSuccess(mockConvertedData);
+
+            expect(convertItemResponse).toHaveBeenCalledWith(mockConvertedData);
+            expect(mockSetItem).toHaveBeenCalledTimes(1);
+            expect(mockSetSharedLink).toHaveBeenCalledTimes(1);
+        });
+
+        test('should handle remove shared link success callback correctly for folders', () => {
+            (convertItemResponse as jest.Mock).mockReturnValue(mockConvertedData);
+            renderHookWithProps({ itemType: TYPE_FOLDER });
+
+            // Get the onSuccess callbacks that were passed to mock createSharingService
+            const onSuccessCallbacks = (createSharingService as jest.Mock).mock.calls[0][0].onSuccess;
+            onSuccessCallbacks.handleRemoveSharedLinkSuccess(mockConvertedData);
+
+            expect(convertItemResponse).toHaveBeenCalledWith(mockConvertedData);
+            expect(mockSetItem).toHaveBeenCalledTimes(1);
+            expect(mockSetSharedLink).toHaveBeenCalledTimes(1);
         });
     });
 });
