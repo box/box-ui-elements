@@ -11,7 +11,7 @@ import {
 } from '../../utils/__mocks__/ContentSharingV2Mocks';
 import ContentSharingV2 from '../../ContentSharingV2';
 
-export const Modernization = {
+export const withModernization = {
     args: {
         api: mockAPIWithoutSharedLink,
         enableModernizedComponents: true,
@@ -33,7 +33,7 @@ export const withSharedLink = {
         api: mockAPIWithSharedLink,
     },
     play: async context => {
-        await Modernization.play(context);
+        await withModernization.play(context);
         expect(screen.getByLabelText('Shared link URL')).toBeVisible();
         expect(screen.getByRole('button', { name: 'Link Settings' })).toBeVisible();
         const peopleWithTheLinkButton = screen.getByRole('button', { name: 'People with the link' });
@@ -53,7 +53,7 @@ export const withCollaborators = {
         api: mockAPIWithCollaborators,
     },
     play: async context => {
-        await Modernization.play(context);
+        await withModernization.play(context);
         await waitFor(async () => {
             const sharedWithAvatars = screen.getByRole('button', { name: 'Shared with D R D' });
             expect(sharedWithAvatars).toBeVisible();
