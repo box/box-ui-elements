@@ -69,7 +69,7 @@ export const createSharingService = ({
     const createSharedLink = async () => {
         return itemApiInstance.share(
             { id, permissions },
-            options.access ?? undefined, // if "access" is undefined, the backend will set the default access level for the shared link
+            undefined, // if "access" is undefined, the backend will set the default access level for the shared link
             onUpdateSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
