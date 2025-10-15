@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
 
+import { Button } from '@box/blueprint-web';
+
 import { TYPE_FILE } from '../../../../constants';
 import {
     mockAPIWithCollaborators,
@@ -9,7 +11,7 @@ import {
 } from '../../utils/__mocks__/ContentSharingV2Mocks';
 import ContentSharingV2 from '../../ContentSharingV2';
 
-export const withModernization = {
+export const Modernization = {
     args: {
         api: mockAPIWithoutSharedLink,
         enableModernizedComponents: true,
@@ -31,7 +33,7 @@ export const withSharedLink = {
         api: mockAPIWithSharedLink,
     },
     play: async context => {
-        await withModernization.play(context);
+        await Modernization.play(context);
         expect(screen.getByLabelText('Shared link URL')).toBeVisible();
         expect(screen.getByRole('button', { name: 'Link Settings' })).toBeVisible();
         const peopleWithTheLinkButton = screen.getByRole('button', { name: 'People with the link' });
@@ -51,7 +53,7 @@ export const withCollaborators = {
         api: mockAPIWithCollaborators,
     },
     play: async context => {
-        await withModernization.play(context);
+        await Modernization.play(context);
         await waitFor(async () => {
             const sharedWithAvatars = screen.getByRole('button', { name: 'Shared with D R D' });
             expect(sharedWithAvatars).toBeVisible();
@@ -69,7 +71,7 @@ export default {
     title: 'Elements/ContentSharingV2/tests/visual-regression-tests',
     component: ContentSharingV2,
     args: {
-        children: <button>Open Unified Share Modal</button>,
+        children: <Button>Open Unified Share Modal</Button>,
         itemType: TYPE_FILE,
         itemID: global.FILE_ID,
     },
