@@ -7,6 +7,7 @@ import type { CollaborationRole, Collaborator, Item, SharedLink, User } from '@b
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { fetchAvatars, fetchCollaborators, fetchCurrentUser, fetchItem } from './apis';
 import { useSharingService } from './hooks/useSharingService';
 import { convertCollabsResponse, convertItemResponse } from './utils';
@@ -177,4 +178,4 @@ function ContentSharingV2({
     );
 }
 
-export default ContentSharingV2;
+export default withBlueprintModernization(ContentSharingV2);
