@@ -13,3 +13,4 @@ reports/
 storybook/
 test/screenshots/
 test/videos/
+.webpack-cache/
