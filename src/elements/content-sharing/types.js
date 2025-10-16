@@ -99,6 +99,7 @@ export type ContentSharingHooksOptions = {
     handleSuccess?: Function,
     handleUpdateSharedLinkError?: Function,
     handleUpdateSharedLinkSuccess?: Function,
+    isContentSharingV2Enabled?: boolean,
     setIsLoading?: Function,
     transformAccess?: Function,
     transformGroups?: Function,
