@@ -26,17 +26,12 @@ describe('elements/content-sharing/hooks/useContactService', () => {
         jest.clearAllMocks();
     });
 
-    test('should return null contactService when currentUserID is null or undefined', () => {
-        [null, undefined].forEach(currentUserID => {
-            const { result } = renderHook(() => useContactService(mockApi, mockItemID, currentUserID));
-            expect(result.current.contactService).toBeNull();
-        });
-    });
-
     test('should return contactService with getContacts function', () => {
         const { result } = renderHook(() => useContactService(mockApi, mockItemID, mockCurrentUserID));
 
         expect(useContacts).toHaveBeenCalledWith(mockApi, mockItemID, {
+            currentUserId: mockCurrentUserID,
+            isContentSharingV2Enabled: true,
             transformUsers: expect.any(Function),
             transformGroups: expect.any(Function),
         });

@@ -92,6 +92,7 @@ export type ContentSharingItemAPIResponse = {
 };
 
 export type ContentSharingHooksOptions = {
+    currentUserId?: string,
     handleError?: Function,
     handleRemoveSharedLinkError?: Function,
     handleRemoveSharedLinkSuccess?: Function,

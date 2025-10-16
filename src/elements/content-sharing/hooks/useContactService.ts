@@ -1,21 +1,13 @@
-import * as React from 'react';
-
 import { convertGroupContactsResponse, convertUserContactsResponse } from '../utils';
 import useContacts from './useContacts';
 
-export const useContactService = (api, itemID, currentUserId) => {
-    const getContacts = useContacts(api, itemID, {
+export const useContactService = (api, itemId, currentUserId) => {
+    const getContacts = useContacts(api, itemId, {
+        currentUserId,
+        isContentSharingV2Enabled: true,
         transformUsers: data => convertUserContactsResponse(data, currentUserId),
         transformGroups: data => convertGroupContactsResponse(data),
     });
 
-    const contactService = React.useMemo(() => {
-        if (!currentUserId) {
-            return null;
-        }
-
-        return { getContacts };
-    }, [currentUserId, getContacts]);
-
-    return { contactService };
+    return { contactService: { getContacts } };
 };
