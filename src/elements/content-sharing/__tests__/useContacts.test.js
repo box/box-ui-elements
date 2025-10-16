@@ -34,6 +34,7 @@ function FakeComponent({
     const [getContacts, setGetContacts] = React.useState(null);
 
     const updatedGetContactsFn = useContacts(api, MOCK_ITEM_ID, {
+        currentUserId: '123',
         handleSuccess,
         handleError,
         transformGroups,
