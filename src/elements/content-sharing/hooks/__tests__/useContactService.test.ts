@@ -7,15 +7,15 @@ import useContacts from '../useContacts';
 jest.mock('../useContacts');
 jest.mock('../../utils');
 
-describe('elements/content-sharing/hooks/useContactService', () => {
-    const mockApi = {
-        getMarkerBasedUsersAPI: jest.fn(),
-        getMarkerBasedGroupsAPI: jest.fn(),
-    };
-    const mockItemID = '123456789';
-    const mockCurrentUserID = '123';
-    const mockGetContacts = jest.fn();
+const mockApi = {
+    getMarkerBasedUsersAPI: jest.fn(),
+    getMarkerBasedGroupsAPI: jest.fn(),
+};
+const mockItemID = '123456789';
+const mockCurrentUserID = '123';
+const mockGetContacts = jest.fn();
 
+describe('elements/content-sharing/hooks/useContactService', () => {
     beforeEach(() => {
         (useContacts as jest.Mock).mockReturnValue(mockGetContacts);
         (convertGroupContactsResponse as jest.Mock).mockReturnValue([]);
@@ -29,7 +29,6 @@ describe('elements/content-sharing/hooks/useContactService', () => {
     test('should return null contactService when currentUserID is null or undefined', () => {
         [null, undefined].forEach(currentUserID => {
             const { result } = renderHook(() => useContactService(mockApi, mockItemID, currentUserID));
-
             expect(result.current.contactService).toBeNull();
         });
     });
