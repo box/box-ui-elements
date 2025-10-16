@@ -63,12 +63,13 @@ const Select = ({
                             <span className="select-overlay" />
                         </span>
                         {infoTooltip && (
-                            <Tooltip isShown={infoTooltipIsOpen} position="middle-right" text={infoTooltip}>
-                                <PlainButton
-                                    type="button"
-                                    className="tooltip-icon-container"
-                                    onClick={() => setInfoTooltipIsOpen(!infoTooltipIsOpen)}
-                                >
+                            <Tooltip
+                                targetWrapperClassName="tooltip-icon-container"
+                                isShown={infoTooltipIsOpen}
+                                position="middle-right"
+                                text={infoTooltip}
+                            >
+                                <PlainButton type="button" onClick={() => setInfoTooltipIsOpen(!infoTooltipIsOpen)}>
                                     <IconInfo
                                         height={16}
                                         width={16}

@@ -113,6 +113,10 @@ $left-sidebar-z-index: 40 !default;
     }
 }
 
+.bdl-Tooltip-target.bdl-CollapsibleSidebar-menuItemToolTipTarget {
+    display: block;
+}
+
 @include breakpoint($xlarge-screen) {
     .bdl-CollapsibleSidebar-logo {
         margin-left: $collapsible-side-bar-h-padding - 1px;

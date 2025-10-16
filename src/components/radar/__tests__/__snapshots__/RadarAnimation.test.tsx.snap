@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/radar/RadarAnimation should render correctly with bottom-center positioning 1`] = `
-<TetherComponent
+<d
   attachment="top center"
   classPrefix="radar-animation"
   constraints={
@@ -12,31 +12,15 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-cen
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="bottom center"
->
-  <div
-    aria-describedby="radarAnimation1"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation1"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with bottom-left positioning 1`] = `
-<TetherComponent
+<d
   attachment="top left"
   classPrefix="radar-animation"
   constraints={
@@ -47,31 +31,15 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-lef
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="bottom left"
->
-  <div
-    aria-describedby="radarAnimation2"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation2"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with bottom-right positioning 1`] = `
-<TetherComponent
+<d
   attachment="top right"
   classPrefix="radar-animation"
   constraints={
@@ -82,31 +50,15 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-rig
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="bottom right"
->
-  <div
-    aria-describedby="radarAnimation3"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation3"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with middle-center positioning 1`] = `
-<TetherComponent
+<d
   attachment="middle center"
   classPrefix="radar-animation"
   constraints={
@@ -117,31 +69,15 @@ exports[`components/radar/RadarAnimation should render correctly with middle-cen
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="middle center"
->
-  <div
-    aria-describedby="radarAnimation4"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation4"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with middle-left positioning 1`] = `
-<TetherComponent
+<d
   attachment="middle right"
   classPrefix="radar-animation"
   constraints={
@@ -152,31 +88,15 @@ exports[`components/radar/RadarAnimation should render correctly with middle-lef
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="middle left"
->
-  <div
-    aria-describedby="radarAnimation5"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation5"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with middle-right positioning 1`] = `
-<TetherComponent
+<d
   attachment="middle left"
   classPrefix="radar-animation"
   constraints={
@@ -187,31 +107,15 @@ exports[`components/radar/RadarAnimation should render correctly with middle-rig
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="middle right"
->
-  <div
-    aria-describedby="radarAnimation6"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation6"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with tetherElementClassName 1`] = `
-<TetherComponent
+<d
   attachment="middle left"
   className="tether-element-class-name"
   classPrefix="radar-animation"
@@ -223,31 +127,15 @@ exports[`components/radar/RadarAnimation should render correctly with tetherElem
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="middle right"
->
-  <div
-    aria-describedby="radarAnimation12"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation12"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with top-center positioning 1`] = `
-<TetherComponent
+<d
   attachment="bottom center"
   classPrefix="radar-animation"
   constraints={
@@ -258,31 +146,15 @@ exports[`components/radar/RadarAnimation should render correctly with top-center
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="top center"
->
-  <div
-    aria-describedby="radarAnimation7"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation7"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with top-left positioning 1`] = `
-<TetherComponent
+<d
   attachment="bottom left"
   classPrefix="radar-animation"
   constraints={
@@ -293,31 +165,15 @@ exports[`components/radar/RadarAnimation should render correctly with top-left p
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="top left"
->
-  <div
-    aria-describedby="radarAnimation8"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation8"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;
 
 exports[`components/radar/RadarAnimation should render correctly with top-right positioning 1`] = `
-<TetherComponent
+<d
   attachment="bottom right"
   classPrefix="radar-animation"
   constraints={
@@ -328,25 +184,9 @@ exports[`components/radar/RadarAnimation should render correctly with top-right 
       },
     ]
   }
-  renderElementTag="div"
-  renderElementTo={null}
+  enabled={true}
+  renderElement={[Function]}
+  renderTarget={[Function]}
   targetAttachment="top right"
->
-  <div
-    aria-describedby="radarAnimation9"
-  >
-    Hello
-  </div>
-  <div
-    className="radar "
-    id="radarAnimation9"
-  >
-    <div
-      className="radar-dot"
-    />
-    <div
-      className="radar-circle"
-    />
-  </div>
-</TetherComponent>
+/>
 `;

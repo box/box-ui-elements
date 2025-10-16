@@ -146,23 +146,29 @@ class AppActivity extends React.PureComponent<Props, State> {
                                 className="bcs-AppActivity-confirm"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
-                            >
-                                <Media.Menu isDisabled={isConfirmingDelete}>
-                                    <MenuItem onClick={this.handleDeleteClick}>
-                                        <IconTrash color={bdlGray80} />
-                                        <FormattedMessage {...messages.appActivityDeleteMenuItem} />
-                                    </MenuItem>
-                                </Media.Menu>
-
-                                {isConfirmingDelete && (
-                                    <DeleteConfirmation
-                                        isOpen={isConfirmingDelete}
-                                        message={messages.appActivityDeletePrompt}
-                                        onDeleteCancel={this.handleDeleteCancel}
-                                        onDeleteConfirm={this.handleDeleteConfirm}
-                                    />
+                                renderTarget={ref => (
+                                    <div ref={ref} style={{ display: 'inline-block' }}>
+                                        <Media.Menu isDisabled={isConfirmingDelete}>
+                                            <MenuItem onClick={this.handleDeleteClick}>
+                                                <IconTrash color={bdlGray80} />
+                                                <FormattedMessage {...messages.appActivityDeleteMenuItem} />
+                                            </MenuItem>
+                                        </Media.Menu>
+                                    </div>
                                 )}
-                            </TetherComponent>
+                                renderElement={ref => {
+                                    return isConfirmingDelete ? (
+                                        <div ref={ref}>
+                                            <DeleteConfirmation
+                                                isOpen={isConfirmingDelete}
+                                                message={messages.appActivityDeletePrompt}
+                                                onDeleteCancel={this.handleDeleteCancel}
+                                                onDeleteConfirm={this.handleDeleteConfirm}
+                                            />
+                                        </div>
+                                    ) : null;
+                                }}
+                            />
                         )}
 
                         <figcaption className="bcs-AppActivity-headline">{name}</figcaption>
