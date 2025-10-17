@@ -20,7 +20,7 @@ function useContactsByEmail(
     options: ContentSharingHooksOptions,
 ): GetContactsByEmailFnType | null {
     const [getContactsByEmail, setGetContactsByEmail] = React.useState<null | GetContactsByEmailFnType>(null);
-    const { handleSuccess = noop, handleError = noop, transformUsers } = options;
+    const { handleSuccess = noop, handleError = noop, isContentSharingV2Enabled, transformUsers } = options;
 
     React.useEffect(() => {
         if (getContactsByEmail) return;
@@ -38,25 +38,42 @@ function useContactsByEmail(
             return resolve({});
         };
 
-        const updatedGetContactsByEmailFn: GetContactsByEmailFnType = () => (filterTerm: {
-            [emails: string]: string,
-        }) => {
-            if (!filterTerm || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
+        const updatedGetContactsByEmailFn: GetContactsByEmailFnType =
+            () => (filterTerm: { [emails: string]: string }) => {
+                if (!filterTerm || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
+                    return Promise.resolve({});
+                }
+                const parsedFilterTerm = filterTerm.emails[0];
+
+                return new Promise((resolve: (result: ContactByEmailObject | Array<UserMini>) => void) => {
+                    api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
+                        itemID,
+                        (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
+                        handleError,
+                        { filter_term: parsedFilterTerm },
+                    );
+                });
+            };
+
+        const getContactsByEmailV2 = () => email => {
+            if (!email) {
                 return Promise.resolve({});
             }
-            const parsedFilterTerm = filterTerm.emails[0];
 
-            return new Promise((resolve: (result: ContactByEmailObject | Array<UserMini>) => void) => {
+            return new Promise(resolve => {
                 api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                     itemID,
-                    (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
+                    response => resolveAPICall(resolve, response, transformUsers),
                     handleError,
-                    { filter_term: parsedFilterTerm },
+                    { filter_term: email },
                 );
             });
         };
-        setGetContactsByEmail(updatedGetContactsByEmailFn);
-    }, [api, getContactsByEmail, handleError, handleSuccess, itemID, transformUsers]);
+
+        isContentSharingV2Enabled
+            ? setGetContactsByEmail(getContactsByEmailV2)
+            : setGetContactsByEmail(updatedGetContactsByEmailFn);
+    }, [api, getContactsByEmail, handleError, handleSuccess, isContentSharingV2Enabled, itemID, transformUsers]);
 
     return getContactsByEmail;
 }

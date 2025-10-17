@@ -55,3 +55,24 @@ export const convertGroupContactsResponse = contactsApiData => {
         })
         .sort(sortByName);
 };
+
+/**
+ * Convert an enterprise users API response into an object of internal USM contacts, keyed by email, which is
+ * then passed to the mergeContacts function.
+ */
+export const convertUserContactByEmailResponse = contactsApiData => {
+    const { entries = [] } = contactsApiData;
+    const entry = entries[0];
+    if (!entry) {
+        return {};
+    }
+
+    const { id, login: email = '', name, type } = entry;
+    return {
+        id,
+        email,
+        name,
+        type,
+        value: email,
+    };
+};

@@ -1,4 +1,5 @@
-import { convertGroupContactsResponse, convertUserContactsResponse } from '../utils';
+import { convertGroupContactsResponse, convertUserContactByEmailResponse, convertUserContactsResponse } from '../utils';
+import useContactsByEmail from './useContactsByEmail';
 import useContacts from './useContacts';
 
 export const useContactService = (api, itemId, currentUserId) => {
@@ -9,5 +10,10 @@ export const useContactService = (api, itemId, currentUserId) => {
         transformGroups: data => convertGroupContactsResponse(data),
     });
 
-    return { contactService: { getContacts } };
+    const getContactByEmail = useContactsByEmail(api, itemId, {
+        isContentSharingV2Enabled: true,
+        transformUsers: data => convertUserContactByEmailResponse(data),
+    });
+
+    return { contactService: { getContactByEmail, getContacts } };
 };

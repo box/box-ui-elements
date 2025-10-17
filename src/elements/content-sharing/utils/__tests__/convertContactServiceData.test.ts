@@ -1,5 +1,9 @@
 import { STATUS_INACTIVE } from '../../../../constants';
-import { convertUserContactsResponse, convertGroupContactsResponse } from '../convertContactServiceData';
+import {
+    convertUserContactsResponse,
+    convertGroupContactsResponse,
+    convertUserContactByEmailResponse,
+} from '../convertContactServiceData';
 
 const mockCurrentUserId = '123';
 
@@ -327,6 +331,106 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
             expect(result[0].name).toBe('Alice Group');
             expect(result[1].name).toBe('Bob Group');
             expect(result[2].name).toBe('Charlie Group');
+        });
+    });
+
+    describe('convertUserContactByEmailResponse', () => {
+        describe('basic conversion', () => {
+            test('should return empty object when entries is empty', () => {
+                const contactsApiData = { entries: [] };
+                const result = convertUserContactByEmailResponse(contactsApiData);
+                expect(result).toEqual({});
+            });
+
+            test('should convert valid user contact correctly', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            login: 'jane.smith@example.com',
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: 'jane.smith@example.com',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: 'jane.smith@example.com',
+                });
+            });
+
+            test('should handle user contact with missing login field', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: '',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: '',
+                });
+            });
+
+            test('should handle user contact with undefined login field', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: '',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: '',
+                });
+            });
+
+            test('should handle user contact with undefined login field', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            login: undefined,
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: '',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: '',
+                });
+            });
         });
     });
 });
