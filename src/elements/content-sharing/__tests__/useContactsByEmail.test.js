@@ -134,7 +134,7 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
         test('should set the value of getContactsByEmail() and retrieve contacts when isContentSharingV2Enabled is true and email is provided', async () => {
             const mockUser1 = MOCK_CONTACTS_API_RESPONSE.entries[0];
-            const { id, email, name, type } = mockUser1;
+            const { id, login: email, name, type } = mockUser1;
             const expectedTransformedResult = {
                 id,
                 email,

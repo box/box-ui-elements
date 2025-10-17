@@ -4,7 +4,12 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
 import type { UserCollection, UserMini } from '../../../common/types/core';
-import type { ContactByEmailObject, ContentSharingHooksOptions, GetContactsByEmailFnType } from '../types';
+import type {
+    ContactByEmailObject,
+    ContentSharingHooksOptions,
+    GetContactByEmailFnType,
+    GetContactsByEmailFnType,
+} from '../types';
 
 /**
  * Generate the getContactsByEmail() function, which is used for looking up contacts added to the collaborators field in the USM.
@@ -38,41 +43,43 @@ function useContactsByEmail(
             return resolve({});
         };
 
-        const updatedGetContactsByEmailFn: GetContactsByEmailFnType =
-            () => (filterTerm: { [emails: string]: string }) => {
-                if (!filterTerm || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
+        if (isContentSharingV2Enabled) {
+            const getContactsByEmailV2: GetContactByEmailFnType = () => email => {
+                if (!email) {
                     return Promise.resolve({});
                 }
-                const parsedFilterTerm = filterTerm.emails[0];
 
-                return new Promise((resolve: (result: ContactByEmailObject | Array<UserMini>) => void) => {
+                return new Promise(resolve => {
                     api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                         itemID,
-                        (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
+                        response => resolveAPICall(resolve, response, transformUsers),
                         handleError,
-                        { filter_term: parsedFilterTerm },
+                        { filter_term: email },
                     );
                 });
             };
 
-        const getContactsByEmailV2 = () => email => {
-            if (!email) {
-                return Promise.resolve({});
-            }
+            setGetContactsByEmail(getContactsByEmailV2);
+        } else {
+            const updatedGetContactsByEmailFn: GetContactsByEmailFnType =
+                () => (filterTerm: { [emails: string]: string }) => {
+                    if (!filterTerm || !Array.isArray(filterTerm.emails) || !filterTerm.emails.length) {
+                        return Promise.resolve({});
+                    }
+                    const parsedFilterTerm = filterTerm.emails[0];
 
-            return new Promise(resolve => {
-                api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
-                    itemID,
-                    response => resolveAPICall(resolve, response, transformUsers),
-                    handleError,
-                    { filter_term: email },
-                );
-            });
-        };
+                    return new Promise((resolve: (result: ContactByEmailObject | Array<UserMini>) => void) => {
+                        api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
+                            itemID,
+                            (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
+                            handleError,
+                            { filter_term: parsedFilterTerm },
+                        );
+                    });
+                };
 
-        isContentSharingV2Enabled
-            ? setGetContactsByEmail(getContactsByEmailV2)
-            : setGetContactsByEmail(updatedGetContactsByEmailFn);
+            setGetContactsByEmail(updatedGetContactsByEmailFn);
+        }
     }, [api, getContactsByEmail, handleError, handleSuccess, isContentSharingV2Enabled, itemID, transformUsers]);
 
     return getContactsByEmail;
