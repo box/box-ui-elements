@@ -7,8 +7,9 @@ import type { CollaborationRole, Collaborator, Item, SharedLink, User } from '@b
 import API from '../../api';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { fetchAvatars, fetchCollaborators, fetchCurrentUser, fetchItem } from './apis';
-import { useSharingService } from './hooks/useSharingService';
+import { useContactService, useSharingService } from './hooks';
 import { convertCollabsResponse, convertItemResponse } from './utils';
 
 import type { Collaborations, ItemType, StringMap } from '../../common/types/core';
@@ -60,6 +61,7 @@ function ContentSharingV2({
         setItem,
         setSharedLink,
     });
+    const { contactService } = useContactService(api, itemID, currentUser?.id);
 
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback(itemData => {
@@ -164,6 +166,7 @@ function ContentSharingV2({
                         config={config}
                         collaborationRoles={collaborationRoles}
                         collaborators={collaborators}
+                        contactService={contactService}
                         currentUser={currentUser}
                         item={item}
                         sharedLink={sharedLink}
@@ -177,4 +180,4 @@ function ContentSharingV2({
     );
 }
 
-export default ContentSharingV2;
+export default withBlueprintModernization(ContentSharingV2);

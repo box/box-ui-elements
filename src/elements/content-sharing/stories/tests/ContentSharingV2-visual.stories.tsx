@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
 
+import { Button } from '@box/blueprint-web';
+
 import { TYPE_FILE } from '../../../../constants';
 import {
     mockAPIWithCollaborators,
@@ -69,7 +71,7 @@ export default {
     title: 'Elements/ContentSharingV2/tests/visual-regression-tests',
     component: ContentSharingV2,
     args: {
-        children: <button>Open Unified Share Modal</button>,
+        children: <Button>Open Unified Share Modal</Button>,
         itemType: TYPE_FILE,
         itemID: global.FILE_ID,
     },

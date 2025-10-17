@@ -59,6 +59,11 @@ const messages = defineMessages({
             'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitesSuccess',
     },
+    groupContactLabel: {
+        defaultMessage: 'Group',
+        description: 'Display text for a Group contact type',
+        id: 'be.contentSharing.groupContactLabel',
+    },
 });
 
 export default messages;
