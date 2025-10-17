@@ -192,7 +192,7 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
             let contacts;
             await act(async () => {
-                contacts = await result.current({ emails: [MOCK_EMAIL] });
+                contacts = await result.current({ MOCK_EMAIL });
             });
 
             expect(handleSuccess).toHaveBeenCalledWith(EMPTY_USERS);

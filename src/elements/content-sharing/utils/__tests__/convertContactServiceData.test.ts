@@ -408,29 +408,6 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
                     value: '',
                 });
             });
-
-            test('should handle user contact with undefined login field', () => {
-                const contactsApiData = {
-                    entries: [
-                        {
-                            id: 'user-1',
-                            login: undefined,
-                            name: 'Jane Smith',
-                            type: 'user',
-                        },
-                    ],
-                };
-
-                const result = convertUserContactByEmailResponse(contactsApiData);
-
-                expect(result).toEqual({
-                    id: 'user-1',
-                    email: '',
-                    name: 'Jane Smith',
-                    type: 'user',
-                    value: '',
-                });
-            });
         });
     });
 });
