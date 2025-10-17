@@ -75,7 +75,7 @@ describe('elements/content-sharing/hooks/useContactService', () => {
         const resultGroups = transformGroupsFn(mockGroupData);
 
         expect(convertUserContactsResponse as jest.Mock).toHaveBeenCalledWith(mockUserData, mockCurrentUserId);
-        expect(convertGroupContactsResponse as jest.Mock).toHaveBeenCalledWith(mockGroupData);
+        expect(convertGroupContactsResponse as jest.Mock).toHaveBeenCalledWith(mockGroupData, 'Group');
         expect(resultUsers).toBe(mockTransformedUsers);
         expect(resultGroups).toBe(mockTransformedGroups);
 
