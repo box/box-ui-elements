@@ -140,6 +140,8 @@ export type GetContactsByEmailFnType = () => (filterTerm: {
     [emails: string]: string,
 }) => Promise<ContactByEmailObject | Array<UserMini>> | null;
 
+export type GetContactByEmailFnType = () => (email: string) => Promise<ContactByEmailObject | Array<UserMini>> | null;
+
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 
 export type ConnectToItemShareFnType = ({

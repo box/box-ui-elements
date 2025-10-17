@@ -1,5 +1,9 @@
 import { STATUS_INACTIVE } from '../../../../constants';
-import { convertUserContactsResponse, convertGroupContactsResponse } from '../convertContactServiceData';
+import {
+    convertUserContactsResponse,
+    convertGroupContactsResponse,
+    convertUserContactByEmailResponse,
+} from '../convertContactServiceData';
 
 const mockCurrentUserId = '123';
 
@@ -203,7 +207,7 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
         describe('basic conversion', () => {
             test('should return empty array when entries is empty', () => {
                 const contactsApiData = { entries: [] };
-                const result = convertGroupContactsResponse(contactsApiData);
+                const result = convertGroupContactsResponse(contactsApiData, 'Group');
                 expect(result).toEqual([]);
             });
 
@@ -229,7 +233,7 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
                     ],
                 };
 
-                const result = convertGroupContactsResponse(contactsApiData);
+                const result = convertGroupContactsResponse(contactsApiData, 'Group');
 
                 expect(result).toEqual([
                     {
@@ -237,14 +241,14 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
                         email: 'Group',
                         name: 'Engineering Team',
                         type: 'group',
-                        value: 'Group',
+                        value: 'group-1',
                     },
                     {
                         id: 'group-2',
                         email: 'Group',
                         name: 'Marketing Team',
                         type: 'group',
-                        value: 'Group',
+                        value: 'group-2',
                     },
                 ]);
             });
@@ -284,7 +288,7 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
                     ],
                 };
 
-                const result = convertGroupContactsResponse(contactsApiData);
+                const result = convertGroupContactsResponse(contactsApiData, 'Group');
 
                 expect(result).toHaveLength(1);
                 expect(result[0].id).toBe('group-4');
@@ -321,12 +325,89 @@ describe('elements/content-sharing/utils/convertContactServiceData', () => {
                 ],
             };
 
-            const result = convertGroupContactsResponse(contactsApiData);
+            const result = convertGroupContactsResponse(contactsApiData, 'Group');
 
             expect(result).toHaveLength(3);
             expect(result[0].name).toBe('Alice Group');
             expect(result[1].name).toBe('Bob Group');
             expect(result[2].name).toBe('Charlie Group');
+        });
+    });
+
+    describe('convertUserContactByEmailResponse', () => {
+        describe('basic conversion', () => {
+            test('should return empty object when entries is empty', () => {
+                const contactsApiData = { entries: [] };
+                const result = convertUserContactByEmailResponse(contactsApiData);
+                expect(result).toEqual({});
+            });
+
+            test('should convert valid user contact correctly', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            login: 'jane.smith@example.com',
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: 'jane.smith@example.com',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: 'jane.smith@example.com',
+                });
+            });
+
+            test('should handle user contact with missing login field', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: '',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: '',
+                });
+            });
+
+            test('should handle user contact with undefined login field', () => {
+                const contactsApiData = {
+                    entries: [
+                        {
+                            id: 'user-1',
+                            name: 'Jane Smith',
+                            type: 'user',
+                        },
+                    ],
+                };
+
+                const result = convertUserContactByEmailResponse(contactsApiData);
+
+                expect(result).toEqual({
+                    id: 'user-1',
+                    email: '',
+                    name: 'Jane Smith',
+                    type: 'user',
+                    value: '',
+                });
+            });
         });
     });
 });

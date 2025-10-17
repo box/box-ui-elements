@@ -35,7 +35,7 @@ export const convertUserContactsResponse = (contactsApiData, currentUserId) => {
 /**
  * Convert an enterprise groups API response into an array of internal USM contacts.
  */
-export const convertGroupContactsResponse = contactsApiData => {
+export const convertGroupContactsResponse = (contactsApiData, emailMessage) => {
     const { entries = [] } = contactsApiData;
 
     // Only return groups with the correct permissions
@@ -47,11 +47,31 @@ export const convertGroupContactsResponse = contactsApiData => {
             const { id, name, type } = contact;
             return {
                 id,
-                email: 'Group', // Need this for the avatar to work for isUserContactType
+                email: emailMessage, // Need this for the avatar to work for isUserContactType
                 name,
                 type,
-                value: 'Group',
+                value: id,
             };
         })
         .sort(sortByName);
+};
+
+/**
+ * Convert an enterprise users API response into a single internal USM contact object (from the first entry).
+ */
+export const convertUserContactByEmailResponse = contactsApiData => {
+    const { entries = [] } = contactsApiData;
+    const entry = entries[0];
+    if (!entry) {
+        return {};
+    }
+
+    const { id, login: email = '', name, type } = entry;
+    return {
+        id,
+        email,
+        name,
+        type,
+        value: email,
+    };
 };
