@@ -35,7 +35,7 @@ export const convertUserContactsResponse = (contactsApiData, currentUserId) => {
 /**
  * Convert an enterprise groups API response into an array of internal USM contacts.
  */
-export const convertGroupContactsResponse = (contactsApiData, formatMessage) => {
+export const convertGroupContactsResponse = (contactsApiData, emailMessage) => {
     const { entries = [] } = contactsApiData;
 
     // Only return groups with the correct permissions
@@ -47,7 +47,7 @@ export const convertGroupContactsResponse = (contactsApiData, formatMessage) => 
             const { id, name, type } = contact;
             return {
                 id,
-                email: formatMessage, // Need this for the avatar to work for isUserContactType
+                email: emailMessage, // Need this for the avatar to work for isUserContactType
                 name,
                 type,
                 value: id,

@@ -13,8 +13,7 @@ export const useContactService = (api, itemId, currentUserId) => {
         currentUserId,
         isContentSharingV2Enabled: true,
         transformUsers: data => convertUserContactsResponse(data, currentUserId),
-        transformGroups: data =>
-            convertGroupContactsResponse(data, formatMessage(messages.contactServiceGroupDisplayText)),
+        transformGroups: data => convertGroupContactsResponse(data, formatMessage(messages.groupContactLabel)),
     });
 
     const getContactByEmail = useContactsByEmail(api, itemId, {

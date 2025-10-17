@@ -17,14 +17,16 @@ import type {
  * @param {API} api
  * @param {string} itemID
  * @param {ContentSharingHooksOptions} options
- * @returns {GetContactsByEmailFnType | null}
+ * @returns {GetContactsByEmailFnType | GetContactByEmailFnType | null}
  */
 function useContactsByEmail(
     api: API,
     itemID: string,
     options: ContentSharingHooksOptions,
-): GetContactsByEmailFnType | null {
-    const [getContactsByEmail, setGetContactsByEmail] = React.useState<null | GetContactsByEmailFnType>(null);
+): GetContactsByEmailFnType | GetContactByEmailFnType | null {
+    const [getContactsByEmail, setGetContactsByEmail] = React.useState<
+        null | GetContactsByEmailFnType | GetContactByEmailFnType,
+    >(null);
     const { handleSuccess = noop, handleError = noop, isContentSharingV2Enabled, transformUsers } = options;
 
     React.useEffect(() => {
