@@ -45,7 +45,7 @@
         "url": "https://github.com/box/box-ui-elements/issues"
     },
     "engines": {
-        "node": ">=20.x || ^22.0",
+        "node": ">=18.x || ^20.x || ^22.x",
         "yarn": ">=1.10.0"
     },
     "scripts": {
