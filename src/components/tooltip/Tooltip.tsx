@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
-import TetherComponent from 'react-tether';
+import TetherComponent, { type TetherProps } from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
 import CloseButton from './CloseButton';
@@ -102,6 +102,8 @@ export type TooltipProps = {
     stopBubble?: boolean;
     /** A CSS class for the tether element component */
     tetherElementClassName?: string;
+    /** A CSS class for the target wrapper element */
+    targetWrapperClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
 } & Partial<DefaultTooltipProps>;
@@ -246,6 +248,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             showCloseButton,
             stopBubble,
             tetherElementClassName,
+            targetWrapperClassName,
             text,
             theme,
         } = this.props;
@@ -312,22 +315,18 @@ class Tooltip extends React.Component<TooltipProps, State> {
             'with-close-button': withCloseButton,
         });
 
-        const tetherProps: {
-            attachment: TetherPosition;
-            bodyElement: HTMLElement;
-            classPrefix: string;
-            constraints: {};
-            enabled: boolean | undefined;
-            targetAttachment: TetherPosition;
+        const tetherProps: Pick<
+            TetherProps,
+            'attachment' | 'targetAttachment' | 'constraints' | 'renderElementTo' | 'classPrefix'
+        > & {
             offset?: string;
             className?: string;
         } = {
             attachment: tetherPosition.attachment,
-            bodyElement: bodyEl,
             classPrefix: 'tooltip',
             constraints,
-            enabled: showTooltip,
             targetAttachment: tetherPosition.targetAttachment,
+            renderElementTo: bodyEl,
         };
 
         if (tetherElementClassName) {
@@ -345,46 +344,62 @@ class Tooltip extends React.Component<TooltipProps, State> {
             </>
         );
 
-        const tooltip = stopBubble ? (
-            <div
-                className={classes}
-                id={this.tooltipID}
-                onClick={this.handleTooltipEvent}
-                onContextMenu={this.handleTooltipEvent}
-                onKeyPress={this.handleTooltipEvent}
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-                role="presentation"
-            >
+        const renderTooltip = (ref: React.RefObject<HTMLDivElement>) => {
+            if (!showTooltip) {
+                return null;
+            }
+            return stopBubble ? (
                 <div
-                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                    className={classes}
+                    id={this.tooltipID}
+                    onClick={this.handleTooltipEvent}
+                    onContextMenu={this.handleTooltipEvent}
+                    onKeyPress={this.handleTooltipEvent}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}
+                    role="presentation"
+                    ref={ref}
+                >
+                    <div
+                        role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                        aria-live="polite"
+                        aria-hidden={ariaHidden || isLabelMatchingTooltipText}
+                        data-testid="bdl-Tooltip"
+                    >
+                        {tooltipInner}
+                    </div>
+                </div>
+            ) : (
+                <div
                     aria-live="polite"
                     aria-hidden={ariaHidden || isLabelMatchingTooltipText}
+                    className={classes}
                     data-testid="bdl-Tooltip"
+                    id={this.tooltipID}
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}
+                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                    ref={ref}
                 >
                     {tooltipInner}
                 </div>
-            </div>
-        ) : (
-            <div
-                aria-live="polite"
-                aria-hidden={ariaHidden || isLabelMatchingTooltipText}
-                className={classes}
-                data-testid="bdl-Tooltip"
-                id={this.tooltipID}
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
-            >
-                {tooltipInner}
-            </div>
-        );
+            );
+        };
 
         return (
-            <TetherComponent ref={this.tetherRef} {...tetherProps}>
-                {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && tooltip}
-            </TetherComponent>
+            <TetherComponent
+                {...tetherProps}
+                ref={this.tetherRef}
+                renderTarget={(ref: React.RefObject<HTMLDivElement>) => {
+                    const child = React.Children.only(children);
+                    return child ? (
+                        <div className={classNames('bdl-Tooltip-target', targetWrapperClassName)} ref={ref}>
+                            {React.cloneElement(child as React.ReactElement, componentProps)}
+                        </div>
+                    ) : null;
+                }}
+                renderElement={renderTooltip}
+            />
         );
     }
 }

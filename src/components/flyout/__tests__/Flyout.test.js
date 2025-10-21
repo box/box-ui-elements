@@ -36,6 +36,19 @@ describe('components/flyout/Flyout', () => {
     FakeOverlay.displayName = 'FakeOverlay';
     /* eslint-enable */
 
+    const renderWrapper = (props = {}) => {
+        return mount(
+            <Flyout {...props}>
+                <FakeButton />
+                <FakeOverlay />
+            </Flyout>,
+        );
+    };
+
+    const findTetherComponent = wrapper => {
+        return wrapper.findWhere(node => node.prop('renderTarget') && node.prop('renderElement'));
+    };
+
     afterEach(() => {
         sandbox.verifyAndRestore();
     });
@@ -64,12 +77,7 @@ describe('components/flyout/Flyout', () => {
         });
 
         test('should correctly render a single child button with correct props', () => {
-            const wrapper = shallow(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper();
 
             const instance = wrapper.instance();
             const button = wrapper.find(FakeButton);
@@ -83,16 +91,14 @@ describe('components/flyout/Flyout', () => {
         });
 
         test('should set aria-expanded="true" and aria-controls=overlayID when overlay is visible', () => {
-            const wrapper = shallow(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper();
 
-            wrapper.setState({
-                isVisible: true,
+            act(() => {
+                wrapper.setState({
+                    isVisible: true,
+                });
             });
+            wrapper.update();
 
             const button = wrapper.find(FakeButton);
             expect(button.prop('aria-expanded')).toEqual('true');
@@ -112,17 +118,15 @@ describe('components/flyout/Flyout', () => {
         });
 
         test('should correctly render a single child overlay with correct props when overlay is open', () => {
-            const wrapper = shallow(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper();
 
             const instance = wrapper.instance();
-            wrapper.setState({
-                isVisible: true,
+            act(() => {
+                wrapper.setState({
+                    isVisible: true,
+                });
             });
+            wrapper.update();
 
             const overlay = wrapper.find(FakeOverlay);
             expect(overlay.length).toBe(1);
@@ -136,80 +140,60 @@ describe('components/flyout/Flyout', () => {
         });
 
         test('should render TetherComponent with correct props with correct default values', () => {
-            const wrapper = shallow(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('attachment')).toEqual('top left');
-            expect(wrapper.prop('targetAttachment')).toEqual('bottom left');
-            expect(wrapper.prop('classPrefix')).toEqual('flyout-overlay');
-            expect(wrapper.prop('enabled')).toBe(false);
+            const wrapper = renderWrapper();
+
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.length).toBe(1);
+            expect(tetherComponent.prop('attachment')).toEqual('top left');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('bottom left');
+            expect(tetherComponent.prop('classPrefix')).toEqual('flyout-overlay');
+            expect(tetherComponent.prop('enabled')).toBe(false);
         });
 
         test('should render TetherComponent with correct enable prop when overlay is visible', () => {
-            const wrapper = shallow(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper();
 
-            wrapper.setState({
-                isVisible: true,
+            act(() => {
+                wrapper.setState({
+                    isVisible: true,
+                });
             });
+            wrapper.update();
 
-            expect(wrapper.prop('enabled')).toBe(true);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should render TetherComponent with offset when offset is passed in as a prop', () => {
             const offset = 'wooot';
-            const wrapper = shallow(
-                <Flyout offset={offset}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ offset });
 
-            expect(wrapper.prop('offset')).toEqual(offset);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('offset')).toEqual(offset);
         });
 
         test('should render TetherComponent with passed in className', () => {
             const className = 'the-class-name';
-            const wrapper = shallow(
-                <Flyout className={className}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ className });
 
-            expect(wrapper.prop('classes')).toEqual({
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('classes')).toEqual({
                 element: `flyout-overlay ${className}`,
             });
         });
 
         test('should render TetherComponent without scrollParent constraint when constrainToScrollParent=false', () => {
-            const wrapper = shallow(
-                <Flyout constrainToScrollParent={false}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ constrainToScrollParent: false });
 
-            expect(wrapper.prop('constraints')).toEqual([]);
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([]);
         });
 
         test('should render TetherComponent with window constraint when constrainToWindow=true', () => {
-            const wrapper = shallow(
-                <Flyout constrainToWindow>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ constrainToWindow: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
                     attachment: 'together',
@@ -222,14 +206,10 @@ describe('components/flyout/Flyout', () => {
         });
 
         test('should render TetherComponent with window constraint when constrainToWindowWithPin=true', () => {
-            const wrapper = shallow(
-                <Flyout constrainToWindowWithPin>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ constrainToWindowWithPin: true });
 
-            expect(wrapper.prop('constraints')).toEqual([
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('constraints')).toEqual([
                 {
                     to: 'scrollParent',
                     attachment: 'together',
@@ -277,13 +257,10 @@ describe('components/flyout/Flyout', () => {
             },
         ].forEach(({ position, offset }) => {
             test('should set tether offset correctly when offset props is not passed in', () => {
-                const wrapper = shallow(
-                    <Flyout position={position}>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
-                expect(wrapper.prop('offset')).toEqual(offset);
+                const wrapper = renderWrapper({ position });
+
+                const tetherComponent = findTetherComponent(wrapper);
+                expect(tetherComponent.prop('offset')).toEqual(offset);
             });
         });
     });
@@ -313,12 +290,7 @@ describe('components/flyout/Flyout', () => {
         ])(
             'should handle clicks within overlay properly %s',
             ({ closeOnClick, hasClickableAncestor, shouldCloseOverlay }) => {
-                const wrapper = mount(
-                    <Flyout closeOnClick={closeOnClick}>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
+                const wrapper = renderWrapper({ closeOnClick });
                 const instance = wrapper.instance();
                 act(() => {
                     instance.setState({
@@ -350,12 +322,7 @@ describe('components/flyout/Flyout', () => {
         let wrapper = null;
 
         beforeEach(() => {
-            wrapper = mount(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            wrapper = renderWrapper();
             instance = wrapper.instance();
         });
 
@@ -403,12 +370,7 @@ describe('components/flyout/Flyout', () => {
     describe('handleButtonHover()', () => {
         test('should call openOverlay() when props.openOnHover is true', () => {
             const event = {};
-            const wrapper = mount(
-                <Flyout openOnHover>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ openOnHover: true });
 
             const instance = wrapper.instance();
             setTimeout(() => {
@@ -420,12 +382,7 @@ describe('components/flyout/Flyout', () => {
 
         test('should not call openOverlay() when props.openOnHover is false', () => {
             const event = {};
-            const wrapper = mount(
-                <Flyout openOnHover={false}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ openOnHover: false });
 
             const instance = wrapper.instance();
             setTimeout(() => {
@@ -437,12 +394,7 @@ describe('components/flyout/Flyout', () => {
 
         test('should be able to set custom timeouts for the openOnHover', () => {
             const timeout = 100;
-            const wrapper = mount(
-                <Flyout openOnHover={false} openOnHoverDebounceTimeout={timeout}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ openOnHover: false, openOnHoverDebounceTimeout: timeout });
 
             const instance = wrapper.instance();
             setTimeout(() => {
@@ -459,12 +411,7 @@ describe('components/flyout/Flyout', () => {
 
     describe('handleButtonHoverLeave()', () => {
         test('should call closeOverlay', () => {
-            const wrapper = mount(
-                <Flyout openOnHover={false}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ openOnHover: false });
 
             const instance = wrapper.instance();
 
@@ -514,32 +461,26 @@ describe('components/flyout/Flyout', () => {
             },
         ].forEach(({ currentIsVisible, isVisibleAfterOverlayClosed }) => {
             test('should toggle isVisible state when called', () => {
-                const wrapper = mount(
-                    <Flyout>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
+                const wrapper = renderWrapper();
                 const instance = wrapper.instance();
                 const event = {
                     preventDefault: sandbox.stub(),
                 };
-                instance.setState({
-                    isVisible: currentIsVisible,
+                act(() => {
+                    instance.setState({
+                        isVisible: currentIsVisible,
+                    });
                 });
-                instance.closeOverlay(event);
+                act(() => {
+                    instance.closeOverlay(event);
+                });
                 expect(instance.state.isVisible).toEqual(isVisibleAfterOverlayClosed);
             });
         });
 
         test('should call onClose when closeOverlay gets called', () => {
             const onClose = sandbox.mock();
-            const wrapper = shallow(
-                <Flyout onClose={onClose}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ onClose });
             const instance = wrapper.instance();
             const event = {
                 preventDefault: sandbox.stub(),
@@ -560,12 +501,7 @@ describe('components/flyout/Flyout', () => {
             },
         ].forEach(({ currentIsVisible, isVisibleAfterOverlayOpened }) => {
             test('should toggle isVisible state when called', () => {
-                const wrapper = mount(
-                    <Flyout>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
+                const wrapper = renderWrapper();
                 const instance = wrapper.instance();
                 const event = {
                     preventDefault: sandbox.stub(),
@@ -584,12 +520,7 @@ describe('components/flyout/Flyout', () => {
 
         test('should call onOpen when openOverlay gets called', () => {
             const onOpen = sandbox.mock();
-            const wrapper = shallow(
-                <Flyout onOpen={onOpen}>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ onOpen });
             const instance = wrapper.instance();
             const event = {
                 preventDefault: sandbox.stub(),
@@ -900,12 +831,7 @@ describe('components/flyout/Flyout', () => {
             },
         ].forEach(({ prevIsVisible, currIsVisible, shouldAddEventListener, shouldRemoveEventListener }) => {
             test('should remove and add event listeners properly', () => {
-                const wrapper = mount(
-                    <Flyout isVisibleByDefault={prevIsVisible}>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
+                const wrapper = renderWrapper({ isVisibleByDefault: prevIsVisible });
                 const instance = wrapper.instance();
                 const documentMock = sandbox.mock(document);
 
@@ -940,12 +866,7 @@ describe('components/flyout/Flyout', () => {
             },
         ].forEach(({ isVisible, shouldRemoveEventListener }) => {
             test('should remove event listeners only when the overlay is visible', () => {
-                const wrapper = mount(
-                    <Flyout>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
+                const wrapper = renderWrapper();
                 const instance = wrapper.instance();
                 const documentMock = sandbox.mock(document);
 
@@ -969,12 +890,7 @@ describe('components/flyout/Flyout', () => {
 
     describe('handleOverlayClose()', () => {
         test('should call focusButton() and closeOverlay() when called', () => {
-            const wrapper = mount(
-                <Flyout>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper();
             const instance = wrapper.instance();
 
             sandbox.mock(instance).expects('focusButton');
@@ -986,14 +902,10 @@ describe('components/flyout/Flyout', () => {
 
     describe('isResponsive', () => {
         test('should have correct className when isResponsive is true', () => {
-            const wrapper = shallow(
-                <Flyout isResponsive>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
+            const wrapper = renderWrapper({ isResponsive: true });
 
-            expect(wrapper.prop('classes')).toEqual({
+            const tetherComponent = findTetherComponent(wrapper);
+            expect(tetherComponent.prop('classes')).toEqual({
                 element: `flyout-overlay bdl-Flyout--responsive`,
             });
         });
