@@ -1,4 +1,4 @@
-export { convertCollabsResponse } from './convertCollaborators';
+export { convertCollabsResponse, convertCollab, convertCollabsRequest } from './convertCollaborators';
 export { convertItemResponse } from './convertItemResponse';
 export {
     convertGroupContactsResponse,

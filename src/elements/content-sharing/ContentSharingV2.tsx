@@ -53,11 +53,15 @@ function ContentSharingV2({
 
     const { sharingService } = useSharingService({
         api,
+        avatarURLMap,
+        collaborators,
+        currentUserId: currentUser?.id,
         item,
         itemId: itemID,
         itemType,
         sharedLink,
         sharingServiceProps,
+        setCollaborators,
         setItem,
         setSharedLink,
     });
@@ -111,7 +115,10 @@ function ContentSharingV2({
                 id,
                 enterprise: { name: enterprise ? enterprise.name : '' },
             });
-            setSharedLink(prevSharedLink => ({ ...prevSharedLink, serverURL: hostname ? `${hostname}v/` : '' }));
+            setSharingServiceProps(prevSharingServiceProps => ({
+                ...prevSharingServiceProps,
+                serverURL: hostname ? `${hostname}v/` : '',
+            }));
         };
 
         (async () => {
@@ -136,13 +143,23 @@ function ContentSharingV2({
 
     // Get avatars when collaborators are available
     React.useEffect(() => {
-        if (avatarURLMap || !collaboratorsData || !collaboratorsData.entries) return;
-
+        if (avatarURLMap || !collaboratorsData || !collaboratorsData.entries || !owner) return;
         (async () => {
-            const response = await fetchAvatars({ api, itemID, collaborators: collaboratorsData.entries });
+            const ownerEntry = {
+                accessible_by: {
+                    id: owner.id,
+                    login: owner.email,
+                    name: owner.name,
+                },
+            };
+            const response = await fetchAvatars({
+                api,
+                itemID,
+                collaborators: [...collaboratorsData.entries, ownerEntry],
+            });
             setAvatarURLMap(response);
         })();
-    }, [api, avatarURLMap, collaboratorsData, itemID]);
+    }, [api, avatarURLMap, collaboratorsData, itemID, owner]);
 
     React.useEffect(() => {
         if (avatarURLMap && collaboratorsData && currentUser && owner) {

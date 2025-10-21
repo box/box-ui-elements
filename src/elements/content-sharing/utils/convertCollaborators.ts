@@ -1,6 +1,7 @@
 import { Collaborator } from '@box/unified-share-modal';
 
 import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED } from '../../../constants';
+import { COLLAB_USER_TYPE, COLLAB_GROUP_TYPE } from '../constants';
 
 import type { Collaboration, Collaborations } from '../../../common/types/core';
 import type { AvatarURLMap } from '../types';
@@ -73,10 +74,49 @@ export const convertCollabsResponse = (
             name: ownerName,
         },
     };
-    entries.unshift(itemOwner);
 
-    return entries.flatMap(collab => {
+    return [itemOwner, ...entries].flatMap(collab => {
         const converted = convertCollab({ collab, currentUserId, isCurrentUserOwner, ownerEmailDomain, avatarURLMap });
         return converted ? [converted] : [];
     });
+};
+
+export const convertCollabsRequest = (collabRequest, existingCollaboratorsList) => {
+    const existingCollab = [];
+    if (existingCollaboratorsList && existingCollaboratorsList.length > 0) {
+        existingCollaboratorsList.forEach(collab => {
+            existingCollab.push(collab.userId);
+        });
+    }
+
+    const groups = [];
+    const users = [];
+    const { role } = collabRequest;
+    collabRequest.contacts.forEach(contact => {
+        if (existingCollab.includes(contact.id)) {
+            return;
+        }
+
+        if (contact.type === COLLAB_USER_TYPE) {
+            users.push({
+                accessible_by: {
+                    login: contact.email,
+                    type: COLLAB_USER_TYPE,
+                },
+                role,
+            });
+        }
+
+        if (contact.type === COLLAB_GROUP_TYPE) {
+            groups.push({
+                accessible_by: {
+                    id: contact.id,
+                    type: COLLAB_GROUP_TYPE,
+                },
+                role,
+            });
+        }
+    });
+
+    return { groups, users };
 };

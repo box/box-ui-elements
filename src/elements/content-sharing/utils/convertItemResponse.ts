@@ -103,6 +103,8 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         sharingService: {
             can_set_share_access: canChangeAccessLevel,
             can_share: canShare,
+            ownerEmail: ownedBy.login,
+            ownerId: ownedBy.id,
         },
         ownedBy,
     };

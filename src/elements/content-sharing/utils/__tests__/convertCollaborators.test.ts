@@ -1,5 +1,5 @@
 import { STATUS_ACCEPTED } from '../../../../constants';
-import { convertCollab, convertCollabsResponse } from '../convertCollaborators';
+import { convertCollab, convertCollabsResponse, convertCollabsRequest } from '../convertCollaborators';
 import {
     collabUser1,
     collabUser2,
@@ -251,6 +251,70 @@ describe('convertCollaborators', () => {
                 expect(collab.avatarUrl).toBeUndefined();
                 expect(collab.hasCustomAvatar).toBeFalsy();
                 return collab.avatarUrl;
+            });
+        });
+    });
+
+    describe('convertCollabsRequest', () => {
+        test('should convert collab request with users and groups correctly', () => {
+            const mockCollabRequest = {
+                role: 'editor',
+                contacts: [
+                    {
+                        id: 'user1',
+                        email: 'user1@test.com',
+                        type: 'user',
+                    },
+                    {
+                        id: 'group1',
+                        email: 'Group',
+                        type: 'group',
+                    },
+                    {
+                        id: 'user2',
+                        email: 'existing@test.com',
+                        type: 'user',
+                    },
+                ],
+            };
+
+            const mockExistingCollaboratorsList = [{ userId: 'user2' }, { userId: 'group2' }];
+
+            const result = convertCollabsRequest(mockCollabRequest, mockExistingCollaboratorsList);
+
+            expect(result).toEqual({
+                groups: [
+                    {
+                        accessible_by: {
+                            id: 'group1',
+                            type: 'group',
+                        },
+                        role: 'editor',
+                    },
+                ],
+                users: [
+                    {
+                        accessible_by: {
+                            login: 'user1@test.com',
+                            type: 'user',
+                        },
+                        role: 'editor',
+                    },
+                    // The existing collaborator is filtered out
+                ],
+            });
+        });
+
+        test('should handle empty contacts array', () => {
+            const emptyCollabRequest = {
+                role: 'editor',
+                contacts: [],
+            };
+
+            const result = convertCollabsRequest(emptyCollabRequest, null);
+            expect(result).toEqual({
+                groups: [],
+                users: [],
             });
         });
     });

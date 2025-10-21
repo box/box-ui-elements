@@ -18,6 +18,7 @@ import type { ItemType } from '../../../common/types/core';
 function useInvites(api: API, itemID: string, itemType: ItemType, options: UseInvitesOptions) {
     const [sendInvites, setSendInvites] = useState<null | SendInvitesFnType>(null);
     const {
+        collaborators,
         handleSuccess = noop,
         handleError = noop,
         setIsLoading = noop,
@@ -26,7 +27,7 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
     } = options;
 
     React.useEffect(() => {
-        if (sendInvites) return;
+        if (sendInvites || !collaborators) return;
 
         const itemData = {
             id: itemID,
@@ -45,23 +46,23 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
             );
         };
 
-        const createPostCollaborationFn: SendInvitesFnType = () => async (
-            collabRequest: InviteCollaboratorsRequest,
-        ) => {
-            if (!transformRequest) return Promise.resolve(null);
+        const createPostCollaborationFn: SendInvitesFnType =
+            () => async (collabRequest: InviteCollaboratorsRequest) => {
+                if (!transformRequest) return Promise.resolve(null);
 
-            const { users, groups } = transformRequest(collabRequest);
-            return Promise.all([
-                users.map(user => sendCollabRequest(user)),
-                groups.map(group => sendCollabRequest(group)),
-            ]);
-        };
+                const { users, groups } = transformRequest(collabRequest);
+                return Promise.all([
+                    users.map(user => sendCollabRequest(user)),
+                    groups.map(group => sendCollabRequest(group)),
+                ]);
+            };
 
         if (!sendInvites) {
             setSendInvites(createPostCollaborationFn);
         }
     }, [
         api,
+        collaborators,
         handleError,
         handleSuccess,
         itemID,
