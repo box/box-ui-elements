@@ -1,5 +1,5 @@
 // @flow
-import type { CollaborationRole, DateValue, Item, SharedLink } from '@box/unified-share-modal';
+import type { CollaborationRole, Collaborator, DateValue, Item, SharedLink } from '@box/unified-share-modal';
 
 import API from '../../api';
 import type {
@@ -125,7 +125,8 @@ export type ContentSharingCollaborationsRequest = {
 };
 
 export type UseInvitesOptions = ContentSharingHooksOptions & {
-    collaborators?: Array,
+    collaborators?: Array<Collaborator>,
+    isContentSharingV2Enabled?: Boolean,
     transformRequest: InviteCollaboratorsRequest => ContentSharingCollaborationsRequest,
 };
 

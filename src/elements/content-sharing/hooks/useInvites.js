@@ -21,13 +21,14 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
         collaborators,
         handleSuccess = noop,
         handleError = noop,
+        isContentSharingV2Enabled,
         setIsLoading = noop,
         transformRequest,
         transformResponse = arg => arg,
     } = options;
 
     React.useEffect(() => {
-        if (sendInvites || !collaborators) return;
+        if (sendInvites || (isContentSharingV2Enabled && !collaborators)) return;
 
         const itemData = {
             id: itemID,
@@ -65,6 +66,7 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
         collaborators,
         handleError,
         handleSuccess,
+        isContentSharingV2Enabled,
         itemID,
         itemType,
         sendInvites,

@@ -44,7 +44,6 @@ describe('useInvites hook', () => {
     test('invokes setIsLoading, handleSuccess, and transformResponse on successful collaboration addition', async () => {
         const { result } = renderHook(() =>
             useInvites(mockApi, '123', 'folder', {
-                collaborators: mockCollaborators,
                 handleSuccess: mockHandleSuccess,
                 handleError: mockHandleError,
                 transformRequest: mockTransformRequest,
@@ -63,7 +62,6 @@ describe('useInvites hook', () => {
     test('invokes handleError on failed collaboration addition', async () => {
         const { result } = renderHook(() =>
             useInvites(mockApi, '123', 'folder', {
-                collaborators: mockCollaborators,
                 handleSuccess: mockHandleSuccess,
                 handleError: mockHandleError,
                 transformRequest: mockTransformRequest,
@@ -81,7 +79,6 @@ describe('useInvites hook', () => {
     test('returns null if transformRequest is not provided', async () => {
         const { result } = renderHook(() =>
             useInvites(mockApi, '123', 'folder', {
-                collaborators: mockCollaborators,
                 handleSuccess: mockHandleSuccess,
                 handleError: mockHandleError,
                 transformResponse: mockTransformResponse,
@@ -98,39 +95,43 @@ describe('useInvites hook', () => {
         expect(mockHandleError).not.toHaveBeenCalled();
     });
 
-    test('processes multiple users and groups in a single call', async () => {
-        const { result } = renderHook(() =>
-            useInvites(mockApi, '123', 'folder', {
-                collaborators: mockCollaborators,
-                handleSuccess: mockHandleSuccess,
-                handleError: mockHandleError,
-                transformRequest: mockTransformRequest,
-                transformResponse: mockTransformResponse,
-            }),
-        );
+    describe('when isContentSharingV2Enabled is true', () => {
+        test('processes multiple users and groups in a single call', async () => {
+            const { result } = renderHook(() =>
+                useInvites(mockApi, '123', 'folder', {
+                    collaborators: mockCollaborators,
+                    handleSuccess: mockHandleSuccess,
+                    handleError: mockHandleError,
+                    isContentSharingV2Enabled: true,
+                    transformRequest: mockTransformRequest,
+                    transformResponse: mockTransformResponse,
+                }),
+            );
 
-        act(() => {
-            result.current({
-                users: [{ email: 'user@example.com', role: 'editor' }],
-                groups: [{ id: 'group123', role: 'viewer' }],
+            act(() => {
+                result.current({
+                    users: [{ email: 'user@example.com', role: 'editor' }],
+                    groups: [{ id: 'group123', role: 'viewer' }],
+                });
             });
+
+            expect(mockHandleSuccess).toHaveBeenCalledTimes(2);
+            expect(mockTransformResponse).toHaveBeenCalledTimes(2);
         });
 
-        expect(mockHandleSuccess).toHaveBeenCalledTimes(2);
-        expect(mockTransformResponse).toHaveBeenCalledTimes(2);
-    });
+        test('Should early return null if collaborators is not provided', async () => {
+            const { result } = renderHook(() =>
+                useInvites(mockApi, '123', 'folder', {
+                    handleSuccess: mockHandleSuccess,
+                    handleError: mockHandleError,
+                    isContentSharingV2Enabled: true,
+                    transformResponse: mockTransformResponse,
+                }),
+            );
 
-    test('Should early return null if collaborators is not provided', async () => {
-        const { result } = renderHook(() =>
-            useInvites(mockApi, '123', 'folder', {
-                handleSuccess: mockHandleSuccess,
-                handleError: mockHandleError,
-                transformResponse: mockTransformResponse,
-            }),
-        );
-
-        expect(result.current).toBeNull();
-        expect(mockHandleSuccess).not.toHaveBeenCalled();
-        expect(mockHandleError).not.toHaveBeenCalled();
+            expect(result.current).toBeNull();
+            expect(mockHandleSuccess).not.toHaveBeenCalled();
+            expect(mockHandleError).not.toHaveBeenCalled();
+        });
     });
 });

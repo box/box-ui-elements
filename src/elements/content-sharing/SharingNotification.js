@@ -232,7 +232,6 @@ function SharingNotification({
 
     // Set the sendInvites function
     const sendInvitesFn = useInvites(api, itemID, itemType, {
-        collaborators: [],
         handleSuccess: response => {
             createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
             setIsLoading(false);

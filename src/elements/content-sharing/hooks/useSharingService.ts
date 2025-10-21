@@ -92,6 +92,7 @@ export const useSharingService = ({
     const sendInvitations = useInvites(api, itemId, itemType, {
         collaborators,
         handleSuccess,
+        isContentSharingV2Enabled: true,
         transformRequest: data => convertCollabsRequest(data, collaborators),
     });
 

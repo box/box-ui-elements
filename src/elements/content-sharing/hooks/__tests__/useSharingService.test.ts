@@ -244,6 +244,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             expect(useInvites).toHaveBeenCalledWith(mockApi, mockItemId, TYPE_FILE, {
                 collaborators: mockCollaborators,
                 handleSuccess: expect.any(Function),
+                isContentSharingV2Enabled: true,
                 transformRequest: expect.any(Function),
             });
         });
