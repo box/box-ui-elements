@@ -28,7 +28,7 @@ const mockItemId = '123';
 const mockSharingServiceProps = {
     can_set_share_access: true,
     can_share: true,
-    serverURL: 'https://example.com/server-url',
+    serverUrl: 'https://example.com/server-url',
 };
 const mockItem = {
     id: mockItemId,
@@ -124,7 +124,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
         test('should create file API instance and sharing service', () => {
             const { result } = renderHookWithProps();
-            const { can_set_share_access, can_share, serverURL } = mockItem.sharingServiceProps;
+            const { can_set_share_access, can_share, serverUrl } = mockItem.sharingServiceProps;
 
             expect(mockApi.getFileAPI).toHaveBeenCalled();
             expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
@@ -141,7 +141,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                     isDownloadAvailable: mockSharedLink.settings.isDownloadAvailable,
                     id: mockItemId,
                     permissions: { can_set_share_access, can_share },
-                    serverURL,
+                    serverUrl,
                 },
             });
         });
@@ -180,7 +180,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
         test('should create folder API instance and sharing service', () => {
             const { result } = renderHookWithProps({ itemType: TYPE_FOLDER });
-            const { can_set_share_access, can_share, serverURL } = mockItem.sharingServiceProps;
+            const { can_set_share_access, can_share, serverUrl } = mockItem.sharingServiceProps;
 
             expect(mockApi.getFolderAPI).toHaveBeenCalled();
             expect(mockApi.getFileAPI).not.toHaveBeenCalled();
@@ -197,7 +197,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                     isDownloadAvailable: mockSharedLink.settings.isDownloadAvailable,
                     id: mockItemId,
                     permissions: { can_set_share_access, can_share },
-                    serverURL,
+                    serverUrl,
                 },
             });
         });

@@ -126,7 +126,6 @@ export type ContentSharingCollaborationsRequest = {
 
 export type UseInvitesOptions = ContentSharingHooksOptions & {
     collaborators?: Array<Collaborator>,
-    isContentSharingV2Enabled?: Boolean,
     transformRequest: InviteCollaboratorsRequest => ContentSharingCollaborationsRequest,
 };
 

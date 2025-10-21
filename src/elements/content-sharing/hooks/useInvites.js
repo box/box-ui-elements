@@ -53,8 +53,8 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
 
                 const { users, groups } = transformRequest(collabRequest);
                 return Promise.all([
-                    users.map(user => sendCollabRequest(user)),
-                    groups.map(group => sendCollabRequest(group)),
+                    ...users.map(user => sendCollabRequest(user)),
+                    ...groups.map(group => sendCollabRequest(group)),
                 ]);
             };
 

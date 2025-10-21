@@ -117,7 +117,7 @@ function ContentSharingV2({
             });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
-                serverURL: hostname ? `${hostname}v/` : '',
+                serverUrl: hostname ? `${hostname}v/` : '',
             }));
         };
 
@@ -143,7 +143,7 @@ function ContentSharingV2({
 
     // Get avatars when collaborators are available
     React.useEffect(() => {
-        if (avatarURLMap || !collaboratorsData || !collaboratorsData.entries || !owner) return;
+        if (avatarURLMap || !collaboratorsData || !collaboratorsData.entries || !owner.id) return;
         (async () => {
             const ownerEntry = {
                 accessible_by: {

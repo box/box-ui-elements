@@ -48,7 +48,7 @@ export const useSharingService = ({
                 can_set_share_access: sharingServiceProps.can_set_share_access,
                 can_share: sharingServiceProps.can_share,
             },
-            serverURL: sharingServiceProps.serverURL,
+            serverUrl: sharingServiceProps.serverUrl,
             isDownloadAvailable: sharedLink.settings?.isDownloadAvailable ?? false,
         };
 

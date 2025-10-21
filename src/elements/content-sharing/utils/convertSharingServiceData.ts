@@ -36,7 +36,7 @@ export const convertSharedLinkSettings = (
     newSettings: SharedLinkSettings,
     accessLevel: string,
     isDownloadAvailable: boolean,
-    serverURL: string,
+    serverUrl: string,
 ): ConvertSharedLinkSettingsReturnType => {
     const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, password, vanityName } = newSettings;
 
@@ -45,7 +45,7 @@ export const convertSharedLinkSettings = (
             expiration && isExpirationEnabled
                 ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
                 : null,
-        vanity_url: serverURL && vanityName ? `${serverURL}${vanityName}` : '',
+        vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
 
     // Download permissions can only be set on "company" or "open" shared links.
