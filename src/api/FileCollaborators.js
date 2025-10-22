@@ -104,7 +104,10 @@ class FileCollaborators extends MarkerBasedAPI {
         successCallback: ({ entries: Array<SelectorItem<UserMini | GroupMini>>, next_marker: ?string }) => void,
         errorCallback: ElementsErrorCallback,
         searchStr: string,
-        { includeGroups = false }: { includeGroups: boolean } = {},
+        {
+            includeGroups = false,
+            respectHiddenCollabs = false,
+        }: { includeGroups: boolean, respectHiddenCollabs: boolean } = {},
     ) => {
         // Do not fetch without filter
         if (!searchStr || searchStr.trim() === '') {
@@ -115,6 +118,7 @@ class FileCollaborators extends MarkerBasedAPI {
             filter_term: searchStr,
             include_groups: includeGroups,
             include_uploader_collabs: false,
+            respect_hidden_collabs: respectHiddenCollabs,
         });
     };
 }
