@@ -1,6 +1,7 @@
 import { Collaborator } from '@box/unified-share-modal';
 
 import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED } from '../../../constants';
+import { COLLAB_USER_TYPE, COLLAB_GROUP_TYPE } from '../constants';
 
 import type { Collaboration, Collaborations } from '../../../common/types/core';
 import type { AvatarURLMap } from '../types';
@@ -10,7 +11,7 @@ export interface ConvertCollabProps {
     currentUserId: string;
     isCurrentUserOwner: boolean;
     ownerEmailDomain: string;
-    avatarURLMap?: AvatarURLMap;
+    avatarUrlMap?: AvatarURLMap;
 }
 
 export const convertCollab = ({
@@ -18,7 +19,7 @@ export const convertCollab = ({
     currentUserId,
     isCurrentUserOwner,
     ownerEmailDomain,
-    avatarURLMap,
+    avatarUrlMap,
 }: ConvertCollabProps): Collaborator | null => {
     if (!collab || collab.status !== STATUS_ACCEPTED) return null;
 
@@ -32,7 +33,7 @@ export const convertCollab = ({
     const isCurrentUser = collabId === currentUserId;
     const isExternal =
         !isCurrentUserOwner && collabEmail && ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
-    const avatarUrl = avatarURLMap ? avatarURLMap[collabId] : undefined;
+    const avatarUrl = avatarUrlMap ? avatarUrlMap[collabId] : undefined;
 
     return {
         avatarUrl,
@@ -51,12 +52,12 @@ export const convertCollab = ({
 };
 
 export const convertCollabsResponse = (
-    collabsAPIData: Collaborations,
+    collabsApiData: Collaborations,
     currentUserId: string,
     owner: { id: string; email: string; name: string },
-    avatarURLMap?: AvatarURLMap,
+    avatarUrlMap?: AvatarURLMap,
 ): Collaborator[] => {
-    const { entries = [] } = collabsAPIData;
+    const { entries = [] } = collabsApiData;
     if (!entries.length) return [];
 
     const { id: ownerId, email: ownerEmail, name: ownerName } = owner;
@@ -73,10 +74,49 @@ export const convertCollabsResponse = (
             name: ownerName,
         },
     };
-    entries.unshift(itemOwner);
 
-    return entries.flatMap(collab => {
-        const converted = convertCollab({ collab, currentUserId, isCurrentUserOwner, ownerEmailDomain, avatarURLMap });
+    return [itemOwner, ...entries].flatMap(collab => {
+        const converted = convertCollab({ collab, currentUserId, isCurrentUserOwner, ownerEmailDomain, avatarUrlMap });
         return converted ? [converted] : [];
     });
+};
+
+export const convertCollabsRequest = (collabRequest, existingCollaboratorsList) => {
+    const existingCollab = [];
+    if (existingCollaboratorsList && existingCollaboratorsList.length > 0) {
+        existingCollaboratorsList.forEach(collab => {
+            existingCollab.push(collab.userId);
+        });
+    }
+
+    const groups = [];
+    const users = [];
+    const { role } = collabRequest;
+    collabRequest.contacts.forEach(contact => {
+        if (existingCollab.includes(contact.id)) {
+            return;
+        }
+
+        if (contact.type === COLLAB_USER_TYPE) {
+            users.push({
+                accessible_by: {
+                    login: contact.email,
+                    type: COLLAB_USER_TYPE,
+                },
+                role,
+            });
+        }
+
+        if (contact.type === COLLAB_GROUP_TYPE) {
+            groups.push({
+                accessible_by: {
+                    id: contact.id,
+                    type: COLLAB_GROUP_TYPE,
+                },
+                role,
+            });
+        }
+    });
+
+    return { groups, users };
 };

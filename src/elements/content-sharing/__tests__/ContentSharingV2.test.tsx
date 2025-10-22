@@ -15,15 +15,15 @@ import { CONTENT_SHARING_ITEM_FIELDS } from '../constants';
 
 import ContentSharingV2 from '../ContentSharingV2';
 
-const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI) => ({
-    getFileAPI: jest.fn().mockReturnValue(fileAPI),
-    getFolderAPI: jest.fn().mockReturnValue(folderAPI),
-    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
-    getFileCollaborationsAPI: jest.fn().mockReturnValue(collaborationsAPI),
+const createApiMock = (fileApi, folderApi, usersApi, collaborationsApi) => ({
+    getFileAPI: jest.fn().mockReturnValue(fileApi),
+    getFolderAPI: jest.fn().mockReturnValue(folderApi),
+    getUsersAPI: jest.fn().mockReturnValue(usersApi),
+    getFileCollaborationsAPI: jest.fn().mockReturnValue(collaborationsApi),
 });
 
-const createSuccessMock = responseFromAPI => (id, successFn) => {
-    return Promise.resolve(responseFromAPI).then(response => {
+const createSuccessMock = responseFromApi => (id, successFn) => {
+    return Promise.resolve(responseFromApi).then(response => {
         successFn(response);
     });
 };
@@ -40,7 +40,7 @@ const getDefaultFolderMock = jest.fn().mockImplementation(createSuccessMock(DEFA
 const getCollaborationsMock = jest.fn().mockImplementation(createSuccessMock(MOCK_COLLABORATIONS_RESPONSE));
 const getAvatarUrlMock = jest.fn().mockImplementation(userID => mockAvatarURLMap[userID] ?? null);
 
-const defaultAPIMock = createAPIMock(
+const defaultApiMock = createApiMock(
     { getFile: getDefaultFileMock },
     { getFolderFields: getDefaultFolderMock },
     { getUser: getDefaultUserMock, getAvatarUrlWithAccessToken: getAvatarUrlMock },
@@ -54,8 +54,8 @@ jest.mock('../hooks/useSharingService', () => ({
 const renderComponent = (props = {}): RenderResult =>
     render(
         <ContentSharingV2
-            api={defaultAPIMock}
-            itemID={MOCK_ITEM.id}
+            api={defaultApiMock}
+            itemId={MOCK_ITEM.id}
             itemType={MOCK_ITEM.type}
             hasProviders={true}
             {...props}
@@ -98,7 +98,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
 
     test('should see the shared link elements if shared link is present', async () => {
         const apiWithSharedLink = {
-            ...defaultAPIMock,
+            ...defaultApiMock,
             getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
         };
         renderComponent({ api: apiWithSharedLink });
@@ -122,7 +122,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
 
     test('should see the classification elements if classification is present', async () => {
         const apiWithClassification = {
-            ...defaultAPIMock,
+            ...defaultApiMock,
             getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithClassification }),
         };
 

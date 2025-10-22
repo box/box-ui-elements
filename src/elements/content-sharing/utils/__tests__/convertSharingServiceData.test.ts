@@ -36,7 +36,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
     });
 
     describe('convertSharedLinkSettings', () => {
-        const mockServerURL = 'https://example.com/server-url/';
+        const mockServerUrl = 'https://example.com/server-url/';
         const mockSettings = {
             expiration: new Date('2024-12-31T23:59:59Z'),
             isDownloadEnabled: true,
@@ -48,7 +48,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
         describe('basic conversion', () => {
             test('should return settings with correct values', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, true, mockServerURL);
+                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, true, mockServerUrl);
 
                 expect(result).toEqual({
                     password: 'test-password',
@@ -92,7 +92,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     expiration: new Date('2024-12-31T23:59:59Z'),
                 };
 
-                const result = convertSharedLinkSettings(settingsWithoutExpiration, ACCESS_OPEN, true, mockServerURL);
+                const result = convertSharedLinkSettings(settingsWithoutExpiration, ACCESS_OPEN, true, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
             });
@@ -104,7 +104,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     expiration,
                 };
 
-                const result = convertSharedLinkSettings(settingsWithNullExpiration, ACCESS_OPEN, true, mockServerURL);
+                const result = convertSharedLinkSettings(settingsWithNullExpiration, ACCESS_OPEN, true, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
             });
@@ -117,12 +117,12 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                 ['https://example.com/server-url/', ''],
             ])(
                 'should return empty string when at least one of serverURL or vanityName is empty',
-                (serverURL, vanityName) => {
+                (serverUrl, vanityName) => {
                     const result = convertSharedLinkSettings(
                         { ...mockSettings, vanityName },
                         ACCESS_OPEN,
                         true,
-                        serverURL,
+                        serverUrl,
                     );
 
                     expect(result.vanity_url).toBe('');
@@ -132,7 +132,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
         describe('permissions handling', () => {
             test('should not set permissions for ACCESS_COLLAB access level', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_COLLAB, true, mockServerURL);
+                const result = convertSharedLinkSettings(mockSettings, ACCESS_COLLAB, true, mockServerUrl);
 
                 expect(result.permissions).toBeUndefined();
             });
@@ -147,7 +147,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     settingsWithDownloadDisabled,
                     ACCESS_OPEN,
                     true,
-                    mockServerURL,
+                    mockServerUrl,
                 );
 
                 expect(result.permissions).toEqual({
@@ -157,7 +157,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
             });
 
             test('should not set can_download when isDownloadAvailable is false', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, false, mockServerURL);
+                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, false, mockServerUrl);
 
                 expect(result.permissions).toEqual({
                     can_preview: false,
@@ -178,7 +178,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     settingsWithPasswordDisabled,
                     ACCESS_OPEN,
                     true,
-                    mockServerURL,
+                    mockServerUrl,
                 );
 
                 expect(result.password).toBeNull();
@@ -191,13 +191,13 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     password: '',
                 };
 
-                const result = convertSharedLinkSettings(settingsWithEmptyPassword, ACCESS_OPEN, true, mockServerURL);
+                const result = convertSharedLinkSettings(settingsWithEmptyPassword, ACCESS_OPEN, true, mockServerUrl);
 
                 expect(result.password).toBeUndefined();
             });
 
             test.each([ACCESS_COLLAB, ACCESS_COMPANY])('should not set password for non open access level', access => {
-                const result = convertSharedLinkSettings(mockSettings, access, true, mockServerURL);
+                const result = convertSharedLinkSettings(mockSettings, access, true, mockServerUrl);
 
                 expect(result.password).toBeUndefined();
             });

@@ -162,7 +162,7 @@ describe('elements/content-sharing/sharingService', () => {
                 sharedLinkSettings,
                 undefined, // access
                 undefined, // isDownloadAvailable
-                undefined, // serverURL
+                undefined, // serverUrl
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
@@ -173,7 +173,7 @@ describe('elements/content-sharing/sharingService', () => {
             );
         });
 
-        test('should call updateSharedLink with options including access, isDownloadAvailable, and serverURL', async () => {
+        test('should call updateSharedLink with options including access, isDownloadAvailable, and serverUrl', async () => {
             const mockConvertedSharedLinkSettings = {
                 password: 'test-password',
                 permissions: { can_download: false, can_preview: true },
@@ -191,7 +191,7 @@ describe('elements/content-sharing/sharingService', () => {
                     ...options,
                     access: 'open',
                     isDownloadAvailable: true,
-                    serverURL: 'https://example.com/server-url',
+                    serverUrl: 'https://example.com/server-url',
                 },
             });
 

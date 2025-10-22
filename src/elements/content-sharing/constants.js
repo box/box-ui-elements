@@ -81,3 +81,6 @@ export const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
 export const ANYONE_WITH_LINK = 'peopleWithTheLink';
 export const ANYONE_IN_COMPANY = 'peopleInYourCompany';
 export const PEOPLE_IN_ITEM = 'peopleInThisItem';
+
+export const COLLAB_USER_TYPE = 'user';
+export const COLLAB_GROUP_TYPE = 'group';

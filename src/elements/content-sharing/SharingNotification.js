@@ -170,42 +170,37 @@ function SharingNotification({
     };
 
     // Generate shared link CRUD functions for the item
-    const {
-        changeSharedLinkAccessLevel,
-        changeSharedLinkPermissionLevel,
-        onAddLink,
-        onRemoveLink,
-        onSubmitSettings,
-    } = useSharedLink(api, itemID, itemType, permissions, accessLevel, {
-        handleUpdateSharedLinkError: () => {
-            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
-            setIsLoading(false);
-            closeSettings();
-        },
-        handleUpdateSharedLinkSuccess: itemData => {
-            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
-            handleUpdateSharedLinkSuccess(itemData);
-            setIsLoading(false);
-            closeSettings();
-        },
-        handleRemoveSharedLinkError: () => {
-            createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
-            setIsLoading(false);
-            closeComponent(); // if this function is provided, it will close the modal
-        },
-        handleRemoveSharedLinkSuccess: itemData => {
-            createNotification(TYPE_INFO, contentSharingMessages.sharedLinkRemovalSuccess);
-            handleRemoveSharedLinkSuccess(itemData);
-            setIsLoading(false);
-            closeComponent();
-        },
-        setIsLoading,
-        transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
-        transformPermissions: newSharedLinkPermissionLevel =>
-            convertSharedLinkPermissions(newSharedLinkPermissionLevel),
-        transformSettings: (settings, access) =>
-            convertSharedLinkSettings(settings, access, isDownloadAvailable, serverURL),
-    });
+    const { changeSharedLinkAccessLevel, changeSharedLinkPermissionLevel, onAddLink, onRemoveLink, onSubmitSettings } =
+        useSharedLink(api, itemID, itemType, permissions, accessLevel, {
+            handleUpdateSharedLinkError: () => {
+                createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+                setIsLoading(false);
+                closeSettings();
+            },
+            handleUpdateSharedLinkSuccess: itemData => {
+                createNotification(TYPE_INFO, contentSharingMessages.sharedLinkSettingsUpdateSuccess);
+                handleUpdateSharedLinkSuccess(itemData);
+                setIsLoading(false);
+                closeSettings();
+            },
+            handleRemoveSharedLinkError: () => {
+                createNotification(TYPE_ERROR, contentSharingMessages.sharedLinkUpdateError);
+                setIsLoading(false);
+                closeComponent(); // if this function is provided, it will close the modal
+            },
+            handleRemoveSharedLinkSuccess: itemData => {
+                createNotification(TYPE_INFO, contentSharingMessages.sharedLinkRemovalSuccess);
+                handleRemoveSharedLinkSuccess(itemData);
+                setIsLoading(false);
+                closeComponent();
+            },
+            setIsLoading,
+            transformAccess: newAccessLevel => USM_TO_API_ACCESS_LEVEL_MAP[newAccessLevel],
+            transformPermissions: newSharedLinkPermissionLevel =>
+                convertSharedLinkPermissions(newSharedLinkPermissionLevel),
+            transformSettings: (settings, access) =>
+                convertSharedLinkSettings(settings, access, isDownloadAvailable, serverURL),
+        });
 
     setChangeSharedLinkAccessLevel(() => changeSharedLinkAccessLevel);
     setChangeSharedLinkPermissionLevel(() => changeSharedLinkPermissionLevel);

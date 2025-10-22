@@ -16,7 +16,7 @@ export interface ItemData {
 export interface Options extends ItemData {
     access?: string;
     isDownloadAvailable?: boolean;
-    serverURL?: string;
+    serverUrl?: string;
 }
 
 export interface CreateSharingServiceArgs {
@@ -55,11 +55,11 @@ export const createSharingService = ({
     };
 
     const updateSharedLink = async (sharedLinkSettings: SharedLinkSettings) => {
-        const { access, isDownloadAvailable, serverURL } = options;
+        const { access, isDownloadAvailable, serverUrl } = options;
 
         return itemApiInstance.updateSharedLink(
             { id, permissions },
-            convertSharedLinkSettings(sharedLinkSettings, access, isDownloadAvailable, serverURL),
+            convertSharedLinkSettings(sharedLinkSettings, access, isDownloadAvailable, serverUrl),
             onUpdateSharedLink,
             {},
             CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
