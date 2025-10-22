@@ -1,10 +1,10 @@
 import { DEFAULT_USER_API_RESPONSE, MOCK_ITEM } from '../../utils/__mocks__/ContentSharingV2Mocks';
 import { fetchAvatars } from '..';
-import { createSuccessMock, createUsersAPIMock } from './testUtils';
+import { createSuccessMock, createUsersApiMock } from './testUtils';
 
 const getAvatarUrlMock = jest.fn();
 const getDefaultUserMock = jest.fn().mockImplementation(createSuccessMock(DEFAULT_USER_API_RESPONSE));
-const defaultAPIMock = createUsersAPIMock({
+const defaultApiMock = createUsersApiMock({
     getUser: getDefaultUserMock,
     getAvatarUrlWithAccessToken: getAvatarUrlMock,
 });
@@ -27,12 +27,12 @@ describe('content-sharing/apis/fetchAvatars', () => {
             .mockResolvedValueOnce('https://example.com/avatar3.jpg');
 
         const result = await fetchAvatars({
-            api: defaultAPIMock,
-            itemID: MOCK_ITEM.id,
+            api: defaultApiMock,
+            itemId: MOCK_ITEM.id,
             collaborators: mockCollaborations,
         });
 
-        expect(defaultAPIMock.getUsersAPI).toHaveBeenCalledWith(false);
+        expect(defaultApiMock.getUsersAPI).toHaveBeenCalledWith(false);
         expect(getAvatarUrlMock).toHaveBeenCalledTimes(3);
         expect(getAvatarUrlMock).toHaveBeenCalledWith('123', MOCK_ITEM.id);
         expect(getAvatarUrlMock).toHaveBeenCalledWith('456', MOCK_ITEM.id);
@@ -51,8 +51,8 @@ describe('content-sharing/apis/fetchAvatars', () => {
             .mockResolvedValueOnce('https://example.com/avatar3.jpg');
 
         const result = await fetchAvatars({
-            api: defaultAPIMock,
-            itemID: MOCK_ITEM.id,
+            api: defaultApiMock,
+            itemId: MOCK_ITEM.id,
             collaborators: mockCollaborations,
         });
 
@@ -69,8 +69,8 @@ describe('content-sharing/apis/fetchAvatars', () => {
         getAvatarUrlMock.mockResolvedValue('https://example.com/avatar.jpg');
 
         const result = await fetchAvatars({
-            api: defaultAPIMock,
-            itemID: MOCK_ITEM.id,
+            api: defaultApiMock,
+            itemId: MOCK_ITEM.id,
             collaborators: collaboratorsWithMissingData,
         });
 
@@ -83,8 +83,8 @@ describe('content-sharing/apis/fetchAvatars', () => {
 
     test('should handle empty collaborators array', async () => {
         const result = await fetchAvatars({
-            api: defaultAPIMock,
-            itemID: MOCK_ITEM.id,
+            api: defaultApiMock,
+            itemId: MOCK_ITEM.id,
             collaborators: [],
         });
 

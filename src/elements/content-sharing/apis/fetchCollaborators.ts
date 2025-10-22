@@ -3,19 +3,19 @@ import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import type { Collaborations } from '../../../common/types/core';
 import type { FetchItemProps } from '../types';
 
-export const fetchCollaborators = async ({ api, itemID, itemType }: FetchItemProps): Promise<Collaborations> => {
-    let collabAPIInstance;
+export const fetchCollaborators = async ({ api, itemId, itemType }: FetchItemProps): Promise<Collaborations> => {
+    let collabApiInstance;
     if (itemType === TYPE_FILE) {
-        collabAPIInstance = api.getFileCollaborationsAPI(false);
+        collabApiInstance = api.getFileCollaborationsAPI(false);
     } else if (itemType === TYPE_FOLDER) {
-        collabAPIInstance = api.getFolderCollaborationsAPI(false);
+        collabApiInstance = api.getFolderCollaborationsAPI(false);
     }
 
-    if (!collabAPIInstance) {
+    if (!collabApiInstance) {
         return null;
     }
 
     return new Promise((resolve, reject) => {
-        collabAPIInstance.getCollaborations(itemID, resolve, reject);
+        collabApiInstance.getCollaborations(itemId, resolve, reject);
     });
 };

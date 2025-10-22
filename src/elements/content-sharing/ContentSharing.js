@@ -119,7 +119,7 @@ function ContentSharing({
             api && (
                 <ContentSharingV2
                     api={api}
-                    itemID={itemID}
+                    itemId={itemID}
                     itemType={itemType}
                     hasProviders={hasProviders}
                     language={language}

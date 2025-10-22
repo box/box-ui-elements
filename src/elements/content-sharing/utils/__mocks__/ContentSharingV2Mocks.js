@@ -27,7 +27,7 @@ export const MOCK_SHARED_LINK = {
     vanity_url: 'https://example.com/vanity-url',
 };
 
-export const mockAvatarURLMap = {
+export const mockAvatarUrlMap = {
     456: 'https://example.com/avatar.jpg',
 };
 
@@ -122,46 +122,46 @@ export const MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION = {
 };
 
 // Mock API class for ContentSharingV2 storybook
-export const createMockAPI = (
+export const createMockApi = (
     itemResponse = DEFAULT_ITEM_API_RESPONSE,
     userResponse = DEFAULT_USER_API_RESPONSE,
     collaboratorsResponse = MOCK_COLLABORATIONS_RESPONSE,
 ) => {
-    const mockFileAPI = {
-        getFile: (itemID, successCallback) => {
+    const mockFileApi = {
+        getFile: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(itemResponse);
             }, 100);
         },
     };
 
-    const mockFolderAPI = {
-        getFolderFields: (itemID, successCallback) => {
+    const mockFolderApi = {
+        getFolderFields: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(itemResponse);
             }, 100);
         },
     };
 
-    const mockUsersAPI = {
-        getUser: (itemID, successCallback) => {
+    const mockUsersApi = {
+        getUser: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(userResponse);
             }, 100);
         },
-        getAvatarUrlWithAccessToken: userID => mockAvatarURLMap[userID] ?? null,
+        getAvatarUrlWithAccessToken: userId => mockAvatarUrlMap[userId] ?? null,
     };
 
-    const getFileCollaborationsAPI = () => ({
-        getCollaborations: (itemID, successCallback) => {
+    const getFileCollaborationsApi = () => ({
+        getCollaborations: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(collaboratorsResponse);
             }, 100);
         },
     });
 
-    const getFolderCollaborationsAPI = () => ({
-        getCollaborations: (itemID, successCallback) => {
+    const getFolderCollaborationsApi = () => ({
+        getCollaborations: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(collaboratorsResponse);
             }, 100);
@@ -169,26 +169,26 @@ export const createMockAPI = (
     });
 
     return {
-        getFileAPI: () => mockFileAPI,
-        getFolderAPI: () => mockFolderAPI,
-        getUsersAPI: () => mockUsersAPI,
-        getFileCollaborationsAPI,
-        getFolderCollaborationsAPI,
+        getFileAPI: () => mockFileApi,
+        getFolderAPI: () => mockFolderApi,
+        getUsersAPI: () => mockUsersApi,
+        getFileCollaborationsApi,
+        getFolderCollaborationsApi,
     };
 };
 
 // Pre-configured mock APIs for different scenarios
-export const mockAPIWithSharedLink = createMockAPI(
+export const mockApiWithSharedLink = createMockApi(
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     DEFAULT_USER_API_RESPONSE,
     EMPTY_COLLABORATIONS_RESPONSE,
 );
-export const mockAPIWithoutSharedLink = createMockAPI(
+export const mockApiWithoutSharedLink = createMockApi(
     DEFAULT_ITEM_API_RESPONSE,
     DEFAULT_USER_API_RESPONSE,
     EMPTY_COLLABORATIONS_RESPONSE,
 );
-export const mockAPIWithCollaborators = createMockAPI(
+export const mockApiWithCollaborators = createMockApi(
     MOCK_ITEM_API_RESPONSE_WITH_COLLABORATORS,
     DEFAULT_USER_API_RESPONSE,
     MOCK_COLLABORATIONS_RESPONSE,

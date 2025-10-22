@@ -11,7 +11,7 @@ export interface ConvertCollabProps {
     currentUserId: string;
     isCurrentUserOwner: boolean;
     ownerEmailDomain: string;
-    avatarURLMap?: AvatarURLMap;
+    avatarUrlMap?: AvatarURLMap;
 }
 
 export const convertCollab = ({
@@ -19,7 +19,7 @@ export const convertCollab = ({
     currentUserId,
     isCurrentUserOwner,
     ownerEmailDomain,
-    avatarURLMap,
+    avatarUrlMap,
 }: ConvertCollabProps): Collaborator | null => {
     if (!collab || collab.status !== STATUS_ACCEPTED) return null;
 
@@ -33,7 +33,7 @@ export const convertCollab = ({
     const isCurrentUser = collabId === currentUserId;
     const isExternal =
         !isCurrentUserOwner && collabEmail && ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
-    const avatarUrl = avatarURLMap ? avatarURLMap[collabId] : undefined;
+    const avatarUrl = avatarUrlMap ? avatarUrlMap[collabId] : undefined;
 
     return {
         avatarUrl,
@@ -52,12 +52,12 @@ export const convertCollab = ({
 };
 
 export const convertCollabsResponse = (
-    collabsAPIData: Collaborations,
+    collabsApiData: Collaborations,
     currentUserId: string,
     owner: { id: string; email: string; name: string },
-    avatarURLMap?: AvatarURLMap,
+    avatarUrlMap?: AvatarURLMap,
 ): Collaborator[] => {
-    const { entries = [] } = collabsAPIData;
+    const { entries = [] } = collabsApiData;
     if (!entries.length) return [];
 
     const { id: ownerId, email: ownerEmail, name: ownerName } = owner;
@@ -76,7 +76,7 @@ export const convertCollabsResponse = (
     };
 
     return [itemOwner, ...entries].flatMap(collab => {
-        const converted = convertCollab({ collab, currentUserId, isCurrentUserOwner, ownerEmailDomain, avatarURLMap });
+        const converted = convertCollab({ collab, currentUserId, isCurrentUserOwner, ownerEmailDomain, avatarUrlMap });
         return converted ? [converted] : [];
     });
 };

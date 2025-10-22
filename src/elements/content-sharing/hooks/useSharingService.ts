@@ -7,7 +7,7 @@ import useInvites from './useInvites';
 
 export const useSharingService = ({
     api,
-    avatarURLMap,
+    avatarUrlMap,
     collaborators,
     currentUserId,
     item,
@@ -82,7 +82,7 @@ export const useSharingService = ({
                 currentUserId,
                 isCurrentUserOwner: currentUserId === ownerId,
                 ownerEmailDomain,
-                avatarURLMap,
+                avatarUrlMap,
             });
 
             return newCollab ? [...prevList, newCollab] : prevList;
