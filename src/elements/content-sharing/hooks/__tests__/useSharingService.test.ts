@@ -58,7 +58,7 @@ const renderHookWithProps = (props = {}) => {
     return renderHook(() =>
         useSharingService({
             api: mockApi,
-            avatarURLMap: {},
+            avatarUrlMap: {},
             collaborators: [],
             currentUserId: '123',
             item: mockItem,
@@ -231,13 +231,13 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
     describe('sendInvitations', () => {
         const mockCollaborators = [{ id: 'collab-1', email: 'existing@example.com', type: 'user' }];
-        const mockAvatarURLMap = { 'user-1': 'https://example.com/avatar.jpg' };
+        const mockAvatarUrlMap = { 'user-1': 'https://example.com/avatar.jpg' };
         const mockCurrentUserId = 'current-user-123';
 
         test('should call useInvites with correct parameters', () => {
             renderHookWithProps({
                 collaborators: mockCollaborators,
-                avatarURLMap: mockAvatarURLMap,
+                avatarUrlMap: mockAvatarUrlMap,
                 currentUserId: mockCurrentUserId,
             });
 
@@ -259,7 +259,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
             renderHookWithProps({
                 collaborators: mockCollaborators,
-                avatarURLMap: mockAvatarURLMap,
+                avatarUrlMap: mockAvatarUrlMap,
                 currentUserId: mockCurrentUserId,
             });
 
@@ -274,7 +274,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 currentUserId: mockCurrentUserId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain: 'test.com',
-                avatarURLMap: mockAvatarURLMap,
+                avatarUrlMap: mockAvatarUrlMap,
             });
         });
 

@@ -1,23 +1,23 @@
-export const createSuccessMock = responseFromAPI => (itemID, successFn) => {
+export const createSuccessMock = responseFromApi => (itemId, successFn) => {
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve(responseFromAPI);
+            resolve(responseFromApi);
         }, 500);
     }).then(response => {
         successFn(response);
     });
 };
 
-export const createItemAPIMock = (fileAPI, folderAPI) => ({
-    getFileAPI: jest.fn().mockReturnValue(fileAPI),
-    getFolderAPI: jest.fn().mockReturnValue(folderAPI),
+export const createItemApiMock = (fileApi, folderApi) => ({
+    getFileAPI: jest.fn().mockReturnValue(fileApi),
+    getFolderAPI: jest.fn().mockReturnValue(folderApi),
 });
 
-export const createCollabAPIMock = (fileCollabAPI, folderCollabAPI) => ({
-    getFileCollaborationsAPI: jest.fn().mockReturnValue(fileCollabAPI),
-    getFolderCollaborationsAPI: jest.fn().mockReturnValue(folderCollabAPI),
+export const createCollabApiMock = (fileCollabApi, folderCollabApi) => ({
+    getFileCollaborationsAPI: jest.fn().mockReturnValue(fileCollabApi),
+    getFolderCollaborationsAPI: jest.fn().mockReturnValue(folderCollabApi),
 });
 
-export const createUsersAPIMock = usersAPI => ({
-    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+export const createUsersApiMock = usersApi => ({
+    getUsersAPI: jest.fn().mockReturnValue(usersApi),
 });

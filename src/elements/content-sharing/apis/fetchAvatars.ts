@@ -1,8 +1,8 @@
 import type { AvatarURLMap, FetchCollaboratorsProps } from '../types';
 
-export const fetchAvatars = async ({ api, itemID, collaborators }: FetchCollaboratorsProps): Promise<AvatarURLMap> => {
-    const usersAPI = api.getUsersAPI(false);
-    const avatarURLMap: AvatarURLMap = {};
+export const fetchAvatars = async ({ api, itemId, collaborators }: FetchCollaboratorsProps): Promise<AvatarURLMap> => {
+    const usersApi = api.getUsersAPI(false);
+    const avatarUrlMap: AvatarURLMap = {};
 
     const avatarPromises = collaborators.map(async collab => {
         if (!collab?.accessible_by) return;
@@ -10,13 +10,13 @@ export const fetchAvatars = async ({ api, itemID, collaborators }: FetchCollabor
             accessible_by: { id: userId },
         } = collab;
         try {
-            const url = await usersAPI.getAvatarUrlWithAccessToken(userId.toString(), itemID);
-            avatarURLMap[userId] = url;
+            const url = await usersApi.getAvatarUrlWithAccessToken(userId.toString(), itemId);
+            avatarUrlMap[userId] = url;
         } catch {
-            avatarURLMap[userId] = null;
+            avatarUrlMap[userId] = null;
         }
     });
 
     await Promise.all(avatarPromises);
-    return avatarURLMap;
+    return avatarUrlMap;
 };

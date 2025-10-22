@@ -5,15 +5,15 @@ import { Button } from '@box/blueprint-web';
 
 import { TYPE_FILE } from '../../../../constants';
 import {
-    mockAPIWithCollaborators,
-    mockAPIWithSharedLink,
-    mockAPIWithoutSharedLink,
+    mockApiWithCollaborators,
+    mockApiWithSharedLink,
+    mockApiWithoutSharedLink,
 } from '../../utils/__mocks__/ContentSharingV2Mocks';
 import ContentSharingV2 from '../../ContentSharingV2';
 
 export const withModernization = {
     args: {
-        api: mockAPIWithoutSharedLink,
+        api: mockApiWithoutSharedLink,
         enableModernizedComponents: true,
     },
     play: async ({ canvasElement }) => {
@@ -30,7 +30,7 @@ export const withModernization = {
 
 export const withSharedLink = {
     args: {
-        api: mockAPIWithSharedLink,
+        api: mockApiWithSharedLink,
     },
     play: async context => {
         await withModernization.play(context);
@@ -50,7 +50,7 @@ export const withSharedLink = {
 
 export const withCollaborators = {
     args: {
-        api: mockAPIWithCollaborators,
+        api: mockApiWithCollaborators,
     },
     play: async context => {
         await withModernization.play(context);
@@ -73,6 +73,6 @@ export default {
     args: {
         children: <Button>Open Unified Share Modal</Button>,
         itemType: TYPE_FILE,
-        itemID: global.FILE_ID,
+        itemId: global.FILE_ID,
     },
 };
