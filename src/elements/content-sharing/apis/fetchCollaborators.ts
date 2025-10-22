@@ -3,7 +3,7 @@ import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import type { Collaborations } from '../../../common/types/core';
 import type { FetchItemProps } from '../types';
 
-export const fetchCollaborators = async ({ api, itemId, itemType }: FetchItemProps): Promise<Collaborations> => {
+export const fetchCollaborators = async ({ api, itemId, itemType }: FetchItemProps): Promise<Collaborations | null> => {
     let collabApiInstance;
     if (itemType === TYPE_FILE) {
         collabApiInstance = api.getFileCollaborationsAPI(false);

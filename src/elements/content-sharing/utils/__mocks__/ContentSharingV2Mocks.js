@@ -152,7 +152,7 @@ export const createMockApi = (
         getAvatarUrlWithAccessToken: userId => mockAvatarUrlMap[userId] ?? null,
     };
 
-    const getFileCollaborationsApi = () => ({
+    const getFileCollaborationsAPI = () => ({
         getCollaborations: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(collaboratorsResponse);
@@ -160,7 +160,7 @@ export const createMockApi = (
         },
     });
 
-    const getFolderCollaborationsApi = () => ({
+    const getFolderCollaborationsAPI = () => ({
         getCollaborations: (itemId, successCallback) => {
             setTimeout(() => {
                 successCallback(collaboratorsResponse);
@@ -172,8 +172,8 @@ export const createMockApi = (
         getFileAPI: () => mockFileApi,
         getFolderAPI: () => mockFolderApi,
         getUsersAPI: () => mockUsersApi,
-        getFileCollaborationsApi,
-        getFolderCollaborationsApi,
+        getFileCollaborationsAPI,
+        getFolderCollaborationsAPI,
     };
 };
 
