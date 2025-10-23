@@ -103,7 +103,7 @@ export const useSharingService = ({
 
     const sendInvitations = (...args) => {
         return handleSendInvitations(...args).then(result => {
-            if (!result) {
+            if (!result || args[0].contacts.length === 0) {
                 return null;
             }
 
@@ -116,7 +116,7 @@ export const useSharingService = ({
                     type: 'error',
                 });
             }
-            if (result.length <= args[0].contacts.length) {
+            if (result.length <= args[0].contacts.length && result.length > 0) {
                 notification.push({
                     text: formatMessage(messages.sendInvitationsSuccess, { count: result.length }),
                     type: 'success',
