@@ -61,14 +61,14 @@ const messages = defineMessages({
     },
     sendInvitationsError: {
         defaultMessage:
-            '{ count, plural, one { Failed to invite a collaborator. } other { Failed to invite {count} collaborators. }}',
+            '{count, plural, one {Failed to invite a collaborator.} other {Failed to invite {count} collaborators.}}',
         description:
             'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitationsError',
     },
     sendInvitationsSuccess: {
         defaultMessage:
-            '{ count, plural, one { Successfully invited a collaborator. } other { Successfully invited {count} collaborators. }}',
+            '{count, plural, one {Successfully invited a collaborator.} other {Successfully invited {count} collaborators.}}',
         description:
             'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitationsSuccess',

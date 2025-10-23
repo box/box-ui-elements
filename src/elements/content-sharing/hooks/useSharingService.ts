@@ -101,24 +101,26 @@ export const useSharingService = ({
         transformRequest: data => convertCollabsRequest(data, collaborators),
     });
 
-    const sendInvitations = (...args) => {
-        return handleSendInvitations(...args).then(result => {
-            if (!result || args[0].contacts.length === 0) {
+    const sendInvitations = (...request) => {
+        return handleSendInvitations(...request).then(response => {
+            const { contacts: collabRequest } = request[0];
+            if (!response || !collabRequest || collabRequest.length === 0) {
                 return null;
             }
 
+            const successCount = response.length;
+            const errorCount = collabRequest.length - successCount;
+
             const notification = [];
-            if (result.length === 0 || result.length < args[0].contacts.length) {
+            if (errorCount > 0) {
                 notification.push({
-                    text: formatMessage(messages.sendInvitationsError, {
-                        count: args[0].contacts.length - result.length,
-                    }),
+                    text: formatMessage(messages.sendInvitationsError, { count: errorCount }),
                     type: 'error',
                 });
             }
-            if (result.length <= args[0].contacts.length && result.length > 0) {
+            if (successCount > 0) {
                 notification.push({
-                    text: formatMessage(messages.sendInvitationsSuccess, { count: result.length }),
+                    text: formatMessage(messages.sendInvitationsSuccess, { count: successCount }),
                     type: 'success',
                 });
             }
