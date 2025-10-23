@@ -1419,19 +1419,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@^4.69.0":
-  version "4.69.3"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.69.3.tgz#d149f127c8609731f06eb10aaafb8158232d6704"
-  integrity sha512-43kOdVkHUR04cV0afjyOgoX2y7i13dWj2dYaIwoa9F1+xlMbbldfF+fnvPjIXgoC2fKxdKjjjZG5k5OnhvBEtA==
+"@box/blueprint-web-assets@^4.75.0":
+  version "4.75.3"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.75.3.tgz#7ac514a2711197ef26914893b58dd15cafb1c5fa"
+  integrity sha512-fDQmFWGWy4bnZc4AaXr0kZMQ8TAVYuH+2EICBH8ASdtYhHdx83hNEh1TmuaiVo4P5knaRXLuOOsrxgsXsbvTPg==
 
-"@box/blueprint-web@^12.78.0":
-  version "12.78.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.78.0.tgz#a55a4b2f640771a8345c6afd992dab3ad73c6c85"
-  integrity sha512-ESNCwIPUzGp6+0SwsuSGf1ZYvteeF0t0joE658kDGMPa8QmRzgDl5/GZ27rXQHW1PeGHbtko/4YviOQ+jN93cA==
+"@box/blueprint-web@^12.89.2":
+  version "12.89.2"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.89.2.tgz#12793c9ac1eaa0ec1f798c88cec3cb4a3c14dc36"
+  integrity sha512-eMegvo/AbiERCtZdPBhlWwmOaIm5b7H8Q29YR/FPpVLGRcQqW+CcU6bCqm4iCGuzStHCwipAturwiXAjquzpFg==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.69.0"
+    "@box/blueprint-web-assets" "^4.75.0"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
