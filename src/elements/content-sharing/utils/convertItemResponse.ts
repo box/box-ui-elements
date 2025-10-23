@@ -5,7 +5,7 @@ import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
 
 import type { ContentSharingItemAPIResponse, ItemData } from '../types';
 
-export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ItemData => {
+export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse): ItemData => {
     const {
         allowed_invitee_roles,
         allowed_shared_link_access_levels,
@@ -18,7 +18,7 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
         shared_link,
         shared_link_features,
         type,
-    } = itemAPIData;
+    } = itemApiData;
 
     const { password: isPasswordAvailable } = shared_link_features;
 

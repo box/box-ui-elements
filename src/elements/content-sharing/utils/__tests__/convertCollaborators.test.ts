@@ -4,7 +4,7 @@ import {
     collabUser1,
     collabUser2,
     collabUser3,
-    mockAvatarURLMap,
+    mockAvatarUrlMap,
     mockOwnerId,
     mockOwnerEmail,
     mockOwnerName,
@@ -13,7 +13,7 @@ import {
 import type { Collaborations } from '../../../../common/types/core';
 
 const ownerEmailDomain = 'example.com';
-const ownerFromAPI = {
+const ownerFromApi = {
     id: mockOwnerId,
     email: mockOwnerEmail,
     name: mockOwnerName,
@@ -29,7 +29,7 @@ const itemOwner = {
     },
 };
 
-const mockCollaborationsFromAPI: Collaborations = {
+const mockCollaborationsFromApi: Collaborations = {
     entries: [
         {
             id: '123',
@@ -37,7 +37,7 @@ const mockCollaborationsFromAPI: Collaborations = {
             status: STATUS_ACCEPTED,
             expires_at: '2024-12-31T23:59:59Z',
             accessible_by: collabUser1,
-            created_by: ownerFromAPI,
+            created_by: ownerFromApi,
         },
         {
             id: '124',
@@ -45,7 +45,7 @@ const mockCollaborationsFromAPI: Collaborations = {
             status: STATUS_ACCEPTED,
             expires_at: null,
             accessible_by: collabUser2,
-            created_by: ownerFromAPI,
+            created_by: ownerFromApi,
         },
         {
             id: '125',
@@ -53,22 +53,22 @@ const mockCollaborationsFromAPI: Collaborations = {
             status: 'pending',
             expires_at: '2024-12-31T23:59:59Z',
             accessible_by: collabUser3,
-            created_by: ownerFromAPI,
+            created_by: ownerFromApi,
         },
     ],
 };
 
-const mockCollaborations = [itemOwner, ...mockCollaborationsFromAPI.entries];
+const mockCollaborations = [itemOwner, ...mockCollaborationsFromApi.entries];
 
 describe('convertCollaborators', () => {
     describe('convertCollab', () => {
         test('should convert a valid collaboration to Collaborator format', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[1],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarURLMap: mockAvatarURLMap,
             });
 
             expect(result).toEqual({
@@ -89,11 +89,11 @@ describe('convertCollaborators', () => {
 
         test('should return null for collaboration with non-accepted status', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[3],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarURLMap: mockAvatarURLMap,
             });
 
             expect(result).toBeNull();
@@ -101,11 +101,11 @@ describe('convertCollaborators', () => {
 
         test.each([undefined, null])('should return null for %s collaboration', collab => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab,
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarURLMap: mockAvatarURLMap,
             });
 
             expect(result).toBeNull();
@@ -113,11 +113,11 @@ describe('convertCollaborators', () => {
 
         test('should identify current user correctly', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[0],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: true,
                 ownerEmailDomain,
-                avatarURLMap: mockAvatarURLMap,
             });
 
             expect(result).toEqual({
@@ -137,11 +137,11 @@ describe('convertCollaborators', () => {
 
         test('should identify external user correctly', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[2],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarURLMap: mockAvatarURLMap,
             });
 
             expect(result.isExternal).toBe(true);
@@ -149,13 +149,13 @@ describe('convertCollaborators', () => {
 
         test.each([null, undefined, {}, { 999: 'https://example.com/different-user-avatar.jpg' }])(
             'should handle %s avatar URL map',
-            avatarURLMap => {
+            avatarUrlMap => {
                 const result = convertCollab({
+                    avatarUrlMap,
                     collab: mockCollaborations[1],
                     currentUserId: mockOwnerId,
                     isCurrentUserOwner: false,
                     ownerEmailDomain,
-                    avatarURLMap,
                 });
 
                 expect(result.avatarUrl).toBeUndefined();
@@ -170,11 +170,11 @@ describe('convertCollaborators', () => {
             };
 
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: collabWithoutExpiration,
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarURLMap: mockAvatarURLMap,
             });
 
             expect(result.expiresAt).toBeNull();
@@ -184,10 +184,10 @@ describe('convertCollaborators', () => {
     describe('convertCollabsResponse', () => {
         test('should convert valid collaborations data to Collaborator array', () => {
             const result = convertCollabsResponse(
-                mockCollaborationsFromAPI,
+                mockCollaborationsFromApi,
                 mockOwnerId,
-                ownerFromAPI,
-                mockAvatarURLMap,
+                ownerFromApi,
+                mockAvatarUrlMap,
             );
 
             expect(result).toHaveLength(3); // Only accepted collaborations
@@ -239,13 +239,13 @@ describe('convertCollaborators', () => {
 
         test('should return empty array for empty entries', () => {
             const emptyCollaborations: Collaborations = { entries: [] };
-            const result = convertCollabsResponse(emptyCollaborations, mockOwnerId, ownerFromAPI, mockAvatarURLMap);
+            const result = convertCollabsResponse(emptyCollaborations, mockOwnerId, ownerFromApi, mockAvatarUrlMap);
 
             expect(result).toEqual([]);
         });
 
         test('should handle null avatar URL map', () => {
-            const collabs = convertCollabsResponse(mockCollaborationsFromAPI, mockOwnerId, ownerFromAPI, null);
+            const collabs = convertCollabsResponse(mockCollaborationsFromApi, mockOwnerId, ownerFromApi, null);
 
             collabs.map(collab => {
                 expect(collab.avatarUrl).toBeUndefined();
@@ -301,6 +301,45 @@ describe('convertCollaborators', () => {
                         role: 'editor',
                     },
                     // The existing collaborator is filtered out
+                ],
+            });
+        });
+
+        test('should convert collab request with users without a type', () => {
+            const mockCollabRequest = {
+                role: 'editor',
+                contacts: [
+                    {
+                        id: 'user1',
+                        email: 'user1@test.com',
+                        type: 'user',
+                    },
+                    {
+                        id: 'user2',
+                        email: 'external@test.com',
+                    },
+                ],
+            };
+
+            const result = convertCollabsRequest(mockCollabRequest, null);
+
+            expect(result).toEqual({
+                groups: [],
+                users: [
+                    {
+                        accessible_by: {
+                            login: 'user1@test.com',
+                            type: 'user',
+                        },
+                        role: 'editor',
+                    },
+                    {
+                        accessible_by: {
+                            login: 'external@test.com',
+                            type: 'user',
+                        },
+                        role: 'editor',
+                    },
                 ],
             });
         });
