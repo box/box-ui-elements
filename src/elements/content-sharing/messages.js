@@ -59,6 +59,19 @@ const messages = defineMessages({
             'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitesSuccess',
     },
+    sendInvitationsError: {
+        defaultMessage:
+            '{ count, plural, one { An invitation to join this item was not sent.} other { {count} invitations to join this item were not sent.}}',
+        description:
+            'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitationsError',
+    },
+    sendInvitationsSuccess: {
+        defaultMessage: 'Successfully invited {count} collaborators.',
+        description:
+            'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitationsSuccess',
+    },
     groupContactLabel: {
         defaultMessage: 'Group',
         description: 'Display text for a Group contact type',

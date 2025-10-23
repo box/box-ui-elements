@@ -25,7 +25,9 @@ export const useContactService = (api, itemId, currentUserId) => {
 
     const getContactsAvatarUrls = React.useCallback(
         async contacts => {
-            if (!contacts || contacts.length === 0) return Promise.resolve({});
+            if (!contacts || contacts.length === 0) {
+                return Promise.resolve({});
+            }
 
             const collaborators = contacts.map(contact => ({
                 accessible_by: {

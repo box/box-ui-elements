@@ -64,11 +64,11 @@ describe('convertCollaborators', () => {
     describe('convertCollab', () => {
         test('should convert a valid collaboration to Collaborator format', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[1],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarUrlMap: mockAvatarUrlMap,
             });
 
             expect(result).toEqual({
@@ -89,11 +89,11 @@ describe('convertCollaborators', () => {
 
         test('should return null for collaboration with non-accepted status', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[3],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarUrlMap: mockAvatarUrlMap,
             });
 
             expect(result).toBeNull();
@@ -101,11 +101,11 @@ describe('convertCollaborators', () => {
 
         test.each([undefined, null])('should return null for %s collaboration', collab => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab,
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarUrlMap: mockAvatarUrlMap,
             });
 
             expect(result).toBeNull();
@@ -113,11 +113,11 @@ describe('convertCollaborators', () => {
 
         test('should identify current user correctly', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[0],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: true,
                 ownerEmailDomain,
-                avatarUrlMap: mockAvatarUrlMap,
             });
 
             expect(result).toEqual({
@@ -137,11 +137,11 @@ describe('convertCollaborators', () => {
 
         test('should identify external user correctly', () => {
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[2],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarUrlMap: mockAvatarUrlMap,
             });
 
             expect(result.isExternal).toBe(true);
@@ -151,11 +151,11 @@ describe('convertCollaborators', () => {
             'should handle %s avatar URL map',
             avatarUrlMap => {
                 const result = convertCollab({
+                    avatarUrlMap,
                     collab: mockCollaborations[1],
                     currentUserId: mockOwnerId,
                     isCurrentUserOwner: false,
                     ownerEmailDomain,
-                    avatarUrlMap,
                 });
 
                 expect(result.avatarUrl).toBeUndefined();
@@ -170,11 +170,11 @@ describe('convertCollaborators', () => {
             };
 
             const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
                 collab: collabWithoutExpiration,
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
-                avatarUrlMap: mockAvatarUrlMap,
             });
 
             expect(result.expiresAt).toBeNull();
@@ -301,6 +301,45 @@ describe('convertCollaborators', () => {
                         role: 'editor',
                     },
                     // The existing collaborator is filtered out
+                ],
+            });
+        });
+
+        test('should convert collab request with users without a type', () => {
+            const mockCollabRequest = {
+                role: 'editor',
+                contacts: [
+                    {
+                        id: 'user1',
+                        email: 'user1@test.com',
+                        type: 'user',
+                    },
+                    {
+                        id: 'user2',
+                        email: 'external@test.com',
+                    },
+                ],
+            };
+
+            const result = convertCollabsRequest(mockCollabRequest, null);
+
+            expect(result).toEqual({
+                groups: [],
+                users: [
+                    {
+                        accessible_by: {
+                            login: 'user1@test.com',
+                            type: 'user',
+                        },
+                        role: 'editor',
+                    },
+                    {
+                        accessible_by: {
+                            login: 'external@test.com',
+                            type: 'user',
+                        },
+                        role: 'editor',
+                    },
                 ],
             });
         });

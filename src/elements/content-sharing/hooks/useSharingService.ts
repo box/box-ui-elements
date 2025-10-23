@@ -1,9 +1,12 @@
 import * as React from 'react';
+import { useIntl } from 'react-intl';
 
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 import { convertItemResponse, convertCollab, convertCollabsRequest } from '../utils';
 import { createSharingService } from '../sharingService';
 import useInvites from './useInvites';
+
+import messages from '../messages';
 
 export const useSharingService = ({
     api,
@@ -19,6 +22,8 @@ export const useSharingService = ({
     setItem,
     setSharedLink,
 }) => {
+    const { formatMessage } = useIntl();
+
     // itemApiInstance should only be called once or the API will cause an issue where it gets cancelled
     const itemApiInstance = React.useMemo(() => {
         if (!item || !sharedLink) {
@@ -78,23 +83,49 @@ export const useSharingService = ({
         const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
         setCollaborators(prevList => {
             const newCollab = convertCollab({
+                avatarUrlMap,
                 collab: response,
                 currentUserId,
                 isCurrentUserOwner: currentUserId === ownerId,
                 ownerEmailDomain,
-                avatarUrlMap,
             });
 
             return newCollab ? [...prevList, newCollab] : prevList;
         });
     };
 
-    const sendInvitations = useInvites(api, itemId, itemType, {
+    const handleSendInvitations = useInvites(api, itemId, itemType, {
         collaborators,
         handleSuccess,
         isContentSharingV2Enabled: true,
         transformRequest: data => convertCollabsRequest(data, collaborators),
     });
+
+    const sendInvitations = (...args) => {
+        return handleSendInvitations(...args).then(result => {
+            if (!result) {
+                return null;
+            }
+
+            const notification = [];
+            if (result.length === 0 || result.length < args[0].contacts.length) {
+                notification.push({
+                    text: formatMessage(messages.sendInvitationsError, {
+                        count: args[0].contacts.length - result.length,
+                    }),
+                    type: 'error',
+                });
+            }
+            if (result.length <= args[0].contacts.length) {
+                notification.push({
+                    text: formatMessage(messages.sendInvitationsSuccess, { count: result.length }),
+                    type: 'success',
+                });
+            }
+
+            return notification.length > 0 ? { messages: notification } : null;
+        });
+    };
 
     return { sharingService: { ...sharingService, sendInvitations } };
 };
