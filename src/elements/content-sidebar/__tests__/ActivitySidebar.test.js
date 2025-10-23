@@ -919,7 +919,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         let instance;
         let wrapper;
 
-        test('should get collaborators with groups', () => {
+        test('should get collaborators with groups and respect hidden collaborators', () => {
             wrapper = getWrapper();
             instance = wrapper.instance();
 
@@ -933,6 +933,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 search,
                 {
                     includeGroups: true,
+                    respectHiddenCollabs: true,
                 },
             );
         });

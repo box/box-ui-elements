@@ -952,6 +952,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             searchStr,
             {
                 includeGroups: true,
+                respectHiddenCollabs: true,
             },
         );
     }, DEFAULT_COLLAB_DEBOUNCE);
