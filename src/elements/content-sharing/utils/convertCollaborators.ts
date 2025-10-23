@@ -15,11 +15,11 @@ export interface ConvertCollabProps {
 }
 
 export const convertCollab = ({
+    avatarUrlMap,
     collab,
     currentUserId,
     isCurrentUserOwner,
     ownerEmailDomain,
-    avatarUrlMap,
 }: ConvertCollabProps): Collaborator | null => {
     if (!collab || collab.status !== STATUS_ACCEPTED) return null;
 
@@ -76,7 +76,7 @@ export const convertCollabsResponse = (
     };
 
     return [itemOwner, ...entries].flatMap(collab => {
-        const converted = convertCollab({ collab, currentUserId, isCurrentUserOwner, ownerEmailDomain, avatarUrlMap });
+        const converted = convertCollab({ avatarUrlMap, collab, currentUserId, isCurrentUserOwner, ownerEmailDomain });
         return converted ? [converted] : [];
     });
 };
@@ -97,21 +97,19 @@ export const convertCollabsRequest = (collabRequest, existingCollaboratorsList) 
             return;
         }
 
-        if (contact.type === COLLAB_USER_TYPE) {
-            users.push({
-                accessible_by: {
-                    login: contact.email,
-                    type: COLLAB_USER_TYPE,
-                },
-                role,
-            });
-        }
-
         if (contact.type === COLLAB_GROUP_TYPE) {
             groups.push({
                 accessible_by: {
                     id: contact.id,
                     type: COLLAB_GROUP_TYPE,
+                },
+                role,
+            });
+        } else {
+            users.push({
+                accessible_by: {
+                    login: contact.email,
+                    type: COLLAB_USER_TYPE,
                 },
                 role,
             });

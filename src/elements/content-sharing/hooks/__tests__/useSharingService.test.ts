@@ -10,6 +10,13 @@ jest.mock('../../utils/convertItemResponse');
 jest.mock('../../utils/convertCollaborators');
 jest.mock('../../sharingService');
 jest.mock('../useInvites');
+const mockFormatMessage = jest.fn(({ defaultMessage }) => defaultMessage);
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    useIntl: () => ({
+        formatMessage: mockFormatMessage,
+    }),
+}));
 
 const mockApi = {
     getFileAPI: jest.fn(),
@@ -229,7 +236,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
         });
     });
 
-    describe('sendInvitations', () => {
+    describe('handleSendInvitations', () => {
         const mockCollaborators = [{ id: 'collab-1', email: 'existing@example.com', type: 'user' }];
         const mockAvatarUrlMap = { 'user-1': 'https://example.com/avatar.jpg' };
         const mockCurrentUserId = 'current-user-123';
@@ -292,6 +299,91 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             useInvitesCallOptions.transformRequest(mockCollabRequest);
 
             expect(convertCollabsRequest).toHaveBeenCalledWith(mockCollabRequest, mockCollaborators);
+        });
+
+        describe('sendInvitations notification rendering', () => {
+            const mockContacts = [
+                { id: 'user-1', email: 'user1@test.com', type: 'user' },
+                { id: 'user-2', email: 'user2@test.com', type: 'user' },
+                { id: 'user-3', email: 'user3@test.com', type: 'user' },
+            ];
+
+            test('should return success notification when all contacts are successfully invited', async () => {
+                const mockResult = [
+                    { id: 'result-1', email: 'user1@test.com' },
+                    { id: 'result-2', email: 'user2@test.com' },
+                    { id: 'result-3', email: 'user3@test.com' },
+                ];
+                mockSendInvitations.mockResolvedValue(mockResult);
+                const { result } = renderHookWithProps();
+
+                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                    contacts: mockContacts,
+                    role: 'editor',
+                });
+
+                expect(mockFormatMessage).toHaveBeenCalledWith(
+                    expect.objectContaining({ id: 'be.contentSharing.sendInvitationsSuccess' }),
+                    { count: 3 }, // Counts of successfully invited collaborators
+                );
+                expect(sendInvitationsResult.messages[0].type).toEqual('success');
+            });
+
+            test('should return correct notification when some invitations are invited', async () => {
+                const mockResult = [
+                    { id: 'result-1', email: 'user1@test.com' },
+                    { id: 'result-2', email: 'user2@test.com' },
+                ];
+                mockSendInvitations.mockResolvedValue(mockResult);
+                const { result } = renderHookWithProps();
+
+                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                    contacts: mockContacts,
+                    role: 'editor',
+                });
+
+                expect(mockFormatMessage).toHaveBeenNthCalledWith(
+                    1,
+                    expect.objectContaining({ id: 'be.contentSharing.sendInvitationsError' }),
+                    { count: 1 }, // Counts of invitations not sent
+                );
+                expect(mockFormatMessage).toHaveBeenNthCalledWith(
+                    2,
+                    expect.objectContaining({ id: 'be.contentSharing.sendInvitationsSuccess' }),
+                    { count: 2 }, // Counts of successfully invited collaborators
+                );
+                expect(sendInvitationsResult.messages[0].type).toEqual('error');
+                expect(sendInvitationsResult.messages[1].type).toEqual('success');
+            });
+
+            test('should return error notification when no contacts are successfully invited', async () => {
+                const mockResult = [];
+                mockSendInvitations.mockResolvedValue(mockResult);
+                const { result } = renderHookWithProps();
+
+                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                    contacts: mockContacts,
+                    role: 'editor',
+                });
+
+                expect(mockFormatMessage).toHaveBeenCalledWith(
+                    expect.objectContaining({ id: 'be.contentSharing.sendInvitationsError' }),
+                    { count: 3 }, // Counts of invitations not sent
+                );
+                expect(sendInvitationsResult.messages[0].type).toEqual('error');
+            });
+
+            test('should return null when no result is returned from handleSendInvitations', async () => {
+                mockSendInvitations.mockResolvedValue(null);
+                const { result } = renderHookWithProps();
+
+                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                    contacts: mockContacts,
+                    role: 'editor',
+                });
+
+                expect(sendInvitationsResult).toBeNull();
+            });
         });
     });
 });
