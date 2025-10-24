@@ -203,6 +203,35 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
             expect(onClick).toHaveBeenCalled();
         });
 
+        test('should render timestamp with text when annotationsMillisecondTimestamp is provided and getUserProfileUrl is provided', async () => {
+            const onClick = jest.fn();
+            const videoAnnotation = {
+                annotationsMillisecondTimestamp: '0:01:00',
+                tagged_message: 'test @[3203255873:test user] with some text',
+                onClick,
+            };
+            const intl = createIntl({ locale: 'en' });
+            const wrapper = mount(
+                <ActivityMessage
+                    id="123"
+                    {...videoAnnotation}
+                    intl={intl}
+                    getUserProfileUrl={() => Promise.resolve('url')}
+                />,
+            );
+            expect(wrapper.find('button[aria-label="Seek to video timestamp"]').length).toBe(1);
+            expect(wrapper.find('button[aria-label="Seek to video timestamp"]').text()).toBe('0:01:00');
+            wrapper.find('button[aria-label="Seek to video timestamp"]').simulate('click');
+            expect(onClick).toHaveBeenCalled();
+            const userLink = wrapper.find('UserLink');
+            expect(userLink.length).toBe(1);
+            const props = userLink.props();
+            expect(props.id).toBe('3203255873');
+            expect(props.name).toBe('@test user');
+            const profileUrl = await props.getUserProfileUrl();
+            expect(profileUrl).toBe('url');
+        });
+
         test('should render original message when annotationsMillisecondTimestamp is not provided', () => {
             const comment = {
                 annotationsMillisecondTimestamp: undefined,
