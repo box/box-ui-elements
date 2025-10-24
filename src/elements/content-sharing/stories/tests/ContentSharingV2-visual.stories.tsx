@@ -1,15 +1,11 @@
-import * as React from 'react';
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
 
-import { Button } from '@box/blueprint-web';
-
-import { TYPE_FILE } from '../../../../constants';
 import {
+    ContentSharingV2Template,
     mockApiWithCollaborators,
     mockApiWithSharedLink,
     mockApiWithoutSharedLink,
 } from '../../utils/__mocks__/ContentSharingV2Mocks';
-import ContentSharingV2 from '../../ContentSharingV2';
 
 export const withModernization = {
     args: {
@@ -69,10 +65,5 @@ export const withCollaborators = {
 
 export default {
     title: 'Elements/ContentSharingV2/tests/visual-regression-tests',
-    component: ContentSharingV2,
-    args: {
-        children: <Button>Open Unified Share Modal</Button>,
-        itemType: TYPE_FILE,
-        itemId: global.FILE_ID,
-    },
+    component: ContentSharingV2Template,
 };
