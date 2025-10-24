@@ -224,5 +224,20 @@ describe('elements/content-sharing/ContentSharingV2', () => {
                 });
             });
         });
+
+        test('should render default error message when no corresponding error status is provided', async () => {
+            const error = { status: 503 };
+            renderComponent({ api: createErrorApi(error) });
+
+            await waitFor(() => {
+                expect(mockAddNotification).toHaveBeenCalledWith({
+                    closeButtonAriaLabel: 'Close',
+                    sensitivity: 'foreground',
+                    styledText: 'Something went wrong. Please try again later.',
+                    typeIconAriaLabel: 'Error',
+                    variant: 'error',
+                });
+            });
+        });
     });
 });

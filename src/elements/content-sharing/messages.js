@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    defaultErrorNoticeText: {
+        defaultMessage: 'Something went wrong. Please try again later.',
+        description: 'Default error notification text rendered when API fails',
+        id: 'be.contentSharing.defaultErrorNoticeText',
+    },
     badRequestError: {
         defaultMessage: 'The request for this item was malformed.',
         description: 'Message that appears when the request for the ContentSharing Element is malformed.',

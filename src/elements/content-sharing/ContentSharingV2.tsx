@@ -84,13 +84,17 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
                 return;
             }
 
-            let errorObject;
+            let errorMessage;
             if (error.status) {
-                errorObject = messages[CONTENT_SHARING_ERRORS[error.status]];
+                errorMessage = messages[CONTENT_SHARING_ERRORS[error.status]];
             } else if (error.response && error.response.status) {
-                errorObject = messages[CONTENT_SHARING_ERRORS[error.response.status]];
+                errorMessage = messages[CONTENT_SHARING_ERRORS[error.response.status]];
             } else {
-                errorObject = messages.loadingError;
+                errorMessage = messages.loadingError;
+            }
+
+            if (!errorMessage) {
+                errorMessage = messages.defaultErrorNoticeText;
             }
 
             setHasError(true);
@@ -99,7 +103,7 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
                 sensitivity: 'foreground' as const,
                 typeIconAriaLabel: formatMessage(messages.errorNoticeIcon),
                 variant: 'error',
-                styledText: formatMessage(errorObject),
+                styledText: formatMessage(errorMessage),
             });
         },
         [hasError, addNotification, formatMessage],
@@ -167,34 +171,29 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
                 setCollaboratorsData(response);
             } catch (error) {
                 setCollaboratorsData({ entries: [], next_marker: null });
-                getError(error);
             }
         })();
-    }, [api, collaboratorsData, item, itemId, itemType, getError]);
+    }, [api, collaboratorsData, item, itemId, itemType]);
 
     // Get avatars when collaborators are available
     React.useEffect(() => {
         if (avatarUrlMap || !collaboratorsData || !collaboratorsData.entries || !owner.id) return;
         (async () => {
-            try {
-                const ownerEntry = {
-                    accessible_by: {
-                        id: owner.id,
-                        login: owner.email,
-                        name: owner.name,
-                    },
-                };
-                const response = await fetchAvatars({
-                    api,
-                    itemId,
-                    collaborators: [...collaboratorsData.entries, ownerEntry],
-                });
-                setAvatarUrlMap(response);
-            } catch (error) {
-                getError(error);
-            }
+            const ownerEntry = {
+                accessible_by: {
+                    id: owner.id,
+                    login: owner.email,
+                    name: owner.name,
+                },
+            };
+            const response = await fetchAvatars({
+                api,
+                itemId,
+                collaborators: [...collaboratorsData.entries, ownerEntry],
+            });
+            setAvatarUrlMap(response);
         })();
-    }, [api, avatarUrlMap, collaboratorsData, itemId, owner, getError]);
+    }, [api, avatarUrlMap, collaboratorsData, itemId, owner]);
 
     React.useEffect(() => {
         if (avatarUrlMap && collaboratorsData && currentUser && owner) {
