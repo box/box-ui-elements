@@ -32,7 +32,7 @@ export interface ContentSharingV2Props {
 function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
-    const [errorMessage, setErrorMessage] = React.useState<boolean>(false);
+    const [hasError, setHasError] = React.useState<boolean>(false);
     const [sharedLink, setSharedLink] = React.useState<SharedLink | null>(null);
     const [sharingServiceProps, setSharingServiceProps] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState<User | null>(null);
@@ -80,7 +80,7 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
     const getError = React.useCallback(
         (error: ElementsXhrError) => {
             // display only one component-level notification at a time
-            if (errorMessage) {
+            if (hasError) {
                 return;
             }
 
@@ -93,20 +93,21 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
                 errorObject = messages.loadingError;
             }
 
-            setErrorMessage(errorObject.defaultMessage);
+            setHasError(true);
             addNotification({
                 closeButtonAriaLabel: formatMessage(messages.noticeCloseLabel),
                 sensitivity: 'foreground' as const,
                 typeIconAriaLabel: formatMessage(messages.errorNoticeIcon),
                 variant: 'error',
-                styledText: errorObject.defaultMessage,
+                styledText: formatMessage(errorObject),
             });
         },
-        [errorMessage, addNotification, formatMessage],
+        [hasError, addNotification, formatMessage],
     );
 
     // Reset state if the API has changed
     React.useEffect(() => {
+        setHasError(false);
         setItem(null);
         setSharedLink(null);
         setCurrentUser(null);
