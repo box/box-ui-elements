@@ -130,7 +130,8 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
           <dd>
             <Text>
               <p
-                className="bp_text_module_textReset--3fbba bp_text_module_breakWord--3fbba bp_text_module_bodyDefault--3fbba bp_text_module_textOnLightDefault--3fbba"
+                className="bp_text_module_textReset--b68a7 bp_text_module_breakWord--b68a7 bp_text_module_bodyDefault--b68a7 bp_text_module_textOnLightDefault--b68a7"
+                data-modern="false"
               >
                 1 B
               </p>
