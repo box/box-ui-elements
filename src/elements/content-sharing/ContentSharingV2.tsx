@@ -169,7 +169,7 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
             try {
                 const response = await fetchCollaborators({ api, itemId, itemType });
                 setCollaboratorsData(response);
-            } catch (error) {
+            } catch {
                 setCollaboratorsData({ entries: [], next_marker: null });
             }
         })();
