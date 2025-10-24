@@ -50,17 +50,13 @@ describe('content-sharing/apis/fetchAvatars', () => {
             .mockRejectedValueOnce(new Error('Avatar fetch failed'))
             .mockResolvedValueOnce('https://example.com/avatar3.jpg');
 
-        const result = await fetchAvatars({
-            api: defaultApiMock,
-            itemId: MOCK_ITEM.id,
-            collaborators: mockCollaborations,
-        });
-
-        expect(result).toEqual({
-            123: 'https://example.com/avatar1.jpg',
-            456: null,
-            789: 'https://example.com/avatar3.jpg',
-        });
+        await expect(
+            fetchAvatars({
+                api: defaultApiMock,
+                itemId: MOCK_ITEM.id,
+                collaborators: mockCollaborations,
+            }),
+        ).rejects.toThrow('Avatar fetch failed');
     });
 
     test('should handle collaborators without accessible_by', async () => {

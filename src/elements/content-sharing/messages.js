@@ -78,6 +78,16 @@ const messages = defineMessages({
         description: 'Display text for a Group contact type',
         id: 'be.contentSharing.groupContactLabel',
     },
+    noticeCloseLabel: {
+        defaultMessage: 'Close',
+        description: 'Close button aria label for the notifications',
+        id: 'be.contentSharing.noticeCloseLabel',
+    },
+    errorNoticeIcon: {
+        defaultMessage: 'Error',
+        description: 'Icon label for the error notifications',
+        id: 'be.contentSharing.errorNoticeIcon',
+    },
 });
 
 export default messages;

@@ -1,19 +1,22 @@
 import * as React from 'react';
+import { useIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-
+import { useNotification } from '@box/blueprint-web';
 import { UnifiedShareModal } from '@box/unified-share-modal';
 import type { CollaborationRole, Collaborator, Item, SharedLink, User } from '@box/unified-share-modal';
 
 import API from '../../api';
-import Internationalize from '../common/Internationalize';
-import Providers from '../common/Providers';
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { fetchAvatars, fetchCollaborators, fetchCurrentUser, fetchItem } from './apis';
+import { CONTENT_SHARING_ERRORS } from './constants';
 import { useContactService, useSharingService } from './hooks';
 import { convertCollabsResponse, convertItemResponse } from './utils';
 
-import type { Collaborations, ItemType, StringMap } from '../../common/types/core';
+import type { Collaborations, ItemType } from '../../common/types/core';
+import type { ElementsXhrError } from '../../common/types/api';
 import type { AvatarURLMap } from './types';
+
+import messages from './messages';
 
 export interface ContentSharingV2Props {
     /** api - API instance */
@@ -24,25 +27,12 @@ export interface ContentSharingV2Props {
     itemId: string;
     /** itemType - "file" or "folder" */
     itemType: ItemType;
-    /** hasProviders - Whether the element has providers for USM already */
-    hasProviders?: boolean;
-    /** language - Language used for the element */
-    language?: string;
-    /** messages - Localized strings used by the element */
-    messages?: StringMap;
 }
 
-function ContentSharingV2({
-    api,
-    children,
-    itemId,
-    itemType,
-    hasProviders,
-    language,
-    messages,
-}: ContentSharingV2Props) {
+function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
+    const [errorMessage, setErrorMessage] = React.useState<boolean>(false);
     const [sharedLink, setSharedLink] = React.useState<SharedLink | null>(null);
     const [sharingServiceProps, setSharingServiceProps] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState<User | null>(null);
@@ -51,6 +41,8 @@ function ContentSharingV2({
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
     const [owner, setOwner] = React.useState({ id: '', email: '', name: '' });
 
+    const { formatMessage } = useIntl();
+    const { addNotification } = useNotification();
     const { sharingService } = useSharingService({
         api,
         avatarUrlMap,
@@ -84,6 +76,35 @@ function ContentSharingV2({
         setOwner({ id: ownedBy.id, email: ownedBy.login, name: ownedBy.name });
     }, []);
 
+    // Handle initial data retrieval errors
+    const getError = React.useCallback(
+        (error: ElementsXhrError) => {
+            // display only one component-level notification at a time
+            if (errorMessage) {
+                return;
+            }
+
+            let errorObject;
+            if (error.status) {
+                errorObject = messages[CONTENT_SHARING_ERRORS[error.status]];
+            } else if (error.response && error.response.status) {
+                errorObject = messages[CONTENT_SHARING_ERRORS[error.response.status]];
+            } else {
+                errorObject = messages.loadingError;
+            }
+
+            setErrorMessage(errorObject.defaultMessage);
+            addNotification({
+                closeButtonAriaLabel: formatMessage(messages.noticeCloseLabel),
+                sensitivity: 'foreground' as const,
+                typeIconAriaLabel: formatMessage(messages.errorNoticeIcon),
+                variant: 'error',
+                styledText: errorObject.defaultMessage,
+            });
+        },
+        [errorMessage, addNotification, formatMessage],
+    );
+
     // Reset state if the API has changed
     React.useEffect(() => {
         setItem(null);
@@ -100,10 +121,14 @@ function ContentSharingV2({
         if (!api || isEmpty(api) || item) return;
 
         (async () => {
-            const itemData = await fetchItem({ api, itemId, itemType });
-            handleGetItemSuccess(itemData);
+            try {
+                const itemData = await fetchItem({ api, itemId, itemType });
+                handleGetItemSuccess(itemData);
+            } catch (error) {
+                getError(error);
+            }
         })();
-    }, [api, item, itemId, itemType, sharedLink, handleGetItemSuccess]);
+    }, [api, item, itemId, itemType, sharedLink, handleGetItemSuccess, getError]);
 
     // Get current user
     React.useEffect(() => {
@@ -122,10 +147,14 @@ function ContentSharingV2({
         };
 
         (async () => {
-            const userData = await fetchCurrentUser({ api, itemId });
-            getUserSuccess(userData);
+            try {
+                const userData = await fetchCurrentUser({ api, itemId });
+                getUserSuccess(userData);
+            } catch (error) {
+                getError(error);
+            }
         })();
-    }, [api, currentUser, item, itemId, itemType, sharedLink]);
+    }, [api, currentUser, item, itemId, itemType, sharedLink, getError]);
 
     // Get collaborators
     React.useEffect(() => {
@@ -135,31 +164,36 @@ function ContentSharingV2({
             try {
                 const response = await fetchCollaborators({ api, itemId, itemType });
                 setCollaboratorsData(response);
-            } catch {
+            } catch (error) {
                 setCollaboratorsData({ entries: [], next_marker: null });
+                getError(error);
             }
         })();
-    }, [api, collaboratorsData, item, itemId, itemType]);
+    }, [api, collaboratorsData, item, itemId, itemType, getError]);
 
     // Get avatars when collaborators are available
     React.useEffect(() => {
         if (avatarUrlMap || !collaboratorsData || !collaboratorsData.entries || !owner.id) return;
         (async () => {
-            const ownerEntry = {
-                accessible_by: {
-                    id: owner.id,
-                    login: owner.email,
-                    name: owner.name,
-                },
-            };
-            const response = await fetchAvatars({
-                api,
-                itemId,
-                collaborators: [...collaboratorsData.entries, ownerEntry],
-            });
-            setAvatarUrlMap(response);
+            try {
+                const ownerEntry = {
+                    accessible_by: {
+                        id: owner.id,
+                        login: owner.email,
+                        name: owner.name,
+                    },
+                };
+                const response = await fetchAvatars({
+                    api,
+                    itemId,
+                    collaborators: [...collaboratorsData.entries, ownerEntry],
+                });
+                setAvatarUrlMap(response);
+            } catch (error) {
+                getError(error);
+            }
         })();
-    }, [api, avatarUrlMap, collaboratorsData, itemId, owner]);
+    }, [api, avatarUrlMap, collaboratorsData, itemId, owner, getError]);
 
     React.useEffect(() => {
         if (avatarUrlMap && collaboratorsData && currentUser && owner) {
@@ -176,24 +210,20 @@ function ContentSharingV2({
     const config = { sharedLinkEmail: false };
 
     return (
-        <Internationalize language={language} messages={messages}>
-            <Providers hasProviders={hasProviders}>
-                {item && (
-                    <UnifiedShareModal
-                        config={config}
-                        collaborationRoles={collaborationRoles}
-                        collaborators={collaborators}
-                        contactService={contactService}
-                        currentUser={currentUser}
-                        item={item}
-                        sharedLink={sharedLink}
-                        sharingService={sharingService}
-                    >
-                        {children}
-                    </UnifiedShareModal>
-                )}
-            </Providers>
-        </Internationalize>
+        item && (
+            <UnifiedShareModal
+                config={config}
+                collaborationRoles={collaborationRoles}
+                collaborators={collaborators}
+                contactService={contactService}
+                currentUser={currentUser}
+                item={item}
+                sharedLink={sharedLink}
+                sharingService={sharingService}
+            >
+                {children}
+            </UnifiedShareModal>
+        )
     );
 }
 

@@ -12,8 +12,9 @@ export const fetchAvatars = async ({ api, itemId, collaborators }: FetchCollabor
         try {
             const url = await usersApi.getAvatarUrlWithAccessToken(userId.toString(), itemId);
             avatarUrlMap[userId] = url;
-        } catch {
+        } catch (error) {
             avatarUrlMap[userId] = null;
+            throw error;
         }
     });
 

@@ -12,6 +12,8 @@ import API from '../../api';
 // $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { isFeatureEnabled } from '../common/feature-checking';
+import Internationalize from '../common/Internationalize';
+import Providers from '../common/Providers';
 import SharingModal from './SharingModal';
 // $FlowFixMe
 import ContentSharingV2 from './ContentSharingV2';
@@ -117,16 +119,13 @@ function ContentSharing({
     if (isFeatureEnabled(features, 'contentSharingV2')) {
         return (
             api && (
-                <ContentSharingV2
-                    api={api}
-                    itemId={itemID}
-                    itemType={itemType}
-                    hasProviders={hasProviders}
-                    language={language}
-                    messages={messages}
-                >
-                    {children}
-                </ContentSharingV2>
+                <Internationalize language={language} messages={messages}>
+                    <Providers hasProviders={hasProviders}>
+                        <ContentSharingV2 api={api} itemId={itemID} itemType={itemType}>
+                            {children}
+                        </ContentSharingV2>
+                    </Providers>
+                </Internationalize>
             )
         );
     }
