@@ -1,3 +1,10 @@
+import * as React from 'react';
+
+import { Button, Notification, TooltipProvider } from '@box/blueprint-web';
+
+import { TYPE_FILE } from '../../../../constants';
+import ContentSharingV2 from '../../ContentSharingV2';
+
 export const MOCK_PERMISSIONS = {
     can_download: true,
     can_invite_collaborator: true,
@@ -193,3 +200,20 @@ export const mockApiWithCollaborators = createMockApi(
     DEFAULT_USER_API_RESPONSE,
     MOCK_COLLABORATIONS_RESPONSE,
 );
+
+export const ContentSharingV2Template = (props = {}) => {
+    return (
+        <Notification.Provider>
+            <TooltipProvider>
+                <ContentSharingV2
+                    api={mockApiWithoutSharedLink}
+                    itemId={global.FILE_ID}
+                    itemType={TYPE_FILE}
+                    {...props}
+                >
+                    <Button>Open Unified Share Modal</Button>
+                </ContentSharingV2>
+            </TooltipProvider>
+        </Notification.Provider>
+    );
+};

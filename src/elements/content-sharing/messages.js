@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    defaultErrorNoticeText: {
+        defaultMessage: 'Something went wrong. Please try again later.',
+        description: 'Default error notification text rendered when API fails',
+        id: 'be.contentSharing.defaultErrorNoticeText',
+    },
     badRequestError: {
         defaultMessage: 'The request for this item was malformed.',
         description: 'Message that appears when the request for the ContentSharing Element is malformed.',
@@ -77,6 +82,16 @@ const messages = defineMessages({
         defaultMessage: 'Group',
         description: 'Display text for a Group contact type',
         id: 'be.contentSharing.groupContactLabel',
+    },
+    noticeCloseLabel: {
+        defaultMessage: 'Close',
+        description: 'Close button aria label for the notifications',
+        id: 'be.contentSharing.noticeCloseLabel',
+    },
+    errorNoticeIcon: {
+        defaultMessage: 'Error',
+        description: 'Icon label for the error notifications',
+        id: 'be.contentSharing.errorNoticeIcon',
     },
 });
 
