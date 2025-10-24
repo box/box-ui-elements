@@ -146,7 +146,7 @@ const formatTaggedMessage = (
  * @param handleClick The click handler for the timestamp button
  * @param intl The intl object method to add the timestamp aria label
  * @param textAfterTimestamp The text that comes after the timestamp
- * @param shouldFormatTextAfterTimestamp Whether to format the text after timestamp
+ * @param getUserProfileUrl The function to get the user profile url
  * @returns A React Fragment with timestamp button and text
  */
 export function renderTimestampWithText(
