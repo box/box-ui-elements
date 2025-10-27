@@ -10,6 +10,7 @@ import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from '../common/user-link';
 import messages from '../common/activity-message/messages';
 import { convertTimestampToSeconds, convertMillisecondsToHMMSS } from '../../../../utils/timestamp';
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
 
 /**
  * Formats text containing a timestamp by wrapping the timestamp in a Link component
@@ -154,7 +155,7 @@ export function renderTimestampWithText(
     handleClick: (e: SyntheticMouseEvent<HTMLButtonElement>) => void,
     intl: IntlShape,
     textAfterTimestamp: string,
-    getUserProfileUrl?: Function,
+    getUserProfileUrl?: GetProfileUrlCallback,
 ): React$Element<any> {
     return (
         <>
