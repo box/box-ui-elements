@@ -50,10 +50,10 @@ export const useSharingService = ({
             id: itemId,
             access: sharedLink.access,
             permissions: {
-                can_set_share_access: sharingServiceProps.can_set_share_access,
-                can_share: sharingServiceProps.can_share,
+                can_set_share_access: sharingServiceProps?.can_set_share_access,
+                can_share: sharingServiceProps?.can_share,
             },
-            serverUrl: sharingServiceProps.serverUrl,
+            serverUrl: sharingServiceProps?.serverUrl,
             isDownloadAvailable: sharedLink.settings?.isDownloadAvailable ?? false,
         };
 
