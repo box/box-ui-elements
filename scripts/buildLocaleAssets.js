@@ -55,9 +55,6 @@ if (isMainThread) {
     const { locale, react } = workerData;
     parentPort.postMessage(`[${threadId}] Building ${locale} assets with react=${react}...`);
 
-    if (locale !== 'en-US') {
-        return;
-    }
     try {
         execSync(`time LANGUAGE=${locale} REACT=${react} yarn build:prod:dist`);
     } catch (error) {
