@@ -15,7 +15,7 @@ export const withCustomButton = {
 
 export const withContentSharingV2Enabled = {
     args: {
-        children: <button>Open Unified Share Modal</button>,
+        // children: <button>Open Unified Share Modal</button>,
         features: {
             ...global.FEATURE_FLAGS,
             contentSharingV2: true,
