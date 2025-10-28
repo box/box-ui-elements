@@ -48,6 +48,19 @@ const mockLogger = {
     },
 };
 
+// I'm not exactly sure why, but the metadata sidebar shows a loading indicator for several seconds with taxonomies
+// This await is needed in order for taxonomy tests to pass.
+const waitForLoadingToComplete = async (canvas: ReturnType<typeof within>) => {
+    const loadingIndicator = await canvas.findByRole('status', { name: 'Loading' });
+    expect(loadingIndicator).toBeInTheDocument();
+    await waitFor(
+        async () => {
+            expect(loadingIndicator).not.toBeInTheDocument();
+        },
+        { timeout: 10000 },
+    );
+};
+
 export const AddTemplateDropdownMenuOn = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -76,6 +89,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
 
         expect(addTemplateButton).toBeInTheDocument();
@@ -616,6 +630,8 @@ export const ViewMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
+        await waitForLoadingToComplete(canvas);
+
         await waitFor(async () => {
             const multilevelOptionButton = canvas.getByRole('button', { name: 'London' });
 
@@ -644,6 +660,8 @@ export const ViewSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
+        await waitForLoadingToComplete(canvas);
+
         await waitFor(async () => {
             const singlelevelOptionButton = canvas.getByRole('button', { name: 'Blue' });
 
@@ -662,6 +680,8 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
     ...ViewMultilevelTaxonomy,
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+
+        await waitForLoadingToComplete(canvas);
 
         const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
 
@@ -705,6 +725,8 @@ export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     ...ViewSinglelevelTaxonomy,
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+
+        await waitForLoadingToComplete(canvas);
 
         const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
 
