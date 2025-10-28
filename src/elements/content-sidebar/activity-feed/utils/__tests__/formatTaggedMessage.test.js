@@ -1,4 +1,4 @@
-import formatTaggedMessage from '../formatTaggedMessage';
+import formatTaggedMessage, { renderTimestampWithText } from '../formatTaggedMessage';
 import UserLink from '../../common/user-link';
 
 describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () => {
@@ -45,6 +45,47 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
         expect(mention.props.name).toBe('@test user');
     });
 
+    describe('renderTimestampWithText', () => {
+        test('should render the timestamp button and remaining text', () => {
+            const timestampInHHMMSS = '0:02:03';
+            const handleClick = jest.fn();
+            const intl = { formatMessage: () => 'Seek to video timestamp' };
+            const textAfterTimestamp = ' with some text';
+            const result = renderTimestampWithText(timestampInHHMMSS, handleClick, intl, textAfterTimestamp);
+            expect(result).toBeDefined();
+            const [container, text] = result.props.children;
+            expect(container.type).toBe('div');
+            const child = container.props.children;
+            expect(child.props.onClick).toBeDefined();
+            expect(child.type).toBe('button');
+            expect(child.props.children).toBe('0:02:03');
+            expect(text).toBe(' with some text');
+        });
+
+        test('should render the timestamp button and remaining text with user profile url', () => {
+            const timestampInHHMMSS = '0:02:03';
+            const handleClick = jest.fn();
+            const intl = { formatMessage: () => 'Seek to video timestamp' };
+            const textAfterTimestamp = '@[3203255873:test user] with some text @[3203255874:test user2]';
+            const result = renderTimestampWithText(timestampInHHMMSS, handleClick, intl, textAfterTimestamp, 'url');
+            expect(result).toBeDefined();
+            const [container, text] = result.props.children;
+            expect(container.type).toBe('div');
+            const child = container.props.children;
+            expect(child.props.onClick).toBeDefined();
+            expect(child.type).toBe('button');
+            expect(child.props.children).toBe('0:02:03');
+            expect(text[2]).toBe(' with some text ');
+            const mention = text[1];
+            expect(mention.type).toBe(UserLink);
+            expect(mention.props.id).toBe('3203255873');
+            expect(mention.props.name).toBe('@test user');
+            const mention2 = text[3];
+            expect(mention2.type).toBe(UserLink);
+            expect(mention2.props.id).toBe('3203255874');
+            expect(mention2.props.name).toBe('@test user2');
+        });
+    });
     describe('formatTimestamp', () => {
         let mockVideo;
         let mockPause;

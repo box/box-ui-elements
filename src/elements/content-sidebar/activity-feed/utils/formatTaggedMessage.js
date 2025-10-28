@@ -10,34 +10,7 @@ import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import UserLink from '../common/user-link';
 import messages from '../common/activity-message/messages';
 import { convertTimestampToSeconds, convertMillisecondsToHMMSS } from '../../../../utils/timestamp';
-
-/**
- * Renders the timestamp button and remaining text
- * @param timestampInHHMMSS The formatted timestamp string (HH:MM:SS)
- * @param timestampLabel The aria label for the timestamp button
- * @param handleClick The click handler for the timestamp button
- * @param textAfterTimestamp The text that comes after the timestamp
- * @returns A React Fragment with timestamp button and text
- */
-export const renderTimestampWithText = (
-    timestampInHHMMSS: string,
-    handleClick: (e: SyntheticMouseEvent<HTMLButtonElement>) => void,
-    intl: IntlShape,
-    textAfterTimestamp: string,
-): React$Element<any> => (
-    <>
-        <div className="bcs-ActivityMessage-timestamp">
-            <button
-                aria-label={intl.formatMessage(messages.activityMessageTimestampLabel)}
-                type="button"
-                onClick={handleClick}
-            >
-                {timestampInHHMMSS}
-            </button>
-        </div>
-        {textAfterTimestamp}
-    </>
-);
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
 
 /**
  * Formats text containing a timestamp by wrapping the timestamp in a Link component
@@ -79,7 +52,8 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
         }
     };
 
-    return renderTimestampWithText(timestampInHHMMSS, handleClick, intl, textAfterTimestamp);
+    // eslint-disable-next-line no-use-before-define
+    return renderTimestampWithText(timestampInHHMMSS, handleClick, intl, textAfterTimestamp, undefined);
 };
 
 // this regex matches one of the following regular expressions:
@@ -166,5 +140,40 @@ const formatTaggedMessage = (
 
     return contentItems;
 };
+
+/**
+ * Renders the timestamp button and remaining text
+ * @param timestampInHHMMSS The formatted timestamp string (HH:MM:SS)
+ * @param handleClick The click handler for the timestamp button
+ * @param intl The intl object method to add the timestamp aria label
+ * @param textAfterTimestamp The text that comes after the timestamp
+ * @param getUserProfileUrl The function to get the user profile url
+ * @returns A React Fragment with timestamp button and text
+ */
+export function renderTimestampWithText(
+    timestampInHHMMSS: string,
+    handleClick: (e: SyntheticMouseEvent<HTMLButtonElement>) => void,
+    intl: IntlShape,
+    textAfterTimestamp: string,
+    getUserProfileUrl?: GetProfileUrlCallback,
+): React$Element<any> {
+    return (
+        <>
+            <div className="bcs-ActivityMessage-timestamp">
+                <button
+                    aria-label={intl.formatMessage(messages.activityMessageTimestampLabel)}
+                    type="button"
+                    onClick={handleClick}
+                >
+                    {timestampInHHMMSS}
+                </button>
+            </div>
+            {getUserProfileUrl
+                ? // eslint-disable-next-line no-use-before-define
+                  formatTaggedMessage(textAfterTimestamp, '', false, getUserProfileUrl, intl)
+                : textAfterTimestamp}
+        </>
+    );
+}
 
 export default formatTaggedMessage;
