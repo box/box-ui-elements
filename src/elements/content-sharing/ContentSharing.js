@@ -73,6 +73,25 @@ const createAPI = (apiHost, itemID, itemType, token) =>
         version: CLIENT_VERSION,
     });
 
+/**
+ * Top-level React component that initializes the sharing API and renders the content-sharing UI,
+ * either the feature-flagged ContentSharingV2 wrapped with localization and providers or the legacy SharingModal with an optional custom launch button.
+ *
+ * @param {string} [apiHost] - Hostname for the API; defaults to the library's default API hostname.
+ * @param {React.ReactNode} [children] - Optional children passed into the ContentSharingV2 variant.
+ * @param {Object} [config] - Configuration object passed to the legacy SharingModal.
+ * @param {React.ReactElement} [customButton] - Optional custom launch button; when provided it is cloned and wired to open the sharing UI.
+ * @param {boolean} [displayInModal] - When true, instructs the legacy sharing UI to render inside a modal.
+ * @param {Object} [features] - Feature-flag map; used to enable the `contentSharingV2` variant.
+ * @param {boolean} [hasProviders] - When true, wraps ContentSharingV2 with provider context; controls whether Providers is applied.
+ * @param {string} itemID - Identifier of the item being shared.
+ * @param {string} itemType - Type of the item being shared.
+ * @param {string} [language] - Locale code used by the Internationalize wrapper.
+ * @param {Object} [messages] - Localization messages passed to Internationalize.
+ * @param {string} [token] - Authorization token used to construct the API client.
+ * @param {string} [uuid] - Unique identifier used to reset component visibility when it changes.
+ * @returns {JSX.Element|null} The rendered content-sharing UI (either ContentSharingV2 wrapped with Internationalize and Providers, or the legacy SharingModal and optional launch button), or null while the API is unavailable.
+ */
 function ContentSharing({
     apiHost = DEFAULT_HOSTNAME_API,
     children,

@@ -29,6 +29,16 @@ export interface ContentSharingV2Props {
     itemType: ItemType;
 }
 
+/**
+ * Orchestrates fetching item, user, collaborator, and avatar data and renders a UnifiedShareModal when the item is loaded.
+ *
+ * This component manages internal state for the item, shared link, collaborators, avatars, roles, and current user,
+ * resets state when the provided `api` changes, and displays a single error notification on initial data-retrieval failures.
+ *
+ * @param itemId - The Box file or folder ID to load and share
+ * @param itemType - Either `"file"` or `"folder"`, indicating the type of `itemId`
+ * @returns The rendered UnifiedShareModal element when item data is available, otherwise `null`
+ */
 function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
