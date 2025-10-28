@@ -417,7 +417,7 @@ export const taxonomyMockHandlers: HttpHandler[] = [
     }),
     http.get(mockMultilevelTaxonomyOptions.url, ({ request }) => {
         const url = new URL(request.url);
-        const ancestorId = url.searchParams.get('ancestor_id');
+        const ancestorId = url.searchParams.get('ancestor');
 
         if (!ancestorId) {
             return HttpResponse.json(mockMultilevelTaxonomyOptions.response.firstLevel);
