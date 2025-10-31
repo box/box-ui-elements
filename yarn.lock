@@ -1419,19 +1419,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@^4.75.0":
-  version "4.75.3"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.75.3.tgz#7ac514a2711197ef26914893b58dd15cafb1c5fa"
-  integrity sha512-fDQmFWGWy4bnZc4AaXr0kZMQ8TAVYuH+2EICBH8ASdtYhHdx83hNEh1TmuaiVo4P5knaRXLuOOsrxgsXsbvTPg==
+"@box/blueprint-web-assets@^4.76.2", "@box/blueprint-web-assets@^4.76.5":
+  version "4.76.5"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.76.5.tgz#8bfabeacdcd4e09969b7cbe33aab253c6d2875b0"
+  integrity sha512-3cRuzGYnOskj6D7LjgUwN+ooSiQJK5uxYZxxRMHNLp9mtAsw+p8296/gkG4/Br7x2tsqJ27KpVDa7TPNGGGyig==
 
-"@box/blueprint-web@^12.89.2":
-  version "12.89.2"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.89.2.tgz#12793c9ac1eaa0ec1f798c88cec3cb4a3c14dc36"
-  integrity sha512-eMegvo/AbiERCtZdPBhlWwmOaIm5b7H8Q29YR/FPpVLGRcQqW+CcU6bCqm4iCGuzStHCwipAturwiXAjquzpFg==
+"@box/blueprint-web@^12.92.3":
+  version "12.92.3"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.92.3.tgz#2828d6d46e8825f93174b3d874a7ada1b61ab90c"
+  integrity sha512-UnKVlENT2jSvL6ed5Nb/uLA+giQpd6PBUFu/gOsEIE8u/HWYc9qUuyLaZ4IgMl5sNGvAay9FJSv9+d0+DxWtQQ==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.75.0"
+    "@box/blueprint-web-assets" "^4.76.2"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1488,10 +1488,10 @@
     "@box/tree" "^0.45.4"
     react-accessible-treeview "2.9.0"
 
-"@box/copy-input@^0.22.12":
-  version "0.22.12"
-  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-0.22.12.tgz#919f9f1d0ddc0a95a1a8dd5effcf31f1b338b64b"
-  integrity sha512-hBXiYidsXsBKu2CsWT0FwcaA4KL5ZMigISpThfoqurtoB94yZjq+E+sBSEBKnwB44KdPI/EQ24Z+jWeEaxlIeQ==
+"@box/copy-input@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-1.5.3.tgz#7eeffbdbc40a2f8660fa06c4b740f9d504c8ddc0"
+  integrity sha512-EpT+gcIzgyb2MNmAFSIfFq2bfKFDF+5yZldBmU0H/lwHQ5/uowb14cBEC7ZFc9IIkNz7aazEm+HmBikoGyZj1g==
 
 "@box/frontend@^11.0.1":
   version "11.0.1"
@@ -1512,20 +1512,20 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.122.12":
-  version "0.122.16"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.122.16.tgz#d120602dcc39a6b4cd6f441ddd5fdc4b2f2862a4"
-  integrity sha512-fy43Z9fr6+t0hO+tlVDX4A890K0mos78GqHeZp9fGDH+lQsjHBHz3DDvcbyfmkCrf3Dbg15wrvBO0Pa4FaCSvw==
+"@box/metadata-editor@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.5.3.tgz#75eba5fb48697ce4f9e1428e8c7187fcac9c834b"
+  integrity sha512-49CaS2R8xnSlFKWjVscmx+YZJRV8NjYzzTKRMmw51f0Rs3I0VxRdxo0O+FThC6AtqRPE+3gvpLRMhXJlbTVL/w==
 
-"@box/metadata-filter@^1.30.1":
-  version "1.30.1"
-  resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.30.1.tgz#8bf2fdd8d0f68c725fc4ea98e86ebdc41194d15c"
-  integrity sha512-QiPXQQdKkr3l80+oxdT1hJaQ6CjrHD3PGdSZ17okiJxN3UEqmfBjUchMAb9H4yH+wwGkc32ndUCCfyI7NvMwHw==
+"@box/metadata-filter@^1.41.3":
+  version "1.41.3"
+  resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.41.3.tgz#57b9f76446b2d0270028baa455e6f2ed74d230bf"
+  integrity sha512-rlz4tQMf+b75WK4f6cpaVJb+6FE1Qxy5bqfvsUdDW4YxvVpVHG1pFkGDU3IlmsoNsxcEyHBQm9Yq0SO0ZQljFQ==
 
-"@box/metadata-view@^0.59.0":
-  version "0.59.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-0.59.0.tgz#0081af7baea0745d5909f0053e876017d6de9c8d"
-  integrity sha512-CIPW7aMog4K1QZyaXMqCnn7N+Gwi1YXr0HvnPs3Tl9dB+OGdLXH3u1IuX9nyh2L6ZHCNvdzHzhlEq4g+R+Klqg==
+"@box/metadata-view@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-1.10.0.tgz#138988e3dec76ca5c0bd545817354e5f532bb116"
+  integrity sha512-Hj5a36ZaN3+m5cwecKj0CpUGyf/D5mjCXQNM4qs5seCr+QAFbd8zo3Br5/8LXU/eYEg5FxvhWH0slHXvvoK5kw==
 
 "@box/react-virtualized@^9.22.3-rc-box.10":
   version "9.22.3-rc-box.10"
