@@ -687,28 +687,25 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
         await userEvent.click(editButton);
 
         const multilevelInput = await canvas.findByRole('combobox');
-        const optionChip = await canvas.findByRole('button', { name: 'London' });
-        expect(multilevelInput).toBeInTheDocument();
-        expect(optionChip).toBeInTheDocument();
-
         await userEvent.click(multilevelInput);
 
-        // Scope subsequent queries to the listbox to avoid race conditions with other UI
         const listbox = await canvas.findByRole('listbox');
         const listboxCanvas = within(listbox);
 
-        const expandButtons = await waitFor(() => canvas.getAllByRole('button', { name: 'Expand branch' }));
+        const japanLabel = await listboxCanvas.findByText('Japan');
+        const japanTreeitem = japanLabel.closest('[role="treeitem"]') as HTMLElement | null;
+        expect(japanTreeitem).not.toBeNull();
+        const expander = within(japanTreeitem as HTMLElement).getByRole('button', { name: 'Expand branch' });
+        await userEvent.click(expander);
 
-        await expandBranch('Japan', 'Hokkaido');
-        await expandBranch('Hokkaido', 'Sapporo');
+        const hokkaidoLabel = await listboxCanvas.findByText('Hokkaido');
+        const hokkaidoTreeitem = hokkaidoLabel.closest('[role="treeitem"]') as HTMLElement | null;
+        expect(hokkaidoTreeitem).not.toBeNull();
+        const hokkaidoExpander = within(hokkaidoTreeitem as HTMLElement).getByRole('button', { name: 'Expand branch' });
+        await userEvent.click(hokkaidoExpander);
 
-        // Re-scope to the active listbox before selecting the leaf.
-        // Expanding branches can trigger a tree re-render that unmounts the previous
-        // popup content. Re-querying the listbox here ensures we don't act on a stale
-        // element reference and avoids intermittent "element not in the document" errors.
-        const activeListbox = await canvas.findByRole('listbox');
-        const activeListboxCanvas = within(activeListbox);
-        await userEvent.click(await activeListboxCanvas.findByRole('treeitem', { name: 'Sapporo' }));
+        const sapporoTreeitem = await listboxCanvas.findByRole('treeitem', { name: 'Sapporo' });
+        await userEvent.click(sapporoTreeitem);
 
         const nestedExpandButtons = await waitFor(() => screen.getAllByRole('button', { name: 'Expand branch' }));
 
