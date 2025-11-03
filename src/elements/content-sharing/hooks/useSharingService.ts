@@ -31,11 +31,11 @@ export const useSharingService = ({
         }
 
         if (itemType === TYPE_FILE) {
-            return api.getFileAPI();
+            return api.getFileAPI(false);
         }
 
         if (itemType === TYPE_FOLDER) {
-            return api.getFolderAPI();
+            return api.getFolderAPI(false);
         }
 
         return null;
