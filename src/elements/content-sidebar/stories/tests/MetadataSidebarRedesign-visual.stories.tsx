@@ -686,40 +686,40 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
         const editButton = await canvas.findByRole('button', { name: 'Edit My Taxonomy' });
         await userEvent.click(editButton);
 
-        const multilevelInput = await canvas.findByRole('combobox');
-        await userEvent.click(multilevelInput);
+        const navigateToSapporoTreeItem = async () => {
+            const multilevelInput = await canvas.findByRole('combobox');
+            await userEvent.click(multilevelInput);
 
-        const listbox = await canvas.findByRole('listbox');
-        const listboxCanvas = within(listbox);
+            const listbox = await canvas.findByRole('listbox');
+            const listboxCanvas = within(listbox);
 
-        const japanLabel = await listboxCanvas.findByText('Japan');
-        const japanTreeitem = japanLabel.closest('[role="treeitem"]') as HTMLElement | null;
-        expect(japanTreeitem).not.toBeNull();
-        const expander = within(japanTreeitem as HTMLElement).getByRole('button', { name: 'Expand branch' });
-        await userEvent.click(expander);
+            const japanLabel = await listboxCanvas.findByText('Japan');
+            const japanTreeitem = japanLabel.closest('[role="treeitem"]') as HTMLElement | null;
+            expect(japanTreeitem).not.toBeNull();
+            const expander = within(japanTreeitem as HTMLElement).getByRole('button', { name: 'Expand branch' });
+            await userEvent.click(expander);
 
-        const hokkaidoLabel = await listboxCanvas.findByText('Hokkaido');
-        const hokkaidoTreeitem = hokkaidoLabel.closest('[role="treeitem"]') as HTMLElement | null;
-        expect(hokkaidoTreeitem).not.toBeNull();
-        const hokkaidoExpander = within(hokkaidoTreeitem as HTMLElement).getByRole('button', { name: 'Expand branch' });
-        await userEvent.click(hokkaidoExpander);
+            const hokkaidoLabel = await listboxCanvas.findByText('Hokkaido');
+            const hokkaidoTreeitem = hokkaidoLabel.closest('[role="treeitem"]') as HTMLElement | null;
+            expect(hokkaidoTreeitem).not.toBeNull();
+            const hokkaidoExpander = within(hokkaidoTreeitem as HTMLElement).getByRole('button', {
+                name: 'Expand branch',
+            });
+            await userEvent.click(hokkaidoExpander);
 
-        const sapporoTreeitem = await listboxCanvas.findByRole('treeitem', { name: 'Sapporo' });
-        await userEvent.click(sapporoTreeitem);
+            const sapporoTreeitem = await listboxCanvas.findByRole('treeitem', { name: 'Sapporo' });
+            return sapporoTreeitem;
+        };
 
-        const nestedExpandButtons = await waitFor(() => screen.getAllByRole('button', { name: 'Expand branch' }));
-
-        await userEvent.click(nestedExpandButtons[2]);
-
-        const sapporoOption = await waitFor(() => canvas.getByRole('treeitem', { name: 'Sapporo' }));
-
-        expect(sapporoOption).toBeInTheDocument();
-        expect(sapporoOption).toHaveAttribute('aria-selected', 'false');
-
-        await userEvent.click(sapporoOption);
+        const unselectedSapporoTreeitem = await navigateToSapporoTreeItem();
+        expect(unselectedSapporoTreeitem).toHaveAttribute('aria-selected', 'false');
+        await userEvent.click(unselectedSapporoTreeitem);
 
         const sapporoSelection = await waitFor(() => canvas.getByRole('gridcell', { name: 'Sapporo' }));
         expect(sapporoSelection).toBeInTheDocument();
+
+        const selectedSapporoTreeitem = await navigateToSapporoTreeItem();
+        expect(selectedSapporoTreeitem).toHaveAttribute('aria-selected', 'true');
     },
 };
 
