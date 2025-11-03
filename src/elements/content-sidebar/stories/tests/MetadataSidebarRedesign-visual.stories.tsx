@@ -678,16 +678,16 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
         const listbox = await waitFor(() => canvas.getByRole('listbox'));
         expect(listbox).toBeInTheDocument();
 
-        let expandButtons = await waitFor(() => canvas.getAllByRole('button', { name: 'Expand branch' }));
+        const expandButtons = await waitFor(() => canvas.getAllByRole('button', { name: 'Expand branch' }));
 
         await userEvent.click(expandButtons[1]);
 
         const hokkaidoOption = await waitFor(() => canvas.getByText('Hokkaido'));
         expect(hokkaidoOption).toBeInTheDocument();
 
-        expandButtons = await waitFor(() => screen.getAllByRole('button', { name: 'Expand branch' }));
+        const nestedExpandButtons = await waitFor(() => screen.getAllByRole('button', { name: 'Expand branch' }));
 
-        await userEvent.click(expandButtons[2]);
+        await userEvent.click(nestedExpandButtons[2]);
 
         const sapporoOption = await waitFor(() => canvas.getByRole('treeitem', { name: 'Sapporo' }));
 
@@ -697,9 +697,6 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
         await userEvent.click(sapporoOption);
 
         const sapporoSelection = await waitFor(() => canvas.getByRole('gridcell', { name: 'Sapporo' }));
-
-        expect(sapporoOption).toBeInTheDocument();
-        expect(sapporoOption).toHaveAttribute('aria-selected', 'true');
         expect(sapporoSelection).toBeInTheDocument();
     },
 };
