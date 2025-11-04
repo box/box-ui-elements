@@ -1480,12 +1480,12 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/combobox-with-api@^0.34.9":
-  version "0.34.9"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.34.9.tgz#0620ac1ef80719a3c6d95f27f731ec92e03bb05c"
-  integrity sha512-jE257A/6rlN5GydNWh+T+K4w8xmoaDaPb+J6MOh8pz4AkTJuZXOSp9jhfHP7KRwrQs849moBDpWowF0xOnQ2+g==
+"@box/combobox-with-api@^1.3.11":
+  version "1.3.13"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-1.3.13.tgz#bfe008b1fac3ac59a2459a98b1e7d9f8783799b0"
+  integrity sha512-PN+unnjkbiJf55JTKhz2lYIxCI28IX7b+ds+YUsStcrER9IrQuX7sbdA7UwJ+yW/uJBXF5zpyd4tnDIAloaSIQ==
   dependencies:
-    "@box/tree" "^0.45.4"
+    "@box/tree" "^1.2.6"
     react-accessible-treeview "2.9.0"
 
 "@box/copy-input@^1.5.3":
@@ -1539,10 +1539,10 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/tree@^0.45.4":
-  version "0.45.4"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.45.4.tgz#605051e77e64ebb3c03ceefc9ee99f0a0d2ed4ae"
-  integrity sha512-gJLYz4bF+xci7o0e8oM2qAtc0lSRQYGrlOYMtZO5QvoLY0JjtAHtNaI9axmL7leJsy7VuCCxFoSFUoSXMHVRMA==
+"@box/tree@^1.2.6":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-1.2.6.tgz#998611a8e23f94959a20e9aa37ee89ab6d7d556b"
+  integrity sha512-BWJhvfnwbKTqEKS3mXWY8jfSI5zteSNEVfA06vA7+JPpiGrRWMIvolRiSQ4aeDAPXLoHqulzAm9PHmkSEnNsVw==
 
 "@box/types@^0.2.1":
   version "0.2.1"

@@ -1348,19 +1348,19 @@ class Metadata extends File {
 
         const {
             marker,
-            searchInput: query_text,
+            searchInput: query,
             onlySelectableOptions,
-            ancestorId: ancestor_id,
+            ancestorId: ancestor,
             level: optionsLevel,
             signal,
         } = options;
 
         const params: {} = {
             ...(marker ? { marker } : {}),
-            ...(query_text ? { query_text } : {}),
+            ...(query ? { query } : {}),
             ...(optionsLevel ? { level: optionsLevel } : {}),
-            ...(ancestor_id ? { ancestor_id } : {}),
-            ...(onlySelectableOptions !== undefined ? { only_selectable_options: !!onlySelectableOptions } : {}),
+            ...(ancestor ? { ancestor } : {}),
+            ...(onlySelectableOptions !== undefined ? { 'only-selectable-options': !!onlySelectableOptions } : {}),
             limit: 100,
         };
 

@@ -48,6 +48,17 @@ const mockLogger = {
     },
 };
 
+const waitForLoadingToComplete = async (canvas: ReturnType<typeof within>) => {
+    const loadingIndicator = await canvas.findByRole('status', { name: 'Loading' });
+    expect(loadingIndicator).toBeInTheDocument();
+    await waitFor(
+        async () => {
+            expect(loadingIndicator).not.toBeInTheDocument();
+        },
+        { timeout: 10000 },
+    );
+};
+
 export const AddTemplateDropdownMenuOn = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -76,6 +87,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
 
         expect(addTemplateButton).toBeInTheDocument();
@@ -616,6 +628,8 @@ export const ViewMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
+        await waitForLoadingToComplete(canvas);
+
         await waitFor(async () => {
             const multilevelOptionButton = canvas.getByRole('button', { name: 'London' });
 
@@ -644,6 +658,8 @@ export const ViewSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
+        await waitForLoadingToComplete(canvas);
+
         await waitFor(async () => {
             const singlelevelOptionButton = canvas.getByRole('button', { name: 'Blue' });
 
@@ -663,41 +679,45 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
+        await waitForLoadingToComplete(canvas);
 
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Taxonomy' });
         await userEvent.click(editButton);
 
-        const multilevelInput = canvas.getByRole('combobox');
-        const optionChip = canvas.getByRole('button', { name: 'London' });
+        const navigateToSapporoTreeItem = async () => {
+            const multilevelInput = await canvas.findByRole('combobox');
+            await userEvent.click(multilevelInput);
 
-        expect(multilevelInput).toBeInTheDocument();
-        expect(optionChip).toBeInTheDocument();
+            const listbox = await canvas.findByRole('listbox');
+            const listboxCanvas = within(listbox);
 
-        await userEvent.click(multilevelInput);
+            const japanLabel = await listboxCanvas.findByText('Japan');
+            const japanTreeitem = japanLabel.closest('[role="treeitem"]') as HTMLElement | null;
+            expect(japanTreeitem).not.toBeNull();
+            const expander = within(japanTreeitem as HTMLElement).getByRole('button', { name: 'Expand branch' });
+            await userEvent.click(expander);
 
-        const listbox = await waitFor(() => canvas.getByRole('listbox'));
-        expect(listbox).toBeInTheDocument();
+            const hokkaidoLabel = await listboxCanvas.findByText('Hokkaido');
+            const hokkaidoTreeitem = hokkaidoLabel.closest('[role="treeitem"]') as HTMLElement | null;
+            expect(hokkaidoTreeitem).not.toBeNull();
+            const hokkaidoExpander = within(hokkaidoTreeitem as HTMLElement).getByRole('button', {
+                name: 'Expand branch',
+            });
+            await userEvent.click(hokkaidoExpander);
 
-        const expandButtons = await waitFor(() => canvas.getAllByRole('button', { name: 'Expand branch' }));
+            const sapporoTreeitem = await listboxCanvas.findByRole('treeitem', { name: 'Sapporo' });
+            return sapporoTreeitem;
+        };
 
-        await userEvent.click(expandButtons[1]);
-
-        const hokkaidoOption = await waitFor(() => canvas.getByText('Hokkaido'));
-        expect(hokkaidoOption).toBeInTheDocument();
-
-        const nestedExpandButtons = await waitFor(() => screen.getAllByRole('button', { name: 'Expand branch' }));
-
-        await userEvent.click(nestedExpandButtons[2]);
-
-        const sapporoOption = await waitFor(() => canvas.getByRole('treeitem', { name: 'Sapporo' }));
-
-        expect(sapporoOption).toBeInTheDocument();
-        expect(sapporoOption).toHaveAttribute('aria-selected', 'false');
-
-        await userEvent.click(sapporoOption);
+        const unselectedSapporoTreeitem = await navigateToSapporoTreeItem();
+        expect(unselectedSapporoTreeitem).toHaveAttribute('aria-selected', 'false');
+        await userEvent.click(unselectedSapporoTreeitem);
 
         const sapporoSelection = await waitFor(() => canvas.getByRole('gridcell', { name: 'Sapporo' }));
         expect(sapporoSelection).toBeInTheDocument();
+
+        const selectedSapporoTreeitem = await navigateToSapporoTreeItem();
+        expect(selectedSapporoTreeitem).toHaveAttribute('aria-selected', 'true');
     },
 };
 
@@ -705,6 +725,8 @@ export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     ...ViewSinglelevelTaxonomy,
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+
+        await waitForLoadingToComplete(canvas);
 
         const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
 
