@@ -48,8 +48,6 @@ const mockLogger = {
     },
 };
 
-// I'm not exactly sure why, but the metadata sidebar shows a loading indicator for several seconds with taxonomies
-// This await is needed in order for taxonomy tests to pass.
 const waitForLoadingToComplete = async (canvas: ReturnType<typeof within>) => {
     const loadingIndicator = await canvas.findByRole('status', { name: 'Loading' });
     expect(loadingIndicator).toBeInTheDocument();
