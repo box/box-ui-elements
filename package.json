@@ -124,8 +124,8 @@
         "@babel/preset-typescript": "^7.24.7",
         "@babel/template": "^7.24.7",
         "@babel/types": "^7.24.7",
-        "@box/blueprint-web": "^12.92.3",
-        "@box/blueprint-web-assets": "^4.76.5",
+        "@box/blueprint-web": "^12.93.5",
+        "@box/blueprint-web-assets": "^4.79.1",
         "@box/box-ai-agent-selector": "^0.53.0",
         "@box/box-ai-content-answers": "^0.139.0",
         "@box/box-item-type-selector": "^0.73.1",
@@ -296,8 +296,8 @@
         "webpack-dev-server": "^5.2.1"
     },
     "peerDependencies": {
-        "@box/blueprint-web": "^12.92.3",
-        "@box/blueprint-web-assets": "^4.76.5",
+        "@box/blueprint-web": "^12.93.5",
+        "@box/blueprint-web-assets": "^4.79.1",
         "@box/box-ai-agent-selector": "^0.53.0",
         "@box/box-ai-content-answers": "^0.139.0",
         "@box/box-item-type-selector": "^0.73.1",
