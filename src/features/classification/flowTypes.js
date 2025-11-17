@@ -74,8 +74,8 @@ type Controls = {
     download?: DownloadRestrictions,
     externalCollab?: ExternalCollabRestriction,
     sharedLink?: SharedLinkRestrictions,
-    watermark?: WatermarkControl,
     sharedLinkAutoExpiration?: SharedLinkAutoExpirationRestriction,
+    watermark?: WatermarkControl,
 };
 
 type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;

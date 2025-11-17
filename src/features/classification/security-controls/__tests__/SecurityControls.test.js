@@ -137,16 +137,18 @@ describe('features/classification/security-controls/SecurityControls', () => {
         });
     });
 
-    describe('AutoExpiration combinations', () => {
-        test('should render AutoExpiration alone (1 restriction)', () => {
+    describe('SharedLinkAutoExpiration combinations', () => {
+        test('should render SharedLinkAutoExpiration alone (1 restriction)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
-            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(messages.shortAutoExpiration);
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharedLinkAutoExpiration,
+            );
         });
 
-        test('should render Download + AutoExpiration (2 restrictions)', () => {
+        test('should render Download + SharedLinkAutoExpiration (2 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 download: {
@@ -156,10 +158,12 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 },
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
-            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(messages.shortDownloadAutoExpiration);
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortDownloadSharedLinkAutoExpiration,
+            );
         });
 
-        test('should render Sharing + AutoExpiration (2 restrictions)', () => {
+        test('should render Sharing + SharedLinkAutoExpiration (2 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -167,10 +171,12 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 },
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
-            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(messages.shortSharingAutoExpiration);
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingSharedLinkAutoExpiration,
+            );
         });
 
-        test('should render App + AutoExpiration (2 restrictions)', () => {
+        test('should render App + SharedLinkAutoExpiration (2 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 app: {
@@ -179,10 +185,12 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 },
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
-            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(messages.shortAppAutoExpiration);
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortAppSharedLinkAutoExpiration,
+            );
         });
 
-        test('should render Integration + AutoExpiration when shouldDisplayAppsAsIntegrations is true (2 restrictions)', () => {
+        test('should render Integration + SharedLinkAutoExpiration when shouldDisplayAppsAsIntegrations is true (2 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 app: {
@@ -196,11 +204,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 shouldDisplayAppsAsIntegrations: true,
             });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortIntegrationAutoExpiration,
+                messages.shortIntegrationSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Sign + AutoExpiration (2 restrictions)', () => {
+        test('should render Sign + SharedLinkAutoExpiration (2 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 boxSignRequest: {
@@ -208,10 +216,12 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 },
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
-            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(messages.shortSignAutoExpiration);
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSignSharedLinkAutoExpiration,
+            );
         });
 
-        test('should render Sharing + Download + AutoExpiration (3 restrictions)', () => {
+        test('should render Sharing + Download + SharedLinkAutoExpiration (3 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -225,11 +235,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortSharingDownloadAutoExpiration,
+                messages.shortSharingDownloadSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Sharing + App + AutoExpiration (3 restrictions)', () => {
+        test('should render Sharing + App + SharedLinkAutoExpiration (3 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -242,11 +252,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortSharingAppAutoExpiration,
+                messages.shortSharingAppSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Sharing + Sign + AutoExpiration (3 restrictions)', () => {
+        test('should render Sharing + Sign + SharedLinkAutoExpiration (3 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -258,11 +268,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortSharingSignAutoExpiration,
+                messages.shortSharingSignSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Download + App + AutoExpiration (3 restrictions)', () => {
+        test('should render Download + App + SharedLinkAutoExpiration (3 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 download: {
@@ -277,11 +287,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortDownloadAppAutoExpiration,
+                messages.shortDownloadAppSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Download + Sign + AutoExpiration (3 restrictions)', () => {
+        test('should render Download + Sign + SharedLinkAutoExpiration (3 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 download: {
@@ -295,11 +305,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortDownloadSignAutoExpiration,
+                messages.shortDownloadSignSharedLinkAutoExpiration,
             );
         });
 
-        test('should render App + Sign + AutoExpiration (3 restrictions)', () => {
+        test('should render App + Sign + SharedLinkAutoExpiration (3 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 app: {
@@ -311,10 +321,12 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 },
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
-            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(messages.shortAppSignAutoExpiration);
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortAppSignSharedLinkAutoExpiration,
+            );
         });
 
-        test('should render Sharing + Download + App + AutoExpiration (4 restrictions)', () => {
+        test('should render Sharing + Download + App + SharedLinkAutoExpiration (4 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -332,11 +344,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortSharingDownloadAppAutoExpiration,
+                messages.shortSharingDownloadAppSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Sharing + Download + Integration + AutoExpiration when shouldDisplayAppsAsIntegrations is true (4 restrictions)', () => {
+        test('should render Sharing + Download + Integration + SharedLinkAutoExpiration when shouldDisplayAppsAsIntegrations is true (4 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -358,11 +370,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
                 shouldDisplayAppsAsIntegrations: true,
             });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortSharingDownloadIntegrationAutoExpiration,
+                messages.shortSharingDownloadIntegrationSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Sharing + Download + Sign + AutoExpiration (4 restrictions)', () => {
+        test('should render Sharing + Download + Sign + SharedLinkAutoExpiration (4 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 sharedLink: {
@@ -379,11 +391,11 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortSharingDownloadSignAutoExpiration,
+                messages.shortSharingDownloadSignSharedLinkAutoExpiration,
             );
         });
 
-        test('should render Download + App + Sign + AutoExpiration (4 restrictions)', () => {
+        test('should render Download + App + Sign + SharedLinkAutoExpiration (4 restrictions)', () => {
             const autoExpirationControls = {
                 sharedLinkAutoExpiration: true,
                 download: {
@@ -401,7 +413,32 @@ describe('features/classification/security-controls/SecurityControls', () => {
             };
             wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
             expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
-                messages.shortDownloadAppSignAutoExpiration,
+                messages.shortDownloadAppSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Download + App + Sign + SharedLinkAutoExpiration (5 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingDownloadAppSignSharedLinkAutoExpiration,
             );
         });
 
@@ -413,7 +450,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
             const autoExpirationItem = wrapper.findWhere(
                 node =>
                     node.type() === SecurityControlsItem &&
-                    node.prop('message').id === 'boxui.securityControls.sharingAutoExpirationEnabled',
+                    node.prop('message').id === 'boxui.securityControls.sharedLinkAutoExpirationApplied',
             );
             expect(autoExpirationItem.exists()).toBe(true);
         });

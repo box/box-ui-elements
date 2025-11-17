@@ -34,26 +34,34 @@ const getShortSecurityControlsMessage = (
     // together as generic "sharing" restrictions
     const sharing = (sharedLink && sharedLink.accessLevel !== PUBLIC) || externalCollab;
 
-    // 4 restriction combinations
-    if (sharedLinkAutoExpiration && sharing && download && app) {
+    // 5 restriction combinations
+    if (sharedLinkAutoExpiration && sharing && download && app && boxSignRequest) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortSharingDownloadIntegrationAutoExpiration
-                : messages.shortSharingDownloadAppAutoExpiration,
+                ? messages.shortSharingDownloadIntegrationSignSharedLinkAutoExpiration
+                : messages.shortSharingDownloadAppSignSharedLinkAutoExpiration,
+        });
+    }
+    // 4 restriction combinations
+    else if (sharedLinkAutoExpiration && sharing && download && app) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingDownloadIntegrationSharedLinkAutoExpiration
+                : messages.shortSharingDownloadAppSharedLinkAutoExpiration,
         });
     } else if (sharedLinkAutoExpiration && sharing && download && boxSignRequest) {
-        items.push({ message: messages.shortSharingDownloadSignAutoExpiration });
+        items.push({ message: messages.shortSharingDownloadSignSharedLinkAutoExpiration });
     } else if (sharedLinkAutoExpiration && sharing && app && boxSignRequest) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortSharingIntegrationSignAutoExpiration
-                : messages.shortSharingAppSignAutoExpiration,
+                ? messages.shortSharingIntegrationSignSharedLinkAutoExpiration
+                : messages.shortSharingAppSignSharedLinkAutoExpiration,
         });
     } else if (sharedLinkAutoExpiration && download && app && boxSignRequest) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortDownloadIntegrationSignAutoExpiration
-                : messages.shortDownloadAppSignAutoExpiration,
+                ? messages.shortDownloadIntegrationSignSharedLinkAutoExpiration
+                : messages.shortDownloadAppSignSharedLinkAutoExpiration,
         });
     } else if (sharing && download && app && boxSignRequest) {
         items.push({
@@ -64,28 +72,28 @@ const getShortSecurityControlsMessage = (
     }
     // 3 restriction combinations
     else if (sharedLinkAutoExpiration && sharing && download) {
-        items.push({ message: messages.shortSharingDownloadAutoExpiration });
+        items.push({ message: messages.shortSharingDownloadSharedLinkAutoExpiration });
     } else if (sharedLinkAutoExpiration && sharing && app) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortSharingIntegrationAutoExpiration
-                : messages.shortSharingAppAutoExpiration,
+                ? messages.shortSharingIntegrationSharedLinkAutoExpiration
+                : messages.shortSharingAppSharedLinkAutoExpiration,
         });
     } else if (sharedLinkAutoExpiration && sharing && boxSignRequest) {
-        items.push({ message: messages.shortSharingSignAutoExpiration });
+        items.push({ message: messages.shortSharingSignSharedLinkAutoExpiration });
     } else if (sharedLinkAutoExpiration && download && app) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortDownloadIntegrationAutoExpiration
-                : messages.shortDownloadAppAutoExpiration,
+                ? messages.shortDownloadIntegrationSharedLinkAutoExpiration
+                : messages.shortDownloadAppSharedLinkAutoExpiration,
         });
     } else if (sharedLinkAutoExpiration && download && boxSignRequest) {
-        items.push({ message: messages.shortDownloadSignAutoExpiration });
+        items.push({ message: messages.shortDownloadSignSharedLinkAutoExpiration });
     } else if (sharedLinkAutoExpiration && app && boxSignRequest) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortIntegrationSignAutoExpiration
-                : messages.shortAppSignAutoExpiration,
+                ? messages.shortIntegrationSignSharedLinkAutoExpiration
+                : messages.shortAppSignSharedLinkAutoExpiration,
         });
     } else if (sharing && download && app) {
         items.push({
@@ -110,17 +118,17 @@ const getShortSecurityControlsMessage = (
     }
     // 2 restriction combinations
     else if (sharedLinkAutoExpiration && sharing) {
-        items.push({ message: messages.shortSharingAutoExpiration });
+        items.push({ message: messages.shortSharingSharedLinkAutoExpiration });
     } else if (sharedLinkAutoExpiration && download) {
-        items.push({ message: messages.shortDownloadAutoExpiration });
+        items.push({ message: messages.shortDownloadSharedLinkAutoExpiration });
     } else if (sharedLinkAutoExpiration && app) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
-                ? messages.shortIntegrationAutoExpiration
-                : messages.shortAppAutoExpiration,
+                ? messages.shortIntegrationSharedLinkAutoExpiration
+                : messages.shortAppSharedLinkAutoExpiration,
         });
     } else if (sharedLinkAutoExpiration && boxSignRequest) {
-        items.push({ message: messages.shortSignAutoExpiration });
+        items.push({ message: messages.shortSignSharedLinkAutoExpiration });
     } else if (sharing && boxSignRequest) {
         items.push({ message: messages.shortSharingSign });
     } else if (download && boxSignRequest) {
@@ -151,7 +159,7 @@ const getShortSecurityControlsMessage = (
     } else if (app) {
         items.push({ message: shouldDisplayAppsAsIntegrations ? messages.shortIntegration : messages.shortApp });
     } else if (sharedLinkAutoExpiration) {
-        items.push({ message: messages.shortAutoExpiration });
+        items.push({ message: messages.shortSharedLinkAutoExpiration });
     }
 
     if (watermark) {
@@ -190,7 +198,7 @@ const getWatermarkingMessages = (controls: Controls): Array<MessageItem> => {
     return items;
 };
 
-const getSharingAutoExpirationMessages = (controls: Controls): Array<MessageItem> => {
+const getSharedLinkAutoExpirationMessages = (controls: Controls): Array<MessageItem> => {
     const items = [];
 
     if (getProp(controls, `${SHARED_LINK_AUTO_EXPIRATION}`, false)) {
@@ -336,7 +344,7 @@ const getFullSecurityControlsMessages = (
     const items = [
         ...getSharedLinkMessages(controls),
         ...getExternalCollabMessages(controls),
-        ...getSharingAutoExpirationMessages(controls),
+        ...getSharedLinkAutoExpirationMessages(controls),
         ...getDownloadMessages(controls),
         ...getAppDownloadMessages(controls, maxAppCount, shouldDisplayAppsAsIntegrations),
         ...getWatermarkingMessages(controls),

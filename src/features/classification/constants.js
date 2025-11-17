@@ -18,8 +18,8 @@ const ACCESS_POLICY_RESTRICTION: {
     EXTERNAL_COLLAB: 'externalCollab',
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
-    WATERMARK: 'watermark',
     SHARED_LINK_AUTO_EXPIRATION: 'sharedLinkAutoExpiration',
+    WATERMARK: 'watermark',
 } = {
     APP: 'app',
     BOX_SIGN_REQUEST: 'boxSignRequest',
@@ -27,8 +27,8 @@ const ACCESS_POLICY_RESTRICTION: {
     EXTERNAL_COLLAB: 'externalCollab',
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
-    WATERMARK: 'watermark',
     SHARED_LINK_AUTO_EXPIRATION: 'sharedLinkAutoExpiration',
+    WATERMARK: 'watermark',
 };
 
 const DOWNLOAD_CONTROL: {
