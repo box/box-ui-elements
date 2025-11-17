@@ -34,33 +34,55 @@ describe('features/classification/security-controls/utils', () => {
 
     describe('getShortSecurityControlsMessage()', () => {
         test.each`
-            securityControls                                            | expectedMessages                                                      | description
-            ${{}}                                                       | ${[]}                                                                 | ${'there are no restrictions'}
-            ${allSecurityControls}                                      | ${[messages.shortSharingDownloadAppSign, messages.shortWatermarking]} | ${'all restrictions are present'}
-            ${{ sharedLink: { accessLevel: PUBLIC } }}                  | ${[]}                                                                 | ${'shared link restriction has a "public" access level'}
-            ${{ sharedLink: {}, download: {}, app: {} }}                | ${[messages.shortSharingDownloadApp]}                                 | ${'download, app and shared link restrictions are present'}
-            ${{ externalCollab: {}, download: {}, app: {} }}            | ${[messages.shortSharingDownloadApp]}                                 | ${'download, app and external collab restrictions are present'}
-            ${{ download: {}, app: {}, boxSignRequest: {} }}            | ${[messages.shortDownloadAppSign]}                                    | ${'download, app and sign restrictions are present'}
-            ${{ app: {}, boxSignRequest: {}, sharedLink: {} }}          | ${[messages.shortSharingAppSign]}                                     | ${'app, sign and shared link restrictions are present'}
-            ${{ app: {}, boxSignRequest: {}, externalCollab: {} }}      | ${[messages.shortSharingAppSign]}                                     | ${'app, sign and external collab restrictions are present'}
-            ${{ download: {}, boxSignRequest: {}, sharedLink: {} }}     | ${[messages.shortSharingDownloadSign]}                                | ${'download, sign and shared link restrictions are present'}
-            ${{ download: {}, boxSignRequest: {}, externalCollab: {} }} | ${[messages.shortSharingDownloadSign]}                                | ${'download, sign and external collab restrictions are present'}
-            ${{ sharedLink: {}, boxSignRequest: {} }}                   | ${[messages.shortSharingSign]}                                        | ${'sign and shared link restrictions are present'}
-            ${{ externalCollab: {}, boxSignRequest: {} }}               | ${[messages.shortSharingSign]}                                        | ${'sign and external collab restrictions are present'}
-            ${{ download: {}, boxSignRequest: {} }}                     | ${[messages.shortDownloadSign]}                                       | ${'download and sign restrictions are present'}
-            ${{ app: {}, boxSignRequest: {} }}                          | ${[messages.shortAppSign]}                                            | ${'app and sign restrictions are present'}
-            ${{ sharedLink: {}, download: {} }}                         | ${[messages.shortSharingDownload]}                                    | ${'download and shared link restrictions are present'}
-            ${{ externalCollab: {}, download: {} }}                     | ${[messages.shortSharingDownload]}                                    | ${'download and external collab restrictions are present'}
-            ${{ sharedLink: {}, app: {} }}                              | ${[messages.shortSharingApp]}                                         | ${'app and shared link restrictions are present'}
-            ${{ externalCollab: {}, app: {} }}                          | ${[messages.shortSharingApp]}                                         | ${'app and external collab restrictions are present'}
-            ${{ download: {}, app: {} }}                                | ${[messages.shortDownloadApp]}                                        | ${'app and download restrictions are present'}
-            ${{ sharedLink: {}, externalCollab: {} }}                   | ${[messages.shortSharing]}                                            | ${'shared link and external collab restrictions are present'}
-            ${{ sharedLink: {} }}                                       | ${[messages.shortSharing]}                                            | ${'shared link restrictions are present'}
-            ${{ externalCollab: {} }}                                   | ${[messages.shortSharing]}                                            | ${'external collab restrictions are present'}
-            ${{ download: {} }}                                         | ${[messages.shortDownload]}                                           | ${'download restrictions are present'}
-            ${{ app: {} }}                                              | ${[messages.shortApp]}                                                | ${'app restrictions are present'}
-            ${{ watermark: {} }}                                        | ${[messages.shortWatermarking]}                                       | ${'watermark restrictions are present'}
-            ${{ boxSignRequest: {} }}                                   | ${[messages.shortSign]}                                               | ${'sign restrictions are present'}
+            securityControls                                                                            | expectedMessages                                                      | description
+            ${{}}                                                                                       | ${[]}                                                                 | ${'there are no restrictions'}
+            ${allSecurityControls}                                                                      | ${[messages.shortSharingDownloadAppSign, messages.shortWatermarking]} | ${'all restrictions are present'}
+            ${{ sharedLink: { accessLevel: PUBLIC } }}                                                  | ${[]}                                                                 | ${'shared link restriction has a "public" access level'}
+            ${{ sharedLink: {}, download: {}, app: {} }}                                                | ${[messages.shortSharingDownloadApp]}                                 | ${'download, app and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {}, app: {} }}                                            | ${[messages.shortSharingDownloadApp]}                                 | ${'download, app and external collab restrictions are present'}
+            ${{ download: {}, app: {}, boxSignRequest: {} }}                                            | ${[messages.shortDownloadAppSign]}                                    | ${'download, app and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, sharedLink: {} }}                                          | ${[messages.shortSharingAppSign]}                                     | ${'app, sign and shared link restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, externalCollab: {} }}                                      | ${[messages.shortSharingAppSign]}                                     | ${'app, sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, sharedLink: {} }}                                     | ${[messages.shortSharingDownloadSign]}                                | ${'download, sign and shared link restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, externalCollab: {} }}                                 | ${[messages.shortSharingDownloadSign]}                                | ${'download, sign and external collab restrictions are present'}
+            ${{ sharedLink: {}, boxSignRequest: {} }}                                                   | ${[messages.shortSharingSign]}                                        | ${'sign and shared link restrictions are present'}
+            ${{ externalCollab: {}, boxSignRequest: {} }}                                               | ${[messages.shortSharingSign]}                                        | ${'sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {} }}                                                     | ${[messages.shortDownloadSign]}                                       | ${'download and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {} }}                                                          | ${[messages.shortAppSign]}                                            | ${'app and sign restrictions are present'}
+            ${{ sharedLink: {}, download: {} }}                                                         | ${[messages.shortSharingDownload]}                                    | ${'download and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {} }}                                                     | ${[messages.shortSharingDownload]}                                    | ${'download and external collab restrictions are present'}
+            ${{ sharedLink: {}, app: {} }}                                                              | ${[messages.shortSharingApp]}                                         | ${'app and shared link restrictions are present'}
+            ${{ externalCollab: {}, app: {} }}                                                          | ${[messages.shortSharingApp]}                                         | ${'app and external collab restrictions are present'}
+            ${{ download: {}, app: {} }}                                                                | ${[messages.shortDownloadApp]}                                        | ${'app and download restrictions are present'}
+            ${{ sharedLink: {}, externalCollab: {} }}                                                   | ${[messages.shortSharing]}                                            | ${'shared link and external collab restrictions are present'}
+            ${{ sharedLink: {} }}                                                                       | ${[messages.shortSharing]}                                            | ${'shared link restrictions are present'}
+            ${{ externalCollab: {} }}                                                                   | ${[messages.shortSharing]}                                            | ${'external collab restrictions are present'}
+            ${{ download: {} }}                                                                         | ${[messages.shortDownload]}                                           | ${'download restrictions are present'}
+            ${{ app: {} }}                                                                              | ${[messages.shortApp]}                                                | ${'app restrictions are present'}
+            ${{ watermark: {} }}                                                                        | ${[messages.shortWatermarking]}                                       | ${'watermark restrictions are present'}
+            ${{ boxSignRequest: {} }}                                                                   | ${[messages.shortSign]}                                               | ${'sign restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true }}                                                       | ${[messages.shortAutoExpiration]}                                     | ${'Auto-Expiration restriction is present'}
+            ${{ sharedLinkAutoExpiration: true, download: {} }}                                         | ${[messages.shortDownloadAutoExpiration]}                             | ${'download and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {} }}                                       | ${[messages.shortSharingAutoExpiration]}                              | ${'shared link and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {} }}                                   | ${[messages.shortSharingAutoExpiration]}                              | ${'external collab and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, app: {} }}                                              | ${[messages.shortAppAutoExpiration]}                                  | ${'app and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, boxSignRequest: {} }}                                   | ${[messages.shortSignAutoExpiration]}                                 | ${'sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, download: {} }}                         | ${[messages.shortSharingDownloadAutoExpiration]}                      | ${'shared link, download and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, download: {} }}                     | ${[messages.shortSharingDownloadAutoExpiration]}                      | ${'external collab, download and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, app: {} }}                              | ${[messages.shortSharingAppAutoExpiration]}                           | ${'shared link, app and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, app: {} }}                          | ${[messages.shortSharingAppAutoExpiration]}                           | ${'external collab, app and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, boxSignRequest: {} }}                   | ${[messages.shortSharingSignAutoExpiration]}                          | ${'shared link, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, boxSignRequest: {} }}               | ${[messages.shortSharingSignAutoExpiration]}                          | ${'external collab, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, download: {}, app: {} }}                                | ${[messages.shortDownloadAppAutoExpiration]}                          | ${'download, app and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, download: {}, boxSignRequest: {} }}                     | ${[messages.shortDownloadSignAutoExpiration]}                         | ${'download, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, app: {}, boxSignRequest: {} }}                          | ${[messages.shortAppSignAutoExpiration]}                              | ${'app, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, download: {}, app: {} }}                | ${[messages.shortSharingDownloadAppAutoExpiration]}                   | ${'shared link, download, app and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, download: {}, app: {} }}            | ${[messages.shortSharingDownloadAppAutoExpiration]}                   | ${'external collab, download, app and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, download: {}, boxSignRequest: {} }}     | ${[messages.shortSharingDownloadSignAutoExpiration]}                  | ${'shared link, download, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, download: {}, boxSignRequest: {} }} | ${[messages.shortSharingDownloadSignAutoExpiration]}                  | ${'external collab, download, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, app: {}, boxSignRequest: {} }}          | ${[messages.shortSharingAppSignAutoExpiration]}                       | ${'shared link, app, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, app: {}, boxSignRequest: {} }}      | ${[messages.shortSharingAppSignAutoExpiration]}                       | ${'external collab, app, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, download: {}, app: {}, boxSignRequest: {} }}            | ${[messages.shortDownloadAppSignAutoExpiration]}                      | ${'download, app, sign and Auto-Expiration restrictions are present'}
         `('should return correct messages when $description', ({ securityControls, expectedMessages }) => {
             const expectedResult = expectedMessages.map(message => ({ message }));
 
@@ -70,33 +92,55 @@ describe('features/classification/security-controls/utils', () => {
         });
 
         test.each`
-            securityControls                                            | expectedMessages                                                              | description
-            ${{}}                                                       | ${[]}                                                                         | ${'there are no restrictions'}
-            ${allSecurityControls}                                      | ${[messages.shortSharingDownloadIntegrationSign, messages.shortWatermarking]} | ${'all restrictions are present'}
-            ${{ sharedLink: { accessLevel: PUBLIC } }}                  | ${[]}                                                                         | ${'shared link restriction has a "public" access level'}
-            ${{ sharedLink: {}, download: {}, app: {} }}                | ${[messages.shortSharingDownloadIntegration]}                                 | ${'download, integration and shared link restrictions are present'}
-            ${{ externalCollab: {}, download: {}, app: {} }}            | ${[messages.shortSharingDownloadIntegration]}                                 | ${'download, integration and external collab restrictions are present'}
-            ${{ download: {}, app: {}, boxSignRequest: {} }}            | ${[messages.shortDownloadIntegrationSign]}                                    | ${'download, integration and sign restrictions are present'}
-            ${{ app: {}, boxSignRequest: {}, sharedLink: {} }}          | ${[messages.shortSharingIntegrationSign]}                                     | ${'integration, sign and shared link restrictions are present'}
-            ${{ app: {}, boxSignRequest: {}, externalCollab: {} }}      | ${[messages.shortSharingIntegrationSign]}                                     | ${'integration, sign and external collab restrictions are present'}
-            ${{ download: {}, boxSignRequest: {}, sharedLink: {} }}     | ${[messages.shortSharingDownloadSign]}                                        | ${'download, sign and shared link restrictions are present'}
-            ${{ download: {}, boxSignRequest: {}, externalCollab: {} }} | ${[messages.shortSharingDownloadSign]}                                        | ${'download, sign and external collab restrictions are present'}
-            ${{ sharedLink: {}, boxSignRequest: {} }}                   | ${[messages.shortSharingSign]}                                                | ${'sign and shared link restrictions are present'}
-            ${{ externalCollab: {}, boxSignRequest: {} }}               | ${[messages.shortSharingSign]}                                                | ${'sign and external collab restrictions are present'}
-            ${{ download: {}, boxSignRequest: {} }}                     | ${[messages.shortDownloadSign]}                                               | ${'download and sign restrictions are present'}
-            ${{ app: {}, boxSignRequest: {} }}                          | ${[messages.shortIntegrationSign]}                                            | ${'integration and sign restrictions are present'}
-            ${{ sharedLink: {}, download: {} }}                         | ${[messages.shortSharingDownload]}                                            | ${'download and shared link restrictions are present'}
-            ${{ externalCollab: {}, download: {} }}                     | ${[messages.shortSharingDownload]}                                            | ${'download and external collab restrictions are present'}
-            ${{ sharedLink: {}, app: {} }}                              | ${[messages.shortSharingIntegration]}                                         | ${'integration and shared link restrictions are present'}
-            ${{ externalCollab: {}, app: {} }}                          | ${[messages.shortSharingIntegration]}                                         | ${'integration and external collab restrictions are present'}
-            ${{ download: {}, app: {} }}                                | ${[messages.shortDownloadIntegration]}                                        | ${'integration and download restrictions are present'}
-            ${{ sharedLink: {}, externalCollab: {} }}                   | ${[messages.shortSharing]}                                                    | ${'shared link and external collab restrictions are present'}
-            ${{ sharedLink: {} }}                                       | ${[messages.shortSharing]}                                                    | ${'shared link restrictions are present'}
-            ${{ externalCollab: {} }}                                   | ${[messages.shortSharing]}                                                    | ${'external collab restrictions are present'}
-            ${{ download: {} }}                                         | ${[messages.shortDownload]}                                                   | ${'download restrictions are present'}
-            ${{ app: {} }}                                              | ${[messages.shortIntegration]}                                                | ${'integration restrictions are present'}
-            ${{ watermark: {} }}                                        | ${[messages.shortWatermarking]}                                               | ${'watermark restrictions are present'}
-            ${{ boxSignRequest: {} }}                                   | ${[messages.shortSign]}                                                       | ${'sign restrictions are present'}
+            securityControls                                                                            | expectedMessages                                                              | description
+            ${{}}                                                                                       | ${[]}                                                                         | ${'there are no restrictions'}
+            ${allSecurityControls}                                                                      | ${[messages.shortSharingDownloadIntegrationSign, messages.shortWatermarking]} | ${'all restrictions are present'}
+            ${{ sharedLink: { accessLevel: PUBLIC } }}                                                  | ${[]}                                                                         | ${'shared link restriction has a "public" access level'}
+            ${{ sharedLink: {}, download: {}, app: {} }}                                                | ${[messages.shortSharingDownloadIntegration]}                                 | ${'download, integration and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {}, app: {} }}                                            | ${[messages.shortSharingDownloadIntegration]}                                 | ${'download, integration and external collab restrictions are present'}
+            ${{ download: {}, app: {}, boxSignRequest: {} }}                                            | ${[messages.shortDownloadIntegrationSign]}                                    | ${'download, integration and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, sharedLink: {} }}                                          | ${[messages.shortSharingIntegrationSign]}                                     | ${'integration, sign and shared link restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, externalCollab: {} }}                                      | ${[messages.shortSharingIntegrationSign]}                                     | ${'integration, sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, sharedLink: {} }}                                     | ${[messages.shortSharingDownloadSign]}                                        | ${'download, sign and shared link restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, externalCollab: {} }}                                 | ${[messages.shortSharingDownloadSign]}                                        | ${'download, sign and external collab restrictions are present'}
+            ${{ sharedLink: {}, boxSignRequest: {} }}                                                   | ${[messages.shortSharingSign]}                                                | ${'sign and shared link restrictions are present'}
+            ${{ externalCollab: {}, boxSignRequest: {} }}                                               | ${[messages.shortSharingSign]}                                                | ${'sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {} }}                                                     | ${[messages.shortDownloadSign]}                                               | ${'download and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {} }}                                                          | ${[messages.shortIntegrationSign]}                                            | ${'integration and sign restrictions are present'}
+            ${{ sharedLink: {}, download: {} }}                                                         | ${[messages.shortSharingDownload]}                                            | ${'download and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {} }}                                                     | ${[messages.shortSharingDownload]}                                            | ${'download and external collab restrictions are present'}
+            ${{ sharedLink: {}, app: {} }}                                                              | ${[messages.shortSharingIntegration]}                                         | ${'integration and shared link restrictions are present'}
+            ${{ externalCollab: {}, app: {} }}                                                          | ${[messages.shortSharingIntegration]}                                         | ${'integration and external collab restrictions are present'}
+            ${{ download: {}, app: {} }}                                                                | ${[messages.shortDownloadIntegration]}                                        | ${'integration and download restrictions are present'}
+            ${{ sharedLink: {}, externalCollab: {} }}                                                   | ${[messages.shortSharing]}                                                    | ${'shared link and external collab restrictions are present'}
+            ${{ sharedLink: {} }}                                                                       | ${[messages.shortSharing]}                                                    | ${'shared link restrictions are present'}
+            ${{ externalCollab: {} }}                                                                   | ${[messages.shortSharing]}                                                    | ${'external collab restrictions are present'}
+            ${{ download: {} }}                                                                         | ${[messages.shortDownload]}                                                   | ${'download restrictions are present'}
+            ${{ app: {} }}                                                                              | ${[messages.shortIntegration]}                                                | ${'integration restrictions are present'}
+            ${{ watermark: {} }}                                                                        | ${[messages.shortWatermarking]}                                               | ${'watermark restrictions are present'}
+            ${{ boxSignRequest: {} }}                                                                   | ${[messages.shortSign]}                                                       | ${'sign restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true }}                                                       | ${[messages.shortAutoExpiration]}                                             | ${'Auto-Expiration restriction is present'}
+            ${{ sharedLinkAutoExpiration: true, download: {} }}                                         | ${[messages.shortDownloadAutoExpiration]}                                     | ${'download and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {} }}                                       | ${[messages.shortSharingAutoExpiration]}                                      | ${'shared link and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {} }}                                   | ${[messages.shortSharingAutoExpiration]}                                      | ${'external collab and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, app: {} }}                                              | ${[messages.shortIntegrationAutoExpiration]}                                  | ${'integration and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, boxSignRequest: {} }}                                   | ${[messages.shortSignAutoExpiration]}                                         | ${'sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, download: {} }}                         | ${[messages.shortSharingDownloadAutoExpiration]}                              | ${'shared link, download and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, download: {} }}                     | ${[messages.shortSharingDownloadAutoExpiration]}                              | ${'external collab, download and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, app: {} }}                              | ${[messages.shortSharingIntegrationAutoExpiration]}                           | ${'shared link, integration and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, app: {} }}                          | ${[messages.shortSharingIntegrationAutoExpiration]}                           | ${'external collab, integration and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, boxSignRequest: {} }}                   | ${[messages.shortSharingSignAutoExpiration]}                                  | ${'shared link, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, boxSignRequest: {} }}               | ${[messages.shortSharingSignAutoExpiration]}                                  | ${'external collab, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, download: {}, app: {} }}                                | ${[messages.shortDownloadIntegrationAutoExpiration]}                          | ${'download, integration and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, download: {}, boxSignRequest: {} }}                     | ${[messages.shortDownloadSignAutoExpiration]}                                 | ${'download, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, app: {}, boxSignRequest: {} }}                          | ${[messages.shortIntegrationSignAutoExpiration]}                              | ${'integration, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, download: {}, app: {} }}                | ${[messages.shortSharingDownloadIntegrationAutoExpiration]}                   | ${'shared link, download, integration and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, download: {}, app: {} }}            | ${[messages.shortSharingDownloadIntegrationAutoExpiration]}                   | ${'external collab, download, integration and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, download: {}, boxSignRequest: {} }}     | ${[messages.shortSharingDownloadSignAutoExpiration]}                          | ${'shared link, download, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, download: {}, boxSignRequest: {} }} | ${[messages.shortSharingDownloadSignAutoExpiration]}                          | ${'external collab, download, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, sharedLink: {}, app: {}, boxSignRequest: {} }}          | ${[messages.shortSharingIntegrationSignAutoExpiration]}                       | ${'shared link, integration, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, externalCollab: {}, app: {}, boxSignRequest: {} }}      | ${[messages.shortSharingIntegrationSignAutoExpiration]}                       | ${'external collab, integration, sign and Auto-Expiration restrictions are present'}
+            ${{ sharedLinkAutoExpiration: true, download: {}, app: {}, boxSignRequest: {} }}            | ${[messages.shortDownloadIntegrationSignAutoExpiration]}                      | ${'download, integration, sign and Auto-Expiration restrictions are present'}
         `(
             'should return correct messages when $description and shouldDisplayAppsAsIntegrations is true',
             ({ securityControls, expectedMessages }) => {
@@ -345,6 +389,16 @@ describe('features/classification/security-controls/utils', () => {
 
             expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
                 { message: messages.boxSignRequestRestricted },
+            ]);
+        });
+
+        test('should include correct message when shared link Auto-Expiration is enabled', () => {
+            accessPolicy = {
+                sharedLinkAutoExpiration: true,
+            };
+
+            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
+                { message: messages.sharedLinkAutoExpirationApplied },
             ]);
         });
 

@@ -16,7 +16,8 @@ import {
     SHARED_LINK_ACCESS_LEVEL,
 } from '../constants';
 
-const { APP, BOX_SIGN_REQUEST, DOWNLOAD, EXTERNAL_COLLAB, SHARED_LINK, WATERMARK } = ACCESS_POLICY_RESTRICTION;
+const { APP, BOX_SIGN_REQUEST, DOWNLOAD, EXTERNAL_COLLAB, SHARED_LINK, WATERMARK, SHARED_LINK_AUTO_EXPIRATION } =
+    ACCESS_POLICY_RESTRICTION;
 const { DEFAULT, WITH_APP_LIST, WITH_OVERFLOWN_APP_LIST } = APP_RESTRICTION_MESSAGE_TYPE;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
@@ -27,14 +28,34 @@ const getShortSecurityControlsMessage = (
     shouldDisplayAppsAsIntegrations?: boolean,
 ): Array<MessageItem> => {
     const items = [];
-    const { app, boxSignRequest, download, externalCollab, sharedLink, watermark } = controls;
+    const { app, boxSignRequest, download, externalCollab, sharedLink, watermark, sharedLinkAutoExpiration } = controls;
 
     // Shared link and external collab restrictions are grouped
     // together as generic "sharing" restrictions
     const sharing = (sharedLink && sharedLink.accessLevel !== PUBLIC) || externalCollab;
 
     // 4 restriction combinations
-    if (sharing && download && app && boxSignRequest) {
+    if (sharedLinkAutoExpiration && sharing && download && app) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingDownloadIntegrationAutoExpiration
+                : messages.shortSharingDownloadAppAutoExpiration,
+        });
+    } else if (sharedLinkAutoExpiration && sharing && download && boxSignRequest) {
+        items.push({ message: messages.shortSharingDownloadSignAutoExpiration });
+    } else if (sharedLinkAutoExpiration && sharing && app && boxSignRequest) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingIntegrationSignAutoExpiration
+                : messages.shortSharingAppSignAutoExpiration,
+        });
+    } else if (sharedLinkAutoExpiration && download && app && boxSignRequest) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortDownloadIntegrationSignAutoExpiration
+                : messages.shortDownloadAppSignAutoExpiration,
+        });
+    } else if (sharing && download && app && boxSignRequest) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
                 ? messages.shortSharingDownloadIntegrationSign
@@ -42,7 +63,31 @@ const getShortSecurityControlsMessage = (
         });
     }
     // 3 restriction combinations
-    else if (sharing && download && app) {
+    else if (sharedLinkAutoExpiration && sharing && download) {
+        items.push({ message: messages.shortSharingDownloadAutoExpiration });
+    } else if (sharedLinkAutoExpiration && sharing && app) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingIntegrationAutoExpiration
+                : messages.shortSharingAppAutoExpiration,
+        });
+    } else if (sharedLinkAutoExpiration && sharing && boxSignRequest) {
+        items.push({ message: messages.shortSharingSignAutoExpiration });
+    } else if (sharedLinkAutoExpiration && download && app) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortDownloadIntegrationAutoExpiration
+                : messages.shortDownloadAppAutoExpiration,
+        });
+    } else if (sharedLinkAutoExpiration && download && boxSignRequest) {
+        items.push({ message: messages.shortDownloadSignAutoExpiration });
+    } else if (sharedLinkAutoExpiration && app && boxSignRequest) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortIntegrationSignAutoExpiration
+                : messages.shortAppSignAutoExpiration,
+        });
+    } else if (sharing && download && app) {
         items.push({
             message: shouldDisplayAppsAsIntegrations
                 ? messages.shortSharingDownloadIntegration
@@ -64,7 +109,19 @@ const getShortSecurityControlsMessage = (
         items.push({ message: messages.shortSharingDownloadSign });
     }
     // 2 restriction combinations
-    else if (sharing && boxSignRequest) {
+    else if (sharedLinkAutoExpiration && sharing) {
+        items.push({ message: messages.shortSharingAutoExpiration });
+    } else if (sharedLinkAutoExpiration && download) {
+        items.push({ message: messages.shortDownloadAutoExpiration });
+    } else if (sharedLinkAutoExpiration && app) {
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortIntegrationAutoExpiration
+                : messages.shortAppAutoExpiration,
+        });
+    } else if (sharedLinkAutoExpiration && boxSignRequest) {
+        items.push({ message: messages.shortSignAutoExpiration });
+    } else if (sharing && boxSignRequest) {
         items.push({ message: messages.shortSharingSign });
     } else if (download && boxSignRequest) {
         items.push({ message: messages.shortDownloadSign });
@@ -83,6 +140,7 @@ const getShortSecurityControlsMessage = (
             message: shouldDisplayAppsAsIntegrations ? messages.shortDownloadIntegration : messages.shortDownloadApp,
         });
     }
+
     // 1 restriction combinations
     else if (boxSignRequest) {
         items.push({ message: messages.shortSign });
@@ -92,6 +150,8 @@ const getShortSecurityControlsMessage = (
         items.push({ message: messages.shortDownload });
     } else if (app) {
         items.push({ message: shouldDisplayAppsAsIntegrations ? messages.shortIntegration : messages.shortApp });
+    } else if (sharedLinkAutoExpiration) {
+        items.push({ message: messages.shortAutoExpiration });
     }
 
     if (watermark) {
@@ -125,6 +185,16 @@ const getWatermarkingMessages = (controls: Controls): Array<MessageItem> => {
 
     if (isWatermarkEnabled) {
         items.push({ message: messages.watermarkingApplied });
+    }
+
+    return items;
+};
+
+const getSharingAutoExpirationMessages = (controls: Controls): Array<MessageItem> => {
+    const items = [];
+
+    if (getProp(controls, `${SHARED_LINK_AUTO_EXPIRATION}`, false)) {
+        items.push({ message: messages.sharedLinkAutoExpirationApplied });
     }
 
     return items;
@@ -266,6 +336,7 @@ const getFullSecurityControlsMessages = (
     const items = [
         ...getSharedLinkMessages(controls),
         ...getExternalCollabMessages(controls),
+        ...getSharingAutoExpirationMessages(controls),
         ...getDownloadMessages(controls),
         ...getAppDownloadMessages(controls, maxAppCount, shouldDisplayAppsAsIntegrations),
         ...getWatermarkingMessages(controls),

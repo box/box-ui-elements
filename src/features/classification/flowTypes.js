@@ -66,6 +66,8 @@ type WatermarkControl = {
     enabled?: boolean,
 };
 
+type SharedLinkAutoExpirationRestriction = {};
+
 type Controls = {
     app?: ApplicationRestriction,
     boxSignRequest?: BoxSignRequestRestriction,
@@ -73,6 +75,7 @@ type Controls = {
     externalCollab?: ExternalCollabRestriction,
     sharedLink?: SharedLinkRestrictions,
     watermark?: WatermarkControl,
+    sharedLinkAutoExpiration?: SharedLinkAutoExpirationRestriction,
 };
 
 type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;
@@ -91,4 +94,5 @@ export type {
     ExternalCollabRestriction,
     MessageItem,
     SharedLinkRestrictions,
+    SharedLinkAutoExpirationRestriction,
 };

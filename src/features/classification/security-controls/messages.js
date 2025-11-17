@@ -42,6 +42,12 @@ const messages = defineMessages({
             'Short summary displayed for items when Sign restriction is applied to them. Box Sign is a product name',
         id: 'boxui.securityControls.shortSign',
     },
+    shortAutoExpiration: {
+        defaultMessage: 'Sharing Auto-Expiration restriction applies',
+        description:
+            'Short summary displayed for items when Shared Link Auto-Expiration restriction is applied to them.',
+        id: 'boxui.securityControls.shortAutoExpiration',
+    },
     // Short summary messages - 2 restrictions
     shortSharingDownload: {
         defaultMessage: 'Sharing and download restrictions apply',
@@ -97,6 +103,36 @@ const messages = defineMessages({
             'Short summary displayed for items when both integration download and Sign restrictions are applied to them. Box Sign is a product name',
         id: 'boxui.securityControls.shortIntegrationSign',
     },
+    shortSharingAutoExpiration: {
+        defaultMessage: 'Sharing and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when both sharing and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingAutoExpiration',
+    },
+    shortDownloadAutoExpiration: {
+        defaultMessage: 'Download and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when both download and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortDownloadAutoExpiration',
+    },
+    shortAppAutoExpiration: {
+        defaultMessage: 'App and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when both app and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortAppAutoExpiration',
+    },
+    shortIntegrationAutoExpiration: {
+        defaultMessage: 'Integration and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when both integration and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortIntegrationAutoExpiration',
+    },
+    shortSignAutoExpiration: {
+        defaultMessage: 'Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when both Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSignAutoExpiration',
+    },
     // Short summary messages - 3 restrictions
     shortDownloadAppSign: {
         defaultMessage: 'Download, app and Sign restrictions apply',
@@ -140,6 +176,60 @@ const messages = defineMessages({
             'Short summary displayed for items when sharing, download and integration download restrictions are applied to them.',
         id: 'boxui.securityControls.shortSharingDownloadIntegration',
     },
+    shortSharingDownloadAutoExpiration: {
+        defaultMessage: 'Sharing, download and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, download and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingDownloadAutoExpiration',
+    },
+    shortSharingAppAutoExpiration: {
+        defaultMessage: 'Sharing, app and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, app and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingAppAutoExpiration',
+    },
+    shortSharingIntegrationAutoExpiration: {
+        defaultMessage: 'Sharing, integration and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, integration and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingIntegrationAutoExpiration',
+    },
+    shortSharingSignAutoExpiration: {
+        defaultMessage: 'Sharing, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingSignAutoExpiration',
+    },
+    shortDownloadAppAutoExpiration: {
+        defaultMessage: 'Download, app and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when download, app and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortDownloadAppAutoExpiration',
+    },
+    shortDownloadIntegrationAutoExpiration: {
+        defaultMessage: 'Download, integration and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when download, integration and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortDownloadIntegrationAutoExpiration',
+    },
+    shortDownloadSignAutoExpiration: {
+        defaultMessage: 'Download, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when download, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortDownloadSignAutoExpiration',
+    },
+    shortAppSignAutoExpiration: {
+        defaultMessage: 'App, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when app, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortAppSignAutoExpiration',
+    },
+    shortIntegrationSignAutoExpiration: {
+        defaultMessage: 'Integration, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when integration, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortIntegrationSignAutoExpiration',
+    },
     // Short summary messages - 4 restrictions
     shortSharingDownloadAppSign: {
         defaultMessage: 'Sharing, download, app and Sign restrictions apply',
@@ -152,6 +242,66 @@ const messages = defineMessages({
         description:
             'Short summary displayed for items when sharing, download, integration download and Sign restrictions are applied to them. Box Sign is a product name',
         id: 'boxui.securityControls.shortSharingDownloadIntegrationSign',
+    },
+    shortSharingDownloadAppAutoExpiration: {
+        defaultMessage: 'Sharing, download, app and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, download, app and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingDownloadAppAutoExpiration',
+    },
+    shortSharingDownloadIntegrationAutoExpiration: {
+        defaultMessage: 'Sharing, download, integration and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, download, integration and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingDownloadIntegrationAutoExpiration',
+    },
+    shortSharingDownloadSignAutoExpiration: {
+        defaultMessage: 'Sharing, download, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, download, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingDownloadSignAutoExpiration',
+    },
+    shortSharingAppIntegrationAutoExpiration: {
+        defaultMessage: 'Sharing, app, integration and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, app, integration and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortSharingAppIntegrationAutoExpiration',
+    },
+    shortSharingAppSignAutoExpiration: {
+        defaultMessage: 'Sharing, app, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, app, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingAppSignAutoExpiration',
+    },
+    shortSharingIntegrationSignAutoExpiration: {
+        defaultMessage: 'Sharing, integration, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when sharing, integration, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortSharingIntegrationSignAutoExpiration',
+    },
+    shortDownloadAppIntegrationAutoExpiration: {
+        defaultMessage: 'Download, app, integration and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when download, app, integration and sharing Auto-Expiration restrictions are applied to them.',
+        id: 'boxui.securityControls.shortDownloadAppIntegrationAutoExpiration',
+    },
+    shortDownloadAppSignAutoExpiration: {
+        defaultMessage: 'Download, app, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when download, app, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortDownloadAppSignAutoExpiration',
+    },
+    shortDownloadIntegrationSignAutoExpiration: {
+        defaultMessage: 'Download, integration, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when download, integration, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortDownloadIntegrationSignAutoExpiration',
+    },
+    shortAppIntegrationSignAutoExpiration: {
+        defaultMessage: 'App, integration, Sign and sharing Auto-Expiration restrictions apply',
+        description:
+            'Short summary displayed for items when app, integration, Sign and sharing Auto-Expiration restrictions are applied to them. Box Sign is a product name',
+        id: 'boxui.securityControls.shortAppIntegrationSignAutoExpiration',
     },
     // Full list individual restriction bullets
     sharingCollabOnly: {
@@ -243,6 +393,12 @@ const messages = defineMessages({
         defaultMessage: 'All integrations: {appsList}',
         description: 'Name list of all integrations download restriction applied to classification',
         id: 'boxui.securityControls.allIntegrationNames',
+    },
+    sharedLinkAutoExpirationApplied: {
+        defaultMessage: 'Sharing Auto-Expiration restriction applies.',
+        description:
+            'Bullet point that summarizes sharing Auto-Expiration enabled restriction applied to classification',
+        id: 'boxui.securityControls.sharingAutoExpirationEnabled',
     },
     // Web Download Restrictions
     webDownloadOwners: {

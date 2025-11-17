@@ -19,6 +19,7 @@ const ACCESS_POLICY_RESTRICTION: {
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
     WATERMARK: 'watermark',
+    SHARED_LINK_AUTO_EXPIRATION: 'sharedLinkAutoExpiration',
 } = {
     APP: 'app',
     BOX_SIGN_REQUEST: 'boxSignRequest',
@@ -27,6 +28,7 @@ const ACCESS_POLICY_RESTRICTION: {
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
     WATERMARK: 'watermark',
+    SHARED_LINK_AUTO_EXPIRATION: 'sharedLinkAutoExpiration',
 };
 
 const DOWNLOAD_CONTROL: {
