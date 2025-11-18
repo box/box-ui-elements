@@ -59,6 +59,7 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
                 <DropdownMenu.Item onClick={() => handleMenuItemClick(TASK_TYPE_APPROVAL)}>
                     <div className="bcs-AddTaskMenu-v-two-menuItem">
                         <div className="bcs-AddTaskMenu-v-two-icon">
+                            {/* Should be replaced by icons/MediumFilled/ApprovalTask after it will be availabel */}
                             <ApprovalTask color="black" width={20} height={20} />
                         </div>
                         <div>
