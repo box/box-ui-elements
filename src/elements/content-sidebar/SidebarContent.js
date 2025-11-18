@@ -31,7 +31,7 @@ const SidebarContent = ({ actions, children, className, elementId, sidebarView, 
             {...rest}
         >
             <div className="bcs-content-header">
-                {title && <h3 className="bcs-title">{title}</h3>}
+                {title && <h2 className="bcs-title">{title}</h2>}
                 {actions}
             </div>
             {subheader && <div className="bcs-content-subheader">{subheader}</div>}

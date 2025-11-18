@@ -173,6 +173,7 @@ const SidebarNav = ({
                     )}
                     {hasDocGen && (
                         <SidebarNavButton
+                            elementId=""
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
                             data-testid="sidebardocgen"
