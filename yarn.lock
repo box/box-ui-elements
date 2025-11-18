@@ -1419,7 +1419,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@^4.80.0":
+"@box/blueprint-web-assets@^4.80.0", "@box/blueprint-web-assets@^4.80.4":
   version "4.80.4"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.80.4.tgz#3db74e9c1006d2eb86ddc7e4caa23a4f0376cf92"
   integrity sha512-zXIUfIC+RgzpQkA6KtLi0M5gtbXjNO3orWPNsVaJgEbYjrKahC4AejL2j4/XNaxt7AO0Xvz6vRr1Zjn1Byu4YA==
