@@ -220,8 +220,6 @@
         margin: 10px 0;
 
         .shared-link-field-container {
-            flex: 1;
-            align-items: center;
             margin-bottom: 0;
         }
 
@@ -239,6 +237,14 @@
         .email-shared-link-btn {
             margin: 0 0 0 5px;
             padding: 6px 10px;
+        }
+
+        .bdl-Tooltip-target {
+            display: block;
+        }
+
+        .shared-link-field-container-tooltip-wrapper {
+            flex: 1;
         }
     }
 
