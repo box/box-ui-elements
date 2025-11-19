@@ -163,6 +163,24 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(placeholders).toHaveLength(5);
     });
 
+    test('should render additional tabs with modernized class when previewModernization is enabled', () => {
+        renderSidebarNav({
+            features: {
+                previewModernization: {
+                    enabled: true,
+                },
+            },
+            props: {
+                additionalTabs: [],
+                hasAdditionalTabs: true,
+            },
+        });
+
+        const overflowContainer = screen.getByTestId('additional-tabs-overflow');
+        expect(overflowContainer).toBeInTheDocument();
+        expect(overflowContainer).toHaveClass('bcs-SidebarNav-overflow--modernized');
+    });
+
     test('should render the Box Sign entry point if its feature is enabled', () => {
         renderSidebarNav({
             props: {
