@@ -4,7 +4,7 @@ import { SidebarToggleComponent as SidebarToggle } from '../SidebarToggle';
 
 describe('elements/content-sidebar/SidebarToggle', () => {
     const historyMock = { replace: jest.fn() };
-    
+
     beforeEach(() => {
         jest.clearAllMocks();
     });
@@ -20,12 +20,12 @@ describe('elements/content-sidebar/SidebarToggle', () => {
     `('should render and handle clicks correctly when isOpen is $isOpen', async ({ isOpen, expectedState }) => {
         const user = userEvent();
         renderSidebarToggle({ isOpen });
-        
+
         const toggleButton = screen.getByTestId('sidebartoggle');
         expect(toggleButton).toBeInTheDocument();
-        
+
         await user.click(toggleButton);
-        
+
         expect(historyMock.replace).toHaveBeenCalledWith(expectedState);
     });
 });
@@ -69,7 +69,7 @@ describe('elements/content-sidebar/SidebarToggle - Router Disabled', () => {
             activeFeedEntryType: 'comments',
             activeFeedEntryId: '456',
         };
-        
+
         renderSidebarToggle({
             isOpen: true,
             internalSidebarNavigation: complexNavigation,
@@ -78,10 +78,56 @@ describe('elements/content-sidebar/SidebarToggle - Router Disabled', () => {
         const toggleButton = screen.getByTestId('sidebartoggle');
         await user.click(toggleButton);
 
-        expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith({
-            ...complexNavigation,
-            open: false,
-        }, true);
+        expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith(
+            {
+                ...complexNavigation,
+                open: false,
+            },
+            true,
+        );
+    });
+});
+
+describe('elements/content-sidebar/SidebarToggle - Custom Render', () => {
+    const historyMock = { replace: jest.fn() };
+    const renderToggleButton = jest.fn(props => (
+        <button {...props} type="button">
+            Custom Toggle
+        </button>
+    ));
+    const user = userEvent();
+
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
+    test('should render a custom component if renderToggleButton is provided', () => {
+        render(<SidebarToggle history={historyMock} isOpen={false} renderToggleButton={renderToggleButton} />);
+
+        expect(renderToggleButton).toHaveBeenCalled();
+        expect(screen.getByText('Custom Toggle')).toBeInTheDocument();
+        expect(screen.getByTestId('sidebartoggle')).toBeInTheDocument();
+    });
+
+    test('should properly pass button props to the custom component', () => {
+        render(<SidebarToggle history={historyMock} isOpen={true} renderToggleButton={renderToggleButton} />);
+
+        expect(renderToggleButton).toHaveBeenCalledWith(
+            expect.objectContaining({
+                isOpen: true,
+                onClick: expect.any(Function),
+                'data-resin-target': 'sidebartoggle',
+                'data-testid': 'sidebartoggle',
+            }),
+        );
+    });
+
+    test('should handle clicks on custom toggle button', async () => {
+        render(<SidebarToggle history={historyMock} isOpen={true} renderToggleButton={renderToggleButton} />);
+
+        const toggleButton = screen.getByTestId('sidebartoggle');
+        await user.click(toggleButton);
+
+        expect(historyMock.replace).toHaveBeenCalledWith({ state: { open: false } });
+    });
 });

@@ -39,3 +39,10 @@ export type InternalSidebarNavigation = SidebarNavigation & {
 export type SidebarNavigationHandler = (sidebar: SidebarNavigation, replace?: boolean) => void;
 
 export type InternalSidebarNavigationHandler = (sidebar: InternalSidebarNavigation, replace?: boolean) => void;
+
+export type SidebarToggleButtonProps = {
+    'data-resin-target'?: string,
+    'data-testid'?: string,
+    isOpen?: boolean,
+    onClick: (event: SyntheticMouseEvent<HTMLButtonElement>) => void,
+};
