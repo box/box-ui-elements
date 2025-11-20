@@ -11,7 +11,15 @@
 
 .bcs-SidebarNavSignButton-icon--grayscale {
     display: none;
-    margin-top: 2px; // for visual alignment
+    margin-top: 2px; // for visual alignment;
+}
+
+// Modernized hover effect with feature flag
+.bcs-SidebarNav--modernized {
+    .bcs-SidebarNavSignButton:hover svg {
+        transform: scale(1.09);
+        transition: transform 150ms;
+    }
 }
 
 @include breakpoint($medium-screen) {

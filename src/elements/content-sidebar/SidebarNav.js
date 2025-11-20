@@ -142,7 +142,12 @@ const SidebarNav = ({
     };
 
     return (
-        <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
+        <div
+            className={classNames('bcs-SidebarNav', {
+                'bcs-SidebarNav--modernized': isPreviewModernizationEnabled,
+            })}
+            aria-label={intl.formatMessage(messages.sidebarNavLabel)}
+        >
             <div className="bcs-SidebarNav-tabs">
                 <SidebarNavTablist
                     elementId={elementId}
