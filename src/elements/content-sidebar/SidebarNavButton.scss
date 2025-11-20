@@ -45,10 +45,10 @@
     }
 }
 
-// Modernized hover and selected effects with feature flag
 .bcs-SidebarNav--modernized {
     .bcs-NavButton {
         &:hover svg,
+        &:focus svg,
         &.bcs-is-selected svg {
             transform: scale(1.09);
             transition: transform 150ms;
