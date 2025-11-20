@@ -15,8 +15,8 @@
 }
 
 .bcs-SidebarNav--modernized {
-    .bcs-SidebarNavSignButton:hover svg,
-    .bcs-SidebarNavSignButton:focus svg {
+    .bcs-SidebarNavSignButton:not(.bdl-is-disabled):hover svg,
+    .bcs-SidebarNavSignButton:not(.bdl-is-disabled):focus svg {
         transform: scale(1.09);
         transition: transform 150ms;
     }

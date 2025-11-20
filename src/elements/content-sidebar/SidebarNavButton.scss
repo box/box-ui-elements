@@ -47,8 +47,8 @@
 
 .bcs-SidebarNav--modernized {
     .bcs-NavButton {
-        &:hover svg,
-        &:focus svg,
+        &:not([aria-disabled='true']):hover svg,
+        &:not([aria-disabled='true']):focus svg,
         &.bcs-is-selected svg {
             transform: scale(1.09);
             transition: transform 150ms;
