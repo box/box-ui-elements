@@ -5,6 +5,7 @@
  */
 
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 import AdditionalTab from './AdditionalTab';
 import AdditionalTabsLoading from './AdditionalTabsLoading';
 import type { AdditionalSidebarTab } from '../flowTypes';
@@ -13,6 +14,7 @@ import './AdditionalTabs.scss';
 
 type Props = {
     tabs?: Array<AdditionalSidebarTab>,
+    isPreviewModernizationEnabled?: boolean,
 };
 
 type State = {
@@ -53,11 +55,15 @@ class AdditionalTabs extends PureComponent<Props, State> {
     };
 
     render() {
-        const { tabs } = this.props;
+        const { tabs, isPreviewModernizationEnabled } = this.props;
         const { isLoading } = this.state;
 
         return (
-            <div className="bdl-AdditionalTabs">
+            <div
+                className={classNames('bdl-AdditionalTabs', {
+                    'bdl-AdditionalTabs--modernized': isPreviewModernizationEnabled,
+                })}
+            >
                 {isLoading && <AdditionalTabsLoading />}
                 {tabs &&
                     tabs.map(tabData => (
