@@ -311,6 +311,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataSidebarProps,
             onAnnotationSelect,
             onVersionChange,
+            renderToggleButton,
             signSidebarProps,
             theme,
             versionsSidebarProps,
@@ -351,6 +352,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
                                 onPanelChange={this.handlePanelChange}
+                                renderToggleButton={renderToggleButton}
                                 signSidebarProps={signSidebarProps}
                             />
                         )}

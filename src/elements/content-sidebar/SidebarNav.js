@@ -58,6 +58,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     routerDisabled?: boolean,
     signSidebarProps: SignSidebarProps,
+    renderToggleButton: () => React.ReactNode,
 };
 
 const SidebarNav = ({
@@ -77,6 +78,7 @@ const SidebarNav = ({
     isOpen,
     onNavigate,
     onPanelChange = noop,
+    renderToggleButton,
     routerDisabled,
     signSidebarProps,
 }: Props) => {
@@ -203,6 +205,7 @@ const SidebarNav = ({
                     internalSidebarNavigation={internalSidebarNavigation}
                     internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                     isOpen={isOpen}
+                    renderToggleButton={renderToggleButton}
                     routerDisabled={routerDisabled}
                 />
             </div>

@@ -377,6 +377,7 @@ class ContentSidebar extends React.Component<Props, State> {
             onPanelChange,
             onVersionChange,
             onVersionHistoryClick,
+            renderToggleButton,
             signSidebarProps,
             theme,
             versionsSidebarProps,
@@ -420,6 +421,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 onPanelChange={onPanelChange}
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}
+                                renderToggleButton={renderToggleButton}
                                 signSidebarProps={signSidebarProps}
                                 theme={theme}
                                 versionsSidebarProps={versionsSidebarProps}
