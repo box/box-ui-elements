@@ -31,6 +31,7 @@ import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
+import type { SidebarToggleButtonProps } from '../common/types/SidebarNavigation';
 import type { SignSidebarProps } from './SidebarNavSign';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
@@ -70,6 +71,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    renderToggleButton?: (toggleButtonProps: SidebarToggleButtonProps) => React.Node,
     signSidebarProps: SignSidebarProps,
     theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,

@@ -48,6 +48,7 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+import type { SidebarToggleButtonProps } from '../common/types/SidebarNavigation';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
 import type APICache from '../../utils/Cache';
@@ -90,6 +91,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    renderToggleButton?: (toggleButtonProps: SidebarToggleButtonProps) => React.Node,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,

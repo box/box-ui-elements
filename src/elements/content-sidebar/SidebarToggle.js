@@ -9,21 +9,18 @@ import { type RouterHistory } from 'react-router-dom';
 import { withRouterIfEnabled } from '../common/routing';
 import SidebarToggleButton from '../../components/sidebar-toggle-button/SidebarToggleButton';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
-
-type ToggleButtonProps = {
-    'data-resin-target'?: string,
-    'data-testid'?: string,
-    isOpen: boolean,
-    handleToggleClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
-};
+import type {
+    InternalSidebarNavigation,
+    InternalSidebarNavigationHandler,
+    SidebarToggleButtonProps,
+} from '../common/types/SidebarNavigation';
 
 type Props = {
     history?: RouterHistory,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isOpen?: boolean,
-    renderToggleButton?: (toggleButtonProps: ToggleButtonProps) => React.ReactNode,
+    renderToggleButton?: (toggleButtonProps: SidebarToggleButtonProps) => React.Node,
     routerDisabled?: boolean,
 };
 
@@ -36,7 +33,7 @@ const SidebarToggle = ({
     routerDisabled = false,
 }: Props) => {
     const handleToggleClick = React.useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>) => {
+        (event: SyntheticMouseEvent<HTMLButtonElement>) => {
             event.preventDefault();
 
             if (routerDisabled) {

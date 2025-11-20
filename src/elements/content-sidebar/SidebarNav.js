@@ -35,7 +35,11 @@ import {
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
+import type {
+    InternalSidebarNavigation,
+    InternalSidebarNavigationHandler,
+    SidebarToggleButtonProps,
+} from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
 
@@ -58,7 +62,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     routerDisabled?: boolean,
     signSidebarProps: SignSidebarProps,
-    renderToggleButton: () => React.ReactNode,
+    renderToggleButton?: (toggleButtonProps: SidebarToggleButtonProps) => React.Node,
 };
 
 const SidebarNav = ({
