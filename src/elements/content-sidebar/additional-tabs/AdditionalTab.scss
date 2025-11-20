@@ -12,10 +12,11 @@
     }
 }
 
-// Modernized hover effect with feature flag
 .bcs-SidebarNav--modernized {
     .bdl-AdditionalTab:hover svg,
-    .bdl-AdditionalTab:hover img {
+    .bdl-AdditionalTab:hover img,
+    .bdl-AdditionalTab:focus svg,
+    .bdl-AdditionalTab:focus img {
         transform: scale(1.09);
         transition: transform 150ms;
     }

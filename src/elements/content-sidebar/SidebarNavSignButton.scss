@@ -14,9 +14,9 @@
     margin-top: 2px; // for visual alignment;
 }
 
-// Modernized hover effect with feature flag
 .bcs-SidebarNav--modernized {
-    .bcs-SidebarNavSignButton:hover svg {
+    .bcs-SidebarNavSignButton:hover svg,
+    .bcs-SidebarNavSignButton:focus svg {
         transform: scale(1.09);
         transition: transform 150ms;
     }
