@@ -12,8 +12,17 @@
     }
 }
 
+// Modernized hover effect with feature flag
+.bcs-SidebarNav--modernized {
+    .bdl-AdditionalTab:hover svg,
+    .bdl-AdditionalTab:hover img {
+        transform: scale(1.09);
+        transition: transform 150ms;
+    }
+}
+
 .bdl-AdditionalTab-icon {
-    @include bdl-openComponentAnimation(.5s);
+    @include bdl-openComponentAnimation(0.5s);
     @include bdl-SidebarNavIcon;
 
     border-radius: 5px;
