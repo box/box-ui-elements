@@ -13,10 +13,10 @@
 }
 
 .bcs-SidebarNav--modernized {
-    .bdl-AdditionalTab:hover svg,
-    .bdl-AdditionalTab:hover img,
-    .bdl-AdditionalTab:focus svg,
-    .bdl-AdditionalTab:focus img {
+    .bdl-AdditionalTab:not(.bdl-is-disabled):hover svg,
+    .bdl-AdditionalTab:not(.bdl-is-disabled):hover img,
+    .bdl-AdditionalTab:not(.bdl-is-disabled):focus svg,
+    .bdl-AdditionalTab:not(.bdl-is-disabled):focus img {
         transform: scale(1.09);
         transition: transform 150ms;
     }
