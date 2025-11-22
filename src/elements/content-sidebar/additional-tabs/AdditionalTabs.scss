@@ -1,4 +1,13 @@
+@import '../mixins';
+
 .bdl-AdditionalTabs {
     display: flex;
     flex-direction: column;
+
+    &--modernized {
+        .bdl-AdditionalTab-icon,
+        .bdl-AdditionalTabPlaceholder-icon {
+            @include bdl-SidebarNavIconModernized;
+        }
+    }
 }
