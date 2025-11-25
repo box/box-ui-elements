@@ -22,8 +22,10 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
 
     const handleMenuItemClick = React.useCallback(
         (taskType: TaskType) => {
-            setIsOpen(false);
+            // Open the modal first
             onMenuItemClick(taskType);
+            // Then close the dropdown. We rely on onCloseAutoFocus to prevent focus restoration.
+            setIsOpen(false);
         },
         [onMenuItemClick],
     );
@@ -40,7 +42,16 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
                 />
             </DropdownMenu.Trigger>
 
-            <DropdownMenu.Content align="end" className="bcs-AddTaskMenu-v-two">
+            <DropdownMenu.Content
+                align="end"
+                className="bcs-AddTaskMenu-v-two"
+                onCloseAutoFocus={(event: Event) => {
+                    // Prevent focus from returning to the trigger button when the menu closes.
+                    // This allows the Modal (which was just opened) to keep focus on its input field
+                    // without having it stolen back, which would trigger a blur validation error.
+                    event.preventDefault();
+                }}
+            >
                 <DropdownMenu.Item onClick={() => handleMenuItemClick(TASK_TYPE_GENERAL)}>
                     <div className="bcs-AddTaskMenu-v-two-menuItem">
                         <div className="bcs-AddTaskMenu-v-two-icon">
