@@ -116,4 +116,4 @@ class AddTaskButton extends React.Component<Props, State> {
 }
 
 export { AddTaskButton as AddTaskButtonComponent };
-export default withRouterIfEnabled(withFeatureConsumer(AddTaskButton));
+export default withFeatureConsumer(withRouterIfEnabled(AddTaskButton));
