@@ -4,22 +4,22 @@
 $bcs-AddTaskMenu-v-two-width: 256px;
 
 .bcs-AddTaskMenu-v-two {
-    padding: 8px;
+    padding: var(--space-2);
 }
 
 .bcs-AddTaskMenu-v-two-menuItem {
     display: flex;
     max-width: $bcs-AddTaskMenu-v-two-width;
     white-space: normal;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .bcs-AddTaskMenu-v-two-icon {
     align-self: center;
-    background-color: $bdl-gray-05;
-    min-height: 32px;
-    min-width: 32px;
-    border-radius: $bdl-border-radius-size-med;
+    background-color: var(--gray-05);
+    min-height: var(--size-8);
+    min-width: var(--size-8);
+    border-radius: var(--radius-2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,7 +30,7 @@ $bcs-AddTaskMenu-v-two-width: 256px;
 }
 
 .bcs-AddTaskMenu-v-two-description {
-    color: $bdl-gray-65;
-    font-size: 12px;
-    line-height: 14px;
+    color: var(--gray-65);
+    font-size: var(--caption-default-font-size);
+    line-height: var(--caption-default-line-height);
 }
