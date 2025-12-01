@@ -21,7 +21,7 @@ import './SidebarNavButton.scss';
 type Props = {
     'data-resin-target'?: string,
     'data-testid'?: string,
-    children: React.Node,
+    children: React.Element<any>,
     elementId?: string,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
@@ -90,9 +90,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         };
 
         // Clone children and pass isActive prop
-        const childrenWithProps = React.isValidElement(children)
-            ? React.cloneElement(children, { isActive: isActiveValue })
-            : children;
+        const childrenWithProps = React.cloneElement(children, { isActive: isActiveValue });
 
         return (
             <TooltipComponent {...tooltipProps}>
@@ -142,9 +140,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 };
 
                 // Clone children and pass isActive prop
-                const childrenWithProps = React.isValidElement(children)
-                    ? React.cloneElement(children, { isActive: isActiveValue })
-                    : children;
+                const childrenWithProps = React.cloneElement(children, { isActive: isActiveValue });
 
                 return (
                     <TooltipComponent {...tooltipProps}>
