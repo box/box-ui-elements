@@ -164,7 +164,7 @@ const AnnotationActivity = ({
                         </div>
                         <div className="bcs-AnnotationActivity-timestamp">
                             <ActivityTimestamp date={createdAtTimestamp} />
-                            {hasVersions && !isVideoAnnotation && (
+                            {hasVersions && ((isVideoAnnotation && !isCurrentVersion) || !isVideoAnnotation) && (
                                 <AnnotationActivityLink
                                     className="bcs-AnnotationActivity-link"
                                     data-resin-target="annotationLink"
