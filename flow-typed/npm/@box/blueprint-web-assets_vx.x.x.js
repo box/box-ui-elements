@@ -9,6 +9,8 @@ declare module '@box/blueprint-web-assets/icons/Medium' {
   declare export var XMark: React$ComponentType<any>;
   declare export var BoxAiAdvancedLogo24: React$ComponentType<any>;
   declare export var BoxAiLogo24: React$ComponentType<any>;
+  declare export var Comment: React$ComponentType<any>;
+  declare export var Metadata: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/icons/Content' {
@@ -37,6 +39,7 @@ declare module '@box/blueprint-web-assets/icons/Fill' {
 declare module '@box/blueprint-web-assets/icons/Logo' {
   declare export var BoxLogo: React$ComponentType<any>;
   declare export var BoxAiLogo: React$ComponentType<any>;
+  declare export var BoxAiLogo24: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/illustrations/Medium' {
@@ -56,4 +59,5 @@ declare module '@box/blueprint-web-assets/tokens/tokens' {
   declare export var Gray50: any;
   declare export var Size3: any;
   declare export var Size6: any;
+  declare export var IconIconBlue: any;
 }
