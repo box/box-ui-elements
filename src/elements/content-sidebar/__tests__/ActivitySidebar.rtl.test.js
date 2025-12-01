@@ -145,7 +145,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, false);
         });
 
         test('should not call history.push if file versions are the same', () => {
@@ -192,7 +192,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, false);
         });
 
         test('should not call history.push if no file version id on the annotation', () => {
@@ -218,6 +218,30 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
             expect(history.push).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
+
+        test('should call onAnnotationSelect with isVideoAnnotation true if video annotation', () => {
+            getAnnotationsPath.mockReturnValue('/activity/annotations/235/124');
+            annotation = { file_version: { id: '235' }, id: '124' };
+            document.querySelector = jest.fn().mockReturnValue({ className: 'bp-media-container' });
+            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+                if (onAnnotationSelectProp) {
+                    onAnnotationSelectProp(annotation);
+                }
+                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+            });
+
+            renderActivitySidebar({
+                emitActiveAnnotationChangeEvent,
+                getAnnotationsMatchPath,
+                getAnnotationsPath,
+                history,
+                onAnnotationSelect,
+            });
+
+            expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
+            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, true);
         });
     });
 
@@ -267,7 +291,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 activeFeedEntryId: '124',
                 fileVersionId: '235',
             });
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, false);
         });
 
         test('should not call internalSidebarNavigationHandler if file versions are the same', () => {
@@ -321,7 +345,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 activeFeedEntryId: '124',
                 fileVersionId: '235',
             });
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, false);
         });
 
         test('should not call internalSidebarNavigationHandler if no file version id on the annotation', () => {
@@ -348,6 +372,39 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
             expect(internalSidebarNavigationHandler).not.toHaveBeenCalled();
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
+        });
+
+        test('should call onAnnotationSelect with isVideoAnnotation true if video annotation and is not current file version', () => {
+            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: '456' } });
+            getAnnotationsPath.mockReturnValue('/activity/annotations/456/124');
+            annotation = { file_version: { id: '457' }, id: '124' };
+
+            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+                if (onAnnotationSelectProp) {
+                    onAnnotationSelectProp(annotation);
+                }
+                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+            });
+            document.querySelector = jest.fn().mockReturnValue({ className: 'bp-media-container' });
+
+            // m
+            renderActivitySidebar({
+                routerDisabled: true,
+                internalSidebarNavigationHandler,
+                emitActiveAnnotationChangeEvent,
+                getAnnotationsMatchPath,
+                getAnnotationsPath,
+                onAnnotationSelect,
+            });
+
+            expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                activeFeedEntryId: '124',
+                fileVersionId: '457',
+            });
+            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, true);
         });
     });
 
