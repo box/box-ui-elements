@@ -223,7 +223,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test('should call onAnnotationSelect with isVideoAnnotation true if video annotation', () => {
             getAnnotationsPath.mockReturnValue('/activity/annotations/235/124');
             annotation = { file_version: { id: '235' }, id: '124' };
-            document.querySelector = jest.fn().mockReturnValue({ className: 'bp-media-container' });
+            jest.spyOn(document, 'querySelector').mockReturnValue({ className: 'bp-media-container' });
             ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
@@ -265,6 +265,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 .fn()
                 .mockImplementationOnce((_, __, callback) => callback([]))
                 .mockImplementation(() => {});
+
+            jest.spyOn(document, 'querySelector').mockReturnValue(null);
         });
 
         test('should call emitActiveAnnotationChangeEvent and onAnnotationSelect appropriately', () => {
@@ -385,9 +387,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 }
                 return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
             });
-            document.querySelector = jest.fn().mockReturnValue({ className: 'bp-media-container' });
 
-            // m
+            jest.spyOn(document, 'querySelector').mockReturnValue({ className: 'bp-media-container' });
+
             renderActivitySidebar({
                 routerDisabled: true,
                 internalSidebarNavigationHandler,
