@@ -9,7 +9,6 @@ import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-import classNames from 'classnames';
 import { BoxAiLogo, BoxAiLogo24 } from '@box/blueprint-web-assets/icons/Logo';
 import { Size6, Size5, IconIconBlue } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
