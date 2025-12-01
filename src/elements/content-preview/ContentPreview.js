@@ -228,6 +228,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     updateVersionToCurrent: ?() => void;
 
+    dynamicOnPreviewLoadAction: ?() => void;
+
     initialState: State = {
         canPrint: false,
         error: undefined,
@@ -734,6 +736,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         this.handleCanPrint();
+        if (this.dynamicOnPreviewLoadAction) {
+            this.dynamicOnPreviewLoadAction();
+        }
     };
 
     /**
@@ -847,6 +852,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
+
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
@@ -1209,7 +1215,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
-    handleAnnotationSelect = ({ file_version, id, target }: Annotation) => {
+    handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload = false) => {
         const { location = {} } = target;
         const { file, selectedVersion } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');
@@ -1227,8 +1233,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
             });
         }
 
-        if (viewer) {
+        if (viewer && !deferScrollToOnload) {
             viewer.emit('scrolltoannotation', { id, target });
+        } else if (viewer && deferScrollToOnload) {
+            this.dynamicOnPreviewLoadAction = () => {
+                const videoPlayer = document.querySelector('video');
+                const handleLoadedData = () => {
+                    const newViewer = this.getViewer();
+                    newViewer.emit('scrolltoannotation', { id, target });
+                    videoPlayer.removeEventListener('loadeddata', handleLoadedData);
+                    this.dynamicOnPreviewLoadAction = null;
+                };
+                videoPlayer.addEventListener('loadeddata', handleLoadedData);
+            };
         }
     };
 
