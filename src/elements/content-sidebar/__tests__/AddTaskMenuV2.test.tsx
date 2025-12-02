@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { screen } from '@testing-library/react';
 import { IntlShape } from 'react-intl';
 import { TooltipProvider } from '@box/blueprint-web';
-import { render, userEvent } from '../../../test-utils/testing-library';
+import { render, screen, userEvent } from '../../../test-utils/testing-library';
 import AddTaskMenuV2 from '../AddTaskMenuV2';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../constants';
 
