@@ -1,23 +1,24 @@
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { DropdownMenu, TriggerButton } from '@box/blueprint-web';
-import ApprovalTask from '@box/blueprint-web-assets/icons/Fill/ApprovalTask';
-import Tasks from '@box/blueprint-web-assets/icons/MediumFilled/Tasks';
+import { ApprovalTask } from '@box/blueprint-web-assets/icons/Fill';
+import { Tasks } from '@box/blueprint-web-assets/icons/MediumFilled';
 import messages from './messages';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskType } from '../../common/types/tasks';
 
 import './AddTaskMenuV2.scss';
 
-type Props = {
+export interface AddTaskMenuV2Props {
     isDisabled: boolean;
     onMenuItemClick: (taskType: TaskType) => void;
     setAddTaskButtonRef?: (element: HTMLButtonElement | null) => void;
-    intl: IntlShape;
-};
+}
 
-const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTaskButtonRef, intl }) => {
+const AddTaskMenuV2: React.FC<AddTaskMenuV2Props> = ({ isDisabled, onMenuItemClick, setAddTaskButtonRef }) => {
+    const { formatMessage } = useIntl();
+
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleMenuItemClick = React.useCallback(
@@ -38,7 +39,7 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
                     disabled={isDisabled}
                     ref={setAddTaskButtonRef}
                     caretDirection={isOpen ? 'up' : 'down'}
-                    label={intl.formatMessage(messages.tasksAddTask)}
+                    label={formatMessage(messages.tasksAddTask)}
                 />
             </DropdownMenu.Trigger>
 
@@ -59,10 +60,10 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
                         </div>
                         <div>
                             <div className="bcs-AddTaskMenu-v-two-title">
-                                {intl.formatMessage(messages.taskAddTaskGeneral)}
+                                {formatMessage(messages.taskAddTaskGeneral)}
                             </div>
                             <div className="bcs-AddTaskMenu-v-two-description">
-                                {intl.formatMessage(messages.taskAddTaskGeneralDescription)}
+                                {formatMessage(messages.taskAddTaskGeneralDescription)}
                             </div>
                         </div>
                     </div>
@@ -75,10 +76,10 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
                         </div>
                         <div>
                             <div className="bcs-AddTaskMenu-v-two-title">
-                                {intl.formatMessage(messages.taskAddTaskApproval)}
+                                {formatMessage(messages.taskAddTaskApproval)}
                             </div>
                             <div className="bcs-AddTaskMenu-v-two-description">
-                                {intl.formatMessage(messages.taskAddTaskApprovalDescription)}
+                                {formatMessage(messages.taskAddTaskApprovalDescription)}
                             </div>
                         </div>
                     </div>
@@ -88,4 +89,4 @@ const AddTaskMenuV2: React.FC<Props> = ({ isDisabled, onMenuItemClick, setAddTas
     );
 };
 
-export default injectIntl(AddTaskMenuV2);
+export default AddTaskMenuV2;
