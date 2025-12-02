@@ -53,6 +53,45 @@ const SIDEBAR_TAB_ICON_PROPS = {
     width: Size5,
 };
 
+type IconWrapperProps = {
+    isActive?: boolean,
+    isPreviewModernizationEnabled: boolean,
+};
+
+// Icon wrapper components that receive isActive prop from SidebarNavButton
+const ActivityIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconChatRound className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <CommentIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <CommentIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const DetailsIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconDocInfo className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <InformationCircleIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const MetadataIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconMetadataThick className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <MetadataIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <MetadataIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     elementId: string,
@@ -72,58 +111,6 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     routerDisabled?: boolean,
     signSidebarProps: SignSidebarProps,
-};
-
-// Icon wrapper components that receive isActive prop from SidebarNavButton
-const ActivityIconWrapper = ({
-    isActive,
-    isPreviewModernizationEnabled,
-}: {
-    isActive?: boolean,
-    isPreviewModernizationEnabled: boolean,
-}) => {
-    if (!isPreviewModernizationEnabled) {
-        return <IconChatRound className="bcs-SidebarNav-icon" />;
-    }
-    return isActive ? (
-        <CommentIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
-    ) : (
-        <CommentIcon {...SIDEBAR_TAB_ICON_PROPS} />
-    );
-};
-
-const DetailsIconWrapper = ({
-    isActive,
-    isPreviewModernizationEnabled,
-}: {
-    isActive?: boolean,
-    isPreviewModernizationEnabled: boolean,
-}) => {
-    if (!isPreviewModernizationEnabled) {
-        return <IconDocInfo className="bcs-SidebarNav-icon" />;
-    }
-    return isActive ? (
-        <InformationCircleIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
-    ) : (
-        <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />
-    );
-};
-
-const MetadataIconWrapper = ({
-    isActive,
-    isPreviewModernizationEnabled,
-}: {
-    isActive?: boolean,
-    isPreviewModernizationEnabled: boolean,
-}) => {
-    if (!isPreviewModernizationEnabled) {
-        return <IconMetadataThick className="bcs-SidebarNav-icon" />;
-    }
-    return isActive ? (
-        <MetadataIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
-    ) : (
-        <MetadataIcon {...SIDEBAR_TAB_ICON_PROPS} />
-    );
 };
 
 const SidebarNav = ({
