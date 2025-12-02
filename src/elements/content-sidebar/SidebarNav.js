@@ -10,14 +10,18 @@ import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 import { BoxAiLogo, BoxAiLogo24 } from '@box/blueprint-web-assets/icons/Logo';
+import {
+    Comment as CommentIcon,
+    InformationCircle as InformationCircleIcon,
+    Metadata as MetadataIcon,
+} from '@box/blueprint-web-assets/icons/Medium';
+import {
+    Comment as CommentIconFilled,
+    InformationCircle as InformationCircleIconFilled,
+    Metadata as MetadataIconFilled,
+} from '@box/blueprint-web-assets/icons/MediumFilled';
 import { Size6, Size5, IconIconBlue } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
-import CommentIcon from '@box/blueprint-web-assets/icons/Medium/Comment';
-import CommentIconFilled from '@box/blueprint-web-assets/icons/MediumFilled/Comment';
-import InfoIcon from '@box/blueprint-web-assets/icons/Medium/InformationCircle';
-import InfoIconFilled from '@box/blueprint-web-assets/icons/MediumFilled/InformationCircle';
-import MetadataIcon from '@box/blueprint-web-assets/icons/Medium/Metadata';
-import MetadataIconFilled from '@box/blueprint-web-assets/icons/MediumFilled/Metadata';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -123,9 +127,9 @@ const SidebarNav = ({
             return <IconDocInfo className="bcs-SidebarNav-icon" />;
         }
         return isActive ? (
-            <InfoIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+            <InformationCircleIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
         ) : (
-            <InfoIcon {...SIDEBAR_TAB_ICON_PROPS} />
+            <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />
         );
     };
 
