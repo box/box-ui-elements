@@ -18,7 +18,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       />
     </MediaFigure>
     <MediaBody>
-      <TetherComponent
+      <d
         attachment="top right"
         className="bcs-Comment-deleteConfirmationModal"
         constraints={
@@ -29,38 +29,10 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
             },
           ]
         }
-        renderElementTag="div"
-        renderElementTo={null}
+        renderElement={[Function]}
+        renderTarget={[Function]}
         targetAttachment="bottom right"
-      >
-        <MediaMenu
-          data-testid="comment-actions-menu"
-          dropdownProps={
-            {
-              "onMenuClose": [Function],
-              "onMenuOpen": [Function],
-            }
-          }
-          isDisabled={false}
-          menuProps={
-            {
-              "data-resin-component": "activityfeedcomment",
-            }
-          }
-        >
-          <MenuItem
-            data-resin-target="activityfeed-comment-delete"
-            data-testid="delete-comment"
-            onClick={[Function]}
-          >
-            <Trash16 />
-            <FormattedMessage
-              defaultMessage="Delete"
-              id="be.contentSidebar.activityFeed.comment.commentDeleteMenuItem"
-            />
-          </MenuItem>
-        </MediaMenu>
-      </TetherComponent>
+      />
       <div
         className="bcs-Comment-headline"
       >

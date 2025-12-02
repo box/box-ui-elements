@@ -4,6 +4,10 @@
 .bdl-Media {
     display: flex;
     align-items: flex-start;
+
+    .bdl-DropdownMenu-target {
+        display: block;
+    }
 }
 
 // the media content, ie, an avatar

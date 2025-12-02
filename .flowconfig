@@ -29,6 +29,7 @@ sharedmemory.hash_table_pow=21
 esproposal.export_star_as=enable
 esproposal.optional_chaining=enable
 module.file_ext=.js
+module.file_ext=.cjs
 module.file_ext=.scss
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/EmptyFlowStub.js.flow'
 module.name_mapper.extension='css' -> '<PROJECT_ROOT>/flow/EmptyFlowStub.js.flow'

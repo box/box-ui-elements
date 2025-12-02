@@ -126,7 +126,13 @@ class DraftJSEditor extends React.Component<Props> {
                     {description}
                 </span>
 
-                <Tooltip isShown={!!error} position="bottom-left" text={error ? error.message : ''} theme="error">
+                <Tooltip
+                    targetWrapperClassName="bdl-DraftJSEditor-target"
+                    isShown={!!error}
+                    position="bottom-left"
+                    text={error ? error.message : ''}
+                    theme="error"
+                >
                     {/* need div so tooltip can set aria-describedby */}
                     <div>
                         <Editor
