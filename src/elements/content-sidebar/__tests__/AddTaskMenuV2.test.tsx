@@ -16,11 +16,7 @@ describe('elements/content-sidebar/AddTaskMenuV2', () => {
     };
 
     const renderComponent = (props = {}) => {
-        return render(
-            <TooltipProvider>
-                <AddTaskMenuV2 {...defaultProps} {...props} />
-            </TooltipProvider>,
-        );
+        return render(<AddTaskMenuV2 {...defaultProps} {...props} />);
     };
 
     beforeEach(() => {
