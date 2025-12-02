@@ -28,8 +28,8 @@
 }
 
 @mixin bdl-SidebarNavIconModernized {
-    width: 20px;
-    height: 20px;
+    width: var(--size-5);
+    height: var(--size-5);
 }
 
 @mixin bcs-SidebarSection {
