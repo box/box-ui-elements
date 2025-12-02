@@ -74,6 +74,58 @@ type Props = {
     signSidebarProps: SignSidebarProps,
 };
 
+// Icon wrapper components that receive isActive prop from SidebarNavButton
+const ActivityIconWrapper = ({
+    isActive,
+    isPreviewModernizationEnabled,
+}: {
+    isActive?: boolean,
+    isPreviewModernizationEnabled: boolean,
+}) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconChatRound className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <CommentIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <CommentIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const DetailsIconWrapper = ({
+    isActive,
+    isPreviewModernizationEnabled,
+}: {
+    isActive?: boolean,
+    isPreviewModernizationEnabled: boolean,
+}) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconDocInfo className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <InformationCircleIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const MetadataIconWrapper = ({
+    isActive,
+    isPreviewModernizationEnabled,
+}: {
+    isActive?: boolean,
+    isPreviewModernizationEnabled: boolean,
+}) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconMetadataThick className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <MetadataIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <MetadataIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
 const SidebarNav = ({
     additionalTabs,
     elementId,
@@ -108,40 +160,6 @@ const SidebarNav = ({
         if (sidebarview === SIDEBAR_VIEW_BOXAI) {
             focusPrompt();
         }
-    };
-
-    // Icon wrapper components that receive isActive prop from SidebarNavButton
-    const ActivityIconWrapper = ({ isActive }: { isActive?: boolean }) => {
-        if (!isPreviewModernizationEnabled) {
-            return <IconChatRound className="bcs-SidebarNav-icon" />;
-        }
-        return isActive ? (
-            <CommentIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
-        ) : (
-            <CommentIcon {...SIDEBAR_TAB_ICON_PROPS} />
-        );
-    };
-
-    const DetailsIconWrapper = ({ isActive }: { isActive?: boolean }) => {
-        if (!isPreviewModernizationEnabled) {
-            return <IconDocInfo className="bcs-SidebarNav-icon" />;
-        }
-        return isActive ? (
-            <InformationCircleIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
-        ) : (
-            <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />
-        );
-    };
-
-    const MetadataIconWrapper = ({ isActive }: { isActive?: boolean }) => {
-        if (!isPreviewModernizationEnabled) {
-            return <IconMetadataThick className="bcs-SidebarNav-icon" />;
-        }
-        return isActive ? (
-            <MetadataIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
-        ) : (
-            <MetadataIcon {...SIDEBAR_TAB_ICON_PROPS} />
-        );
     };
 
     return (
@@ -192,7 +210,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
-                            <ActivityIconWrapper />
+                            <ActivityIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasDetails && (
@@ -205,7 +223,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
-                            <DetailsIconWrapper />
+                            <DetailsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasSkills && (
@@ -231,7 +249,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
-                            <MetadataIconWrapper />
+                            <MetadataIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasDocGen && (
