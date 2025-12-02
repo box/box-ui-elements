@@ -27,11 +27,11 @@ type Props = {
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled?: boolean,
     isOpen?: boolean,
+    isPreviewModernizationEnabled?: boolean,
     onClick?: (sidebarView: ViewTypeValues) => void,
     routerDisabled?: boolean,
     sidebarView: ViewTypeValues,
     tooltip: React.Node,
-    isPreviewModernizationEnabled?: boolean,
 };
 
 const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
