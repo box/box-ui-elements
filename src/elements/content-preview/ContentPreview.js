@@ -1233,7 +1233,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             const newViewer = this.getViewer();
             newViewer.emit('scrolltoannotation', { id, target });
             videoPlayer.removeEventListener('loadeddata', handleLoadedData);
-            this.dynamicOnPreviewLoadAction = null;
         };
         videoPlayer.addEventListener('loadeddata', handleLoadedData);
     };
@@ -1265,8 +1264,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 } else {
                     const newViewer = this.getViewer();
                     newViewer.emit('scrolltoannotation', { id, target });
-                    this.dynamicOnPreviewLoadAction = null;
                 }
+                this.dynamicOnPreviewLoadAction = null;
             };
         }
     };
