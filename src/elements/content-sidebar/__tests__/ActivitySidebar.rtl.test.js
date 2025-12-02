@@ -220,29 +220,33 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
 
-        test('should call onAnnotationSelect with isVideoAnnotation true if video annotation', () => {
-            getAnnotationsPath.mockReturnValue('/activity/annotations/235/124');
-            annotation = { file_version: { id: '235' }, id: '124' };
-            jest.spyOn(document, 'querySelector').mockReturnValue({ className: 'bp-media-container' });
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
-                if (onAnnotationSelectProp) {
-                    onAnnotationSelectProp(annotation);
-                }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
+        test.each([
+            { locationType: 'frame', isVideoAnnotation: true },
+            { locationType: 'page', isVideoAnnotation: false },
+        ])(
+            'should call onAnnotationSelect with isVideoAnnotation $isVideoAnnotation if location type is $locationType',
+            ({ locationType, isVideoAnnotation }) => {
+                getAnnotationsPath.mockReturnValue('/activity/annotations/235/124');
+                annotation = { file_version: { id: '235' }, id: '124', target: { location: { type: locationType } } };
+                ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+                    if (onAnnotationSelectProp) {
+                        onAnnotationSelectProp(annotation);
+                    }
+                    return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                });
 
-            renderActivitySidebar({
-                emitActiveAnnotationChangeEvent,
-                getAnnotationsMatchPath,
-                getAnnotationsPath,
-                history,
-                onAnnotationSelect,
-            });
-
-            expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
-            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, true);
-        });
+                renderActivitySidebar({
+                    emitActiveAnnotationChangeEvent,
+                    getAnnotationsMatchPath,
+                    getAnnotationsPath,
+                    history,
+                    onAnnotationSelect,
+                });
+                expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
+                expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
+                expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, isVideoAnnotation);
+            },
+        );
     });
 
     describe('handleAnnotationSelect() - Router Disabled', () => {
@@ -265,8 +269,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 .fn()
                 .mockImplementationOnce((_, __, callback) => callback([]))
                 .mockImplementation(() => {});
-
-            jest.spyOn(document, 'querySelector').mockReturnValue(null);
         });
 
         test('should call emitActiveAnnotationChangeEvent and onAnnotationSelect appropriately', () => {
@@ -376,38 +378,42 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
 
-        test('should call onAnnotationSelect with isVideoAnnotation true if video annotation and is not current file version', () => {
-            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: '456' } });
-            getAnnotationsPath.mockReturnValue('/activity/annotations/456/124');
-            annotation = { file_version: { id: '457' }, id: '124' };
+        test.each([
+            { locationType: 'frame', isVideoAnnotation: true },
+            { locationType: 'page', isVideoAnnotation: false },
+        ])(
+            'should call onAnnotationSelect with isVideoAnnotation $isVideoAnnotation if location type is $locationType',
+            ({ locationType, isVideoAnnotation }) => {
+                getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: '456' } });
+                getAnnotationsPath.mockReturnValue('/activity/annotations/456/124');
+                annotation = { file_version: { id: '457' }, id: '124', target: { location: { type: locationType } } };
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
-                if (onAnnotationSelectProp) {
-                    onAnnotationSelectProp(annotation);
-                }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
+                ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+                    if (onAnnotationSelectProp) {
+                        onAnnotationSelectProp(annotation);
+                    }
+                    return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                });
 
-            jest.spyOn(document, 'querySelector').mockReturnValue({ className: 'bp-media-container' });
+                renderActivitySidebar({
+                    routerDisabled: true,
+                    internalSidebarNavigationHandler,
+                    emitActiveAnnotationChangeEvent,
+                    getAnnotationsMatchPath,
+                    getAnnotationsPath,
+                    onAnnotationSelect,
+                });
 
-            renderActivitySidebar({
-                routerDisabled: true,
-                internalSidebarNavigationHandler,
-                emitActiveAnnotationChangeEvent,
-                getAnnotationsMatchPath,
-                getAnnotationsPath,
-                onAnnotationSelect,
-            });
-
-            expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
-            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
-                sidebar: ViewType.ACTIVITY,
-                activeFeedEntryType: FeedEntryType.ANNOTATIONS,
-                activeFeedEntryId: '124',
-                fileVersionId: '457',
-            });
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, true);
-        });
+                expect(emitActiveAnnotationChangeEvent).toHaveBeenCalledWith('124');
+                expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
+                    sidebar: ViewType.ACTIVITY,
+                    activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                    activeFeedEntryId: '124',
+                    fileVersionId: '457',
+                });
+                expect(onAnnotationSelect).toHaveBeenCalledWith(annotation, isVideoAnnotation);
+            },
+        );
     });
 
     describe('updateReplies()', () => {

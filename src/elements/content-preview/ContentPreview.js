@@ -61,6 +61,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
+import type { Target } from '../../common/types/annotations';
 import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
@@ -1215,6 +1216,28 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
+    /**
+     * Handles scrolling to a frame-based annotation by waiting for video player to load first
+     *
+     * @param {string} id - The annotation ID
+     * @param {object} target - The annotation target
+     * @return {void}
+     */
+    scrollToFrameAnnotation = (id: string, target: Target): void => {
+        const videoPlayer = document.querySelector('.bp-media-container video');
+        if (!videoPlayer) {
+            this.dynamicOnPreviewLoadAction = null;
+            return;
+        }
+        const handleLoadedData = () => {
+            const newViewer = this.getViewer();
+            newViewer.emit('scrolltoannotation', { id, target });
+            videoPlayer.removeEventListener('loadeddata', handleLoadedData);
+            this.dynamicOnPreviewLoadAction = null;
+        };
+        videoPlayer.addEventListener('loadeddata', handleLoadedData);
+    };
+
     handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload = false) => {
         const { location = {} } = target;
         const { file, selectedVersion } = this.state;
@@ -1237,14 +1260,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
             viewer.emit('scrolltoannotation', { id, target });
         } else if (viewer && deferScrollToOnload) {
             this.dynamicOnPreviewLoadAction = () => {
-                const videoPlayer = document.querySelector('video');
-                const handleLoadedData = () => {
+                if (target?.location?.type === 'frame') {
+                    this.scrollToFrameAnnotation(id, target);
+                } else {
                     const newViewer = this.getViewer();
                     newViewer.emit('scrolltoannotation', { id, target });
-                    videoPlayer.removeEventListener('loadeddata', handleLoadedData);
                     this.dynamicOnPreviewLoadAction = null;
-                };
-                videoPlayer.addEventListener('loadeddata', handleLoadedData);
+                }
             };
         }
     };
