@@ -298,7 +298,6 @@ describe('api/Metadata', () => {
                     id: 1,
                     hidden: false,
                     fields: [
-                        { type: 'string' },
                         {
                             type: 'taxonomy',
                             namespace: 'namespace1',
@@ -308,6 +307,7 @@ describe('api/Metadata', () => {
                                 { displayName: 'level 2', description: 'Another level' },
                             ],
                         },
+                        { type: 'string' },
                     ],
                 },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
@@ -352,7 +352,6 @@ describe('api/Metadata', () => {
                     id: 1,
                     hidden: false,
                     fields: [
-                        { type: 'string' },
                         {
                             type: 'taxonomy',
                             namespace: 'namespace1',
@@ -362,6 +361,7 @@ describe('api/Metadata', () => {
                                 { displayName: 'level 2', description: 'Another level' },
                             ],
                         },
+                        { type: 'string' },
                     ],
                 },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
