@@ -17,6 +17,7 @@ import './SidebarNavSignButton.scss';
 
 export type Props = PlainButtonProps & {
     blockedReason?: string;
+    isDropdownOpen: boolean;
     intl: IntlShape;
     targetingApi?: {
         canShow: boolean;
@@ -28,7 +29,7 @@ export type Props = PlainButtonProps & {
 
 export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) => children;
 
-export function SidebarNavSignButton({ blockedReason, intl, targetingApi, ...rest }: Props) {
+export function SidebarNavSignButton({ blockedReason, intl, isDropdownOpen, targetingApi, ...rest }: Props) {
     const isSignDisabled = !!blockedReason;
     const isTargeted = targetingApi?.canShow;
     const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
@@ -51,8 +52,6 @@ export function SidebarNavSignButton({ blockedReason, intl, targetingApi, ...res
     }
 
     const renderButtonWithTooltip = () => {
-        const isDropdownOpen = rest['aria-expanded'] === 'true';
-
         // Use Blueprint tooltip when modernization is enabled
         if (isPreviewModernizationEnabled) {
             const modernizedButton = (

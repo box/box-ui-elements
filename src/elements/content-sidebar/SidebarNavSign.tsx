@@ -34,10 +34,27 @@ export function SidebarNavSign(signSidebarProps: SignSidebarProps) {
         targetingApi: boxSignTargetingApi,
     } = signSidebarProps;
 
+    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
+    const handleOnDropdownOpen = () => {
+        setIsDropdownOpen(true);
+    };
+
+    const handleOnDropdownClose = () => {
+        setIsDropdownOpen(false);
+    };
+
     return (
-        <DropdownMenu isResponsive constrainToWindow isRightAligned>
+        <DropdownMenu
+            isResponsive
+            constrainToWindow
+            isRightAligned
+            onMenuOpen={handleOnDropdownOpen}
+            onMenuClose={handleOnDropdownClose}
+        >
             <SidebarNavSignButton
                 blockedReason={boxSignBlockedReason}
+                isDropdownOpen={isDropdownOpen}
                 targetingApi={boxSignTargetingApi}
                 data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
             />
