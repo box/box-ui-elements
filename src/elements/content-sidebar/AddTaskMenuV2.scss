@@ -14,12 +14,13 @@ $bcs-AddTaskMenu-v-two-width: 256px;
 .bcs-AddTaskMenu-v-two-icon {
     align-self: center;
     background-color: var(--gray-05);
-    min-height: var(--size-8);
-    min-width: var(--size-8);
+    height: var(--size-8);
+    width: var(--size-8);
     border-radius: var(--radius-2);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .bcs-AddTaskMenu-v-two-title {
