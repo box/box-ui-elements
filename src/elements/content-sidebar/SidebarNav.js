@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+import classNames from 'classnames';
 import noop from 'lodash/noop';
 // $FlowFixMe
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
@@ -83,6 +84,7 @@ const SidebarNav = ({
     const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
+    const { enabled: isPreviewModernizationEnabled } = useFeatureConfig('previewModernization');
 
     const { focusPrompt } = usePromptFocus('.be.bcs');
 
@@ -193,7 +195,12 @@ const SidebarNav = ({
                 )}
 
                 {hasAdditionalTabs && (
-                    <div className="bcs-SidebarNav-overflow" data-testid="additional-tabs-overflow">
+                    <div
+                        className={classNames('bcs-SidebarNav-overflow', {
+                            'bcs-SidebarNav-overflow--modernized': isPreviewModernizationEnabled,
+                        })}
+                        data-testid="additional-tabs-overflow"
+                    >
                         <AdditionalTabs key={fileId} tabs={additionalTabs} />
                     </div>
                 )}
