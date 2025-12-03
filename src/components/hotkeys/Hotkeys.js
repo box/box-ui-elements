@@ -2,6 +2,7 @@ import { Children, Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { HotkeyPropType } from './HotkeyRecord';
+import { HotkeyContext } from './HotkeyContext';
 
 class Hotkeys extends Component {
     /* eslint-disable no-underscore-dangle */
@@ -12,14 +13,11 @@ class Hotkeys extends Component {
         configs: PropTypes.arrayOf(HotkeyPropType).isRequired,
     };
 
-    static contextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
-
     componentDidMount() {
         const { configs } = this.props;
+        const hotkeyLayer = this.context;
 
-        if (!this.context.hotkeyLayer) {
+        if (!hotkeyLayer) {
             throw new Error('You must instantiate a HotkeyLayer before using Hotkeys');
         }
 
@@ -44,11 +42,14 @@ class Hotkeys extends Component {
     }
 
     _addHotkeys(hotkeyConfigs) {
-        hotkeyConfigs.forEach(hotkeyConfig => this.context.hotkeyLayer.registerHotkey(hotkeyConfig));
+        hotkeyConfigs.forEach(hotkeyConfig => this.context.registerHotkey(hotkeyConfig));
     }
 
     _removeHotkeys(hotkeyConfigs) {
-        hotkeyConfigs.forEach(hotkeyConfig => this.context.hotkeyLayer.deregisterHotkey(hotkeyConfig));
+        // Check if context exists (it may be null during cleanup if Provider unmounts first)
+        if (this.context) {
+            hotkeyConfigs.forEach(hotkeyConfig => this.context.deregisterHotkey(hotkeyConfig));
+        }
     }
 
     render() {
@@ -58,5 +59,7 @@ class Hotkeys extends Component {
         return Children.only(this.props.children);
     }
 }
+
+Hotkeys.contextType = HotkeyContext;
 
 export default Hotkeys;
