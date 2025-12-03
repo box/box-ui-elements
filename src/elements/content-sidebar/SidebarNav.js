@@ -9,10 +9,18 @@ import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-// $FlowFixMe
-import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
-// $FlowFixMe
-import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
+import { BoxAiLogo, BoxAiLogo24 } from '@box/blueprint-web-assets/icons/Logo';
+import {
+    Comment as CommentIcon,
+    InformationCircle as InformationCircleIcon,
+    Metadata as MetadataIcon,
+} from '@box/blueprint-web-assets/icons/Medium';
+import {
+    Comment as CommentIconFilled,
+    InformationCircle as InformationCircleIconFilled,
+    Metadata as MetadataIconFilled,
+} from '@box/blueprint-web-assets/icons/MediumFilled';
+import { Size6, Size5, IconIconBlue } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
@@ -39,6 +47,50 @@ import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
+
+const SIDEBAR_TAB_ICON_PROPS = {
+    height: Size5,
+    width: Size5,
+};
+
+type IconWrapperProps = {
+    isActive?: boolean,
+    isPreviewModernizationEnabled: boolean,
+};
+
+// Icon wrapper components that receive isActive prop from SidebarNavButton
+const ActivityIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconChatRound className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <CommentIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <CommentIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const DetailsIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconDocInfo className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <InformationCircleIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const MetadataIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconMetadataThick className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <MetadataIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <MetadataIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
@@ -98,7 +150,12 @@ const SidebarNav = ({
     };
 
     return (
-        <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
+        <div
+            className={classNames('bcs-SidebarNav', {
+                'bcs-SidebarNav--modernized': isPreviewModernizationEnabled,
+            })}
+            aria-label={intl.formatMessage(messages.sidebarNavLabel)}
+        >
             <div className="bcs-SidebarNav-tabs">
                 <SidebarNavTablist
                     elementId={elementId}
@@ -110,6 +167,7 @@ const SidebarNav = ({
                 >
                     {hasBoxAI && (
                         <SidebarNavButton
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                             data-target-id="SidebarNavButton-boxAI"
                             data-testid="sidebarboxai"
@@ -122,11 +180,16 @@ const SidebarNav = ({
                                     : intl.formatMessage(messages.sidebarBoxAITitle)
                             }
                         >
-                            <BoxAiLogo height={Size6} width={Size6} />
+                            {isPreviewModernizationEnabled ? (
+                                <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />
+                            ) : (
+                                <BoxAiLogo height={Size6} width={Size6} />
+                            )}
                         </SidebarNavButton>
                     )}
                     {hasActivity && (
                         <SidebarNavButton
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                             data-target-id="SidebarNavButton-activity"
                             data-testid="sidebaractivity"
@@ -134,11 +197,12 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
-                            <IconChatRound className="bcs-SidebarNav-icon" />
+                            <ActivityIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasDetails && (
                         <SidebarNavButton
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
                             data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                             data-target-id="SidebarNavButton-details"
                             data-testid="sidebardetails"
@@ -146,11 +210,12 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
-                            <IconDocInfo className="bcs-SidebarNav-icon" />
+                            <DetailsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasSkills && (
                         <SidebarNavButton
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
                             data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                             data-target-id="SidebarNavButton-skills"
                             data-testid="sidebarskills"
@@ -163,6 +228,7 @@ const SidebarNav = ({
                     )}
                     {hasMetadata && (
                         <SidebarNavButton
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
                             data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                             data-target-id="SidebarNavButton-metadata"
                             data-testid="sidebarmetadata"
@@ -170,12 +236,13 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
-                            <IconMetadataThick className="bcs-SidebarNav-icon" />
+                            <MetadataIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasDocGen && (
                         <SidebarNavButton
                             elementId=""
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
                             data-testid="sidebardocgen"
@@ -201,7 +268,11 @@ const SidebarNav = ({
                         })}
                         data-testid="additional-tabs-overflow"
                     >
-                        <AdditionalTabs key={fileId} tabs={additionalTabs} />
+                        <AdditionalTabs
+                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                            key={fileId}
+                            tabs={additionalTabs}
+                        />
                     </div>
                 )}
             </div>
