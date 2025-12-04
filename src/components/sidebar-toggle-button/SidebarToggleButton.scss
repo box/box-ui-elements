@@ -29,3 +29,17 @@
         }
     }
 }
+
+.bcs-SidebarNav--modernized {
+    .bdl-SidebarToggleButton {
+        &:not(.bdl-is-disabled):hover svg,
+        &:not(.is-disabled):hover svg,
+        &:not(.bdl-is-disabled):focus svg,
+        &:not(.is-disabled):focus svg,
+        &.bdl-is-collapsed svg,
+        &.bdl-is-collapsed:hover svg {
+            transform: scale(1.09);
+            transition: transform 150ms;
+        }
+    }
+}

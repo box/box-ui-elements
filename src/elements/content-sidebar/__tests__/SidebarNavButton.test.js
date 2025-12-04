@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
-// Using fireEvent for all click interactions instead of userEvent because 
+// Using fireEvent for all click interactions instead of userEvent because
 // userEvent.pointer with right-click doesn't reliably trigger onClick handlers
 import { render, screen, fireEvent } from '../../../test-utils/testing-library';
 import SidebarNavButton from '../SidebarNavButton';
@@ -23,7 +23,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         renderWrapper({
             tooltip: 'foo',
             sidebarView: 'activity',
-            children: 'test button',
+            children: <span>test button</span>,
         });
         const button = screen.getByRole('tab');
 
@@ -49,7 +49,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             isOpen,
             sidebarView: 'activity',
             tooltip: 'foo',
-            children: 'test button',
+            children: <span>test button</span>,
         };
         renderWrapper(props, '/activity');
         const button = screen.getByRole('tab');
@@ -78,7 +78,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
                 isOpen: true,
                 sidebarView: 'activity',
                 tooltip: 'foo',
-                children: 'test button',
+                children: <span>test button</span>,
             },
             path,
         );
@@ -103,7 +103,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             onClick: mockOnClick,
             sidebarView: mockSidebarView,
             tooltip: 'test',
-            children: 'button',
+            children: <span>button</span>,
         });
         const button = screen.getByText('button');
 
@@ -117,12 +117,11 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         ${false}     | ${false}
         ${undefined} | ${false}
     `('should apply bdl-is-disabled class when isDisabled is $isDisabled', ({ isDisabled, expected }) => {
-        const content = 'Activity';
         renderWrapper({
             isDisabled,
             sidebarView: 'activity',
             tooltip: 'Activity',
-            children: content,
+            children: <span>Activity</span>,
         });
 
         const button = screen.getByRole('tab');
@@ -146,7 +145,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
                 elementId,
                 sidebarView,
                 tooltip: 'test',
-                children: 'test button',
+                children: <span>test button</span>,
             });
 
             const button = screen.getByRole('tab');
@@ -162,7 +161,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             ref,
             sidebarView: 'activity',
             tooltip: 'test',
-            children: 'test button',
+            children: <span>test button</span>,
         });
 
         const button = screen.getByRole('tab');
@@ -183,7 +182,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             return render(
                 <Router history={history}>
                     <SidebarNavButton sidebarView="activity" tooltip="test" {...props}>
-                        Activity
+                        <span>Activity</span>
                     </SidebarNavButton>
                 </Router>,
             );
@@ -267,7 +266,7 @@ describe('elements/content-sidebar/SidebarNavButton - Router Disabled', () => {
         internalSidebarNavigation: { sidebar: 'skills' },
     };
 
-    const renderWithoutRouter = ({ children = 'test button', ref, ...props }) =>
+    const renderWithoutRouter = ({ children = <span>test button</span>, ref, ...props }) =>
         render(
             <SidebarNavButton ref={ref} {...defaultProps} {...props}>
                 {children}
@@ -291,29 +290,32 @@ describe('elements/content-sidebar/SidebarNavButton - Router Disabled', () => {
     });
 
     test.each`
-        internalSidebarNavigation                        | expected
-        ${null}                                         | ${false}
-        ${undefined}                                    | ${false}
-        ${{ sidebar: 'skills' }}                        | ${false}
-        ${{ sidebar: 'activity' }}                      | ${true}
-        ${{ sidebar: 'activity', versionId: '123' }}    | ${true}
-    `('should reflect active state ($expected) correctly based on internal navigation', ({ expected, internalSidebarNavigation }) => {
-        renderWithoutRouter({
-            internalSidebarNavigation,
-            isOpen: true,
-        });
-        const button = screen.getByRole('tab');
+        internalSidebarNavigation                    | expected
+        ${null}                                      | ${false}
+        ${undefined}                                 | ${false}
+        ${{ sidebar: 'skills' }}                     | ${false}
+        ${{ sidebar: 'activity' }}                   | ${true}
+        ${{ sidebar: 'activity', versionId: '123' }} | ${true}
+    `(
+        'should reflect active state ($expected) correctly based on internal navigation',
+        ({ expected, internalSidebarNavigation }) => {
+            renderWithoutRouter({
+                internalSidebarNavigation,
+                isOpen: true,
+            });
+            const button = screen.getByRole('tab');
 
-        if (expected) {
-            expect(button).toHaveClass('bcs-is-selected');
-            expect(button).toHaveAttribute('aria-selected', 'true');
-            expect(button).toHaveAttribute('tabindex', '0');
-        } else {
-            expect(button).not.toHaveClass('bcs-is-selected');
-            expect(button).toHaveAttribute('aria-selected', 'false');
-            expect(button).toHaveAttribute('tabindex', '-1');
-        }
-    });
+            if (expected) {
+                expect(button).toHaveClass('bcs-is-selected');
+                expect(button).toHaveAttribute('aria-selected', 'true');
+                expect(button).toHaveAttribute('tabindex', '0');
+            } else {
+                expect(button).not.toHaveClass('bcs-is-selected');
+                expect(button).toHaveAttribute('aria-selected', 'false');
+                expect(button).toHaveAttribute('tabindex', '-1');
+            }
+        },
+    );
 
     test('should call onClick with sidebarView when clicked', () => {
         const mockOnClick = jest.fn();
@@ -345,10 +347,13 @@ describe('elements/content-sidebar/SidebarNavButton - Router Disabled', () => {
             fireEvent.click(button);
 
             expect(mockOnClick).toBeCalledWith('activity');
-            expect(mockInternalSidebarNavigationHandler).toBeCalledWith({
-                sidebar: 'activity',
-                open: true,
-            }, false);
+            expect(mockInternalSidebarNavigationHandler).toBeCalledWith(
+                {
+                    sidebar: 'activity',
+                    open: true,
+                },
+                false,
+            );
         });
 
         test('calls internalSidebarNavigationHandler with replace=true when exact match', () => {
@@ -364,10 +369,13 @@ describe('elements/content-sidebar/SidebarNavButton - Router Disabled', () => {
             fireEvent.click(button);
 
             expect(mockOnClick).toBeCalledWith('activity');
-            expect(mockInternalSidebarNavigationHandler).toBeCalledWith({
-                sidebar: 'activity',
-                open: true,
-            }, true);
+            expect(mockInternalSidebarNavigationHandler).toBeCalledWith(
+                {
+                    sidebar: 'activity',
+                    open: true,
+                },
+                true,
+            );
         });
 
         test('does not call internalSidebarNavigationHandler on right click', () => {
