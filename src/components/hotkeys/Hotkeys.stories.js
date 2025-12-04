@@ -7,7 +7,7 @@ import ModalActions from '../modal/ModalActions';
 import HotkeyLayer from './HotkeyLayer';
 import HotkeyRecord from './HotkeyRecord';
 
-export const HotkeyFeatures = () => {
+export const Hotkeys = () => {
     const [message, setMessage] = React.useState('Press keys to see actions');
     const [count, setCount] = React.useState(0);
     const [baseMessage, setBaseMessage] = React.useState('Base layer active');
@@ -81,7 +81,8 @@ export const HotkeyFeatures = () => {
         // Key combinations
         new HotkeyRecord({
             key: 'ctrl+s',
-            handler: () => {
+            handler: event => {
+                event.preventDefault();
                 setAction('Save (Ctrl+S)');
             },
             description: 'Save document',
@@ -89,7 +90,8 @@ export const HotkeyFeatures = () => {
         }),
         new HotkeyRecord({
             key: 'shift+a',
-            handler: () => {
+            handler: event => {
+                event.preventDefault();
                 setAction('Select All (Shift+A)');
             },
             description: 'Select all items',
@@ -105,7 +107,8 @@ export const HotkeyFeatures = () => {
         }),
         new HotkeyRecord({
             key: 'alt+n',
-            handler: () => {
+            handler: event => {
+                event.preventDefault();
                 setAction('New (Alt+N)');
             },
             description: 'Create new item',
@@ -115,7 +118,7 @@ export const HotkeyFeatures = () => {
         new HotkeyRecord({
             key: 'h',
             handler: () => {
-                setMessage('Hidden hotkey pressed (not shown in help modal)');
+                setMessage('Hidden hotkey pressed');
             },
             description: null, // Hidden hotkey
         }),
@@ -169,8 +172,6 @@ export const HotkeyFeatures = () => {
     return (
         <HotkeyLayer configs={baseHotkeys} enableHelpModal helpModalShortcut="?">
             <Card>
-                <Text as="h1">Hotkey Features</Text>
-
                 <div>
                     <Card>
                         <Text as="h2">Hotkeys</Text>

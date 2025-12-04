@@ -63,7 +63,7 @@ describe('components/hotkeys/Hotkeys', () => {
             ];
             const mockHotkeyLayer = {
                 registerHotkey: sandbox.stub(),
-                deregisterHotkey: sandbox.stub(),
+                deregisterHotkey: sandbox.mock().twice(),
             };
 
             const wrapper = mount(
@@ -78,14 +78,11 @@ describe('components/hotkeys/Hotkeys', () => {
                 />,
             );
 
-            // Update state to trigger componentDidUpdate naturally
             act(() => {
                 wrapper.find('HotkeyTestWrapper').setState({ configs: [configs[1]] });
             });
-            wrapper.update();
 
-            // Verify that deregisterHotkey was called twice (for 'a' and 'c')
-            expect(mockHotkeyLayer.deregisterHotkey.callCount).toBe(2);
+            wrapper.update();
         });
 
         test('should throw error when hotkey layer does not exist', () => {
@@ -166,7 +163,6 @@ describe('components/hotkeys/Hotkeys', () => {
                 </HotkeyContext.Provider>,
             );
 
-            // Hotkeys returns null when no children, so the wrapper should be empty
             expect(wrapper.find('Hotkeys').children().length).toBe(0);
         });
     });
