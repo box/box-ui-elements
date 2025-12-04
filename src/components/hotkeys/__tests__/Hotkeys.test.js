@@ -5,7 +5,7 @@ import { mount, shallow } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
 import { HotkeyContext } from '../HotkeyContext';
-import { createContextTestWrapper } from './testHelpers';
+import { HotkeyTestWrapper } from './HotkeyTestWrapper';
 
 import Hotkeys from '../Hotkeys';
 
@@ -66,31 +66,26 @@ describe('components/hotkeys/Hotkeys', () => {
                 deregisterHotkey: sandbox.stub(),
             };
 
-            const TestWrapper = createContextTestWrapper({
-                contextValue: mockHotkeyLayer,
-                initialState: { configs },
-                renderChild: state => (
-                    <Hotkeys configs={state.configs}>
-                        <div />
-                    </Hotkeys>
-                ),
-            });
-
-            const wrapper = mount(<TestWrapper />);
+            const wrapper = mount(
+                <HotkeyTestWrapper
+                    contextValue={mockHotkeyLayer}
+                    initialState={{ configs }}
+                    renderChild={state => (
+                        <Hotkeys configs={state.configs}>
+                            <div />
+                        </Hotkeys>
+                    )}
+                />,
+            );
 
             // Update state to trigger componentDidUpdate naturally
             act(() => {
-                wrapper.find('TestWrapper').setState({ configs: [configs[1]] });
+                wrapper.find('HotkeyTestWrapper').setState({ configs: [configs[1]] });
             });
             wrapper.update();
 
             // Verify that deregisterHotkey was called twice (for 'a' and 'c')
             expect(mockHotkeyLayer.deregisterHotkey.callCount).toBe(2);
-
-            // Explicitly unmount while context is still available
-            // When Jest cleans up automatically, the Provider unmounts first, making context null
-            // By unmounting explicitly here, we ensure the Provider stays mounted until Hotkeys unmounts
-            wrapper.unmount();
         });
 
         test('should throw error when hotkey layer does not exist', () => {

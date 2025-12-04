@@ -39,17 +39,22 @@ class HotkeyHelpModal extends Component {
     constructor(props) {
         super(props);
 
+        this.hotkeys = {};
+        this.types = [];
+        this.state = {
+            currentType: null,
+        };
+    }
+
+    componentDidMount() {
         const hotkeyLayer = this.context;
         if (hotkeyLayer) {
             this.hotkeys = hotkeyLayer.getActiveHotkeys();
             this.types = hotkeyLayer.getActiveTypes();
-        } else {
-            this.hotkeys = {};
-            this.types = [];
+            this.setState({
+                currentType: this.types.length ? this.types[0] : null,
+            });
         }
-        this.state = {
-            currentType: this.types.length ? this.types[0] : null,
-        };
     }
 
     componentDidUpdate({ isOpen: prevIsOpen }, { currentType: prevType }) {

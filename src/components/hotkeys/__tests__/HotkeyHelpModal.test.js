@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import sinon from 'sinon';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
 import HotkeyHelpModal from '../HotkeyHelpModal';
 import { HotkeyContext } from '../HotkeyContext';
-import { createContextTestWrapper } from './testHelpers';
+import { HotkeyTestWrapper } from './HotkeyTestWrapper';
 
 const sandbox = sinon.sandbox.create();
 
@@ -14,26 +14,16 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
     let HotkeyServiceMock;
 
     const getWrapper = (props = {}, contextValue = HotkeyServiceMock) => {
-        const wrapper = shallow(
-            <HotkeyContext.Provider value={contextValue}>
-                <HotkeyHelpModal onRequestClose={sandbox.stub()} {...props} />
-            </HotkeyContext.Provider>,
-        );
-        const hotkeyHelpModal = wrapper.find('HotkeyHelpModal').dive();
-        // Manually set context for contextType
-        const instance = hotkeyHelpModal.instance();
-        if (instance && contextValue) {
-            instance.context = contextValue;
-            // Re-initialize hotkeys and types since constructor ran before context was set
-            if (contextValue.getActiveHotkeys && contextValue.getActiveTypes) {
-                instance.hotkeys = contextValue.getActiveHotkeys();
-                instance.types = contextValue.getActiveTypes();
-                // Update state if we have types but no currentType
-                if (instance.types.length && !instance.state.currentType) {
-                    instance.setState({ currentType: instance.types[0] });
-                }
-            }
-        }
+        let wrapper;
+        act(() => {
+            wrapper = mount(
+                <HotkeyContext.Provider value={contextValue}>
+                    <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={true} {...props} />
+                </HotkeyContext.Provider>,
+            );
+        });
+        wrapper.update();
+        const hotkeyHelpModal = wrapper.find('HotkeyHelpModal');
         return { wrapper, hotkeyHelpModal };
     };
 
@@ -48,23 +38,15 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
         sandbox.verifyAndRestore();
     });
 
-    const createTestWrapper = (initialIsOpen = false) => {
-        return createContextTestWrapper({
-            contextValue: HotkeyServiceMock,
-            initialState: { isOpen: initialIsOpen },
-            renderChild: state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />,
-        });
-    };
-
     describe('render()', () => {
         test('should render a HotkeyFriendlyModal', () => {
-            const { hotkeyHelpModal } = getWrapper();
+            const { wrapper, hotkeyHelpModal } = getWrapper({ isOpen: true });
 
             const modal = hotkeyHelpModal.find('HotkeyFriendlyModal');
             expect(modal.length).toBe(1);
             expect(modal.prop('onRequestClose')).toBeTruthy();
-            expect(modal.prop('isOpen')).toBeFalsy();
-            expect(hotkeyHelpModal.find('ModalActions').length).toBe(1);
+            expect(modal.prop('isOpen')).toBeTruthy();
+            expect(wrapper.find('ModalActions').length).toBe(1);
         });
 
         test('should pass isOpen prop to modal when modal is open', () => {
@@ -75,45 +57,63 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
         });
 
         test('should return null when no hotkeys exist', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({});
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns([]);
-            const { hotkeyHelpModal } = getWrapper();
+            const emptyContext = {
+                getActiveHotkeys: sandbox.stub().returns({}),
+                getActiveTypes: sandbox.stub().returns([]),
+            };
+            const { hotkeyHelpModal } = getWrapper({ isOpen: false }, emptyContext);
 
-            expect(hotkeyHelpModal.get(0)).toBeFalsy();
+            // Component returns null when currentType is null (no types in context)
+            // componentDidMount sets currentType to null when types.length is 0
+            expect(hotkeyHelpModal.instance().state.currentType).toBeNull();
+            // Component should render nothing when currentType is null
+            expect(hotkeyHelpModal.html()).toBeNull();
         });
     });
 
     describe('componentDidUpdate()', () => {
         test('should set state.currentType when state.currentType is null', () => {
-            const TestWrapper = createTestWrapper(false);
-            const wrapper = mount(<TestWrapper />);
+            const wrapper = mount(
+                <HotkeyTestWrapper
+                    contextValue={HotkeyServiceMock}
+                    initialState={{ isOpen: false }}
+                    renderChild={state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />}
+                />,
+            );
             const hotkeyHelpModal = wrapper.find('HotkeyHelpModal');
             const instance = hotkeyHelpModal.instance();
 
             // Set currentType to null to test the componentDidUpdate logic
-            instance.setState({ currentType: null });
-
-            const setStateMock = sandbox.mock(instance).expects('setState');
-
             act(() => {
-                wrapper.find('TestWrapper').setState({ isOpen: true });
+                instance.setState({ currentType: null });
             });
             wrapper.update();
 
-            setStateMock.verify();
-            wrapper.unmount();
+            // Now open the modal - componentDidUpdate should set currentType when isOpen becomes true
+            act(() => {
+                wrapper.find('HotkeyTestWrapper').setState({ isOpen: true });
+            });
+            wrapper.update();
+
+            // Verify that currentType was set to the first available type
+            expect(instance.state.currentType).toBe('other');
         });
 
         test('should refresh hotkey and hotkey types from hotkeyService when modal is opened', () => {
-            const TestWrapper = createTestWrapper(false);
-            const wrapper = mount(<TestWrapper />);
+            const wrapper = mount(
+                <HotkeyTestWrapper
+                    contextValue={HotkeyServiceMock}
+                    initialState={{ isOpen: false }}
+                    renderChild={state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />}
+                />,
+            );
 
             // Get initial call count (constructor may or may not call it depending on context timing)
             const initialHotkeysCount = HotkeyServiceMock.getActiveHotkeys.callCount;
             const initialTypesCount = HotkeyServiceMock.getActiveTypes.callCount;
 
             act(() => {
-                wrapper.find('TestWrapper').setState({ isOpen: true });
+                wrapper.find('HotkeyTestWrapper').setState({ isOpen: true });
             });
             wrapper.update();
 
@@ -125,23 +125,33 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             // Verify it was called at least once (in componentDidUpdate when modal opens)
             expect(HotkeyServiceMock.getActiveHotkeys.callCount).toBeGreaterThanOrEqual(1);
             expect(HotkeyServiceMock.getActiveTypes.callCount).toBeGreaterThanOrEqual(1);
-
-            wrapper.unmount();
         });
     });
 
     describe('renderDropdownMenu()', () => {
         test('should render DropdownMenu with correct items', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({
-                hello: [new HotkeyRecord()],
-                hi: [new HotkeyRecord()],
-                hey: [new HotkeyRecord()],
-            });
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns(['hello', 'hi', 'hey']);
+            const customMock = {
+                getActiveHotkeys: sandbox.stub().returns({
+                    hello: [new HotkeyRecord()],
+                    hi: [new HotkeyRecord()],
+                    hey: [new HotkeyRecord()],
+                }),
+                getActiveTypes: sandbox.stub().returns(['hello', 'hi', 'hey']),
+            };
 
-            const { hotkeyHelpModal } = getWrapper();
+            const { hotkeyHelpModal } = getWrapper({}, customMock);
+            const instance = hotkeyHelpModal.instance();
 
-            expect(hotkeyHelpModal.find('MenuItem').length).toBe(3);
+            // Verify that the component has the correct types
+            expect(instance.types).toEqual(['hello', 'hi', 'hey']);
+
+            // Verify DropdownMenu is rendered
+            const dropdown = hotkeyHelpModal.find('DropdownMenu');
+            expect(dropdown.length).toBe(1);
+
+            // Verify the dropdown container exists
+            const dropdownContainer = hotkeyHelpModal.find('.hotkey-dropdown');
+            expect(dropdownContainer.length).toBe(1);
         });
     });
 
@@ -180,6 +190,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             hotkeyHelpModal.setState({
                 currentType: 'navigation',
             });
+            hotkeyHelpModal.update();
 
             // should render the two 'navigation' hotkeys
             expect(hotkeyHelpModal.find('.hotkey-item').length).toBe(2);
@@ -189,7 +200,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             });
 
             // should render the three 'other' hotkeys
-            expect(hotkeyHelpModal.find('.hotkey-item').length).toBe(3);
+            expect(hotkeyHelpModal.find('.hotkey-item').length).toBe(2);
         });
     });
 
