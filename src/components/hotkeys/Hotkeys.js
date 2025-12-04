@@ -46,7 +46,6 @@ class Hotkeys extends Component {
     }
 
     _removeHotkeys(hotkeyConfigs) {
-        // Check if context exists (it may be null during cleanup if Provider unmounts first)
         if (this.context) {
             hotkeyConfigs.forEach(hotkeyConfig => this.context.deregisterHotkey(hotkeyConfig));
         }
