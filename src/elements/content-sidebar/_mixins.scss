@@ -14,7 +14,7 @@
     }
 
     &.bdl-is-disabled {
-        opacity: .5;
+        opacity: 0.5;
     }
 
     &.bdl-is-hidden {
@@ -25,6 +25,11 @@
 @mixin bdl-SidebarNavIcon {
     width: 24px;
     height: 24px;
+}
+
+@mixin bdl-SidebarNavIconModernized {
+    width: var(--size-5);
+    height: var(--size-5);
 }
 
 @mixin bcs-SidebarSection {

@@ -8,21 +8,26 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
-import { Button } from '@box/blueprint-web';
+import { Button, Tooltip as BPTooltip } from '@box/blueprint-web';
 import Tooltip from '../../components/tooltip/Tooltip';
 import { isLeftClick } from '../../utils/dom';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler, ViewTypeValues } from '../common/types/SidebarNavigation';
+import type {
+    InternalSidebarNavigation,
+    InternalSidebarNavigationHandler,
+    ViewTypeValues,
+} from '../common/types/SidebarNavigation';
 import './SidebarNavButton.scss';
 
 type Props = {
     'data-resin-target'?: string,
     'data-testid'?: string,
-    children: React.Node,
+    children: React.Element<any>,
     elementId?: string,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled?: boolean,
     isOpen?: boolean,
+    isPreviewModernizationEnabled?: boolean,
     onClick?: (sidebarView: ViewTypeValues) => void,
     routerDisabled?: boolean,
     sidebarView: ViewTypeValues,
@@ -43,39 +48,52 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         routerDisabled = false,
         sidebarView,
         tooltip,
+        isPreviewModernizationEnabled = false,
     } = props;
     const sidebarPath = `/${sidebarView}`;
     const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
+
+    const TooltipComponent = isPreviewModernizationEnabled ? BPTooltip : Tooltip;
+    // Blueprint Tooltip uses 'content' prop, legacy Tooltip uses 'text' prop
+    const tooltipProps = isPreviewModernizationEnabled
+        ? { content: tooltip, side: 'left' }
+        : { text: tooltip, position: 'middle-left', isTabbable: false };
 
     if (routerDisabled) {
         // Mimic router behavior using internalSidebarNavigation
         const isMatch = !!internalSidebarNavigation && internalSidebarNavigation.sidebar === sidebarView;
         const isActiveValue = isMatch && !!isOpen;
-        
+
         // Mimic isExactMatch: true when no extra navigation parameters are present
-        const hasExtraParams = internalSidebarNavigation && (
-            internalSidebarNavigation.versionId ||
-            internalSidebarNavigation.activeFeedEntryType ||
-            internalSidebarNavigation.activeFeedEntryId ||
-            internalSidebarNavigation.fileVersionId
-        );
+        const hasExtraParams =
+            internalSidebarNavigation &&
+            (internalSidebarNavigation.versionId ||
+                internalSidebarNavigation.activeFeedEntryType ||
+                internalSidebarNavigation.activeFeedEntryId ||
+                internalSidebarNavigation.fileVersionId);
         const isExactMatch = isMatch && !hasExtraParams;
-        
+
         const handleNavButtonClick = event => {
             onClick(sidebarView);
-            
+
             // Mimic router navigation behavior
             if (internalSidebarNavigationHandler && !event.defaultPrevented && isLeftClick(event)) {
                 const replace = isExactMatch;
-                internalSidebarNavigationHandler({
-                    sidebar: sidebarView,
-                    open: true,
-                }, replace);
+                internalSidebarNavigationHandler(
+                    {
+                        sidebar: sidebarView,
+                        open: true,
+                    },
+                    replace,
+                );
             }
         };
 
+        // Clone children and pass isActive prop
+        const childrenWithProps = React.cloneElement(children, { isActive: isActiveValue });
+
         return (
-            <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+            <TooltipComponent {...tooltipProps}>
                 <Button
                     accessibleWhenDisabled={true}
                     aria-controls={`${id}-content`}
@@ -96,9 +114,9 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                     type="button"
                     variant="tertiary"
                 >
-                    {children}
+                    {childrenWithProps}
                 </Button>
-            </Tooltip>
+            </TooltipComponent>
         );
     }
 
@@ -121,8 +139,11 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                     }
                 };
 
+                // Clone children and pass isActive prop
+                const childrenWithProps = React.cloneElement(children, { isActive: isActiveValue });
+
                 return (
-                    <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+                    <TooltipComponent {...tooltipProps}>
                         <Button
                             accessibleWhenDisabled={true}
                             aria-controls={`${id}-content`}
@@ -143,9 +164,9 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             type="button"
                             variant="tertiary"
                         >
-                            {children}
+                            {childrenWithProps}
                         </Button>
-                    </Tooltip>
+                    </TooltipComponent>
                 );
             }}
         </Route>

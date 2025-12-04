@@ -386,7 +386,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBe('0:01:00');
         });
 
-        test('should not show version link for video annotations even when hasVersions is true', () => {
+        test('should not show Annotation Activity Link link for video annotations when is current version and hasVersions is true', () => {
             const wrapper = getWrapper({
                 item: mockVideoAnnotation,
                 hasVersions: true,
@@ -394,6 +394,21 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             });
 
             expect(wrapper.exists('AnnotationActivityLink')).toBe(false);
+        });
+
+        test('should show Annotation Activity Link for video annotations when is not current version and hasVersions is true', () => {
+            const wrapper = getWrapper({
+                item: mockVideoAnnotation,
+                hasVersions: true,
+                isCurrentVersion: false,
+            });
+
+            expect(wrapper.exists('AnnotationActivityLink')).toBe(true);
+
+            expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
+                ...messages.annotationActivityVersionLink,
+                values: { number: '2' },
+            });
         });
 
         test('should pass correct timestamp format to ActivityMessage for video annotations', () => {
@@ -460,6 +475,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             const wrapper = getWrapper({ item: regularAnnotation });
             const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
+            expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
+                ...messages.annotationActivityPageItem,
+                values: { number: 1 },
+            });
 
             expect(activityMessage.prop('annotationsMillisecondTimestamp')).toBeFalsy();
         });
