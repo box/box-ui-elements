@@ -27,6 +27,7 @@ export type Props = {
     avatarAttributes?: React.HTMLAttributes<HTMLDivElement>;
     className?: string;
     collaborators: Array<Collaborator>;
+    enableModernizedComponents?: boolean;
     hideAdditionalCount?: boolean;
     hideTooltips?: boolean;
     maxAdditionalCollaborators?: number;
@@ -41,6 +42,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         avatarAttributes,
         className,
         collaborators,
+        enableModernizedComponents = false,
         hideAdditionalCount,
         hideTooltips,
         maxAdditionalCollaborators = 99,
@@ -50,7 +52,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         isPreviewModernizationEnabled = false,
         ...rest
     } = props;
-    const blueprintContext = React.useContext(BlueprintModernizationContext);
+    const blueprintModernizationContext = React.useContext(BlueprintModernizationContext);
     const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
 
     const hideTooltip = (): void => {
@@ -142,14 +144,17 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
     );
 
     if (isPreviewModernizationEnabled) {
-        // no blueprint modernization context found from the parent component, so we need to provide our own
-        if (!blueprintContext.enableModernizedComponents) {
+        // This component can be used standalone when it's not inside a ContentPreview/ContentSidebar,
+        // so we need to provide our own BlueprintModernizationProvider and TooltipProvider
+        // no context found from the parent component, so we need to provide our own
+        if (!blueprintModernizationContext.enableModernizedComponents) {
             return (
-                <BlueprintModernizationProvider enableModernizedComponents>
+                <BlueprintModernizationProvider enableModernizedComponents={enableModernizedComponents}>
                     <TooltipProvider>{content}</TooltipProvider>
                 </BlueprintModernizationProvider>
             );
         }
+        // Context found and is true, use existing context
         return <TooltipProvider>{content}</TooltipProvider>;
     }
     return content;
