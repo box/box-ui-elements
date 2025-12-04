@@ -1,6 +1,12 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
+import {
+    Tooltip as BPTooltip,
+    TooltipProvider,
+    BlueprintModernizationProvider,
+    BlueprintModernizationContext,
+} from '@box/blueprint-web';
 // @ts-ignore flow import
 import PresenceAvatar from './PresenceAvatar';
 import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
@@ -27,6 +33,7 @@ export type Props = {
     maxDisplayedAvatars?: number;
     onAvatarMouseEnter?: (id: string) => void;
     onAvatarMouseLeave?: () => void;
+    isPreviewModernizationEnabled?: boolean;
 };
 
 function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.Element | null {
@@ -40,9 +47,10 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         maxDisplayedAvatars = 3,
         onAvatarMouseEnter = noop,
         onAvatarMouseLeave = noop,
+        isPreviewModernizationEnabled = false,
         ...rest
     } = props;
-
+    const blueprintContext = React.useContext(BlueprintModernizationContext);
     const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
 
     const hideTooltip = (): void => {
@@ -63,39 +71,60 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         return null;
     }
 
-    return (
+    const renderAvatar = (collaborator: Collaborator) => {
+        const { id, avatarUrl, name, isActive, interactedAt, interactionType } = collaborator;
+
+        const avatarElement = (
+            <PresenceAvatar
+                aria-hidden="true"
+                avatarUrl={avatarUrl}
+                id={id}
+                isActive={isActive}
+                name={name}
+                onBlur={hideTooltip}
+                onFocus={() => showTooltip(id)}
+                onMouseEnter={() => showTooltip(id)}
+                onMouseLeave={hideTooltip}
+                {...avatarAttributes}
+            />
+        );
+
+        const tooltipContent = (
+            <PresenceAvatarTooltipContent
+                name={name}
+                interactedAt={interactedAt}
+                interactionType={interactionType}
+                isActive={isActive}
+            />
+        );
+
+        if (hideTooltips) {
+            return <React.Fragment key={id}>{avatarElement}</React.Fragment>;
+        }
+
+        if (isPreviewModernizationEnabled) {
+            return (
+                <BPTooltip key={id} content={tooltipContent} side="bottom">
+                    <span>{avatarElement}</span>
+                </BPTooltip>
+            );
+        }
+
+        return (
+            <Tooltip
+                key={id}
+                isShown={activeTooltip === id}
+                position={TooltipPosition.BOTTOM_CENTER}
+                text={tooltipContent}
+            >
+                {avatarElement}
+            </Tooltip>
+        );
+    };
+
+    const content = (
         <div ref={ref} className={classNames('bdl-PresenceAvatarList', className)} {...rest}>
-            {collaborators.slice(0, maxDisplayedAvatars).map(collaborator => {
-                const { id, avatarUrl, name, isActive, interactedAt, interactionType } = collaborator;
-                return (
-                    <Tooltip
-                        key={id}
-                        isShown={!hideTooltips && activeTooltip === id}
-                        position={TooltipPosition.BOTTOM_CENTER}
-                        text={
-                            <PresenceAvatarTooltipContent
-                                name={name}
-                                interactedAt={interactedAt}
-                                interactionType={interactionType}
-                                isActive={isActive}
-                            />
-                        }
-                    >
-                        <PresenceAvatar
-                            aria-hidden="true"
-                            avatarUrl={avatarUrl}
-                            id={id}
-                            isActive={isActive}
-                            name={name}
-                            onBlur={hideTooltip}
-                            onFocus={() => showTooltip(id)}
-                            onMouseEnter={() => showTooltip(id)}
-                            onMouseLeave={hideTooltip}
-                            {...avatarAttributes}
-                        />
-                    </Tooltip>
-                );
-            })}
+            {collaborators.slice(0, maxDisplayedAvatars).map(renderAvatar)}
 
             {!hideAdditionalCount && collaborators.length > maxDisplayedAvatars && (
                 <div
@@ -111,6 +140,19 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
             )}
         </div>
     );
+
+    if (isPreviewModernizationEnabled) {
+        // no blueprint modernization context found from the parent component, so we need to provide our own
+        if (!blueprintContext.enableModernizedComponents) {
+            return (
+                <BlueprintModernizationProvider enableModernizedComponents>
+                    <TooltipProvider>{content}</TooltipProvider>
+                </BlueprintModernizationProvider>
+            );
+        }
+        return <TooltipProvider>{content}</TooltipProvider>;
+    }
+    return content;
 }
 
 export { PresenceAvatarList as PresenceAvatarListComponent };
