@@ -100,13 +100,9 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
             />
         );
 
-        if (hideTooltips) {
-            return <React.Fragment key={id}>{avatarElement}</React.Fragment>;
-        }
-
         if (isPreviewModernizationEnabled) {
             return (
-                <BPTooltip key={id} content={tooltipContent} side="bottom">
+                <BPTooltip key={id} content={tooltipContent} side="bottom" hidden={hideTooltips}>
                     <span>{avatarElement}</span>
                 </BPTooltip>
             );
@@ -115,7 +111,7 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         return (
             <Tooltip
                 key={id}
-                isShown={activeTooltip === id}
+                isShown={!hideTooltips && activeTooltip === id}
                 position={TooltipPosition.BOTTOM_CENTER}
                 text={tooltipContent}
             >
@@ -143,10 +139,10 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         </div>
     );
 
+    // This component can be used standalone when it's not inside a ContentPreview/ContentSidebar,
+    // so we need to provide our own BlueprintModernizationProvider and TooltipProvider
+    // no context found from the parent component, so we need to provide our own
     if (isPreviewModernizationEnabled) {
-        // This component can be used standalone when it's not inside a ContentPreview/ContentSidebar,
-        // so we need to provide our own BlueprintModernizationProvider and TooltipProvider
-        // no context found from the parent component, so we need to provide our own
         if (!blueprintModernizationContext.enableModernizedComponents) {
             return (
                 <BlueprintModernizationProvider enableModernizedComponents={enableModernizedComponents}>
