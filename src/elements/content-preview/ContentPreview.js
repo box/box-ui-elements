@@ -61,6 +61,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
+import type { Target } from '../../common/types/annotations';
 import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
@@ -227,6 +228,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
     stagedFile: ?BoxItem;
 
     updateVersionToCurrent: ?() => void;
+
+    dynamicOnPreviewLoadAction: ?() => void;
 
     initialState: State = {
         canPrint: false,
@@ -734,6 +737,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         this.handleCanPrint();
+        if (this.dynamicOnPreviewLoadAction) {
+            this.dynamicOnPreviewLoadAction();
+        }
     };
 
     /**
@@ -847,6 +853,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
+
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
@@ -1209,7 +1216,28 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
-    handleAnnotationSelect = ({ file_version, id, target }: Annotation) => {
+    /**
+     * Handles scrolling to a frame-based annotation by waiting for video player to load first
+     *
+     * @param {string} id - The annotation ID
+     * @param {object} target - The annotation target
+     * @return {void}
+     */
+    scrollToFrameAnnotation = (id: string, target: Target): void => {
+        const videoPlayer = document.querySelector('.bp-media-container video');
+        if (!videoPlayer) {
+            this.dynamicOnPreviewLoadAction = null;
+            return;
+        }
+        const handleLoadedData = () => {
+            const newViewer = this.getViewer();
+            newViewer.emit('scrolltoannotation', { id, target });
+            videoPlayer.removeEventListener('loadeddata', handleLoadedData);
+        };
+        videoPlayer.addEventListener('loadeddata', handleLoadedData);
+    };
+
+    handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload = false) => {
         const { location = {} } = target;
         const { file, selectedVersion } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');
@@ -1227,8 +1255,18 @@ class ContentPreview extends React.PureComponent<Props, State> {
             });
         }
 
-        if (viewer) {
+        if (viewer && !deferScrollToOnload) {
             viewer.emit('scrolltoannotation', { id, target });
+        } else if (viewer && deferScrollToOnload) {
+            this.dynamicOnPreviewLoadAction = () => {
+                if (target?.location?.type === 'frame') {
+                    this.scrollToFrameAnnotation(id, target);
+                } else {
+                    const newViewer = this.getViewer();
+                    newViewer.emit('scrolltoannotation', { id, target });
+                }
+                this.dynamicOnPreviewLoadAction = null;
+            };
         }
     };
 
