@@ -69,7 +69,7 @@ describe('features/presence/PresenceAvatarList', () => {
             });
 
             test.each(['focus', 'mouseenter'])(
-                'should show tooltip when correponding avatar encounters %s event',
+                'should show tooltip when corresponding avatar encounters %s event',
                 event => {
                     const onAvatarMouseEnter = jest.fn();
                     const wrapper = getWrapper({
