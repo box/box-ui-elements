@@ -1,16 +1,12 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-import {
-    Tooltip as BPTooltip,
-    TooltipProvider,
-    BlueprintModernizationProvider,
-    BlueprintModernizationContext,
-} from '@box/blueprint-web';
+import { Tooltip as BPTooltip, TooltipProvider as BPTooltipProvider } from '@box/blueprint-web';
 // @ts-ignore flow import
 import PresenceAvatar from './PresenceAvatar';
 import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
+import { withBlueprintModernization } from '../../elements/common/withBlueprintModernization';
 import './PresenceAvatarList.scss';
 
 export type Collaborator = {
@@ -42,7 +38,6 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         avatarAttributes,
         className,
         collaborators,
-        enableModernizedComponents = false,
         hideAdditionalCount,
         hideTooltips,
         maxAdditionalCollaborators = 99,
@@ -52,7 +47,6 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         isPreviewModernizationEnabled = false,
         ...rest
     } = props;
-    const blueprintModernizationContext = React.useContext(BlueprintModernizationContext);
     const [activeTooltip, setActiveTooltip] = React.useState<string | null>(null);
 
     const hideTooltip = (): void => {
@@ -101,8 +95,11 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
         );
 
         if (isPreviewModernizationEnabled) {
+            if (hideTooltips) {
+                return avatarElement;
+            }
             return (
-                <BPTooltip key={id} content={tooltipContent} side="bottom" hidden={hideTooltips}>
+                <BPTooltip key={id} content={tooltipContent} side="bottom">
                     <span>{avatarElement}</span>
                 </BPTooltip>
             );
@@ -140,22 +137,13 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
     );
 
     // This component can be used standalone when it's not inside a ContentPreview/ContentSidebar,
-    // so we need to provide our own BlueprintModernizationProvider and TooltipProvider
-    // no context found from the parent component, so we need to provide our own
+    // so we need to provide our own TooltipProvider when using Blueprint tooltips
     if (isPreviewModernizationEnabled) {
-        if (!blueprintModernizationContext.enableModernizedComponents) {
-            return (
-                <BlueprintModernizationProvider enableModernizedComponents={enableModernizedComponents}>
-                    <TooltipProvider>{content}</TooltipProvider>
-                </BlueprintModernizationProvider>
-            );
-        }
-        // Context found and is true, use existing context
-        return <TooltipProvider>{content}</TooltipProvider>;
+        return <BPTooltipProvider>{content}</BPTooltipProvider>;
     }
     return content;
 }
 
 export { PresenceAvatarList as PresenceAvatarListComponent };
 
-export default React.forwardRef(PresenceAvatarList);
+export default withBlueprintModernization(React.forwardRef(PresenceAvatarList));
