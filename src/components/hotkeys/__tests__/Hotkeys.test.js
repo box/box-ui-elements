@@ -1,7 +1,11 @@
 import * as React from 'react';
+import { act } from 'react-dom/test-utils';
 import sinon from 'sinon';
+import { mount, shallow } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
+import { HotkeyContext } from '../HotkeyContext';
+import { HotkeyTestWrapper } from './HotkeyTestWrapper';
 
 import Hotkeys from '../Hotkeys';
 
@@ -14,45 +18,39 @@ describe('components/hotkeys/Hotkeys', () => {
 
     describe('componentDidMount()', () => {
         test('should call hotkeyLayer.registerHotkey for each hotkey config', () => {
-            shallow(
-                <Hotkeys
-                    configs={[
-                        new HotkeyRecord({ key: 'a' }),
-                        new HotkeyRecord({ key: 'b' }),
-                        new HotkeyRecord({ key: 'c' }),
-                    ]}
-                >
-                    <div />
-                </Hotkeys>,
-                {
-                    context: {
-                        hotkeyLayer: {
-                            registerHotkey: sandbox.mock().thrice(),
-                        },
-                    },
-                },
+            const mockHotkeyLayer = {
+                registerHotkey: sandbox.mock().thrice(),
+            };
+
+            mount(
+                <HotkeyContext.Provider value={mockHotkeyLayer}>
+                    <Hotkeys
+                        configs={[
+                            new HotkeyRecord({ key: 'a' }),
+                            new HotkeyRecord({ key: 'b' }),
+                            new HotkeyRecord({ key: 'c' }),
+                        ]}
+                    >
+                        <div />
+                    </Hotkeys>
+                </HotkeyContext.Provider>,
             );
         });
 
         test('should throw error when hotkey layer does not exist', () => {
-            const wrapper = shallow(
-                <Hotkeys
-                    configs={[
-                        new HotkeyRecord({ key: 'a' }),
-                        new HotkeyRecord({ key: 'b' }),
-                        new HotkeyRecord({ key: 'c' }),
-                    ]}
-                >
-                    <div />
-                </Hotkeys>,
-                {
-                    disableLifecycleMethods: true,
-                },
-            );
-
             expect(() => {
-                wrapper.instance().componentDidMount();
-            }).toThrow();
+                mount(
+                    <Hotkeys
+                        configs={[
+                            new HotkeyRecord({ key: 'a' }),
+                            new HotkeyRecord({ key: 'b' }),
+                            new HotkeyRecord({ key: 'c' }),
+                        ]}
+                    >
+                        <div />
+                    </Hotkeys>,
+                );
+            }).toThrow('You must instantiate a HotkeyLayer before using Hotkeys');
         });
     });
 
@@ -63,23 +61,28 @@ describe('components/hotkeys/Hotkeys', () => {
                 new HotkeyRecord({ key: 'b' }),
                 new HotkeyRecord({ key: 'c' }),
             ];
-            const wrapper = shallow(
-                <Hotkeys configs={configs}>
-                    <div />
-                </Hotkeys>,
-                {
-                    context: {
-                        hotkeyLayer: {
-                            registerHotkey: sandbox.stub(),
-                            deregisterHotkey: sandbox.mock().twice(),
-                        },
-                    },
-                },
+            const mockHotkeyLayer = {
+                registerHotkey: sandbox.stub(),
+                deregisterHotkey: sandbox.mock().twice(),
+            };
+
+            const wrapper = mount(
+                <HotkeyTestWrapper
+                    contextValue={mockHotkeyLayer}
+                    initialState={{ configs }}
+                    renderChild={state => (
+                        <Hotkeys configs={state.configs}>
+                            <div />
+                        </Hotkeys>
+                    )}
+                />,
             );
 
-            wrapper.setProps({
-                configs: [configs[1]],
+            act(() => {
+                wrapper.find('HotkeyTestWrapper').setState({ configs: [configs[1]] });
             });
+
+            wrapper.update();
         });
 
         test('should throw error when hotkey layer does not exist', () => {
@@ -98,64 +101,69 @@ describe('components/hotkeys/Hotkeys', () => {
                 },
             );
 
+            // componentDidUpdate would throw when trying to add hotkeys if context is null
             expect(() => {
-                wrapper.instance().componentDidMount();
+                wrapper.instance().componentDidUpdate({
+                    configs: [new HotkeyRecord({ key: 'a' })],
+                });
             }).toThrow();
         });
     });
 
     describe('componentWillUnmount()', () => {
         test('should call hotkeyLayer.deregisterHotkey for each hotkey config', () => {
-            shallow(
-                <Hotkeys
-                    configs={[
-                        new HotkeyRecord({ key: 'a' }),
-                        new HotkeyRecord({ key: 'b' }),
-                        new HotkeyRecord({ key: 'c' }),
-                    ]}
-                >
-                    <div />
-                </Hotkeys>,
-                {
-                    context: {
-                        hotkeyLayer: {
-                            registerHotkey: sandbox.stub(),
-                            deregisterHotkey: sandbox.mock().thrice(),
-                        },
-                    },
-                },
-            ).unmount();
+            const mockHotkeyLayer = {
+                registerHotkey: sandbox.stub(),
+                deregisterHotkey: sandbox.mock().thrice(),
+            };
+
+            const wrapper = mount(
+                <HotkeyContext.Provider value={mockHotkeyLayer}>
+                    <Hotkeys
+                        configs={[
+                            new HotkeyRecord({ key: 'a' }),
+                            new HotkeyRecord({ key: 'b' }),
+                            new HotkeyRecord({ key: 'c' }),
+                        ]}
+                    >
+                        <div />
+                    </Hotkeys>
+                </HotkeyContext.Provider>,
+            );
+
+            wrapper.unmount();
         });
     });
 
     describe('render()', () => {
         test('should render children', () => {
-            const wrapper = shallow(
-                <Hotkeys configs={[]}>
-                    <div>hi</div>
-                </Hotkeys>,
-                {
-                    context: {
-                        hotkeyLayer: {
-                            registerHotkey: sandbox.stub(),
-                        },
-                    },
-                },
+            const mockHotkeyLayer = {
+                registerHotkey: sandbox.stub(),
+            };
+
+            const wrapper = mount(
+                <HotkeyContext.Provider value={mockHotkeyLayer}>
+                    <Hotkeys configs={[]}>
+                        <div>hi</div>
+                    </Hotkeys>
+                </HotkeyContext.Provider>,
             );
 
             expect(wrapper.contains(<div>hi</div>)).toBe(true);
         });
 
         test('should render null when no children', () => {
-            const wrapper = shallow(<Hotkeys configs={[]} />, {
-                context: {
-                    hotkeyLayer: {
-                        registerHotkey: sandbox.stub(),
-                    },
-                },
-            });
+            const mockHotkeyLayer = {
+                registerHotkey: sandbox.stub(),
+            };
 
-            expect(wrapper.type()).toBeNull();
+            const wrapper = mount(
+                <HotkeyContext.Provider value={mockHotkeyLayer}>
+                    <Hotkeys configs={[]} />
+                </HotkeyContext.Provider>,
+            );
+
+            expect(wrapper.find('Hotkeys').children().length).toBe(0);
         });
     });
 });

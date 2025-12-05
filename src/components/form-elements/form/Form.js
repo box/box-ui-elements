@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import serialize from 'form-serialize';
 
+import { FormContext } from './FormContext';
+
 function getFormValidityState(form) {
     // Turn the form.elements HTMLCollection into Array before reducing
     return [].slice.call(form.elements).reduce((validityObj, inputEl) => {
@@ -37,27 +39,11 @@ class Form extends Component {
         formValidityState: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
     };
 
-    static childContextTypes = {
-        form: PropTypes.shape({
-            registerInput: PropTypes.func.isRequired,
-            unregisterInput: PropTypes.func.isRequired,
-        }).isRequired,
-    };
-
     constructor(props) {
         super(props);
 
         this.state = {
             registeredInputs: {},
-        };
-    }
-
-    getChildContext() {
-        return {
-            form: {
-                registerInput: this.registerInput.bind(this),
-                unregisterInput: this.unregisterInput.bind(this),
-            },
         };
     }
 
@@ -129,9 +115,18 @@ class Form extends Component {
     render() {
         const { children } = this.props;
         return (
-            <form noValidate onChange={this.onChange} onSubmit={this.onSubmit}>
-                {children}
-            </form>
+            <FormContext.Provider
+                value={{
+                    form: {
+                        registerInput: this.registerInput,
+                        unregisterInput: this.unregisterInput,
+                    },
+                }}
+            >
+                <form noValidate onChange={this.onChange} onSubmit={this.onSubmit}>
+                    {children}
+                </form>
+            </FormContext.Provider>
         );
     }
 }

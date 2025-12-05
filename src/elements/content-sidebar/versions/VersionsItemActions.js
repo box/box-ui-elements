@@ -5,7 +5,10 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { IconButton } from '@box/blueprint-web';
+import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill';
+import { useFeatureConfig } from '../../common/feature-checking/hooks';
 import DropdownMenu from '../../../components/dropdown-menu';
 import IconClockPast from '../../../icons/general/IconClockPast';
 import IconDownload from '../../../icons/general/IconDownload';
@@ -59,6 +62,9 @@ const VersionsItemActions = ({
     showPromote = false,
     showRestore = false,
 }: Props) => {
+    const { enabled: isPreviewModernizationEnabled } = useFeatureConfig('previewModernization');
+    const { formatMessage } = useIntl();
+
     if (!showDelete && !showDownload && !showPreview && !showPromote && !showRestore) {
         return null;
     }
@@ -71,19 +77,32 @@ const VersionsItemActions = ({
             isRightAligned
             onMenuClose={handleMenuClose}
         >
-            <PlainButton
-                className="bcs-VersionsItemActions-toggle"
-                data-resin-iscurrent={isCurrent}
-                data-resin-itemid={fileId}
-                data-resin-target="overflow"
-                onClick={handleToggleClick}
-                type="button"
-            >
-                <IconEllipsis height={4} width={14} />
-                <FormattedMessage {...messages.versionActionToggle}>
-                    {(text: string) => <span className="accessibility-hidden">{text}</span>}
-                </FormattedMessage>
-            </PlainButton>
+            {isPreviewModernizationEnabled ? (
+                <IconButton
+                    aria-label={formatMessage(messages.versionActionToggle)}
+                    className="bcs-VersionsItemActions-toggle--modernized"
+                    data-resin-iscurrent={isCurrent}
+                    data-resin-itemid={fileId}
+                    data-resin-target="overflow"
+                    icon={Ellipsis}
+                    size="small"
+                    onClick={handleToggleClick}
+                />
+            ) : (
+                <PlainButton
+                    className="bcs-VersionsItemActions-toggle"
+                    data-resin-iscurrent={isCurrent}
+                    data-resin-itemid={fileId}
+                    data-resin-target="overflow"
+                    onClick={handleToggleClick}
+                    type="button"
+                >
+                    <IconEllipsis height={4} width={14} />
+                    <FormattedMessage {...messages.versionActionToggle}>
+                        {(text: string) => <span className="accessibility-hidden">{text}</span>}
+                    </FormattedMessage>
+                </PlainButton>
+            )}
 
             <Menu
                 className="bcs-VersionsItemActions-menu"

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import sinon from 'sinon';
+import { shallow } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
 import HotkeyLayer from '../HotkeyLayer';
@@ -18,16 +19,17 @@ describe('components/hotkeys/HotkeyLayer', () => {
         HotkeyService.mockClear();
     });
 
-    describe('getChildContext()', () => {
-        test('should return the hotkey service', () => {
+    describe('HotkeyContext.Provider', () => {
+        test('should provide the hotkey service via context', () => {
             const wrapper = shallow(
                 <HotkeyLayer>
                     <div />
                 </HotkeyLayer>,
             );
 
-            const context = wrapper.instance().getChildContext();
-            expect(context.hotkeyLayer).toEqual(wrapper.instance().hotkeyService);
+            const provider = wrapper.find('ContextProvider');
+            expect(provider.length).toBe(1);
+            expect(provider.prop('value')).toEqual(wrapper.instance().hotkeyService);
         });
     });
 
