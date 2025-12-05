@@ -7,10 +7,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 import './SidebarContent.scss';
 
-export interface SidebarContentProps {
+export interface SidebarContentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     actions?: React.ReactNode;
-    children: React.ReactNode;
-    className?: string;
     elementId?: string;
     sidebarView?: string;
     title?: React.ReactNode;

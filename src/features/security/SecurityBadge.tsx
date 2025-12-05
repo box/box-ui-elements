@@ -5,7 +5,7 @@ import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import { bdlYellow50 } from '../../styles/variables';
 import './SecurityBadge.scss';
 
-export interface SecurityBadgeProps {
+export interface SecurityBadgeProps extends React.HTMLAttributes<HTMLHeadingElement> {
     className?: string;
     color?: string;
     icon?: React.ReactNode;
