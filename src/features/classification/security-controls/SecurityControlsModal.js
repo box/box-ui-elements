@@ -28,9 +28,9 @@ const SecurityControlsModal = ({
     definition,
     classificationColor,
     classificationName,
-    isSecurityControlsModalOpen,
+    isSecurityControlsModalOpen = false,
     itemName,
-    modalItems,
+    modalItems = [],
 }: Props) => {
     if (!itemName || !classificationName || !definition) {
         return null;
@@ -64,11 +64,6 @@ const SecurityControlsModal = ({
             </ModalActions>
         </Modal>
     );
-};
-
-SecurityControlsModal.defaultProps = {
-    isSecurityControlsModalOpen: false,
-    modalItems: [],
 };
 
 export default SecurityControlsModal;

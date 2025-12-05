@@ -19,10 +19,10 @@ type Props = {
 
 const SlideCarouselPrimitive = ({
     children,
-    className,
+    className = '',
     contentHeight,
     idPrefix = '',
-    onSelection,
+    onSelection = () => {},
     selectedIndex,
     title,
 }: Props) => {
@@ -53,11 +53,5 @@ const SlideCarouselPrimitive = ({
 };
 
 SlideCarouselPrimitive.displayName = 'SlideCarouselPrimitive';
-
-SlideCarouselPrimitive.defaultProps = {
-    className: '',
-    idPrefix: '',
-    onSelection: () => {},
-};
 
 export default SlideCarouselPrimitive;

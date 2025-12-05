@@ -17,7 +17,16 @@ type Props = {
     title?: React.Node,
     subheader?: React.Node,
 };
-const SidebarContent = ({ actions, children, className, elementId, sidebarView, title, subheader, ...rest }: Props) => {
+const SidebarContent = ({
+    actions,
+    children,
+    className,
+    elementId = '',
+    sidebarView = '',
+    title,
+    subheader,
+    ...rest
+}: Props) => {
     const label = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
     const id = `${label}-content`;
 
@@ -40,11 +49,6 @@ const SidebarContent = ({ actions, children, className, elementId, sidebarView, 
             </div>
         </div>
     );
-};
-
-SidebarContent.defaultProps = {
-    elementId: '',
-    sidebarView: '',
 };
 
 export default SidebarContent;
