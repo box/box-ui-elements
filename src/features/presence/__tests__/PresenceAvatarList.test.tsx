@@ -132,7 +132,7 @@ describe('features/presence/PresenceAvatarList', () => {
                 expect(wrapper.find(PresenceAvatar).first().prop('data-resin-target')).toEqual('avatar');
             });
 
-            test('should correctly render collaborators with additional count when number of collaborators is greater than maxAddionalCollaboratorsNum + maxDisplayedAvatars', () => {
+            test('should correctly render collaborators with additional count when number of collaborators is greater than maxAdditionalCollaborators + maxDisplayedAvatars', () => {
                 const maxDisplayedAvatars = 2;
                 const maxAdditionalCollaborators = 1;
                 const wrapper = getWrapper({
@@ -145,7 +145,7 @@ describe('features/presence/PresenceAvatarList', () => {
                 expect(wrapper.find('.bdl-PresenceAvatarList-count').text()).toBe('1+');
             });
 
-            test('should correctly render collaborators with additional count when number of collaborators is less than maxAddionalCollaboratorsNum + maxDisplayedAvatars', () => {
+            test('should correctly render collaborators with additional count when number of collaborators is less than maxAdditionalCollaborators + maxDisplayedAvatars', () => {
                 const maxDisplayedAvatars = 2;
                 const maxAdditionalCollaborators = 10;
                 const wrapper = getWrapper({
