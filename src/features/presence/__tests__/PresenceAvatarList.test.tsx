@@ -58,14 +58,12 @@ describe('features/presence/PresenceAvatarList', () => {
                 expect(wrapper.exists('.bdl-PresenceAvatarList-count')).toBe(false);
             });
 
-            test('should hide tooltips when hideTooltips is true and isPreviewModernizationEnabled is true', () => {
+            test('should hide tooltips when hideTooltips is true ', () => {
                 const wrapper = getWrapper({
                     hideTooltips: true,
-                    isPreviewModernizationEnabled: true,
+                    isPreviewModernizationEnabled,
                 });
 
-                // When hideTooltips is true and isPreviewModernizationEnabled is true,
-                // avatars should be rendered without BPTooltip wrapper
                 expect(wrapper.find(PresenceAvatar).length).toBeGreaterThan(0);
                 expect(wrapper.find(BPTooltip).length).toBe(0);
             });
