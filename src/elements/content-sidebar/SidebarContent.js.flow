@@ -17,12 +17,13 @@ type Props = {
     title?: React.Node,
     subheader?: React.Node,
 };
+
 const SidebarContent = ({
     actions,
     children,
     className,
-    elementId = '',
-    sidebarView = '',
+    elementId,
+    sidebarView,
     title,
     subheader,
     ...rest
@@ -51,4 +52,10 @@ const SidebarContent = ({
     );
 };
 
+SidebarContent.defaultProps = {
+    elementId: '',
+    sidebarView: '',
+};
+
 export default SidebarContent;
+
