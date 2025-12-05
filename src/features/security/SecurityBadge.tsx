@@ -10,7 +10,6 @@ export interface SecurityBadgeProps {
     color?: string;
     icon?: React.ReactNode;
     message: React.ReactNode;
-    strokeColor?: string;
 }
 
 const SecurityBadge = ({
