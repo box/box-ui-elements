@@ -2,8 +2,11 @@
 import * as React from 'react';
 import { type RouterHistory } from 'react-router-dom';
 import { withRouterIfEnabled } from '../common/routing';
+import { withFeatureConsumer, getFeatureConfig } from '../common/feature-checking';
+import type { FeatureConfig } from '../common/feature-checking';
 
 import AddTaskMenu from './AddTaskMenu';
+import AddTaskMenuV2 from './AddTaskMenuV2';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
@@ -12,6 +15,7 @@ import type { ElementsXhrError } from '../../common/types/api';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type Props = {|
+    features: FeatureConfig,
     history?: RouterHistory,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
@@ -79,16 +83,24 @@ class AddTaskButton extends React.Component<Props, State> {
     };
 
     render() {
-        const { isDisabled, taskFormProps } = this.props;
+        const { features, isDisabled, taskFormProps } = this.props;
         const { isTaskFormOpen, taskType, error } = this.state;
+        const featureConfig = getFeatureConfig(features, 'previewModernization');
+        const { enabled: isPreviewModernizationEnabled } = featureConfig || {};
+
+        const addTaskMenuProps = {
+            isDisabled,
+            onMenuItemClick: this.handleClickMenuItem,
+            setAddTaskButtonRef: this.setAddTaskButtonRef,
+        };
 
         return (
             <>
-                <AddTaskMenu
-                    isDisabled={isDisabled}
-                    onMenuItemClick={this.handleClickMenuItem}
-                    setAddTaskButtonRef={this.setAddTaskButtonRef}
-                />
+                {isPreviewModernizationEnabled ? (
+                    <AddTaskMenuV2 {...addTaskMenuProps} />
+                ) : (
+                    <AddTaskMenu {...addTaskMenuProps} />
+                )}
                 <TaskModal
                     error={error}
                     onSubmitError={this.handleSubmitError}
@@ -104,4 +116,4 @@ class AddTaskButton extends React.Component<Props, State> {
 }
 
 export { AddTaskButton as AddTaskButtonComponent };
-export default withRouterIfEnabled(AddTaskButton);
+export default withFeatureConsumer(withRouterIfEnabled(AddTaskButton));
