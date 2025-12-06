@@ -29,9 +29,9 @@ type Props = VirtualizedTableProps & {
 const DraggableVirtualizedTable = ({
     children,
     className,
-    onDragEnd,
+    onDragEnd = noop,
     rowData,
-    shouldShowDragHandle,
+    shouldShowDragHandle = true,
     tableId,
     ...rest
 }: Props) => {
@@ -83,10 +83,5 @@ const DraggableVirtualizedTable = ({
 };
 
 DraggableVirtualizedTable.displayName = 'DraggableVirtualizedTable';
-
-DraggableVirtualizedTable.defaultProps = {
-    onDragEnd: noop,
-    shouldShowDragHandle: true,
-};
 
 export default DraggableVirtualizedTable;

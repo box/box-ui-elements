@@ -1,6 +1,7 @@
 // @flow
 import classNames from 'classnames';
 import * as React from 'react';
+import noop from 'lodash/noop';
 
 import CarouselHeader from './CarouselHeader';
 import SlideNavigator from './SlideNavigator';
@@ -19,10 +20,10 @@ type Props = {
 
 const SlideCarouselPrimitive = ({
     children,
-    className,
+    className = '',
     contentHeight,
     idPrefix = '',
-    onSelection,
+    onSelection = noop,
     selectedIndex,
     title,
 }: Props) => {
@@ -53,11 +54,5 @@ const SlideCarouselPrimitive = ({
 };
 
 SlideCarouselPrimitive.displayName = 'SlideCarouselPrimitive';
-
-SlideCarouselPrimitive.defaultProps = {
-    className: '',
-    idPrefix: '',
-    onSelection: () => {},
-};
 
 export default SlideCarouselPrimitive;

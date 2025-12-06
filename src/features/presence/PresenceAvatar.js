@@ -7,7 +7,7 @@ import Avatar from '../../components/avatar';
 const PresenceAvatar = ({
     avatarUrl,
     id,
-    isActive,
+    isActive = false,
     name,
     onMouseEnter,
     onMouseLeave,
@@ -42,10 +42,6 @@ PresenceAvatar.propTypes = {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     isDropDownAvatar: PropTypes.bool,
-};
-
-PresenceAvatar.defaultProps = {
-    isActive: false,
 };
 
 export default PresenceAvatar;

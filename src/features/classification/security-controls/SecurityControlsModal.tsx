@@ -1,37 +1,39 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Modal, ModalActions } from '../../../components/modal';
-import commonMessages from '../../../common/messages';
-import Button from '../../../components/button';
-import classificationMessages from '../messages';
+import Button, { ButtonType } from '../../../components/button';
 import ClassifiedBadge from '../ClassifiedBadge';
 import Label from '../../../components/label/Label';
-import messages from './messages';
 import SecurityControlsItem from './SecurityControlsItem';
-import './SecurityControlsModal.scss';
+
 import type { MessageItem } from '../flowTypes';
 
-type Props = {
-    classificationColor?: string,
-    classificationName?: string,
-    closeModal: Function,
-    definition?: string,
-    isSecurityControlsModalOpen: boolean,
-    itemName?: string,
-    modalItems: Array<MessageItem>,
-};
+import commonMessages from '../../../common/messages';
+import classificationMessages from '../messages';
+import messages from './messages';
+
+import './SecurityControlsModal.scss';
+
+export interface SecurityControlsModalProps {
+    classificationColor?: string;
+    classificationName?: string;
+    closeModal: () => void;
+    definition?: string;
+    isSecurityControlsModalOpen?: boolean;
+    itemName?: string;
+    modalItems?: Array<MessageItem>;
+}
 
 const SecurityControlsModal = ({
     closeModal,
     definition,
     classificationColor,
     classificationName,
-    isSecurityControlsModalOpen,
+    isSecurityControlsModalOpen = false,
     itemName,
-    modalItems,
-}: Props) => {
+    modalItems = [],
+}: SecurityControlsModalProps) => {
     if (!itemName || !classificationName || !definition) {
         return null;
     }
@@ -48,7 +50,7 @@ const SecurityControlsModal = ({
             <p>
                 <FormattedMessage {...messages.modalDescription} />
             </p>
-            <ClassifiedBadge color={classificationColor} name={((classificationName: any): string)} />
+            <ClassifiedBadge color={classificationColor} name={classificationName as string} />
             <Label text={<FormattedMessage {...classificationMessages.definition} />}>
                 <p className="bdl-SecurityControlsModal-definition">{definition}</p>
             </Label>
@@ -58,17 +60,12 @@ const SecurityControlsModal = ({
                 ))}
             </ul>
             <ModalActions>
-                <Button onClick={closeModal} type="button">
+                <Button onClick={closeModal} type={ButtonType.BUTTON}>
                     <FormattedMessage {...commonMessages.close} />
                 </Button>
             </ModalActions>
         </Modal>
     );
-};
-
-SecurityControlsModal.defaultProps = {
-    isSecurityControlsModalOpen: false,
-    modalItems: [],
 };
 
 export default SecurityControlsModal;

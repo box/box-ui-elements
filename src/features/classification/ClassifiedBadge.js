@@ -19,7 +19,13 @@ type Props = {
 
 const ICON_SIZE = 12;
 
-const ClassifiedBadge = ({ color, name, onClick, tooltipPosition = 'bottom-center', tooltipText }: Props) => {
+const ClassifiedBadge = ({
+    color = bdlYellow50,
+    name,
+    onClick,
+    tooltipPosition = 'bottom-center',
+    tooltipText,
+}: Props) => {
     const isClickable = typeof onClick === 'function';
     const isTooltipDisabled = !tooltipText;
     const badge = (
@@ -46,10 +52,6 @@ const ClassifiedBadge = ({ color, name, onClick, tooltipPosition = 'bottom-cente
             )}
         </Tooltip>
     );
-};
-
-ClassifiedBadge.defaultProps = {
-    color: bdlYellow50,
 };
 
 export default ClassifiedBadge;

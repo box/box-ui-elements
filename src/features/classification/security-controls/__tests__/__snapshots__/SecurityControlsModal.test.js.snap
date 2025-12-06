@@ -30,7 +30,6 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     />
   </p>
   <ClassifiedBadge
-    color="#ffeb7f"
     name="internal"
   />
   <Label
