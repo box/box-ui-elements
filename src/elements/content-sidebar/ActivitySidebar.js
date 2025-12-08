@@ -1154,8 +1154,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
             }
 
-            const isVideoAnnotation = annotation?.target?.location?.type === 'frame';
-            onAnnotationSelect(annotation, isVideoAnnotation);
+            const deferScrollToOnload = annotation?.target?.location?.type === 'frame';
+            onAnnotationSelect(annotation, deferScrollToOnload);
         } else {
             onAnnotationSelect(annotation);
         }
