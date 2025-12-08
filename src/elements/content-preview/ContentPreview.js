@@ -1232,7 +1232,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
         const handleLoadedData = () => {
             const newViewer = this.getViewer();
-            newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+            if (newViewer) {
+                newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+            }
             videoPlayer.removeEventListener('loadeddata', handleLoadedData);
         };
         videoPlayer.addEventListener('loadeddata', handleLoadedData);
