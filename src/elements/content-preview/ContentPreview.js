@@ -1217,6 +1217,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
+    emitScrollToAnnotation = (id: string, target: Target) => {
+        const newViewer = this.getViewer();
+        if (newViewer) {
+            newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+        }
+    };
+
     /**
      * Handles scrolling to a frame-based annotation by waiting for video player to load first
      *
@@ -1230,11 +1237,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.dynamicOnPreviewLoadAction = null;
             return;
         }
+
+        const videoReadyToScroll = videoPlayer.readyState === 4;
+        if (videoReadyToScroll) {
+            this.emitScrollToAnnotation(id, target);
+            return;
+        }
         const handleLoadedData = () => {
-            const newViewer = this.getViewer();
-            if (newViewer) {
-                newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
-            }
+            this.emitScrollToAnnotation(id, target);
             videoPlayer.removeEventListener('loadeddata', handleLoadedData);
         };
         videoPlayer.addEventListener('loadeddata', handleLoadedData);
