@@ -1238,7 +1238,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         videoPlayer.addEventListener('loadeddata', handleLoadedData);
     };
 
-    handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload = false) => {
+    handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload: boolean = false) => {
         const { location = {} } = target;
         const { file, selectedVersion } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');
