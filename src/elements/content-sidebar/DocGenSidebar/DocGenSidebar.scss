@@ -35,6 +35,10 @@
     overflow: 'auto' 'auto';
 }
 
+.bcs-DocGen-tagPath {
+    padding-left: var(--space-1);
+}
+
 .bcs-DocGen-accordion * {
     width: auto;
     padding: 0;
@@ -47,9 +51,13 @@
 }
 
 .bcs-DocGen-collapsible {
-    padding-top: var(--space-3);
-    padding-right: var(--space-6);
+    min-width: 0;
     border: none;
+    width: 100%;
+
+    * {
+        text-transform: unset;
+    }
 }
 
 .bcs-DocGenSidebar-loading {
