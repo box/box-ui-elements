@@ -194,6 +194,7 @@ const startAtTypes = {
 const InvalidIdError = new Error('Invalid id for Preview!');
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
+const SCROLL_TO_ANNOTATION_EVENT = 'scrolltoannotation';
 
 mark(MARK_NAME_JS_READY);
 
@@ -1231,7 +1232,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
         const handleLoadedData = () => {
             const newViewer = this.getViewer();
-            newViewer.emit('scrolltoannotation', { id, target });
+            newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
             videoPlayer.removeEventListener('loadeddata', handleLoadedData);
         };
         videoPlayer.addEventListener('loadeddata', handleLoadedData);
@@ -1256,14 +1257,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         if (viewer && !deferScrollToOnload) {
-            viewer.emit('scrolltoannotation', { id, target });
+            viewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
         } else if (viewer && deferScrollToOnload) {
             this.dynamicOnPreviewLoadAction = () => {
                 if (target?.location?.type === 'frame') {
                     this.scrollToFrameAnnotation(id, target);
                 } else {
                     const newViewer = this.getViewer();
-                    newViewer.emit('scrolltoannotation', { id, target });
+                    newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
                 }
                 this.dynamicOnPreviewLoadAction = null;
             };
