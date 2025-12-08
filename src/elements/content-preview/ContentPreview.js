@@ -1232,7 +1232,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     scrollToFrameAnnotation = (id: string, target: Target): void => {
-        const videoPlayer = document.querySelector('.bp-media-container video');
+        // $FlowFixMe: querySelector('video') returns an HTMLVideoElement
+        const videoPlayer: HTMLVideoElement = document.querySelector('.bp-media-container video');
         if (!videoPlayer) {
             this.dynamicOnPreviewLoadAction = null;
             return;
