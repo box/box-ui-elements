@@ -364,8 +364,5 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
-    },
-    "resolutions": {
-        "node-forge": "1.3.2"
     }
 }
