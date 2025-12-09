@@ -48,23 +48,45 @@ const SidebarToggleButton = ({
         return isOpen ? <IconHide height={16} width={16} /> : <IconShow height={16} width={16} />;
     };
 
+    // Adding this to stop the mousedown event from being propogated up to box-annnotatoins as
+    // that will cause the active annotation to no longer be active which means that it will not be displayed.
+    // This  causes video annotations not to work properly.
+    const mouseDownHandler = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
     if (isPreviewModernizationEnabled) {
         const tooltipPositionModernized = direction === DIRECTION_LEFT ? DIRECTION_RIGHT : DIRECTION_LEFT;
 
         return (
-            <BPTooltip content={intlText} side={tooltipPositionModernized}>
+            <BPTooltip content={intlText} side={tooltipPositionModernized} onMouseDown={mouseDownHandler}>
                 {/* Workaround to attach BP tooltip to legacy button, remove span when buttons are migrated to BP */}
-                <span>
-                    <PlainButton aria-label={intlText} className={classes} onClick={onClick} type="button" {...rest}>
-                        {renderButton()}
+                <span onMouseDown={mouseDownHandler} role="presentation">
+                    <PlainButton
+                        aria-label={intlText}
+                        className={classes}
+                        onClick={onClick}
+                        onMouseDown={mouseDownHandler}
+                        type="button"
+                        {...rest}
+                    >
+                        {renderButton()}x
                     </PlainButton>
                 </span>
             </BPTooltip>
         );
     }
     return (
-        <Tooltip position={tooltipPosition} text={intlText}>
-            <PlainButton aria-label={intlText} className={classes} onClick={onClick} type="button" {...rest}>
+        <Tooltip position={tooltipPosition} text={intlText} onMouseDown={mouseDownHandler}>
+            <PlainButton
+                aria-label={intlText}
+                className={classes}
+                onClick={onClick}
+                onMouseDown={mouseDownHandler}
+                type="button"
+                {...rest}
+            >
                 {renderButton()}
             </PlainButton>
         </Tooltip>
