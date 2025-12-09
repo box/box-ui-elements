@@ -22,7 +22,7 @@ const MediaFigure = ({ as: Wrapper, className, children, ...rest }: Props) => (
 // that affects union types
 // https://github.com/facebook/flow/issues/5461
 MediaFigure.defaultProps = {
-    as: 'figure',
+    as: 'div',
 };
 
 export default MediaFigure;

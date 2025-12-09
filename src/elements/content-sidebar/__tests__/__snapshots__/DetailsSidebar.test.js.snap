@@ -3,7 +3,6 @@
 exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with access stats 1`] = `
 <SidebarContent
   className="bcs-details"
-  elementId=""
   sidebarView="details"
   title={
     <FormattedMessage
@@ -26,7 +25,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with all components 1`] = `
 <SidebarContent
   className="bcs-details"
-  elementId=""
   sidebarView="details"
   title={
     <FormattedMessage
@@ -107,7 +105,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with notices 1`] = `
 <SidebarContent
   className="bcs-details"
-  elementId=""
   sidebarView="details"
   title={
     <FormattedMessage
@@ -134,7 +131,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with properties 1`] = `
 <SidebarContent
   className="bcs-details"
-  elementId=""
   sidebarView="details"
   title={
     <FormattedMessage
@@ -172,7 +168,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with versions 1`] = `
 <SidebarContent
   className="bcs-details"
-  elementId=""
   sidebarView="details"
   title={
     <FormattedMessage
@@ -186,7 +181,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 exports[`elements/content-sidebar/DetailsSidebar render() should render an empty container if there is no file information 1`] = `
 <SidebarContent
   className="bcs-details"
-  elementId=""
   sidebarView="details"
   title={
     <FormattedMessage
