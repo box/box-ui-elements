@@ -1,5 +1,509 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/sidebar-toggle-button/SidebarToggleButton previewModernization feature enabled should render IconButton when previewModernization is enabled and sidebar is closed (left direction) 1`] = `
+<SidebarToggleButton
+  direction="left"
+  isOpen={false}
+>
+  <SidebarToggleButton
+    direction="left"
+    intl={
+      {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+        "formatNumber": [Function],
+        "formatRelativeTime": [Function],
+      }
+    }
+    isOpen={false}
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="middle-right"
+      text="Show Sidebar"
+      theme="default"
+    >
+      <TetherComponent
+        attachment="middle left"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          [
+            {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
+        }
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle right"
+      >
+        <IconButton
+          aria-label="Show Sidebar"
+          icon={[Function]}
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          size="large"
+          tabIndex="0"
+          variant="high-contrast"
+        >
+          <Button2
+            aria-label="Show Sidebar"
+            className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+            tabIndex="0"
+          >
+            <button
+              aria-label="Show Sidebar"
+              className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+              onBlur={[Function]}
+              onClickCapture={[Function]}
+              onFocus={[Function]}
+              onFocusCapture={[Function]}
+              onKeyDown={[Function]}
+              onKeyDownCapture={[Function]}
+              onKeyPressCapture={[Function]}
+              onKeyUp={[Function]}
+              onLoadedMetadataCapture={[Function]}
+              onMouseDown={[Function]}
+              onMouseDownCapture={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              tabIndex="0"
+              type="button"
+            >
+              <IconRightSidebarChevronClose
+                className="bp_icon_button_module_icon--cb154"
+                height="1.5rem"
+                role="presentation"
+                width="1.5rem"
+              >
+                <AccessibleSVG
+                  className="icon-show bp_icon_button_module_icon--cb154"
+                  height="1.5rem"
+                  viewBox="0 0 24 24"
+                  width="1.5rem"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="icon-show bp_icon_button_module_icon--cb154"
+                    focusable="false"
+                    height="1.5rem"
+                    role="presentation"
+                    viewBox="0 0 24 24"
+                    width="1.5rem"
+                  >
+                    <path
+                      d="M15.707 9.29297C15.3165 8.90245 14.6835 8.90245 14.293 9.29297C13.9024 9.68349 13.9024 10.3165 14.293 10.707L15.5859 12L14.293 13.293C13.9024 13.6835 13.9024 14.3165 14.293 14.707C14.6835 15.0975 15.3165 15.0975 15.707 14.707L17.707 12.707C18.0975 12.3165 18.0975 11.6835 17.707 11.293L15.707 9.29297Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                    />
+                    <path
+                      clip-rule="evenodd"
+                      d="M7 4C4.23858 4 2 6.23858 2 9V15C2 17.7614 4.23858 20 7 20H17C19.6753 20 21.8595 17.8989 21.9932 15.2568L22 15V9C22 6.23858 19.7614 4 17 4H7ZM17 6C18.6569 6 20 7.34315 20 9V15L19.9961 15.1543C19.9158 16.7394 18.6051 18 17 18H12V6H17ZM10 18H7C5.34315 18 4 16.6569 4 15V9C4 7.34315 5.34315 6 7 6H10V18Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </AccessibleSVG>
+              </IconRightSidebarChevronClose>
+            </button>
+          </Button2>
+        </IconButton>
+      </TetherComponent>
+    </Tooltip>
+  </SidebarToggleButton>
+</SidebarToggleButton>
+`;
+
+exports[`components/sidebar-toggle-button/SidebarToggleButton previewModernization feature enabled should render IconButton when previewModernization is enabled and sidebar is closed (right direction) 1`] = `
+<SidebarToggleButton
+  isOpen={false}
+>
+  <SidebarToggleButton
+    intl={
+      {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+        "formatNumber": [Function],
+        "formatRelativeTime": [Function],
+      }
+    }
+    isOpen={false}
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="middle-left"
+      text="Show Sidebar"
+      theme="default"
+    >
+      <TetherComponent
+        attachment="middle right"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          [
+            {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
+        }
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle left"
+      >
+        <IconButton
+          aria-label="Show Sidebar"
+          icon={[Function]}
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          size="large"
+          tabIndex="0"
+          variant="high-contrast"
+        >
+          <Button2
+            aria-label="Show Sidebar"
+            className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+            tabIndex="0"
+          >
+            <button
+              aria-label="Show Sidebar"
+              className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+              onBlur={[Function]}
+              onClickCapture={[Function]}
+              onFocus={[Function]}
+              onFocusCapture={[Function]}
+              onKeyDown={[Function]}
+              onKeyDownCapture={[Function]}
+              onKeyPressCapture={[Function]}
+              onKeyUp={[Function]}
+              onLoadedMetadataCapture={[Function]}
+              onMouseDown={[Function]}
+              onMouseDownCapture={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              tabIndex="0"
+              type="button"
+            >
+              <IconRightSidebarChevronOpen
+                className="bp_icon_button_module_icon--cb154"
+                height="1.5rem"
+                role="presentation"
+                width="1.5rem"
+              >
+                <AccessibleSVG
+                  className="icon-show bp_icon_button_module_icon--cb154"
+                  height="1.5rem"
+                  viewBox="0 0 24 24"
+                  width="1.5rem"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="icon-show bp_icon_button_module_icon--cb154"
+                    focusable="false"
+                    height="1.5rem"
+                    role="presentation"
+                    viewBox="0 0 24 24"
+                    width="1.5rem"
+                  >
+                    <path
+                      d="M17.707 9.29297C17.3165 8.90245 16.6835 8.90247 16.293 9.29297L14.293 11.293C13.9024 11.6835 13.9024 12.3165 14.293 12.707L16.293 14.707C16.6835 15.0975 17.3165 15.0975 17.707 14.707C18.0975 14.3165 18.0975 13.6835 17.707 13.293L16.4141 12L17.707 10.707C18.0975 10.3165 18.0975 9.68349 17.707 9.29297Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                    />
+                    <path
+                      clip-rule="evenodd"
+                      d="M7 4C4.23858 4 2 6.23858 2 9V15C2 17.7614 4.23858 20 7 20H17C19.6753 20 21.8595 17.8989 21.9932 15.2568L22 15V9C22 6.23858 19.7614 4 17 4H7ZM17 6C18.6569 6 20 7.34315 20 9V15L19.9961 15.1543C19.9158 16.7394 18.6051 18 17 18H12V6H17ZM10 18H7C5.34315 18 4 16.6569 4 15V9C4 7.34315 5.34315 6 7 6H10V18Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </AccessibleSVG>
+              </IconRightSidebarChevronOpen>
+            </button>
+          </Button2>
+        </IconButton>
+      </TetherComponent>
+    </Tooltip>
+  </SidebarToggleButton>
+</SidebarToggleButton>
+`;
+
+exports[`components/sidebar-toggle-button/SidebarToggleButton previewModernization feature enabled should render IconButton when previewModernization is enabled and sidebar is open (left direction) 1`] = `
+<SidebarToggleButton
+  direction="left"
+  isOpen={true}
+>
+  <SidebarToggleButton
+    direction="left"
+    intl={
+      {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+        "formatNumber": [Function],
+        "formatRelativeTime": [Function],
+      }
+    }
+    isOpen={true}
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="middle-right"
+      text="Hide Sidebar"
+      theme="default"
+    >
+      <TetherComponent
+        attachment="middle left"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          [
+            {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
+        }
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle right"
+      >
+        <IconButton
+          aria-label="Hide Sidebar"
+          icon={[Function]}
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          size="large"
+          tabIndex="0"
+          variant="high-contrast"
+        >
+          <Button2
+            aria-label="Hide Sidebar"
+            className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+            tabIndex="0"
+          >
+            <button
+              aria-label="Hide Sidebar"
+              className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+              onBlur={[Function]}
+              onClickCapture={[Function]}
+              onFocus={[Function]}
+              onFocusCapture={[Function]}
+              onKeyDown={[Function]}
+              onKeyDownCapture={[Function]}
+              onKeyPressCapture={[Function]}
+              onKeyUp={[Function]}
+              onLoadedMetadataCapture={[Function]}
+              onMouseDown={[Function]}
+              onMouseDownCapture={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              tabIndex="0"
+              type="button"
+            >
+              <IconRightSidebarChevronOpen
+                className="bp_icon_button_module_icon--cb154"
+                height="1.5rem"
+                role="presentation"
+                width="1.5rem"
+              >
+                <AccessibleSVG
+                  className="icon-show bp_icon_button_module_icon--cb154"
+                  height="1.5rem"
+                  viewBox="0 0 24 24"
+                  width="1.5rem"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="icon-show bp_icon_button_module_icon--cb154"
+                    focusable="false"
+                    height="1.5rem"
+                    role="presentation"
+                    viewBox="0 0 24 24"
+                    width="1.5rem"
+                  >
+                    <path
+                      d="M17.707 9.29297C17.3165 8.90245 16.6835 8.90247 16.293 9.29297L14.293 11.293C13.9024 11.6835 13.9024 12.3165 14.293 12.707L16.293 14.707C16.6835 15.0975 17.3165 15.0975 17.707 14.707C18.0975 14.3165 18.0975 13.6835 17.707 13.293L16.4141 12L17.707 10.707C18.0975 10.3165 18.0975 9.68349 17.707 9.29297Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                    />
+                    <path
+                      clip-rule="evenodd"
+                      d="M7 4C4.23858 4 2 6.23858 2 9V15C2 17.7614 4.23858 20 7 20H17C19.6753 20 21.8595 17.8989 21.9932 15.2568L22 15V9C22 6.23858 19.7614 4 17 4H7ZM17 6C18.6569 6 20 7.34315 20 9V15L19.9961 15.1543C19.9158 16.7394 18.6051 18 17 18H12V6H17ZM10 18H7C5.34315 18 4 16.6569 4 15V9C4 7.34315 5.34315 6 7 6H10V18Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </AccessibleSVG>
+              </IconRightSidebarChevronOpen>
+            </button>
+          </Button2>
+        </IconButton>
+      </TetherComponent>
+    </Tooltip>
+  </SidebarToggleButton>
+</SidebarToggleButton>
+`;
+
+exports[`components/sidebar-toggle-button/SidebarToggleButton previewModernization feature enabled should render IconButton when previewModernization is enabled and sidebar is open (right direction) 1`] = `
+<SidebarToggleButton
+  isOpen={true}
+>
+  <SidebarToggleButton
+    intl={
+      {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+        "formatNumber": [Function],
+        "formatRelativeTime": [Function],
+      }
+    }
+    isOpen={true}
+  >
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      isDisabled={false}
+      position="middle-left"
+      text="Hide Sidebar"
+      theme="default"
+    >
+      <TetherComponent
+        attachment="middle right"
+        bodyElement={<body />}
+        classPrefix="tooltip"
+        constraints={
+          [
+            {
+              "attachment": "together",
+              "to": "window",
+            },
+          ]
+        }
+        enabled={false}
+        renderElementTag="div"
+        renderElementTo={null}
+        targetAttachment="middle left"
+      >
+        <IconButton
+          aria-label="Hide Sidebar"
+          icon={[Function]}
+          key=".0"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+          size="large"
+          tabIndex="0"
+          variant="high-contrast"
+        >
+          <Button2
+            aria-label="Hide Sidebar"
+            className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+            tabIndex="0"
+          >
+            <button
+              aria-label="Hide Sidebar"
+              className="bp_icon_button_module_iconButton--cb154 bp_icon_button_module_high-contrast--cb154 bp_icon_button_module_large--cb154"
+              onBlur={[Function]}
+              onClickCapture={[Function]}
+              onFocus={[Function]}
+              onFocusCapture={[Function]}
+              onKeyDown={[Function]}
+              onKeyDownCapture={[Function]}
+              onKeyPressCapture={[Function]}
+              onKeyUp={[Function]}
+              onLoadedMetadataCapture={[Function]}
+              onMouseDown={[Function]}
+              onMouseDownCapture={[Function]}
+              onMouseEnter={[Function]}
+              onMouseLeave={[Function]}
+              tabIndex="0"
+              type="button"
+            >
+              <IconRightSidebarChevronClose
+                className="bp_icon_button_module_icon--cb154"
+                height="1.5rem"
+                role="presentation"
+                width="1.5rem"
+              >
+                <AccessibleSVG
+                  className="icon-show bp_icon_button_module_icon--cb154"
+                  height="1.5rem"
+                  viewBox="0 0 24 24"
+                  width="1.5rem"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="icon-show bp_icon_button_module_icon--cb154"
+                    focusable="false"
+                    height="1.5rem"
+                    role="presentation"
+                    viewBox="0 0 24 24"
+                    width="1.5rem"
+                  >
+                    <path
+                      d="M15.707 9.29297C15.3165 8.90245 14.6835 8.90245 14.293 9.29297C13.9024 9.68349 13.9024 10.3165 14.293 10.707L15.5859 12L14.293 13.293C13.9024 13.6835 13.9024 14.3165 14.293 14.707C14.6835 15.0975 15.3165 15.0975 15.707 14.707L17.707 12.707C18.0975 12.3165 18.0975 11.6835 17.707 11.293L15.707 9.29297Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                    />
+                    <path
+                      clip-rule="evenodd"
+                      d="M7 4C4.23858 4 2 6.23858 2 9V15C2 17.7614 4.23858 20 7 20H17C19.6753 20 21.8595 17.8989 21.9932 15.2568L22 15V9C22 6.23858 19.7614 4 17 4H7ZM17 6C18.6569 6 20 7.34315 20 9V15L19.9961 15.1543C19.9158 16.7394 18.6051 18 17 18H12V6H17ZM10 18H7C5.34315 18 4 16.6569 4 15V9C4 7.34315 5.34315 6 7 6H10V18Z"
+                      fill="#000000"
+                      fill-opacity="0.6"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </AccessibleSVG>
+              </IconRightSidebarChevronClose>
+            </button>
+          </Button2>
+        </IconButton>
+      </TetherComponent>
+    </Tooltip>
+  </SidebarToggleButton>
+</SidebarToggleButton>
+`;
+
 exports[`components/sidebar-toggle-button/SidebarToggleButton should render correctly as closed 1`] = `
 <SidebarToggleButton
   isOpen={false}

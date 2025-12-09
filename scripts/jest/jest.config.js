@@ -8,6 +8,7 @@ module.exports = {
     moduleNameMapper: {
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
         'box-locale-data': '<rootDir>/node_modules/@box/cldr-data/locale-data/en-US',
+        '^elements/(.*)$': '<rootDir>/src/elements/$1',
         '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
             '<rootDir>/scripts/jest/mocks/fileMock.js',
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
