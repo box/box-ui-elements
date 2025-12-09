@@ -1499,27 +1499,37 @@ describe('elements/content-preview/ContentPreview', () => {
             jest.clearAllMocks();
         });
 
-        test('should emit scrolltoannotation immediately if video player is ready to seek and not set video event listener', () => {
+        test('should return if the video player is not found', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            jest.spyOn(document, 'querySelector').mockReturnValue(null);
+            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
+            expect(instance.dynamicOnPreviewLoadAction).toBeNull();
+            expect(emit).not.toBeCalled();
+        });
+
+        test('should emit scrolltoannotation if video player is ready to seek and do not set video player event listener', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            mockVideoPlayer.readyState = 4;
+            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
+            expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
+            expect(mockVideoPlayer.addEventListener).not.toBeCalled();
+        });
+
+        test('should not throw an error if the video player is ready to seek and the viewer is not found', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             jest.spyOn(instance, 'getViewer').mockReturnValue(null);
             mockVideoPlayer.readyState = 4;
             instance.scrollToFrameAnnotation(annotation.id, annotation.target);
-            expect(mockVideoPlayer.addEventListener).not.toBeCalled();
-            expect(mockVideoPlayer.removeEventListener).not.toBeCalled();
         });
 
-        test('should not emit scrolltoannotation immediately if video player is ready to seek and the viewer is not found', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            jest.spyOn(instance, 'getViewer').mockReturnValue(null);
-            mockVideoPlayer.readyState = 4;
-            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
-            expect(mockVideoPlayer.addEventListener).not.toBeCalled();
-            expect(mockVideoPlayer.removeEventListener).not.toBeCalled();
-        });
-
-        test('should add event listener to video player if video player is not ready to seek', () => {
+        test('should add loadeddata event listener to video player if video player is not ready to seek', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             wrapper.setState({ selectedVersion: { id: 123 } });
@@ -1528,7 +1538,7 @@ describe('elements/content-preview/ContentPreview', () => {
             mockVideoPlayer.readyState = 0;
             instance.scrollToFrameAnnotation(annotation.id, annotation.target);
             expect(emit).not.toBeCalled();
-            expect(addEventListener).toBeCalled();
+            expect(addEventListener).toBeCalledWith('loadeddata', expect.any(Function));
         });
     });
 });
