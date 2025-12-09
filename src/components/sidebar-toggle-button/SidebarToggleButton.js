@@ -4,8 +4,12 @@ import classNames from 'classnames';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
+import { IconButton } from '@box/blueprint-web';
+import { useFeatureConfig } from 'elements/common/feature-checking';
 import IconHide from '../../icons/general/IconHide';
 import IconShow from '../../icons/general/IconShow';
+import IconRightSidebarChevronOpen from '../../icons/general/IconRightSidebarChevronOpen';
+import IconRightSidebarChevronClose from '../../icons/general/IconRightSidebarChevronClose';
 import PlainButton from '../plain-button';
 import Tooltip from '../tooltip';
 
@@ -40,18 +44,49 @@ const SidebarToggleButton = ({
     });
     const tooltipPosition = direction === DIRECTION_LEFT ? 'middle-right' : 'middle-left';
 
+    const { enabled: isPreviewModernizationEnabled } = useFeatureConfig('previewModernization');
+
     const renderButton = () => {
-        if (direction === DIRECTION_LEFT) {
-            return isOpen ? <IconShow height={16} width={16} /> : <IconHide height={16} width={16} />;
+        if (isPreviewModernizationEnabled) {
+            if (direction === DIRECTION_LEFT) {
+                return (
+                    <IconButton
+                        aria-label={intlText}
+                        icon={isOpen ? IconRightSidebarChevronOpen : IconRightSidebarChevronClose}
+                        onClick={onClick}
+                        size="large"
+                        variant="high-contrast"
+                    />
+                );
+            }
+            return (
+                <IconButton
+                    aria-label={intlText}
+                    icon={isOpen ? IconRightSidebarChevronClose : IconRightSidebarChevronOpen}
+                    onClick={onClick}
+                    size="large"
+                    variant="high-contrast"
+                />
+            );
         }
-        return isOpen ? <IconHide height={16} width={16} /> : <IconShow height={16} width={16} />;
+
+        const renderIcon = () => {
+            if (direction === DIRECTION_LEFT) {
+                return isOpen ? <IconShow height={16} width={16} /> : <IconHide height={16} width={16} />;
+            }
+            return isOpen ? <IconHide height={16} width={16} /> : <IconShow height={16} width={16} />;
+        };
+
+        return (
+            <PlainButton aria-label={intlText} className={classes} onClick={onClick} type="button" {...rest}>
+                {renderIcon()}
+            </PlainButton>
+        );
     };
 
     return (
         <Tooltip position={tooltipPosition} text={intlText}>
-            <PlainButton aria-label={intlText} className={classes} onClick={onClick} type="button" {...rest}>
-                {renderButton()}
-            </PlainButton>
+            {renderButton()}
         </Tooltip>
     );
 };
