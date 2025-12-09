@@ -61,6 +61,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
+import type { Target } from '../../common/types/annotations';
 import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
@@ -193,6 +194,7 @@ const startAtTypes = {
 const InvalidIdError = new Error('Invalid id for Preview!');
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
+const SCROLL_TO_ANNOTATION_EVENT = 'scrolltoannotation';
 
 mark(MARK_NAME_JS_READY);
 
@@ -227,6 +229,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
     stagedFile: ?BoxItem;
 
     updateVersionToCurrent: ?() => void;
+
+    dynamicOnPreviewLoadAction: ?() => void;
 
     initialState: State = {
         canPrint: false,
@@ -734,6 +738,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         this.handleCanPrint();
+
+        if (this.dynamicOnPreviewLoadAction) {
+            this.dynamicOnPreviewLoadAction();
+        }
     };
 
     /**
@@ -847,6 +855,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
+
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
@@ -1209,7 +1218,40 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     };
 
-    handleAnnotationSelect = ({ file_version, id, target }: Annotation) => {
+    emitScrollToAnnotation = (id: string, target: Target) => {
+        const newViewer = this.getViewer();
+        // $FlowFixMe - Flow doesn't support optional chaining with method calls
+        newViewer?.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+    };
+
+    /**
+     * Handles scrolling to a frame-based annotation by waiting for video player to load first
+     *
+     * @param {string} id - The annotation ID
+     * @param {object} target - The annotation target
+     * @return {void}
+     */
+    scrollToFrameAnnotation = (id: string, target: Target): void => {
+        // $FlowFixMe: querySelector('video') returns an HTMLVideoElement
+        const videoPlayer: HTMLVideoElement = document.querySelector('.bp-media-container video');
+        if (!videoPlayer) {
+            this.dynamicOnPreviewLoadAction = null;
+            return;
+        }
+
+        const videoReadyToScroll = videoPlayer.readyState === 4;
+        if (videoReadyToScroll) {
+            this.emitScrollToAnnotation(id, target);
+            return;
+        }
+        const handleLoadedData = () => {
+            this.emitScrollToAnnotation(id, target);
+            videoPlayer.removeEventListener('loadeddata', handleLoadedData);
+        };
+        videoPlayer.addEventListener('loadeddata', handleLoadedData);
+    };
+
+    handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload: boolean = false) => {
         const { location = {} } = target;
         const { file, selectedVersion } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');
@@ -1227,8 +1269,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
             });
         }
 
-        if (viewer) {
-            viewer.emit('scrolltoannotation', { id, target });
+        if (viewer && !deferScrollToOnload) {
+            viewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+        } else if (viewer && deferScrollToOnload) {
+            this.dynamicOnPreviewLoadAction = () => {
+                if (target?.location?.type === 'frame') {
+                    this.scrollToFrameAnnotation(id, target);
+                } else {
+                    const newViewer = this.getViewer();
+                    // $FlowFixMe - Flow doesn't support optional chaining with method calls
+                    newViewer?.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+                }
+                this.dynamicOnPreviewLoadAction = null;
+            };
         }
     };
 
