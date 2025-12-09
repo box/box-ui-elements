@@ -71,7 +71,7 @@ const SidebarToggleButton = ({
                         type="button"
                         {...rest}
                     >
-                        {renderButton()}x
+                        {renderButton()}
                     </PlainButton>
                 </span>
             </BPTooltip>
