@@ -38,7 +38,7 @@ describe('components/sidebar-toggle-button/SidebarToggleButton', () => {
     );
 
     test.each([true, false])(
-        'should stop the mousedown event from being propogated up to box-annnotations if isPreviewModernizationEnabled is %s',
+        'should stop the mousedown event from being propagated up to box-annotations if isPreviewModernizationEnabled is %s',
         isPreviewModernizationEnabled => {
             const onMouseDown = jest.fn();
             const onClick = jest.fn();
