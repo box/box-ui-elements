@@ -23,7 +23,6 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
     </React.Fragment>
   }
   className="bcs-activity"
-  elementId=""
   sidebarView="activity"
   title={
     <FormattedMessage

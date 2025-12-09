@@ -69,9 +69,9 @@ const ContactRestrictionNotice = ({
     intl,
     isFetchingJustificationReasons,
     isRestrictionJustificationEnabled,
-    justificationReasons,
-    onRemoveRestrictedContacts,
-    onSelectJustificationReason,
+    justificationReasons = [],
+    onRemoveRestrictedContacts = noop,
+    onSelectJustificationReason = noop,
     restrictedEmails,
     restrictedGroups,
     selectedContacts,
@@ -167,12 +167,6 @@ const ContactRestrictionNotice = ({
 };
 
 ContactRestrictionNotice.displayName = 'ContactRestrictionNotice';
-
-ContactRestrictionNotice.defaultProps = {
-    justificationReasons: [],
-    onRemoveRestrictedContacts: noop,
-    onSelectJustificationReason: noop,
-};
 
 export { ContactRestrictionNotice as ContactRestrictionNoticeComponent };
 export default injectIntl(ContactRestrictionNotice);
