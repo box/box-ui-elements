@@ -738,6 +738,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         this.handleCanPrint();
+
         if (this.dynamicOnPreviewLoadAction) {
             this.dynamicOnPreviewLoadAction();
         }
@@ -1219,9 +1220,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     emitScrollToAnnotation = (id: string, target: Target) => {
         const newViewer = this.getViewer();
-        if (newViewer) {
-            newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
-        }
+        newViewer?.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
     };
 
     /**
@@ -1277,7 +1276,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     this.scrollToFrameAnnotation(id, target);
                 } else {
                     const newViewer = this.getViewer();
-                    newViewer.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
+                    newViewer?.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
                 }
                 this.dynamicOnPreviewLoadAction = null;
             };
