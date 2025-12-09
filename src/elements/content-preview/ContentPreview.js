@@ -1220,6 +1220,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     emitScrollToAnnotation = (id: string, target: Target) => {
         const newViewer = this.getViewer();
+        // $FlowFixMe - Flow doesn't support optional chaining with method calls
         newViewer?.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
     };
 
@@ -1276,6 +1277,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     this.scrollToFrameAnnotation(id, target);
                 } else {
                     const newViewer = this.getViewer();
+                    // $FlowFixMe - Flow doesn't support optional chaining with method calls
                     newViewer?.emit(SCROLL_TO_ANNOTATION_EVENT, { id, target });
                 }
                 this.dynamicOnPreviewLoadAction = null;
