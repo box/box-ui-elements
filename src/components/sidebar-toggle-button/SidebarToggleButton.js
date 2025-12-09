@@ -48,7 +48,7 @@ const SidebarToggleButton = ({
         return isOpen ? <IconHide height={16} width={16} /> : <IconShow height={16} width={16} />;
     };
 
-    // Adding this to stop the mousedown event from being propogated up to box-annnotatoins as
+    // Adding this to stop the mousedown event from being propagated up to box-annotations as
     // that will cause the active annotation to no longer be active which means that it will not be displayed.
     // This  causes video annotations not to work properly.
     const mouseDownHandler = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
