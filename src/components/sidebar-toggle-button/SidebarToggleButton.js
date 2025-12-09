@@ -52,7 +52,6 @@ const SidebarToggleButton = ({
     // that will cause the active annotation to no longer be active which means that it will not be displayed.
     // This  causes video annotations not to work properly.
     const mouseDownHandler = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
         event.stopPropagation();
     };
 
