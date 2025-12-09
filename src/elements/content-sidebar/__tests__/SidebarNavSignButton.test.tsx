@@ -8,7 +8,7 @@ import TargetedClickThroughGuideTooltip from '../../../features/targeting/Target
 import Tooltip from '../../../components/tooltip';
 
 describe('elements/content-sidebar/SidebarNavSignButton', () => {
-    const getWrapper = (props = {}) => shallow(<SidebarNavSignButton {...props} />).dive();
+    const getWrapper = (props = {}) => shallow(<SidebarNavSignButton isDropdownOpen={false} {...props} />).dive();
 
     test('should render the correct label', () => {
         const wrapper = getWrapper();

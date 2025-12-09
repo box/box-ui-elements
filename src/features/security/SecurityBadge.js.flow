@@ -11,10 +11,15 @@ type Props = {
     color?: string,
     icon?: React.Node,
     message: React.Node,
-    strokeColor?: string,
 };
 
-const SecurityBadge = ({ className, color, icon, message, ...rest }: Props) => (
+const SecurityBadge = ({
+    className,
+    color,
+    icon,
+    message,
+    ...rest
+}: Props) => (
     <h1 className={classNames('bdl-SecurityBadge', className)} style={{ backgroundColor: color }} {...rest}>
         {icon}
         <span className="bdl-SecurityBadge-name">{message}</span>
@@ -26,3 +31,4 @@ SecurityBadge.defaultProps = {
 };
 
 export default SecurityBadge;
+

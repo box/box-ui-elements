@@ -66,12 +66,15 @@ type WatermarkControl = {
     enabled?: boolean,
 };
 
+type SharedLinkAutoExpirationRestriction = {};
+
 type Controls = {
     app?: ApplicationRestriction,
     boxSignRequest?: BoxSignRequestRestriction,
     download?: DownloadRestrictions,
     externalCollab?: ExternalCollabRestriction,
     sharedLink?: SharedLinkRestrictions,
+    sharedLinkAutoExpiration?: SharedLinkAutoExpirationRestriction,
     watermark?: WatermarkControl,
 };
 
@@ -91,4 +94,5 @@ export type {
     ExternalCollabRestriction,
     MessageItem,
     SharedLinkRestrictions,
+    SharedLinkAutoExpirationRestriction,
 };

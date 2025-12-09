@@ -120,6 +120,7 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
                               onClick,
                               intl,
                               ` ${commentToDisplay}`,
+                              getUserProfileUrl,
                           )
                         : formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl, intl)}
                     {isEdited && (

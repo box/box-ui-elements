@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    defaultErrorNoticeText: {
+        defaultMessage: 'Something went wrong. Please try again later.',
+        description: 'Default error notification text rendered when API fails',
+        id: 'be.contentSharing.defaultErrorNoticeText',
+    },
     badRequestError: {
         defaultMessage: 'The request for this item was malformed.',
         description: 'Message that appears when the request for the ContentSharing Element is malformed.',
@@ -58,6 +63,35 @@ const messages = defineMessages({
         description:
             'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitesSuccess',
+    },
+    sendInvitationsError: {
+        defaultMessage:
+            '{count, plural, one {Failed to invite a collaborator.} other {Failed to invite {count} collaborators.}}',
+        description:
+            'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitationsError',
+    },
+    sendInvitationsSuccess: {
+        defaultMessage:
+            '{count, plural, one {Successfully invited a collaborator.} other {Successfully invited {count} collaborators.}}',
+        description:
+            'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
+        id: 'be.contentSharing.sendInvitationsSuccess',
+    },
+    groupContactLabel: {
+        defaultMessage: 'Group',
+        description: 'Display text for a Group contact type',
+        id: 'be.contentSharing.groupContactLabel',
+    },
+    noticeCloseLabel: {
+        defaultMessage: 'Close',
+        description: 'Close button aria label for the notifications',
+        id: 'be.contentSharing.noticeCloseLabel',
+    },
+    errorNoticeIcon: {
+        defaultMessage: 'Error',
+        description: 'Icon label for the error notifications',
+        id: 'be.contentSharing.errorNoticeIcon',
     },
 });
 

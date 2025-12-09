@@ -1,6 +1,7 @@
 // @flow
-import type { CollaborationRole, Item, SharedLink } from '@box/unified-share-modal';
+import type { CollaborationRole, Collaborator, DateValue, Item, SharedLink } from '@box/unified-share-modal';
 
+import API from '../../api';
 import type {
     Access,
     BoxItemClassification,
@@ -91,12 +92,14 @@ export type ContentSharingItemAPIResponse = {
 };
 
 export type ContentSharingHooksOptions = {
+    currentUserId?: string,
     handleError?: Function,
     handleRemoveSharedLinkError?: Function,
     handleRemoveSharedLinkSuccess?: Function,
     handleSuccess?: Function,
     handleUpdateSharedLinkError?: Function,
     handleUpdateSharedLinkSuccess?: Function,
+    isContentSharingV2Enabled?: boolean,
     setIsLoading?: Function,
     transformAccess?: Function,
     transformGroups?: Function,
@@ -122,6 +125,7 @@ export type ContentSharingCollaborationsRequest = {
 };
 
 export type UseInvitesOptions = ContentSharingHooksOptions & {
+    collaborators?: Array<Collaborator>,
     transformRequest: InviteCollaboratorsRequest => ContentSharingCollaborationsRequest,
 };
 
@@ -136,6 +140,8 @@ export type ContactByEmailObject = { [string]: contactType | UserMini | [] };
 export type GetContactsByEmailFnType = () => (filterTerm: {
     [emails: string]: string,
 }) => Promise<ContactByEmailObject | Array<UserMini>> | null;
+
+export type GetContactByEmailFnType = () => (email: string) => Promise<ContactByEmailObject | Array<UserMini>> | null;
 
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 
@@ -159,4 +165,26 @@ export interface ItemData {
     collaborationRoles: CollaborationRole[];
     item: Item;
     sharedLink: SharedLink;
+}
+
+export interface BaseFetchProps {
+    api: API;
+    itemID: string;
+}
+
+export interface FetchItemProps extends BaseFetchProps {
+    itemType: ItemType;
+}
+
+export interface FetchCollaboratorsProps extends BaseFetchProps {
+    collaborators: Collaboration[];
+}
+
+export interface SharedLinkSettings {
+    expiration: ?DateValue;
+    isDownloadEnabled: boolean;
+    isExpirationEnabled: boolean;
+    isPasswordEnabled: boolean;
+    password: string;
+    vanityName: string;
 }

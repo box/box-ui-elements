@@ -59,10 +59,10 @@ export const withSubmenuFlip = () => (
 export const withSelectMenu = () => (
     <Menu>
         <SelectMenuLinkItem isSelected>
-            <Link href="http://opensource.box.com/box-ui-elements/storybook">View Profile</Link>
+            <Link href="https://opensource.box.com/box-ui-elements/">View Profile</Link>
         </SelectMenuLinkItem>
         <SelectMenuLinkItem>
-            <Link href="http://opensource.box.com/box-ui-elements/storybook">Awesome Link</Link>
+            <Link href="https://opensource.box.com/box-ui-elements/">Awesome Link</Link>
         </SelectMenuLinkItem>
     </Menu>
 );

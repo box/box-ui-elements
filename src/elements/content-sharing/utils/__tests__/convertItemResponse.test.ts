@@ -2,6 +2,9 @@ import {
     DEFAULT_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
+    mockOwnerId,
+    mockOwnerEmail,
+    mockOwnerName,
 } from '../__mocks__/ContentSharingV2Mocks';
 import { convertItemResponse } from '../convertItemResponse';
 
@@ -32,6 +35,17 @@ describe('convertItemResponse', () => {
                     canShare: true,
                 },
                 type: 'file',
+            },
+            ownedBy: {
+                id: mockOwnerId,
+                login: mockOwnerEmail,
+                name: mockOwnerName,
+            },
+            sharingService: {
+                can_set_share_access: true,
+                can_share: true,
+                ownerEmail: mockOwnerEmail,
+                ownerId: mockOwnerId,
             },
         });
     });

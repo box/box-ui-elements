@@ -15,7 +15,7 @@ type Props = {
     versionCount: number,
 };
 
-const VersionHistoryLink = ({ className, versionCount, onClick, ...rest }: Props) => {
+const VersionHistoryLink = ({ className = '', versionCount, onClick, ...rest }: Props) => {
     const formattedMessageComponent = <FormattedMessage {...messages.savedVersions} values={{ versionCount }} />;
 
     // Only render it as a link if there is an onClick
@@ -28,10 +28,6 @@ const VersionHistoryLink = ({ className, versionCount, onClick, ...rest }: Props
     }
 
     return <div className={className}>{formattedMessageComponent}</div>;
-};
-
-VersionHistoryLink.defaultProps = {
-    className: '',
 };
 
 export default VersionHistoryLink;

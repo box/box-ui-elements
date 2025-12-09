@@ -1,9 +1,9 @@
 import React, { act } from 'react';
-import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
 import TextInput from '..';
+import { FormContext } from '../../form/FormContext';
 
 const sandbox = sinon.sandbox.create();
 
@@ -222,51 +222,49 @@ describe('components/form-elements/text-input/TextInput', () => {
 
     test('should set validity state when set validity state handler is called with custom error', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
         const error = {
             errorCode: 'errorCode',
             errorMessage: 'Error Message',
         };
 
-        const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextInput label="label" name="input" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
 
-        expect(component.state('error')).toEqual(error);
+        expect(component.find('TextInput').first().instance().state.error).toEqual(error);
     });
 
     test('should set validity state when set validity state handler is called with ValidityState object', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
         const error = {
             valid: false,
             badInput: true,
         };
 
-        const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextInput label="label" name="input" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.state('error').code).toEqual('badInput');
+        expect(component.find('TextInput').first().instance().state.error.code).toEqual('badInput');
     });
 
     /**
@@ -275,66 +273,55 @@ describe('components/form-elements/text-input/TextInput', () => {
      */
     test('should correctly validate patternMismatch', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
         const error = {
             valid: false,
             patternMismatch: true,
         };
 
-        const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextInput label="label" name="input" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.state('error').code).toEqual('patternMismatch');
+        expect(component.find('TextInput').first().instance().state.error.code).toEqual('patternMismatch');
     });
 
     test('should correctly validate tooLong', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
         const error = {
             valid: false,
             tooLong: true,
         };
 
-        const component = mount(<TextInput label="label" maxLength={10} name="input" value="" />, {
-            context,
-            childContextTypes,
-        });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextInput label="label" maxLength={10} name="input" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.state('error').code).toEqual('tooLong');
+        expect(component.find('TextInput').first().instance().state.error.code).toEqual('tooLong');
     });
 
     test('should correctly validate tooShort', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
 
         const error = {
@@ -342,14 +329,15 @@ describe('components/form-elements/text-input/TextInput', () => {
             tooShort: true,
         };
 
-        const component = mount(<TextInput label="label" minLength={1} name="input" value="" />, {
-            context,
-            childContextTypes,
-        });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextInput label="label" minLength={1} name="input" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.state('error').code).toEqual('tooShort');
+        expect(component.find('TextInput').first().instance().state.error.code).toEqual('tooShort');
     });
 });

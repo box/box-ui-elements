@@ -63,8 +63,30 @@ const mockMetadataTemplate = {
 
 const mockOnClose = jest.fn();
 
+const TestWrapper = ({
+    initialProps,
+    onStateChange,
+}: {
+    initialProps: Omit<MetadataSidePanelProps, 'isEditing' | 'onEditingChange'>;
+    onStateChange?: (isEditing: boolean) => void;
+}) => {
+    const [isEditing, setIsEditing] = React.useState(false);
+
+    const handleEditingChange = (editing: boolean) => {
+        setIsEditing(editing);
+        onStateChange?.(editing);
+    };
+
+    return (
+        <Notification.Provider>
+            <Notification.Viewport />
+            <MetadataSidePanel {...initialProps} isEditing={isEditing} onEditingChange={handleEditingChange} />
+        </Notification.Provider>
+    );
+};
+
 describe('elements/content-explorer/MetadataSidePanel', () => {
-    const defaultProps: MetadataSidePanelProps = {
+    const defaultProps: Omit<MetadataSidePanelProps, 'isEditing' | 'onEditingChange'> = {
         currentCollection: mockCollection,
         metadataTemplate: mockMetadataTemplate,
         onClose: mockOnClose,
@@ -73,13 +95,13 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         selectedItemIds: new Set(['1']),
     };
 
-    const renderComponent = (props: Partial<MetadataSidePanelProps> = {}) =>
-        render(
-            <Notification.Provider>
-                <Notification.Viewport />
-                <MetadataSidePanel {...defaultProps} {...props} />
-            </Notification.Provider>,
-        );
+    const renderComponent = (
+        props: Partial<Omit<MetadataSidePanelProps, 'isEditing' | 'onEditingChange'>> = {},
+        onStateChange?: (isEditing: boolean) => void,
+    ) => {
+        const mergedProps = { ...defaultProps, ...props };
+        return render(<TestWrapper initialProps={mergedProps} onStateChange={onStateChange} />);
+    };
 
     test('renders the metadata title', () => {
         renderComponent();

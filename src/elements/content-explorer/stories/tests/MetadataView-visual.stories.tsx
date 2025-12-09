@@ -250,6 +250,64 @@ export const sidePanelOpenWithMultipleItemsSelected: Story = {
     },
 };
 
+export const disableSelectionInEditMode: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+
+        metadataViewProps: {
+            columns,
+            isSelectionEnabled: true,
+        },
+    },
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Start editing
+        await userEvent.click(canvas.getByLabelText('Select all'));
+        await userEvent.click(canvas.getByRole('button', { name: 'Metadata' }));
+        await userEvent.click(canvas.getByLabelText('Edit templateName'));
+        expect(canvas.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+        expect(canvas.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+
+        // Verify checkboxes are disabled
+        expect(canvas.getByLabelText('Select all')).toBeDisabled();
+        expect(within(canvas.getByRole('row', { name: /Child 2/i })).getByRole('checkbox')).toBeDisabled();
+    },
+};
+
+export const clearSelectionInEditMode: Story = {
+    args: {
+        ...metadataViewV2ElementProps,
+        metadataViewProps: {
+            columns,
+            isSelectionEnabled: true,
+        },
+    },
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        // Start editing
+        await userEvent.click(canvas.getByLabelText('Select all'));
+        await userEvent.click(canvas.getByRole('button', { name: 'Metadata' }));
+        await userEvent.click(canvas.getByLabelText('Edit templateName'));
+
+        // Clear selection in subheader
+        await userEvent.click(canvas.getByLabelText('Clear selection'));
+
+        // Verify sidebar is closed and no items are selected
+        expect(canvas.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument();
+        expect(canvas.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
+        expect(canvas.queryByText('Mock Template')).not.toBeInTheDocument();
+
+        expect(canvas.getByLabelText('Select all')).not.toBeChecked();
+        expect(within(canvas.getByRole('row', { name: /Child 2/i })).getByRole('checkbox')).not.toBeChecked();
+    },
+};
+
 const meta: Meta<typeof ContentExplorer> = {
     title: 'Elements/ContentExplorer/tests/MetadataView/visual',
     component: ContentExplorer,

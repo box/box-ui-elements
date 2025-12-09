@@ -1,25 +1,28 @@
 import React from 'react';
-import { render, RenderResult, screen, waitFor } from '@testing-library/react';
-
+import { render, type RenderResult, screen, waitFor } from '@testing-library/react';
+import { Notification, TooltipProvider } from '@box/blueprint-web';
+import { useSharingService } from '../hooks/useSharingService';
 import {
     DEFAULT_ITEM_API_RESPONSE,
     DEFAULT_USER_API_RESPONSE,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
+    MOCK_COLLABORATIONS_RESPONSE,
+    mockAvatarURLMap,
 } from '../utils/__mocks__/ContentSharingV2Mocks';
 import { CONTENT_SHARING_ITEM_FIELDS } from '../constants';
-
 import ContentSharingV2 from '../ContentSharingV2';
 
-const createAPIMock = (fileAPI, folderAPI, usersAPI) => ({
-    getFileAPI: jest.fn().mockReturnValue(fileAPI),
-    getFolderAPI: jest.fn().mockReturnValue(folderAPI),
-    getUsersAPI: jest.fn().mockReturnValue(usersAPI),
+const createApiMock = (fileApi, folderApi, usersApi, collaborationsApi) => ({
+    getFileAPI: jest.fn().mockReturnValue(fileApi),
+    getFolderAPI: jest.fn().mockReturnValue(folderApi),
+    getUsersAPI: jest.fn().mockReturnValue(usersApi),
+    getFileCollaborationsAPI: jest.fn().mockReturnValue(collaborationsApi),
 });
 
-const createSuccessMock = responseFromAPI => (id, successFn) => {
-    return Promise.resolve(responseFromAPI).then(response => {
+const createSuccessMock = responseFromApi => (id, successFn) => {
+    return Promise.resolve(responseFromApi).then(response => {
         successFn(response);
     });
 };
@@ -33,21 +36,32 @@ const getFileMockWithClassification = jest
     .fn()
     .mockImplementation(createSuccessMock(MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION));
 const getDefaultFolderMock = jest.fn().mockImplementation(createSuccessMock(DEFAULT_ITEM_API_RESPONSE));
-const defaultAPIMock = createAPIMock(
+const getCollaborationsMock = jest.fn().mockImplementation(createSuccessMock(MOCK_COLLABORATIONS_RESPONSE));
+const getAvatarUrlMock = jest.fn().mockImplementation(userID => mockAvatarURLMap[userID] ?? null);
+
+const defaultApiMock = createApiMock(
     { getFile: getDefaultFileMock },
     { getFolderFields: getDefaultFolderMock },
-    { getUser: getDefaultUserMock },
+    { getUser: getDefaultUserMock, getAvatarUrlWithAccessToken: getAvatarUrlMock },
+    { getCollaborations: getCollaborationsMock },
 );
 
-const getWrapper = (props): RenderResult =>
+const mockAddNotification = jest.fn();
+jest.mock('@box/blueprint-web', () => ({
+    ...jest.requireActual('@box/blueprint-web'),
+    useNotification: jest.fn(() => ({ addNotification: mockAddNotification })),
+}));
+jest.mock('../hooks/useSharingService', () => ({
+    useSharingService: jest.fn().mockReturnValue({ sharingService: null }),
+}));
+
+const renderComponent = (props = {}): RenderResult =>
     render(
-        <ContentSharingV2
-            api={defaultAPIMock}
-            itemID={MOCK_ITEM.id}
-            itemType={MOCK_ITEM.type}
-            hasProviders={true}
-            {...props}
-        />,
+        <Notification.Provider>
+            <TooltipProvider>
+                <ContentSharingV2 api={defaultApiMock} itemId={MOCK_ITEM.id} itemType={MOCK_ITEM.type} {...props} />
+            </TooltipProvider>
+        </Notification.Provider>,
     );
 
 describe('elements/content-sharing/ContentSharingV2', () => {
@@ -56,50 +70,42 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     test('should see the correct elements for files', async () => {
-        getWrapper({});
+        renderComponent();
         await waitFor(() => {
-            expect(getDefaultFileMock).toHaveBeenCalledWith(
-                MOCK_ITEM.id,
-                expect.any(Function),
-                {},
-                {
-                    fields: CONTENT_SHARING_ITEM_FIELDS,
-                },
-            );
+            expect(getDefaultFileMock).toHaveBeenCalledWith(MOCK_ITEM.id, expect.any(Function), expect.any(Function), {
+                fields: CONTENT_SHARING_ITEM_FIELDS,
+            });
         });
-
-        expect(screen.getByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
-        expect(screen.getByRole('combobox', { name: 'Invite People' })).toBeVisible();
-        expect(screen.getByRole('switch', { name: 'Shared link' })).toBeVisible();
     });
 
     test('should see the correct elements for folders', async () => {
-        getWrapper({ itemType: 'folder' });
+        renderComponent({ itemType: 'folder' });
         await waitFor(() => {
             expect(getDefaultFolderMock).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
                 expect.any(Function),
-                {},
+                expect.any(Function),
                 {
                     fields: CONTENT_SHARING_ITEM_FIELDS,
                 },
             );
+            expect(screen.getByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+            expect(screen.getByRole('combobox', { name: 'Invite People' })).toBeVisible();
+            expect(screen.getByRole('switch', { name: 'Shared link' })).toBeVisible();
         });
-
-        expect(screen.getByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
-        expect(screen.getByRole('combobox', { name: 'Invite People' })).toBeVisible();
-        expect(screen.getByRole('switch', { name: 'Shared link' })).toBeVisible();
     });
 
     test('should see the shared link elements if shared link is present', async () => {
-        getWrapper({
-            api: createAPIMock({ getFile: getFileMockWithSharedLink }, null, { getUser: getDefaultUserMock }),
-        });
+        const apiWithSharedLink = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
+        };
+        renderComponent({ api: apiWithSharedLink });
         await waitFor(() => {
             expect(getFileMockWithSharedLink).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
                 expect.any(Function),
-                {},
+                expect.any(Function),
                 {
                     fields: CONTENT_SHARING_ITEM_FIELDS,
                 },
@@ -114,19 +120,124 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     test('should see the classification elements if classification is present', async () => {
-        getWrapper({
-            api: createAPIMock({ getFile: getFileMockWithClassification }, null, { getUser: getDefaultUserMock }),
-        });
+        const apiWithClassification = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithClassification }),
+        };
+
+        renderComponent({ api: apiWithClassification });
         await waitFor(() => {
             expect(getFileMockWithClassification).toHaveBeenCalledWith(
                 MOCK_ITEM.id,
                 expect.any(Function),
-                {},
+                expect.any(Function),
                 {
                     fields: CONTENT_SHARING_ITEM_FIELDS,
                 },
             );
+            expect(screen.getByText('BLUE')).toBeVisible();
         });
-        expect(screen.getByText('BLUE')).toBeVisible();
+    });
+
+    test('should process collaborators with avatars correctly', async () => {
+        renderComponent();
+
+        await waitFor(() => {
+            expect(getCollaborationsMock).toHaveBeenCalledWith(
+                MOCK_ITEM.id,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(getAvatarUrlMock).toHaveBeenCalledWith('456', MOCK_ITEM.id);
+            expect(getAvatarUrlMock).toHaveBeenCalledWith('457', MOCK_ITEM.id);
+            expect(getAvatarUrlMock).toHaveBeenCalledWith('458', MOCK_ITEM.id);
+        });
+    });
+
+    test('should render UnifiedShareModal when sharingService is available', async () => {
+        const mockSharingService = {
+            changeSharedLinkPermission: jest.fn(),
+            updateSharedLink: jest.fn(),
+        };
+
+        (useSharingService as jest.Mock).mockReturnValue({
+            sharingService: mockSharingService,
+        });
+
+        renderComponent();
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /Box Development Guide.pdf/i })).toBeVisible();
+        });
+    });
+
+    describe('getError function', () => {
+        const createErrorApi = error => ({
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({
+                getFile: jest.fn().mockImplementation((id, successFn, errorFn) => {
+                    errorFn(error);
+                }),
+            }),
+        });
+
+        test('should render bad request message for error.status 400', async () => {
+            const error = { status: 400 };
+            renderComponent({ api: createErrorApi(error) });
+
+            await waitFor(() => {
+                expect(mockAddNotification).toHaveBeenCalledWith({
+                    closeButtonAriaLabel: 'Close',
+                    sensitivity: 'foreground',
+                    styledText: 'The request for this item was malformed.',
+                    typeIconAriaLabel: 'Error',
+                    variant: 'error',
+                });
+            });
+        });
+
+        test('should render no access message for error.response.status 401', async () => {
+            const error = { response: { status: 401 } };
+            renderComponent({ api: createErrorApi(error) });
+
+            await waitFor(() => {
+                expect(mockAddNotification).toHaveBeenCalledWith({
+                    closeButtonAriaLabel: 'Close',
+                    sensitivity: 'foreground',
+                    styledText: 'You do not have access to this item.',
+                    typeIconAriaLabel: 'Error',
+                    variant: 'error',
+                });
+            });
+        });
+
+        test('should render loading error message when no status is provided', async () => {
+            const error = { message: 'Network error' };
+            renderComponent({ api: createErrorApi(error) });
+
+            await waitFor(() => {
+                expect(mockAddNotification).toHaveBeenCalledWith({
+                    closeButtonAriaLabel: 'Close',
+                    sensitivity: 'foreground',
+                    styledText: 'Could not load shared link for this item.',
+                    typeIconAriaLabel: 'Error',
+                    variant: 'error',
+                });
+            });
+        });
+
+        test('should render default error message when no corresponding error status is provided', async () => {
+            const error = { status: 503 };
+            renderComponent({ api: createErrorApi(error) });
+
+            await waitFor(() => {
+                expect(mockAddNotification).toHaveBeenCalledWith({
+                    closeButtonAriaLabel: 'Close',
+                    sensitivity: 'foreground',
+                    styledText: 'Something went wrong. Please try again later.',
+                    typeIconAriaLabel: 'Error',
+                    variant: 'error',
+                });
+            });
+        });
     });
 });

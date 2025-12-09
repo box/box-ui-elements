@@ -1,22 +1,24 @@
 import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD } from '../../../constants';
+import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../constants';
 import { getAllowedAccessLevels } from './getAllowedAccessLevels';
 import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
-import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../utils/constants';
 
 import type { ContentSharingItemAPIResponse, ItemData } from '../types';
 
-export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse): ItemData => {
+export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse): ItemData => {
     const {
         allowed_invitee_roles,
         allowed_shared_link_access_levels,
+        allowed_shared_link_access_levels_disabled_reasons,
         classification,
         id,
         name,
+        owned_by: ownedBy,
         permissions,
         shared_link,
         shared_link_features,
         type,
-    } = itemAPIData;
+    } = itemApiData;
 
     const { password: isPasswordAvailable } = shared_link_features;
 
@@ -59,15 +61,18 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
 
         sharedLink = {
             access,
-            accessLevels: getAllowedAccessLevels(allowed_shared_link_access_levels),
-            expiresAt: expirationTimestamp,
+            accessLevels: getAllowedAccessLevels(
+                allowed_shared_link_access_levels,
+                allowed_shared_link_access_levels_disabled_reasons,
+            ),
+            expiresAt: expirationTimestamp ? new Date(expirationTimestamp).getTime() : undefined, // convert to milliseconds
             permission,
             permissionLevels: getAllowedPermissionLevels(canChangeAccessLevel, isDownloadSettingAvailable, permission),
             settings: {
                 canChangeDownload,
                 canChangeExpiration,
                 canChangePassword,
-                canChangeVanityName: false, // vanity URLs cannot be set via the API,
+                canChangeVanityName: false, // vanity URLs cannot be set via the API
                 isDownloadAvailable: isDownloadSettingAvailable,
                 isDownloadEnabled: isDownloadAllowed,
                 isPasswordAvailable: isPasswordAvailable ?? false,
@@ -95,5 +100,12 @@ export const convertItemResponse = (itemAPIData: ContentSharingItemAPIResponse):
             type,
         },
         sharedLink,
+        sharingService: {
+            can_set_share_access: canChangeAccessLevel,
+            can_share: canShare,
+            ownerEmail: ownedBy.login,
+            ownerId: ownedBy.id,
+        },
+        ownedBy,
     };
 };

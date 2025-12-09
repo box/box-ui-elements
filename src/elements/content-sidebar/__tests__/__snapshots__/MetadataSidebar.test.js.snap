@@ -4,7 +4,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
 <SidebarContent
   actions={null}
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage
@@ -35,7 +34,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
 <SidebarContent
   actions={null}
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage
@@ -71,7 +69,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
     />
   }
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage
@@ -102,7 +99,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render error w
 <SidebarContent
   actions={null}
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage
@@ -128,7 +124,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
 <SidebarContent
   actions={null}
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage
@@ -145,7 +140,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
 <SidebarContent
   actions={null}
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage
@@ -162,7 +156,6 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
 <SidebarContent
   actions={null}
   className="bcs-metadata"
-  elementId=""
   sidebarView="metadata"
   title={
     <FormattedMessage

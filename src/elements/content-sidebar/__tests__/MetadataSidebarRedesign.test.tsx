@@ -139,7 +139,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     test('should render title', () => {
         renderComponent();
 
-        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
     });
 
     test('should have accessible "All templates" combobox trigger button', () => {
@@ -229,7 +229,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
         renderComponent();
 
-        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByText(errorMessage.defaultMessage)).toBeInTheDocument();
     });
 
@@ -250,7 +250,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         renderComponent();
 
-        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
         expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
     });
@@ -315,7 +315,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         renderComponent();
 
-        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 4, name: 'Custom Metadata' })).toBeInTheDocument();
         expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeInTheDocument();
         expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();
@@ -391,7 +391,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         renderComponent({ filteredTemplateIds });
 
-        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
         expect(screen.queryByRole('heading', { level: 4, name: 'Custom Metadata' })).not.toBeInTheDocument();
     });
@@ -415,7 +415,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         renderComponent({ filteredTemplateIds });
 
-        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 4, name: 'Custom Metadata' })).toBeInTheDocument();
         expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeInTheDocument();
         expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();

@@ -18,6 +18,7 @@ const ACCESS_POLICY_RESTRICTION: {
     EXTERNAL_COLLAB: 'externalCollab',
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
+    SHARED_LINK_AUTO_EXPIRATION: 'sharedLinkAutoExpiration',
     WATERMARK: 'watermark',
 } = {
     APP: 'app',
@@ -26,6 +27,7 @@ const ACCESS_POLICY_RESTRICTION: {
     EXTERNAL_COLLAB: 'externalCollab',
     FTP: 'ftp',
     SHARED_LINK: 'sharedLink',
+    SHARED_LINK_AUTO_EXPIRATION: 'sharedLinkAutoExpiration',
     WATERMARK: 'watermark',
 };
 

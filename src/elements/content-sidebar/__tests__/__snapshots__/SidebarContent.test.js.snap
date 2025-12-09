@@ -11,11 +11,11 @@ exports[`elements/content-sidebar/SidebarContent should render sidebar content c
   <div
     className="bcs-content-header"
   >
-    <h3
+    <h2
       className="bcs-title"
     >
       title
-    </h3>
+    </h2>
   </div>
   <div
     className="bcs-scroll-content-wrapper"

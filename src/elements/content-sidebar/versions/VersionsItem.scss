@@ -28,6 +28,12 @@
             box-shadow: $bdl-btn-primary-box-shadow;
         }
     }
+
+    .bcs-VersionsItemActions-toggle--modernized {
+        position: absolute;
+        top: var(--space-2);
+        right: var(--space-2);
+    }
 }
 
 .bcs-VersionsItem-badge {

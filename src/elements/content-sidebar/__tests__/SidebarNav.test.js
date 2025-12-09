@@ -69,8 +69,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         `(
             'given feature boxai.sidebar.showOnlyNavButton = true and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with disabled state and tooltip = $expectedTooltip',
             async ({ disabledTooltip, expectedTooltip }) => {
-                const user = userEvent();
-
                 renderSidebarNav({
                     features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
                     props: { hasBoxAI: true },
@@ -78,16 +76,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
                 const button = screen.getByTestId('sidebarboxai');
 
-                await user.hover(button);
-
                 expect(button).toHaveAttribute('aria-disabled', 'true');
-                expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
+                expect(button).toHaveAttribute('aria-label', expectedTooltip);
             },
         );
 
         test('given feature boxai.sidebar.showOnlyNavButton = false, should render box ai tab with default tooltip', async () => {
-            const user = userEvent();
-
             renderSidebarNav({
                 features: { boxai: { sidebar: { showOnlyNavButton: false } } },
                 props: { hasBoxAI: true },
@@ -95,10 +89,8 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             const button = screen.getByTestId('sidebarboxai');
 
-            await user.hover(button);
-
             expect(button).not.toHaveAttribute('aria-disabled');
-            expect(screen.getByText('Box AI')).toBeInTheDocument();
+            expect(button).toHaveAttribute('aria-label', 'Box AI');
         });
     });
 
@@ -161,6 +153,24 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
         const placeholders = screen.getAllByTestId('additionaltabplaceholder');
         expect(placeholders).toHaveLength(5);
+    });
+
+    test('should render additional tabs with modernized class when previewModernization is enabled', () => {
+        renderSidebarNav({
+            features: {
+                previewModernization: {
+                    enabled: true,
+                },
+            },
+            props: {
+                additionalTabs: [],
+                hasAdditionalTabs: true,
+            },
+        });
+
+        const overflowContainer = screen.getByTestId('additional-tabs-overflow');
+        expect(overflowContainer).toBeInTheDocument();
+        expect(overflowContainer).toHaveClass('bcs-SidebarNav-overflow--modernized');
     });
 
     test('should render the Box Sign entry point if its feature is enabled', () => {

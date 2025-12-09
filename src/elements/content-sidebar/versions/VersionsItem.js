@@ -130,7 +130,7 @@ const VersionsItem = ({
                 onClick={handleAction(onPreview)}
             >
                 <div className="bcs-VersionsItem-badge">
-                    <VersionsItemBadge versionNumber={versionNumber} />
+                    <VersionsItemBadge isCurrent={isCurrent} versionNumber={versionNumber} />
                 </div>
 
                 <div className="bcs-VersionsItem-details">

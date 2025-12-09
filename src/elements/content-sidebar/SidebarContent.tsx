@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Preview sidebar content component
  * @author Box
  */
@@ -8,16 +7,24 @@ import * as React from 'react';
 import classNames from 'classnames';
 import './SidebarContent.scss';
 
-type Props = {
-    actions?: React.Node,
-    children: any,
-    className?: string,
-    elementId: string,
-    sidebarView: string,
-    title?: React.Node,
-    subheader?: React.Node,
-};
-const SidebarContent = ({ actions, children, className, elementId, sidebarView, title, subheader, ...rest }: Props) => {
+export interface SidebarContentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    actions?: React.ReactNode;
+    elementId?: string;
+    sidebarView?: string;
+    title?: React.ReactNode;
+    subheader?: React.ReactNode;
+}
+
+const SidebarContent = ({
+    actions,
+    children,
+    className,
+    elementId = '',
+    sidebarView = '',
+    title,
+    subheader,
+    ...rest
+}: SidebarContentProps) => {
     const label = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
     const id = `${label}-content`;
 
@@ -31,7 +38,7 @@ const SidebarContent = ({ actions, children, className, elementId, sidebarView, 
             {...rest}
         >
             <div className="bcs-content-header">
-                {title && <h3 className="bcs-title">{title}</h3>}
+                {title && <h2 className="bcs-title">{title}</h2>}
                 {actions}
             </div>
             {subheader && <div className="bcs-content-subheader">{subheader}</div>}
@@ -40,11 +47,6 @@ const SidebarContent = ({ actions, children, className, elementId, sidebarView, 
             </div>
         </div>
     );
-};
-
-SidebarContent.defaultProps = {
-    elementId: '',
-    sidebarView: '',
 };
 
 export default SidebarContent;

@@ -16,4 +16,5 @@ export type {
     DownloadRestrictions,
     ExternalCollabRestriction,
     SharedLinkRestrictions,
+    SharedLinkAutoExpirationRestriction,
 } from './flowTypes';

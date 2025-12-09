@@ -78,6 +78,7 @@ describe('api/FileCollaborators', () => {
                 filter_term: searchStr,
                 include_groups: false,
                 include_uploader_collabs: false,
+                respect_hidden_collabs: false,
             });
         });
 
@@ -93,6 +94,25 @@ describe('api/FileCollaborators', () => {
                 filter_term: searchStr,
                 include_groups: true,
                 include_uploader_collabs: false,
+                respect_hidden_collabs: false,
+            });
+        });
+
+        test('should get collaborators respecting hidden collaborators', () => {
+            const searchStr = 'foo';
+            const respectHiddenCollabs = true;
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            fileCollaborators.getCollaboratorsWithQuery('file_id', successCb, errorCb, searchStr, {
+                respectHiddenCollabs,
+            });
+
+            expect(fileCollaborators.getFileCollaborators).toBeCalledWith('file_id', successCb, errorCb, {
+                filter_term: searchStr,
+                include_groups: false,
+                include_uploader_collabs: false,
+                respect_hidden_collabs: true,
             });
         });
     });

@@ -36,10 +36,8 @@ function FakeComponent({
     const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
         null,
     );
-    const [
-        changeSharedLinkPermissionLevel,
-        setChangeSharedLinkPermissionLevel,
-    ] = React.useState<null | SharedLinkUpdateFnType>(null);
+    const [changeSharedLinkPermissionLevel, setChangeSharedLinkPermissionLevel] =
+        React.useState<null | SharedLinkUpdateFnType>(null);
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | Function>(null);
     const [generatedFunctions, setGeneratedFunctions] = React.useState<boolean>(false);
 

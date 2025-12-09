@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import commonMessages from '../../common/messages';
 import { ModalActions } from '../modal';
 import Button from '../button';
 import PlainButton from '../plain-button';
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, MenuItem } from '../menu';
-
+import { HotkeyContext } from './HotkeyContext';
 import HotkeyFriendlyModal from './HotkeyFriendlyModal'; // eslint-disable-line import/no-cycle
+
+import commonMessages from '../../common/messages';
 import messages from './messages';
 
 import './HotkeyHelpModal.scss';
@@ -35,31 +36,39 @@ class HotkeyHelpModal extends Component {
         onRequestClose: PropTypes.func.isRequired,
     };
 
-    static contextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
-
-    constructor(props, context) {
+    constructor(props) {
         super(props);
 
-        this.hotkeys = context.hotkeyLayer.getActiveHotkeys();
-        this.types = context.hotkeyLayer.getActiveTypes();
+        this.hotkeys = {};
+        this.types = [];
         this.state = {
-            currentType: this.types.length ? this.types[0] : null,
+            currentType: null,
         };
+    }
+
+    componentDidMount() {
+        const hotkeyLayer = this.context;
+        if (hotkeyLayer) {
+            this.hotkeys = hotkeyLayer.getActiveHotkeys();
+            this.types = hotkeyLayer.getActiveTypes();
+            this.setState({
+                currentType: this.types.length ? this.types[0] : null,
+            });
+        }
     }
 
     componentDidUpdate({ isOpen: prevIsOpen }, { currentType: prevType }) {
         const { isOpen } = this.props;
+        const hotkeyLayer = this.context;
 
-        if (!isOpen) {
+        if (!isOpen || !hotkeyLayer) {
             return;
         }
 
         // modal is being opened; refresh hotkeys
         if (!prevIsOpen && isOpen) {
-            this.hotkeys = this.context.hotkeyLayer.getActiveHotkeys();
-            this.types = this.context.hotkeyLayer.getActiveTypes();
+            this.hotkeys = hotkeyLayer.getActiveHotkeys();
+            this.types = hotkeyLayer.getActiveTypes();
         }
 
         if (!prevType) {
@@ -188,5 +197,7 @@ class HotkeyHelpModal extends Component {
         );
     }
 }
+
+HotkeyHelpModal.contextType = HotkeyContext;
 
 export default HotkeyHelpModal;

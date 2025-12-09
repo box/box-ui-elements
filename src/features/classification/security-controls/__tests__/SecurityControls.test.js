@@ -136,4 +136,323 @@ describe('features/classification/security-controls/SecurityControls', () => {
             values: { appsList: 'App 1, App 2, App 3' },
         });
     });
+
+    describe('SharedLinkAutoExpiration combinations', () => {
+        test('should render SharedLinkAutoExpiration alone (1 restriction)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Download + SharedLinkAutoExpiration (2 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortDownloadSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + SharedLinkAutoExpiration (2 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render App + SharedLinkAutoExpiration (2 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortAppSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Integration + SharedLinkAutoExpiration when shouldDisplayAppsAsIntegrations is true (2 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+            };
+            wrapper.setProps({
+                controlsFormat: SHORT,
+                controls: autoExpirationControls,
+                shouldDisplayAppsAsIntegrations: true,
+            });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortIntegrationSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sign + SharedLinkAutoExpiration (2 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Download + SharedLinkAutoExpiration (3 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingDownloadSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + App + SharedLinkAutoExpiration (3 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingAppSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Sign + SharedLinkAutoExpiration (3 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Download + App + SharedLinkAutoExpiration (3 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortDownloadAppSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Download + Sign + SharedLinkAutoExpiration (3 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortDownloadSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render App + Sign + SharedLinkAutoExpiration (3 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortAppSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Download + App + SharedLinkAutoExpiration (4 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingDownloadAppSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Download + Integration + SharedLinkAutoExpiration when shouldDisplayAppsAsIntegrations is true (4 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+            };
+            wrapper.setProps({
+                controlsFormat: SHORT,
+                controls: autoExpirationControls,
+                shouldDisplayAppsAsIntegrations: true,
+            });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingDownloadIntegrationSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Download + Sign + SharedLinkAutoExpiration (4 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingDownloadSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Download + App + Sign + SharedLinkAutoExpiration (4 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortDownloadAppSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render Sharing + Download + App + Sign + SharedLinkAutoExpiration (5 restrictions)', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+                sharedLink: {
+                    accessLevel: 'collabOnly',
+                },
+                download: {
+                    desktop: {
+                        restrictManagedUsers: 'ownersCoOwners',
+                    },
+                },
+                app: {
+                    accessLevel: 'whitelist',
+                    apps: [{ displayText: 'App 1' }],
+                },
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+            wrapper.setProps({ controlsFormat: SHORT, controls: autoExpirationControls });
+            expect(wrapper.find('SecurityControlsItem').prop('message')).toEqual(
+                messages.shortSharingDownloadAppSignSharedLinkAutoExpiration,
+            );
+        });
+
+        test('should render sharedLinkAutoExpirationApplied in FULL format', () => {
+            const autoExpirationControls = {
+                sharedLinkAutoExpiration: true,
+            };
+            wrapper.setProps({ controlsFormat: FULL, controls: autoExpirationControls });
+            const autoExpirationItem = wrapper.findWhere(
+                node =>
+                    node.type() === SecurityControlsItem &&
+                    node.prop('message').id === 'boxui.securityControls.sharedLinkAutoExpirationApplied',
+            );
+            expect(autoExpirationItem.exists()).toBe(true);
+        });
+    });
 });

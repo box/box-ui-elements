@@ -2,7 +2,8 @@ import { http, HttpResponse } from 'msw';
 import type { HttpHandler } from 'msw';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
-import { fileIdWithMetadata, mockFileRequest } from './MetadataSidebarRedesignedMocks';
+import { fileIdWithMetadata, mockFileRequest, mockGlobalMetadataTemplates } from './MetadataSidebarRedesignedMocks';
+import { mockUserRequest } from '../../../common/__mocks__/mockRequests';
 
 const apiV2Path = `${DEFAULT_HOSTNAME_API}/2.0`;
 
@@ -397,8 +398,14 @@ export const mockSinglelevelTaxonomyNodes = {
 };
 
 export const taxonomyMockHandlers: HttpHandler[] = [
+    http.get(mockUserRequest.url, () => {
+        return HttpResponse.json(mockUserRequest.response);
+    }),
     http.get(mockFileRequest.url, () => {
         return HttpResponse.json(mockFileRequest.response);
+    }),
+    http.get(mockGlobalMetadataTemplates.url, () => {
+        return HttpResponse.json(mockGlobalMetadataTemplates.response);
     }),
     http.get(mockMetadataInstancesWithTaxonomy.url, () => {
         return HttpResponse.json(mockMetadataInstancesWithTaxonomy.response);
@@ -417,7 +424,7 @@ export const taxonomyMockHandlers: HttpHandler[] = [
     }),
     http.get(mockMultilevelTaxonomyOptions.url, ({ request }) => {
         const url = new URL(request.url);
-        const ancestorId = url.searchParams.get('ancestor_id');
+        const ancestorId = url.searchParams.get('ancestor');
 
         if (!ancestorId) {
             return HttpResponse.json(mockMultilevelTaxonomyOptions.response.firstLevel);

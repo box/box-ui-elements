@@ -6,7 +6,9 @@
 
 import * as React from 'react';
 import { Route } from 'react-router-dom';
+import classNames from 'classnames';
 import VersionsItem from './VersionsItem';
+import { useFeatureConfig } from '../../common/feature-checking/hooks';
 import type { BoxItemVersion } from '../../../common/types/core';
 import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation';
 import './VersionsList.scss';
@@ -22,6 +24,8 @@ type Props = {
 };
 
 const VersionsList = ({ currentId, internalSidebarNavigation, routerDisabled = false, versions, ...rest }: Props) => {
+    const { enabled: isPreviewModernizationEnabled } = useFeatureConfig('previewModernization');
+
     const renderVersionItemWithoutRouter = (version: BoxItemVersion) => (
         <VersionsItem
             isCurrent={currentId === version.id}
@@ -45,7 +49,11 @@ const VersionsList = ({ currentId, internalSidebarNavigation, routerDisabled = f
     );
 
     return (
-        <ul className="bcs-VersionsList">
+        <ul
+            className={classNames('bcs-VersionsList', {
+                'bcs-VersionsList--modernized': isPreviewModernizationEnabled,
+            })}
+        >
             {versions.map(version => (
                 <li className="bcs-VersionsList-item" key={version.id}>
                     {routerDisabled ? renderVersionItemWithoutRouter(version) : renderVersionItemWithRouter(version)}

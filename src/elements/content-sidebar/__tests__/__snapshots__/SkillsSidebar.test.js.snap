@@ -3,7 +3,6 @@
 exports[`elements/content-sidebar/Skills/SkillsSidebar should render loading indicator component when cards are not available 1`] = `
 <SidebarContent
   className="bcs-skills"
-  elementId=""
   sidebarView="skills"
   title={
     <FormattedMessage
@@ -19,7 +18,6 @@ exports[`elements/content-sidebar/Skills/SkillsSidebar should render loading ind
 exports[`elements/content-sidebar/Skills/SkillsSidebar should render skills sidebar component when cards are available 1`] = `
 <SidebarContent
   className="bcs-skills"
-  elementId=""
   sidebarView="skills"
   title={
     <FormattedMessage

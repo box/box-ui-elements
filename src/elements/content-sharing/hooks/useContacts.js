@@ -17,10 +17,19 @@ import type { ContentSharingHooksOptions, GetContactsFnType } from '../types';
  */
 function useContacts(api: API, itemID: string, options: ContentSharingHooksOptions): GetContactsFnType | null {
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const { handleSuccess = noop, handleError = noop, transformGroups, transformUsers } = options;
+    const {
+        currentUserId,
+        handleSuccess = noop,
+        handleError = noop,
+        isContentSharingV2Enabled,
+        transformGroups,
+        transformUsers,
+    } = options;
 
     React.useEffect(() => {
-        if (getContacts) return;
+        if (getContacts || (isContentSharingV2Enabled && !currentUserId)) {
+            return;
+        }
 
         const resolveAPICall = (
             resolve: (result: Array<Object>) => void,
@@ -60,7 +69,17 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
             return Promise.all([getUsers, getGroups]).then(contactArrays => [...contactArrays[0], ...contactArrays[1]]);
         };
         setGetContacts(updatedGetContactsFn);
-    }, [api, getContacts, handleError, handleSuccess, itemID, transformGroups, transformUsers]);
+    }, [
+        api,
+        currentUserId,
+        getContacts,
+        handleError,
+        handleSuccess,
+        isContentSharingV2Enabled,
+        itemID,
+        transformGroups,
+        transformUsers,
+    ]);
 
     return getContacts;
 }

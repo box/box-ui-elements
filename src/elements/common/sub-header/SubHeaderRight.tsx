@@ -32,7 +32,7 @@ export interface SubHeaderRightProps {
     onCreate: () => void;
     onGridViewSliderChange: (newSliderValue: number) => void;
     onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
-    onMetadataSidePanelToggle?: () => void;
+    onSidePanelToggle?: () => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
     portalElement?: HTMLElement;
@@ -53,7 +53,7 @@ const SubHeaderRight = ({
     onCreate,
     onGridViewSliderChange,
     onSortChange,
-    onMetadataSidePanelToggle,
+    onSidePanelToggle,
     onUpload,
     onViewModeChange,
     portalElement,
@@ -107,7 +107,7 @@ const SubHeaderRight = ({
                     {bulkItemActions && bulkItemActions.length > 0 && (
                         <BulkItemActionMenu actions={bulkItemActions} selectedItemIds={selectedItemIds} />
                     )}
-                    <Button icon={Pencil} size="large" variant="primary" onClick={onMetadataSidePanelToggle}>
+                    <Button icon={Pencil} size="large" variant="primary" onClick={onSidePanelToggle}>
                         {formatMessage(messages.metadata)}
                     </Button>
                 </>

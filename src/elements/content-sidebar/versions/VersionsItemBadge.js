@@ -5,19 +5,26 @@
  */
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import classNames from 'classnames';
 import messages from './messages';
 import './VersionsItemBadge.scss';
 
 type Props = {
     intl: any,
-    versionNumber: string,
+    isCurrent?: boolean,
+    versionNumber?: string,
 };
 
-const VersionsItemBadge = ({ intl, versionNumber }: Props) => {
+const VersionsItemBadge = ({ intl, isCurrent, versionNumber }: Props) => {
     const intlValues = { versionNumber };
 
     return (
-        <div aria-label={intl.formatMessage(messages.versionNumberLabel, intlValues)} className="bcs-VersionsItemBadge">
+        <div
+            aria-label={intl.formatMessage(messages.versionNumberLabel, intlValues)}
+            className={classNames('bcs-VersionsItemBadge', {
+                'bcs-VersionsItemBadge--current': isCurrent,
+            })}
+        >
             <FormattedMessage {...messages.versionNumberBadge} values={intlValues} />
         </div>
     );

@@ -125,52 +125,58 @@ describe('components/form-elements/form/Form', () => {
     });
 
     test('should expose form register/unregister function on the context', () => {
-        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
+        const wrapper = mount(
+            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+                <div />
+            </Form>,
+        );
 
-        expect(wrapper.instance().getChildContext().form.registerInput).toBeTruthy();
-        expect(wrapper.instance().getChildContext().form.unregisterInput).toBeTruthy();
+        const instance = wrapper.find('Form').instance();
+
+        expect(instance.registerInput).toBeTruthy();
+        expect(instance.unregisterInput).toBeTruthy();
     });
 
     test('should register an input when registerInput is called', () => {
-        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
+        const wrapper = mount(
+            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+                <div />
+            </Form>,
+        );
 
         const inputHandlerSpy = sinon.spy();
-        wrapper
-            .instance()
-            .getChildContext()
-            .form.registerInput('testinput', inputHandlerSpy);
-        expect(wrapper.state('registeredInputs').testinput).toBe(inputHandlerSpy);
+        const instance = wrapper.find('Form').instance();
+        instance.registerInput('testinput', inputHandlerSpy);
+        expect(instance.state.registeredInputs.testinput).toBe(inputHandlerSpy);
     });
 
     test('should correctly register multiple inputs when registerInput is called', () => {
-        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
+        const wrapper = mount(
+            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+                <div />
+            </Form>,
+        );
 
         const inputHandlerSpy = sinon.spy();
-        wrapper
-            .instance()
-            .getChildContext()
-            .form.registerInput('testinput1', inputHandlerSpy);
-        wrapper
-            .instance()
-            .getChildContext()
-            .form.registerInput('testinput2', inputHandlerSpy);
-        expect(wrapper.state('registeredInputs').testinput1).toBe(inputHandlerSpy);
-        expect(wrapper.state('registeredInputs').testinput2).toBe(inputHandlerSpy);
+        const instance = wrapper.find('Form').instance();
+        instance.registerInput('testinput1', inputHandlerSpy);
+        instance.registerInput('testinput2', inputHandlerSpy);
+        expect(instance.state.registeredInputs.testinput1).toBe(inputHandlerSpy);
+        expect(instance.state.registeredInputs.testinput2).toBe(inputHandlerSpy);
     });
 
     test('should throw an error if registerInput is called for already registered input', done => {
-        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
+        const wrapper = mount(
+            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+                <div />
+            </Form>,
+        );
 
-        wrapper
-            .instance()
-            .getChildContext()
-            .form.registerInput('testinput', () => {});
+        const instance = wrapper.find('Form').instance();
+        instance.registerInput('testinput', () => {});
 
         try {
-            wrapper
-                .instance()
-                .getChildContext()
-                .form.registerInput('testinput', () => {});
+            instance.registerInput('testinput', () => {});
         } catch (e) {
             expect(e.message).toEqual("Input 'testinput' is already registered.");
             done();
@@ -178,18 +184,17 @@ describe('components/form-elements/form/Form', () => {
     });
 
     test('should unregister an input when unregisterInput is called', () => {
-        const wrapper = shallow(<Form onInvalidSubmit={() => {}} onValidSubmit={() => {}} />);
+        const wrapper = mount(
+            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+                <div />
+            </Form>,
+        );
 
         const inputHandlerSpy = sinon.spy();
-        wrapper
-            .instance()
-            .getChildContext()
-            .form.registerInput('testinput', inputHandlerSpy);
-        expect(wrapper.state('registeredInputs').testinput).toBe(inputHandlerSpy);
-        wrapper
-            .instance()
-            .getChildContext()
-            .form.unregisterInput('testinput', inputHandlerSpy);
-        expect(wrapper.state('registeredInputs').testinput).toBeFalsy();
+        const instance = wrapper.find('Form').instance();
+        instance.registerInput('testinput', inputHandlerSpy);
+        expect(instance.state.registeredInputs.testinput).toBe(inputHandlerSpy);
+        instance.unregisterInput('testinput');
+        expect(instance.state.registeredInputs.testinput).toBeFalsy();
     });
 });

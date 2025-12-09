@@ -30,7 +30,7 @@ export const basic = {
     },
 };
 
-export const Modernization = {
+export const withModernization = {
     args: {
         enableModernizedComponents: true,
     },

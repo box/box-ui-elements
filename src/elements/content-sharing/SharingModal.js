@@ -39,6 +39,7 @@ import type {
 import type {
     ContentSharingItemAPIResponse,
     ContentSharingSharedLinkType,
+    GetContactByEmailFnType,
     GetContactsFnType,
     GetContactsByEmailFnType,
     SendInvitesFnType,
@@ -80,18 +81,16 @@ function SharingModal({
     const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
-    const [
-        changeSharedLinkAccessLevel,
-        setChangeSharedLinkAccessLevel,
-    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
-    const [
-        changeSharedLinkPermissionLevel,
-        setChangeSharedLinkPermissionLevel,
-    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] =
+        React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [changeSharedLinkPermissionLevel, setChangeSharedLinkPermissionLevel] =
+        React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
-    const [getContactsByEmail, setGetContactsByEmail] = React.useState<null | GetContactsByEmailFnType>(null);
+    const [getContactsByEmail, setGetContactsByEmail] = React.useState<
+        null | GetContactsByEmailFnType | GetContactByEmailFnType,
+    >(null);
     const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
@@ -191,11 +190,15 @@ function SharingModal({
 
     // Set the getContactsByEmail function. This call is not associated with a banner notification,
     // which is why it exists at this level and not in SharingNotification
-    const getContactsByEmailFn: GetContactsByEmailFnType | null = useContactsByEmail(api, itemID, {
-        transformUsers: data => convertUserContactsByEmailResponse(data),
-    });
+    const getContactsByEmailFn: GetContactsByEmailFnType | GetContactByEmailFnType | null = useContactsByEmail(
+        api,
+        itemID,
+        {
+            transformUsers: data => convertUserContactsByEmailResponse(data),
+        },
+    );
     if (getContactsByEmailFn && !getContactsByEmail) {
-        setGetContactsByEmail((): GetContactsByEmailFnType => getContactsByEmailFn);
+        setGetContactsByEmail((): GetContactsByEmailFnType | GetContactByEmailFnType => getContactsByEmailFn);
     }
 
     // Display a notification if there is an error in retrieving initial data

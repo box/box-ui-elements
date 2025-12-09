@@ -20,6 +20,7 @@ export const withContentSharingV2Enabled = {
             ...global.FEATURE_FLAGS,
             contentSharingV2: true,
         },
+        hasProviders: true,
     },
 };
 
