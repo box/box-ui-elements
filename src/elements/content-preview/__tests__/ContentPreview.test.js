@@ -1358,7 +1358,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 }
             },
         );
-        test('should set dynamicOnPreviewLoadAction and call srollToAnnotation properly if deferScrollToOnload is true', () => {
+        test('should set dynamicOnPreviewLoadAction and execute scrollToFrameAnnotation properly if deferScrollToOnload is true', () => {
             const annotation = {
                 id: '123',
                 file_version: { id: '123' },
