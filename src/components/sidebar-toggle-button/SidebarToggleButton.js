@@ -59,7 +59,7 @@ const SidebarToggleButton = ({
         const tooltipPositionModernized = direction === DIRECTION_LEFT ? DIRECTION_RIGHT : DIRECTION_LEFT;
 
         return (
-            <BPTooltip content={intlText} side={tooltipPositionModernized} onMouseDown={mouseDownHandler}>
+            <BPTooltip content={intlText} side={tooltipPositionModernized}>
                 {/* Workaround to attach BP tooltip to legacy button, remove span when buttons are migrated to BP */}
                 <span onMouseDown={mouseDownHandler} role="presentation">
                     <PlainButton
@@ -77,7 +77,7 @@ const SidebarToggleButton = ({
         );
     }
     return (
-        <Tooltip position={tooltipPosition} text={intlText} onMouseDown={mouseDownHandler}>
+        <Tooltip position={tooltipPosition} text={intlText}>
             <PlainButton
                 aria-label={intlText}
                 className={classes}
