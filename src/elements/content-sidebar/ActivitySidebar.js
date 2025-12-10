@@ -1153,9 +1153,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             } else {
                 history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
             }
-        }
 
-        onAnnotationSelect(annotation);
+            const deferScrollToOnload = annotation?.target?.location?.type === 'frame';
+            onAnnotationSelect(annotation, deferScrollToOnload);
+        } else {
+            onAnnotationSelect(annotation);
+        }
     };
 
     handleItemsFiltered = (status?: ActivityFilterItemType) => {
