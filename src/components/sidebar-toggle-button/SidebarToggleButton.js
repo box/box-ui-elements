@@ -3,9 +3,11 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
-import { Tooltip as BPTooltip } from '@box/blueprint-web';
+import { IconButton, Tooltip as BPTooltip } from '@box/blueprint-web';
 import IconHide from '../../icons/general/IconHide';
 import IconShow from '../../icons/general/IconShow';
+import IconRightSidebarChevronOpen from '../../icons/general/IconRightSidebarChevronOpen';
+import IconRightSidebarChevronClose from '../../icons/general/IconRightSidebarChevronClose';
 import PlainButton from '../plain-button';
 import Tooltip from '../tooltip';
 import { useFeatureConfig } from '../../elements/common/feature-checking';
@@ -38,11 +40,11 @@ const SidebarToggleButton = ({
     const intlText = intl.formatMessage(intlMessage);
     const classes = classNames(className, 'bdl-SidebarToggleButton', {
         'bdl-is-collapsed': isCollapsed,
-        'bdl-SidebarToggleButton--modernized': isPreviewModernizationEnabled,
     });
-    const tooltipPosition = direction === DIRECTION_LEFT ? 'middle-right' : 'middle-left';
-    const renderButton = () => {
-        if (direction === DIRECTION_LEFT) {
+    const isDirectionLeft = direction === DIRECTION_LEFT;
+    const tooltipPosition = isDirectionLeft ? 'middle-right' : 'middle-left';
+    const renderIcon = () => {
+        if (isDirectionLeft) {
             return isOpen ? <IconShow height={16} width={16} /> : <IconHide height={16} width={16} />;
         }
         return isOpen ? <IconHide height={16} width={16} /> : <IconShow height={16} width={16} />;
@@ -56,23 +58,30 @@ const SidebarToggleButton = ({
     };
 
     if (isPreviewModernizationEnabled) {
-        const tooltipPositionModernized = direction === DIRECTION_LEFT ? DIRECTION_RIGHT : DIRECTION_LEFT;
-
+        const tooltipPositionModernized = isDirectionLeft ? DIRECTION_RIGHT : DIRECTION_LEFT;
         return (
             <BPTooltip content={intlText} side={tooltipPositionModernized}>
-                {/* Workaround to attach BP tooltip to legacy button, remove span when buttons are migrated to BP */}
-                <span onMouseDown={mouseDownHandler} role="presentation">
-                    <PlainButton
+                {isDirectionLeft ? (
+                    <IconButton
                         aria-label={intlText}
-                        className={classes}
+                        icon={isOpen ? IconRightSidebarChevronOpen : IconRightSidebarChevronClose}
                         onClick={onClick}
                         onMouseDown={mouseDownHandler}
-                        type="button"
+                        size="large"
+                        variant="high-contrast"
                         {...rest}
-                    >
-                        {renderButton()}
-                    </PlainButton>
-                </span>
+                    />
+                ) : (
+                    <IconButton
+                        aria-label={intlText}
+                        icon={isOpen ? IconRightSidebarChevronClose : IconRightSidebarChevronOpen}
+                        onClick={onClick}
+                        onMouseDown={mouseDownHandler}
+                        size="large"
+                        variant="high-contrast"
+                        {...rest}
+                    />
+                )}
             </BPTooltip>
         );
     }
@@ -86,7 +95,7 @@ const SidebarToggleButton = ({
                 type="button"
                 {...rest}
             >
-                {renderButton()}
+                {renderIcon()}
             </PlainButton>
         </Tooltip>
     );
