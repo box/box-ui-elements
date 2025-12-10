@@ -64,6 +64,7 @@ const SidebarToggleButton = ({
                 {isDirectionLeft ? (
                     <IconButton
                         aria-label={intlText}
+                        data-testid="sidebar-toggle-button"
                         icon={isOpen ? IconRightSidebarChevronOpen : IconRightSidebarChevronClose}
                         onClick={onClick}
                         onMouseDown={mouseDownHandler}
@@ -74,6 +75,7 @@ const SidebarToggleButton = ({
                 ) : (
                     <IconButton
                         aria-label={intlText}
+                        data-testid="sidebar-toggle-button"
                         icon={isOpen ? IconRightSidebarChevronClose : IconRightSidebarChevronOpen}
                         onClick={onClick}
                         onMouseDown={mouseDownHandler}
@@ -90,6 +92,7 @@ const SidebarToggleButton = ({
             <PlainButton
                 aria-label={intlText}
                 className={classes}
+                data-testid="sidebar-toggle-button"
                 onClick={onClick}
                 onMouseDown={mouseDownHandler}
                 type="button"
