@@ -226,6 +226,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     stagedFile: ?BoxItem;
 
+    previewLibraryLoaded: boolean = false;
+
     updateVersionToCurrent: ?() => void;
 
     initialState: State = {
@@ -447,6 +449,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const prevFileVersionId = getProp(prevFile, 'file_version.id');
         const fileVersionId = getProp(file, 'file_version.id');
         let loadPreview = false;
+
+        // Check if preview library just became available and we haven't loaded preview yet
+        // This handles cases where library loads asynchronously after file is already set
+        if (!this.previewLibraryLoaded && this.isPreviewLibraryLoaded() && file && !this.preview) {
+            this.previewLibraryLoaded = true;
+            return true;
+        }
 
         if (selectedVersionId !== prevSelectedVersionId) {
             const isPreviousCurrent = fileVersionId === prevSelectedVersionId || !prevSelectedVersionId;
@@ -800,8 +809,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             ...rest
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
+        this.previewLibraryLoaded = this.isPreviewLibraryLoaded();
 
-        if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
+        if (!this.previewLibraryLoaded || !file || !tokenOrTokenFunction) {
             return;
         }
 
