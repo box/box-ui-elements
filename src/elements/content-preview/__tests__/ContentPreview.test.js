@@ -513,7 +513,7 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(spy).not.toHaveBeenCalled();
         });
 
-        test('should return false if the file is not set', async () => {
+        test('should return early if the file is not set', async () => {
             const wrapper = getWrapper(props);
             const instance = wrapper.instance();
             instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
