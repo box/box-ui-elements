@@ -175,6 +175,14 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(instance.shouldLoadPreview({ selectedVersion: { id: '1' } })).toBe(false);
         });
+
+        test("should return true if the preview library just became available and we haven't loaded preview yet", () => {
+            instance.previewLibraryLoaded = false;
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+            instance.preview = undefined;
+            expect(instance.shouldLoadPreview({ file })).toBe(true);
+            expect(instance.previewLibraryLoaded).toBe(true);
+        });
     });
 
     describe('canDownload()', () => {
@@ -494,6 +502,35 @@ describe('elements/content-preview/ContentPreview', () => {
                 }
             },
         );
+
+        test('should return if the preview library is not loaded', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(false);
+            const spy = jest.spyOn(instance, 'getFileId');
+            await instance.loadPreview();
+            expect(spy).not.toHaveBeenCalled();
+        });
+
+        test('should return early if the file is not set', async () => {
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+            const spy = jest.spyOn(instance, 'getFileId');
+            await instance.loadPreview();
+            expect(spy).not.toHaveBeenCalled();
+        });
+
+        test('should return if the token is not set', async () => {
+            const wrapper = getWrapper({ ...props, token: undefined });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+            const spy = jest.spyOn(instance, 'getFileId');
+            await instance.loadPreview();
+            expect(spy).not.toHaveBeenCalled();
+        });
     });
 
     describe('fetchFile()', () => {
