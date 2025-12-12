@@ -65,6 +65,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -225,6 +226,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -351,6 +353,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToWindow={true}
       isDisabled={false}
       position="top-right"
+      targetWrapperClassName="usm-ftux-toggle-tooltip-target"
       text="Create and copy link for sharing"
       theme="default"
     >
@@ -416,6 +419,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -662,6 +666,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -802,6 +807,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -953,6 +959,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -1103,6 +1110,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -1253,6 +1261,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
@@ -1431,6 +1440,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       onDismiss={[Function]}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="shared-link-field-container-tooltip-wrapper"
       theme="callout"
     >
       <TextInputWithCopyButton
