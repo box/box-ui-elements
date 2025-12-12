@@ -175,6 +175,14 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(instance.shouldLoadPreview({ selectedVersion: { id: '1' } })).toBe(false);
         });
+
+        test("should return true if the preview library just became available and we haven't loaded preview yet", () => {
+            instance.previewLibraryLoaded = false;
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+            instance.preview = undefined;
+            expect(instance.shouldLoadPreview({ file })).toBe(true);
+            expect(instance.previewLibraryLoaded).toBe(true);
+        });
     });
 
     describe('canDownload()', () => {
@@ -494,6 +502,35 @@ describe('elements/content-preview/ContentPreview', () => {
                 }
             },
         );
+
+        test('should return if the preview library is not loaded', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(false);
+            const spy = jest.spyOn(instance, 'getFileId');
+            await instance.loadPreview();
+            expect(spy).not.toHaveBeenCalled();
+        });
+
+        test('should return early if the file is not set', async () => {
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+            const spy = jest.spyOn(instance, 'getFileId');
+            await instance.loadPreview();
+            expect(spy).not.toHaveBeenCalled();
+        });
+
+        test('should return if the token is not set', async () => {
+            const wrapper = getWrapper({ ...props, token: undefined });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+            const spy = jest.spyOn(instance, 'getFileId');
+            await instance.loadPreview();
+            expect(spy).not.toHaveBeenCalled();
+        });
     });
 
     describe('fetchFile()', () => {
@@ -791,7 +828,7 @@ describe('elements/content-preview/ContentPreview', () => {
         beforeEach(() => {
             props = {
                 collection: [{}, {}],
-                fileId: file.id,
+                fileId: 123,
                 onLoad: jest.fn(),
                 token: 'token',
             };
@@ -823,6 +860,16 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should set isLoading to false', () => {
             instance.onPreviewLoad(data);
             expect(instance.state.isLoading).toBe(false);
+        });
+
+        test('should call dynamicOnPreviewLoadAction if it is defined', () => {
+            instance.dynamicOnPreviewLoadAction = jest.fn();
+            instance.onPreviewLoad(data);
+            expect(instance.dynamicOnPreviewLoadAction).toBeCalled();
+        });
+
+        test('should not call dynamicOnPreviewLoadAction if it is not defined', () => {
+            expect(() => instance.onPreviewLoad(data)).not.toThrow();
         });
     });
 
@@ -1285,6 +1332,7 @@ describe('elements/content-preview/ContentPreview', () => {
             annotationFileVersionId | selectedVersionId | locationType | setStateCount
             ${'123'}                | ${'124'}          | ${'page'}    | ${1}
             ${'124'}                | ${'124'}          | ${'page'}    | ${0}
+            ${'123'}                | ${'124'}          | ${'frame'}   | ${0}
             ${'123'}                | ${'124'}          | ${''}        | ${0}
             ${undefined}            | ${'124'}          | ${'page'}    | ${0}
         `(
@@ -1317,6 +1365,112 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
             },
         );
+
+        test.each`
+            annotationFileVersionId | selectedVersionId | locationType | deferScrollToOnload
+            ${'123'}                | ${'124'}          | ${'frame'}   | ${true}
+            ${'123'}                | ${'124'}          | ${'page'}    | ${false}
+        `(
+            'should not call emit scrolltoannotation if deferScrollToOnload is $deferScrollToOnload',
+            ({ annotationFileVersionId, selectedVersionId, locationType, deferScrollToOnload }) => {
+                const annotation = {
+                    id: '123',
+                    file_version: { id: annotationFileVersionId },
+                    target: { location: { type: locationType } },
+                };
+                const wrapper = getWrapper();
+                const instance = wrapper.instance();
+                wrapper.setState({ selectedVersion: { id: selectedVersionId } });
+                const emit = jest.fn();
+                jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+                instance.setState = jest.fn();
+
+                instance.handleAnnotationSelect(annotation, deferScrollToOnload);
+                if (deferScrollToOnload) {
+                    expect(emit).not.toBeCalled();
+                    expect(instance.dynamicOnPreviewLoadAction).toBeDefined();
+                } else {
+                    expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
+                    expect(instance.dynamicOnPreviewLoadAction).not.toBeDefined();
+                }
+            },
+        );
+        test('should set dynamicOnPreviewLoadAction and execute scrollToFrameAnnotation properly if deferScrollToOnload is true', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '123' },
+                target: { location: { type: 'frame' } },
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ selectedVersion: { id: 123 } });
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            instance.setState = jest.fn();
+            instance.handleAnnotationSelect(annotation, true);
+            expect(instance.dynamicOnPreviewLoadAction).toBeDefined();
+            let handleLoadedData;
+            const mockAddEventListener = jest.fn().mockImplementation((listener, callback) => {
+                expect(listener).toBe('loadeddata');
+                expect(callback).toBeDefined();
+                handleLoadedData = callback;
+            });
+            const mockRemoveEventListener = jest.fn().mockImplementation((listener, callback) => {
+                expect(listener).toBe('loadeddata');
+                expect(callback).toEqual(handleLoadedData);
+                handleLoadedData = null;
+            });
+            jest.spyOn(document, 'querySelector').mockReturnValue({
+                addEventListener: mockAddEventListener,
+                removeEventListener: mockRemoveEventListener,
+            });
+            instance.dynamicOnPreviewLoadAction();
+            expect(mockAddEventListener).toBeCalledWith('loadeddata', handleLoadedData);
+            handleLoadedData();
+            expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
+            expect(instance.dynamicOnPreviewLoadAction).toBeNull();
+            expect(mockRemoveEventListener).toHaveBeenCalledTimes(1);
+        });
+
+        test('dynamicOnPreviewLoadAction should return if video player does not exist', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '123' },
+                target: { location: { type: 'frame' } },
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ selectedVersion: { id: 123 } });
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            instance.setState = jest.fn();
+            jest.spyOn(document, 'querySelector').mockReturnValue(null);
+            instance.handleAnnotationSelect(annotation, true);
+            instance.dynamicOnPreviewLoadAction();
+            expect(instance.dynamicOnPreviewLoadAction).toBeNull();
+            expect(emit).not.toBeCalled();
+        });
+
+        test('dynamicOnPreviewLoadAction should still call emit scrolltoannotation if target location type is not frame', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '123' },
+                target: { location: { type: 'page' } },
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ selectedVersion: { id: 123 } });
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            const scrollToFrameAnnotation = jest.fn();
+            jest.spyOn(instance, 'scrollToFrameAnnotation').mockReturnValue(scrollToFrameAnnotation);
+            instance.setState = jest.fn();
+            instance.handleAnnotationSelect(annotation, true);
+            instance.dynamicOnPreviewLoadAction();
+            expect(scrollToFrameAnnotation).not.toBeCalled();
+            expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
+            expect(instance.dynamicOnPreviewLoadAction).toBeNull();
+        });
     });
 
     describe('getThumbnail()', () => {
@@ -1349,6 +1503,79 @@ describe('elements/content-preview/ContentPreview', () => {
             const pageThumbnail = instance.getThumbnail(pageNumber);
 
             expect(pageThumbnail).toBeNull();
+        });
+    });
+
+    describe('scrollToFrameAnnotation()', () => {
+        let annotation;
+        let addEventListener;
+        let removeEventListener;
+        let mockVideoPlayer;
+        beforeEach(() => {
+            addEventListener = jest.fn();
+            removeEventListener = jest.fn();
+            mockVideoPlayer = {
+                addEventListener,
+                removeEventListener,
+                readyState: 0,
+            };
+
+            annotation = {
+                id: '123',
+                file_version: { id: '123' },
+                target: { location: { type: 'frame' } },
+            };
+
+            jest.spyOn(document, 'querySelector').mockImplementation(selector => {
+                expect(selector).toBe('.bp-media-container video');
+                return mockVideoPlayer;
+            });
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        test('should return if the video player does not exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            jest.spyOn(document, 'querySelector').mockReturnValue(null);
+            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
+            expect(instance.dynamicOnPreviewLoadAction).toBeNull();
+            expect(emit).not.toBeCalled();
+        });
+
+        test('should emit scrolltoannotation if video player is ready to seek and do not set video player event listener', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            mockVideoPlayer.readyState = 4;
+            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
+            expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
+            expect(mockVideoPlayer.addEventListener).not.toBeCalled();
+        });
+
+        test('should not throw an error if the video player is ready to seek and the viewer is not found', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            jest.spyOn(instance, 'getViewer').mockReturnValue(null);
+            mockVideoPlayer.readyState = 4;
+            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
+        });
+
+        test('should add loadeddata event listener to video player if video player is not ready to seek', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ selectedVersion: { id: 123 } });
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            mockVideoPlayer.readyState = 0;
+            instance.scrollToFrameAnnotation(annotation.id, annotation.target);
+            expect(emit).not.toBeCalled();
+            expect(addEventListener).toBeCalledWith('loadeddata', expect.any(Function));
         });
     });
 });
