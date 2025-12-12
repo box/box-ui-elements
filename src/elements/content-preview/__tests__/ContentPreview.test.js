@@ -1536,7 +1536,7 @@ describe('elements/content-preview/ContentPreview', () => {
             jest.clearAllMocks();
         });
 
-        test('should return if the video player is not found', () => {
+        test('should return if the video player does not exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             const emit = jest.fn();
