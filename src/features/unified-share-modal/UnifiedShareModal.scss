@@ -47,7 +47,7 @@
     }
 }
 
-.tooltip-target .bdl-Tooltip-target {
+.bdl-Tooltip-target.wrapper-block {
     display: block;
 }
 
@@ -93,6 +93,10 @@
             textarea {
                 width: 100%;
             }
+        }
+
+        .bdl-Tooltip-target.bdl-Tooltip-target {
+            display: block;
         }
     }
 
@@ -187,6 +191,10 @@
         align-items: center;
         justify-content: space-between;
         margin-top: 10px;
+
+        .bdl-Tooltip-target {
+            flex: 0 1 80%;
+        }
 
         .toggle-container {
             flex: 0 1 80%;
