@@ -3,11 +3,12 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+
 import { IconButton, Tooltip as BPTooltip } from '@box/blueprint-web';
+import { RightSidebarChevronOpen, RightSidebarChevronClose } from '@box/blueprint-web-assets/icons/Medium';
+
 import IconHide from '../../icons/general/IconHide';
 import IconShow from '../../icons/general/IconShow';
-import IconRightSidebarChevronOpen from '../../icons/general/IconRightSidebarChevronOpen';
-import IconRightSidebarChevronClose from '../../icons/general/IconRightSidebarChevronClose';
 import PlainButton from '../plain-button';
 import Tooltip from '../tooltip';
 import { useFeatureConfig } from '../../elements/common/feature-checking';
@@ -65,22 +66,20 @@ const SidebarToggleButton = ({
                     <IconButton
                         aria-label={intlText}
                         data-testid="sidebar-toggle-button"
-                        icon={isOpen ? IconRightSidebarChevronOpen : IconRightSidebarChevronClose}
+                        icon={isOpen ? RightSidebarChevronOpen : RightSidebarChevronClose}
                         onClick={onClick}
                         onMouseDown={mouseDownHandler}
                         size="large"
-                        variant="high-contrast"
                         {...rest}
                     />
                 ) : (
                     <IconButton
                         aria-label={intlText}
                         data-testid="sidebar-toggle-button"
-                        icon={isOpen ? IconRightSidebarChevronClose : IconRightSidebarChevronOpen}
+                        icon={isOpen ? RightSidebarChevronClose : RightSidebarChevronOpen}
                         onClick={onClick}
                         onMouseDown={mouseDownHandler}
                         size="large"
-                        variant="high-contrast"
                         {...rest}
                     />
                 )}
