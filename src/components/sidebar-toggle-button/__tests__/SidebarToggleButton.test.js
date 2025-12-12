@@ -64,10 +64,7 @@ describe('components/sidebar-toggle-button/SidebarToggleButton', () => {
             render(<SidebarToggleButton isOpen onClick={onClick} />, {
                 wrapperProps: { features: { previewModernization: { enabled: isPreviewModernizationEnabled } } },
             });
-            const button = screen.getByRole('button');
-            expect(button).toHaveClass('bdl-SidebarToggleButton');
-            const isModernized = button.classList.contains('bdl-SidebarToggleButton--modernized');
-            expect(isModernized).toBe(isPreviewModernizationEnabled);
+            const button = screen.getByTestId('sidebar-toggle-button');
             fireEvent.click(button);
             expect(onClick).toHaveBeenCalled();
         },
