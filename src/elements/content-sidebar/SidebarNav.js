@@ -14,11 +14,14 @@ import {
     Comment as CommentIcon,
     InformationCircle as InformationCircleIcon,
     Metadata as MetadataIcon,
+    MagicWand as MagicWandIcon,
+    DocGen as BPDocGenIcon,
 } from '@box/blueprint-web-assets/icons/Medium';
 import {
     Comment as CommentIconFilled,
     InformationCircle as InformationCircleIconFilled,
     Metadata as MetadataIconFilled,
+    MagicWand as MagicWandIconFilled,
 } from '@box/blueprint-web-assets/icons/MediumFilled';
 import { Size6, Size5, IconIconBlue } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
@@ -89,6 +92,28 @@ const MetadataIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWr
         <MetadataIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
     ) : (
         <MetadataIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const MagicWandIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <IconMagicWand className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <MagicWandIconFilled {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <MagicWandIcon {...SIDEBAR_TAB_ICON_PROPS} />
+    );
+};
+
+const DocGenIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+    if (!isPreviewModernizationEnabled) {
+        return <DocGenIcon className="bcs-SidebarNav-icon" />;
+    }
+    return isActive ? (
+        <BPDocGenIcon {...SIDEBAR_TAB_ICON_PROPS} color={IconIconBlue} />
+    ) : (
+        <BPDocGenIcon {...SIDEBAR_TAB_ICON_PROPS} />
     );
 };
 
@@ -223,7 +248,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
-                            <IconMagicWand className="bcs-SidebarNav-icon" />
+                            <MagicWandIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasMetadata && (
@@ -250,7 +275,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >
-                            <DocGenIcon className="bcs-SidebarNav-icon" />
+                            <DocGenIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                 </SidebarNavTablist>
