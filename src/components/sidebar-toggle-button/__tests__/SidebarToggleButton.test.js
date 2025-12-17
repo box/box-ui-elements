@@ -65,9 +65,15 @@ describe('components/sidebar-toggle-button/SidebarToggleButton', () => {
                 wrapperProps: { features: { previewModernization: { enabled: isPreviewModernizationEnabled } } },
             });
             const button = screen.getByRole('button');
-            expect(button).toHaveClass('bdl-SidebarToggleButton');
-            const isModernized = button.classList.contains('bdl-SidebarToggleButton--modernized');
-            expect(isModernized).toBe(isPreviewModernizationEnabled);
+
+            if (isPreviewModernizationEnabled) {
+                expect(button).toHaveClass('bdl-SidebarToggleButton--modernized');
+                expect(button).not.toHaveClass('bdl-SidebarToggleButton');
+            } else {
+                expect(button).toHaveClass('bdl-SidebarToggleButton');
+                expect(button).not.toHaveClass('bdl-SidebarToggleButton--modernized');
+            }
+
             fireEvent.click(button);
             expect(onClick).toHaveBeenCalled();
         },
