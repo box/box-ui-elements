@@ -95,7 +95,7 @@ const MetadataIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWr
     );
 };
 
-const MagicWandIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
+const SkillsIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrapperProps) => {
     if (!isPreviewModernizationEnabled) {
         return <IconMagicWand className="bcs-SidebarNav-icon" />;
     }
@@ -248,7 +248,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
-                            <MagicWandIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
+                            <SkillsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
                         </SidebarNavButton>
                     )}
                     {hasMetadata && (
