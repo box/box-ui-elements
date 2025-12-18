@@ -371,6 +371,54 @@ describe('useSidebarMetadataFetcher', () => {
             ]);
         });
 
+        test('should map taxonomy field suggestions with value and displayValue', async () => {
+            const taxonomyTemplate = {
+                canEdit: true,
+                id: 'metadata_template_taxonomy',
+                fields: [
+                    {
+                        key: 'taxonomyField',
+                        type: 'taxonomy' as MetadataTemplateFieldType,
+                        hidden: false,
+                    },
+                ],
+                scope: 'global',
+                templateKey: 'taxonomyTemplateKey',
+            };
+
+            const mockTaxonomySuggestions = {
+                taxonomyField: [
+                    { id: 'taxonomy-id-1', displayName: 'Taxonomy Item 1' },
+                    { id: 'taxonomy-id-2', displayName: 'Taxonomy Item 2' },
+                ],
+            };
+
+            mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+                successCallback({
+                    editors: [],
+                    templates: [taxonomyTemplate],
+                    templateInstances: [],
+                });
+            });
+            mockAPI.extractStructured.mockResolvedValue(mockTaxonomySuggestions);
+
+            const { result } = setupHook();
+
+            await waitFor(() => expect(result.current.templates).toEqual([taxonomyTemplate]));
+
+            const suggestions = await result.current.extractSuggestions('taxonomyTemplateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...taxonomyTemplate.fields[0],
+                    aiSuggestion: [
+                        { value: 'taxonomy-id-1', displayValue: 'Taxonomy Item 1' },
+                        { value: 'taxonomy-id-2', displayValue: 'Taxonomy Item 2' },
+                    ],
+                },
+            ]);
+        });
+
         test('should handle user correctable error during suggestions extraction', async () => {
             mockAPI.extractStructured.mockRejectedValue({ response: mockRateLimitError });
 

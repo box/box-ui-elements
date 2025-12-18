@@ -1424,19 +1424,19 @@
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.88.2.tgz#cb98f14dcd5a072d7c97be31030485cf9219478e"
   integrity sha512-TAtiYWvudxj3i5GAa4NsiHzlF9WcIARBbp1dCxgwsFP652NEamo/3SH2wyhcc/5u1bJJLftxe5xsTv6a7dpj0w==
 
-"@box/blueprint-web-assets@^4.80.0":
-  version "4.80.4"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.80.4.tgz#3db74e9c1006d2eb86ddc7e4caa23a4f0376cf92"
-  integrity sha512-zXIUfIC+RgzpQkA6KtLi0M5gtbXjNO3orWPNsVaJgEbYjrKahC4AejL2j4/XNaxt7AO0Xvz6vRr1Zjn1Byu4YA==
+"@box/blueprint-web-assets@^4.89.0":
+  version "4.89.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.89.0.tgz#fd19ea1e826b6af9db78fbddb89e052717e40f24"
+  integrity sha512-5pwvqUUJutlpVFjf8rZld0qegNwICyG1g63OEnhszVq+KqkMQPZJOWJ2rfK5Pr8SduH4ei5LQ3j6XkG8VJuFig==
 
-"@box/blueprint-web@^12.98.0":
-  version "12.98.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.98.0.tgz#05f7cf9dbfb3e7da0dc78f7e86c307f4656796b7"
-  integrity sha512-8KViIyToOdFzHjqVi3jswt94VVMfKXecxY5mPZCY6QdkXgpeATkJVMfDrTNT2sEFI+KWc6BPgv5LxBFy5o227A==
+"@box/blueprint-web@^12.104.1":
+  version "12.108.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.108.1.tgz#7760d6a3c0635a3a28e8c15881c1b799cbda5fff"
+  integrity sha512-v3jBIc7zP2oz7qG5cuALW67D0V+/4PdB8tRoeXs7OcFgwjTIRpx9pNg6pagmTTD/VSm6sCawbUl6oRQfowOQOQ==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.80.0"
+    "@box/blueprint-web-assets" "^4.89.0"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1485,12 +1485,12 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/combobox-with-api@^1.3.11":
-  version "1.3.13"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-1.3.13.tgz#bfe008b1fac3ac59a2459a98b1e7d9f8783799b0"
-  integrity sha512-PN+unnjkbiJf55JTKhz2lYIxCI28IX7b+ds+YUsStcrER9IrQuX7sbdA7UwJ+yW/uJBXF5zpyd4tnDIAloaSIQ==
+"@box/combobox-with-api@^1.18.0":
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-1.20.1.tgz#49fc8d7dfc3824b5ac77230de0a98f2080525bab"
+  integrity sha512-YkEN+1JbMkbpIkII8jKhKXpeIzyu48viOd5U9vbfUFYPMMd8iRQ9DZmPeb2cserywLAXajNX66PK5j9j3Gq+tw==
   dependencies:
-    "@box/tree" "^1.2.6"
+    "@box/tree" "^1.18.1"
     react-accessible-treeview "2.9.0"
 
 "@box/copy-input@^1.5.3":
@@ -1517,10 +1517,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.5.3.tgz#75eba5fb48697ce4f9e1428e8c7187fcac9c834b"
-  integrity sha512-49CaS2R8xnSlFKWjVscmx+YZJRV8NjYzzTKRMmw51f0Rs3I0VxRdxo0O+FThC6AtqRPE+3gvpLRMhXJlbTVL/w==
+"@box/metadata-editor@^1.18.0":
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.19.0.tgz#832b63be022dc3ef0482776378fbfdaaaa7e3a87"
+  integrity sha512-JtI+2PbRYxX8YW2PN+E9sMeJaAX25v24PTk5upbNN/vohTjpEuy8TWeZMziLT1UBwPtJ83NXqLY3F+6P2EC4aw==
 
 "@box/metadata-filter@^1.41.3":
   version "1.41.3"
@@ -1544,10 +1544,10 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/tree@^1.2.6":
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-1.2.6.tgz#998611a8e23f94959a20e9aa37ee89ab6d7d556b"
-  integrity sha512-BWJhvfnwbKTqEKS3mXWY8jfSI5zteSNEVfA06vA7+JPpiGrRWMIvolRiSQ4aeDAPXLoHqulzAm9PHmkSEnNsVw==
+"@box/tree@^1.18.1":
+  version "1.18.1"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-1.18.1.tgz#206602830e985dceb924e048391695344c1e0f07"
+  integrity sha512-FFGK+T0SdxUSKFVRiCvW76XfZlD7fx18jYo3d8qyC/Dg99QFqihDtpye9EaV+stHCwMBGgAhiHZMVTYMu4vEQg==
 
 "@box/types@^0.2.1":
   version "0.2.1"
