@@ -13,6 +13,8 @@ type Props = {
     children: React.Node,
     /** Forces menu to render within the scroll parent */
     className?: string,
+    /** Optional class name for the target wrapper element */
+    targetWrapperClassName?: string,
     /** Forces menu to render within the visible window */
     constrainToScrollParent: boolean,
     /** Right aligns menu to button */
@@ -182,6 +184,7 @@ class DropdownMenu extends React.Component<Props, State> {
             bodyElement,
             children,
             className,
+            targetWrapperClassName,
             constrainToScrollParent,
             constrainToWindow,
             constrainToWindowWithPin,
@@ -264,16 +267,25 @@ class DropdownMenu extends React.Component<Props, State> {
         return (
             <TetherComponent
                 attachment={tetherAttachment || attachment}
-                bodyElement={bodyEl}
                 className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
                 classPrefix="dropdown-menu"
                 constraints={constraints}
                 enabled={isOpen}
+                renderElementTo={bodyEl}
                 targetAttachment={tetherTargetAttachment || targetAttachment}
-            >
-                {React.cloneElement(menuButton, menuButtonProps)}
-                {isOpen && React.cloneElement(menu, menuProps)}
-            </TetherComponent>
+                renderTarget={ref => (
+                    <div ref={ref} className={classNames('bdl-DropdownMenu-target', targetWrapperClassName)}>
+                        {React.cloneElement(menuButton, menuButtonProps)}
+                    </div>
+                )}
+                renderElement={ref => {
+                    return isOpen ? (
+                        <div ref={ref} className="bdl-DropdownMenu-element">
+                            {React.cloneElement(menu, menuProps)}
+                        </div>
+                    ) : null;
+                }}
+            />
         );
     }
 }

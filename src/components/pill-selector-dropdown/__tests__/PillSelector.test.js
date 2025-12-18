@@ -201,12 +201,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 wrapper.setState({ selectedIndex: 0 });
             });
 
-            expect(
-                wrapper
-                    .find('Pill')
-                    .at(0)
-                    .prop('isSelected'),
-            ).toBe(true);
+            expect(wrapper.find('Pill').at(0).prop('isSelected')).toBe(true);
         });
 
         test('should render hidden pill selection helper', () => {
@@ -282,7 +277,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
             sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
 
-            wrapper.simulate('click');
+            wrapper.find('.bdl-PillSelector').simulate('click');
         });
     });
 
@@ -310,7 +305,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             sandbox.mock(instance).expects('resetSelectedIndex');
             sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
 
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'Backspace',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -323,7 +318,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = mount(
                 <PillSelector onChange={() => {}} onInput={onInputStub} onRemove={onRemoveStub} value="test" />,
             );
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'Backspace',
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
@@ -336,7 +331,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = mount(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'Backspace',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -350,7 +345,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = mount(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'Backspace',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -360,7 +355,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
         test('should not call onRemove() when backspace is pressed and there are no pills and no input value', () => {
             const wrapper = mount(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'Backspace',
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
@@ -376,7 +371,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 wrapper.setState({ selectedIndex: 1 });
             });
 
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowLeft',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -391,7 +386,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 wrapper.setState({ selectedIndex: 0 });
             });
 
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowLeft',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -411,7 +406,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
             sandbox.mock(wrapper.find('[data-testid="pill-selection-helper"]').getDOMNode()).expects('focus');
 
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowLeft',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -424,7 +419,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = mount(
                 <PillSelector onChange={() => {}} onInput={onInputStub} onRemove={onRemoveStub} value="test" />,
             );
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowLeft',
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
@@ -449,7 +444,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             sandbox.mock(instance).expects('resetSelectedIndex');
             sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
 
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowRight',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -468,7 +463,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 wrapper.setState({ selectedIndex: 0 });
             });
 
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowRight',
                 preventDefault: sandbox.mock(),
                 stopPropagation: sandbox.mock(),
@@ -479,7 +474,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
         test('should not prevent default when right arrow is pressed and no pill is selected', () => {
             const wrapper = mount(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            wrapper.simulate('keyDown', {
+            wrapper.find('.bdl-PillSelector').simulate('keyDown', {
                 key: 'ArrowRight',
                 preventDefault: sandbox.mock().never(),
                 stopPropagation: sandbox.mock().never(),
@@ -494,10 +489,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
-            wrapper
-                .find('Pill')
-                .at(0)
-                .prop('onRemove')();
+            wrapper.find('Pill').at(0).prop('onRemove')();
             expect(onRemoveStub.calledWith(option, 0)).toBe(true);
         });
 
@@ -507,10 +499,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
-            wrapper
-                .find('Pill')
-                .at(0)
-                .prop('onRemove')();
+            wrapper.find('Pill').at(0).prop('onRemove')();
             expect(onRemoveStub.calledWith(option, 0)).toBe(true);
         });
     });
