@@ -6,6 +6,9 @@ import Classification from '../Classification';
 import messages from '../messages';
 import securityControlsMessages from '../security-controls/messages';
 
+// Preload component to prevent lazy loading issues with Jest
+import '../applied-by-ai-classification-reason/AppliedByAiClassificationReason';
+
 describe('features/classification/Classification', () => {
     let classificationLabelName;
     let defaultProps;
