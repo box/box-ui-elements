@@ -21,7 +21,7 @@ type RenderConnectedOptions = RenderOptions & {
     wrapperProps?: Record<string, unknown>;
 };
 
-const renderConnected = (element, options: RenderConnectedOptions = {}) =>
+const renderConnected = (element: React.ReactElement, options: RenderConnectedOptions = {}) =>
     render(element, {
         wrapper: options.wrapper ? options.wrapper : props => <Wrapper {...props} {...options.wrapperProps} />,
         ...options,

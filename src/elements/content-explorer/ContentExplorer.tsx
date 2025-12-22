@@ -768,7 +768,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @param {string} query search string
      * @return {void}
      */
-    debouncedSearch = debounce((id: string, query: string) => {
+    debouncedSearch: ReturnType<typeof debounce> = debounce((id: string, query: string) => {
         const { currentOffset, currentPageSize }: State = this.state;
 
         this.api
@@ -1412,7 +1412,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @param {string} [name] - folder name
      * @return {void}
      */
-    throttledCreateFolderCallback = throttle(this.createFolderCallback, 500, { trailing: false });
+    throttledCreateFolderCallback: ReturnType<typeof throttle> = throttle(this.createFolderCallback, 500, {
+        trailing: false,
+    });
 
     /**
      * Selects the clicked file and then shares it

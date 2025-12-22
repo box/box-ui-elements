@@ -132,7 +132,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         }
     };
 
-    closeSubmenu = debounce(() => {
+    closeSubmenu: ReturnType<typeof debounce> = debounce(() => {
         this.setState({
             isSubmenuOpen: false,
         });

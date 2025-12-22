@@ -74,7 +74,7 @@
         "lint:js": "eslint --max-warnings=0 .",
         "lint:ts": "tsc",
         "lint:css": "stylelint \"src/**/*.scss\"",
-        "prebuild:es": "npm-run-all copy:styles ts:defs copy:flow",
+        "prebuild:es": "npm-run-all copy:styles copy:flow",
         "release": "yarn release:beta",
         "release:beta": "DIST=beta BRANCH=master scripts/release.sh",
         "release:hotfix": "DIST=latest HOTFIX=true scripts/release.sh",

@@ -20,11 +20,18 @@ export interface MediaProps {
     style?: React.CSSProperties;
 }
 
-const Media = ({ as: Wrapper = 'div', children, className, ...rest }: MediaProps) => (
-    <Wrapper className={classnames('bdl-Media', className)} {...rest}>
-        {children}
-    </Wrapper>
-);
+type MediaComponent = React.FC<MediaProps> & {
+    Body: typeof MediaBody;
+    Menu: typeof MediaMenu;
+    Figure: typeof MediaFigure;
+};
+
+const Media: MediaComponent = ({ as: Wrapper = 'div', children, className, ...rest }: MediaProps) =>
+    (
+        <Wrapper className={classnames('bdl-Media', className)} {...rest}>
+            {children}
+        </Wrapper>
+    ) as MediaComponent;
 
 Media.Body = MediaBody;
 Media.Menu = MediaMenu;
