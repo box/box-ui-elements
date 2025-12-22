@@ -43,6 +43,12 @@ module.exports = {
                 messagesDir: './i18n/json',
             },
         ],
+        [
+            'babel-plugin-transform-define',
+            {
+                __VERSION__: require('./package.json').version,
+            },
+        ],
     ],
     env: {
         development: {

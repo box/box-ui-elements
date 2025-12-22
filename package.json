@@ -99,7 +99,11 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
+        "development": [
+            "last 1 Chrome versions",
+            "last 1 Firefox versions",
+            "last 1 Safari versions"
+        ]
     },
     "husky": {
         "hooks": {
@@ -191,6 +195,7 @@
         "babel-plugin-react-remove-properties": "^0.3.0",
         "babel-plugin-rewire": "^1.0.0",
         "babel-plugin-styled-components": "^1.10.7",
+        "babel-plugin-transform-define": "^2.1.4",
         "babel-preset-react-app": "^9.1.0",
         "chromatic": "^11.26.1",
         "circular-dependency-plugin": "^5.2.2",
@@ -364,6 +369,8 @@
         }
     },
     "msw": {
-        "workerDirectory": [".storybook/public"]
+        "workerDirectory": [
+            ".storybook/public"
+        ]
     }
 }
