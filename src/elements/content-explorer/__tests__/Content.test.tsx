@@ -16,6 +16,7 @@ import { Collection } from '../../common/types/core';
 const mockProps: ContentProps = {
     canDelete: true,
     canDownload: true,
+    canMove: false,
     canPreview: true,
     canRename: true,
     canShare: true,
@@ -26,6 +27,7 @@ const mockProps: ContentProps = {
     onItemClick: jest.fn(),
     onItemDelete: jest.fn(),
     onItemDownload: jest.fn(),
+    onItemMove: jest.fn(),
     onItemPreview: jest.fn(),
     onItemRename: jest.fn(),
     onItemSelect: jest.fn(),

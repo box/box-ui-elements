@@ -35,6 +35,7 @@ export interface ItemOptionsProps extends ItemEventHandlers, ItemEventPermission
 const ItemOptions = ({
     canDelete = false,
     canDownload = false,
+    canMove = false,
     canPreview = false,
     canRename = false,
     canShare = false,
@@ -42,6 +43,7 @@ const ItemOptions = ({
     itemActions = [],
     onItemDelete = noop,
     onItemDownload = noop,
+    onItemMove = noop,
     onItemPreview = noop,
     onItemRename = noop,
     onItemShare = noop,
@@ -87,7 +89,13 @@ const ItemOptions = ({
 
     const hasActions = !!actions.length;
     const hasOptions =
-        isDeleteEnabled || isDownloadEnabled || isOpenEnabled || isPreviewEnabled || isRenameEnabled || isShareEnabled;
+        canMove ||
+        isDeleteEnabled ||
+        isDownloadEnabled ||
+        isOpenEnabled ||
+        isPreviewEnabled ||
+        isRenameEnabled ||
+        isShareEnabled;
 
     if (!hasActions && !hasOptions) {
         return isListView ? <Cell /> : null;
@@ -117,6 +125,11 @@ const ItemOptions = ({
                 {isPreviewEnabled && (
                     <DropdownMenu.Item onClick={() => onItemPreview(item)}>
                         {formatMessage(messages.preview)}
+                    </DropdownMenu.Item>
+                )}
+                {canMove && (
+                    <DropdownMenu.Item onClick={() => onItemMove(item)}>
+                        {formatMessage(messages.move)}
                     </DropdownMenu.Item>
                 )}
                 {isOpenEnabled && (

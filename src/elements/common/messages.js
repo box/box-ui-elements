@@ -37,6 +37,11 @@ const messages = defineMessages({
         description: 'Label for preview action.',
         defaultMessage: 'Preview',
     },
+    move: {
+        id: 'be.move',
+        description: 'Label for move action.',
+        defaultMessage: 'Move',
+    },
     previewError: {
         id: 'be.previewError',
         description: 'Error message when Preview fails due to the files call.',

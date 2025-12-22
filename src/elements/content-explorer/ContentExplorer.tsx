@@ -1217,6 +1217,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         this.select(item, this.deleteCallback);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    move = (_item: BoxItem): void => {
+        // Placeholder move method - does nothing by default
+        // Can be extended by consumers if needed
+    };
+
     /**
      * Deletes a file
      *
@@ -1943,6 +1949,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 <Content
                                     canDelete={canDelete}
                                     canDownload={canDownload}
+                                    canMove={false}
                                     canPreview={canPreview}
                                     canRename={canRename}
                                     canShare={canShare}
@@ -1960,6 +1967,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     onItemClick={this.onItemClick}
                                     onItemDelete={this.delete}
                                     onItemDownload={this.download}
+                                    onItemMove={this.move}
                                     onItemPreview={this.preview}
                                     onItemRename={this.rename}
                                     onItemSelect={this.select}
