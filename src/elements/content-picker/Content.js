@@ -6,10 +6,10 @@
 
 import * as React from 'react';
 // $FlowFixMe TypeScript file
+import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
-import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import type { View, Collection } from '../../common/types/core';
 // $FlowFixMe TypeScript file
 import type { ItemAction } from '../common/item';
@@ -25,6 +25,7 @@ type Props = {
     isSingleSelect: boolean,
     isSmall: boolean,
     itemActions?: ItemAction[],
+    itemBeingMovedId?: string,
     onFocusChange: Function,
     onItemClick: Function,
     onItemSelect: Function,
@@ -66,6 +67,7 @@ const Content = ({
     onFocusChange,
     extensionsWhitelist,
     itemActions,
+    itemBeingMovedId,
 }: Props) => (
     <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
@@ -92,6 +94,7 @@ const Content = ({
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
                 itemActions={itemActions}
+                itemBeingMovedId={itemBeingMovedId}
             />
         )}
     </div>

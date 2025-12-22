@@ -123,6 +123,12 @@ export interface ContentExplorerProps {
     canShare?: boolean;
     canUpload?: boolean;
     className?: string;
+    components?: {
+        Content?: React.ComponentType<any>;
+        CreateFolderDialog?: React.ComponentType<any>;
+        Header?: React.ComponentType<any>;
+        SubHeader?: React.ComponentType<any>;
+    };
     contentPreviewProps?: ContentPreviewProps;
     contentUploaderProps?: ContentUploaderProps;
     currentFolderId?: string;
@@ -130,6 +136,7 @@ export interface ContentExplorerProps {
     features?: FeatureConfig;
     fieldsToShow?: FieldsToShow;
     hasProviders?: boolean;
+    headerActionButtons?: React.ReactNode[];
     initialPage?: number;
     initialPageSize?: number;
     isLarge?: boolean;
@@ -138,6 +145,7 @@ export interface ContentExplorerProps {
     isTouch?: boolean;
     isVeryLarge?: boolean;
     itemActions?: ItemAction[];
+    itemBeingMovedId?: string;
     language?: string;
     logoUrl?: string;
     measureRef?: (ref: Element | null) => void;
@@ -147,12 +155,15 @@ export interface ContentExplorerProps {
         MetadataViewContainerProps,
         'hasError' | 'currentCollection' | 'metadataTemplate' | 'selectedKeys'
     >;
+    move?: (item: BoxItem) => void;
+    moveCallback?: () => void;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
     onNavigate?: (item: BoxItem) => void;
     onPreview?: (data: unknown) => void;
     onRename?: (item: BoxItem) => void;
+    onSearch?: (query: string) => void;
     onSelect?: (item: BoxItem) => void;
     onUpload?: (item: BoxItem) => void;
     previewLibraryVersion?: string;
@@ -188,6 +199,7 @@ type State = {
     isCreateFolderModalOpen: boolean;
     isDeleteModalOpen: boolean;
     isLoading: boolean;
+    isMoveModalOpen: boolean;
     isPreviewModalOpen: boolean;
     isRenameModalOpen: boolean;
     isShareModalOpen: boolean;
@@ -254,6 +266,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         onSelect: noop,
         onUpload: noop,
         onNavigate: noop,
+        onSearch: noop,
         defaultView: DEFAULT_VIEW_FILES,
         initialPage: DEFAULT_PAGE_NUMBER,
         initialPageSize: DEFAULT_PAGE_SIZE,
@@ -316,6 +329,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isCreateFolderModalOpen: false,
             isDeleteModalOpen: false,
             isLoading: false,
+            isMoveModalOpen: false,
             sidePanelState: SidePanelState.CLOSED,
             isPreviewModalOpen: false,
             isRenameModalOpen: false,
@@ -771,6 +785,15 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     debouncedSearch: ReturnType<typeof debounce> = debounce((id: string, query: string) => {
         const { currentOffset, currentPageSize }: State = this.state;
 
+        const {
+            onSearch
+        } = this.props;
+
+        // Call the onSearch callback if provided
+        if (onSearch) {
+            onSearch(query);
+        }
+
         this.api
             .getSearchAPI()
             .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
@@ -1217,10 +1240,13 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         this.select(item, this.deleteCallback);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    move = (_item: BoxItem): void => {
-        // Placeholder move method - does nothing by default
-        // Can be extended by consumers if needed
+    move = (item: BoxItem): void => {
+        const { move } = this.props;
+        if (move) {
+            this.select(item, () => move(item));
+        } else {
+            this.setState({ isMoveModalOpen: true });
+        }
     };
 
     /**
@@ -1516,6 +1542,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         this.setState({
             isLoading: false,
             isDeleteModalOpen: false,
+            isMoveModalOpen: false,
             isRenameModalOpen: false,
             isCreateFolderModalOpen: false,
             isShareModalOpen: false,
@@ -1835,15 +1862,18 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             canShare,
             canUpload,
             className,
+            components = {},
             contentPreviewProps,
             contentUploaderProps,
             defaultView,
             features,
             hasProviders,
+            headerActionButtons,
             isMedium,
             isSmall,
             isTouch,
             itemActions,
+            itemBeingMovedId,
             language,
             logoUrl,
             measureRef,
@@ -1908,6 +1938,14 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const isSidePanelOpen = sidePanelState !== SidePanelState.CLOSED;
         const isEditing = sidePanelState === SidePanelState.EDITING;
 
+        // Extract component overrides or use defaults
+        const {
+            Content: CustomContent = Content,
+            CreateFolderDialog: CustomCreateFolderDialog = CreateFolderDialog,
+            Header: CustomHeader = Header,
+            SubHeader: CustomSubHeader = SubHeader,
+        } = components;
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
@@ -1917,11 +1955,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                             <div className="bce-ContentExplorer-main">
-                                {!isDefaultViewMetadata && (
-                                    <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
-                                )}
-
-                                <SubHeader
+                                <CustomSubHeader
                                     bulkItemActions={bulkItemActions}
                                     view={view}
                                     viewMode={viewMode}
@@ -1946,12 +1980,17 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     portalElement={this.rootElement}
                                     selectedItemIds={selectedItemIds}
                                     title={title}
+                                    headerActionButtons={headerActionButtons}
                                 />
 
-                                <Content
+                                {!isDefaultViewMetadata && (
+                                    <CustomHeader view={view} logoUrl={logoUrl} onSearch={this.search} />
+                                )}
+
+                                <CustomContent
                                     canDelete={canDelete}
                                     canDownload={canDownload}
-                                    canMove={false}
+                                    canMove={!!this.props.move}
                                     canPreview={canPreview}
                                     canRename={canRename}
                                     canShare={canShare}
@@ -1963,6 +2002,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                     isSmall={isSmall}
                                     isTouch={isTouch}
                                     itemActions={itemActions}
+                                    itemBeingMovedId={itemBeingMovedId}
                                     fieldsToShow={fieldsToShow}
                                     metadataTemplate={metadataTemplate}
                                     metadataViewProps={metadataViewProps}
@@ -2029,7 +2069,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                             />
                         ) : null}
                         {allowCreate && !!this.appElement ? (
-                            <CreateFolderDialog
+                            <CustomCreateFolderDialog
                                 isOpen={isCreateFolderModalOpen}
                                 onCreate={this.throttledCreateFolderCallback}
                                 onCancel={this.closeModals}

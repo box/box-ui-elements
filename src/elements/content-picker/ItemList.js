@@ -31,6 +31,7 @@ type Props = {
     isSingleSelect: boolean,
     isSmall: boolean,
     itemActions?: ItemAction[],
+    itemBeingMovedId?: string,
     onFocusChange: Function,
     onItemClick: Function,
     onItemSelect: Function,
@@ -58,6 +59,7 @@ const ItemList = ({
     focusedRow,
     selectableType,
     canSetShareAccess,
+    itemBeingMovedId,
     hasHitSelectionLimit,
     isSingleSelect,
     extensionsWhitelist,
@@ -89,7 +91,8 @@ const ItemList = ({
         itemActions,
     });
     const { id, items = [] }: Collection = currentCollection;
-    const rowCount: number = items.length;
+    const filteredItems = itemBeingMovedId ? items.filter(item => item.id !== itemBeingMovedId) : items;
+    const rowCount: number = filteredItems.length;
 
     const rowClassName = ({ index }) => {
         if (index === -1) {
@@ -146,7 +149,7 @@ const ItemList = ({
                             headerHeight={0}
                             rowHeight={isSmall ? 70 : 50}
                             rowCount={rowCount}
-                            rowGetter={({ index }) => items[index]}
+                            rowGetter={({ index }) => filteredItems[index]}
                             ref={tableRef}
                             rowClassName={rowClassName}
                             onRowClick={onRowClick}

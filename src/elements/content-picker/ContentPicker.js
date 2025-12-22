@@ -527,7 +527,7 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true): void => {
-        const { rootFolderId }: Props = this.props;
+        const { itemBeingMovedId, onSelect, rootFolderId }: Props = this.props;
         const {
             currentCollection: { id: currentId },
             currentOffset,
@@ -537,6 +537,10 @@ class ContentPicker extends Component<Props, State> {
             sortDirection,
         }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
+        if (itemBeingMovedId && folderId === itemBeingMovedId) {
+            return;
+        }
+        onSelect(folderId);
         const hasFolderChanged = currentId && currentId !== folderId;
         const hasSearchQuery = !!searchQuery.trim().length;
         const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
@@ -565,6 +569,7 @@ class ContentPicker extends Component<Props, State> {
             sortBy,
             sortDirection,
             (collection: Collection) => {
+                onSelect(collection);
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
@@ -627,12 +632,18 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     showSelected = (): void => {
-        const { selected, sortBy, sortDirection }: State = this.state;
+        const { selected, sortBy, sortDirection, view }: State = this.state;
+        const { rootFolderId }: Props = this.props;
+        if (view === VIEW_SELECTED) {
+            this.setState({ currentOffset: 0 }, () => {
+                this.fetchFolder(rootFolderId, false);
+            });
+        }
         this.setState(
             {
                 searchQuery: '',
-                view: VIEW_SELECTED,
-                currentCollection: {
+                view: view === VIEW_SELECTED ? VIEW_FOLDER : VIEW_SELECTED,
+                currentCollection: view === VIEW_SELECTED ? {} : {
                     sortBy,
                     sortDirection,
                     percentLoaded: 100,
@@ -1220,6 +1231,10 @@ class ContentPicker extends Component<Props, State> {
             showSelectedButton,
             theme,
             itemActions,
+            itemBeingMovedId,
+            customHeader,
+            customSubHeader,
+            onUpload,
         }: Props = this.props;
         const {
             view,
@@ -1250,14 +1265,39 @@ class ContentPicker extends Component<Props, State> {
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-picker">
                     <ThemingStyles theme={theme} />
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                        <Header
-                            view={view}
-                            isHeaderLogoVisible={isHeaderLogoVisible}
-                            searchQuery={searchQuery}
-                            logoUrl={logoUrl}
-                            onSearch={this.search}
-                        />
-                        <SubHeader
+                        {customHeader ? (
+                            <customHeader
+                                view={view}
+                                onSearch={this.search}
+                                currentCollection={currentCollection}
+                            />
+                        ) : (
+                            <Header
+                                view={view}
+                                isHeaderLogoVisible={isHeaderLogoVisible}
+                                searchQuery={searchQuery}
+                                logoUrl={logoUrl}
+                                onSearch={this.search}
+                            />
+                        )}
+                        {customSubHeader ? (
+                            <customSubHeader
+                                view="folder"
+                                showButtons={false}
+                                canCreateNewFolder={false}
+                                canUpload={allowUpload}
+                                currentCollection={currentCollection}
+                                headerActionButtons={false}
+                                isSmall={isSmall}
+                                onCreate={noop}
+                                onItemClick={this.fetchFolder}
+                                onUpload={this.upload}
+                                onViewModeChange={noop}
+                                rootName={rootName}
+                                rootId={rootFolderId}
+                            />
+                        ) : (
+                            <SubHeader
                             view={view}
                             rootId={rootFolderId}
                             isSmall={isSmall}
@@ -1270,6 +1310,7 @@ class ContentPicker extends Component<Props, State> {
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
                         />
+                        )}
                         <Content
                             view={view}
                             isSmall={isSmall}
@@ -1288,6 +1329,7 @@ class ContentPicker extends Component<Props, State> {
                             onFocusChange={this.onFocusChange}
                             onShareAccessChange={this.changeShareAccess}
                             itemActions={itemActions}
+                            itemBeingMovedId={itemBeingMovedId}
                         />
                         <Footer
                             currentCollection={currentCollection}
@@ -1302,6 +1344,7 @@ class ContentPicker extends Component<Props, State> {
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}
                             renderCustomActionButtons={renderCustomActionButtons}
+                            view={view}
                         >
                             {isPaginationVisible ? (
                                 <Pagination
@@ -1328,6 +1371,7 @@ class ContentPicker extends Component<Props, State> {
                             contentUploaderProps={contentUploaderProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
+                            onUpload={onUpload}
                         />
                     ) : null}
                     {allowCreate && !!this.appElement ? (

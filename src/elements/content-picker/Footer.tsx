@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import type { Collection, BoxItem } from '../../common/types/core';
+import type { Collection, BoxItem, View } from '../../common/types/core';
 import Button, { ButtonType } from '../../components/button';
 import ButtonGroup from '../../components/button-group';
 import IconCheck from '../../icons/general/IconCheck';
@@ -8,6 +8,7 @@ import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
 import PrimaryButton from '../../components/primary-button';
 import Tooltip from '../common/Tooltip';
+import { VIEW_SELECTED } from '../../constants';
 import './Footer.scss';
 
 interface Props {
@@ -31,6 +32,7 @@ interface Props {
     selectedCount: number;
     selectedItems: BoxItem[];
     showSelectedButton: boolean;
+    view?: View;
 }
 
 const Footer = ({
@@ -47,10 +49,12 @@ const Footer = ({
     children,
     renderCustomActionButtons,
     showSelectedButton,
+    view,
 }: Props): React.ReactElement => {
     const { formatMessage } = useIntl();
     const cancelMessage = formatMessage(messages.cancel);
-    const chooseMessage = formatMessage(messages.choose);
+    const moveMessage = formatMessage(messages.move);
+    const chooseMessage = view === VIEW_SELECTED ? moveMessage : formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
 
     return (
