@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import tabbable from 'tabbable';
+import { tabbable } from 'tabbable';
 import classNames from 'classnames';
 
 type Props = {
@@ -106,15 +106,8 @@ class FocusTrap extends React.Component<Props> {
     };
 
     render() {
-        const {
-            children,
-            className,
-            getRef,
-            handleOverlayKeyDown,
-            shouldDefaultFocus,
-            shouldOutlineFocus,
-            ...rest
-        } = this.props;
+        const { children, className, getRef, handleOverlayKeyDown, shouldDefaultFocus, shouldOutlineFocus, ...rest } =
+            this.props;
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div

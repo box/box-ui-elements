@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import tabbable from 'tabbable';
+import { tabbable } from 'tabbable';
 import omit from 'lodash/omit';
 
 import FocusTrap from '../focus-trap';

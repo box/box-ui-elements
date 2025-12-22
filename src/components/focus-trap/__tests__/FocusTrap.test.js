@@ -1,9 +1,9 @@
 import * as React from 'react';
-import tabbable from 'tabbable';
+import { tabbable } from 'tabbable';
 
 import FocusTrap from '../FocusTrap';
 
-jest.mock('tabbable', () => jest.fn());
+jest.mock('tabbable', () => ({ tabbable: jest.fn() }));
 
 jest.useFakeTimers();
 

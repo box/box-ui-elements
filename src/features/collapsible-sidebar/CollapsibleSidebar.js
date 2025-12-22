@@ -9,7 +9,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
-import tabbable from 'tabbable';
+import { tabbable } from 'tabbable';
 import { KEYS } from '../../constants';
 
 import './CollapsibleSidebar.scss';
