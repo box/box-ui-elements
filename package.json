@@ -49,6 +49,7 @@
         "yarn": ">=1.10.0"
     },
     "scripts": {
+        "prepare": "yarn build:prod:es",
         "build": "yarn build:dev:dist",
         "build:ci:dist": "LANGUAGE=en-US ENTRY=explorer REACT=true yarn build:prod:dist",
         "build:ci:es": "yarn build:prod:es",
