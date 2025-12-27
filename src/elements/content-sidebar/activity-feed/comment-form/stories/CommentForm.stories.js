@@ -66,7 +66,7 @@ export const VideoFile = () => {
 
     return (
         <div>
-            <div className="bp-media-dash" style={{ width: '100px', height: '100px', marginBottom: '10px' }}>
+            <div className="bp-media-container" style={{ width: '100px', height: '100px', marginBottom: '10px' }}>
                 {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                 <video
                     src="//cdn03.boxcdn.net/sites/default/files/homepage/v2/images/hero/run/laptop-screen-1680-v2@1x.mp4"

@@ -463,9 +463,9 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
     };
 
     getVideoTimestamp = (): videoTimestamp => {
-        const mediaDashContainer: ?HTMLElement = document.querySelector('.bp-media-dash');
+        const videoContainer: ?HTMLElement = document.querySelector('.bp-media-container');
         // $FlowFixMe
-        const video: ?HTMLVideoElement = mediaDashContainer?.querySelector('video');
+        const video: ?HTMLVideoElement = videoContainer?.querySelector('video');
 
         const currentTime = video?.currentTime || 0;
 

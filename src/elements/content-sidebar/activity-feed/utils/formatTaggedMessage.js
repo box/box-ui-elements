@@ -40,7 +40,7 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
 
     const handleClick = (e: SyntheticMouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
-        const videoContainer = document.querySelector('.bp-media-dash');
+        const videoContainer = document.querySelector('.bp-media-container');
         if (videoContainer) {
             // $FlowFixMe: querySelector('video') returns an HTMLVideoElement
             const video: ?HTMLVideoElement = videoContainer.querySelector('video');
