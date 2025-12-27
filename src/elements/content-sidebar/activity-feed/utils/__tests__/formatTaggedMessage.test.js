@@ -98,7 +98,7 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
             const mockMediaDashContainer = { querySelector: () => mockVideo };
 
             jest.spyOn(document, 'querySelector').mockImplementation(query => {
-                if (query === '.bp-media-dash') {
+                if (query === '.bp-media-container') {
                     return mockMediaDashContainer;
                 }
 
