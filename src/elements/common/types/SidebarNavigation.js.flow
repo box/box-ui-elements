@@ -10,7 +10,6 @@ export const ViewType = Object.freeze({
     METADATA_REDESIGN: 'metadata_redesign',
     SKILLS: 'skills',
     ACTIVITY: 'activity',
-    VERSIONS: 'versions',
     DOCGEN: 'docgen',
 });
 
@@ -18,6 +17,7 @@ export const FeedEntryType = Object.freeze({
     ANNOTATIONS: 'annotations',
     COMMENTS: 'comments',
     TASKS: 'tasks',
+    VERSIONS: 'versions',
 });
 
 export type ViewTypeValues = $Values<typeof ViewType>;
@@ -27,13 +27,14 @@ export type SidebarNavigation = {
     activeFeedEntryType?: FeedEntryTypeValues,
     activeFeedEntryId?: string,
     fileVersionId?: string,
-    filteredTemplateIds?: string,
-    sidebar: ViewTypeValues,
+    filteredTemplateIds?: string[],
+    sidebar?: ViewTypeValues,
     versionId?: string,
 };
 
 export type InternalSidebarNavigation = SidebarNavigation & {
     open?: boolean,
+    silent?: boolean,
 };
 
 export type SidebarNavigationHandler = (sidebar: SidebarNavigation, replace?: boolean) => void;
