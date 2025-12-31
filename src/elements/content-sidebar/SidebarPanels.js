@@ -49,6 +49,8 @@ type Props = {
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,
+    /** When true, defers all data fetching until set to false. Used to prioritize preview loading. */
+    deferDataFetch?: boolean,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
@@ -219,6 +221,7 @@ class SidebarPanels extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             defaultPanel = '',
+            deferDataFetch,
             detailsSidebarProps,
             docGenSidebarProps,
             elementId,
@@ -329,6 +332,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             this.handlePanelRender(SIDEBAR_VIEW_ACTIVITY);
                             return (
                                 <LoadableActivitySidebar
+                                    deferDataFetch={deferDataFetch}
                                     elementId={elementId}
                                     currentUser={currentUser}
                                     currentUserError={currentUserError}
