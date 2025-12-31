@@ -84,6 +84,8 @@ type ExternalProps = {
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     currentUserError?: Errors,
+    /** When true, defers data fetching until set to false. Used to prioritize preview loading. */
+    deferDataFetch?: boolean,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies?: boolean,
     hasTasks?: boolean,
@@ -185,7 +187,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        this.fetchFeedItems(true);
+        const { deferDataFetch } = this.props;
+        if (!deferDataFetch) {
+            this.fetchFeedItems(true);
+        }
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const { deferDataFetch } = this.props;
+        const { deferDataFetch: prevDeferDataFetch } = prevProps;
+
+        // Fetch when deferral is lifted
+        if (prevDeferDataFetch && !deferDataFetch) {
+            this.fetchFeedItems(true);
+        }
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
