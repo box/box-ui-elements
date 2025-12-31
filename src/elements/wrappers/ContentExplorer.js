@@ -5,9 +5,7 @@
  */
 
 import * as React from 'react';
-// TODO switch to createRoot when upgrading to React 18
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ES6Wrapper from './ES6Wrapper';
 // $FlowFixMe
 import ContentExplorerReactComponent from '../content-explorer';
@@ -103,7 +101,10 @@ class ContentExplorer extends ES6Wrapper {
 
     /** @inheritdoc */
     render() {
-        render(
+        if (!this.root) {
+            this.root = createRoot(this.container);
+        }
+        this.root.render(
             <ContentExplorerReactComponent
                 language={this.language}
                 messages={this.messages}
@@ -121,7 +122,6 @@ class ContentExplorer extends ES6Wrapper {
                 onInteraction={this.onInteraction}
                 {...this.options}
             />,
-            this.container,
         );
     }
 }

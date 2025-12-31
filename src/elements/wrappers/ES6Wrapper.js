@@ -5,7 +5,7 @@
  */
 
 import EventEmitter from 'events';
-import ReactDOM from 'react-dom';
+import type { Root } from 'react-dom/client';
 import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
 import type { Token, StringMap } from '../../common/types/core';
@@ -52,6 +52,11 @@ class ES6Wrapper extends EventEmitter {
     component: any;
 
     /**
+     * @property {Root}
+     */
+    root: Root;
+
+    /**
      * Shows the content picker.
      *
      * @public
@@ -81,8 +86,10 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
-        // eslint-disable-next-line react/no-deprecated
-        ReactDOM.unmountComponentAtNode(this.container);
+        if (this.root) {
+            this.root.unmount();
+            this.root = null;
+        }
         if (this.container) {
             this.container.innerHTML = '';
         }
