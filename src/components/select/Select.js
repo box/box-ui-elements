@@ -64,7 +64,7 @@ const Select = ({
                         </span>
                         {infoTooltip && (
                             <Tooltip
-                                targetWrapperClassName="tooltip-icon-container"
+                                targetWrapperClassName="bdl-Select-tooltipIcon"
                                 isShown={infoTooltipIsOpen}
                                 position="middle-right"
                                 text={infoTooltip}

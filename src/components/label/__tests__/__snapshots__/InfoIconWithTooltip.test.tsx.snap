@@ -9,15 +9,17 @@ exports[`components/label/InfoIconWithTooltip should render correctly 1`] = `
     <Tooltip
       content="I am a tooltip"
     >
-      <span
-        className="info-icon-container"
-      >
-        <InfoBadge16
-          a="a"
-          b="b"
-          c="c"
-        />
-      </span>
+      <ForwardRef>
+        <span
+          className="info-icon-container"
+        >
+          <InfoBadge16
+            a="a"
+            b="b"
+            c="c"
+          />
+        </span>
+      </ForwardRef>
     </Tooltip>
   </TooltipProvider>
 </span>

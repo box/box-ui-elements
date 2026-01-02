@@ -4,7 +4,7 @@ import TetherComponent from 'react-tether';
 import RadarAnimation, { RadarAnimationPosition } from '../RadarAnimation';
 
 describe('components/radar/RadarAnimation', () => {
-    const renderWrapper = (props: {}) => {
+    const getWrapper = (props: {}) => {
         return mount<RadarAnimation>(
             <RadarAnimation {...props}>
                 <div>Hello</div>
@@ -65,7 +65,7 @@ describe('components/radar/RadarAnimation', () => {
     });
 
     test('should spread the rest of the props to the radar node', () => {
-        const wrapper = renderWrapper({
+        const wrapper = getWrapper({
             'data-resin-target': 'radaranimation1',
         });
         expect(wrapper.find('.radar').prop('data-resin-target')).toBe('radaranimation1');
@@ -73,7 +73,7 @@ describe('components/radar/RadarAnimation', () => {
 
     test('should render with custom offset when provided', () => {
         const offset = '0 10px';
-        const wrapper = renderWrapper({
+        const wrapper = getWrapper({
             offset,
         });
 
@@ -93,19 +93,19 @@ describe('components/radar/RadarAnimation', () => {
 
     describe('isShown', () => {
         test('should be shown when isShown is not provided', () => {
-            const wrapper = renderWrapper({});
+            const wrapper = getWrapper({});
             const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should be shown when isShown is true', () => {
-            const wrapper = renderWrapper({ isShown: true });
+            const wrapper = getWrapper({ isShown: true });
             const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(true);
         });
 
         test('should not be shown when isShown is false', () => {
-            const wrapper = renderWrapper({ isShown: false });
+            const wrapper = getWrapper({ isShown: false });
             const tetherComponent = wrapper.find(TetherComponent);
             expect(tetherComponent.prop('enabled')).toBe(false);
         });
@@ -115,7 +115,7 @@ describe('components/radar/RadarAnimation', () => {
         test.each([true, false])('should only position the tether when shown', isShown => {
             const positionTetherMock = jest.fn();
 
-            const wrapper = renderWrapper({ isShown });
+            const wrapper = getWrapper({ isShown });
             // @ts-ignore: react-tether shenanigans
             wrapper.instance().tetherRef = { current: { position: positionTetherMock } };
 

@@ -16,7 +16,7 @@ exports[`components/Media compound component 1`] = `
     class="bdl-Media-body"
   >
     <div
-      class="bdl-DropdownMenu-target bdl-Media-menu-target"
+      class="bdl-DropdownMenu-target"
     >
       <button
         aria-expanded="false"

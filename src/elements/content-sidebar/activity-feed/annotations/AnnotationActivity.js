@@ -205,16 +205,15 @@ const AnnotationActivity = ({
                 {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </SelectableActivityCard>
-            <TetherComponent
-                {...tetherProps}
-                renderTarget={ref => (
-                    <div ref={ref} style={{ display: 'inline-block' }}>
-                        {isMenuVisible && (
+            {isMenuVisible && (
+                <TetherComponent
+                    {...tetherProps}
+                    renderTarget={ref => (
+                        <div ref={ref} className="bcs-AnnotationActivity-menuTarget">
                             <AnnotationActivityMenu
                                 canDelete={canDelete}
                                 canEdit={canEdit}
                                 canResolve={canResolve}
-                                className="bcs-AnnotationActivity-menu"
                                 id={id}
                                 isDisabled={isConfirmingDelete}
                                 status={status}
@@ -224,23 +223,23 @@ const AnnotationActivity = ({
                                 onMenuOpen={handleMenuOpen}
                                 onStatusChange={handleStatusChange}
                             />
-                        )}
-                    </div>
-                )}
-                renderElement={ref => {
-                    return isConfirmingDelete ? (
-                        <div ref={ref} className="bcs-AnnotationActivity-deleteConfirmationModal">
-                            <DeleteConfirmation
-                                data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
-                                isOpen={isConfirmingDelete}
-                                message={messages.annotationActivityDeletePrompt}
-                                onDeleteCancel={handleDeleteCancel}
-                                onDeleteConfirm={handleDeleteConfirm}
-                            />
                         </div>
-                    ) : null;
-                }}
-            />
+                    )}
+                    renderElement={ref => {
+                        return isConfirmingDelete ? (
+                            <div ref={ref} className="bcs-AnnotationActivity-deleteConfirmationModal">
+                                <DeleteConfirmation
+                                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
+                                    isOpen={isConfirmingDelete}
+                                    message={messages.annotationActivityDeletePrompt}
+                                    onDeleteCancel={handleDeleteCancel}
+                                    onDeleteConfirm={handleDeleteConfirm}
+                                />
+                            </div>
+                        ) : null;
+                    }}
+                />
+            )}
         </>
     );
 };

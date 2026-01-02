@@ -10,23 +10,25 @@ exports[`feature/footer-indicator/FooterIndicator should render a FooterIndicato
       content="abcdefghijklmnopqrstuvwxyz"
       side="top"
     >
-      <div
-        className="bdl-FooterIndicator-content"
-      >
-        <span
-          className="bdl-FooterIndicator-iconWrapper"
+      <ForwardRef>
+        <div
+          className="bdl-FooterIndicator-content"
         >
-          <IconPuzzlePiece
-            height={14}
-            width={14}
-          />
-        </span>
-        <span
-          className="bdl-FooterIndicator-text"
-        >
-          abcdefghijklmnopqrstuvwxyz
-        </span>
-      </div>
+          <span
+            className="bdl-FooterIndicator-iconWrapper"
+          >
+            <IconPuzzlePiece
+              height={14}
+              width={14}
+            />
+          </span>
+          <span
+            className="bdl-FooterIndicator-text"
+          >
+            abcdefghijklmnopqrstuvwxyz
+          </span>
+        </div>
+      </ForwardRef>
     </Tooltip>
   </TooltipProvider>
 </div>

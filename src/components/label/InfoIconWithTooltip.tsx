@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tooltip, TooltipProvider } from '@box/blueprint-web';
+import { Focusable, Tooltip, TooltipProvider } from '@box/blueprint-web';
 
 import InfoBadge16 from '../../icon/fill/InfoBadge16';
 
@@ -16,9 +16,11 @@ const InfoIconWithTooltip = ({ className = '', iconProps, tooltipText }: InfoIco
     <span key="infoIcon" className={`${className} tooltip-icon-container`}>
         <TooltipProvider>
             <Tooltip content={tooltipText}>
-                <span className="info-icon-container">
-                    <InfoBadge16 {...iconProps} />
-                </span>
+                <Focusable>
+                    <span className="info-icon-container">
+                        <InfoBadge16 {...iconProps} />
+                    </span>
+                </Focusable>
             </Tooltip>
         </TooltipProvider>
     </span>

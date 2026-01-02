@@ -1,5 +1,6 @@
-import { shallow, mount } from 'enzyme';
 import * as React from 'react';
+
+import { shallow, mount } from 'enzyme';
 import TetherComponent from 'react-tether';
 
 import ClockBadge16 from '../../../icon/line/ClockBadge16';

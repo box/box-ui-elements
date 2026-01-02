@@ -434,7 +434,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             expect(wrapper.exists('AnnotationActivityLink')).toBe(true);
 
-            expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
+            expect(wrapper.find('AnnotationActivityLink').first().prop('message')).toEqual({
                 ...messages.annotationActivityVersionLink,
                 values: { number: '2' },
             });
@@ -504,7 +504,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             const wrapper = getWrapper({ item: regularAnnotation });
             const activityMessage = wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))');
-            expect(wrapper.find('AnnotationActivityLink').prop('message')).toEqual({
+            expect(wrapper.find('AnnotationActivityLink').first().prop('message')).toEqual({
                 ...messages.annotationActivityPageItem,
                 values: { number: 1 },
             });

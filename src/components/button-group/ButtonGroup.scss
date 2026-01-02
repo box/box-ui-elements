@@ -44,7 +44,7 @@
     &,
     & > .bdl-targeted-click-through {
         > .btn,
-        > * > .btn {
+        > .bdl-Tooltip-target > .btn {
             margin: 5px 0 5px -1px;
             border-radius: 0;
 
@@ -66,19 +66,19 @@
         }
 
         > .btn:first-child,
-        > *:first-child > .btn {
+        > .bdl-Tooltip-target:first-child > .btn {
             border-top-left-radius: $bdl-border-radius-size-med;
             border-bottom-left-radius: $bdl-border-radius-size-med;
         }
 
         > .btn:last-child,
-        > *:last-child > .btn {
+        > .bdl-Tooltip-target:last-child > .btn {
             border-top-right-radius: $bdl-border-radius-size-med;
             border-bottom-right-radius: $bdl-border-radius-size-med;
         }
 
         > .btn.is-selected,
-        > * > .btn.is-selected {
+        > .bdl-Tooltip-target > .btn.is-selected {
             z-index: 2; /* place on top of siblings */
             color: $bdl-gray-80;
             background-color: $bdl-gray-10;
@@ -87,7 +87,7 @@
         }
 
         > .btn:focus,
-        > * > .btn:focus {
+        > .bdl-Tooltip-target > .btn:focus {
             z-index: 3; /* place on top of all other buttons for accessibility */
         }
     }

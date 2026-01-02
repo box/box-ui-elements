@@ -104,7 +104,7 @@ exports[`components/select/Select should render infoTooltip when specified 1`] =
           isDisabled={false}
           isShown={false}
           position="middle-right"
-          targetWrapperClassName="tooltip-icon-container"
+          targetWrapperClassName="bdl-Select-tooltipIcon"
           text="hello!!!"
           theme="default"
         >

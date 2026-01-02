@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { Tooltip, TooltipProvider } from '@box/blueprint-web';
+import { Focusable, Tooltip, TooltipProvider } from '@box/blueprint-web';
+
 import IconInfo from '../../icons/general/IconInfo';
 
 const messages = defineMessages({
@@ -20,13 +21,15 @@ const CheckboxTooltip = ({ tooltip }: CheckboxTooltipProps) => (
     <div className="checkbox-tooltip-wrapper">
         <TooltipProvider>
             <Tooltip content={tooltip}>
-                <div className="info-tooltip">
-                    <IconInfo
-                        height={16}
-                        title={<FormattedMessage {...messages.checkboxTooltipIconInfoText} />}
-                        width={16}
-                    />
-                </div>
+                <Focusable>
+                    <div className="info-tooltip">
+                        <IconInfo
+                            height={16}
+                            title={<FormattedMessage {...messages.checkboxTooltipIconInfoText} />}
+                            width={16}
+                        />
+                    </div>
+                </Focusable>
             </Tooltip>
         </TooltipProvider>
     </div>

@@ -8,7 +8,7 @@ import { Editor } from 'draft-js';
 import type { EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
-import Tooltip from '../tooltip';
+import { Tooltip, TooltipProvider } from '@box/blueprint-web';
 
 import commonMessages from '../../common/messages';
 import './DraftJSEditor.scss';
@@ -126,30 +126,31 @@ class DraftJSEditor extends React.Component<Props> {
                     {description}
                 </span>
 
-                <Tooltip
-                    targetWrapperClassName="bdl-DraftJSEditor-target"
-                    isShown={!!error}
-                    position="bottom-left"
-                    text={error ? error.message : ''}
-                    theme="error"
-                >
-                    {/* need div so tooltip can set aria-describedby */}
-                    <div>
-                        <Editor
-                            {...a11yProps}
-                            ariaLabelledBy={this.labelID}
-                            ariaDescribedBy={this.descriptionID}
-                            editorState={editorState}
-                            handleReturn={this.handleReturn}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            onFocus={onFocus}
-                            placeholder={placeholder}
-                            readOnly={isDisabled}
-                            stripPastedStyles
-                        />
-                    </div>
-                </Tooltip>
+                <TooltipProvider>
+                    <Tooltip
+                        open={!!error}
+                        side="bottom"
+                        align="start"
+                        content={error ? error.message : ''}
+                        variant="error"
+                    >
+                        <div>
+                            <Editor
+                                {...a11yProps}
+                                ariaLabelledBy={this.labelID}
+                                ariaDescribedBy={this.descriptionID}
+                                editorState={editorState}
+                                handleReturn={this.handleReturn}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                onFocus={onFocus}
+                                placeholder={placeholder}
+                                readOnly={isDisabled}
+                                stripPastedStyles
+                            />
+                        </div>
+                    </Tooltip>
+                </TooltipProvider>
             </div>
         );
     }

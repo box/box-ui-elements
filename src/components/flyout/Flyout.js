@@ -491,13 +491,13 @@ class Flyout extends React.Component<Props, State> {
             <TetherComponent
                 {...tetherProps}
                 renderTarget={ref => (
-                    <div ref={ref} style={{ display: 'inline-block' }}>
+                    <div ref={ref} className="bdl-Flyout-target">
                         {React.cloneElement(overlayButton, overlayButtonProps)}
                     </div>
                 )}
                 renderElement={ref => {
                     return isVisible ? (
-                        <div ref={ref} style={{ outline: 'none' }}>
+                        <div ref={ref} className="bdl-Flyout-element">
                             <FlyoutContext.Provider value={{ closeOverlay: this.closeOverlay }}>
                                 {React.cloneElement(overlayContent, overlayProps)}
                             </FlyoutContext.Provider>

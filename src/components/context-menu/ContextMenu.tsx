@@ -166,9 +166,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
             targetOffset,
         };
 
-        if (document?.body) {
-            tetherProps.renderElementTo = document.body;
-        }
+        tetherProps.renderElementTo = document.body;
 
         return (
             <TetherComponent
