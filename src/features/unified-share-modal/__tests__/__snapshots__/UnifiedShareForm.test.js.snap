@@ -14,7 +14,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -215,7 +215,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       isShown={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -380,7 +380,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -545,7 +545,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -715,7 +715,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isShown={true}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -881,7 +881,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -1048,7 +1048,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -1184,7 +1184,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -1351,7 +1351,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -1518,7 +1518,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -1686,7 +1686,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -1864,7 +1864,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -2030,7 +2030,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -2200,7 +2200,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -2367,7 +2367,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4
@@ -2533,7 +2533,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       isDisabled={false}
       position="middle-left"
       showCloseButton={true}
-      targetWrapperClassName="wrapper-block"
+      targetWrapperClassName="bdl-UnifiedShareForm-tooltipTarget"
       text={
         <div>
           <h4

@@ -103,12 +103,12 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
         const {
             children,
             className = '',
-            targetWrapperClassName,
             constrainToScrollParent,
             constrainToWindow,
             position,
             isShown,
             offset,
+            targetWrapperClassName,
             tetherElementClassName,
             ...rest
         } = this.props;

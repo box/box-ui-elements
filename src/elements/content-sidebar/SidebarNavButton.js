@@ -48,6 +48,8 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>(
             sidebarView,
             tooltip,
         } = props;
+        // aria-label requires a string; use tooltip directly if it's a string
+        const ariaLabel = typeof tooltip === 'string' ? tooltip : undefined;
         const sidebarPath = `/${sidebarView}`;
         const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
@@ -92,7 +94,7 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>(
                     <Button
                         accessibleWhenDisabled={true}
                         aria-controls={`${id}-content`}
-                        aria-label={tooltip}
+                        aria-label={ariaLabel}
                         aria-selected={isActiveValue}
                         className={classNames('bcs-NavButton', {
                             'bcs-is-selected': isActiveValue,
@@ -105,7 +107,7 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>(
                         disabled={isDisabled}
                         onClick={handleNavButtonClick}
                         role="tab"
-                        tabIndex={isActiveValue ? '0' : '-1'}
+                        tabIndex={isActiveValue ? 0 : -1}
                         type="button"
                         variant="tertiary"
                     >
@@ -142,7 +144,7 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>(
                             <Button
                                 accessibleWhenDisabled={true}
                                 aria-controls={`${id}-content`}
-                                aria-label={tooltip}
+                                aria-label={ariaLabel}
                                 aria-selected={isActiveValue}
                                 className={classNames('bcs-NavButton', {
                                     'bcs-is-selected': isActiveValue,
@@ -155,7 +157,7 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>(
                                 disabled={isDisabled}
                                 onClick={handleNavButtonClick}
                                 role="tab"
-                                tabIndex={isActiveValue ? '0' : '-1'}
+                                tabIndex={isActiveValue ? 0 : -1}
                                 type="button"
                                 variant="tertiary"
                             >
