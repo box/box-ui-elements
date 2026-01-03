@@ -164,9 +164,8 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
             constraints,
             targetAttachment: 'top left',
             targetOffset,
+            renderElementTo: document.body,
         };
-
-        tetherProps.renderElementTo = document.body;
 
         return (
             <TetherComponent

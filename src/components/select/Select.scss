@@ -12,8 +12,8 @@
     }
 
     // add specificity to ensure button style override
-    button.bdl-Select-tooltipIcon,
-    .bdl-Select-tooltipIcon {
+    button.tooltip-icon-container,
+    .tooltip-icon-container {
         position: absolute;
         margin-top: 9px;
         margin-left: 10px;

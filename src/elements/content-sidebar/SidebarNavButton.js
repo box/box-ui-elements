@@ -29,7 +29,7 @@ type Props = {
     onClick?: (sidebarView: ViewTypeValues) => void,
     routerDisabled?: boolean,
     sidebarView: ViewTypeValues,
-    tooltip: React.Node,
+    tooltip: string,
 };
 
 const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>(

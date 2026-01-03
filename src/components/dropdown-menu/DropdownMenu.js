@@ -13,8 +13,6 @@ type Props = {
     children: React.Node,
     /** Forces menu to render within the scroll parent */
     className?: string,
-    /** Optional class name for the target wrapper element */
-    targetWrapperClassName?: string,
     /** Forces menu to render within the visible window */
     constrainToScrollParent: boolean,
     /** Right aligns menu to button */
@@ -29,6 +27,8 @@ type Props = {
     onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    /** Optional class name for the target wrapper element */
+    targetWrapperClassName?: string,
     /** "attachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
     tetherAttachment?: string,
     /** "targetAttachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
@@ -184,12 +184,12 @@ class DropdownMenu extends React.Component<Props, State> {
             bodyElement,
             children,
             className,
-            targetWrapperClassName,
             constrainToScrollParent,
             constrainToWindow,
             constrainToWindowWithPin,
             isResponsive,
             isRightAligned,
+            targetWrapperClassName,
             tetherAttachment,
             tetherTargetAttachment,
         } = this.props;

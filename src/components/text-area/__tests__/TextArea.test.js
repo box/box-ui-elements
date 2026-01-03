@@ -77,6 +77,7 @@ describe('components/text-area/TextArea', () => {
         const tetherEl = wrapper.find(TetherComponent);
 
         expect(tetherEl.prop('className')).toBe(className);
+        wrapper.unmount();
     });
 
     test('should not show optional text when hideOptionalLabel is true', () => {
