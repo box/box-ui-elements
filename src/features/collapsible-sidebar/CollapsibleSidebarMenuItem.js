@@ -196,7 +196,8 @@ function CollapsibleSidebarMenuItem(props: Props) {
 
     return (
         <Tooltip
-            className={classNames('bdl-CollapsibleSidebar-menuItemToolTip')}
+            className={classNames('bdl-CollapsibleSidebar-menuItemTooltip')}
+            targetWrapperClassName="bdl-CollapsibleSidebar-menuItemTooltipTarget"
             isDisabled={!isTextOverflowed}
             isShown={isScrolling || shouldHideTooltip ? false : undefined}
             isTabbable={false}

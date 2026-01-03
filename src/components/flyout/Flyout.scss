@@ -1,6 +1,14 @@
 @import '../../styles/variables';
 @import './variables';
 
+.bdl-Flyout-target {
+    display: inline-block;
+}
+
+.bdl-Flyout-element {
+    outline: none;
+}
+
 .flyout-overlay {
     @include common-typography;
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TetherComponent from 'react-tether';
+import TetherComponent, { TetherProps } from 'react-tether';
 import uniqueId from 'lodash/uniqueId';
 
 import './ContextMenu.scss';
@@ -158,20 +158,29 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
             onClose: this.handleMenuClose,
         };
 
-        // TypeScript defs don't work for older versions of react-tether
-        const tetherProps = {
+        const tetherProps: TetherProps = {
             attachment: 'top left',
             classPrefix: 'context-menu',
             constraints,
             targetAttachment: 'top left',
             targetOffset,
+            renderElementTo: document.body,
         };
 
         return (
-            <TetherComponent {...tetherProps}>
-                {React.isValidElement(menuTarget) ? React.cloneElement(menuTarget, menuTargetProps) : null}
-                {isOpen && React.isValidElement(menu) ? React.cloneElement(menu, menuProps) : null}
-            </TetherComponent>
+            <TetherComponent
+                {...tetherProps}
+                renderTarget={ref => {
+                    return React.isValidElement(menuTarget) ? (
+                        <div ref={ref}>{React.cloneElement(menuTarget, menuTargetProps)}</div>
+                    ) : null;
+                }}
+                renderElement={ref => {
+                    return isOpen && React.isValidElement(menu) ? (
+                        <div ref={ref}>{React.cloneElement(menu, menuProps)}</div>
+                    ) : null;
+                }}
+            />
         );
     }
 }

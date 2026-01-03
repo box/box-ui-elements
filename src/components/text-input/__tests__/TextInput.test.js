@@ -1,5 +1,8 @@
 import * as React from 'react';
+
 import { shallow, mount } from 'enzyme';
+import TetherComponent from 'react-tether';
+
 import ClockBadge16 from '../../../icon/line/ClockBadge16';
 import IconVerified from '../../../icons/general/IconVerified';
 import LoadingIndicator from '../../loading-indicator';
@@ -80,11 +83,8 @@ describe('components/text-input/TextInput', () => {
 
     test('should render Tooltip with tetherElementClassName', () => {
         const className = 'tether-element-class-name';
-        const wrapper = shallow(<TextInput error="error" label="label" tooltipTetherClassName={className} />);
-        const tetherEl = wrapper
-            .find('Tooltip')
-            .dive()
-            .find('TetherComponent');
+        const wrapper = mount(<TextInput error="error" label="label" tooltipTetherClassName={className} />);
+        const tetherEl = wrapper.find(TetherComponent);
 
         expect(tetherEl.prop('className')).toBe(className);
     });

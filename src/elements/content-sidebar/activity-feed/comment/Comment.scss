@@ -15,10 +15,10 @@
 // the comment activity item
 .bcs-Comment-media {
     opacity: 1;
-    transition: opacity .33s;
+    transition: opacity 0.33s;
 
     &.bcs-is-pending {
-        opacity: .4;
+        opacity: 0.4;
     }
 }
 
@@ -33,6 +33,10 @@
 // tethered styles for delete confirmation modal
 .bcs-Comment-deleteConfirmationModal {
     z-index: $overlay-z-index;
+}
+
+.bcs-Comment-menuTarget {
+    display: inline-block;
 }
 
 // override for activity feed defaults

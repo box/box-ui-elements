@@ -56,7 +56,7 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
 
         const wrapper = getWrapper({ text: 'bar', icon: 'bold' }, { isScrolling: false });
 
-        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemToolTip').length).toBe(1);
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemTooltip').length).toBe(1);
         expect(wrapper.find(Tooltip).prop('isShown')).toBe(undefined); // can show on hover
         expect(wrapper.find(Tooltip).prop('isDisabled')).toBe(false);
     });
@@ -66,7 +66,7 @@ describe('components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIt
 
         const wrapper = getWrapper({ text: 'bar', icon: 'bold' }, { isScrolling: true });
 
-        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemToolTip').length).toBe(0);
+        expect(wrapper.find('.bdl-CollapsibleSidebar-menuItemTooltip').length).toBe(0);
     });
 
     test('should spread props to inner element', () => {

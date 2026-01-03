@@ -266,7 +266,7 @@
         "react-responsive": "^10.0.0",
         "react-router-dom": "^5.3.4",
         "react-scrollbars-custom": "^4.0.21",
-        "react-tether": "^1.0.5",
+        "react-tether": "^3.0.3",
         "react-textarea-autosize": "^8.5.3",
         "regenerator-runtime": "^0.14.1",
         "remarkable": "^2.0.1",
@@ -332,11 +332,11 @@
         "mousetrap": "^1.6.3",
         "pikaday": "^1.8.0",
         "query-string": "5.1.1",
-        "react": "^17.0.1 || ^18.0.0",
+        "react": "^18.0.0 || ^19.0.0",
         "react-animate-height": "^3.2.3",
         "react-aria-components": "^1.10.1",
         "react-beautiful-dnd": "^13.1.1",
-        "react-dom": "^17.0.1 || ^18.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0",
         "react-draggable": "^4.5.0",
         "react-immutable-proptypes": "^2.1.0",
         "react-intl": ">=2.9.0",
@@ -347,7 +347,7 @@
         "react-responsive": "^10.0.0",
         "react-router-dom": "5.3.4",
         "react-scrollbars-custom": "^4.0.21",
-        "react-tether": "^1.0.5",
+        "react-tether": "^3.0.3",
         "react-textarea-autosize": "^8.5.3",
         "regenerator-runtime": "^0.13.2",
         "remarkable": "^2.0.1",
@@ -356,11 +356,6 @@
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
         "uuid": "^8.3.2"
-    },
-    "comments": {
-        "dependencies": {
-            "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
-        }
     },
     "msw": {
         "workerDirectory": [".storybook/public"]

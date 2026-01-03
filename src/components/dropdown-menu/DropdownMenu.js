@@ -27,6 +27,8 @@ type Props = {
     onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    /** Optional class name for the target wrapper element */
+    targetWrapperClassName?: string,
     /** "attachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
     tetherAttachment?: string,
     /** "targetAttachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
@@ -187,6 +189,7 @@ class DropdownMenu extends React.Component<Props, State> {
             constrainToWindowWithPin,
             isResponsive,
             isRightAligned,
+            targetWrapperClassName,
             tetherAttachment,
             tetherTargetAttachment,
         } = this.props;
@@ -264,16 +267,25 @@ class DropdownMenu extends React.Component<Props, State> {
         return (
             <TetherComponent
                 attachment={tetherAttachment || attachment}
-                bodyElement={bodyEl}
                 className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
                 classPrefix="dropdown-menu"
                 constraints={constraints}
                 enabled={isOpen}
+                renderElementTo={bodyEl}
                 targetAttachment={tetherTargetAttachment || targetAttachment}
-            >
-                {React.cloneElement(menuButton, menuButtonProps)}
-                {isOpen && React.cloneElement(menu, menuProps)}
-            </TetherComponent>
+                renderTarget={ref => (
+                    <div ref={ref} className={classNames('bdl-DropdownMenu-target', targetWrapperClassName)}>
+                        {React.cloneElement(menuButton, menuButtonProps)}
+                    </div>
+                )}
+                renderElement={ref => {
+                    return isOpen ? (
+                        <div ref={ref} className="bdl-DropdownMenu-element">
+                            {React.cloneElement(menu, menuProps)}
+                        </div>
+                    ) : null;
+                }}
+            />
         );
     }
 }

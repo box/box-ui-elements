@@ -488,6 +488,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             showCloseButton: true,
             text: ftuxTooltipText,
             theme: 'callout',
+            targetWrapperClassName: 'bdl-UnifiedShareForm-tooltipTarget',
         };
         const showUpsellInlineNotice = !!upsellInlineNotice;
 

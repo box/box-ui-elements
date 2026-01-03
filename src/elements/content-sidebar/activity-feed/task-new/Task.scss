@@ -5,10 +5,10 @@ $bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
 
 .bcs-Task-media {
     opacity: 1;
-    transition: opacity .33s;
+    transition: opacity 0.33s;
 
     &.bcs-is-pending {
-        opacity: .4;
+        opacity: 0.4;
     }
 
     .bdl-Media-body {
@@ -53,4 +53,8 @@ $bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
 // tethered styles for delete confirmation modal
 .bcs-Task-deleteConfirmationModal {
     z-index: $overlay-z-index;
+}
+
+.bcs-Task-menuTarget {
+    display: inline-block;
 }

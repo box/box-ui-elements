@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { mount, shallow } from 'enzyme';
+import TetherComponent from 'react-tether';
 import sinon from 'sinon';
 
 import LeftSidebarLinkCallout from '../LeftSidebarLinkCallout';
@@ -40,8 +42,13 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
                 content: <div>Hi</div>,
                 onClose: sandbox.mock(),
             };
-            const wrapper = getWrapper({ callout });
-            const btn = wrapper.find('.nav-link-callout-close-button');
+            const wrapper = mount(
+                <LeftSidebarLinkCallout callout={callout} isShown={true}>
+                    <span>Test Child</span>
+                </LeftSidebarLinkCallout>,
+            );
+            const tetherComponent = wrapper.find(TetherComponent);
+            const btn = tetherComponent.find('.nav-link-callout-close-button').first();
             btn.simulate('click');
         });
 
@@ -54,8 +61,21 @@ describe('components/tooltip/LeftSidebarLinkCallout', () => {
         });
 
         test('should add class provided to nav-link-callout component', () => {
-            const wrapper = getWrapper({ isShown: true, navLinkClassName: 'testClass' });
-            const callout = wrapper.find('.nav-link-callout');
+            const wrapper = mount(
+                <LeftSidebarLinkCallout
+                    callout={{
+                        content: <div>Hi</div>,
+                        onClose: () => {},
+                    }}
+                    isShown={true}
+                    navLinkClassName="testClass"
+                >
+                    <span>Test Child</span>
+                </LeftSidebarLinkCallout>,
+            );
+
+            const tetherComponent = wrapper.find(TetherComponent);
+            const callout = tetherComponent.find('.nav-link-callout');
             expect(callout.props().className).toContain('testClass');
         });
     });

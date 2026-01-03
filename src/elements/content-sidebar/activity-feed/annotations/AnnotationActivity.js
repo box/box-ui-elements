@@ -123,7 +123,6 @@ const AnnotationActivity = ({
         : { ...linkMessage, values: { number: linkValue } };
     const tetherProps = {
         attachment: 'top right',
-        className: 'bcs-AnnotationActivity-deleteConfirmationModal',
         constraints: [{ to: 'scrollParent', attachment: 'together' }],
         targetAttachment: 'bottom right',
     };
@@ -206,33 +205,41 @@ const AnnotationActivity = ({
                 {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
             </SelectableActivityCard>
-            <TetherComponent {...tetherProps}>
-                {isMenuVisible && (
-                    <AnnotationActivityMenu
-                        canDelete={canDelete}
-                        canEdit={canEdit}
-                        canResolve={canResolve}
-                        className="bcs-AnnotationActivity-menu"
-                        id={id}
-                        isDisabled={isConfirmingDelete}
-                        status={status}
-                        onDelete={handleDelete}
-                        onEdit={handleEdit}
-                        onMenuClose={handleMenuClose}
-                        onMenuOpen={handleMenuOpen}
-                        onStatusChange={handleStatusChange}
-                    />
-                )}
-                {isConfirmingDelete && (
-                    <DeleteConfirmation
-                        data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
-                        isOpen={isConfirmingDelete}
-                        message={messages.annotationActivityDeletePrompt}
-                        onDeleteCancel={handleDeleteCancel}
-                        onDeleteConfirm={handleDeleteConfirm}
-                    />
-                )}
-            </TetherComponent>
+            {isMenuVisible && (
+                <TetherComponent
+                    {...tetherProps}
+                    renderTarget={ref => (
+                        <div ref={ref} className="bcs-AnnotationActivity-menuTarget">
+                            <AnnotationActivityMenu
+                                canDelete={canDelete}
+                                canEdit={canEdit}
+                                canResolve={canResolve}
+                                id={id}
+                                isDisabled={isConfirmingDelete}
+                                status={status}
+                                onDelete={handleDelete}
+                                onEdit={handleEdit}
+                                onMenuClose={handleMenuClose}
+                                onMenuOpen={handleMenuOpen}
+                                onStatusChange={handleStatusChange}
+                            />
+                        </div>
+                    )}
+                    renderElement={ref => {
+                        return isConfirmingDelete ? (
+                            <div ref={ref} className="bcs-AnnotationActivity-deleteConfirmationModal">
+                                <DeleteConfirmation
+                                    data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
+                                    isOpen={isConfirmingDelete}
+                                    message={messages.annotationActivityDeletePrompt}
+                                    onDeleteCancel={handleDeleteCancel}
+                                    onDeleteConfirm={handleDeleteConfirm}
+                                />
+                            </div>
+                        ) : null;
+                    }}
+                />
+            )}
         </>
     );
 };
