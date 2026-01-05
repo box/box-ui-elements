@@ -5,9 +5,7 @@
  */
 
 import * as React from 'react';
-// TODO switch to createRoot when upgrading to React 18
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ES6Wrapper from './ES6Wrapper';
 import ContentSidebarComponent from '../content-sidebar';
 
@@ -22,7 +20,10 @@ class ContentSidebar extends ES6Wrapper {
 
     /** @inheritdoc */
     render() {
-        render(
+        if (!this.root) {
+            this.root = createRoot(this.container);
+        }
+        this.root.render(
             <ContentSidebarComponent
                 componentRef={this.setComponent}
                 fileId={this.id}
@@ -32,7 +33,6 @@ class ContentSidebar extends ES6Wrapper {
                 token={this.token}
                 {...this.options}
             />,
-            this.container,
         );
     }
 }

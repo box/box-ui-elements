@@ -70,17 +70,22 @@ class LeftSidebarLinkCallout extends React.Component<Props, State> {
                 classPrefix="nav-link-callout"
                 enabled={showTooltip}
                 targetAttachment={targetAttachmentPosition}
-            >
-                {React.Children.only(children)}
-                {showTooltip && (
-                    <div className={classNames('nav-link-callout', navLinkClassName)}>
-                        <PlainButton className="nav-link-callout-close-button" onClick={this.hideCallout}>
-                            <IconClose color="#fff" height={16} width={16} />
-                        </PlainButton>
-                        {content}
+                renderTarget={ref => (
+                    <div ref={ref} style={{ display: 'inline-block' }}>
+                        {React.Children.only(children)}
                     </div>
                 )}
-            </TetherComponent>
+                renderElement={ref => {
+                    return showTooltip ? (
+                        <div className={classNames('nav-link-callout', navLinkClassName)} ref={ref}>
+                            <PlainButton className="nav-link-callout-close-button" onClick={this.hideCallout}>
+                                <IconClose color="#fff" height={16} width={16} />
+                            </PlainButton>
+                            {content}
+                        </div>
+                    ) : null;
+                }}
+            />
         );
     }
 }

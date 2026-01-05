@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import AppActivity from '../AppActivity';
 import Media from '../../../../../components/media';
@@ -27,6 +27,8 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
     };
     const render = (props = {}) =>
         shallow(<AppActivity isPending={false} onDelete={jest.fn()} {...fakeAppActivity} {...props} />).dive();
+    const renderWithMount = (props = {}) =>
+        mount(<AppActivity isPending={false} onDelete={jest.fn()} {...fakeAppActivity} {...props} />);
 
     test('should correctly render an app activity item', () => {
         const currentUser = {
@@ -74,24 +76,21 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
     });
 
     test('should show the overflow menu if the current user is the one who made the activity', () => {
-        const wrapper = render({
+        const wrapper = renderWithMount({
             currentUser: { ...fakeUser },
+            permissions: { can_delete: false },
         });
 
-        expect(wrapper.exists(Media.Menu)).toBe(true);
+        expect(wrapper.find('button.bdl-Media-menu').exists()).toBe(true);
     });
 
     test('should show the overflow menu if a different user, with the correct permissions', () => {
-        const wrapper = render({
-            currentUser: {
-                id: 'someone_else',
-            },
-            permissions: {
-                can_delete: true,
-            },
+        const wrapper = renderWithMount({
+            currentUser: { id: 'someone_else' },
+            permissions: { can_delete: true },
         });
 
-        expect(wrapper.exists(Media.Menu)).toBe(true);
+        expect(wrapper.find('button.bdl-Media-menu').exists()).toBe(true);
     });
 
     test('should show the overflow menu if pending', () => {
