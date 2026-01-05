@@ -84,8 +84,8 @@ type ExternalProps = {
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     currentUserError?: Errors,
-    /** When true, defers data fetching until set to false. Used to prioritize preview loading. */
-    deferDataFetch?: boolean,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies?: boolean,
     hasTasks?: boolean,
@@ -187,18 +187,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        const { deferDataFetch } = this.props;
-        if (!deferDataFetch) {
+        const { shouldFetchSidebarData } = this.props;
+        if (shouldFetchSidebarData) {
             this.fetchFeedItems(true);
         }
     }
 
     componentDidUpdate(prevProps: Props) {
-        const { deferDataFetch } = this.props;
-        const { deferDataFetch: prevDeferDataFetch } = prevProps;
+        const { shouldFetchSidebarData } = this.props;
+        const { shouldFetchSidebarData: prevShouldFetchSidebarData } = prevProps;
 
-        // Fetch when deferral is lifted
-        if (prevDeferDataFetch && !deferDataFetch) {
+        // Fetch when fetch is enabled
+        if (!prevShouldFetchSidebarData && shouldFetchSidebarData) {
             this.fetchFeedItems(true);
         }
     }

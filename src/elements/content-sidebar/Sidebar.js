@@ -46,8 +46,8 @@ type Props = {
     className: string,
     currentUser?: User,
     currentUserError?: Errors,
-    /** When true, defers all data fetching until set to false. Used to prioritize preview loading. */
-    deferDataFetch?: boolean,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     features: FeatureConfig,
@@ -299,7 +299,7 @@ class Sidebar extends React.Component<Props, State> {
             className,
             currentUser,
             currentUserError,
-            deferDataFetch,
+            shouldFetchSidebarData,
             detailsSidebarProps,
             docGenSidebarProps,
             file,
@@ -362,7 +362,7 @@ class Sidebar extends React.Component<Props, State> {
                             boxAISidebarProps={boxAISidebarProps}
                             currentUser={currentUser}
                             currentUserError={currentUserError}
-                            deferDataFetch={deferDataFetch}
+                            shouldFetchSidebarData={shouldFetchSidebarData}
                             elementId={this.id}
                             defaultPanel={defaultPanel}
                             detailsSidebarProps={detailsSidebarProps}

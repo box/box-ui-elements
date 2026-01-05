@@ -67,8 +67,8 @@ type Props = {
     clientName: string,
     currentUser?: User,
     defaultView: string,
-    /** When true, defers all data fetching until set to false. Used to prioritize preview loading. */
-    deferDataFetch?: boolean,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps?: DocGenSidebarProps,
     features: FeatureConfig,
@@ -208,7 +208,7 @@ class ContentSidebar extends React.Component<Props, State> {
     /**
      * Fetches the file data on load
      * Note: Always fetch file metadata immediately - it's fast and needed for sidebar structure.
-     * The deferDataFetch prop is passed to panels to defer their heavier API calls.
+     * The shouldFetchSidebarData prop is passed to panels to control when they make their heavier API calls.
      *
      * @private
      * @inheritdoc
@@ -360,7 +360,7 @@ class ContentSidebar extends React.Component<Props, State> {
             className,
             currentUser,
             defaultView,
-            deferDataFetch,
+            shouldFetchSidebarData,
             detailsSidebarProps,
             docGenSidebarProps,
             features,
@@ -405,7 +405,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
-                                deferDataFetch={deferDataFetch}
+                                shouldFetchSidebarData={shouldFetchSidebarData}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
                                 file={file}
