@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { Focusable, Tooltip, TooltipProvider } from '@box/blueprint-web';
 
 import InfoBadge16 from '../../icon/fill/InfoBadge16';
-import Tooltip, { TooltipPosition } from '../tooltip';
 
 export interface InfoIconWithTooltipProps {
     /** Custom class for the icon */
@@ -14,11 +14,15 @@ export interface InfoIconWithTooltipProps {
 
 const InfoIconWithTooltip = ({ className = '', iconProps, tooltipText }: InfoIconWithTooltipProps) => (
     <span key="infoIcon" className={`${className} tooltip-icon-container`}>
-        <Tooltip position={TooltipPosition.TOP_CENTER} text={tooltipText}>
-            <span className="info-icon-container">
-                <InfoBadge16 {...iconProps} />
-            </span>
-        </Tooltip>
+        <TooltipProvider>
+            <Tooltip content={tooltipText}>
+                <Focusable>
+                    <span className="info-icon-container">
+                        <InfoBadge16 {...iconProps} />
+                    </span>
+                </Focusable>
+            </Tooltip>
+        </TooltipProvider>
     </span>
 );
 

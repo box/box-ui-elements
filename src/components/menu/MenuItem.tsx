@@ -4,6 +4,8 @@ import omit from 'lodash/omit';
 
 import RadarAnimation from '../radar';
 
+import './MenuItem.scss';
+
 export interface MenuItemProps {
     /** 'aria-checked' - ARIA attribute for checkbox elements */
     'aria-checked'?: boolean;
@@ -68,7 +70,7 @@ class MenuItem extends React.Component<MenuItemProps> {
 
         let menuItem = <li {...menuItemProps}>{children}</li>;
         if (showRadar) {
-            menuItem = <RadarAnimation>{menuItem}</RadarAnimation>;
+            menuItem = <RadarAnimation targetWrapperClassName="bdl-MenuItem-radarTarget">{menuItem}</RadarAnimation>;
         }
 
         return menuItem;

@@ -2,6 +2,7 @@
 // @ts-ignore
 import React, { act } from 'react';
 import { mount, shallow, ReactWrapper } from 'enzyme';
+import TetherComponent from 'react-tether';
 import sinon from 'sinon';
 
 import ContextMenu, { ContextMenuProps, ContextMenuState } from '../ContextMenu';
@@ -53,7 +54,7 @@ describe('components/context-menu/ContextMenu', () => {
         });
 
         test('should correctly render a single child button with correct props', () => {
-            const wrapper = shallow<ContextMenu>(
+            const wrapper = mount<ContextMenu>(
                 <ContextMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -69,7 +70,7 @@ describe('components/context-menu/ContextMenu', () => {
         });
 
         test('should not render child menu when menu is closed', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <ContextMenu>
                     <FakeButton />
                     <FakeMenu />
@@ -81,13 +82,16 @@ describe('components/context-menu/ContextMenu', () => {
         });
 
         test('should correctly render a single child menu with correct props when menu is open', () => {
-            const wrapper = shallow<ContextMenu>(
+            const wrapper = mount<ContextMenu>(
                 <ContextMenu>
                     <FakeButton />
                     <FakeMenu />
                 </ContextMenu>,
             );
-            wrapper.setState({ isOpen: true });
+            act(() => {
+                wrapper.setState({ isOpen: true });
+            });
+            wrapper.update();
 
             const instance = wrapper.instance();
 
@@ -100,17 +104,18 @@ describe('components/context-menu/ContextMenu', () => {
         });
 
         test('should render TetherComponent with correct props with correct default values', () => {
-            const wrapper = shallow(
+            const wrapper = mount(
                 <ContextMenu>
                     <FakeButton />
                     <FakeMenu />
                 </ContextMenu>,
             );
 
-            expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('attachment')).toEqual('top left');
-            expect(wrapper.prop('targetAttachment')).toEqual('top left');
-            expect(wrapper.prop('constraints')).toEqual([]);
+            const tetherComponent = wrapper.find(TetherComponent);
+            expect(tetherComponent.length).toBe(1);
+            expect(tetherComponent.prop('attachment')).toEqual('top left');
+            expect(tetherComponent.prop('targetAttachment')).toEqual('top left');
+            expect(tetherComponent.prop('constraints')).toEqual([]);
         });
 
         test('should render TetherComponent with constraints when specified', () => {
@@ -153,12 +158,9 @@ describe('components/context-menu/ContextMenu', () => {
                 </ContextMenu>,
             );
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({
-                    isOpen: false,
-                });
+            sandbox.mock(instance).expects('setState').withArgs({
+                isOpen: false,
+            });
             instance.closeMenu();
         });
 
@@ -247,7 +249,9 @@ describe('components/context-menu/ContextMenu', () => {
             const instance = wrapper.instance();
             document.addEventListener = jest.fn();
             document.removeEventListener = jest.fn();
-            instance.setState({ isOpen: true });
+            act(() => {
+                instance.setState({ isOpen: true });
+            });
             expect(document.addEventListener).not.toHaveBeenCalledWith('click', expect.anything(), expect.anything());
             expect(document.addEventListener).not.toHaveBeenCalledWith(
                 'contextmenu',
@@ -290,14 +294,8 @@ describe('components/context-menu/ContextMenu', () => {
             );
 
             const documentMock = sandbox.mock(document);
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('contextmenu')
-                .never();
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('click')
-                .never();
+            documentMock.expects('removeEventListener').withArgs('contextmenu').never();
+            documentMock.expects('removeEventListener').withArgs('click').never();
 
             wrapper.unmount();
         });
@@ -411,18 +409,18 @@ describe('components/context-menu/ContextMenu', () => {
                 const instance = wrapper.instance() as ContextMenu;
                 instance.closeMenu = closeMenuSpy;
 
-                const handleContextMenuEvent = ({
+                const handleContextMenuEvent = {
                     clientX: 10,
                     clientY: 15,
                     preventDefault: preventDefaultSpy,
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 act(() => {
                     instance.handleContextMenu(handleContextMenuEvent);
                 });
 
-                const documentClickEvent = ({
+                const documentClickEvent = {
                     target: document.createElement('div'),
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 instance.handleDocumentClick(documentClickEvent);
                 expect(closeMenuSpy).toHaveBeenCalled();
             });
@@ -438,18 +436,18 @@ describe('components/context-menu/ContextMenu', () => {
                 const instance = wrapper.instance() as ContextMenu;
                 instance.closeMenu = closeMenuSpy;
 
-                const handleContextMenuEvent = ({
+                const handleContextMenuEvent = {
                     clientX: 10,
                     clientY: 15,
                     preventDefault: preventDefaultSpy,
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 act(() => {
                     instance.handleContextMenu(handleContextMenuEvent);
                 });
 
-                const documentClickEvent = ({
+                const documentClickEvent = {
                     target: document.getElementById(instance.menuID),
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 instance.handleDocumentClick(documentClickEvent);
                 expect(closeMenuSpy).not.toHaveBeenCalled();
             });
