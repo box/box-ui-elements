@@ -67,8 +67,6 @@ type Props = {
     clientName: string,
     currentUser?: User,
     defaultView: string,
-    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
-    shouldFetchSidebarData?: boolean,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps?: DocGenSidebarProps,
     features: FeatureConfig,
@@ -96,8 +94,10 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    theme?: Theme,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     signSidebarProps: SignSidebarProps,
+    theme?: Theme,
     token: Token,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &

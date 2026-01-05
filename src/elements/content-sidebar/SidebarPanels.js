@@ -49,8 +49,6 @@ type Props = {
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,
-    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
-    shouldFetchSidebarData?: boolean,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
@@ -73,6 +71,8 @@ type Props = {
     onPanelChange?: (name: string, isInitialState?: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     versionsSidebarProps: VersionsSidebarProps,
 };
 

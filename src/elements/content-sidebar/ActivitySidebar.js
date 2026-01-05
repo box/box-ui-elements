@@ -84,8 +84,6 @@ type ExternalProps = {
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
     currentUserError?: Errors,
-    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
-    shouldFetchSidebarData?: boolean,
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies?: boolean,
     hasTasks?: boolean,
@@ -101,6 +99,8 @@ type ExternalProps = {
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
     routerDisabled?: boolean,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
 } & ErrorContextProps &
     WithAnnotatorContextProps;
 
