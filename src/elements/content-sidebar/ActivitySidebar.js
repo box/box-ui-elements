@@ -187,15 +187,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        const { shouldFetchSidebarData } = this.props;
+        const { shouldFetchSidebarData = true } = this.props;
         if (shouldFetchSidebarData) {
             this.fetchFeedItems(true);
         }
     }
 
     componentDidUpdate(prevProps: Props) {
-        const { shouldFetchSidebarData } = this.props;
-        const { shouldFetchSidebarData: prevShouldFetchSidebarData } = prevProps;
+        const { shouldFetchSidebarData = true } = this.props;
+        const { shouldFetchSidebarData: prevShouldFetchSidebarData = true } = prevProps;
 
         // Fetch when fetch is enabled
         if (!prevShouldFetchSidebarData && shouldFetchSidebarData) {
