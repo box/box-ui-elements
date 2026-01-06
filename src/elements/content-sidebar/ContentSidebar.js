@@ -94,8 +94,10 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    theme?: Theme,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     signSidebarProps: SignSidebarProps,
+    theme?: Theme,
     token: Token,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
@@ -355,6 +357,7 @@ class ContentSidebar extends React.Component<Props, State> {
             className,
             currentUser,
             defaultView,
+            shouldFetchSidebarData,
             detailsSidebarProps,
             docGenSidebarProps,
             features,
@@ -399,6 +402,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
+                                shouldFetchSidebarData={shouldFetchSidebarData}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
                                 file={file}
