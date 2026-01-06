@@ -445,6 +445,28 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should pass preloadUrlMap to preview.show() when provided', async () => {
+            const preloadUrlMap = {
+                jpg: { 1: 'https://api.box.com/image1.jpg' },
+                webp: { 1: 'https://api.box.com/image2.webp', 2: 'https://api.box.com/image3.webp' },
+            };
+            const wrapper = getWrapper({ ...props, preloadUrlMap });
+
+            wrapper.setState({ file });
+
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    preloadUrlMap,
+                }),
+            );
+        });
+
         test.each`
             called   | showAnnotationsControls
             ${true}  | ${true}
