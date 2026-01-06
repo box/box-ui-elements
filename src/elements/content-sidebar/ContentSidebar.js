@@ -207,8 +207,6 @@ class ContentSidebar extends React.Component<Props, State> {
 
     /**
      * Fetches the file data on load
-     * Note: Always fetch file metadata immediately - it's fast and needed for sidebar structure.
-     * The shouldFetchSidebarData prop is passed to panels to control when they make their heavier API calls.
      *
      * @private
      * @inheritdoc
@@ -229,7 +227,6 @@ class ContentSidebar extends React.Component<Props, State> {
         const { fileId }: Props = this.props;
         const { fileId: prevFileId }: Props = prevProps;
 
-        // Fetch when fileId changes
         if (fileId !== prevFileId) {
             this.fetchFile();
         }
