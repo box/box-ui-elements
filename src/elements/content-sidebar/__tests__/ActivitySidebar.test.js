@@ -110,6 +110,66 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test('should fetch the file and refresh the cache and fetch the current user', () => {
             expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
         });
+
+        test('should not fetch feed items when shouldFetchSidebarData is false', () => {
+            jest.restoreAllMocks();
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
+
+            getWrapper({ shouldFetchSidebarData: false });
+
+            expect(ActivitySidebarComponent.prototype.fetchFeedItems).not.toHaveBeenCalled();
+        });
+
+        test('should fetch feed items when shouldFetchSidebarData is true', () => {
+            jest.restoreAllMocks();
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
+
+            getWrapper({ shouldFetchSidebarData: true });
+
+            expect(ActivitySidebarComponent.prototype.fetchFeedItems).toHaveBeenCalledWith(true);
+        });
+    });
+
+    describe('componentDidUpdate()', () => {
+        test('should fetch feed items when shouldFetchSidebarData changes from false to true', () => {
+            const wrapper = getWrapper({ shouldFetchSidebarData: false });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.setProps({ shouldFetchSidebarData: true });
+
+            expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
+        });
+
+        test('should not fetch feed items when shouldFetchSidebarData remains false', () => {
+            const wrapper = getWrapper({ shouldFetchSidebarData: false });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.setProps({ shouldFetchSidebarData: false });
+
+            expect(instance.fetchFeedItems).not.toHaveBeenCalled();
+        });
+
+        test('should not fetch feed items when shouldFetchSidebarData remains true', () => {
+            const wrapper = getWrapper({ shouldFetchSidebarData: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.setProps({ shouldFetchSidebarData: true });
+
+            expect(instance.fetchFeedItems).not.toHaveBeenCalled();
+        });
+
+        test('should not fetch feed items when shouldFetchSidebarData changes from true to false', () => {
+            const wrapper = getWrapper({ shouldFetchSidebarData: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.setProps({ shouldFetchSidebarData: false });
+
+            expect(instance.fetchFeedItems).not.toHaveBeenCalled();
+        });
     });
 
     describe('render()', () => {
