@@ -294,4 +294,76 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(refresh).toHaveBeenCalled();
         });
     });
+
+    describe('render() with minimalFile', () => {
+        const minimalFile = {
+            id: 'minimal_file_id',
+            type: 'file',
+            name: 'test.pdf',
+            permissions: { can_preview: true },
+        };
+
+        beforeEach(() => {
+            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValue(true);
+        });
+
+        test('should render sidebar with minimalFile when file state is not available', () => {
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+            });
+
+            wrapper.setState({ file: undefined, isLoading: true });
+
+            expect(wrapper.find('sidebar').exists()).toBe(true);
+            expect(wrapper.find('sidebar').prop('file')).toEqual(minimalFile);
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
+        });
+
+        test('should render sidebar with file when both file and minimalFile are available', () => {
+            const wrapper = getWrapper({
+                fileId: file.id,
+                minimalFile,
+            });
+
+            wrapper.setState({ file, isLoading: false });
+
+            expect(wrapper.find('sidebar').exists()).toBe(true);
+            expect(wrapper.find('sidebar').prop('file')).toEqual(file);
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(false);
+        });
+
+        test('should return null when neither file nor minimalFile is available', () => {
+            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValue(true);
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+            });
+
+            wrapper.setState({ file: undefined, isLoading: true });
+
+            expect(wrapper.find('sidebar').exists()).toBe(false);
+        });
+
+        test('should pass isLoading as true when using minimalFile without full file data', () => {
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+            });
+
+            wrapper.setState({ file: undefined, isLoading: true });
+
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
+        });
+
+        test('should pass isLoading as true when file is loading even with minimalFile', () => {
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+            });
+
+            wrapper.setState({ file: undefined, isLoading: true });
+
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
+        });
+    });
 });
