@@ -313,7 +313,10 @@ describe('elements/content-sidebar/ContentSidebar', () => {
                 minimalFile,
             });
 
-            wrapper.setState({ file: undefined, isLoading: true });
+            act(() => {
+                wrapper.setState({ file: undefined, isLoading: true });
+            });
+            wrapper.update();
 
             expect(wrapper.find('sidebar').exists()).toBe(true);
             expect(wrapper.find('sidebar').prop('file')).toEqual(minimalFile);
@@ -326,7 +329,10 @@ describe('elements/content-sidebar/ContentSidebar', () => {
                 minimalFile,
             });
 
-            wrapper.setState({ file, isLoading: false });
+            act(() => {
+                wrapper.setState({ file, isLoading: false });
+            });
+            wrapper.update();
 
             expect(wrapper.find('sidebar').exists()).toBe(true);
             expect(wrapper.find('sidebar').prop('file')).toEqual(file);
@@ -339,7 +345,10 @@ describe('elements/content-sidebar/ContentSidebar', () => {
                 fileId: 'test_id',
             });
 
-            wrapper.setState({ file: undefined, isLoading: true });
+            act(() => {
+                wrapper.setState({ file: undefined, isLoading: true });
+            });
+            wrapper.update();
 
             expect(wrapper.find('sidebar').exists()).toBe(false);
         });
@@ -350,7 +359,10 @@ describe('elements/content-sidebar/ContentSidebar', () => {
                 minimalFile,
             });
 
-            wrapper.setState({ file: undefined, isLoading: true });
+            act(() => {
+                wrapper.setState({ file: undefined, isLoading: true });
+            });
+            wrapper.update();
 
             expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
         });
@@ -361,7 +373,10 @@ describe('elements/content-sidebar/ContentSidebar', () => {
                 minimalFile,
             });
 
-            wrapper.setState({ file: undefined, isLoading: true });
+            act(() => {
+                wrapper.setState({ file: undefined, isLoading: true });
+            });
+            wrapper.update();
 
             expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
         });
