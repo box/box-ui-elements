@@ -125,7 +125,6 @@ type Props = {
         [name: string]: TargetingApi,
     },
     previewLibraryVersion: string,
-    preloadUrlMap?: Object,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,
@@ -812,12 +811,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
-            preloadUrlMap,
             previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
         }: Props = this.props;
+
         const { file, selectedVersion, startAt }: State = this.state;
         this.previewLibraryLoaded = this.isPreviewLibraryLoaded();
 
@@ -856,7 +855,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
             experiences: previewExperiences,
-            preloadUrlMap,
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),
@@ -865,6 +863,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             skipServerUpdate: true,
             useHotkeys: false,
         };
+
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
