@@ -15,7 +15,6 @@ import { convertCollabsResponse, convertItemResponse } from './utils';
 
 import type { ElementsXhrError } from '../../common/types/api';
 import type { Collaborations, ItemType } from '../../common/types/core';
-import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 import type { AvatarURLMap } from './types';
 
 import messages from './messages';
@@ -26,14 +25,14 @@ export interface ContentSharingV2Props {
     /** children - Children for the element to open the Unified Share Modal */
     children?: React.ReactElement;
     /** config - Configuration object for the Unified Share Modal */
-    config?: USMConfig | Configuration;
+    config?: Configuration;
     /** itemId - Box file or folder ID */
     itemId: string;
     /** itemType - "file" or "folder" */
     itemType: ItemType;
 }
 
-function ContentSharingV2({ api, children, config: usmConfig = {}, itemId, itemType }: ContentSharingV2Props) {
+function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [hasError, setHasError] = React.useState<boolean>(false);
