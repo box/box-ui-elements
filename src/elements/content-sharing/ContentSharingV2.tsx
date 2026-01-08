@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
+
 import { useNotification } from '@box/blueprint-web';
 import { UnifiedShareModal } from '@box/unified-share-modal';
-import type { CollaborationRole, Collaborator, Item, SharedLink, User } from '@box/unified-share-modal';
+import type { CollaborationRole, Collaborator, Configuration, Item, SharedLink, User } from '@box/unified-share-modal';
 
 import API from '../../api';
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
@@ -12,8 +13,8 @@ import { CONTENT_SHARING_ERRORS } from './constants';
 import { useContactService, useSharingService } from './hooks';
 import { convertCollabsResponse, convertItemResponse } from './utils';
 
-import type { Collaborations, ItemType } from '../../common/types/core';
 import type { ElementsXhrError } from '../../common/types/api';
+import type { Collaborations, ItemType } from '../../common/types/core';
 import type { AvatarURLMap } from './types';
 
 import messages from './messages';
@@ -23,13 +24,15 @@ export interface ContentSharingV2Props {
     api: API;
     /** children - Children for the element to open the Unified Share Modal */
     children?: React.ReactElement;
+    /** config - Configuration object for the Unified Share Modal */
+    config?: Configuration;
     /** itemId - Box file or folder ID */
     itemId: string;
     /** itemType - "file" or "folder" */
     itemType: ItemType;
 }
 
-function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2Props) {
+function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [hasError, setHasError] = React.useState<boolean>(false);
@@ -207,7 +210,7 @@ function ContentSharingV2({ api, children, itemId, itemType }: ContentSharingV2P
         }
     }, [avatarUrlMap, collaboratorsData, currentUser, owner]);
 
-    const config = { sharedLinkEmail: false };
+    const config = React.useMemo(() => ({ sharedLinkEmail: false, ...usmConfig }), [usmConfig]);
 
     return (
         item && (
