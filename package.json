@@ -310,7 +310,7 @@
         "@box/metadata-view": "^1.10.0",
         "@box/react-virtualized": "^9.22.3-rc-box.10",
         "@box/types": "^0.2.1",
-        "@box/unified-share-modal": "^1.7.1",
+        "@box/unified-share-modal": "^1.36.1",
         "@box/user-selector": "^1.23.25",
         "@hapi/address": "^2.1.4",
         "@tanstack/react-virtual": "^3.13.12",

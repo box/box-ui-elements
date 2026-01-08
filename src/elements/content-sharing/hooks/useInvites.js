@@ -50,7 +50,7 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
                         reject(error);
                     },
                 );
-            });
+            }).finally(() => setIsLoading(false));
         };
 
         const createPostCollaborationFn: SendInvitesFnType =
