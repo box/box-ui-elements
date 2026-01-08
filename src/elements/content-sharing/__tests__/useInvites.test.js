@@ -51,8 +51,8 @@ describe('useInvites hook', () => {
             }),
         );
 
-        act(() => {
-            result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
+        await act(async () => {
+            await result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
         });
 
         expect(mockHandleSuccess).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
@@ -69,8 +69,8 @@ describe('useInvites hook', () => {
             }),
         );
 
-        act(() => {
-            result.current({ users: [{ email: 'fail@example.com', role: 'editor' }] });
+        await act(async () => {
+            await result.current({ users: [{ email: 'fail@example.com', role: 'editor' }] }).catch(() => {});
         });
 
         expect(mockHandleError).toHaveBeenCalled();
@@ -86,11 +86,11 @@ describe('useInvites hook', () => {
         );
 
         let actionResult;
-        act(() => {
-            actionResult = result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
+        await act(async () => {
+            actionResult = await result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
         });
 
-        expect(actionResult).toEqual(Promise.resolve());
+        expect(actionResult).toEqual(null);
         expect(mockHandleSuccess).not.toHaveBeenCalled();
         expect(mockHandleError).not.toHaveBeenCalled();
     });
@@ -108,8 +108,8 @@ describe('useInvites hook', () => {
                 }),
             );
 
-            act(() => {
-                result.current({
+            await act(async () => {
+                await result.current({
                     users: [{ email: 'user@example.com', role: 'editor' }],
                     groups: [{ id: 'group123', role: 'viewer' }],
                 });
