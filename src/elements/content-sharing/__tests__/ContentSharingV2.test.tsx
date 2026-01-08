@@ -170,6 +170,25 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         });
     });
 
+    test('should render UnifiedShareModal when custom config is provided', async () => {
+        renderComponent({ config: { collaborationLimit: 3 } });
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /Box Development Guide.pdf/i })).toBeVisible();
+        });
+    });
+
+    test('should allow custom config to override default config', async () => {
+        const apiWithSharedLink = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
+        };
+        renderComponent({ api: apiWithSharedLink, config: { sharedLinkEmail: true } });
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: /Box Development Guide.pdf/i })).toBeVisible();
+            expect(screen.getByRole('button', { name: 'Send Shared Link' })).toBeVisible();
+        });
+    });
+
     describe('getError function', () => {
         const createErrorApi = error => ({
             ...defaultApiMock,
