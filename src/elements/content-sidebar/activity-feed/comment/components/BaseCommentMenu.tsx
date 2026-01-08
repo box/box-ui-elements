@@ -50,6 +50,7 @@ export const BaseCommentMenu = ({
 }: BaseCommentMenuProps) => {
     return (
         <TetherComponent
+            // @ts-expect-error Awaiting proper types from @types/react-tether
             attachment="top right"
             className="bcs-Comment-deleteConfirmationModal"
             constraints={[{ to: 'scrollParent', attachment: 'together' }]}
