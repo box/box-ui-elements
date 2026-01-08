@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import useInvites from '../hooks/useInvites';
 import API from '../../../api';
 
@@ -51,9 +51,7 @@ describe('useInvites hook', () => {
             }),
         );
 
-        await act(async () => {
-            await result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
-        });
+        await result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
 
         expect(mockHandleSuccess).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
         expect(mockTransformResponse).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
@@ -69,10 +67,7 @@ describe('useInvites hook', () => {
             }),
         );
 
-        await act(async () => {
-            await result.current({ users: [{ email: 'fail@example.com', role: 'editor' }] }).catch(() => {});
-        });
-
+        await result.current({ users: [{ email: 'fail@example.com', role: 'editor' }] }).catch(() => {});
         expect(mockHandleError).toHaveBeenCalled();
     });
 
@@ -85,11 +80,7 @@ describe('useInvites hook', () => {
             }),
         );
 
-        let actionResult;
-        await act(async () => {
-            actionResult = await result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
-        });
-
+        const actionResult = await result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
         expect(actionResult).toEqual(null);
         expect(mockHandleSuccess).not.toHaveBeenCalled();
         expect(mockHandleError).not.toHaveBeenCalled();
@@ -108,11 +99,9 @@ describe('useInvites hook', () => {
                 }),
             );
 
-            await act(async () => {
-                await result.current({
-                    users: [{ email: 'user@example.com', role: 'editor' }],
-                    groups: [{ id: 'group123', role: 'viewer' }],
-                });
+            await result.current({
+                users: [{ email: 'user@example.com', role: 'editor' }],
+                groups: [{ id: 'group123', role: 'viewer' }],
             });
 
             expect(mockHandleSuccess).toHaveBeenCalledTimes(2);
