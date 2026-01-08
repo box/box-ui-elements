@@ -35,37 +35,23 @@ export const createSharingService = ({
     const { id, permissions } = options;
 
     const changeSharedLinkAccess = async (access: string): Promise<void> => {
-        return new Promise<void>((resolve, reject) => {
-            itemApiInstance.share(
-                { id, permissions },
-                access,
-                data => {
-                    onUpdateSharedLink(data);
-                    resolve();
-                },
-                error => {
-                    reject(error);
-                },
-                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            );
-        });
+        return itemApiInstance.share(
+            { id, permissions },
+            access,
+            onUpdateSharedLink,
+            {},
+            CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+        );
     };
 
     const changeSharedLinkPermission = async (permissionLevel: string): Promise<void> => {
-        return new Promise<void>((resolve, reject) => {
-            itemApiInstance.updateSharedLink(
-                { id, permissions },
-                { permissions: convertSharedLinkPermissions(permissionLevel) },
-                data => {
-                    onUpdateSharedLink(data);
-                    resolve();
-                },
-                error => {
-                    reject(error);
-                },
-                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            );
-        });
+        return itemApiInstance.updateSharedLink(
+            { id, permissions },
+            { permissions: convertSharedLinkPermissions(permissionLevel) },
+            onUpdateSharedLink,
+            {},
+            CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+        );
     };
 
     const updateSharedLink = async (sharedLinkSettings: SharedLinkSettings) => {

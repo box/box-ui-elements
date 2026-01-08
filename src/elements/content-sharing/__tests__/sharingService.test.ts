@@ -46,10 +46,6 @@ describe('elements/content-sharing/sharingService', () => {
         });
 
         test('should call updateSharedLink with correct parameters when changeSharedLinkPermission is called', async () => {
-            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
-                successCallback({ id: '123', shared_link: null });
-            });
-
             const service = createSharingServiceWrapper();
             const permissionLevel = PERMISSION_CAN_DOWNLOAD;
             const expectedPermissions = {
@@ -62,8 +58,8 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 { permissions: expectedPermissions },
-                expect.any(Function),
-                expect.any(Function),
+                mockOnUpdateSharedLink,
+                {},
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
@@ -79,18 +75,14 @@ describe('elements/content-sharing/sharingService', () => {
         test.each(['open', 'company', 'collaborators'])(
             'should call share with correct parameters when changeSharedLinkAccess is called',
             async access => {
-                mockItemApiInstance.share.mockImplementation((_options, _access, successCallback) => {
-                    successCallback({ id: '123', shared_link: null });
-                });
-
                 const service = createSharingServiceWrapper();
                 await service.changeSharedLinkAccess(access);
 
                 expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                     options,
                     access,
-                    expect.any(Function),
-                    expect.any(Function),
+                    mockOnUpdateSharedLink,
+                    {},
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
             },
@@ -269,28 +261,6 @@ describe('elements/content-sharing/sharingService', () => {
     });
 
     describe('error handling', () => {
-        test('should reject when changeSharedLinkAccess fails', async () => {
-            const mockError = new Error('Failed to change access');
-            mockItemApiInstance.share.mockImplementation((_options, _access, _successCallback, errorCallback) => {
-                errorCallback(mockError);
-            });
-
-            const service = createSharingServiceWrapper();
-            await expect(service.changeSharedLinkAccess('open')).rejects.toEqual(mockError);
-        });
-
-        test('should reject when changeSharedLinkPermission fails', async () => {
-            const mockError = new Error('Failed to change permission');
-            mockItemApiInstance.updateSharedLink.mockImplementation(
-                (_options, _settings, _successCallback, errorCallback) => {
-                    errorCallback(mockError);
-                },
-            );
-
-            const service = createSharingServiceWrapper();
-            await expect(service.changeSharedLinkPermission(PERMISSION_CAN_DOWNLOAD)).rejects.toEqual(mockError);
-        });
-
         test('should reject when createSharedLink fails', async () => {
             const mockError = new Error('Failed to create shared link');
             mockItemApiInstance.share.mockImplementation((_options, _access, _successCallback, errorCallback) => {
