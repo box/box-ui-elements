@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
+
 import { useNotification } from '@box/blueprint-web';
 import { UnifiedShareModal } from '@box/unified-share-modal';
 import type { CollaborationRole, Collaborator, Configuration, Item, SharedLink, User } from '@box/unified-share-modal';
@@ -12,9 +13,8 @@ import { CONTENT_SHARING_ERRORS } from './constants';
 import { useContactService, useSharingService } from './hooks';
 import { convertCollabsResponse, convertItemResponse } from './utils';
 
-import type { Collaborations, ItemType } from '../../common/types/core';
 import type { ElementsXhrError } from '../../common/types/api';
-
+import type { Collaborations, ItemType } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 import type { AvatarURLMap } from './types';
 

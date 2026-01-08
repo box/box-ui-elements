@@ -8,21 +8,24 @@
  */
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
+
 import type { Configuration } from '@box/unified-share-modal';
 import API from '../../api';
-// $FlowFixMe
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
+
 import { isFeatureEnabled } from '../common/feature-checking';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
-import SharingModal from './SharingModal';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 // $FlowFixMe
 import ContentSharingV2 from './ContentSharingV2';
-import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
+import SharingModal from './SharingModal';
 
+import type { FeatureConfig } from '../common/feature-checking';
 import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
-import type { FeatureConfig } from '../common/feature-checking';
+
+import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
