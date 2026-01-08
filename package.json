@@ -75,7 +75,7 @@
         "lint:css": "stylelint \"src/**/*.scss\"",
         "prebuild:es": "npm-run-all copy:styles ts:defs copy:flow",
         "release": "yarn release:beta",
-        "release:beta": "DIST=beta BRANCH=master scripts/release.sh",
+        "release:beta": "DIST=beta BRANCH=hotfix-v25.5.0-beta.5 scripts/release.sh",
         "release:hotfix": "DIST=latest HOTFIX=true scripts/release.sh",
         "release:latest": "DIST=latest BRANCH=master scripts/release.sh",
         "release:next": "DIST=next BRANCH=next scripts/release.sh",
