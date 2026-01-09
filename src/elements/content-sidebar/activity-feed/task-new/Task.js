@@ -293,45 +293,52 @@ class Task extends React.Component<Props, State> {
                                 className="bcs-Task-deleteConfirmationModal"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
-                            >
-                                <Media.Menu
-                                    isDisabled={isConfirmingDelete}
-                                    data-testid="task-actions-menu"
-                                    menuProps={{
-                                        'data-resin-component': ACTIVITY_TARGETS.TASK_OPTIONS,
-                                    }}
-                                >
-                                    {permissions.can_update && (
-                                        <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_EDIT}
-                                            data-testid="edit-task"
-                                            onClick={this.handleEditClick}
+                                renderTarget={ref => (
+                                    <div ref={ref} className="bcs-Task-menuTarget">
+                                        <Media.Menu
+                                            isDisabled={isConfirmingDelete}
+                                            data-testid="task-actions-menu"
+                                            menuProps={{
+                                                'data-resin-component': ACTIVITY_TARGETS.TASK_OPTIONS,
+                                            }}
                                         >
-                                            <IconPencil color={bdlGray80} />
-                                            <FormattedMessage {...messages.taskEditMenuItem} />
-                                        </MenuItem>
-                                    )}
-                                    {permissions.can_delete && (
-                                        <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_DELETE}
-                                            data-testid="delete-task"
-                                            onClick={this.handleDeleteClick}
-                                        >
-                                            <IconTrash color={bdlGray80} />
-                                            <FormattedMessage {...messages.taskDeleteMenuItem} />
-                                        </MenuItem>
-                                    )}
-                                </Media.Menu>
-                                {isConfirmingDelete && (
-                                    <DeleteConfirmation
-                                        data-resin-component={ACTIVITY_TARGETS.TASK_OPTIONS}
-                                        isOpen={isConfirmingDelete}
-                                        message={messages.taskDeletePrompt}
-                                        onDeleteCancel={this.handleDeleteCancel}
-                                        onDeleteConfirm={this.handleDeleteConfirm}
-                                    />
+                                            {permissions.can_update && (
+                                                <MenuItem
+                                                    data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_EDIT}
+                                                    data-testid="edit-task"
+                                                    onClick={this.handleEditClick}
+                                                >
+                                                    <IconPencil color={bdlGray80} />
+                                                    <FormattedMessage {...messages.taskEditMenuItem} />
+                                                </MenuItem>
+                                            )}
+                                            {permissions.can_delete && (
+                                                <MenuItem
+                                                    data-resin-target={ACTIVITY_TARGETS.TASK_OPTIONS_DELETE}
+                                                    data-testid="delete-task"
+                                                    onClick={this.handleDeleteClick}
+                                                >
+                                                    <IconTrash color={bdlGray80} />
+                                                    <FormattedMessage {...messages.taskDeleteMenuItem} />
+                                                </MenuItem>
+                                            )}
+                                        </Media.Menu>
+                                    </div>
                                 )}
-                            </TetherComponent>
+                                renderElement={ref => {
+                                    return isConfirmingDelete ? (
+                                        <div ref={ref}>
+                                            <DeleteConfirmation
+                                                data-resin-component={ACTIVITY_TARGETS.TASK_OPTIONS}
+                                                isOpen={isConfirmingDelete}
+                                                message={messages.taskDeletePrompt}
+                                                onDeleteCancel={this.handleDeleteCancel}
+                                                onDeleteConfirm={this.handleDeleteConfirm}
+                                            />
+                                        </div>
+                                    ) : null;
+                                }}
+                            />
                         )}
                         <div className="bcs-Task-headline">
                             {createdByUser.name ? (

@@ -11,7 +11,7 @@ type Props = {
     isShown: boolean,
 };
 
-const QuickSearchMessage = ({ children, isShown }: Props) => {
+const QuickSearchMessage = ({ children, isShown = false }: Props) => {
     const className = classNames('overlay-wrapper', { 'is-visible': isShown }, 'quick-search-message');
 
     return (
@@ -19,10 +19,6 @@ const QuickSearchMessage = ({ children, isShown }: Props) => {
             <p className="overlay">{children}</p>
         </div>
     );
-};
-
-QuickSearchMessage.defaultProps = {
-    isShown: false,
 };
 
 export default QuickSearchMessage;

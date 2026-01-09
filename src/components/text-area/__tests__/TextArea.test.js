@@ -1,4 +1,6 @@
+import { mount, shallow } from 'enzyme';
 import * as React from 'react';
+import TetherComponent from 'react-tether';
 
 import TextArea from '../TextArea';
 
@@ -71,13 +73,11 @@ describe('components/text-area/TextArea', () => {
 
     test('should render Tooltip with tetherElementClassName', () => {
         const className = 'tether-element-class-name';
-        const wrapper = shallow(<TextArea error="error" label="label" tooltipTetherClassName={className} />);
-        const tetherEl = wrapper
-            .find('Tooltip')
-            .dive()
-            .find('TetherComponent');
+        const wrapper = mount(<TextArea error="error" label="label" tooltipTetherClassName={className} />);
+        const tetherEl = wrapper.find(TetherComponent);
 
         expect(tetherEl.prop('className')).toBe(className);
+        wrapper.unmount();
     });
 
     test('should not show optional text when hideOptionalLabel is true', () => {

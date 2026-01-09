@@ -225,6 +225,10 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     }
 }
 
+.bdl-Tooltip-target {
+    display: inline-block;
+}
+
 // tooltip is a tethered element and as such attached to body
 // however the body may not have box specific classes and hence the
 // tooltip needs to manually inherit few of the body styles to look correct.

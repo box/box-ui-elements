@@ -63,6 +63,7 @@ class Comment extends React.Component<Props, State> {
     static defaultProps = {
         onDelete: noop,
         onEdit: noop,
+        onSelect: noop,
     };
 
     state = {
@@ -185,70 +186,77 @@ class Comment extends React.Component<Props, State> {
                                 className="bcs-Comment-deleteConfirmationModal"
                                 constraints={[{ to: 'scrollParent', attachment: 'together' }]}
                                 targetAttachment="bottom right"
-                            >
-                                <Media.Menu
-                                    isDisabled={isConfirmingDelete}
-                                    data-testid="comment-actions-menu"
-                                    dropdownProps={{
-                                        onMenuOpen: this.handleMenuOpen,
-                                        onMenuClose: this.handleMenuClose,
-                                    }}
-                                    menuProps={{
-                                        'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
-                                    }}
-                                >
-                                    {canResolve && isResolved && (
-                                        <MenuItem
-                                            className="bcs-Comment-unresolveComment"
-                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                            data-testid="unresolve-comment"
-                                            onClick={() => this.handleStatusUpdate(COMMENT_STATUS_OPEN)}
+                                renderTarget={ref => (
+                                    <div ref={ref} className="bcs-Comment-menuTarget">
+                                        <Media.Menu
+                                            isDisabled={isConfirmingDelete}
+                                            data-testid="comment-actions-menu"
+                                            dropdownProps={{
+                                                onMenuOpen: this.handleMenuOpen,
+                                                onMenuClose: this.handleMenuClose,
+                                            }}
+                                            menuProps={{
+                                                'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
+                                            }}
                                         >
-                                            <X16 />
-                                            <FormattedMessage {...messages.commentUnresolveMenuItem} />
-                                        </MenuItem>
-                                    )}
-                                    {canResolve && !isResolved && (
-                                        <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                            data-testid="resolve-comment"
-                                            onClick={() => this.handleStatusUpdate(COMMENT_STATUS_RESOLVED)}
-                                        >
-                                            <Checkmark16 />
-                                            <FormattedMessage {...messages.commentResolveMenuItem} />
-                                        </MenuItem>
-                                    )}
-                                    {canEdit && (
-                                        <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                            data-testid="edit-comment"
-                                            onClick={this.handleEditClick}
-                                        >
-                                            <Pencil16 />
-                                            <FormattedMessage {...messages.commentEditMenuItem} />
-                                        </MenuItem>
-                                    )}
-                                    {canDelete && (
-                                        <MenuItem
-                                            data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
-                                            data-testid="delete-comment"
-                                            onClick={this.handleDeleteClick}
-                                        >
-                                            <Trash16 />
-                                            <FormattedMessage {...messages.commentDeleteMenuItem} />
-                                        </MenuItem>
-                                    )}
-                                </Media.Menu>
-                                {isConfirmingDelete && (
-                                    <DeleteConfirmation
-                                        data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
-                                        isOpen={isConfirmingDelete}
-                                        message={messages.commentDeletePrompt}
-                                        onDeleteCancel={this.handleDeleteCancel}
-                                        onDeleteConfirm={this.handleDeleteConfirm}
-                                    />
+                                            {canResolve && isResolved && (
+                                                <MenuItem
+                                                    className="bcs-Comment-unresolveComment"
+                                                    data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                                    data-testid="unresolve-comment"
+                                                    onClick={() => this.handleStatusUpdate(COMMENT_STATUS_OPEN)}
+                                                >
+                                                    <X16 />
+                                                    <FormattedMessage {...messages.commentUnresolveMenuItem} />
+                                                </MenuItem>
+                                            )}
+                                            {canResolve && !isResolved && (
+                                                <MenuItem
+                                                    data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                                    data-testid="resolve-comment"
+                                                    onClick={() => this.handleStatusUpdate(COMMENT_STATUS_RESOLVED)}
+                                                >
+                                                    <Checkmark16 />
+                                                    <FormattedMessage {...messages.commentResolveMenuItem} />
+                                                </MenuItem>
+                                            )}
+                                            {canEdit && (
+                                                <MenuItem
+                                                    data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                                    data-testid="edit-comment"
+                                                    onClick={this.handleEditClick}
+                                                >
+                                                    <Pencil16 />
+                                                    <FormattedMessage {...messages.commentEditMenuItem} />
+                                                </MenuItem>
+                                            )}
+                                            {canDelete && (
+                                                <MenuItem
+                                                    data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
+                                                    data-testid="delete-comment"
+                                                    onClick={this.handleDeleteClick}
+                                                >
+                                                    <Trash16 />
+                                                    <FormattedMessage {...messages.commentDeleteMenuItem} />
+                                                </MenuItem>
+                                            )}
+                                        </Media.Menu>
+                                    </div>
                                 )}
-                            </TetherComponent>
+                                renderElement={ref =>
+                                    isConfirmingDelete ? (
+                                        <div ref={ref}>
+                                            <DeleteConfirmation
+                                                data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
+                                                isOpen={isConfirmingDelete}
+                                                message={messages.commentDeletePrompt}
+                                                onDeleteCancel={this.handleDeleteCancel}
+                                                onDeleteConfirm={this.handleDeleteConfirm}
+                                            />
+                                        </div>
+                                    ) : null
+                                }
+                            />
                         )}
                         <div className="bcs-Comment-headline">
                             <UserLink

@@ -9,12 +9,19 @@ declare module '@box/blueprint-web-assets/icons/Medium' {
   declare export var XMark: React$ComponentType<any>;
   declare export var Comment: React$ComponentType<any>;
   declare export var Metadata: React$ComponentType<any>;
+  declare export var ChevronDown: React$ComponentType<any>;
+  declare export var ChevronUp: React$ComponentType<any>;
+  declare export var RightSidebarChevronClose: React$ComponentType<any>;
+  declare export var RightSidebarChevronOpen: React$ComponentType<any>;
+  declare export var MagicWand: React$ComponentType<any>;
+  declare export var DocGen: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/icons/MediumFilled' {
   declare export var Comment: React$ComponentType<any>;
   declare export var InformationCircle: React$ComponentType<any>;
   declare export var Metadata: React$ComponentType<any>;
+  declare export var MagicWand: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/icons/Content' {

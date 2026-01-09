@@ -17,7 +17,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={[]}
   position="bottom-left"
 >
-  <ForwardRef(PresenceAvatarList)
+  <WithBlueprintModernization
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
@@ -141,7 +141,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={[]}
   position="bottom-left"
 >
-  <ForwardRef(PresenceAvatarList)
+  <WithBlueprintModernization
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
@@ -265,7 +265,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={[]}
   position="bottom-left"
 >
-  <ForwardRef(PresenceAvatarList)
+  <WithBlueprintModernization
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={[]}
@@ -312,7 +312,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={[]}
   position="bottom-left"
 >
-  <ForwardRef(PresenceAvatarList)
+  <WithBlueprintModernization
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
@@ -445,7 +445,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   portaledClasses={[]}
   position="bottom-left"
 >
-  <ForwardRef(PresenceAvatarList)
+  <WithBlueprintModernization
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={

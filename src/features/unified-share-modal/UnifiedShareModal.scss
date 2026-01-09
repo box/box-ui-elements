@@ -47,6 +47,14 @@
     }
 }
 
+.bdl-Tooltip-target.bdl-UnifiedShareForm-tooltipTarget {
+    display: block;
+}
+
+.usm-ftux-toggle-tooltip-target {
+    flex: 1;
+}
+
 .usm-share-access-menu .menu-item.is-select-item.is-selected::before,
 .usm-share-permissions-menu .menu-item.is-select-item.is-selected::before {
     bottom: inherit;
@@ -85,6 +93,10 @@
             textarea {
                 width: 100%;
             }
+        }
+
+        .bdl-Tooltip-target.bdl-Tooltip-target {
+            display: block;
         }
     }
 
@@ -180,6 +192,10 @@
         justify-content: space-between;
         margin-top: 10px;
 
+        .bdl-Tooltip-target {
+            flex: 0 1 80%;
+        }
+
         .toggle-container {
             flex: 0 1 80%;
             margin-bottom: 0;
@@ -201,6 +217,10 @@
                 white-space: nowrap;
             }
         }
+
+        > span {
+            width: 100%; // This fixes a width issue with Tooltip wrapper
+        }
     }
 
     .shared-link-field-row {
@@ -208,8 +228,6 @@
         margin: 10px 0;
 
         .shared-link-field-container {
-            flex: 1;
-            align-items: center;
             margin-bottom: 0;
         }
 
@@ -227,6 +245,14 @@
         .email-shared-link-btn {
             margin: 0 0 0 5px;
             padding: 6px 10px;
+        }
+
+        .bdl-Tooltip-target {
+            display: block;
+        }
+
+        .shared-link-field-container-tooltip-wrapper {
+            flex: 1;
         }
     }
 

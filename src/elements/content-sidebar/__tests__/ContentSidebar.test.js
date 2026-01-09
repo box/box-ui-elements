@@ -294,4 +294,85 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(refresh).toHaveBeenCalled();
         });
     });
+
+    describe('render() with minimalFile', () => {
+        const minimalFile = {
+            id: 'minimal_file_id',
+            type: 'file',
+            name: 'test.pdf',
+            permissions: { can_preview: true },
+        };
+
+        beforeEach(() => {
+            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValue(true);
+        });
+
+        test('should render sidebar with minimalFile when file has not been fetched yet', () => {
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+            });
+            const instance = wrapper.instance();
+
+            instance.fetchMetadata = jest.fn();
+
+            expect(wrapper.find('sidebar').exists()).toBe(true);
+            expect(wrapper.find('sidebar').prop('file')).toEqual(minimalFile);
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
+        });
+
+        test('should render sidebar with file when file fetch succeeds', () => {
+            const wrapper = getWrapper({
+                fileId: file.id,
+                minimalFile,
+            });
+            const instance = wrapper.instance();
+
+            instance.fetchMetadata = jest.fn();
+
+            act(() => {
+                instance.fetchFileSuccessCallback(file);
+            });
+            wrapper.update();
+
+            expect(wrapper.find('sidebar').exists()).toBe(true);
+            expect(wrapper.find('sidebar').prop('file')).toEqual(file);
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(false);
+        });
+
+        test('should return null when neither file nor minimalFile is available', () => {
+            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValue(true);
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+            });
+
+            expect(wrapper.find('sidebar').exists()).toBe(false);
+        });
+
+        test('should show loading state when using minimalFile before file data loads', () => {
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+            });
+
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(true);
+        });
+
+        test('should show loading state as false after file fetch completes', () => {
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+            });
+            const instance = wrapper.instance();
+
+            instance.fetchMetadata = jest.fn();
+
+            act(() => {
+                instance.fetchFileSuccessCallback(file);
+            });
+            wrapper.update();
+
+            expect(wrapper.find('sidebar').prop('isLoading')).toBe(false);
+        });
+    });
 });

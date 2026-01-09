@@ -7,12 +7,13 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
   text="bar"
 >
   <Tooltip
-    className="bdl-CollapsibleSidebar-menuItemToolTip"
+    className="bdl-CollapsibleSidebar-menuItemTooltip"
     constrainToScrollParent={false}
     constrainToWindow={true}
     isDisabled={true}
     isTabbable={false}
     position="middle-right"
+    targetWrapperClassName="bdl-CollapsibleSidebar-menuItemTooltipTarget"
     text="bar"
     theme="default"
   >

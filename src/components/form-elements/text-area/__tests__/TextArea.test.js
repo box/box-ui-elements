@@ -1,9 +1,9 @@
 import React, { act } from 'react';
-import PropTypes from 'prop-types';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
 import TextArea from '..';
+import { FormContext } from '../../form/FormContext';
 
 const sandbox = sinon.sandbox.create();
 
@@ -179,50 +179,48 @@ describe('components/form-elements/text-area/TextArea', () => {
 
     test('should set validity state when set validity state handler is called with custom error', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
         const error = {
             errorCode: 'errorCode',
             errorMessage: 'Error Message',
         };
 
-        const component = mount(<TextArea label="label" name="textarea" value="" />, { context, childContextTypes });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextArea label="label" name="textarea" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
 
-        expect(component.state('error')).toEqual(error);
+        expect(component.find('TextArea').first().instance().state.error).toEqual(error);
     });
 
     test('should set validity state when set validity state handler is called with ValidityState object', () => {
         const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
+        const mockForm = {
+            registerInput: validityStateHandlerSpy,
+            unregisterInput: sandbox.mock().never(),
         };
         const error = {
             valid: false,
             badInput: true,
         };
 
-        const component = mount(<TextArea label="label" name="textarea" value="" />, { context, childContextTypes });
+        const component = mount(
+            <FormContext.Provider value={{ form: mockForm }}>
+                <TextArea label="label" name="textarea" value="" />
+            </FormContext.Provider>,
+        );
 
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.state('error').code).toEqual('badInput');
+        expect(component.find('TextArea').first().instance().state.error.code).toEqual('badInput');
     });
 });

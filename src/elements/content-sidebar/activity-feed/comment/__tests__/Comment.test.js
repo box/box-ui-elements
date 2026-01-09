@@ -27,6 +27,13 @@ const allHandlers = {
     },
 };
 
+const openActionsMenu = wrapper => {
+    const menuButton = wrapper.find('button[data-testid="comment-actions-menu"]');
+    if (menuButton.exists()) {
+        menuButton.simulate('click');
+    }
+};
+
 describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
     beforeEach(() => {
         CommentForm.default = jest.fn().mockReturnValue(<div />);
@@ -119,7 +126,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 created_by: { name: '50 Cent', id: 10 },
             };
 
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Comment
                     id="123"
                     {...comment}
@@ -133,9 +140,10 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 />,
             );
 
-            expect(wrapper.find('[data-testid="delete-comment"]').length).toEqual(showDelete ? 1 : 0);
-            expect(wrapper.find('[data-testid="edit-comment"]').length).toEqual(showEdit ? 1 : 0);
-            expect(wrapper.find('[data-testid="comment-actions-menu"]').length).toEqual(showMenu ? 1 : 0);
+            openActionsMenu(wrapper);
+            expect(wrapper.find('[data-testid="delete-comment"]').exists()).toBe(showDelete);
+            expect(wrapper.find('[data-testid="edit-comment"]').exists()).toBe(showEdit);
+            expect(wrapper.find('[data-testid="comment-actions-menu"]').exists()).toBe(showMenu);
         },
     );
 
@@ -156,7 +164,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 tagged_message: 'test',
             };
 
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Comment
                     {...comment}
                     approverSelectorContacts={approverSelectorContacts}
@@ -169,6 +177,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 />,
             );
 
+            openActionsMenu(wrapper);
             expect(wrapper.find('[data-testid="resolve-comment"]').exists()).toBe(expectedResolveMenuExistance);
         },
     );
@@ -189,7 +198,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 status,
             };
 
-            const wrapper = shallow(
+            const wrapper = mount(
                 <Comment
                     {...comment}
                     approverSelectorContacts={approverSelectorContacts}
@@ -201,6 +210,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 />,
             );
 
+            openActionsMenu(wrapper);
             expect(wrapper.find('[data-testid="resolve-comment"]').exists()).toBe(expectedResolveMenuExistance);
             expect(wrapper.find('[data-testid="unresolve-comment"]').exists()).toBe(expectedUnresolvedMenuExistance);
         },

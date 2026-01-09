@@ -94,8 +94,12 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    theme?: Theme,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
+    /** Optional minimal file data to render sidebar shell immediately while fetching full data */
+    minimalFile?: BoxItem,
     signSidebarProps: SignSidebarProps,
+    theme?: Theme,
     token: Token,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
@@ -355,6 +359,7 @@ class ContentSidebar extends React.Component<Props, State> {
             className,
             currentUser,
             defaultView,
+            shouldFetchSidebarData,
             detailsSidebarProps,
             docGenSidebarProps,
             features,
@@ -380,11 +385,14 @@ class ContentSidebar extends React.Component<Props, State> {
             signSidebarProps,
             theme,
             versionsSidebarProps,
+            minimalFile,
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
 
-        if (!file || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors)) {
+        const displayFile = file || minimalFile;
+
+        if (!displayFile || !fileId || !SidebarUtils.shouldRenderSidebar(this.props, displayFile, metadataEditors)) {
             return null;
         }
 
@@ -399,9 +407,10 @@ class ContentSidebar extends React.Component<Props, State> {
                                 boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
+                                shouldFetchSidebarData={shouldFetchSidebarData}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
-                                file={file}
+                                file={displayFile}
                                 fileId={fileId}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
@@ -412,7 +421,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 hasSkills={hasSkills}
                                 hasVersions={hasVersions}
                                 isDefaultOpen={isDefaultOpen}
-                                isLoading={isLoading}
+                                isLoading={isLoading || !file}
                                 metadataEditors={metadataEditors}
                                 metadataSidebarProps={metadataSidebarProps}
                                 onAnnotationSelect={onAnnotationSelect}

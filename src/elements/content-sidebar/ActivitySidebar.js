@@ -99,6 +99,8 @@ type ExternalProps = {
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
     routerDisabled?: boolean,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
 } & ErrorContextProps &
     WithAnnotatorContextProps;
 
@@ -185,7 +187,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        this.fetchFeedItems(true);
+        const { shouldFetchSidebarData = true } = this.props;
+        if (shouldFetchSidebarData) {
+            this.fetchFeedItems(true);
+        }
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const { shouldFetchSidebarData = true } = this.props;
+        const { shouldFetchSidebarData: prevShouldFetchSidebarData = true } = prevProps;
+
+        // Fetch when fetch is enabled
+        if (!prevShouldFetchSidebarData && shouldFetchSidebarData) {
+            this.fetchFeedItems(true);
+        }
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
@@ -1153,9 +1168,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             } else {
                 history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
             }
-        }
 
-        onAnnotationSelect(annotation);
+            const deferScrollToOnload = annotation?.target?.location?.type === 'frame';
+            onAnnotationSelect(annotation, deferScrollToOnload);
+        } else {
+            onAnnotationSelect(annotation);
+        }
     };
 
     handleItemsFiltered = (status?: ActivityFilterItemType) => {

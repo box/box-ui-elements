@@ -70,6 +70,8 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
+    shouldFetchSidebarData?: boolean,
     signSidebarProps: SignSidebarProps,
     theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,
@@ -297,6 +299,7 @@ class Sidebar extends React.Component<Props, State> {
             className,
             currentUser,
             currentUserError,
+            shouldFetchSidebarData,
             detailsSidebarProps,
             docGenSidebarProps,
             file,
@@ -359,6 +362,7 @@ class Sidebar extends React.Component<Props, State> {
                             boxAISidebarProps={boxAISidebarProps}
                             currentUser={currentUser}
                             currentUserError={currentUserError}
+                            shouldFetchSidebarData={shouldFetchSidebarData}
                             elementId={this.id}
                             defaultPanel={defaultPanel}
                             detailsSidebarProps={detailsSidebarProps}

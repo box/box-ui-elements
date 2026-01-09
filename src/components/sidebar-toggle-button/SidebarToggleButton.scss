@@ -30,14 +30,16 @@
     }
 }
 
+.bdl-SidebarToggleButton--modernized {
+    // See: src/elements/content-sidebar/ContentSidebar.scss
+    // Establish a stacking context so the button appears above other positioned elements
+    // within ContentSidebar's z-index: 5 stacking context, preventing it from being blocked.
+    position: relative;
+}
+
 .bcs-SidebarNav--modernized {
-    .bdl-SidebarToggleButton {
-        &:not(.bdl-is-disabled):hover svg,
-        &:not(.is-disabled):hover svg,
-        &:not(.bdl-is-disabled):focus svg,
-        &:not(.is-disabled):focus svg,
-        &.bdl-is-collapsed svg,
-        &.bdl-is-collapsed:hover svg {
+    .bdl-SidebarToggleButton--modernized {
+        &:hover svg {
             transform: scale(1.09);
             transition: transform 150ms;
         }

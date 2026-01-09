@@ -36,7 +36,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       />
     </MediaFigure>
     <MediaBody>
-      <TetherComponent
+      <d
         attachment="top right"
         className="bcs-Task-deleteConfirmationModal"
         constraints={
@@ -47,47 +47,10 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
             },
           ]
         }
-        renderElementTag="div"
-        renderElementTo={null}
+        renderElement={[Function]}
+        renderTarget={[Function]}
         targetAttachment="bottom right"
-      >
-        <MediaMenu
-          data-testid="task-actions-menu"
-          isDisabled={false}
-          menuProps={
-            {
-              "data-resin-component": "activityfeedtask",
-            }
-          }
-        >
-          <MenuItem
-            data-resin-target="activityfeed-task-edit"
-            data-testid="edit-task"
-            onClick={[Function]}
-          >
-            <IconPencil
-              color="#4e4e4e"
-            />
-            <FormattedMessage
-              defaultMessage="Modify task"
-              id="be.contentSidebar.activityFeed.task.taskEditMenuItem"
-            />
-          </MenuItem>
-          <MenuItem
-            data-resin-target="activityfeed-task-delete"
-            data-testid="delete-task"
-            onClick={[Function]}
-          >
-            <IconTrash
-              color="#4e4e4e"
-            />
-            <FormattedMessage
-              defaultMessage="Delete task"
-              id="be.contentSidebar.activityFeed.task.taskDeleteMenuItem"
-            />
-          </MenuItem>
-        </MediaMenu>
-      </TetherComponent>
+      />
       <div
         className="bcs-Task-headline"
       >

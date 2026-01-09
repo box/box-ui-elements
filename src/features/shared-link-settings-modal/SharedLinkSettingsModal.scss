@@ -47,6 +47,12 @@
             margin-right: 4px;
             transform: translateY(3px);
         }
+
+        .vanity-name-content {
+            .bdl-Tooltip-target {
+                display: block;
+            }
+        }
     }
 
     .text-input-container input[type='text'],
