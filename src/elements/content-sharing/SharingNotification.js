@@ -234,7 +234,6 @@ function SharingNotification({
     const sendInvitesFn = useInvites(api, itemID, itemType, {
         handleSuccess: response => {
             createNotification(TYPE_INFO, contentSharingMessages.sendInvitesSuccess);
-            setIsLoading(false);
             setCollaboratorsList((prevList: collaboratorsListType | null) => {
                 const newList = prevList ? { ...prevList } : { collaborators: [] };
                 const newCollab = convertCollab({
@@ -251,7 +250,6 @@ function SharingNotification({
         },
         handleError: () => {
             createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError);
-            setIsLoading(false);
             closeComponent();
         },
         setIsLoading,

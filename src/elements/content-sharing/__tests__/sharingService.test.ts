@@ -97,14 +97,18 @@ describe('elements/content-sharing/sharingService', () => {
         });
 
         test('should call share with correct parameters when createSharedLink is called', async () => {
+            mockItemApiInstance.share.mockImplementation((_options, _access, successCallback) => {
+                successCallback({ id: '123', shared_link: null });
+            });
+
             const service = createSharingServiceWrapper();
             await service.createSharedLink();
 
             expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                 options,
                 undefined,
-                mockOnUpdateSharedLink,
-                {},
+                expect.any(Function),
+                expect.any(Function),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
@@ -118,14 +122,18 @@ describe('elements/content-sharing/sharingService', () => {
         });
 
         test('should call share with ACCESS_NONE and onRemoveSharedLink when deleteSharedLink is called', async () => {
+            mockItemApiInstance.share.mockImplementation((_options, _access, successCallback) => {
+                successCallback({ id: '123', shared_link: null });
+            });
+
             const service = createSharingServiceWrapper();
             await service.deleteSharedLink();
 
             expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                 options,
                 ACCESS_NONE,
-                mockOnRemoveSharedLink,
-                {},
+                expect.any(Function),
+                expect.any(Function),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
@@ -140,6 +148,10 @@ describe('elements/content-sharing/sharingService', () => {
         });
 
         test('should call updateSharedLink with basic shared link settings', async () => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
+                successCallback({ id: '123', shared_link: null });
+            });
+
             const service = createSharingServiceWrapper();
 
             const sharedLinkSettings = {
@@ -167,13 +179,17 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 expectedConvertedSettings,
-                mockOnUpdateSharedLink,
-                {},
+                expect.any(Function),
+                expect.any(Function),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
 
         test('should call updateSharedLink with options including access, isDownloadAvailable, and serverUrl', async () => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
+                successCallback({ id: '123', shared_link: null });
+            });
+
             const mockConvertedSharedLinkSettings = {
                 password: 'test-password',
                 permissions: { can_download: false, can_preview: true },
@@ -215,13 +231,17 @@ describe('elements/content-sharing/sharingService', () => {
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
                 mockConvertedSharedLinkSettings,
-                mockOnUpdateSharedLink,
-                {},
+                expect.any(Function),
+                expect.any(Function),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
 
         test('should handle shared link settings correctly', async () => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
+                successCallback({ id: '123', shared_link: null });
+            });
+
             const service = createSharingServiceWrapper();
 
             const expirationDate = new Date('2024-12-31T23:59:59Z');
@@ -237,6 +257,49 @@ describe('elements/content-sharing/sharingService', () => {
             await service.updateSharedLink(sharedLinkSettings);
 
             expect(convertSharedLinkSettings).toHaveBeenCalledWith(sharedLinkSettings, undefined, undefined, undefined);
+        });
+    });
+
+    describe('error handling', () => {
+        test('should reject when createSharedLink fails', async () => {
+            const mockError = new Error('Failed to create shared link');
+            mockItemApiInstance.share.mockImplementation((_options, _access, _successCallback, errorCallback) => {
+                errorCallback(mockError);
+            });
+
+            const service = createSharingServiceWrapper();
+            await expect(service.createSharedLink()).rejects.toEqual(mockError);
+        });
+
+        test('should reject when deleteSharedLink fails', async () => {
+            const mockError = new Error('Failed to delete shared link');
+            mockItemApiInstance.share.mockImplementation((_options, _access, _successCallback, errorCallback) => {
+                errorCallback(mockError);
+            });
+
+            const service = createSharingServiceWrapper();
+            await expect(service.deleteSharedLink()).rejects.toEqual(mockError);
+        });
+
+        test('should reject when updateSharedLink fails', async () => {
+            const mockError = new Error('Failed to update shared link');
+            mockItemApiInstance.updateSharedLink.mockImplementation(
+                (_options, _settings, _successCallback, errorCallback) => {
+                    errorCallback(mockError);
+                },
+            );
+
+            const service = createSharingServiceWrapper();
+            const sharedLinkSettings = {
+                expiration: null,
+                isDownloadEnabled: true,
+                isExpirationEnabled: false,
+                isPasswordEnabled: false,
+                password: '',
+                vanityName: 'vanity-name',
+            };
+
+            await expect(service.updateSharedLink(sharedLinkSettings)).rejects.toEqual(mockError);
         });
     });
 });
