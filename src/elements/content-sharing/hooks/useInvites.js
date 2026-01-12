@@ -34,17 +34,22 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
             id: itemID,
             type: itemType,
         };
+
         const sendCollabRequest = collab => {
-            setIsLoading(true);
-            return api.getCollaborationsAPI(false).addCollaboration(
-                itemData,
-                collab,
-                response => {
-                    handleSuccess(response);
-                    return transformResponse(response);
-                },
-                handleError,
-            );
+            return new Promise((resolve, reject) => {
+                api.getCollaborationsAPI(false).addCollaboration(
+                    itemData,
+                    collab,
+                    response => {
+                        handleSuccess(response);
+                        resolve(transformResponse(response));
+                    },
+                    error => {
+                        handleError(error);
+                        reject(error);
+                    },
+                );
+            });
         };
 
         const createPostCollaborationFn: SendInvitesFnType =
@@ -52,10 +57,15 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
                 if (!transformRequest) return Promise.resolve(null);
 
                 const { users, groups } = transformRequest(collabRequest);
-                return Promise.all([
-                    ...users.map(user => sendCollabRequest(user)),
-                    ...groups.map(group => sendCollabRequest(group)),
-                ]);
+                setIsLoading(true);
+                try {
+                    return await Promise.all([
+                        ...users.map(user => sendCollabRequest(user)),
+                        ...groups.map(group => sendCollabRequest(group)),
+                    ]);
+                } finally {
+                    setIsLoading(false);
+                }
             };
 
         if (!sendInvites) {

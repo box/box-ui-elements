@@ -1021,8 +1021,13 @@ describe('elements/content-sharing/SharingModal', () => {
                 wrapper.update();
 
                 await act(async () => {
-                    wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
+                    try {
+                        await wrapper.find(UnifiedShareModal).invoke(`${usmFn}`)();
+                    } catch (error) {
+                        expect(error).toEqual(new Error({ status: '400' }));
+                    }
                 });
+
                 wrapper.update();
                 expect(setIsVisibleMock).toHaveBeenCalledWith(false);
                 const notification = wrapper.find(Notification);
