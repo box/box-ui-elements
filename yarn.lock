@@ -1419,24 +1419,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@4.91.3":
-  version "4.91.3"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.91.3.tgz#ddb0127d502e4bc8b42d6af73659f0daf970fecb"
-  integrity sha512-Wd9TTD8Z1XhXeMaLFJ7dOjVOc+lARXDiP5U8VdLDaWmb1+bGiYm9vNCzetrBmYAJac+QaQgW5yhYpr3qGhWAGw==
+"@box/blueprint-web-assets@^4.93.0":
+  version "4.93.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.93.0.tgz#e6e9d0c7a1abffb6900cc2ea52c256cd9ae3198e"
+  integrity sha512-GMaNEM7/EmTPcuwzaWRD4CqN9DVZNbxowDyP/di8ZgiANqPVtv2BKFkQ4srXbPbyHn38KkY5coquSv28yWBUig==
 
-"@box/blueprint-web-assets@^4.91.4":
-  version "4.91.4"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.91.4.tgz#91372cf30a5705085294ad5caa521df365995f2f"
-  integrity sha512-MbECaQ8rmxrBGs+GmkwgK7pwtL621UFIl4Lx38cZjy6rRYFIi9gKaPFfJUTdxln2zc17z3hPqz+clHNzgPRocw==
-
-"@box/blueprint-web@^12.112.3":
-  version "12.113.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.113.0.tgz#106cf61669d51f96995354331c0178da4716ba3e"
-  integrity sha512-eXcVLhQ6JCXPgjFJdPqNzKk+PCAvpRONcGyz50yhEkvobMgXS2qLigg06xcugFHdA714iv7ikUE2CsVXOjf4Ig==
+"@box/blueprint-web@^12.115.2":
+  version "12.115.2"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.115.2.tgz#2c18765f32181db931f534d68ba5250b266bbadf"
+  integrity sha512-uGqhDPEoDRFJx/Y6qp3Jor2qrjfs4C2RHZdktjvEv+X0O34cf1vQe2bL7vt0VvZ/KO/SnXNlne2r9zXCfshBvw==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.91.4"
+    "@box/blueprint-web-assets" "^4.93.0"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
