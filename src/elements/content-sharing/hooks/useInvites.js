@@ -36,7 +36,6 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
         };
 
         const sendCollabRequest = collab => {
-            setIsLoading(true);
             return new Promise((resolve, reject) => {
                 api.getCollaborationsAPI(false).addCollaboration(
                     itemData,
@@ -50,7 +49,7 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
                         reject(error);
                     },
                 );
-            }).finally(() => setIsLoading(false));
+            });
         };
 
         const createPostCollaborationFn: SendInvitesFnType =
@@ -58,10 +57,15 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
                 if (!transformRequest) return Promise.resolve(null);
 
                 const { users, groups } = transformRequest(collabRequest);
-                return Promise.all([
-                    ...users.map(user => sendCollabRequest(user)),
-                    ...groups.map(group => sendCollabRequest(group)),
-                ]);
+                setIsLoading(true);
+                try {
+                    return await Promise.all([
+                        ...users.map(user => sendCollabRequest(user)),
+                        ...groups.map(group => sendCollabRequest(group)),
+                    ]);
+                } finally {
+                    setIsLoading(false);
+                }
             };
 
         if (!sendInvites) {
