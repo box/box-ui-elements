@@ -6,7 +6,7 @@ import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import noop from 'lodash/noop';
 
-import { IconButton, TooltipProvider, Tooltip } from '@box/blueprint-web';
+import { IconButton, Tooltip } from '@box/blueprint-web';
 import { Pencil } from '@box/blueprint-web-assets/icons/Medium';
 
 import type { AgentType } from '@box/box-ai-agent-selector';
@@ -621,19 +621,17 @@ class Instance extends React.PureComponent<Props, State> {
         if (canEdit && !isDirty && !isBusy) {
             const metadataLabelEditText = intl.formatMessage(messages.metadataEditTooltip);
             return (
-                <TooltipProvider>
-                    <Tooltip content={metadataLabelEditText}>
-                        <IconButton
-                            aria-label={metadataLabelEditText}
-                            aria-pressed={isEditing}
-                            className={editClassName}
-                            data-resin-target="metadata-instanceedit"
-                            icon={Pencil}
-                            onClick={this.toggleIsEditing}
-                            size="x-small"
-                        />
-                    </Tooltip>
-                </TooltipProvider>
+                <Tooltip content={metadataLabelEditText}>
+                    <IconButton
+                        aria-label={metadataLabelEditText}
+                        aria-pressed={isEditing}
+                        className={editClassName}
+                        data-resin-target="metadata-instanceedit"
+                        icon={Pencil}
+                        onClick={this.toggleIsEditing}
+                        size="x-small"
+                    />
+                </Tooltip>
             );
         }
         return null;
