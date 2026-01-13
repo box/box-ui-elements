@@ -12,23 +12,23 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
     className=""
     hasStickyHeader={true}
     headerActionItems={
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        isDisabled={false}
-        position="top-left"
-        theme="default"
-      >
-        <PlainButton
-          aria-pressed={false}
-          className="metadata-instance-editor-instance-edit"
-          data-resin-target="metadata-instanceedit"
-          onClick={[Function]}
-          type="button"
-        >
-          <IconEdit />
-        </PlainButton>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <IconButton
+            aria-pressed={false}
+            className="metadata-instance-editor-instance-edit"
+            data-resin-target="metadata-instanceedit"
+            icon={
+              {
+                "$$typeof": Symbol(react.forward_ref),
+                "render": [Function],
+              }
+            }
+            onClick={[Function]}
+            size="x-small"
+          />
+        </Tooltip>
+      </TooltipProvider>
     }
     isBordered={true}
     isOpen={true}
@@ -748,23 +748,23 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     className=""
     hasStickyHeader={true}
     headerActionItems={
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        isDisabled={false}
-        position="top-left"
-        theme="default"
-      >
-        <PlainButton
-          aria-pressed={true}
-          className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
-          data-resin-target="metadata-instanceedit"
-          onClick={[Function]}
-          type="button"
-        >
-          <IconEdit />
-        </PlainButton>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <IconButton
+            aria-pressed={true}
+            className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+            data-resin-target="metadata-instanceedit"
+            icon={
+              {
+                "$$typeof": Symbol(react.forward_ref),
+                "render": [Function],
+              }
+            }
+            onClick={[Function]}
+            size="x-small"
+          />
+        </Tooltip>
+      </TooltipProvider>
     }
     isBordered={true}
     isOpen={true}
@@ -944,23 +944,23 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     className=""
     hasStickyHeader={true}
     headerActionItems={
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        isDisabled={false}
-        position="top-left"
-        theme="default"
-      >
-        <PlainButton
-          aria-pressed={true}
-          className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
-          data-resin-target="metadata-instanceedit"
-          onClick={[Function]}
-          type="button"
-        >
-          <IconEdit />
-        </PlainButton>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <IconButton
+            aria-pressed={true}
+            className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+            data-resin-target="metadata-instanceedit"
+            icon={
+              {
+                "$$typeof": Symbol(react.forward_ref),
+                "render": [Function],
+              }
+            }
+            onClick={[Function]}
+            size="x-small"
+          />
+        </Tooltip>
+      </TooltipProvider>
     }
     isBordered={true}
     isOpen={true}
@@ -1049,23 +1049,23 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     className=""
     hasStickyHeader={true}
     headerActionItems={
-      <Tooltip
-        constrainToScrollParent={false}
-        constrainToWindow={true}
-        isDisabled={false}
-        position="top-left"
-        theme="default"
-      >
-        <PlainButton
-          aria-pressed={true}
-          className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
-          data-resin-target="metadata-instanceedit"
-          onClick={[Function]}
-          type="button"
-        >
-          <IconEdit />
-        </PlainButton>
-      </Tooltip>
+      <TooltipProvider>
+        <Tooltip>
+          <IconButton
+            aria-pressed={true}
+            className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+            data-resin-target="metadata-instanceedit"
+            icon={
+              {
+                "$$typeof": Symbol(react.forward_ref),
+                "render": [Function],
+              }
+            }
+            onClick={[Function]}
+            size="x-small"
+          />
+        </Tooltip>
+      </TooltipProvider>
     }
     isBordered={true}
     isOpen={true}
