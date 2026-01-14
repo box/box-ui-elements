@@ -9,6 +9,10 @@
         margin-right: 0;
         margin-bottom: 0;
 
+        .text-input-tooltip-target {
+            display: block;
+        }
+
         input,
         input:focus {
             width: 100%;
@@ -29,7 +33,9 @@
         min-width: 80px;
         border-top-right-radius: $bdl-border-radius-size-med;
         border-bottom-right-radius: $bdl-border-radius-size-med;
-        transition: background-color .5s ease, border-color .5s ease;
+        transition:
+            background-color 0.5s ease,
+            border-color 0.5s ease;
     }
 
     &.copy-success {
