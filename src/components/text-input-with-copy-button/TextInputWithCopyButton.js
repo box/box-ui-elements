@@ -225,7 +225,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
                 <TextInput
                     {...inputProps}
                     onFocus={this.handleFocus}
-                    tooltipWrapperClassName="text-input-tooltip-target"
+                    tooltipWrapperClassName="text-input-tooltip-wrapper"
                 />
                 {additionalButtons}
                 {this.renderCopyButton()}
