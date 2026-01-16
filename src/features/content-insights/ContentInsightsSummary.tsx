@@ -15,9 +15,18 @@ interface Props {
     onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
+    isRedesignEnabled?: boolean;
 }
 
-const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCount, onClick, totalCount }: Props) => {
+const ContentInsightsSummary = ({
+    error,
+    graphData,
+    isLoading,
+    previousPeriodCount,
+    onClick,
+    totalCount,
+    isRedesignEnabled,
+}: Props) => {
     const renderContentAnalyticsSummary = () => {
         if (error) {
             return <ContentAnalyticsErrorState error={error} />;
@@ -34,7 +43,7 @@ const ContentInsightsSummary = ({ error, graphData, isLoading, previousPeriodCou
                     previousPeriodCount={previousPeriodCount}
                     totalCount={totalCount}
                 />
-                <OpenContentInsightsButton onClick={onClick} />
+                <OpenContentInsightsButton onClick={onClick} isRedesignEnabled={isRedesignEnabled} />
             </>
         );
     };
