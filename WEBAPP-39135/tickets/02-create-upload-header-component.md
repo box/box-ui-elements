@@ -4,15 +4,8 @@
 
 ### What
 
-Create a new reusable `UploadHeader` component that displays upload status, progress, and actions in a consolidated header UI.
-
-**UI Layout:**
-
-```
-[Icon] [Status Title]                           [Action Button] [Chevron]
-       [Count/Error Text]
-[===================Progress Bar==================================]
-```
+1. Implement the `UploadHeader` component as a presentational component according to Figma.
+2. All handlers (e.g., `onCancelAll`, `onRetryAll`, `onToggle` etc) will be passed as props. Implementation of these handlers will be done in subsequent tickets.
 
 **Key Features:**
 
@@ -44,7 +37,7 @@ interface UploadHeaderProps {
 
   // Actions
   onToggle: () => void;
-  onCancelAll?: () => void;
+  onCancelAll?: () => void; // Opens confirmation modal (see ticket 13)
   onRetryAll?: () => void;
 }
 ```
@@ -56,7 +49,7 @@ interface UploadHeaderProps {
    - Icon: Medium/CloudUp on white
    - Title: "Uploads In Progress"
    - Count: "X of Y complete"
-   - Action: "Cancel All" button
+   - Action: "Cancel All" button (opens confirmation modal - see ticket 13)
 
 2. **Success State** (`VIEW_UPLOAD_SUCCESS`):
 
@@ -104,6 +97,9 @@ interface UploadHeaderProps {
 
 ---
 
-**Notes:** This component is a standalone presentational component that will be integrated into UploadsManagerV2 in a subsequent ticket.
+**Notes:**
+
+- This component is a standalone presentational component that will be integrated into UploadsManagerV2 in a subsequent ticket.
+- The "Cancel All" button opens a confirmation modal (implemented in ticket 13) rather than directly canceling uploads.
 
 ---

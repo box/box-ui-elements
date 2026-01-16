@@ -1,5 +1,7 @@
 ## Ticket: Upload Notifications (Cancel and Success)
 
+**Estimated Effort:** ? SP
+
 ### What
 
 Add toast notifications to inform users when uploads are canceled or completed successfully. Notifications should display appropriate counts and differentiate between successful and failed uploads.

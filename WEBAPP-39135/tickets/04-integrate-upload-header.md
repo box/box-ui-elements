@@ -4,7 +4,9 @@
 
 ### What
 
-Integrate the `UploadHeader` component into `UploadsManagerV2` wrapper, connecting it to ContentUploader state and enabling full header functionality.
+1. Pass necessary props from `ContentUploader` to `UploadsManagerV2` and to `UploadHeader`.
+2. Calculate upload counts and overall progress in `UploadsManagerV2` and pass to `UploadHeader`.
+3. Add logic to detect canceled state.
 
 **Architecture:**
 
@@ -23,8 +25,8 @@ Add to `UploadsManagerV2Props`:
 - `view: View` - Current upload state
 - `items: UploadItem[]` - Array for count calculation and item list rendering
 - `percent: number` - Overall progress percentage
-- `onCancelAll?: () => void` - Cancel all handler
-- `onRetryAll?: () => void` - Resume/Retry all handler
+- `onCancelAll: () => void` - Cancel all handler (passed to modal)
+- `onRetryAll: () => void` - Resume/Retry all handler
 
 **Count Calculation:**
 

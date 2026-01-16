@@ -1,10 +1,13 @@
 ## Ticket: Create UploadsManagerV2 Wrapper Component
 
-**Estimated Effort:** 2 SP
+**Estimated Effort:** 3 SP
 
 ### What
 
-Create the `UploadsManagerV2` wrapper component that provides the container structure and positioning for the modernized upload experience. This component renders as a floating panel in the bottom-right corner of the screen and supports collapse/expand functionality.
+1. Create a new component `UploadsManager` in the `src/elements/content-uploader/v2/` directory.
+2. It will act as the wrapper for header and item list components to be added in follow-up tickets.
+3. Implement expanded and collapsed states.
+4. Implement animation for collapsing and expanding.
 
 **Component Structure:**
 

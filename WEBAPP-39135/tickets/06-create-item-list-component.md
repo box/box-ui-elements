@@ -5,6 +5,7 @@
 ### What
 
 Create the `ItemList` component that displays individual upload items with their status, progress, and file information. This component renders below the UploadHeader when the manager is expanded.
+TODO: add virtualizations of the list
 
 **Component Structure:**
 

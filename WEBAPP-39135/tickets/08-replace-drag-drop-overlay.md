@@ -1,5 +1,7 @@
 ## Ticket: Replace Empty Folder Banner with Modern Drag-Drop Overlay
 
+**Estimated Effort:** 3 SP
+
 ### What
 
 Replace the current drag-and-drop UI (blue banner at bottom + grey-out effect on items) with a modern, centered overlay that shows "Drop to upload files" when users drag files over the Files page.
