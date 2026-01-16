@@ -6,15 +6,15 @@ import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import noop from 'lodash/noop';
 
+import { IconButton, Tooltip } from '@box/blueprint-web';
+import { Pencil } from '@box/blueprint-web-assets/icons/Medium';
+
 import type { AgentType } from '@box/box-ai-agent-selector';
 import Collapsible from '../../components/collapsible/Collapsible';
 import Form from '../../components/form-elements/form/Form';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
-import PlainButton from '../../components/plain-button/PlainButton';
-import Tooltip from '../../components/tooltip';
 import IconMetadataColored from '../../icons/general/IconMetadataColored';
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
-import IconEdit from '../../icons/general/IconEdit';
 import { bdlWatermelonRed } from '../../styles/variables';
 import { scrollIntoView } from '../../utils/dom';
 
@@ -621,17 +621,16 @@ class Instance extends React.PureComponent<Props, State> {
         if (canEdit && !isDirty && !isBusy) {
             const metadataLabelEditText = intl.formatMessage(messages.metadataEditTooltip);
             return (
-                <Tooltip position="top-left" text={metadataLabelEditText}>
-                    <PlainButton
+                <Tooltip content={metadataLabelEditText}>
+                    <IconButton
                         aria-label={metadataLabelEditText}
                         aria-pressed={isEditing}
                         className={editClassName}
                         data-resin-target="metadata-instanceedit"
+                        icon={Pencil}
                         onClick={this.toggleIsEditing}
-                        type="button"
-                    >
-                        <IconEdit />
-                    </PlainButton>
+                        size="x-small"
+                    />
                 </Tooltip>
             );
         }
