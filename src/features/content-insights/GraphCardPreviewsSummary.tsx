@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 import { injectIntl, IntlShape } from 'react-intl';
 
 import BarChart from './charts/bar/BarChart';
@@ -29,7 +30,9 @@ function GraphCardPreviewsSummary({ graphData, intl, isRedesignEnabled, previous
                 totalCount={totalCount}
             />
             <BarChart
-                className="GraphCardPreviewsSummary-chart"
+                className={classNames('GraphCardPreviewsSummary-chart', {
+                    'GraphCardPreviewsSummary-chart--redesigned': isRedesignEnabled,
+                })}
                 data={graphData}
                 label={intl.formatMessage(messages.previewGraphLabel)}
                 labelAccessor="start"

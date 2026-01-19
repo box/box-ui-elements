@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 
 import ContentAnalyticsErrorState from './ContentAnalyticsErrorState';
 import ContentInsightsSummaryGhostState from './ContentInsightsSummaryGhostState';
@@ -49,7 +50,15 @@ const ContentInsightsSummary = ({
         );
     };
 
-    return <div className="ContentInsightsSummary">{renderContentAnalyticsSummary()}</div>;
+    return (
+        <div
+            className={classNames('ContentInsightsSummary', {
+                'ContentInsightsSummary--redesigned': isRedesignEnabled,
+            })}
+        >
+            {renderContentAnalyticsSummary()}
+        </div>
+    );
 };
 
 export default ContentInsightsSummary;
