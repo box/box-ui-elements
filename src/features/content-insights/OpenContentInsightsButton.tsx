@@ -16,7 +16,13 @@ const OpenContentInsightsButton = ({ onClick, isRedesignEnabled }: Props) => {
 
     if (isRedesignEnabled) {
         return (
-            <BlueprintButton className="OpenContentInsightsButton" onClick={onClick} type="button" variant="primary">
+            <BlueprintButton
+                className="OpenContentInsightsButton"
+                onClick={onClick}
+                type="button"
+                size="small"
+                variant="secondary"
+            >
                 {formatMessage(messages.openContentInsightsButton)}
             </BlueprintButton>
         );
