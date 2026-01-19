@@ -12,15 +12,17 @@ import './GraphCardPreviewsSummary.scss';
 interface Props {
     graphData: GraphData;
     intl: IntlShape;
+    isRedesignEnabled?: boolean;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-function GraphCardPreviewsSummary({ graphData, intl, previousPeriodCount, totalCount }: Props) {
+function GraphCardPreviewsSummary({ graphData, intl, isRedesignEnabled, previousPeriodCount, totalCount }: Props) {
     return (
         <>
             <MetricSummary
                 data={graphData}
+                isRedesignEnabled={isRedesignEnabled}
                 metric={METRIC.PREVIEWS}
                 period={PERIOD.WEEK}
                 previousPeriodCount={previousPeriodCount}

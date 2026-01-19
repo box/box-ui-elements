@@ -40,6 +40,7 @@ const ContentInsightsSummary = ({
             <>
                 <GraphCardPreviewsSummary
                     graphData={graphData}
+                    isRedesignEnabled={isRedesignEnabled}
                     previousPeriodCount={previousPeriodCount}
                     totalCount={totalCount}
                 />
