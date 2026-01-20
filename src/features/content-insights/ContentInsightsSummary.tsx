@@ -10,23 +10,23 @@ import { GraphData, ResponseError } from './types';
 import './ContentInsightsSummary.scss';
 
 interface Props {
-    graphData: GraphData;
     error?: ResponseError;
+    graphData: GraphData;
     isLoading: boolean;
+    isRedesignEnabled?: boolean;
     onClick: () => void;
     previousPeriodCount: number;
     totalCount: number;
-    isRedesignEnabled?: boolean;
 }
 
 const ContentInsightsSummary = ({
     error,
     graphData,
     isLoading,
-    previousPeriodCount,
-    onClick,
-    totalCount,
     isRedesignEnabled,
+    onClick,
+    previousPeriodCount,
+    totalCount,
 }: Props) => {
     const renderContentAnalyticsSummary = () => {
         if (error) {

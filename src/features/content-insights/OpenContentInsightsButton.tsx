@@ -7,11 +7,11 @@ import Button, { ButtonType } from '../../components/button';
 import messages from './messages';
 
 interface Props {
-    onClick: () => void;
     isRedesignEnabled?: boolean;
+    onClick: () => void;
 }
 
-const OpenContentInsightsButton = ({ onClick, isRedesignEnabled }: Props) => {
+const OpenContentInsightsButton = ({ isRedesignEnabled, onClick }: Props) => {
     const { formatMessage } = useIntl();
 
     if (isRedesignEnabled) {

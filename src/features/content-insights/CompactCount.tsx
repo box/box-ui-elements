@@ -9,9 +9,9 @@ interface Props {
     className?: string;
     count: number;
     intl: IntlShape;
+    isRedesignEnabled?: boolean;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
-    isRedesignEnabled?: boolean;
 }
 
 function CompactCount({ className, count, intl, isRedesignEnabled, ...rest }: Props) {
@@ -21,9 +21,9 @@ function CompactCount({ className, count, intl, isRedesignEnabled, ...rest }: Pr
         return (
             <Text
                 as="span"
-                variant="bodyDefaultSemibold"
+                className={classNames(' ', className)}
                 color="textOnLightSecondary"
-                className={classNames('CompactCount', className)}
+                variant="bodyDefaultSemibold"
                 {...rest}
             >
                 {formattedCount}

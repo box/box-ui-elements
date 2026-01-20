@@ -24,8 +24,8 @@ export interface ContentInsights {
 
 export interface Props {
     contentInsights?: ContentInsights;
-    onContentInsightsClick?: () => void;
     isRedesignEnabled?: boolean;
+    onContentInsightsClick?: () => void;
 }
 
 const defaultContentInsights = {
@@ -37,8 +37,8 @@ const defaultContentInsights = {
 
 const SidebarContentInsights = ({
     contentInsights = defaultContentInsights,
-    onContentInsightsClick = noop,
     isRedesignEnabled,
+    onContentInsightsClick = noop,
 }: Props) => {
     const { error, graphData, isLoading, previousPeriodCount, totalCount } = contentInsights;
 
