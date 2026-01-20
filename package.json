@@ -45,7 +45,7 @@
         "url": "https://github.com/box/box-ui-elements/issues"
     },
     "engines": {
-        "node": ">=18.x || ^20.x || ^22.x",
+        "node": "^22.14.0",
         "yarn": ">=1.10.0"
     },
     "scripts": {
@@ -274,7 +274,7 @@
         "sass": "1.56.0",
         "sass-loader": "^16.0.6",
         "scroll-into-view-if-needed": "^2.2.20",
-        "semantic-release": "^24.2.3",
+        "semantic-release": "^25.0.2",
         "sinon": "^2.3.7",
         "source-map-loader": "^0.2.4",
         "storybook": "^9.1.17",
