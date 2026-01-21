@@ -385,7 +385,8 @@ class SidebarPanels extends React.Component<Props, State> {
                         } = customPanel;
 
                         const isBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
-                        if (isBoxAICustomPanel && hasNativeBoxAISidebar) {
+                        // Skip custom Box AI only when native Box AI can show its panel
+                        if (isBoxAICustomPanel && canShowBoxAISidebarPanel) {
                             return null;
                         }
 
