@@ -29,12 +29,15 @@ describe('elements/content-sidebar/SidebarNav', () => {
         );
     };
 
+    // Mock icon component for testing
+    const MockBoxAIIcon = () => <div data-testid="mock-boxai-icon">BoxAI Icon</div>;
+
     // Helper function to create Box AI custom tab
     const createBoxAITab = (overrides = {}) => ({
         id: 'boxai',
         path: 'boxai',
         title: 'Box AI',
-        icon: null,
+        icon: MockBoxAIIcon,
         isDisabled: false,
         navButtonProps: {},
         ...overrides,
@@ -42,6 +45,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
     describe('individual tab rendering', () => {
         const TABS_CONFIG = {
+            boxai: { testId: 'sidebarboxai', propName: 'hasNativeBoxAISidebar' },
             skills: { testId: 'sidebarskills', propName: 'hasSkills' },
             details: { testId: 'sidebardetails', propName: 'hasDetails' },
             activity: { testId: 'sidebaractivity', propName: 'hasActivity' },
@@ -83,7 +87,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
                 renderSidebarNav({
                     features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
-                    props: { hasBoxAI: true },
+                    props: { hasNativeBoxAISidebar: true },
                 });
 
                 const button = screen.getByTestId('sidebarboxai');
@@ -102,7 +106,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 features: { boxai: { sidebar: { showOnlyNavButton: false } } },
-                props: { hasBoxAI: true },
+                props: { hasNativeBoxAISidebar: true },
             });
 
             const button = screen.getByTestId('sidebarboxai');
@@ -116,12 +120,32 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
     });
 
-    test('should call focusBoxAISidebarPrompt when clicked on Box AI Tab', async () => {
+    test('should call focusBoxAISidebarPrompt when clicked on custom Box AI Tab', async () => {
         const user = userEvent();
 
         renderSidebarNav({
             props: {
                 customTabs: [createBoxAITab()],
+            },
+        });
+
+        const button = screen.getByTestId('sidebarboxai');
+
+        await user.click(button);
+
+        expect(usePromptFocus).toHaveBeenCalledTimes(1);
+        expect(usePromptFocus).toHaveBeenCalledWith('.be.bcs');
+
+        expect(focusBoxAISidebarPromptMock).toHaveBeenCalledTimes(1);
+        expect(focusBoxAISidebarPromptMock).toHaveBeenCalledWith();
+    });
+
+    test('should call focusBoxAISidebarPrompt when clicked on native Box AI Tab', async () => {
+        const user = userEvent();
+
+        renderSidebarNav({
+            props: {
+                hasNativeBoxAISidebar: true,
             },
         });
 
@@ -204,13 +228,103 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(boxSignSection).toBeInTheDocument();
     });
 
+    describe('hasNativeBoxAISidebar and customTabs interaction', () => {
+        test('should render native Box AI when hasNativeBoxAISidebar is true, ignoring custom boxai tab', () => {
+            const boxAiTab = createBoxAITab({ title: 'Custom Box AI' });
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: true,
+                    customTabs: [boxAiTab],
+                },
+            });
+
+            // Should only render one Box AI tab (the native one)
+            const boxAiButtons = screen.getAllByTestId('sidebarboxai');
+            expect(boxAiButtons).toHaveLength(1);
+
+            // The native Box AI button should have the default tooltip, not the custom one
+            expect(boxAiButtons[0]).toHaveAttribute('aria-label', 'Box AI');
+        });
+
+        test('should render custom boxai tab when hasNativeBoxAISidebar is false', () => {
+            const boxAiTab = createBoxAITab({ title: 'Custom Box AI Title' });
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: false,
+                    customTabs: [boxAiTab],
+                },
+            });
+
+            const button = screen.getByTestId('sidebarboxai');
+            expect(button).toBeInTheDocument();
+            expect(button).toHaveAttribute('aria-label', 'Custom Box AI Title');
+        });
+
+        test('should not render any boxai tab when hasNativeBoxAISidebar is false and no custom boxai tab provided', () => {
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: false,
+                    hasActivity: true,
+                    customTabs: [],
+                },
+            });
+
+            expect(screen.queryByTestId('sidebarboxai')).not.toBeInTheDocument();
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+        });
+
+        test('should render native Box AI AND other custom tabs when hasNativeBoxAISidebar is true', () => {
+            // Mock icon component for custom tabs
+            const MockCustomIcon = () => <div data-testid="mock-custom-icon">Custom Icon</div>;
+
+            const boxAiTab = createBoxAITab({ title: 'Custom Box AI' });
+            const analyticsTab = {
+                id: 'analytics',
+                path: 'analytics',
+                title: 'Analytics Tab',
+                icon: MockCustomIcon,
+                isDisabled: false,
+                navButtonProps: {},
+            };
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: true,
+                    hasActivity: true,
+                    customTabs: [boxAiTab, analyticsTab],
+                },
+            });
+
+            // Native Box AI should render (custom Box AI is ignored)
+            const boxAiButtons = screen.getAllByTestId('sidebarboxai');
+            expect(boxAiButtons).toHaveLength(1);
+            expect(boxAiButtons[0]).toHaveAttribute('aria-label', 'Box AI');
+
+            // Other custom tabs should still render alongside native Box AI
+            expect(screen.getByTestId('sidebaranalytics')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+
+            // Verify order: Native Box AI first, then regular tabs, then custom tabs
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(3);
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[1]).toHaveAttribute('data-testid', 'sidebaractivity');
+            expect(navButtons[2]).toHaveAttribute('data-testid', 'sidebaranalytics');
+        });
+    });
+
     describe('multiple customTabs rendering', () => {
+        // Mock icon component for custom tabs
+        const MockCustomIcon = ({ testId }) => <div data-testid={testId || 'mock-custom-icon'}>Custom Icon</div>;
+
         // Helper function to create a generic custom tab
         const createCustomTab = (id, overrides = {}) => ({
             id,
             path: id,
             title: `${id.charAt(0).toUpperCase()}${id.slice(1)} Tab`,
-            icon: null,
+            icon: () => <MockCustomIcon testId={`mock-icon-${id}`} />,
             isDisabled: false,
             navButtonProps: {},
             ...overrides,

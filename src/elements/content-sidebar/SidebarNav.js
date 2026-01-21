@@ -45,6 +45,7 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
+import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
@@ -123,6 +124,7 @@ type Props = {
     fileId: string,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
+    hasNativeBoxAISidebar: boolean,
     hasDetails: boolean,
     hasDocGen?: boolean,
     hasMetadata: boolean,
@@ -144,6 +146,7 @@ const SidebarNav = ({
     fileId,
     hasActivity,
     hasAdditionalTabs,
+    hasNativeBoxAISidebar,
     hasDetails,
     hasMetadata,
     hasSkills,
@@ -177,11 +180,30 @@ const SidebarNav = ({
     const hasOtherCustomTabs = otherCustomTabs.length > 0;
 
     const sidebarTabs = [
-        boxAiTab && (
+        hasNativeBoxAISidebar && (
+            <SidebarNavButton
+                key={SIDEBAR_VIEW_BOXAI}
+                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
+                data-target-id="SidebarNavButton-boxAI"
+                data-testid="sidebarboxai"
+                isDisabled={showOnlyBoxAINavButton}
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_BOXAI}
+                tooltip={showOnlyBoxAINavButton ? boxAIDisabledTooltip : intl.formatMessage(messages.sidebarBoxAITitle)}
+            >
+                {isPreviewModernizationEnabled ? (
+                    <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />
+                ) : (
+                    <BoxAiLogo height={Size6} width={Size6} />
+                )}
+            </SidebarNavButton>
+        ),
+        !hasNativeBoxAISidebar && boxAiTab && (
             <SidebarNavButton
                 key={boxAiTab.id}
                 isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                data-target-id={`SidebarNavButton-${boxAiTab.id}`}
+                data-target-id={`SidebarNavButton-$boxAI`}
                 data-testid={`sidebar${boxAiTab.id}`}
                 {...boxAiTab.navButtonProps}
                 data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
@@ -271,12 +293,9 @@ const SidebarNav = ({
         ),
     ];
 
-    // Filter out falsy values first
     const visibleTabs = sidebarTabs.filter(Boolean);
 
-    // Insert custom tabs - box-ai goes at the top, others at the end
     if (hasOtherCustomTabs) {
-        // Add other custom tabs at the end
         otherCustomTabs.forEach(customTab => {
             const {
                 id: customTabId,

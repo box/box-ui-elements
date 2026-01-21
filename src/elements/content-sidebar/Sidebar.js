@@ -321,17 +321,20 @@ class Sidebar extends React.Component<Props, State> {
             versionsSidebarProps,
         }: Props = this.props;
         const isOpen = this.isOpen();
+
+        const hasCustomBoxAISidebar = customSidebarPanels
+            ? customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI)
+            : false;
+        const isBoxAIEnabled = SidebarUtils.canHaveBoxAISidebar(this.props);
+        const hasNativeBoxAISidebar = isBoxAIEnabled && !hasCustomBoxAISidebar;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
-        const hasBoxAI = customSidebarPanels
-            ? !!customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI)
-            : false;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
-            'bcs-is-wider': hasBoxAI,
+            'bcs-is-wider': hasNativeBoxAISidebar || hasCustomBoxAISidebar,
         });
         const defaultPanel = this.getDefaultPanel();
 
@@ -352,6 +355,7 @@ class Sidebar extends React.Component<Props, State> {
                                 fileId={fileId}
                                 hasActivity={hasActivity}
                                 hasAdditionalTabs={hasAdditionalTabs}
+                                hasNativeBoxAISidebar={hasNativeBoxAISidebar}
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
@@ -377,6 +381,7 @@ class Sidebar extends React.Component<Props, State> {
                             getPreview={getPreview}
                             getViewer={getViewer}
                             hasActivity={hasActivity}
+                            hasNativeBoxAISidebar={hasNativeBoxAISidebar}
                             hasDetails={hasDetails}
                             hasDocGen={docGenSidebarProps.isDocGenTemplate}
                             hasMetadata={hasMetadata}

@@ -126,8 +126,8 @@ describe('elements/content-sidebar/SidebarUtil', () => {
         });
     });
     describe('canHaveBoxAISidebar()', () => {
-        test('should return false when hasBoxAI is false', () => {
-            expect(SidebarUtils.canHaveBoxAISidebar({ hasBoxAI: false })).toBeFalsy();
+        test('should return false when boxai.sidebar.enabled feature flag is not set', () => {
+            expect(SidebarUtils.canHaveBoxAISidebar({ features: {} })).toBeFalsy();
         });
         test('should return true when isFeatureEnabled returns true', () => {
             isFeatureEnabled.mockReturnValueOnce(true);
