@@ -132,11 +132,12 @@ const renderCustomPanelIcon = (
     }
 
     if (React.isValidElement(icon)) {
-        return icon;
+        // Icon is already a React element, return as-is
+        return (icon: any);
     }
 
-    // $FlowFixMe: Flow doesn't understand dynamic component creation
-    const IconComponent = icon;
+    // Icon is a component type, render it
+    const IconComponent: React.ComponentType<any> = (icon: any);
     return <IconComponent className="bcs-SidebarNav-icon" />;
 };
 
