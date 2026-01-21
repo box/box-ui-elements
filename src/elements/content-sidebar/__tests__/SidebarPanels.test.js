@@ -594,6 +594,128 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
                 },
             );
+
+            describe('canShowBoxAISidebarPanel eligibility', () => {
+                test.each`
+                    hasNativeBoxAISidebar | showOnlyNavButton | expectedEligible | description
+                    ${true}               | ${false}          | ${true}          | ${'native Box AI enabled and showOnlyNavButton is false'}
+                    ${true}               | ${true}           | ${false}         | ${'native Box AI enabled but showOnlyNavButton is true'}
+                    ${false}              | ${false}          | ${false}         | ${'native Box AI disabled'}
+                    ${false}              | ${true}           | ${false}         | ${'native Box AI disabled and showOnlyNavButton is true'}
+                `(
+                    'should set Box AI panel eligibility to $expectedEligible when $description',
+                    ({ hasNativeBoxAISidebar, showOnlyNavButton, expectedEligible }) => {
+                        render(
+                            getSidebarPanels({
+                                path: '/boxai',
+                                features: { boxai: { sidebar: { showOnlyNavButton } } },
+                                hasNativeBoxAISidebar,
+                            }),
+                        );
+                        if (expectedEligible) {
+                            expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                        } else {
+                            expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
+                        }
+                    },
+                );
+
+                test('should render native Box AI panel when hasNativeBoxAISidebar is true and showOnlyNavButton is false', () => {
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                            hasNativeBoxAISidebar: true,
+                        }),
+                    );
+                    expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                });
+
+                test('should NOT render native Box AI panel when showOnlyNavButton is true even if hasNativeBoxAISidebar is true', () => {
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                            hasNativeBoxAISidebar: true,
+                        }),
+                    );
+                    expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
+                });
+
+                test('should redirect to first available panel when Box AI is not eligible due to showOnlyNavButton', () => {
+                    const onPanelChange = jest.fn();
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                            hasNativeBoxAISidebar: true,
+                            onPanelChange,
+                        }),
+                    );
+                    // Should redirect to docgen (first in DEFAULT_SIDEBAR_VIEWS)
+                    expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+                });
+
+                test('should render custom Box AI panel when hasNativeBoxAISidebar is false and custom panel is provided', () => {
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                            hasNativeBoxAISidebar: false,
+                            customPanels: [createBoxAIPanel()],
+                        }),
+                    );
+                    expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                });
+
+                test('should prioritize native Box AI over custom Box AI panel when both are available', () => {
+                    const CustomBoxAIComponent = () => <div data-testid="custom-boxai-component" />;
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                            hasNativeBoxAISidebar: true,
+                            customPanels: [createBoxAIPanel({ component: CustomBoxAIComponent })],
+                        }),
+                    );
+                    // Native Box AI should be rendered, not the custom one
+                    expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                    expect(screen.queryByTestId('custom-boxai-component')).not.toBeInTheDocument();
+                });
+
+                test('should render custom Box AI panel when showOnlyNavButton is true and custom panel is provided', () => {
+                    const CustomBoxAIComponent = () => <div data-testid="custom-boxai-component" />;
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                            hasNativeBoxAISidebar: true,
+                            customPanels: [createBoxAIPanel({ component: CustomBoxAIComponent })],
+                        }),
+                    );
+                    // Custom Box AI should be rendered since native cannot show panel (showOnlyNavButton)
+                    expect(screen.getByTestId('custom-boxai-component')).toBeInTheDocument();
+                    // Native Box AI should NOT be rendered
+                    expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
+                });
+
+                test('should make custom Box AI panel eligible when canShowBoxAISidebarPanel is false', () => {
+                    const onPanelChange = jest.fn();
+                    const CustomBoxAIComponent = () => <div data-testid="custom-boxai-component" />;
+                    render(
+                        getSidebarPanels({
+                            path: '/boxai',
+                            features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                            hasNativeBoxAISidebar: true,
+                            customPanels: [createBoxAIPanel({ component: CustomBoxAIComponent })],
+                            onPanelChange,
+                        }),
+                    );
+                    // Should render custom Box AI and call onPanelChange with boxai
+                    expect(screen.getByTestId('custom-boxai-component')).toBeInTheDocument();
+                    expect(onPanelChange).toHaveBeenCalledWith('boxai', true);
+                });
+            });
         });
 
         describe('first loaded behavior', () => {

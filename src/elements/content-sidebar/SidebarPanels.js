@@ -317,13 +317,13 @@ class SidebarPanels extends React.Component<Props, State> {
             // $FlowFixMe: customPanels is checked for existence in hasCustomPanels
             customPanels.forEach(({ id, path, isDisabled }) => {
                 const isBoxAICustomPanel = id === SIDEBAR_VIEW_BOXAI;
-                const isEligible = isBoxAICustomPanel ? !hasNativeBoxAISidebar && !isDisabled : !isDisabled;
+                const isEligible = isBoxAICustomPanel ? !canShowBoxAISidebarPanel && !isDisabled : !isDisabled;
                 customPanelEligibility[path] = isEligible;
             });
         }
 
         const panelsEligibility = {
-            [SIDEBAR_VIEW_BOXAI]: hasNativeBoxAISidebar,
+            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
             [SIDEBAR_VIEW_SKILLS]: hasSkills,
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
