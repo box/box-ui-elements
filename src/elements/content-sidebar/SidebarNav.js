@@ -117,6 +117,29 @@ const DocGenIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrap
     );
 };
 
+/**
+ * Renders a custom panel icon with fallback support.
+ * Handles React elements, component types, and provides default icons when none specified.
+ */
+const renderCustomPanelIcon = (
+    icon?: React.ComponentType<any> | React.Element<any>,
+    isPreviewModernizationEnabled: boolean,
+    defaultModernIcon: React.Node,
+    defaultLegacyIcon: React.Node,
+): React.Node => {
+    if (!icon) {
+        return isPreviewModernizationEnabled ? defaultModernIcon : defaultLegacyIcon;
+    }
+
+    if (React.isValidElement(icon)) {
+        return icon;
+    }
+
+    // $FlowFixMe: Flow doesn't understand dynamic component creation
+    const IconComponent = icon;
+    return <IconComponent className="bcs-SidebarNav-icon" />;
+};
+
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     customTabs?: Array<CustomSidebarPanel>,
@@ -212,13 +235,12 @@ const SidebarNav = ({
                 sidebarView={boxAiTab.path}
                 tooltip={boxAiTab.title ?? boxAiTab.id}
             >
-                {boxAiTab.icon &&
-                    (React.isValidElement(boxAiTab.icon) ? (
-                        boxAiTab.icon
-                    ) : (
-                        // $FlowFixMe: Flow doesn't understand dynamic component creation
-                        <boxAiTab.icon className="bcs-SidebarNav-icon" />
-                    ))}
+                {renderCustomPanelIcon(
+                    boxAiTab.icon,
+                    isPreviewModernizationEnabled,
+                    <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />,
+                    <BoxAiLogo height={Size6} width={Size6} />,
+                )}
             </SidebarNavButton>
         ),
         hasActivity && (
@@ -318,13 +340,12 @@ const SidebarNav = ({
                     sidebarView={customTabPath}
                     tooltip={customTabTitle ?? customTabId}
                 >
-                    {CustomTabIcon &&
-                        (React.isValidElement(CustomTabIcon) ? (
-                            CustomTabIcon
-                        ) : (
-                            // $FlowFixMe: Flow doesn't understand dynamic component creation
-                            <CustomTabIcon className="bcs-SidebarNav-icon" />
-                        ))}
+                    {renderCustomPanelIcon(
+                        CustomTabIcon,
+                        isPreviewModernizationEnabled,
+                        <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />,
+                        <IconDocInfo className="bcs-SidebarNav-icon" />,
+                    )}
                 </SidebarNavButton>
             );
 
