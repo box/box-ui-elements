@@ -401,7 +401,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                 path={`/${customPanelPath}`}
                                 render={() => {
                                     this.handlePanelRender(customPanelPath);
-                                    return CustomPanelComponent ? (
+                                    return (
                                         <CustomPanelComponent
                                             elementId={elementId}
                                             file={file}
@@ -410,7 +410,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                             hasSidebarInitialized={isInitialized}
                                             ref={this.getCustomSidebarRef(customPanelId)}
                                         />
-                                    ) : null;
+                                    );
                                 }}
                             />
                         );

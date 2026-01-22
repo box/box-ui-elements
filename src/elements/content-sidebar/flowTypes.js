@@ -40,7 +40,7 @@ type CustomSidebarPanel = {
     title: string,
     isDisabled?: boolean,
     icon?: React.ComponentType<any> | React.Element<any>,
-    navButtonProps?: Object,
+    navButtonProps?: { [key: string]: mixed },
 };
 
 type CustomSidebarPanels = Array<CustomSidebarPanel>;

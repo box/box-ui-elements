@@ -318,41 +318,41 @@ const SidebarNav = ({
 
     const visibleTabs = sidebarTabs.filter(Boolean);
 
-    if (hasOtherCustomPanels) {
-        otherCustomPanels.forEach(customPanel => {
-            const {
-                id: customPanelId,
-                path: customPanelPath,
-                icon: CustomPanelIcon,
-                title: customPanelTitle,
-                navButtonProps,
-            } = customPanel;
+    const customPanelButtons = hasOtherCustomPanels
+        ? otherCustomPanels.map(customPanel => {
+              const {
+                  id: customPanelId,
+                  path: customPanelPath,
+                  icon: customPanelIcon,
+                  title: customPanelTitle,
+                  navButtonProps,
+              } = customPanel;
 
-            const customPanelButton = (
-                <SidebarNavButton
-                    key={customPanelId}
-                    isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                    data-resin-target={`sidebar${customPanelId}`}
-                    data-target-id={`SidebarNavButton-${customPanelId}`}
-                    data-testid={`sidebar${customPanelId}`}
-                    {...navButtonProps}
-                    isDisabled={customPanel.isDisabled}
-                    onClick={handleSidebarNavButtonClick}
-                    sidebarView={customPanelPath}
-                    tooltip={customPanelTitle}
-                >
-                    {renderCustomPanelIcon(
-                        CustomPanelIcon,
-                        isPreviewModernizationEnabled,
-                        <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />,
-                        <IconDocInfo className="bcs-SidebarNav-icon" />,
-                    )}
-                </SidebarNavButton>
-            );
+              return (
+                  <SidebarNavButton
+                      key={customPanelId}
+                      isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                      data-resin-target={`sidebar${customPanelId}`}
+                      data-target-id={`SidebarNavButton-${customPanelId}`}
+                      data-testid={`sidebar${customPanelId}`}
+                      {...navButtonProps}
+                      isDisabled={customPanel.isDisabled}
+                      onClick={handleSidebarNavButtonClick}
+                      sidebarView={customPanelPath}
+                      tooltip={customPanelTitle}
+                  >
+                      {renderCustomPanelIcon(
+                          customPanelIcon,
+                          isPreviewModernizationEnabled,
+                          <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />,
+                          <IconDocInfo className="bcs-SidebarNav-icon" />,
+                      )}
+                  </SidebarNavButton>
+              );
+          })
+        : [];
 
-            visibleTabs.push(customPanelButton);
-        });
-    }
+    const allVisibleTabs = [...visibleTabs, ...customPanelButtons];
 
     return (
         <div
@@ -370,7 +370,7 @@ const SidebarNav = ({
                     onNavigate={onNavigate}
                     routerDisabled={routerDisabled}
                 >
-                    {visibleTabs}
+                    {allVisibleTabs}
                 </SidebarNavTablist>
 
                 {hasBoxSign && (
