@@ -339,7 +339,7 @@ class SidebarPanels extends React.Component<Props, State> {
         if (
             !isOpen ||
             (!hasActivity &&
-                !hasNativeBoxAISidebar &&
+                !canShowBoxAISidebarPanel &&
                 !hasDetails &&
                 !hasMetadata &&
                 !hasSkills &&

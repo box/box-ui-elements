@@ -499,6 +499,20 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             expect(wrapper.isEmptyRender()).toBe(true);
         });
 
+        test('should render nothing when showOnlyNavButton is true and no other panels are available', () => {
+            const wrapper = getWrapper({
+                features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                hasNativeBoxAISidebar: true,
+                hasActivity: false,
+                hasDetails: false,
+                hasMetadata: false,
+                hasSkills: false,
+                hasVersions: false,
+                hasDocGen: false,
+            });
+            expect(wrapper.isEmptyRender()).toBe(true);
+        });
+
         describe('activity sidebar', () => {
             test('should render with tasks deeplink', () => {
                 const wrapper = getWrapper({ path: '/activity/tasks/12345' });
