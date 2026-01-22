@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import Modal from 'react-modal';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import ContentPreview, { ContentPreviewProps } from '../../content-preview';
@@ -62,7 +61,7 @@ const PreviewDialog = ({
     const { formatMessage } = useIntl();
     const { items }: Collection = currentCollection;
     const onLoad = (data: unknown): void => {
-        onPreview(cloneDeep(data));
+        onPreview(data);
     };
 
     if (!item || !items) {
