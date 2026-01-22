@@ -143,7 +143,7 @@ const renderCustomPanelIcon = (
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
-    customTabs?: Array<CustomSidebarPanel>,
+    customSidebarPanels?: Array<CustomSidebarPanel>,
     elementId: string,
     fileId: string,
     hasActivity: boolean,
@@ -165,7 +165,7 @@ type Props = {
 
 const SidebarNav = ({
     additionalTabs,
-    customTabs,
+    customSidebarPanels,
     elementId,
     fileId,
     hasActivity,
@@ -199,9 +199,9 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const boxAiTab = customTabs ? customTabs.find(tab => tab.id === SIDEBAR_VIEW_BOXAI) : undefined;
-    const otherCustomTabs = customTabs ? customTabs.filter(tab => tab.id !== SIDEBAR_VIEW_BOXAI) : [];
-    const hasOtherCustomTabs = otherCustomTabs.length > 0;
+    const boxAiPanel = customSidebarPanels?.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
+    const otherCustomPanels = customSidebarPanels?.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI) ?? [];
+    const hasOtherCustomPanels = otherCustomPanels.length > 0;
 
     const sidebarTabs = [
         hasNativeBoxAISidebar && (
@@ -223,21 +223,21 @@ const SidebarNav = ({
                 )}
             </SidebarNavButton>
         ),
-        !hasNativeBoxAISidebar && boxAiTab && (
+        !hasNativeBoxAISidebar && boxAiPanel && (
             <SidebarNavButton
-                key={boxAiTab.id}
+                key={boxAiPanel.id}
                 isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                data-target-id={`SidebarNavButton-$boxAI`}
-                data-testid={`sidebar${boxAiTab.id}`}
-                {...boxAiTab.navButtonProps}
+                data-target-id={`SidebarNavButton-boxAI`}
+                data-testid={`sidebar${boxAiPanel.id}`}
+                {...boxAiPanel.navButtonProps}
                 data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
-                isDisabled={boxAiTab.isDisabled}
+                isDisabled={boxAiPanel.isDisabled}
                 onClick={handleSidebarNavButtonClick}
-                sidebarView={boxAiTab.path}
-                tooltip={boxAiTab.title ?? boxAiTab.id}
+                sidebarView={boxAiPanel.path}
+                tooltip={boxAiPanel.title}
             >
                 {renderCustomPanelIcon(
-                    boxAiTab.icon,
+                    boxAiPanel.icon,
                     isPreviewModernizationEnabled,
                     <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />,
                     <BoxAiLogo height={Size6} width={Size6} />,
@@ -318,31 +318,31 @@ const SidebarNav = ({
 
     const visibleTabs = sidebarTabs.filter(Boolean);
 
-    if (hasOtherCustomTabs) {
-        otherCustomTabs.forEach(customTab => {
+    if (hasOtherCustomPanels) {
+        otherCustomPanels.forEach(customPanel => {
             const {
-                id: customTabId,
-                path: customTabPath,
-                icon: CustomTabIcon,
-                title: customTabTitle,
+                id: customPanelId,
+                path: customPanelPath,
+                icon: CustomPanelIcon,
+                title: customPanelTitle,
                 navButtonProps,
-            } = customTab;
+            } = customPanel;
 
-            const customTabButton = (
+            const customPanelButton = (
                 <SidebarNavButton
-                    key={customTabId}
+                    key={customPanelId}
                     isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                    data-resin-target={`sidebar${customTabId}`}
-                    data-target-id={`SidebarNavButton-${customTabId}`}
-                    data-testid={`sidebar${customTabId}`}
+                    data-resin-target={`sidebar${customPanelId}`}
+                    data-target-id={`SidebarNavButton-${customPanelId}`}
+                    data-testid={`sidebar${customPanelId}`}
                     {...navButtonProps}
-                    isDisabled={customTab.isDisabled}
+                    isDisabled={customPanel.isDisabled}
                     onClick={handleSidebarNavButtonClick}
-                    sidebarView={customTabPath}
-                    tooltip={customTabTitle ?? customTabId}
+                    sidebarView={customPanelPath}
+                    tooltip={customPanelTitle}
                 >
                     {renderCustomPanelIcon(
-                        CustomTabIcon,
+                        CustomPanelIcon,
                         isPreviewModernizationEnabled,
                         <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />,
                         <IconDocInfo className="bcs-SidebarNav-icon" />,
@@ -350,7 +350,7 @@ const SidebarNav = ({
                 </SidebarNavButton>
             );
 
-            visibleTabs.push(customTabButton); // Add at the end
+            visibleTabs.push(customPanelButton);
         });
     }
 

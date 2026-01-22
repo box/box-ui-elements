@@ -47,7 +47,7 @@ import type { CustomSidebarPanel } from './flowTypes';
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     boxAISidebarProps: BoxAISidebarProps,
-    customPanels?: Array<CustomSidebarPanel>,
+    customSidebarPanels?: Array<CustomSidebarPanel>,
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,
@@ -247,12 +247,12 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 
     getPanelOrder = (
-        customPanels?: Array<CustomSidebarPanel>,
+        customSidebarPanels?: Array<CustomSidebarPanel>,
         shouldBoxAIBeDefaultPanel: boolean,
         hasNativeBoxAISidebar: boolean,
     ): string[] => {
-        const customPanelPaths = customPanels ? customPanels.map(panel => panel.path) : [];
-        const boxAiCustomPanel = customPanels ? customPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI) : undefined;
+        const customPanelPaths = customSidebarPanels?.map(panel => panel.path) ?? [];
+        const boxAiCustomPanel = customSidebarPanels?.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
         const boxAiPath = boxAiCustomPanel ? boxAiCustomPanel.path : null;
         const nonBoxAIPaths = customPanelPaths.filter(path => path !== boxAiPath);
 
@@ -273,7 +273,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const {
             activitySidebarProps,
             boxAISidebarProps,
-            customPanels,
+            customSidebarPanels,
             currentUser,
             currentUserError,
             defaultPanel = '',
@@ -310,12 +310,12 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const canShowBoxAISidebarPanel = hasNativeBoxAISidebar && !showOnlyBoxAINavButton;
 
-        const hasCustomPanels = customPanels && customPanels.length > 0;
+        const hasCustomPanels = customSidebarPanels && customSidebarPanels.length > 0;
 
         const customPanelEligibility = {};
         if (hasCustomPanels) {
-            // $FlowFixMe: customPanels is checked for existence in hasCustomPanels
-            customPanels.forEach(({ id, path, isDisabled }) => {
+            // $FlowFixMe: customSidebarPanels is checked for existence in hasCustomPanels
+            customSidebarPanels.forEach(({ id, path, isDisabled }) => {
                 const isBoxAICustomPanel = id === SIDEBAR_VIEW_BOXAI;
                 const isEligible = isBoxAICustomPanel ? !canShowBoxAISidebarPanel && !isDisabled : !isDisabled;
                 customPanelEligibility[path] = isEligible;
@@ -375,8 +375,8 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasCustomPanels &&
-                    // $FlowFixMe: customPanels is checked for existence in hasCustomPanels
-                    customPanels.map(customPanel => {
+                    // $FlowFixMe: customSidebarPanels is checked for existence in hasCustomPanels
+                    customSidebarPanels.map(customPanel => {
                         const {
                             id: customPanelId,
                             path: customPanelPath,
@@ -579,7 +579,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         } else {
                             // Use panel order to determine redirect
                             const panelOrder = this.getPanelOrder(
-                                customPanels,
+                                customSidebarPanels,
                                 shouldBoxAIBeDefaultPanel,
                                 hasNativeBoxAISidebar,
                             );

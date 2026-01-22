@@ -33,7 +33,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
     const MockBoxAIIcon = () => <div data-testid="mock-boxai-icon">BoxAI Icon</div>;
 
     // Helper function to create Box AI custom tab
-    const createBoxAITab = (overrides = {}) => ({
+    const createBoxAIPanel = (overrides = {}) => ({
         id: 'boxai',
         path: 'boxai',
         title: 'Box AI',
@@ -125,7 +125,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
         renderSidebarNav({
             props: {
-                customTabs: [createBoxAITab()],
+                customSidebarPanels: [createBoxAIPanel()],
             },
         });
 
@@ -167,7 +167,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 hasActivity: true,
                 hasMetadata: true,
                 hasSkills: true,
-                customTabs: [createBoxAITab()],
+                customSidebarPanels: [createBoxAIPanel()],
             },
         });
 
@@ -228,14 +228,14 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(boxSignSection).toBeInTheDocument();
     });
 
-    describe('hasNativeBoxAISidebar and customTabs interaction', () => {
+    describe('hasNativeBoxAISidebar and customSidebarPanels interaction', () => {
         test('should render native Box AI when hasNativeBoxAISidebar is true, ignoring custom boxai tab', () => {
-            const boxAiTab = createBoxAITab({ title: 'Custom Box AI' });
+            const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI' });
 
             renderSidebarNav({
                 props: {
                     hasNativeBoxAISidebar: true,
-                    customTabs: [boxAiTab],
+                    customSidebarPanels: [boxAiPanel],
                 },
             });
 
@@ -248,12 +248,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
 
         test('should render custom boxai tab when hasNativeBoxAISidebar is false', () => {
-            const boxAiTab = createBoxAITab({ title: 'Custom Box AI Title' });
+            const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI Title' });
 
             renderSidebarNav({
                 props: {
                     hasNativeBoxAISidebar: false,
-                    customTabs: [boxAiTab],
+                    customSidebarPanels: [boxAiPanel],
                 },
             });
 
@@ -267,7 +267,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 props: {
                     hasNativeBoxAISidebar: false,
                     hasActivity: true,
-                    customTabs: [],
+                    customSidebarPanels: [],
                 },
             });
 
@@ -279,7 +279,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             // Mock icon component for custom tabs
             const MockCustomIcon = () => <div data-testid="mock-custom-icon">Custom Icon</div>;
 
-            const boxAiTab = createBoxAITab({ title: 'Custom Box AI' });
+            const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI' });
             const analyticsTab = {
                 id: 'analytics',
                 path: 'analytics',
@@ -293,7 +293,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 props: {
                     hasNativeBoxAISidebar: true,
                     hasActivity: true,
-                    customTabs: [boxAiTab, analyticsTab],
+                    customSidebarPanels: [boxAiPanel, analyticsTab],
                 },
             });
 
@@ -315,7 +315,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
     });
 
-    describe('multiple customTabs rendering', () => {
+    describe('multiple customSidebarPanels rendering', () => {
         // Mock icon component for custom tabs
         const MockCustomIcon = ({ testId }) => <div data-testid={testId || 'mock-custom-icon'}>Custom Icon</div>;
 
@@ -333,11 +333,11 @@ describe('elements/content-sidebar/SidebarNav', () => {
         test('should render multiple custom tabs including Box AI', () => {
             const customTab1 = createCustomTab('customtab1');
             const customTab2 = createCustomTab('customtab2');
-            const boxAiTab = createBoxAITab();
+            const boxAiPanel = createBoxAIPanel();
 
             renderSidebarNav({
                 props: {
-                    customTabs: [boxAiTab, customTab1, customTab2],
+                    customSidebarPanels: [boxAiPanel, customTab1, customTab2],
                 },
             });
 
@@ -357,11 +357,11 @@ describe('elements/content-sidebar/SidebarNav', () => {
         test('should render Box AI first even when passed in different order', () => {
             const customTab1 = createCustomTab('customtab1');
             const customTab2 = createCustomTab('customtab2');
-            const boxAiTab = createBoxAITab();
+            const boxAiPanel = createBoxAIPanel();
 
             renderSidebarNav({
                 props: {
-                    customTabs: [customTab1, boxAiTab, customTab2],
+                    customSidebarPanels: [customTab1, boxAiPanel, customTab2],
                 },
             });
 
@@ -375,13 +375,13 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
         test('should render custom tabs with regular tabs', () => {
             const customTab1 = createCustomTab('analytics');
-            const boxAiTab = createBoxAITab();
+            const boxAiPanel = createBoxAIPanel();
 
             renderSidebarNav({
                 props: {
                     hasActivity: true,
                     hasMetadata: true,
-                    customTabs: [boxAiTab, customTab1],
+                    customSidebarPanels: [boxAiPanel, customTab1],
                 },
             });
 
@@ -409,7 +409,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [disabledTab, customTitleTab],
+                    customSidebarPanels: [disabledTab, customTitleTab],
                 },
             });
 
@@ -431,7 +431,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             renderSidebarNav({
                 props: {
                     hasActivity: true,
-                    customTabs: [customTab1, customTab2],
+                    customSidebarPanels: [customTab1, customTab2],
                 },
             });
 
@@ -445,12 +445,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(navButtons).toHaveLength(3);
         });
 
-        test('should handle empty customTabs array', () => {
+        test('should handle empty customSidebarPanels array', () => {
             renderSidebarNav({
                 props: {
                     hasActivity: true,
                     hasMetadata: true,
-                    customTabs: [],
+                    customSidebarPanels: [],
                 },
             });
 
@@ -463,7 +463,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(navButtons).toHaveLength(2);
         });
 
-        test('should handle customTabs with icons', () => {
+        test('should handle customSidebarPanels with icons', () => {
             const MockIcon = () => <div data-testid="mock-icon">Icon</div>;
             const tabWithIcon = createCustomTab('icontest', {
                 icon: MockIcon,
@@ -472,7 +472,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [tabWithIcon],
+                    customSidebarPanels: [tabWithIcon],
                 },
             });
 
@@ -487,7 +487,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [customTab],
+                    customSidebarPanels: [customTab],
                     onPanelChange: onPanelChangeMock,
                 },
             });
@@ -513,12 +513,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
 
         test('should render custom Box AI tab with provided icon component', () => {
-            const boxAiTab = createBoxAITab({ icon: MockIconComponent });
+            const boxAiPanel = createBoxAIPanel({ icon: MockIconComponent });
 
             renderSidebarNav({
                 props: {
                     hasNativeBoxAISidebar: false,
-                    customTabs: [boxAiTab],
+                    customSidebarPanels: [boxAiPanel],
                 },
             });
 
@@ -527,12 +527,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
 
         test('should render custom Box AI tab with provided React element icon', () => {
-            const boxAiTab = createBoxAITab({ icon: mockIconElement });
+            const boxAiPanel = createBoxAIPanel({ icon: mockIconElement });
 
             renderSidebarNav({
                 props: {
                     hasNativeBoxAISidebar: false,
-                    customTabs: [boxAiTab],
+                    customSidebarPanels: [boxAiPanel],
                 },
             });
 
@@ -541,12 +541,12 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
 
         test('should render custom Box AI tab with default Box AI icon when no icon provided', () => {
-            const boxAiTab = createBoxAITab({ icon: undefined });
+            const boxAiPanel = createBoxAIPanel({ icon: undefined });
 
             renderSidebarNav({
                 props: {
                     hasNativeBoxAISidebar: false,
-                    customTabs: [boxAiTab],
+                    customSidebarPanels: [boxAiPanel],
                 },
             });
 
@@ -561,7 +561,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [customTab],
+                    customSidebarPanels: [customTab],
                 },
             });
 
@@ -574,7 +574,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [customTab],
+                    customSidebarPanels: [customTab],
                 },
             });
 
@@ -587,7 +587,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [customTab],
+                    customSidebarPanels: [customTab],
                 },
             });
 
@@ -598,7 +598,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
 
         test('should render default icons with modernized styles when previewModernization is enabled', () => {
-            const boxAiTab = createBoxAITab({ icon: undefined });
+            const boxAiPanel = createBoxAIPanel({ icon: undefined });
             const customTab = createCustomTab('analytics', { icon: undefined });
 
             renderSidebarNav({
@@ -609,7 +609,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 },
                 props: {
                     hasNativeBoxAISidebar: false,
-                    customTabs: [boxAiTab, customTab],
+                    customSidebarPanels: [boxAiPanel, customTab],
                 },
             });
 
@@ -628,7 +628,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 props: {
-                    customTabs: [tabWithComponent, tabWithElement, tabWithoutIcon],
+                    customSidebarPanels: [tabWithComponent, tabWithElement, tabWithoutIcon],
                 },
             });
 

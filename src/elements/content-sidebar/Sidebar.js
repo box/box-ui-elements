@@ -350,7 +350,7 @@ class Sidebar extends React.Component<Props, State> {
                         {hasNav && (
                             <SidebarNav
                                 additionalTabs={additionalTabs}
-                                customTabs={customSidebarPanels}
+                                customSidebarPanels={customSidebarPanels}
                                 elementId={this.id}
                                 fileId={fileId}
                                 hasActivity={hasActivity}
@@ -371,7 +371,7 @@ class Sidebar extends React.Component<Props, State> {
                             currentUser={currentUser}
                             currentUserError={currentUserError}
                             shouldFetchSidebarData={shouldFetchSidebarData}
-                            customPanels={customSidebarPanels}
+                            customSidebarPanels={customSidebarPanels}
                             elementId={this.id}
                             defaultPanel={defaultPanel}
                             detailsSidebarProps={detailsSidebarProps}
