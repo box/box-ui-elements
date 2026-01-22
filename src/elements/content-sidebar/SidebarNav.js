@@ -199,8 +199,12 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const boxAiPanel = customSidebarPanels?.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
-    const otherCustomPanels = customSidebarPanels?.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI) ?? [];
+    const boxAiPanel = customSidebarPanels
+        ? customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI)
+        : undefined;
+    const otherCustomPanels = customSidebarPanels
+        ? customSidebarPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI)
+        : [];
     const hasOtherCustomPanels = otherCustomPanels.length > 0;
 
     const sidebarTabs = [
