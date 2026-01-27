@@ -17,7 +17,7 @@ function isNumber(count?: number): count is number {
 
 function HeaderWithCount({ isRedesignEnabled, title, totalCount }: Props) {
     return (
-        <div className={classNames('HeaderWithCount', { 'HeaderWithCount--redesigned': isRedesignEnabled })}>
+        <div className={classNames(!isRedesignEnabled && 'HeaderWithCount')}>
             {isRedesignEnabled ? (
                 <>
                     <Text as="span" variant="bodyDefaultSemibold" color="textOnLightSecondary">

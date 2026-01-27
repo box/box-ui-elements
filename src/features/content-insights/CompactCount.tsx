@@ -19,13 +19,7 @@ function CompactCount({ className, count, intl, isRedesignEnabled, ...rest }: Pr
 
     if (isRedesignEnabled) {
         return (
-            <Text
-                as="span"
-                className={classNames(' ', className)}
-                color="textOnLightSecondary"
-                variant="bodyDefaultSemibold"
-                {...rest}
-            >
+            <Text as="span" className={className} color="textOnLightSecondary" variant="bodyDefaultSemibold" {...rest}>
                 {formattedCount}
             </Text>
         );

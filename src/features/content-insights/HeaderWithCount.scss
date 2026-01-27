@@ -1,6 +1,6 @@
 @import './mixins';
 
-.HeaderWithCount:not(.HeaderWithCount--redesigned) {
+.HeaderWithCount {
     @include ContentInsightsHeaderText;
 }
 
