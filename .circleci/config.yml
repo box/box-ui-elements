@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: cimg/node:22.20
+      - image: cimg/node:22.22
         user: root
     resource_class: large
     working_directory: ~/buie
@@ -56,6 +56,9 @@ jobs:
     executor: default
     steps:
       - checkout
+      - run:
+          name: Check Node version
+          command: node --version
       - restore-yarn-cache
       - yarn-install
       - save-yarn-cache
