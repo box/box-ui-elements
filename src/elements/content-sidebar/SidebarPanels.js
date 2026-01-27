@@ -230,9 +230,9 @@ class SidebarPanels extends React.Component<Props, State> {
             detailsSidebar.refresh();
         }
 
-        // Refresh all custom sidebars
+        // Refresh all custom sidebars (refresh is optional)
         this.customSidebars.forEach(ref => {
-            if (ref.current) {
+            if (ref.current && ref.current.refresh) {
                 ref.current.refresh();
             }
         });

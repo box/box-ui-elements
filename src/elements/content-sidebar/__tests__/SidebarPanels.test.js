@@ -759,6 +759,26 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             expect(instance.metadataSidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.versionsSidebar.current.refresh).toHaveBeenCalledWith();
         });
+
+        test('should not throw when custom sidebar does not implement refresh', () => {
+            const instance = getWrapper().find(SidebarPanels).instance();
+
+            // Custom sidebar without refresh method
+            instance.customSidebars.set('customPanel', { current: {} });
+
+            expect(() => instance.refresh()).not.toThrow();
+        });
+
+        test('should call refresh on custom sidebars that implement it', () => {
+            const instance = getWrapper().find(SidebarPanels).instance();
+            const mockRefresh = jest.fn();
+
+            instance.customSidebars.set('customPanel', { current: { refresh: mockRefresh } });
+
+            instance.refresh();
+
+            expect(mockRefresh).toHaveBeenCalled();
+        });
     });
 
     describe('componentDidUpdate', () => {
