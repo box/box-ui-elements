@@ -4,7 +4,8 @@
  */
 
 import IntlMessageFormat from 'intl-messageformat';
-import data, { NumbersData } from 'box-locale-data';
+import type { NumbersData } from '@box/cldr-data/types.d.ts';
+import data from 'box-locale-data';
 
 import isNaN from 'lodash/isNaN';
 

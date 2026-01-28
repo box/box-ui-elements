@@ -12,3 +12,9 @@ declare module '*.md' {
     const content: string;
     export = content;
 }
+
+declare module '@box/cldr-data/locale-data/*' {
+    import { LocaleData } from '@box/cldr-data/types.d.ts';
+    const data: LocaleData;
+    export default data;
+}
