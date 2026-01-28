@@ -736,6 +736,24 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { api } = item;
         api.cancel();
 
+        // Remove the file ID from itemIdsRef to allow re-uploading the same file
+        if (item.file) {
+            const { rootFolderId } = this.props;
+
+            // Delete both IDs that were added:
+            // 1. Simple filename (added in addFilesToUploadQueue)
+            const simpleFileId = item.file.name;
+            // 2. Full ID with timestamp (added in addFilesWithoutRelativePathToQueue)
+            const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
+            const fullFileId = getFileId(fileWithOptions, rootFolderId);
+
+            delete this.itemIdsRef.current[simpleFileId];
+            delete this.itemIdsRef.current[fullFileId];
+
+            const newItemIds = { ...this.itemIdsRef.current };
+            this.setState({ itemIds: newItemIds });
+        }
+
         const itemIndex = this.itemsRef.current.indexOf(item);
         const updatedItems = this.itemsRef.current
             .slice(0, itemIndex)
