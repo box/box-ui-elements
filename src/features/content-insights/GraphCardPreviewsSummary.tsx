@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 import { injectIntl, IntlShape } from 'react-intl';
 
 import BarChart from './charts/bar/BarChart';
@@ -12,22 +13,26 @@ import './GraphCardPreviewsSummary.scss';
 interface Props {
     graphData: GraphData;
     intl: IntlShape;
+    isRedesignEnabled?: boolean;
     previousPeriodCount: number;
     totalCount: number;
 }
 
-function GraphCardPreviewsSummary({ graphData, intl, previousPeriodCount, totalCount }: Props) {
+function GraphCardPreviewsSummary({ graphData, intl, isRedesignEnabled, previousPeriodCount, totalCount }: Props) {
     return (
         <>
             <MetricSummary
                 data={graphData}
+                isRedesignEnabled={isRedesignEnabled}
                 metric={METRIC.PREVIEWS}
                 period={PERIOD.WEEK}
                 previousPeriodCount={previousPeriodCount}
                 totalCount={totalCount}
             />
             <BarChart
-                className="GraphCardPreviewsSummary-chart"
+                className={classNames('GraphCardPreviewsSummary-chart', {
+                    'GraphCardPreviewsSummary-chart--redesigned': isRedesignEnabled,
+                })}
                 data={graphData}
                 label={intl.formatMessage(messages.previewGraphLabel)}
                 labelAccessor="start"

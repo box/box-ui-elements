@@ -7,4 +7,8 @@
     .ca-Bar-value {
         background: $ContentInsights-chart-color-previews;
     }
+
+    &.GraphCardPreviewsSummary-chart--redesigned {
+        margin-top: $bdl-grid-unit * 4.5;
+    }
 }
