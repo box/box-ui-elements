@@ -54,7 +54,7 @@ const config: StorybookConfig = {
         webpack.resolve = webpack.resolve || {};
         webpack.resolve.alias = {
             ...webpack.resolve.alias,
-            'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
+            'box-ui-elements-locale-data': path.resolve(`i18n/bundles/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
