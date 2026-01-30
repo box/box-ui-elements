@@ -1,2 +1,5 @@
 // @flow
-declare export default { [key: string]: string }
+declare export var language: string;
+declare export var locale: string;
+declare export var messages: { [key: string]: string };
+declare export var boxCldrData: any;
