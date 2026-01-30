@@ -48,7 +48,7 @@ const getConfig = isReactBundle => {
             modules: ['src', 'node_modules'],
             extensions: ['.tsx', '.ts', '.js'],
             alias: {
-                'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
+                'box-ui-elements-locale-data': path.resolve(`i18n/bundles/${language}`),
                 'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
             },
         },
