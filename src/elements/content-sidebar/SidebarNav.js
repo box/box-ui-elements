@@ -118,25 +118,14 @@ const DocGenIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrap
 };
 
 /**
- * Renders a custom panel icon with fallback support.
- * Handles React elements, component types, and provides default icons when none specified.
+ * Renders a custom panel icon.
+ * Handles both React elements and component types.
  */
-const renderCustomPanelIcon = (
-    icon?: React.ComponentType<any> | React.Element<any>,
-    isPreviewModernizationEnabled: boolean,
-    defaultModernIcon: React.Node,
-    defaultLegacyIcon: React.Node,
-): React.Node => {
-    if (!icon) {
-        return isPreviewModernizationEnabled ? defaultModernIcon : defaultLegacyIcon;
-    }
-
+const renderCustomPanelIcon = (icon: React.ComponentType<any> | React.Element<any>): React.Node => {
     if (React.isValidElement(icon)) {
-        // Icon is already a React element, return as-is
         return (icon: any);
     }
 
-    // Icon is a component type, render it
     const IconComponent: React.ComponentType<any> = (icon: any);
     return <IconComponent className="bcs-SidebarNav-icon" />;
 };
@@ -240,12 +229,7 @@ const SidebarNav = ({
                 sidebarView={boxAiPanel.path}
                 tooltip={boxAiPanel.title}
             >
-                {renderCustomPanelIcon(
-                    boxAiPanel.icon,
-                    isPreviewModernizationEnabled,
-                    <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />,
-                    <BoxAiLogo height={Size6} width={Size6} />,
-                )}
+                {renderCustomPanelIcon(boxAiPanel.icon)}
             </SidebarNavButton>
         ),
         hasActivity && (
@@ -345,12 +329,7 @@ const SidebarNav = ({
                       sidebarView={customPanelPath}
                       tooltip={customPanelTitle}
                   >
-                      {renderCustomPanelIcon(
-                          customPanelIcon,
-                          isPreviewModernizationEnabled,
-                          <InformationCircleIcon {...SIDEBAR_TAB_ICON_PROPS} />,
-                          <IconDocInfo className="bcs-SidebarNav-icon" />,
-                      )}
+                      {renderCustomPanelIcon(customPanelIcon)}
                   </SidebarNavButton>
               );
           })

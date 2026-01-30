@@ -33,14 +33,19 @@ type AdditionalSidebarTab = {
     icon?: React.Node,
 };
 
+type NavButtonOverrideProps = {
+    'aria-label'?: string,
+    'aria-describedby'?: string,
+};
+
 type CustomSidebarPanel = {
     id: string,
     path: string,
     component: React.ComponentType<any>,
     title: string,
     isDisabled?: boolean,
-    icon?: React.ComponentType<any> | React.Element<any>,
-    navButtonProps?: { [key: string]: mixed },
+    icon: React.ComponentType<any> | React.Element<any>,
+    navButtonProps?: NavButtonOverrideProps,
 };
 
 type CustomSidebarPanels = Array<CustomSidebarPanel>;
