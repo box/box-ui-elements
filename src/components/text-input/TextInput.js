@@ -85,6 +85,7 @@ const TextInput = ({
                 <Tooltip
                     isShown={hasError}
                     position={errorPosition || 'middle-right'}
+                    targetWrapperClassName="text-input-tooltip-target"
                     tetherElementClassName={tooltipTetherClassName}
                     text={error || ''}
                     theme="error"
