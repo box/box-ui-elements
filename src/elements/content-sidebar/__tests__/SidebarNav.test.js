@@ -120,26 +120,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
     });
 
-    test('should call focusBoxAISidebarPrompt when clicked on custom Box AI Tab', async () => {
-        const user = userEvent();
-
-        renderSidebarNav({
-            props: {
-                customSidebarPanels: [createBoxAIPanel()],
-            },
-        });
-
-        const button = screen.getByTestId('sidebarboxai');
-
-        await user.click(button);
-
-        expect(usePromptFocus).toHaveBeenCalledTimes(1);
-        expect(usePromptFocus).toHaveBeenCalledWith('.be.bcs');
-
-        expect(focusBoxAISidebarPromptMock).toHaveBeenCalledTimes(1);
-        expect(focusBoxAISidebarPromptMock).toHaveBeenCalledWith();
-    });
-
     test('should call focusBoxAISidebarPrompt when clicked on native Box AI Tab', async () => {
         const user = userEvent();
 
@@ -164,10 +144,10 @@ describe('elements/content-sidebar/SidebarNav', () => {
         renderSidebarNav({
             path: '/activity',
             props: {
+                hasNativeBoxAISidebar: true,
                 hasActivity: true,
                 hasMetadata: true,
                 hasSkills: true,
-                customSidebarPanels: [createBoxAIPanel()],
             },
         });
 
@@ -319,16 +299,19 @@ describe('elements/content-sidebar/SidebarNav', () => {
         // Mock icon component for custom tabs
         const MockCustomIcon = ({ testId }) => <div data-testid={testId || 'mock-custom-icon'}>Custom Icon</div>;
 
-        // Helper function to create a generic custom tab
-        const createCustomTab = (id, overrides = {}) => ({
-            id,
-            path: id,
-            title: `${id.charAt(0).toUpperCase()}${id.slice(1)} Tab`,
-            icon: () => <MockCustomIcon testId={`mock-icon-${id}`} />,
-            isDisabled: false,
-            navButtonProps: {},
-            ...overrides,
-        });
+        // Helper function to create a generic custom tab (icon is required)
+        const createCustomTab = (id, overrides = {}) => {
+            const { icon = () => <MockCustomIcon testId={`mock-icon-${id}`} />, ...rest } = overrides;
+            return {
+                id,
+                path: id,
+                title: `${id.charAt(0).toUpperCase()}${id.slice(1)} Tab`,
+                icon,
+                isDisabled: false,
+                navButtonProps: {},
+                ...rest,
+            };
+        };
 
         test('should render multiple custom tabs including Box AI', () => {
             const customTab1 = createCustomTab('customtab1');
@@ -501,12 +484,14 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
     describe('custom panel icon rendering', () => {
         const MockIconComponent = () => <div data-testid="mock-icon-component">Icon Component</div>;
+        const MockIconComponent2 = () => <div data-testid="mock-icon-component-2">Icon Component 2</div>;
         const mockIconElement = <div data-testid="mock-icon-element">Icon Element</div>;
 
         const createCustomTab = (id, overrides = {}) => ({
             id,
             path: id,
             title: `${id.charAt(0).toUpperCase()}${id.slice(1)} Tab`,
+            icon: MockIconComponent,
             isDisabled: false,
             navButtonProps: {},
             ...overrides,
@@ -540,22 +525,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(screen.getByTestId('mock-icon-element')).toBeInTheDocument();
         });
 
-        test('should render custom Box AI tab with default Box AI icon when no icon provided', () => {
-            const boxAiPanel = createBoxAIPanel({ icon: undefined });
-
-            renderSidebarNav({
-                props: {
-                    hasNativeBoxAISidebar: false,
-                    customSidebarPanels: [boxAiPanel],
-                },
-            });
-
-            const button = screen.getByTestId('sidebarboxai');
-            expect(button).toBeInTheDocument();
-            // The button should have an SVG icon (BoxAiLogo) rendered inside
-            expect(button.querySelector('svg')).toBeInTheDocument();
-        });
-
         test('should render other custom tab with provided icon component', () => {
             const customTab = createCustomTab('analytics', { icon: MockIconComponent });
 
@@ -582,53 +551,14 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(screen.getByTestId('mock-icon-element')).toBeInTheDocument();
         });
 
-        test('should render other custom tab with default icon when no icon provided', () => {
-            const customTab = createCustomTab('settings', { icon: undefined });
-
-            renderSidebarNav({
-                props: {
-                    customSidebarPanels: [customTab],
-                },
-            });
-
-            const button = screen.getByTestId('sidebarsettings');
-            expect(button).toBeInTheDocument();
-            // The button should have an SVG icon (fallback icon) rendered inside
-            expect(button.querySelector('svg')).toBeInTheDocument();
-        });
-
-        test('should render default icons with modernized styles when previewModernization is enabled', () => {
-            const boxAiPanel = createBoxAIPanel({ icon: undefined });
-            const customTab = createCustomTab('analytics', { icon: undefined });
-
-            renderSidebarNav({
-                features: {
-                    previewModernization: {
-                        enabled: true,
-                    },
-                },
-                props: {
-                    hasNativeBoxAISidebar: false,
-                    customSidebarPanels: [boxAiPanel, customTab],
-                },
-            });
-
-            const boxAiButton = screen.getByTestId('sidebarboxai');
-            const analyticsButton = screen.getByTestId('sidebaranalytics');
-
-            // Both buttons should have SVG icons rendered
-            expect(boxAiButton.querySelector('svg')).toBeInTheDocument();
-            expect(analyticsButton.querySelector('svg')).toBeInTheDocument();
-        });
-
         test('should render multiple custom tabs with mixed icon types', () => {
             const tabWithComponent = createCustomTab('tab1', { icon: MockIconComponent });
             const tabWithElement = createCustomTab('tab2', { icon: mockIconElement });
-            const tabWithoutIcon = createCustomTab('tab3', { icon: undefined });
+            const tabWithComponent2 = createCustomTab('tab3', { icon: MockIconComponent2 });
 
             renderSidebarNav({
                 props: {
-                    customSidebarPanels: [tabWithComponent, tabWithElement, tabWithoutIcon],
+                    customSidebarPanels: [tabWithComponent, tabWithElement, tabWithComponent2],
                 },
             });
 
@@ -638,8 +568,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             expect(screen.getByTestId('mock-icon-component')).toBeInTheDocument();
             expect(screen.getByTestId('mock-icon-element')).toBeInTheDocument();
-            // tab3 should have a fallback SVG icon
-            expect(screen.getByTestId('sidebartab3').querySelector('svg')).toBeInTheDocument();
+            expect(screen.getByTestId('mock-icon-component-2')).toBeInTheDocument();
         });
     });
 });

@@ -317,10 +317,9 @@ class SidebarPanels extends React.Component<Props, State> {
         const customPanelEligibility = {};
         if (hasCustomPanels) {
             // $FlowFixMe: customSidebarPanels is checked for existence in hasCustomPanels
-            customSidebarPanels.forEach(({ id, path, isDisabled }) => {
-                const isBoxAICustomPanel = id === SIDEBAR_VIEW_BOXAI;
-                const isEligible = isBoxAICustomPanel ? !canShowBoxAISidebarPanel && !isDisabled : !isDisabled;
-                customPanelEligibility[path] = isEligible;
+            // Custom panels take precedence over native (handled by Sidebar.js setting hasNativeBoxAISidebar)
+            customSidebarPanels.forEach(({ path, isDisabled }) => {
+                customPanelEligibility[path] = !isDisabled;
             });
         }
 
@@ -352,7 +351,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         return (
             <Switch>
-                {/* Native Box AI route - takes precedence when hasNativeBoxAISidebar is true */}
+                {/* Native Box AI route - only shown when no custom Box AI panel exists */}
                 {canShowBoxAISidebarPanel && (
                     <Route
                         exact
@@ -385,12 +384,6 @@ class SidebarPanels extends React.Component<Props, State> {
                             component: CustomPanelComponent,
                             isDisabled,
                         } = customPanel;
-
-                        const isBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
-                        // Skip custom Box AI only when native Box AI can show its panel
-                        if (isBoxAICustomPanel && canShowBoxAISidebarPanel) {
-                            return null;
-                        }
 
                         if (isDisabled || !CustomPanelComponent) {
                             return null;

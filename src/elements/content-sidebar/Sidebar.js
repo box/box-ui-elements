@@ -326,6 +326,7 @@ class Sidebar extends React.Component<Props, State> {
             ? customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI)
             : false;
         const isBoxAIEnabled = SidebarUtils.canHaveBoxAISidebar(this.props);
+        // Custom Box AI takes precedence over native when both exist
         const hasNativeBoxAISidebar = isBoxAIEnabled && !hasCustomBoxAISidebar;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
