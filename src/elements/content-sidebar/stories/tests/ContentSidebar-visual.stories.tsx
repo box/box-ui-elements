@@ -12,16 +12,7 @@ const MockCustomPanel = React.forwardRef<HTMLDivElement, { title: string }>(({ t
 ));
 MockCustomPanel.displayName = 'MockCustomPanel';
 
-const MockCustomBoxAIPanel = React.forwardRef<HTMLDivElement>((props, ref) => (
-    <div ref={ref} style={{ padding: '20px' }} data-testid="custom-boxai-panel">
-        <h2>Custom Box AI Panel</h2>
-        <p>This is a custom Box AI implementation provided by the consumer.</p>
-    </div>
-));
-MockCustomBoxAIPanel.displayName = 'MockCustomBoxAIPanel';
-
 const MockIcon = () => <span>📋</span>;
-const MockBoxAIIcon = () => <span>🤖</span>;
 
 const DISABLED_TOOLTIP = 'Box AI is not available for this file type';
 
@@ -33,23 +24,10 @@ const customPanelConfig: CustomSidebarPanel = {
     icon: MockIcon,
 };
 
-const customBoxAIPanelConfig: CustomSidebarPanel = {
-    id: 'boxai',
-    path: 'boxai',
-    component: MockCustomBoxAIPanel,
-    title: 'Custom Box AI',
-    icon: MockBoxAIIcon,
-};
-
-const customBoxAIPanelDisabledConfig: CustomSidebarPanel = {
-    ...customBoxAIPanelConfig,
-    isDisabled: true,
-    navButtonProps: { 'aria-label': DISABLED_TOOLTIP },
-};
-
 const defaultFeatures = {
     ...global.FEATURE_FLAGS,
     metadata: { redesign: { enabled: true } },
+    boxai: { sidebar: { enabled: true } },
 };
 
 export default {
@@ -87,13 +65,6 @@ export const ContentSidebarDetailsTab: StoryObj<typeof ContentSidebarComponent> 
 };
 
 // Custom Panels
-export const WithCustomPanel: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: defaultFeatures,
-        customSidebarPanels: [customPanelConfig],
-    },
-};
-
 export const WithMultipleCustomPanels: StoryObj<typeof ContentSidebarComponent> = {
     args: {
         features: defaultFeatures,
@@ -110,110 +81,13 @@ export const WithMultipleCustomPanels: StoryObj<typeof ContentSidebarComponent> 
     },
 };
 
-export const CustomPanelAsDefault: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: { ...defaultFeatures, boxai: { sidebar: { enabled: false } } },
-        hasActivityFeed: false,
-        hasMetadata: false,
-        hasSkills: false,
-        customSidebarPanels: [customPanelConfig],
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(() => expect(canvas.getByTestId('sidebarcustomPanel')).toBeInTheDocument(), { timeout: 5000 });
-    },
-};
-
 // Native Box AI
-export const NativeBoxAIAsDefault: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: { ...defaultFeatures, boxai: { sidebar: { enabled: true, shouldBeDefaultPanel: true } } },
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(
-            () => {
-                const boxAiButton = canvas.getByTestId('sidebarboxai');
-                expect(boxAiButton).toHaveAttribute('aria-selected', 'true');
-            },
-            { timeout: 5000 },
-        );
-    },
-};
-
-export const NativeBoxAINotDefault: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: { ...defaultFeatures, boxai: { sidebar: { enabled: true, shouldBeDefaultPanel: false } } },
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(
-            () => {
-                const boxAiButton = canvas.getByTestId('sidebarboxai');
-                expect(boxAiButton).toHaveAttribute('aria-selected', 'false');
-            },
-            { timeout: 5000 },
-        );
-    },
-};
-
 export const NativeBoxAIDisabled: StoryObj<typeof ContentSidebarComponent> = {
     args: {
         features: {
             ...defaultFeatures,
             boxai: { sidebar: { enabled: true, showOnlyNavButton: true, disabledTooltip: DISABLED_TOOLTIP } },
         },
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(
-            () => {
-                const boxAiButton = canvas.getByTestId('sidebarboxai');
-                expect(boxAiButton).toHaveAttribute('aria-disabled', 'true');
-                expect(boxAiButton).toHaveClass('bdl-is-disabled');
-                expect(boxAiButton).toHaveAttribute('aria-selected', 'false');
-            },
-            { timeout: 5000 },
-        );
-    },
-};
-
-// Custom Box AI
-export const CustomBoxAIAsDefault: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: { ...defaultFeatures, boxai: { sidebar: { enabled: false, shouldBeDefaultPanel: true } } },
-        customSidebarPanels: [customBoxAIPanelConfig],
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(
-            () => {
-                const boxAiButton = canvas.getByTestId('sidebarboxai');
-                expect(boxAiButton).toHaveAttribute('aria-selected', 'true');
-                expect(canvas.getByTestId('custom-boxai-panel')).toBeInTheDocument();
-            },
-            { timeout: 5000 },
-        );
-    },
-};
-
-export const CustomBoxAINotDefault: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: { ...defaultFeatures, boxai: { sidebar: { enabled: false, shouldBeDefaultPanel: false } } },
-        customSidebarPanels: [customBoxAIPanelConfig],
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(() => expect(canvas.getByTestId('sidebarboxai')).toHaveAttribute('aria-selected', 'false'), {
-            timeout: 5000,
-        });
-    },
-};
-
-export const CustomBoxAIDisabled: StoryObj<typeof ContentSidebarComponent> = {
-    args: {
-        features: { ...defaultFeatures, boxai: { sidebar: { enabled: false } } },
-        customSidebarPanels: [customBoxAIPanelDisabledConfig],
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
