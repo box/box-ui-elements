@@ -121,7 +121,7 @@ const DocGenIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrap
  * Renders a custom panel icon.
  * Handles both React elements and component types.
  */
-const renderCustomPanelIcon = (icon: React.ComponentType<any> | React.Element<any>): React.Node => {
+const renderCustomPanelIcon = (icon: React.ComponentType<any> | React.Element<any>): React.Element<any> => {
     if (React.isValidElement(icon)) {
         return (icon: any);
     }
@@ -132,7 +132,7 @@ const renderCustomPanelIcon = (icon: React.ComponentType<any> | React.Element<an
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
-    customSidebarPanels?: Array<CustomSidebarPanel>,
+    customSidebarPanels: Array<CustomSidebarPanel>,
     elementId: string,
     fileId: string,
     hasActivity: boolean,
@@ -188,12 +188,8 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const boxAiPanel = customSidebarPanels
-        ? customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI)
-        : undefined;
-    const otherCustomPanels = customSidebarPanels
-        ? customSidebarPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI)
-        : [];
+    const boxAiPanel = customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
+    const otherCustomPanels = customSidebarPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI);
     const hasOtherCustomPanels = otherCustomPanels.length > 0;
 
     const sidebarTabs = [

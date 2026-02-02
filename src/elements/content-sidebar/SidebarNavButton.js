@@ -26,9 +26,9 @@ type Props = {
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled?: boolean,
     isOpen?: boolean,
-    onClick?: (sidebarView: ViewTypeValues) => void,
+    onClick?: (sidebarView: ViewTypeValues | string) => void,
     routerDisabled?: boolean,
-    sidebarView: ViewTypeValues,
+    sidebarView: ViewTypeValues | string,
     tooltip: React.Node,
 };
 

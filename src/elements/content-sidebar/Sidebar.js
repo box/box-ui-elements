@@ -301,7 +301,7 @@ class Sidebar extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             shouldFetchSidebarData,
-            customSidebarPanels,
+            customSidebarPanels = [],
             detailsSidebarProps,
             docGenSidebarProps,
             file,
@@ -322,9 +322,7 @@ class Sidebar extends React.Component<Props, State> {
         }: Props = this.props;
         const isOpen = this.isOpen();
 
-        const hasCustomBoxAISidebar = customSidebarPanels
-            ? customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI)
-            : false;
+        const hasCustomBoxAISidebar = customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI);
         const isBoxAIEnabled = SidebarUtils.canHaveBoxAISidebar(this.props);
         // Custom Box AI takes precedence over native when both exist
         const hasNativeBoxAISidebar = isBoxAIEnabled && !hasCustomBoxAISidebar;

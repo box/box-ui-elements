@@ -47,7 +47,7 @@ import type { CustomSidebarPanel } from './flowTypes';
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     boxAISidebarProps: BoxAISidebarProps,
-    customSidebarPanels?: Array<CustomSidebarPanel>,
+    customSidebarPanels: Array<CustomSidebarPanel>,
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,
@@ -247,14 +247,12 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 
     getPanelOrder = (
-        customSidebarPanels?: Array<CustomSidebarPanel>,
+        customSidebarPanels: Array<CustomSidebarPanel> = [],
         shouldBoxAIBeDefaultPanel: boolean,
         hasNativeBoxAISidebar: boolean,
     ): string[] => {
-        const customPanelPaths = customSidebarPanels ? customSidebarPanels.map(panel => panel.path) : [];
-        const boxAiCustomPanel = customSidebarPanels
-            ? customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI)
-            : undefined;
+        const customPanelPaths = customSidebarPanels.map(panel => panel.path);
+        const boxAiCustomPanel = customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
         const boxAiPath = boxAiCustomPanel ? boxAiCustomPanel.path : null;
         const nonBoxAIPaths = customPanelPaths.filter(path => path !== boxAiPath);
 
@@ -312,16 +310,13 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const canShowBoxAISidebarPanel = hasNativeBoxAISidebar && !showOnlyBoxAINavButton;
 
-        const hasCustomPanels = customSidebarPanels && customSidebarPanels.length > 0;
+        const hasCustomPanels = customSidebarPanels.length > 0;
 
-        const customPanelEligibility = {};
-        if (hasCustomPanels) {
-            // $FlowFixMe: customSidebarPanels is checked for existence in hasCustomPanels
-            // Custom panels take precedence over native (handled by Sidebar.js setting hasNativeBoxAISidebar)
-            customSidebarPanels.forEach(({ path, isDisabled }) => {
-                customPanelEligibility[path] = !isDisabled;
-            });
-        }
+        const customPanelsEligibility = {};
+        // Custom panels take precedence over native (handled by Sidebar.js setting hasNativeBoxAISidebar)
+        customSidebarPanels.forEach(({ path, isDisabled }) => {
+            customPanelsEligibility[path] = !isDisabled;
+        });
 
         const panelsEligibility = {
             [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
@@ -330,7 +325,7 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
             [SIDEBAR_VIEW_DETAILS]: hasDetails,
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
-            ...customPanelEligibility,
+            ...customPanelsEligibility,
         };
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
@@ -376,7 +371,6 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasCustomPanels &&
-                    // $FlowFixMe: customSidebarPanels is checked for existence in hasCustomPanels
                     customSidebarPanels.map(customPanel => {
                         const {
                             id: customPanelId,

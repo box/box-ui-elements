@@ -48,8 +48,6 @@ type CustomSidebarPanel = {
     navButtonProps?: NavButtonOverrideProps,
 };
 
-type CustomSidebarPanels = Array<CustomSidebarPanel>;
-
 type Translations = {
     onTranslate?: Function,
     translationEnabled?: boolean,
@@ -67,7 +65,6 @@ export type {
     ClassificationInfo,
     ContentInsights,
     CustomSidebarPanel,
-    CustomSidebarPanels,
     NavigateOptions,
     AdditionalSidebarTab,
     AdditionalSidebarTabFtuxData,
