@@ -37,6 +37,8 @@ type Props = {
     labelTooltip?: React.Node,
     /** A CSS class for the tooltip's tether element component */
     tooltipTetherClassName?: string,
+    /** A CSS class for the tooltip's target wrapper element */
+    tooltipWrapperClassName?: string,
 };
 
 const TextInput = ({
@@ -53,7 +55,8 @@ const TextInput = ({
     isValid,
     label,
     labelTooltip,
-    tooltipTetherClassName,
+    tooltipTetherClassName: tetherElementClassName,
+    tooltipWrapperClassName,
     ...rest
 }: Props) => {
     const hasError = !!error;
@@ -85,7 +88,8 @@ const TextInput = ({
                 <Tooltip
                     isShown={hasError}
                     position={errorPosition || 'middle-right'}
-                    tetherElementClassName={tooltipTetherClassName}
+                    targetWrapperClassName={tooltipWrapperClassName}
+                    tetherElementClassName={tetherElementClassName}
                     text={error || ''}
                     theme="error"
                 >

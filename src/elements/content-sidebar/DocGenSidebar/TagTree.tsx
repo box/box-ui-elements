@@ -25,7 +25,6 @@ const TagTree = ({ data, level = 0 }: TagTreeProps) => {
                             <Accordion.Item
                                 value={key}
                                 key={`${key}-${level}`}
-                                style={{ paddingLeft: `${level * 12}px` }}
                                 fixed
                                 className="bcs-DocGen-collapsible"
                             >
@@ -40,7 +39,6 @@ const TagTree = ({ data, level = 0 }: TagTreeProps) => {
                             value={key}
                             title={key}
                             key={`${key}-${level}`}
-                            style={{ paddingLeft: `${level * 12}px` }}
                             className="bcs-DocGen-collapsible"
                         >
                             {data[key] && <TagTree data={data[key]} level={level + 1} />}

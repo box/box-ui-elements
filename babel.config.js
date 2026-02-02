@@ -11,7 +11,7 @@ module.exports = {
     ],
     overrides: [
         {
-            test: ['./src/**/*.ts', './src/**/*.tsx'],
+            test: ['./src/**/*.ts', './src/**/*.tsx', './node_modules/@box/**/*.ts', './node_modules/@box/**/*.tsx'],
             presets: [
                 [
                     '@babel/preset-env',

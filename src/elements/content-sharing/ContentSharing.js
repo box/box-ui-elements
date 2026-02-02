@@ -8,20 +8,24 @@
  */
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
+
+import type { Configuration } from '@box/unified-share-modal';
 import API from '../../api';
-// $FlowFixMe
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
+
 import { isFeatureEnabled } from '../common/feature-checking';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
-import SharingModal from './SharingModal';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 // $FlowFixMe
 import ContentSharingV2 from './ContentSharingV2';
-import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
+import SharingModal from './SharingModal';
 
+import type { FeatureConfig } from '../common/feature-checking';
 import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
-import type { FeatureConfig } from '../common/feature-checking';
+
+import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
 
 import '../common/base.scss';
 import '../common/fonts.scss';
@@ -33,7 +37,7 @@ type ContentSharingProps = {
     /** children - Children for the element to open the Unified Share Modal */
     children?: React.Element<any>,
     /** config - Configuration object that shows/hides features in the USM */
-    config?: USMConfig,
+    config?: USMConfig | Configuration,
     /**
      * customButton - Clickable element for opening the SharingModal component.
      * This property should always be used in conjunction with displayInModal.
@@ -121,7 +125,7 @@ function ContentSharing({
             api && (
                 <Internationalize language={language} messages={messages}>
                     <Providers hasProviders={hasProviders}>
-                        <ContentSharingV2 api={api} itemId={itemID} itemType={itemType}>
+                        <ContentSharingV2 api={api} config={config} itemId={itemID} itemType={itemType}>
                             {children}
                         </ContentSharingV2>
                     </Providers>

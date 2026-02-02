@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import uiElementsLocaleData from 'box-ui-elements-locale-data'; // eslint-disable-line
+import { messages as uiElementsLocaleData } from 'box-ui-elements-locale-data';
 
 declare var __LANGUAGE__: string;
 

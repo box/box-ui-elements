@@ -2,13 +2,19 @@
 
 .MetricSummary-periodCount {
     font-size: 21px;
+    margin-right: $bdl-grid-unit * 2;
+}
+
+.MetricSummary .MetricSummary-periodCount--redesigned {
+    color: $bdl-gray-80;
 }
 
 .MetricSummary-period {
     display: flex;
+    align-items: center;
     margin-top: $bdl-grid-unit * 1.5;
 
-    .MetricSummary-periodCount {
-        margin-right: $bdl-grid-unit * 2;
+    &--redesigned {
+        margin-top: 0;
     }
 }

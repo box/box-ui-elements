@@ -165,9 +165,22 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         });
 
         renderComponent();
-        await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /Box Development Guide.pdf/i })).toBeVisible();
-        });
+        expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+    });
+
+    test('should render UnifiedShareModal when custom config is provided', async () => {
+        renderComponent({ config: { collaborationLimit: 3 } });
+        expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+    });
+
+    test('should allow custom config to override default config', async () => {
+        const apiWithSharedLink = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
+        };
+        renderComponent({ api: apiWithSharedLink, config: { sharedLinkEmail: true } });
+        expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+        expect(await screen.findByRole('button', { name: 'Send Shared Link' })).toBeVisible();
     });
 
     describe('getError function', () => {

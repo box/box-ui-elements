@@ -9,4 +9,8 @@
         margin-right: 0;
         margin-left: 0;
     }
+
+    &--redesigned .OpenContentInsightsButton {
+        margin-top: $bdl-grid-unit * 4.5;
+    }
 }

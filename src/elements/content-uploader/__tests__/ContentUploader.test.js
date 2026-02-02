@@ -217,6 +217,41 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(instance.itemsRef.current.length).toBe(0);
         });
 
+        test('should allow re-uploading after cancellation', () => {
+            const file = new File(['contents'], 'test.txt', { type: 'text/plain' });
+            const uploadItem = {
+                api: { cancel: jest.fn() },
+                file,
+                name: 'test.txt',
+                status: STATUS_PENDING,
+                options: { folderId: 0, uploadInitTimestamp: 12345 },
+            };
+
+            // Set up initial state with both file IDs tracked
+            wrapper.setState({
+                items: [uploadItem],
+                itemIds: { 'test.txt': true, 'test.txt_0_12345': true },
+            });
+            instance.itemsRef.current = [uploadItem];
+            instance.itemIdsRef.current = { 'test.txt': true, 'test.txt_0_12345': true };
+
+            // Remove the file
+            instance.removeFileFromUploadQueue(uploadItem);
+
+            // Verify both file IDs were removed from tracking
+            expect(instance.itemIdsRef.current['test.txt']).toBeUndefined();
+            expect(instance.itemIdsRef.current['test.txt_0_12345']).toBeUndefined();
+            expect(wrapper.state().itemIds['test.txt']).toBeUndefined();
+            expect(wrapper.state().itemIds['test.txt_0_12345']).toBeUndefined();
+
+            // Try to add the same file again
+            const newFiles = instance.getNewFiles([file]);
+
+            // Should not be filtered out since IDs were removed
+            expect(newFiles.length).toBe(1);
+            expect(newFiles[0]).toBe(file);
+        });
+
         test.each`
             view                       | action
             ${VIEW_ERROR}              | ${'should not'}
