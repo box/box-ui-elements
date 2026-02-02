@@ -25,3 +25,9 @@
         margin-left: -2px;
     }
 }
+
+.bcs-VersionsItemActions {
+    &.dropdown-menu-element {
+        z-index: $overlay-z-index;
+    }
+}

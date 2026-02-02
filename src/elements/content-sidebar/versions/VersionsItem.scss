@@ -18,21 +18,17 @@
         }
     }
 
-    .bcs-VersionsItemActions-toggle {
+    .bcs-VersionsItemActions-targetWrapper {
         position: absolute;
         top: $bcs-VersionsItemButton-vertical;
         right: $bcs-VersionsItemButton-horizontal;
+    }
 
+    .bcs-VersionsItemActions-toggle {
         &:focus {
             border: $bdl-btn-border-width solid $primary-color;
             box-shadow: $bdl-btn-primary-box-shadow;
         }
-    }
-
-    .bcs-VersionsItemActions-toggle--modernized {
-        position: absolute;
-        top: var(--space-2);
-        right: var(--space-2);
     }
 }
 

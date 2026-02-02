@@ -74,8 +74,10 @@ const VersionsItemActions = ({
             className="bcs-VersionsItemActions"
             constrainToScrollParent
             constrainToWindow
+            constrainToWindowWithPin
             isRightAligned
             onMenuClose={handleMenuClose}
+            targetWrapperClassName="bcs-VersionsItemActions-targetWrapper"
         >
             {isPreviewModernizationEnabled ? (
                 <IconButton
