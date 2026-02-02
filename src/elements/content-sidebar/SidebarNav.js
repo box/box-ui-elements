@@ -192,17 +192,21 @@ const SidebarNav = ({
     const otherCustomPanels = customSidebarPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI);
     const hasOtherCustomPanels = otherCustomPanels.length > 0;
 
+    const boxAiNavButtonProps = {
+        key: SIDEBAR_VIEW_BOXAI,
+        isPreviewModernizationEnabled,
+        'data-resin-target': SIDEBAR_NAV_TARGETS.BOXAI,
+        'data-target-id': 'SidebarNavButton-boxAI',
+        'data-testid': 'sidebarboxai',
+        sidebarView: SIDEBAR_VIEW_BOXAI,
+    };
+
     const sidebarTabs = [
         hasNativeBoxAISidebar && (
             <SidebarNavButton
-                key={SIDEBAR_VIEW_BOXAI}
-                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
-                data-target-id="SidebarNavButton-boxAI"
-                data-testid="sidebarboxai"
-                isDisabled={showOnlyBoxAINavButton}
+                {...boxAiNavButtonProps}
                 onClick={handleSidebarNavButtonClick}
-                sidebarView={SIDEBAR_VIEW_BOXAI}
+                isDisabled={showOnlyBoxAINavButton}
                 tooltip={showOnlyBoxAINavButton ? boxAIDisabledTooltip : intl.formatMessage(messages.sidebarBoxAITitle)}
             >
                 {isPreviewModernizationEnabled ? (
@@ -214,15 +218,10 @@ const SidebarNav = ({
         ),
         !hasNativeBoxAISidebar && boxAiPanel && (
             <SidebarNavButton
-                key={boxAiPanel.id}
-                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                data-target-id={`SidebarNavButton-boxAI`}
-                data-testid={`sidebar${boxAiPanel.id}`}
+                {...boxAiNavButtonProps}
                 {...boxAiPanel.navButtonProps}
-                data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
-                isDisabled={boxAiPanel.isDisabled}
                 onClick={handleSidebarNavButtonClick}
-                sidebarView={boxAiPanel.path}
+                isDisabled={boxAiPanel.isDisabled}
                 tooltip={boxAiPanel.title}
             >
                 {renderCustomPanelIcon(boxAiPanel.icon)}

@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import type { UseTargetingApi } from '../../features/targeting/types';
+import type { Props as SidebarNavButtonProps } from './SidebarNavButton';
 
 type ClassificationInfo = {
     definition?: string,
@@ -33,10 +34,12 @@ type AdditionalSidebarTab = {
     icon?: React.Node,
 };
 
-type NavButtonOverrideProps = {
-    'aria-label'?: string,
-    'aria-describedby'?: string,
-};
+/**
+ * Optional props to customize the nav button.
+ * Note: onClick, sidebarView, isDisabled, tooltip, and children are managed
+ * internally and will be overridden if passed.
+ */
+type NavButtonOverrideProps = $Shape<SidebarNavButtonProps>;
 
 type CustomSidebarPanel = {
     id: string,

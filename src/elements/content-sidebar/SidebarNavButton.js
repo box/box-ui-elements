@@ -17,7 +17,7 @@ import type {
 } from '../common/types/SidebarNavigation';
 import './SidebarNavButton.scss';
 
-type Props = {
+export type Props = {
     'data-resin-target'?: string,
     'data-testid'?: string,
     children: React.Element<any>,

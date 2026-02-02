@@ -25,6 +25,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
     const getWrapper = ({ path = '/', ...rest } = {}) => {
         return mount(
             <SidebarPanels
+                customSidebarPanels={[]}
                 file={{ id: '1234' }}
                 hasDocGen
                 hasActivity
@@ -50,6 +51,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         return (
             <MemoryRouter initialEntries={[path]}>
                 <SidebarPanels
+                    customSidebarPanels={[]}
                     file={{ id: '1234' }}
                     hasDocGen
                     hasActivity
@@ -85,27 +87,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/skills'}                         | ${'SkillsSidebar'}
             ${'/boxai'}                          | ${'BoxAISidebar'}
             ${'/docgen'}                         | ${'DocGenSidebar'}
-            ${'/nonsense'}                       | ${'DocGenSidebar'}
-            ${'/'}                               | ${'DocGenSidebar'}
+            ${'/nonsense'}                       | ${'BoxAISidebar'}
+            ${'/'}                               | ${'BoxAISidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
             const wrapper = getWrapper({ path });
             expect(wrapper.exists(sidebar)).toBe(true);
         });
-
-        test.each`
-            path           | sidebar
-            ${'/nonsense'} | ${'BoxAISidebar'}
-            ${'/'}         | ${'BoxAISidebar'}
-        `(
-            'should render $sidebar given feature boxai.sidebar.shouldBeDefaultPanel = true and the path $path',
-            ({ path, sidebar }) => {
-                const wrapper = getWrapper({
-                    features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                    path,
-                });
-                expect(wrapper.exists(sidebar)).toBe(true);
-            },
-        );
 
         test.each`
             defaultPanel  | sidebar               | expectedPanelName
@@ -115,8 +102,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'metadata'} | ${'metadata-sidebar'} | ${'metadata'}
             ${'skills'}   | ${'skills-sidebar'}   | ${'skills'}
             ${'boxai'}    | ${'boxai-sidebar'}    | ${'boxai'}
-            ${'nonsense'} | ${'docgen-sidebar'}   | ${'docgen'}
-            ${undefined}  | ${'docgen-sidebar'}   | ${'docgen'}
+            ${'nonsense'} | ${'boxai-sidebar'}    | ${'boxai'}
+            ${undefined}  | ${'boxai-sidebar'}    | ${'boxai'}
         `(
             'should render $sidebar and call onPanelChange with $expectedPanelName given the path = "/" and defaultPanel = $defaultPanel',
             ({ defaultPanel, sidebar, expectedPanelName }) => {
@@ -133,34 +120,14 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         );
 
         test.each`
-            defaultPanel  | sidebar            | expectedPanelName
-            ${'nonsense'} | ${'boxai-sidebar'} | ${'boxai'}
-            ${undefined}  | ${'boxai-sidebar'} | ${'boxai'}
-        `(
-            'should render $sidebar and call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = "/" and defaultPanel = $defaultPanel',
-            ({ defaultPanel, sidebar, expectedPanelName }) => {
-                const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        defaultPanel,
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                        onPanelChange,
-                    }),
-                );
-                expect(screen.getByTestId(sidebar)).toBeInTheDocument();
-                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-            },
-        );
-
-        test.each`
-            defaultPanel  | expectedSidebar       | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
-            ${'activity'} | ${'docgen-sidebar'}   | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'details'}  | ${'docgen-sidebar'}   | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'metadata'} | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'skills'}   | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'docgen'}   | ${'activity-sidebar'} | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}               | ${false}               | ${'activity'}
-            ${'boxai'}    | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
-            ${'boxai'}    | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
+            defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
+            ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
+            ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
+            ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
+            ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'boxai'}
+            ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}               | ${false}               | ${'boxai'}
+            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
+            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
         `(
             'should render first available panel and call onPanelChange with $expectedPanelName for users without rights to render default panel, given the path = "/" and defaultPanel = $defaultPanel',
             ({
@@ -179,55 +146,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 render(
                     getSidebarPanels({
                         features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
-                        defaultPanel,
-                        hasActivity,
-                        hasDetails,
-                        hasMetadata,
-                        hasSkills,
-                        hasDocGen,
-                        hasNativeBoxAISidebar,
-                        onPanelChange,
-                    }),
-                );
-                expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
-                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-            },
-        );
-
-        test.each`
-            defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
-            ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
-            ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
-            ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
-            ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'boxai'}
-            ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}               | ${false}               | ${'boxai'}
-            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
-            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
-        `(
-            'should render first available panel and call onPanelChange with $expectedPanelName for users without rights to render default panel, given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = "/" and defaultPanel = $defaultPanel',
-            ({
-                defaultPanel,
-                expectedSidebar,
-                hasActivity,
-                hasDetails,
-                hasMetadata,
-                hasSkills,
-                hasDocGen,
-                hasNativeBoxAISidebar,
-                showOnlyBoxAINavButton,
-                expectedPanelName,
-            }) => {
-                const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        features: {
-                            boxai: {
-                                sidebar: {
-                                    shouldBeDefaultPanel: true,
-                                    showOnlyNavButton: showOnlyBoxAINavButton,
-                                },
-                            },
-                        },
                         defaultPanel,
                         hasActivity,
                         hasDetails,
@@ -299,8 +217,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/skills'}                         | ${'skills'}
             ${'/boxai'}                          | ${'boxai'}
             ${'/docgen'}                         | ${'docgen'}
-            ${'/nonsense'}                       | ${'docgen'}
-            ${'/'}                               | ${'docgen'}
+            ${'/nonsense'}                       | ${'boxai'}
+            ${'/'}                               | ${'boxai'}
         `('should call onPanelChange with $expectedPanelName given the path = $path', ({ path, expectedPanelName }) => {
             const onPanelChange = jest.fn();
             render(
@@ -311,78 +229,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             );
             expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
         });
-
-        test.each`
-            path           | expectedPanelName
-            ${'/nonsense'} | ${'boxai'}
-            ${'/'}         | ${'boxai'}
-        `(
-            'should call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = $path',
-            ({ path, expectedPanelName }) => {
-                const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                        path,
-                        onPanelChange,
-                    }),
-                );
-                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-            },
-        );
-
-        test.each`
-            path                                 | hasActivity | hasDetails | hasVersions | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
-            ${'/activity'}                       | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/comments'}              | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/comments/1234'}         | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/tasks'}                 | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/tasks/1234'}            | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/annotations/1234/5678'} | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/annotations/1234'}      | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/versions'}              | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/activity/versions/1234'}         | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/details'}                        | ${true}     | ${false}   | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/details/versions'}               | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/details/versions/1234'}          | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/metadata'}                       | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/metadata/filteredTemplates/1,3'} | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/skills'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'docgen'}
-            ${'/docgen'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${false}  | ${true}               | ${false}               | ${'skills'}
-            ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
-            ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
-        `(
-            'should call onPanelChange with $expectedPanelName given the path = $path for users without rights to render the panel for given path',
-            ({
-                path,
-                hasActivity,
-                hasDetails,
-                hasVersions,
-                hasMetadata,
-                hasSkills,
-                hasDocGen,
-                hasNativeBoxAISidebar,
-                showOnlyBoxAINavButton,
-                expectedPanelName,
-            }) => {
-                const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
-                        hasActivity,
-                        hasDetails,
-                        hasDocGen,
-                        hasMetadata,
-                        hasSkills,
-                        hasVersions,
-                        hasNativeBoxAISidebar,
-                        onPanelChange,
-                        path,
-                    }),
-                );
-                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-            },
-        );
 
         test.each`
             path                                 | hasActivity | hasDetails | hasVersions | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
@@ -405,7 +251,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
             ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
         `(
-            'should call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = $path for users without rights to render the panel for given path',
+            'should call onPanelChange with $expectedPanelName given the path = $path for users without rights to render the panel for given path',
             ({
                 path,
                 hasActivity,
@@ -421,14 +267,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 const onPanelChange = jest.fn();
                 render(
                     getSidebarPanels({
-                        features: {
-                            boxai: {
-                                sidebar: {
-                                    shouldBeDefaultPanel: true,
-                                    showOnlyNavButton: showOnlyBoxAINavButton,
-                                },
-                            },
-                        },
+                        features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
                         hasActivity,
                         hasDetails,
                         hasDocGen,
@@ -563,10 +402,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         describe('boxai sidebar', () => {
-            test('should render native Box AI, given feature boxai.sidebar.shouldBeDefaultPanel = true and feature boxai.sidebar.showOnlyNavButton = false', () => {
+            test('should render native Box AI as default panel', () => {
                 render(
                     getSidebarPanels({
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true, showOnlyNavButton: false } } },
+                        features: { boxai: { sidebar: { showOnlyNavButton: false } } },
                     }),
                 );
                 expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
@@ -706,11 +545,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     expect(screen.getByTestId('custom-boxai-sidebar')).toBeInTheDocument();
                 });
 
-                test('should render custom Box AI sidebar as default panel when shouldBeDefaultPanel is true', () => {
+                test('should render custom Box AI sidebar as default panel', () => {
                     const onPanelChange = jest.fn();
                     render(
                         getSidebarPanels({
-                            features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
                             hasNativeBoxAISidebar: false,
                             customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
                             onPanelChange,
@@ -776,13 +614,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     ${'/nonsense'} | ${'boxai'}
                     ${'/'}         | ${'boxai'}
                 `(
-                    'should render custom Box AI sidebar and call onPanelChange with $expectedPanelName given shouldBeDefaultPanel = true and path = $path',
+                    'should render custom Box AI sidebar and call onPanelChange with $expectedPanelName given path = $path',
                     ({ path, expectedPanelName }) => {
                         const onPanelChange = jest.fn();
                         render(
                             getSidebarPanels({
                                 path,
-                                features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
                                 hasNativeBoxAISidebar: false,
                                 customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
                                 onPanelChange,
@@ -799,13 +636,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     ${'nonsense'} | ${'custom-boxai-sidebar'} | ${'boxai'}
                     ${undefined}  | ${'custom-boxai-sidebar'} | ${'boxai'}
                 `(
-                    'should render $sidebar and call onPanelChange with $expectedPanelName given custom Box AI with shouldBeDefaultPanel = true and defaultPanel = $defaultPanel',
+                    'should render $sidebar and call onPanelChange with $expectedPanelName given custom Box AI and defaultPanel = $defaultPanel',
                     ({ defaultPanel, sidebar, expectedPanelName }) => {
                         const onPanelChange = jest.fn();
                         render(
                             getSidebarPanels({
                                 defaultPanel,
-                                features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
                                 hasNativeBoxAISidebar: false,
                                 customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
                                 onPanelChange,
@@ -894,7 +730,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         test('should not throw when custom sidebar does not implement refresh', () => {
-            const instance = getWrapper().find(SidebarPanels).instance();
+            const instance = getWrapper({ hasNativeBoxAISidebar: false }).find(SidebarPanels).instance();
 
             // Custom sidebar without refresh method
             instance.customSidebars.set('customPanel', { current: {} });
@@ -903,7 +739,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         test('should call refresh on custom sidebars that implement it', () => {
-            const instance = getWrapper().find(SidebarPanels).instance();
+            const instance = getWrapper({ hasNativeBoxAISidebar: false }).find(SidebarPanels).instance();
             const mockRefresh = jest.fn();
 
             instance.customSidebars.set('customPanel', { current: { refresh: mockRefresh } });

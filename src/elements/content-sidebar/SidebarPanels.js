@@ -252,18 +252,11 @@ class SidebarPanels extends React.Component<Props, State> {
         hasNativeBoxAISidebar: boolean,
     ): string[] => {
         const customPanelPaths = customSidebarPanels.map(panel => panel.path);
-        const boxAiCustomPanel = customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
-        const boxAiPath = boxAiCustomPanel ? boxAiCustomPanel.path : null;
-        const nonBoxAIPaths = customPanelPaths.filter(path => path !== boxAiPath);
+        const hasCustomBoxAIPanel = customSidebarPanels.some(({ id }) => id === SIDEBAR_VIEW_BOXAI);
+        const nonBoxAIPaths = customPanelPaths.filter(path => path !== SIDEBAR_VIEW_BOXAI);
 
-        if (hasNativeBoxAISidebar) {
-            return shouldBoxAIBeDefaultPanel
-                ? [SIDEBAR_VIEW_BOXAI, ...DEFAULT_SIDEBAR_VIEWS, ...nonBoxAIPaths]
-                : [...DEFAULT_SIDEBAR_VIEWS, SIDEBAR_VIEW_BOXAI, ...nonBoxAIPaths];
-        }
-
-        if (boxAiCustomPanel && shouldBoxAIBeDefaultPanel) {
-            return [boxAiCustomPanel.path, ...DEFAULT_SIDEBAR_VIEWS, ...nonBoxAIPaths];
+        if (hasNativeBoxAISidebar || hasCustomBoxAIPanel) {
+            return [SIDEBAR_VIEW_BOXAI, ...DEFAULT_SIDEBAR_VIEWS, ...nonBoxAIPaths];
         }
 
         return [...DEFAULT_SIDEBAR_VIEWS, ...customPanelPaths];
