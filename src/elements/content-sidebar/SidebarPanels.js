@@ -372,11 +372,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             isDisabled,
                         } = customPanel;
 
-                        if (isDisabled || !CustomPanelComponent) {
-                            return null;
-                        }
-
-                        return (
+                        return isDisabled ? null : (
                             <Route
                                 exact
                                 key={customPanelId}
