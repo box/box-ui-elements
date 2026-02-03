@@ -28,6 +28,8 @@ type Props = {
     textareaRef?: Function, // @TODO: eventually rename to innerRef for consistancy across all form elements
     /** A CSS class for the tooltip's tether element component */
     tooltipTetherClassName?: string,
+    /** A CSS class for the tooltip's target wrapper element */
+    tooltipWrapperClassName?: string,
 };
 
 const TextArea = ({
@@ -42,6 +44,7 @@ const TextArea = ({
     label,
     textareaRef,
     tooltipTetherClassName,
+    tooltipWrapperClassName,
     ...rest
 }: Props) => {
     const hasError = !!error;
@@ -70,6 +73,7 @@ const TextArea = ({
                 <Tooltip
                     isShown={hasError}
                     position={errorTooltipPosition || 'bottom-left'}
+                    targetWrapperClassName={tooltipWrapperClassName}
                     tetherElementClassName={tooltipTetherClassName}
                     text={error || ''}
                     theme="error"

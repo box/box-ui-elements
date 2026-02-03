@@ -80,6 +80,15 @@ describe('components/text-area/TextArea', () => {
         wrapper.unmount();
     });
 
+    test('should pass tooltipWrapperClassName to Tooltip as targetWrapperClassName when provided', () => {
+        const tooltipWrapperClassName = 'custom-tooltip-wrapper';
+        const wrapper = shallow(
+            <TextArea error="error" label="label" tooltipWrapperClassName={tooltipWrapperClassName} />,
+        );
+
+        expect(wrapper.find('Tooltip').prop('targetWrapperClassName')).toBe(tooltipWrapperClassName);
+    });
+
     test('should not show optional text when hideOptionalLabel is true', () => {
         const wrapper = shallow(<TextArea label="label" hideOptionalLabel />);
         expect(wrapper).toMatchSnapshot();

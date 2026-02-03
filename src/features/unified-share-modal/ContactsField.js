@@ -25,6 +25,8 @@ type Props = {
     getPillClassName?: (option: SelectOptionProp) => string,
     intl: any,
     label: React.Node,
+    /** A CSS class for the tooltip's target wrapper element */
+    tooltipWrapperClassName?: string,
     onContactAdd: Function,
     onContactRemove: Function,
     onInput?: Function,
@@ -175,6 +177,7 @@ class ContactsField extends React.Component<Props, State> {
             onPillCreate,
             selectedContacts,
             showContactAvatars,
+            tooltipWrapperClassName,
             validateForError,
             validator,
         } = this.props;
@@ -213,6 +216,7 @@ class ContactsField extends React.Component<Props, State> {
                 showAvatars
                 showRoundedPills
                 selectorOptions={contacts}
+                tooltipWrapperClassName={tooltipWrapperClassName}
                 validateForError={validateForError}
                 validator={validator}
             >

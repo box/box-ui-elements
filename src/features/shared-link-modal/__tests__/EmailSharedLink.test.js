@@ -324,10 +324,12 @@ describe('features/shared-link-modal/EmailSharedLink', () => {
             expect(pillSelector.length).toBe(1);
             expect(pillSelector.find('ContactDatalistItem').length).toBe(11);
             expect(pillSelector.prop('inputProps')['data-resin-thing']).toEqual('hey');
+            expect(pillSelector.prop('tooltipWrapperClassName')).toBe('bdl-EmailSharedLink-tooltipWrapper');
             pillSelector.prop('inputProps').onFocus(); // should call props.onExpand
 
             const textArea = wrapper.find('TextArea');
             expect(textArea.length).toBe(1);
+            expect(textArea.prop('tooltipWrapperClassName')).toBe('bdl-EmailSharedLink-tooltipWrapper');
         });
 
         test('should add is-expanded class to form and show buttons when props.isExpanded is true', () => {

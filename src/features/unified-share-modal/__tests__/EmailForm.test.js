@@ -846,5 +846,13 @@ describe('features/unified-share-modal/EmailForm', () => {
 
             expect(wrapper.find('[data-testid="be-emailform-message"]')).toHaveLength(1);
         });
+
+        test('should pass tooltipWrapperClassName to ContactsField and TextArea for tooltip positioning', () => {
+            const wrapper = getWrapper({ isExpanded: true });
+            const expectedClassName = 'bdl-UnifiedShareModal-tooltipWrapper';
+
+            expect(wrapper.find('ContactsField').prop('tooltipWrapperClassName')).toBe(expectedClassName);
+            expect(wrapper.find('TextArea').prop('tooltipWrapperClassName')).toBe(expectedClassName);
+        });
     });
 });

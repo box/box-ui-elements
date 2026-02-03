@@ -88,6 +88,20 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper.find('.show-error').length).toBe(0);
         });
 
+        test('should pass tooltipWrapperClassName to Tooltip as targetWrapperClassName when provided', () => {
+            const tooltipWrapperClassName = 'custom-tooltip-wrapper';
+            const wrapper = shallow(
+                <PillSelector
+                    error="error"
+                    onInput={onInputStub}
+                    onRemove={onRemoveStub}
+                    tooltipWrapperClassName={tooltipWrapperClassName}
+                />,
+            );
+
+            expect(wrapper.find('Tooltip').prop('targetWrapperClassName')).toBe(tooltipWrapperClassName);
+        });
+
         test('should render pills when there are selected options using legacy text attribute', () => {
             const options = [
                 { text: 'test', value: 'test' },

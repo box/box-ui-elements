@@ -103,10 +103,8 @@ class EmailForm extends React.Component<Props, State> {
         const { isRestrictionJustificationEnabled } = this.props;
         const { isRestrictionJustificationEnabled: prevIsRestrictionJustificationEnabled } = prevProps;
         const { contactsFieldError, contactsRestrictionError } = this.state;
-        const {
-            contactsFieldError: prevContactsFieldError,
-            contactsRestrictionError: prevContactsRestrictionError,
-        } = prevState;
+        const { contactsFieldError: prevContactsFieldError, contactsRestrictionError: prevContactsRestrictionError } =
+            prevState;
 
         // Only display one type of error at a time and give preference
         // to the one triggered most recently
@@ -189,13 +187,8 @@ class EmailForm extends React.Component<Props, State> {
     validateContactsRestrictions = () => {
         let contactsRestrictionError = '';
         const { selectedJustificationReason } = this.state;
-        const {
-            intl,
-            isRestrictionJustificationEnabled,
-            selectedContacts,
-            restrictedEmails,
-            restrictedGroups,
-        } = this.props;
+        const { intl, isRestrictionJustificationEnabled, selectedContacts, restrictedEmails, restrictedGroups } =
+            this.props;
 
         const hasRestrictedCollabs = hasRestrictedContacts(selectedContacts, restrictedEmails, restrictedGroups);
         const isMissingRequiredJustification = isRestrictionJustificationEnabled && !selectedJustificationReason;
@@ -395,6 +388,7 @@ class EmailForm extends React.Component<Props, State> {
             isShown: showEnterEmailsCallout,
             position: 'middle-right',
             showCloseButton: true,
+            targetWrapperClassName: 'bdl-UnifiedShareModal-tooltipWrapper',
             text: <FormattedMessage {...messages.enterEmailAddressesCalloutText} />,
             theme: 'callout',
         };
@@ -402,6 +396,7 @@ class EmailForm extends React.Component<Props, State> {
         const recommendedSharingTooltipProps = {
             isShown: !!recommendedSharingTooltipCalloutName,
             position: 'middle-left',
+            targetWrapperClassName: 'bdl-UnifiedShareModal-tooltipWrapper',
             text: (
                 <FormattedMessage
                     {...messages.recommendedSharingTooltipCalloutText}
@@ -432,6 +427,7 @@ class EmailForm extends React.Component<Props, State> {
                         onPillCreate={onPillCreate}
                         selectedContacts={selectedContacts}
                         suggestedCollaborators={suggestedCollaborators}
+                        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
                         validateForError={this.validateContactField}
                         validator={this.isValidContactPill}
                         showContactAvatars
@@ -490,6 +486,7 @@ class EmailForm extends React.Component<Props, State> {
                         onChange={this.handleMessageChange}
                         placeholder={intl.formatMessage(commonMessages.messageSelectorPlaceholder)}
                         rows={3}
+                        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
                         value={message}
                         {...messageProps}
                     />

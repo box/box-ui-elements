@@ -67,7 +67,7 @@ describe('features/unified-share-modal/ContactsField', () => {
 
     const suggestions = {
         // expectedContacts[1]
-        '23456': {
+        23456: {
             id: '23456',
             userScore: 0.5,
             email: 'y@example.com',
@@ -76,7 +76,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             isExternalUser: false,
         },
         // expectedContacts[2]
-        '34567': {
+        34567: {
             id: '34567',
             userScore: 0.1,
             email: 'z@example.com',
@@ -183,7 +183,7 @@ describe('features/unified-share-modal/ContactsField', () => {
             expect(addSuggestedContactsMock).not.toHaveBeenCalled();
 
             wrapper.setProps({
-                suggestedCollaborators: { '12345': { id: 12345 }, '23456': { id: 23456 } },
+                suggestedCollaborators: { 12345: { id: 12345 }, 23456: { id: 23456 } },
             });
 
             wrapper.instance().filterContacts(contactsFromServer);
@@ -376,7 +376,7 @@ describe('features/unified-share-modal/ContactsField', () => {
         test('should pass overlayTitle when there are suggested collabs', async () => {
             const wrapper = getWrapper({
                 getContacts,
-                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+                suggestedCollaborators: { 12: { id: 12, userScore: 1 } },
             });
 
             wrapper.setState({ pillSelectorInputValue: 'a' });
@@ -388,13 +388,20 @@ describe('features/unified-share-modal/ContactsField', () => {
         test('should render divider at the correct index when there are suggested collabs', async () => {
             const wrapper = getWrapper({
                 getContacts,
-                suggestedCollaborators: { '12': { id: 12, userScore: 1 } },
+                suggestedCollaborators: { 12: { id: 12, userScore: 1 } },
             });
 
             wrapper.setState({ pillSelectorInputValue: 'a' });
             await wrapper.instance().getContactsPromise('a');
 
             expect(wrapper.find('PillSelectorDropdown').props().dividerIndex).toBe(1);
+        });
+
+        test('should pass tooltipWrapperClassName to PillSelectorDropdown when provided', () => {
+            const tooltipWrapperClassName = 'bdl-UnifiedShareModal-tooltipWrapper';
+            const wrapper = getWrapper({ tooltipWrapperClassName });
+
+            expect(wrapper.find('PillSelectorDropdown').prop('tooltipWrapperClassName')).toBe(tooltipWrapperClassName);
         });
     });
 });

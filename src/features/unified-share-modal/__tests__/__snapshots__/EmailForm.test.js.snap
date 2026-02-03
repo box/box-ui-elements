@@ -16,6 +16,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -39,6 +40,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -63,6 +65,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -86,6 +89,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -115,6 +119,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -138,6 +143,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -170,6 +176,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         isShown={true}
         position="middle-right"
         showCloseButton={true}
+        targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         text={
           <FormattedMessage
             defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -193,6 +200,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           onInput={[Function]}
           selectedContacts={[]}
           showContactAvatars={true}
+          tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
           validateForError={[Function]}
           validator={[Function]}
         />
@@ -210,6 +218,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     onChange={[Function]}
     placeholder="boxui.share.messageSelectorPlaceholder"
     rows={3}
+    tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
     value=""
   />
   <ModalActions>
@@ -256,6 +265,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -279,6 +289,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -295,6 +306,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     onChange={[Function]}
     placeholder="boxui.share.messageSelectorPlaceholder"
     rows={3}
+    tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
     value=""
   />
   <ModalActions>
@@ -341,6 +353,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -364,6 +377,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -393,6 +407,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -416,6 +431,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -432,6 +448,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     onChange={[Function]}
     placeholder="boxui.share.messageSelectorPlaceholder"
     rows={3}
+    tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
     value=""
   />
   <ModalActions>
@@ -483,6 +500,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -506,6 +524,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -522,6 +541,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     onChange={[Function]}
     placeholder="boxui.share.messageSelectorPlaceholder"
     rows={3}
+    tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
     value=""
   />
   <ModalActions>
@@ -568,6 +588,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -591,6 +612,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -607,6 +629,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     onChange={[Function]}
     placeholder="boxui.share.messageSelectorPlaceholder"
     rows={3}
+    tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
     value=""
   />
   <div
@@ -667,6 +690,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isDisabled={false}
       isShown={true}
       position="middle-left"
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Based on your usage, we think {fullName} would be interested in this file."
@@ -695,6 +719,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -719,6 +744,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -742,6 +768,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -766,6 +793,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -789,6 +817,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />
@@ -813,6 +842,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -836,6 +866,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onInput={[Function]}
         selectedContacts={[]}
         showContactAvatars={true}
+        tooltipWrapperClassName="bdl-UnifiedShareModal-tooltipWrapper"
         validateForError={[Function]}
         validator={[Function]}
       />

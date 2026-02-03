@@ -56,6 +56,14 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             expect(pillSelector.dive().instance().props.value).toEqual('value');
         });
 
+        test('should pass tooltipWrapperClassName to PillSelector when provided', () => {
+            const tooltipWrapperClassName = 'custom-tooltip-wrapper';
+            const wrapper = getWrapper({ tooltipWrapperClassName });
+            const selectorElement = wrapper.find('SelectorDropdown').prop('selector');
+
+            expect(selectorElement.props.tooltipWrapperClassName).toBe(tooltipWrapperClassName);
+        });
+
         test('should render disabled pill selector', () => {
             const wrapper = getWrapper({ disabled: true });
 

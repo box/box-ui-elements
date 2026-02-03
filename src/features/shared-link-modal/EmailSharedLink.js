@@ -187,6 +187,7 @@ class EmailSharedLink extends Component {
                     placeholder={formatMessage(commonMessages.pillSelectorPlaceholder)}
                     selectedOptions={selectedOptions}
                     selectorOptions={selectorOptions}
+                    tooltipWrapperClassName="bdl-EmailSharedLink-tooltipWrapper"
                     validateForError={this.validateForError}
                     validator={this.validator}
                 >
@@ -199,6 +200,7 @@ class EmailSharedLink extends Component {
                     label={<FormattedMessage {...messages.messageTitle} />}
                     onChange={this.handleMessageChange}
                     rows={3}
+                    tooltipWrapperClassName="bdl-EmailSharedLink-tooltipWrapper"
                     value={emailMessage}
                 />
                 {isExpanded && (
