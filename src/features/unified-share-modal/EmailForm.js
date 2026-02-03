@@ -26,6 +26,8 @@ import messages from './messages';
 import type { CollabRestrictionType, SuggestedCollabLookup, contactType as Contact, USMConfig } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
+import './EmailForm.scss';
+
 type Props = {
     cancelButtonProps?: Object,
     children?: React.Node,
@@ -103,10 +105,8 @@ class EmailForm extends React.Component<Props, State> {
         const { isRestrictionJustificationEnabled } = this.props;
         const { isRestrictionJustificationEnabled: prevIsRestrictionJustificationEnabled } = prevProps;
         const { contactsFieldError, contactsRestrictionError } = this.state;
-        const {
-            contactsFieldError: prevContactsFieldError,
-            contactsRestrictionError: prevContactsRestrictionError,
-        } = prevState;
+        const { contactsFieldError: prevContactsFieldError, contactsRestrictionError: prevContactsRestrictionError } =
+            prevState;
 
         // Only display one type of error at a time and give preference
         // to the one triggered most recently
@@ -189,13 +189,8 @@ class EmailForm extends React.Component<Props, State> {
     validateContactsRestrictions = () => {
         let contactsRestrictionError = '';
         const { selectedJustificationReason } = this.state;
-        const {
-            intl,
-            isRestrictionJustificationEnabled,
-            selectedContacts,
-            restrictedEmails,
-            restrictedGroups,
-        } = this.props;
+        const { intl, isRestrictionJustificationEnabled, selectedContacts, restrictedEmails, restrictedGroups } =
+            this.props;
 
         const hasRestrictedCollabs = hasRestrictedContacts(selectedContacts, restrictedEmails, restrictedGroups);
         const isMissingRequiredJustification = isRestrictionJustificationEnabled && !selectedJustificationReason;
@@ -417,7 +412,7 @@ class EmailForm extends React.Component<Props, State> {
 
         const contactsField = (
             <div className="tooltip-target">
-                <Tooltip {...tooltipPropsToRender}>
+                <Tooltip targetWrapperClassName="bdl-EmailForm-tooltipTarget" {...tooltipPropsToRender}>
                     <ContactsField
                         disabled={!isContactsFieldEnabled}
                         error={contactsFieldError}
@@ -445,7 +440,11 @@ class EmailForm extends React.Component<Props, State> {
             contactsFieldWrap = contactsField;
         } else {
             contactsFieldWrap = (
-                <Tooltip position="bottom-center" text={contactsFieldDisabledTooltip}>
+                <Tooltip
+                    position="bottom-center"
+                    targetWrapperClassName="bdl-EmailForm-tooltipTarget"
+                    text={contactsFieldDisabledTooltip}
+                >
                     {contactsField}
                 </Tooltip>
             );

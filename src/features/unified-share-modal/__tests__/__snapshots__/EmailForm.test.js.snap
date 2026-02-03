@@ -16,6 +16,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -63,6 +64,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -115,6 +117,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -156,6 +159,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     constrainToWindow={true}
     isDisabled={false}
     position="bottom-center"
+    targetWrapperClassName="bdl-EmailForm-tooltipTarget"
     text="You do not have permission to invite collaborators."
     theme="default"
   >
@@ -170,6 +174,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         isShown={true}
         position="middle-right"
         showCloseButton={true}
+        targetWrapperClassName="bdl-EmailForm-tooltipTarget"
         text={
           <FormattedMessage
             defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -256,6 +261,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -341,6 +347,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -393,6 +400,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -483,6 +491,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -568,6 +577,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -667,6 +677,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isDisabled={false}
       isShown={true}
       position="middle-left"
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Based on your usage, we think {fullName} would be interested in this file."
@@ -719,6 +730,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -766,6 +778,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
@@ -813,6 +826,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       isShown={true}
       position="middle-right"
       showCloseButton={true}
+      targetWrapperClassName="bdl-EmailForm-tooltipTarget"
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
