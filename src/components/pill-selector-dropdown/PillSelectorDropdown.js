@@ -81,6 +81,8 @@ type Props = {
     suggestedPillsFilter?: SuggestedPillsFilter,
     /** String describes the suggested pills */
     suggestedPillsTitle?: string,
+    /** A CSS class for the tooltip's target wrapper element */
+    tooltipWrapperClassName?: string,
     /** Validate the given input value, and update `error` prop if necessary */
     validateForError?: Function,
     /** Called to check if pill item data is valid. The `item` is passed in. */
@@ -258,6 +260,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             suggestedPillsFilter,
             suggestedPillsTitle,
             shouldSetActiveItemOnOpen,
+            tooltipWrapperClassName,
             validator,
         } = this.props;
 
@@ -295,6 +298,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                         suggestedPillsData={suggestedPillsData}
                         suggestedPillsFilter={suggestedPillsFilter}
                         suggestedPillsTitle={suggestedPillsTitle}
+                        tooltipWrapperClassName={tooltipWrapperClassName}
                         validator={validator}
                         value={this.state.inputValue}
                     />

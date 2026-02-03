@@ -231,7 +231,13 @@ class PillSelectorBase extends React.Component<Props, State> {
         };
 
         return (
-            <Tooltip isShown={hasError} text={error || ''} position={errorTooltipPosition} theme="error">
+            <Tooltip
+                isShown={hasError}
+                position={errorTooltipPosition}
+                targetWrapperClassName={tooltipWrapperClassName}
+                text={error || ''}
+                theme="error"
+            >
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
