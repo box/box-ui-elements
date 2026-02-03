@@ -316,30 +316,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             };
         };
 
-        test('should render multiple custom tabs including Box AI', () => {
-            const customTab1 = createCustomTab('customtab1');
-            const customTab2 = createCustomTab('customtab2');
-            const boxAiPanel = createBoxAIPanel();
-
-            renderSidebarNav({
-                props: {
-                    customSidebarPanels: [boxAiPanel, customTab1, customTab2],
-                },
-            });
-
-            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
-            expect(screen.getByTestId('sidebarcustomtab1')).toBeInTheDocument();
-            expect(screen.getByTestId('sidebarcustomtab2')).toBeInTheDocument();
-
-            const navButtons = screen.getAllByRole('tab');
-            expect(navButtons).toHaveLength(3);
-
-            // Verify Box AI is rendered first in the DOM order
-            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
-            expect(navButtons[1]).toHaveAttribute('data-testid', 'sidebarcustomtab1');
-            expect(navButtons[2]).toHaveAttribute('data-testid', 'sidebarcustomtab2');
-        });
-
         test('should render Box AI first even when passed in different order', () => {
             const customTab1 = createCustomTab('customtab1');
             const customTab2 = createCustomTab('customtab2');
@@ -512,46 +488,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
             expect(screen.getByTestId('mock-icon-component')).toBeInTheDocument();
-        });
-
-        test('should render custom Box AI tab with provided React element icon', () => {
-            const boxAiPanel = createBoxAIPanel({ icon: mockIconElement });
-
-            renderSidebarNav({
-                props: {
-                    hasNativeBoxAISidebar: false,
-                    customSidebarPanels: [boxAiPanel],
-                },
-            });
-
-            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
-            expect(screen.getByTestId('mock-icon-element')).toBeInTheDocument();
-        });
-
-        test('should render other custom tab with provided icon component', () => {
-            const customTab = createCustomTab('analytics', { icon: MockIconComponent });
-
-            renderSidebarNav({
-                props: {
-                    customSidebarPanels: [customTab],
-                },
-            });
-
-            expect(screen.getByTestId('sidebaranalytics')).toBeInTheDocument();
-            expect(screen.getByTestId('mock-icon-component')).toBeInTheDocument();
-        });
-
-        test('should render other custom tab with provided React element icon', () => {
-            const customTab = createCustomTab('reports', { icon: mockIconElement });
-
-            renderSidebarNav({
-                props: {
-                    customSidebarPanels: [customTab],
-                },
-            });
-
-            expect(screen.getByTestId('sidebarreports')).toBeInTheDocument();
-            expect(screen.getByTestId('mock-icon-element')).toBeInTheDocument();
         });
 
         test('should render multiple custom tabs with mixed icon types', () => {
