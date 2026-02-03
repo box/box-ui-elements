@@ -12,7 +12,16 @@ const MockCustomPanel = React.forwardRef<HTMLDivElement, { title: string }>(({ t
 ));
 MockCustomPanel.displayName = 'MockCustomPanel';
 
+const MockCustomBoxAIPanel = React.forwardRef<HTMLDivElement>((props, ref) => (
+    <div ref={ref} style={{ padding: '20px' }} data-testid="custom-boxai-panel">
+        <h2>Custom Box AI Panel</h2>
+        <p>This is a custom Box AI implementation provided by the consumer.</p>
+    </div>
+));
+MockCustomBoxAIPanel.displayName = 'MockCustomBoxAIPanel';
+
 const MockIcon = () => <span>📋</span>;
+const MockBoxAIIcon = () => <span>🤖</span>;
 
 const DISABLED_TOOLTIP = 'Box AI is not available for this file type';
 
@@ -22,6 +31,14 @@ const customPanelConfig: CustomSidebarPanel = {
     component: MockCustomPanel,
     title: 'Custom Panel',
     icon: MockIcon,
+};
+
+const customBoxAIPanelConfig: CustomSidebarPanel = {
+    id: 'boxai',
+    path: 'boxai',
+    component: MockCustomBoxAIPanel,
+    title: 'Custom Box AI',
+    icon: MockBoxAIIcon,
 };
 
 const defaultFeatures = {
@@ -97,6 +114,25 @@ export const NativeBoxAIDisabled: StoryObj<typeof ContentSidebarComponent> = {
                 expect(boxAiButton).toHaveAttribute('aria-disabled', 'true');
                 expect(boxAiButton).toHaveClass('bdl-is-disabled');
                 expect(boxAiButton).toHaveAttribute('aria-selected', 'false');
+            },
+            { timeout: 5000 },
+        );
+    },
+};
+
+// Custom Box AI Panel
+export const WithCustomBoxAIPanel: StoryObj<typeof ContentSidebarComponent> = {
+    args: {
+        features: { ...defaultFeatures, boxai: { sidebar: { enabled: false } } },
+        customSidebarPanels: [customBoxAIPanelConfig],
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await waitFor(
+            () => {
+                const boxAiButton = canvas.getByTestId('sidebarboxai');
+                expect(boxAiButton).toHaveAttribute('aria-selected', 'true');
+                expect(canvas.getByTestId('custom-boxai-panel')).toBeInTheDocument();
             },
             { timeout: 5000 },
         );

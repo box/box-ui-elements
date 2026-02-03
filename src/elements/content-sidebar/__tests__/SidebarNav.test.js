@@ -20,10 +20,13 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     const renderSidebarNav = ({ path = '/', props = {}, features = {} } = {}) => {
+        const defaultProps = {
+            customSidebarPanels: [],
+        };
         return render(
             <MemoryRouter initialEntries={[path]}>
                 <FeatureProvider features={features}>
-                    <SidebarNav {...props} />
+                    <SidebarNav {...defaultProps} {...props} />
                 </FeatureProvider>
             </MemoryRouter>,
         );
