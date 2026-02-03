@@ -73,7 +73,7 @@ const TextArea = ({
                 <Tooltip
                     isShown={hasError}
                     position={errorTooltipPosition || 'bottom-left'}
-                    targetWrapperClassName={targetWrapperClassName}
+                    targetWrapperClassName={tooltipWrapperClassName}
                     tetherElementClassName={tooltipTetherClassName}
                     text={error || ''}
                     theme="error"
