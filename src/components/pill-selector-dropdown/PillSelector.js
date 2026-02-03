@@ -47,6 +47,8 @@ type Props = {
     suggestedPillsData?: Array<Object>,
     suggestedPillsFilter?: SuggestedPillsFilter,
     suggestedPillsTitle?: string,
+    /** A CSS class for the tooltip's target wrapper element */
+    tooltipWrapperClassName?: string,
     validator: (option: Option | OptionValue) => boolean,
 };
 
@@ -211,6 +213,7 @@ class PillSelectorBase extends React.Component<Props, State> {
             suggestedPillsData,
             suggestedPillsFilter,
             suggestedPillsTitle,
+            tooltipWrapperClassName,
             validator,
             ...rest
         } = this.props;
