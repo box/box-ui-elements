@@ -3,7 +3,7 @@
 exports[`components/label-pill/LabelPill should include DOM for tooltip if specified 1`] = `
 <LabelPill>
   <span
-    className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+    className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeLarge"
   >
     <LabelPillText>
       <span
@@ -27,7 +27,7 @@ exports[`components/label-pill/LabelPill should include DOM for tooltip if speci
 exports[`components/label-pill/LabelPill should render default DOM with icon component 1`] = `
 <LabelPill>
   <span
-    className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+    className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeLarge"
   >
     <LabelPillIcon
       Component={[Function]}
@@ -53,7 +53,7 @@ exports[`components/label-pill/LabelPill should render default DOM with icon com
 exports[`components/label-pill/LabelPill should render default DOM with message 1`] = `
 <LabelPill>
   <span
-    className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+    className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeLarge"
   >
     <LabelPillText>
       <span
