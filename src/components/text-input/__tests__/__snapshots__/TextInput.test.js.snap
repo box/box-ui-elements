@@ -19,6 +19,7 @@ exports[`components/text-input/TextInput should render text input with descripti
       isDisabled={false}
       isShown={false}
       position="middle-right"
+      targetWrapperClassName="text-input-tooltip-target"
       text=""
       theme="error"
     >
