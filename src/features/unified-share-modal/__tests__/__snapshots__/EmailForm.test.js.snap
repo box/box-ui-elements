@@ -2,7 +2,7 @@
 
 exports[`features/unified-share-modal/EmailForm render() should not show inline notice when content is not passed in 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
@@ -49,7 +49,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
 
 exports[`features/unified-share-modal/EmailForm render() should not show inline notice when form is not expanded 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
@@ -96,7 +96,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
 
 exports[`features/unified-share-modal/EmailForm render() should render default component when avatars are passed in 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <CollaboratorAvatars
@@ -148,7 +148,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render default component when contacts field is disabled 1`] = `
 <form
-  className="is-expanded"
+  className="bdl-EmailForm is-expanded"
   onSubmit={[Function]}
 >
   <Tooltip
@@ -242,7 +242,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render default component when expanded 1`] = `
 <form
-  className="is-expanded"
+  className="bdl-EmailForm is-expanded"
   onSubmit={[Function]}
 >
   <div
@@ -327,7 +327,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render default component when not expanded 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
@@ -374,7 +374,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render default component when there is an error 1`] = `
 <form
-  className="is-expanded"
+  className="bdl-EmailForm is-expanded"
   onSubmit={[Function]}
 >
   <InlineNotice
@@ -464,7 +464,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render default component with inline notice 1`] = `
 <form
-  className="is-expanded"
+  className="bdl-EmailForm is-expanded"
   onSubmit={[Function]}
 >
   <InlineNotice
@@ -554,7 +554,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render default component with secruity indicator notes when expanded and has external users selected 1`] = `
 <form
-  className="is-expanded"
+  className="bdl-EmailForm is-expanded"
   onSubmit={[Function]}
 >
   <div
@@ -655,7 +655,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
 
 exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is a string 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
@@ -705,7 +705,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
 
 exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is not passed in 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
@@ -752,7 +752,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
 
 exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is null or undefined 1`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
@@ -799,7 +799,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
 
 exports[`features/unified-share-modal/EmailForm render() should render tooltip around EmailForm correctly if recommendedSharingTooltipCalloutName is null or undefined 2`] = `
 <form
-  className=""
+  className="bdl-EmailForm"
   onSubmit={[Function]}
 >
   <div
