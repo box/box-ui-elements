@@ -412,7 +412,7 @@ class EmailForm extends React.Component<Props, State> {
 
         const contactsField = (
             <div className="tooltip-target">
-                <Tooltip targetWrapperClassName="bdl-EmailForm-tooltipTarget" {...tooltipPropsToRender}>
+                <Tooltip {...tooltipPropsToRender}>
                     <ContactsField
                         disabled={!isContactsFieldEnabled}
                         error={contactsFieldError}
@@ -440,11 +440,7 @@ class EmailForm extends React.Component<Props, State> {
             contactsFieldWrap = contactsField;
         } else {
             contactsFieldWrap = (
-                <Tooltip
-                    position="bottom-center"
-                    targetWrapperClassName="bdl-EmailForm-tooltipTarget"
-                    text={contactsFieldDisabledTooltip}
-                >
+                <Tooltip position="bottom-center" text={contactsFieldDisabledTooltip}>
                     {contactsField}
                 </Tooltip>
             );
@@ -456,7 +452,7 @@ class EmailForm extends React.Component<Props, State> {
 
         return (
             <form
-                className={classNames({
+                className={classNames('bdl-EmailForm', {
                     'is-expanded': isExpanded,
                 })}
                 onSubmit={this.handleSubmit}
