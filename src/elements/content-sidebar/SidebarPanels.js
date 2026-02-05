@@ -306,7 +306,6 @@ class SidebarPanels extends React.Component<Props, State> {
         const hasCustomPanels = customSidebarPanels.length > 0;
 
         const customPanelsEligibility = {};
-        // Custom panels take precedence over native (handled by Sidebar.js setting hasNativeBoxAISidebar)
         customSidebarPanels.forEach(({ path, isDisabled }) => {
             customPanelsEligibility[path] = !isDisabled;
         });
