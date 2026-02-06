@@ -136,6 +136,15 @@ type Props = {
     theme?: Theme,
     token: Token,
     useHotkeys: boolean,
+    /** Optional custom content to render instead of Box.Preview */
+    customPreviewContent?: React.ComponentType<{
+        fileId: string,
+        token: Token,
+        apiHost: string,
+        file: BoxItem,
+        onError?: Function,
+        onLoad?: Function,
+    }>,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -366,8 +375,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        this.loadStylesheet();
-        this.loadScript();
+        const { customPreviewContent } = this.props;
+
+        // Skip loading preview library if using custom content
+        if (!customPreviewContent) {
+            this.loadStylesheet();
+            this.loadScript();
+        }
 
         this.fetchFile(this.state.currentFileId);
         this.focusPreview();
@@ -737,9 +751,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
             };
         }
 
-        onLoad(loadData);
-
+        // Set loading to false before calling onLoad, so errors in metrics don't prevent UI update
         this.setState({ isLoading: false });
+
+        try {
+            onLoad(loadData);
+        } catch (error) {
+            // Log but don't throw - metrics errors shouldn't break preview
+            console.warn('ContentPreview: onLoad callback threw error:', error);
+        }
+
         this.focusPreview();
 
         if (this.preview && filesToPrefetch.length) {
@@ -805,6 +826,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const {
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
+            customPreviewContent,
             enableThumbnailsSidebar,
             features,
             fileOptions,
@@ -817,6 +839,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
             ...rest
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
+
+        // Skip loading Box.Preview if custom content is provided
+        if (customPreviewContent) {
+            return;
+        }
+
         this.previewLibraryLoaded = this.isPreviewLibraryLoaded();
 
         if (!this.previewLibraryLoaded || !file || !tokenOrTokenFunction) {
@@ -1172,8 +1200,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys }: Props = this.props;
-        if (!useHotkeys) {
+        const { useHotkeys, customPreviewContent }: Props = this.props;
+
+        // Skip hotkey handling when custom content is rendered (e.g., markdown editor)
+        // Custom content should handle its own keyboard shortcuts
+        if (!useHotkeys || customPreviewContent) {
             return;
         }
 
@@ -1431,9 +1462,24 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     >
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
-                                                {({ measureRef: previewRef }) => (
-                                                    <div ref={previewRef} className="bcpr-content" />
-                                                )}
+                                                {({ measureRef: previewRef }) => {
+                                                    const { customPreviewContent: CustomPreview } = this.props;
+
+                                                    return (
+                                                        <div ref={previewRef} className="bcpr-content">
+                                                            {CustomPreview && (
+                                                                <CustomPreview
+                                                                    fileId={currentFileId}
+                                                                    token={token}
+                                                                    apiHost={apiHost}
+                                                                    file={file}
+                                                                    onError={this.onError}
+                                                                    onLoad={this.onPreviewLoad}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    );
+                                                }}
                                             </Measure>
                                         )}
                                         <PreviewMask
