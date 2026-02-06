@@ -16,6 +16,7 @@ import { getFeatureConfig, withFeatureConsumer, isFeatureEnabled } from '../comm
 import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
+    ORIGIN_BOXAI_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
     ORIGIN_DOCGEN_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
@@ -23,14 +24,13 @@ import {
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_BOXAI,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
-    SIDEBAR_VIEW_BOXAI,
-    ORIGIN_BOXAI_SIDEBAR,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
@@ -42,10 +42,12 @@ import type { User, BoxItem } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { BoxAISidebarCache } from './types/BoxAISidebarTypes';
+import type { CustomSidebarPanel } from './flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     boxAISidebarProps: BoxAISidebarProps,
+    customSidebarPanels: Array<CustomSidebarPanel>,
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,
@@ -58,7 +60,7 @@ type Props = {
     getPreview: Function,
     getViewer: Function,
     hasActivity: boolean,
-    hasBoxAI: boolean,
+    hasNativeBoxAISidebar: boolean,
     hasDetails: boolean,
     hasDocGen: boolean,
     hasMetadata: boolean,
@@ -86,24 +88,33 @@ type ElementRefType = {
 
 // TODO: place into code splitting logic
 const BASE_EVENT_NAME = '_JS_LOADING';
-const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_BOXAI = `${ORIGIN_BOXAI_SIDEBAR}${BASE_EVENT_NAME}`;
-const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA_REDESIGNED = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}${BASE_EVENT_NAME}`;
-const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
 const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task' };
 
-const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
+// Default sidebar views in order (excluding BoxAI which is handled dynamically)
+const DEFAULT_SIDEBAR_VIEWS = [
+    SIDEBAR_VIEW_DOCGEN,
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_METADATA,
+];
+
 const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_ACTIVITY,
     MARK_NAME_JS_LOADING_ACTIVITY,
 );
 const LoadableBoxAISidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_BOXAI, MARK_NAME_JS_LOADING_BOXAI);
-const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_SKILLS, MARK_NAME_JS_LOADING_SKILLS);
+const LoadableDetailsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DETAILS, MARK_NAME_JS_LOADING_DETAILS);
+const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
     MARK_NAME_JS_LOADING_METADATA,
@@ -112,7 +123,7 @@ const LoadableMetadataSidebarRedesigned = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA_REDESIGN,
     MARK_NAME_JS_LOADING_METADATA,
 );
-const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
+const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_SKILLS, MARK_NAME_JS_LOADING_SKILLS);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_VERSIONS,
     MARK_NAME_JS_LOADING_VERSIONS,
@@ -126,6 +137,8 @@ class SidebarPanels extends React.Component<Props, State> {
     activitySidebar: ElementRefType = React.createRef();
 
     detailsSidebar: ElementRefType = React.createRef();
+
+    customSidebars: Map<string, ElementRefType> = new Map();
 
     initialPanel: { current: null | string } = React.createRef();
 
@@ -182,6 +195,18 @@ class SidebarPanels extends React.Component<Props, State> {
         this.boxAiSidebarCache[key] = value;
     };
 
+    getCustomSidebarRef = (panelId: string): ElementRefType => {
+        if (!this.customSidebars.has(panelId)) {
+            this.customSidebars.set(panelId, React.createRef());
+        }
+        // Flow doesn't understand that we just set the value above, so we need to assert it exists
+        const ref = this.customSidebars.get(panelId);
+        if (!ref) {
+            throw new Error(`Failed to get or create ref for panel ${panelId}`);
+        }
+        return ref;
+    };
+
     /**
      * Refreshes the contents of the active sidebar
      * @returns {void}
@@ -205,6 +230,13 @@ class SidebarPanels extends React.Component<Props, State> {
             detailsSidebar.refresh();
         }
 
+        // Refresh all custom sidebars (refresh is optional)
+        this.customSidebars.forEach(ref => {
+            if (ref.current && ref.current.refresh) {
+                ref.current.refresh();
+            }
+        });
+
         if (metadataSidebar) {
             metadataSidebar.refresh();
         }
@@ -214,10 +246,27 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     }
 
+    getPanelOrder = (
+        customSidebarPanels: Array<CustomSidebarPanel> = [],
+        shouldBoxAIBeDefaultPanel: boolean,
+        hasNativeBoxAISidebar: boolean,
+    ): string[] => {
+        const customPanelPaths = customSidebarPanels.map(panel => panel.path);
+        const hasCustomBoxAIPanel = customSidebarPanels.some(({ id }) => id === SIDEBAR_VIEW_BOXAI);
+        const nonBoxAIPaths = customPanelPaths.filter(path => path !== SIDEBAR_VIEW_BOXAI);
+
+        if (hasNativeBoxAISidebar || hasCustomBoxAIPanel) {
+            return [SIDEBAR_VIEW_BOXAI, ...DEFAULT_SIDEBAR_VIEWS, ...nonBoxAIPaths];
+        }
+
+        return [...DEFAULT_SIDEBAR_VIEWS, ...customPanelPaths];
+    };
+
     render() {
         const {
             activitySidebarProps,
             boxAISidebarProps,
+            customSidebarPanels,
             currentUser,
             currentUserError,
             defaultPanel = '',
@@ -231,7 +280,7 @@ class SidebarPanels extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasActivity,
-            hasBoxAI,
+            hasNativeBoxAISidebar,
             hasDetails,
             hasDocGen,
             hasMetadata,
@@ -252,7 +301,14 @@ class SidebarPanels extends React.Component<Props, State> {
         const { shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel, showOnlyNavButton: showOnlyBoxAINavButton } =
             getFeatureConfig(features, 'boxai.sidebar');
 
-        const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
+        const canShowBoxAISidebarPanel = hasNativeBoxAISidebar && !showOnlyBoxAINavButton;
+
+        const hasCustomPanels = customSidebarPanels.length > 0;
+
+        const customPanelsEligibility = {};
+        customSidebarPanels.forEach(({ path, isDisabled }) => {
+            customPanelsEligibility[path] = !isDisabled;
+        });
 
         const panelsEligibility = {
             [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
@@ -261,16 +317,28 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
             [SIDEBAR_VIEW_DETAILS]: hasDetails,
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
+            ...customPanelsEligibility,
         };
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
 
-        if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
+        if (
+            !isOpen ||
+            (!hasActivity &&
+                !canShowBoxAISidebarPanel &&
+                !hasDetails &&
+                !hasMetadata &&
+                !hasSkills &&
+                !hasDocGen &&
+                !hasVersions &&
+                !hasCustomPanels)
+        ) {
             return null;
         }
 
         return (
             <Switch>
+                {/* Native Box AI route - only shown when no custom Box AI panel exists */}
                 {canShowBoxAISidebarPanel && (
                     <Route
                         exact
@@ -294,6 +362,36 @@ class SidebarPanels extends React.Component<Props, State> {
                         }}
                     />
                 )}
+                {hasCustomPanels &&
+                    customSidebarPanels.map(customPanel => {
+                        const {
+                            id: customPanelId,
+                            path: customPanelPath,
+                            component: CustomPanelComponent,
+                            isDisabled,
+                        } = customPanel;
+
+                        return isDisabled ? null : (
+                            <Route
+                                exact
+                                key={customPanelId}
+                                path={`/${customPanelPath}`}
+                                render={() => {
+                                    this.handlePanelRender(customPanelPath);
+                                    return (
+                                        <CustomPanelComponent
+                                            elementId={elementId}
+                                            file={file}
+                                            fileId={fileId}
+                                            fileExtension={file.extension}
+                                            hasSidebarInitialized={isInitialized}
+                                            ref={this.getCustomSidebarRef(customPanelId)}
+                                        />
+                                    );
+                                }}
+                            />
+                        );
+                    })}
                 {hasSkills && (
                     <Route
                         exact
@@ -455,22 +553,18 @@ class SidebarPanels extends React.Component<Props, State> {
 
                         if (showDefaultPanel) {
                             redirect = defaultPanel;
-                        } else if (canShowBoxAISidebarPanel && shouldBoxAIBeDefaultPanel) {
-                            redirect = SIDEBAR_VIEW_BOXAI;
-                        } else if (hasDocGen) {
-                            redirect = SIDEBAR_VIEW_DOCGEN;
-                        } else if (hasSkills) {
-                            redirect = SIDEBAR_VIEW_SKILLS;
-                        } else if (hasActivity) {
-                            redirect = SIDEBAR_VIEW_ACTIVITY;
-                        } else if (hasDetails) {
-                            redirect = SIDEBAR_VIEW_DETAILS;
-                        } else if (hasMetadata) {
-                            redirect = SIDEBAR_VIEW_METADATA;
-                        } else if (canShowBoxAISidebarPanel && !shouldBoxAIBeDefaultPanel) {
-                            redirect = SIDEBAR_VIEW_BOXAI;
+                        } else {
+                            // Use panel order to determine redirect
+                            const panelOrder = this.getPanelOrder(
+                                customSidebarPanels,
+                                shouldBoxAIBeDefaultPanel,
+                                hasNativeBoxAISidebar,
+                            );
+                            const firstEligiblePanel = panelOrder.find(panel => panelsEligibility[panel]);
+                            if (firstEligiblePanel) {
+                                redirect = firstEligiblePanel;
+                            }
                         }
-
                         return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
                     }}
                 />

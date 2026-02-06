@@ -46,7 +46,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
-import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
+import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
@@ -117,13 +117,27 @@ const DocGenIconWrapper = ({ isActive, isPreviewModernizationEnabled }: IconWrap
     );
 };
 
+/**
+ * Renders a custom panel icon.
+ * Handles both React elements and component types.
+ */
+const renderCustomPanelIcon = (icon: React.ComponentType<any> | React.Element<any>): React.Element<any> => {
+    if (React.isValidElement(icon)) {
+        return (icon: any);
+    }
+
+    const IconComponent: React.ComponentType<any> = (icon: any);
+    return <IconComponent className="bcs-SidebarNav-icon" />;
+};
+
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
+    customSidebarPanels: Array<CustomSidebarPanel>,
     elementId: string,
     fileId: string,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
-    hasBoxAI: boolean,
+    hasNativeBoxAISidebar: boolean,
     hasDetails: boolean,
     hasDocGen?: boolean,
     hasMetadata: boolean,
@@ -140,11 +154,12 @@ type Props = {
 
 const SidebarNav = ({
     additionalTabs,
+    customSidebarPanels,
     elementId,
     fileId,
     hasActivity,
     hasAdditionalTabs,
-    hasBoxAI,
+    hasNativeBoxAISidebar,
     hasDetails,
     hasMetadata,
     hasSkills,
@@ -173,6 +188,149 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
+    const boxAiPanel = customSidebarPanels.find(panel => panel.id === SIDEBAR_VIEW_BOXAI);
+    const otherCustomPanels = customSidebarPanels.filter(panel => panel.id !== SIDEBAR_VIEW_BOXAI);
+    const hasOtherCustomPanels = otherCustomPanels.length > 0;
+
+    const boxAiNavButtonProps = {
+        key: SIDEBAR_VIEW_BOXAI,
+        isPreviewModernizationEnabled,
+        'data-resin-target': SIDEBAR_NAV_TARGETS.BOXAI,
+        'data-target-id': 'SidebarNavButton-boxAI',
+        'data-testid': 'sidebarboxai',
+        sidebarView: SIDEBAR_VIEW_BOXAI,
+    };
+
+    const sidebarTabs = [
+        hasNativeBoxAISidebar && (
+            <SidebarNavButton
+                {...boxAiNavButtonProps}
+                onClick={handleSidebarNavButtonClick}
+                isDisabled={showOnlyBoxAINavButton}
+                tooltip={showOnlyBoxAINavButton ? boxAIDisabledTooltip : intl.formatMessage(messages.sidebarBoxAITitle)}
+            >
+                {isPreviewModernizationEnabled ? (
+                    <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />
+                ) : (
+                    <BoxAiLogo height={Size6} width={Size6} />
+                )}
+            </SidebarNavButton>
+        ),
+        !hasNativeBoxAISidebar && boxAiPanel && (
+            <SidebarNavButton
+                {...boxAiNavButtonProps}
+                {...boxAiPanel.navButtonProps}
+                onClick={handleSidebarNavButtonClick}
+                isDisabled={boxAiPanel.isDisabled}
+                tooltip={boxAiPanel.title}
+            >
+                {renderCustomPanelIcon(boxAiPanel.icon)}
+            </SidebarNavButton>
+        ),
+        hasActivity && (
+            <SidebarNavButton
+                key={SIDEBAR_VIEW_ACTIVITY}
+                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
+                data-target-id="SidebarNavButton-activity"
+                data-testid="sidebaractivity"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_ACTIVITY}
+                tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
+            >
+                <ActivityIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
+            </SidebarNavButton>
+        ),
+        hasDetails && (
+            <SidebarNavButton
+                key={SIDEBAR_VIEW_DETAILS}
+                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
+                data-target-id="SidebarNavButton-details"
+                data-testid="sidebardetails"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_DETAILS}
+                tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
+            >
+                <DetailsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
+            </SidebarNavButton>
+        ),
+        hasSkills && (
+            <SidebarNavButton
+                key={SIDEBAR_VIEW_SKILLS}
+                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
+                data-target-id="SidebarNavButton-skills"
+                data-testid="sidebarskills"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_SKILLS}
+                tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
+            >
+                <SkillsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
+            </SidebarNavButton>
+        ),
+        hasMetadata && (
+            <SidebarNavButton
+                key={SIDEBAR_VIEW_METADATA}
+                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
+                data-target-id="SidebarNavButton-metadata"
+                data-testid="sidebarmetadata"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_METADATA}
+                tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
+            >
+                <MetadataIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
+            </SidebarNavButton>
+        ),
+        hasDocGen && (
+            <SidebarNavButton
+                key={SIDEBAR_VIEW_DOCGEN}
+                isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
+                data-target-id="SidebarNavButton-docgen"
+                data-testid="sidebardocgen"
+                onClick={handleSidebarNavButtonClick}
+                sidebarView={SIDEBAR_VIEW_DOCGEN}
+                tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
+            >
+                <DocGenIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
+            </SidebarNavButton>
+        ),
+    ];
+
+    const visibleTabs = sidebarTabs.filter(Boolean);
+
+    const customPanelButtons = hasOtherCustomPanels
+        ? otherCustomPanels.map(customPanel => {
+              const {
+                  id: customPanelId,
+                  path: customPanelPath,
+                  icon: customPanelIcon,
+                  title: customPanelTitle,
+                  navButtonProps,
+              } = customPanel;
+
+              return (
+                  <SidebarNavButton
+                      key={customPanelId}
+                      isPreviewModernizationEnabled={isPreviewModernizationEnabled}
+                      data-resin-target={`sidebar${customPanelId}`}
+                      data-target-id={`SidebarNavButton-${customPanelId}`}
+                      data-testid={`sidebar${customPanelId}`}
+                      {...navButtonProps}
+                      isDisabled={customPanel.isDisabled}
+                      onClick={handleSidebarNavButtonClick}
+                      sidebarView={customPanelPath}
+                      tooltip={customPanelTitle}
+                  >
+                      {renderCustomPanelIcon(customPanelIcon)}
+                  </SidebarNavButton>
+              );
+          })
+        : [];
+
+    const allVisibleTabs = [...visibleTabs, ...customPanelButtons];
 
     return (
         <div
@@ -190,94 +348,7 @@ const SidebarNav = ({
                     onNavigate={onNavigate}
                     routerDisabled={routerDisabled}
                 >
-                    {hasBoxAI && (
-                        <SidebarNavButton
-                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
-                            data-target-id="SidebarNavButton-boxAI"
-                            data-testid="sidebarboxai"
-                            isDisabled={showOnlyBoxAINavButton}
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_BOXAI}
-                            tooltip={
-                                showOnlyBoxAINavButton
-                                    ? boxAIDisabledTooltip
-                                    : intl.formatMessage(messages.sidebarBoxAITitle)
-                            }
-                        >
-                            {isPreviewModernizationEnabled ? (
-                                <BoxAiLogo24 {...SIDEBAR_TAB_ICON_PROPS} />
-                            ) : (
-                                <BoxAiLogo height={Size6} width={Size6} />
-                            )}
-                        </SidebarNavButton>
-                    )}
-                    {hasActivity && (
-                        <SidebarNavButton
-                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
-                            data-target-id="SidebarNavButton-activity"
-                            data-testid="sidebaractivity"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                            tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
-                        >
-                            <ActivityIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
-                        </SidebarNavButton>
-                    )}
-                    {hasDetails && (
-                        <SidebarNavButton
-                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
-                            data-target-id="SidebarNavButton-details"
-                            data-testid="sidebardetails"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_DETAILS}
-                            tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
-                        >
-                            <DetailsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
-                        </SidebarNavButton>
-                    )}
-                    {hasSkills && (
-                        <SidebarNavButton
-                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
-                            data-target-id="SidebarNavButton-skills"
-                            data-testid="sidebarskills"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_SKILLS}
-                            tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
-                        >
-                            <SkillsIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
-                        </SidebarNavButton>
-                    )}
-                    {hasMetadata && (
-                        <SidebarNavButton
-                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
-                            data-target-id="SidebarNavButton-metadata"
-                            data-testid="sidebarmetadata"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_METADATA}
-                            tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
-                        >
-                            <MetadataIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
-                        </SidebarNavButton>
-                    )}
-                    {hasDocGen && (
-                        <SidebarNavButton
-                            elementId=""
-                            isPreviewModernizationEnabled={isPreviewModernizationEnabled}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
-                            data-target-id="SidebarNavButton-docGen"
-                            data-testid="sidebardocgen"
-                            onClick={handleSidebarNavButtonClick}
-                            sidebarView={SIDEBAR_VIEW_DOCGEN}
-                            tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
-                        >
-                            <DocGenIconWrapper isPreviewModernizationEnabled={isPreviewModernizationEnabled} />
-                        </SidebarNavButton>
-                    )}
+                    {allVisibleTabs}
                 </SidebarNavTablist>
 
                 {hasBoxSign && (

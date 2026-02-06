@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import type { UseTargetingApi } from '../../features/targeting/types';
+import type { Props as SidebarNavButtonProps } from './SidebarNavButton';
 
 type ClassificationInfo = {
     definition?: string,
@@ -33,6 +34,23 @@ type AdditionalSidebarTab = {
     icon?: React.Node,
 };
 
+/**
+ * Optional props to customize the nav button.
+ * Note: onClick, sidebarView, isDisabled, tooltip, and children are managed
+ * internally and will be overridden if passed.
+ */
+type NavButtonOverrideProps = $Shape<SidebarNavButtonProps>;
+
+type CustomSidebarPanel = {
+    id: string,
+    path: string,
+    component: React.ComponentType<any>,
+    title: string,
+    isDisabled?: boolean,
+    icon: React.ComponentType<any> | React.Element<any>,
+    navButtonProps?: NavButtonOverrideProps,
+};
+
 type Translations = {
     onTranslate?: Function,
     translationEnabled?: boolean,
@@ -49,6 +67,7 @@ type FileAccessStats = {
 export type {
     ClassificationInfo,
     ContentInsights,
+    CustomSidebarPanel,
     NavigateOptions,
     AdditionalSidebarTab,
     AdditionalSidebarTabFtuxData,

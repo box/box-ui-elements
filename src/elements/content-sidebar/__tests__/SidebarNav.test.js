@@ -20,22 +20,39 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     const renderSidebarNav = ({ path = '/', props = {}, features = {} } = {}) => {
+        const defaultProps = {
+            customSidebarPanels: [],
+        };
         return render(
             <MemoryRouter initialEntries={[path]}>
                 <FeatureProvider features={features}>
-                    <SidebarNav {...props} />
+                    <SidebarNav {...defaultProps} {...props} />
                 </FeatureProvider>
             </MemoryRouter>,
         );
     };
 
+    // Mock icon component for testing
+    const MockBoxAIIcon = () => <div data-testid="mock-boxai-icon">BoxAI Icon</div>;
+
+    // Helper function to create Box AI custom tab
+    const createBoxAIPanel = (overrides = {}) => ({
+        id: 'boxai',
+        path: 'boxai',
+        title: 'Box AI',
+        icon: MockBoxAIIcon,
+        isDisabled: false,
+        navButtonProps: {},
+        ...overrides,
+    });
+
     describe('individual tab rendering', () => {
         const TABS_CONFIG = {
+            boxai: { testId: 'sidebarboxai', propName: 'hasNativeBoxAISidebar' },
             skills: { testId: 'sidebarskills', propName: 'hasSkills' },
             details: { testId: 'sidebardetails', propName: 'hasDetails' },
             activity: { testId: 'sidebaractivity', propName: 'hasActivity' },
             metadata: { testId: 'sidebarmetadata', propName: 'hasMetadata' },
-            boxai: { testId: 'sidebarboxai', propName: 'hasBoxAI' },
             docgen: { testId: 'sidebardocgen', propName: 'hasDocGen' },
         };
 
@@ -73,7 +90,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
                 renderSidebarNav({
                     features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
-                    props: { hasBoxAI: true },
+                    props: { hasNativeBoxAISidebar: true },
                 });
 
                 const button = screen.getByTestId('sidebarboxai');
@@ -92,7 +109,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             renderSidebarNav({
                 features: { boxai: { sidebar: { showOnlyNavButton: false } } },
-                props: { hasBoxAI: true },
+                props: { hasNativeBoxAISidebar: true },
             });
 
             const button = screen.getByTestId('sidebarboxai');
@@ -106,18 +123,13 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
     });
 
-    test('should call focusBoxAISidebarPrompt when clicked on Box AI Tab', async () => {
+    test('should call focusBoxAISidebarPrompt when clicked on native Box AI Tab', async () => {
         const user = userEvent();
 
         renderSidebarNav({
-            features: {
-                boxai: {
-                    sidebar: {
-                        showOnlyNavButton: false,
-                    },
-                },
+            props: {
+                hasNativeBoxAISidebar: true,
             },
-            props: { hasBoxAI: true },
         });
 
         const button = screen.getByTestId('sidebarboxai');
@@ -135,8 +147,8 @@ describe('elements/content-sidebar/SidebarNav', () => {
         renderSidebarNav({
             path: '/activity',
             props: {
+                hasNativeBoxAISidebar: true,
                 hasActivity: true,
-                hasBoxAI: true,
                 hasMetadata: true,
                 hasSkills: true,
             },
@@ -197,5 +209,305 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
         const boxSignSection = screen.getByRole('button', { name: /sign/i });
         expect(boxSignSection).toBeInTheDocument();
+    });
+
+    describe('hasNativeBoxAISidebar and customSidebarPanels interaction', () => {
+        test('should render native Box AI when hasNativeBoxAISidebar is true, ignoring custom boxai tab', () => {
+            const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI' });
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: true,
+                    customSidebarPanels: [boxAiPanel],
+                },
+            });
+
+            // Should only render one Box AI tab (the native one)
+            const boxAiButtons = screen.getAllByTestId('sidebarboxai');
+            expect(boxAiButtons).toHaveLength(1);
+
+            // The native Box AI button should have the default tooltip, not the custom one
+            expect(boxAiButtons[0]).toHaveAttribute('aria-label', 'Box AI');
+        });
+
+        test('should render custom boxai tab when hasNativeBoxAISidebar is false', () => {
+            const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI Title' });
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: false,
+                    customSidebarPanels: [boxAiPanel],
+                },
+            });
+
+            const button = screen.getByTestId('sidebarboxai');
+            expect(button).toBeInTheDocument();
+            expect(button).toHaveAttribute('aria-label', 'Custom Box AI Title');
+        });
+
+        test('should not render any boxai tab when hasNativeBoxAISidebar is false and no custom boxai tab provided', () => {
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: false,
+                    hasActivity: true,
+                    customSidebarPanels: [],
+                },
+            });
+
+            expect(screen.queryByTestId('sidebarboxai')).not.toBeInTheDocument();
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+        });
+
+        test('should render native Box AI AND other custom tabs when hasNativeBoxAISidebar is true', () => {
+            // Mock icon component for custom tabs
+            const MockCustomIcon = () => <div data-testid="mock-custom-icon">Custom Icon</div>;
+
+            const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI' });
+            const analyticsTab = {
+                id: 'analytics',
+                path: 'analytics',
+                title: 'Analytics Tab',
+                icon: MockCustomIcon,
+                isDisabled: false,
+                navButtonProps: {},
+            };
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: true,
+                    hasActivity: true,
+                    customSidebarPanels: [boxAiPanel, analyticsTab],
+                },
+            });
+
+            // Native Box AI should render (custom Box AI is ignored)
+            const boxAiButtons = screen.getAllByTestId('sidebarboxai');
+            expect(boxAiButtons).toHaveLength(1);
+            expect(boxAiButtons[0]).toHaveAttribute('aria-label', 'Box AI');
+
+            // Other custom tabs should still render alongside native Box AI
+            expect(screen.getByTestId('sidebaranalytics')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+
+            // Verify order: Native Box AI first, then regular tabs, then custom tabs
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(3);
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[1]).toHaveAttribute('data-testid', 'sidebaractivity');
+            expect(navButtons[2]).toHaveAttribute('data-testid', 'sidebaranalytics');
+        });
+    });
+
+    describe('multiple customSidebarPanels rendering', () => {
+        // Mock icon component for custom tabs
+        const MockCustomIcon = ({ testId }) => <div data-testid={testId || 'mock-custom-icon'}>Custom Icon</div>;
+
+        // Helper function to create a generic custom tab (icon is required)
+        const createCustomTab = (id, overrides = {}) => {
+            const { icon = () => <MockCustomIcon testId={`mock-icon-${id}`} />, ...rest } = overrides;
+            return {
+                id,
+                path: id,
+                title: `${id.charAt(0).toUpperCase()}${id.slice(1)} Tab`,
+                icon,
+                isDisabled: false,
+                navButtonProps: {},
+                ...rest,
+            };
+        };
+
+        test('should render Box AI first even when passed in different order', () => {
+            const customTab1 = createCustomTab('customtab1');
+            const customTab2 = createCustomTab('customtab2');
+            const boxAiPanel = createBoxAIPanel();
+
+            renderSidebarNav({
+                props: {
+                    customSidebarPanels: [customTab1, boxAiPanel, customTab2],
+                },
+            });
+
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(3);
+
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[1]).toHaveAttribute('data-testid', 'sidebarcustomtab1');
+            expect(navButtons[2]).toHaveAttribute('data-testid', 'sidebarcustomtab2');
+        });
+
+        test('should render custom tabs with regular tabs', () => {
+            const customTab1 = createCustomTab('analytics');
+            const boxAiPanel = createBoxAIPanel();
+
+            renderSidebarNav({
+                props: {
+                    hasActivity: true,
+                    hasMetadata: true,
+                    customSidebarPanels: [boxAiPanel, customTab1],
+                },
+            });
+
+            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebarmetadata')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebaranalytics')).toBeInTheDocument();
+
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(4);
+
+            // Verify order: Box AI first, regular tabs, then custom tabs at the end
+            expect(navButtons[0]).toHaveAttribute('data-testid', 'sidebarboxai');
+            expect(navButtons[3]).toHaveAttribute('data-testid', 'sidebaranalytics');
+        });
+
+        test('should handle custom tabs with different properties', () => {
+            const disabledTab = createCustomTab('disabled', {
+                isDisabled: true,
+                title: 'Disabled Tab',
+            });
+            const customTitleTab = createCustomTab('customtitle', {
+                title: 'Custom Title Tab',
+            });
+
+            renderSidebarNav({
+                props: {
+                    customSidebarPanels: [disabledTab, customTitleTab],
+                },
+            });
+
+            const disabledButton = screen.getByTestId('sidebardisabled');
+            const customTitleButton = screen.getByTestId('sidebarcustomtitle');
+
+            expect(disabledButton).toBeInTheDocument();
+            expect(disabledButton).toHaveAttribute('aria-disabled', 'true');
+            expect(disabledButton).toHaveAttribute('aria-label', 'Disabled Tab');
+
+            expect(customTitleButton).toBeInTheDocument();
+            expect(customTitleButton).toHaveAttribute('aria-label', 'Custom Title Tab');
+        });
+
+        test('should handle custom tabs without Box AI', () => {
+            const customTab1 = createCustomTab('reports');
+            const customTab2 = createCustomTab('settings');
+
+            renderSidebarNav({
+                props: {
+                    hasActivity: true,
+                    customSidebarPanels: [customTab1, customTab2],
+                },
+            });
+
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebarreports')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebarsettings')).toBeInTheDocument();
+
+            expect(screen.queryByTestId('sidebarboxai')).not.toBeInTheDocument();
+
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(3);
+        });
+
+        test('should handle empty customSidebarPanels array', () => {
+            renderSidebarNav({
+                props: {
+                    hasActivity: true,
+                    hasMetadata: true,
+                    customSidebarPanels: [],
+                },
+            });
+
+            expect(screen.getByTestId('sidebaractivity')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebarmetadata')).toBeInTheDocument();
+
+            expect(screen.queryByTestId('sidebarboxai')).not.toBeInTheDocument();
+
+            const navButtons = screen.getAllByRole('tab');
+            expect(navButtons).toHaveLength(2);
+        });
+
+        test('should handle customSidebarPanels with icons', () => {
+            const MockIcon = () => <div data-testid="mock-icon">Icon</div>;
+            const tabWithIcon = createCustomTab('icontest', {
+                icon: MockIcon,
+                title: 'Tab with Icon',
+            });
+
+            renderSidebarNav({
+                props: {
+                    customSidebarPanels: [tabWithIcon],
+                },
+            });
+
+            expect(screen.getByTestId('sidebaricontest')).toBeInTheDocument();
+            expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
+        });
+
+        test('should call onPanelChange when custom tab is clicked', async () => {
+            const user = userEvent();
+            const onPanelChangeMock = jest.fn();
+            const customTab = createCustomTab('testclick');
+
+            renderSidebarNav({
+                props: {
+                    customSidebarPanels: [customTab],
+                    onPanelChange: onPanelChangeMock,
+                },
+            });
+
+            const button = screen.getByTestId('sidebartestclick');
+            await user.click(button);
+
+            expect(onPanelChangeMock).toHaveBeenCalledWith('testclick', false);
+        });
+    });
+
+    describe('custom panel icon rendering', () => {
+        const MockIconComponent = () => <div data-testid="mock-icon-component">Icon Component</div>;
+        const MockIconComponent2 = () => <div data-testid="mock-icon-component-2">Icon Component 2</div>;
+        const mockIconElement = <div data-testid="mock-icon-element">Icon Element</div>;
+
+        const createCustomTab = (id, overrides = {}) => ({
+            id,
+            path: id,
+            title: `${id.charAt(0).toUpperCase()}${id.slice(1)} Tab`,
+            icon: MockIconComponent,
+            isDisabled: false,
+            navButtonProps: {},
+            ...overrides,
+        });
+
+        test('should render custom Box AI tab with provided icon component', () => {
+            const boxAiPanel = createBoxAIPanel({ icon: MockIconComponent });
+
+            renderSidebarNav({
+                props: {
+                    hasNativeBoxAISidebar: false,
+                    customSidebarPanels: [boxAiPanel],
+                },
+            });
+
+            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
+            expect(screen.getByTestId('mock-icon-component')).toBeInTheDocument();
+        });
+
+        test('should render multiple custom tabs with mixed icon types', () => {
+            const tabWithComponent = createCustomTab('tab1', { icon: MockIconComponent });
+            const tabWithElement = createCustomTab('tab2', { icon: mockIconElement });
+            const tabWithComponent2 = createCustomTab('tab3', { icon: MockIconComponent2 });
+
+            renderSidebarNav({
+                props: {
+                    customSidebarPanels: [tabWithComponent, tabWithElement, tabWithComponent2],
+                },
+            });
+
+            expect(screen.getByTestId('sidebartab1')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebartab2')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebartab3')).toBeInTheDocument();
+
+            expect(screen.getByTestId('mock-icon-component')).toBeInTheDocument();
+            expect(screen.getByTestId('mock-icon-element')).toBeInTheDocument();
+            expect(screen.getByTestId('mock-icon-component-2')).toBeInTheDocument();
+        });
     });
 });

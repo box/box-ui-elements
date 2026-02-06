@@ -28,14 +28,14 @@ import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { SignSidebarProps } from './SidebarNavSign';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
-import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
+import { SIDEBAR_VIEW_DOCGEN, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import API from '../../api';
 
 type Props = {
@@ -46,6 +46,7 @@ type Props = {
     className: string,
     currentUser?: User,
     currentUserError?: Errors,
+    customSidebarPanels?: Array<CustomSidebarPanel>,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     features: FeatureConfig,
@@ -300,6 +301,7 @@ class Sidebar extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             shouldFetchSidebarData,
+            customSidebarPanels = [],
             detailsSidebarProps,
             docGenSidebarProps,
             file,
@@ -319,7 +321,11 @@ class Sidebar extends React.Component<Props, State> {
             versionsSidebarProps,
         }: Props = this.props;
         const isOpen = this.isOpen();
-        const hasBoxAI = SidebarUtils.canHaveBoxAISidebar(this.props);
+
+        const hasCustomBoxAISidebar = customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI);
+        const isBoxAIEnabled = SidebarUtils.canHaveBoxAISidebar(this.props);
+        // Custom Box AI takes precedence over native when both exist
+        const hasNativeBoxAISidebar = isBoxAIEnabled && !hasCustomBoxAISidebar;
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
@@ -327,7 +333,7 @@ class Sidebar extends React.Component<Props, State> {
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
-            'bcs-is-wider': hasBoxAI,
+            'bcs-is-wider': hasNativeBoxAISidebar || hasCustomBoxAISidebar,
         });
         const defaultPanel = this.getDefaultPanel();
 
@@ -343,11 +349,12 @@ class Sidebar extends React.Component<Props, State> {
                         {hasNav && (
                             <SidebarNav
                                 additionalTabs={additionalTabs}
+                                customSidebarPanels={customSidebarPanels}
                                 elementId={this.id}
                                 fileId={fileId}
                                 hasActivity={hasActivity}
                                 hasAdditionalTabs={hasAdditionalTabs}
-                                hasBoxAI={hasBoxAI}
+                                hasNativeBoxAISidebar={hasNativeBoxAISidebar}
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
@@ -363,6 +370,7 @@ class Sidebar extends React.Component<Props, State> {
                             currentUser={currentUser}
                             currentUserError={currentUserError}
                             shouldFetchSidebarData={shouldFetchSidebarData}
+                            customSidebarPanels={customSidebarPanels}
                             elementId={this.id}
                             defaultPanel={defaultPanel}
                             detailsSidebarProps={detailsSidebarProps}
@@ -372,7 +380,7 @@ class Sidebar extends React.Component<Props, State> {
                             getPreview={getPreview}
                             getViewer={getViewer}
                             hasActivity={hasActivity}
-                            hasBoxAI={hasBoxAI}
+                            hasNativeBoxAISidebar={hasNativeBoxAISidebar}
                             hasDetails={hasDetails}
                             hasDocGen={docGenSidebarProps.isDocGenTemplate}
                             hasMetadata={hasMetadata}

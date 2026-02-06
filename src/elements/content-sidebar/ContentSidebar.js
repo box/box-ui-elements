@@ -46,7 +46,7 @@ import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsXhrError, RequestOptions, ErrorContextProps } from '../../common/types/api';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
-import type { AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
@@ -66,6 +66,7 @@ type Props = {
     className: string,
     clientName: string,
     currentUser?: User,
+    customSidebarPanels?: Array<CustomSidebarPanel>,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps?: DocGenSidebarProps,
@@ -358,6 +359,7 @@ class ContentSidebar extends React.Component<Props, State> {
             boxAISidebarProps,
             className,
             currentUser,
+            customSidebarPanels,
             defaultView,
             shouldFetchSidebarData,
             detailsSidebarProps,
@@ -408,6 +410,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 className={className}
                                 currentUser={currentUser}
                                 shouldFetchSidebarData={shouldFetchSidebarData}
+                                customSidebarPanels={customSidebarPanels}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
                                 file={displayFile}
