@@ -661,6 +661,18 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.state.error).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toBeTruthy();
         });
+
+        test('should keep isLoading true when loadingIndicatorShownThisSession is true and new file arrives', () => {
+            const wrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
+            const inst = wrapper.instance();
+            inst.setState({ file: undefined, isLoading: true });
+            inst.loadingIndicatorShownThisSession = true;
+            const newFile = { id: '456', file_version: { sha1: 'sha' } };
+            inst.fetchFileSuccessCallback(newFile);
+
+            expect(inst.state.file).toEqual(newFile);
+            expect(inst.state.isLoading).toBe(true);
+        });
     });
 
     describe('fetchFileErrorCallback()', () => {
@@ -873,6 +885,24 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('onPreviewError()', () => {
+        test('should end loading session and call onError', () => {
+            const onError = jest.fn();
+            const wrapper = getWrapper({ ...props, onError });
+            const inst = wrapper.instance();
+            inst.setState({ isLoading: true });
+            const errorPayload = { error: { code: 'some_code', message: 'msg' } };
+            inst.onPreviewError(errorPayload);
+            expect(inst.state.isLoading).toBe(false);
+            expect(onError).toHaveBeenCalledWith(
+                errorPayload.error,
+                'some_code',
+                expect.objectContaining({ error: errorPayload.error }),
+                expect.any(String),
+            );
+        });
+    });
+
     describe('onPreviewMetric()', () => {
         let wrapper;
         let instance;
@@ -1060,12 +1090,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadPreview).toBeCalledTimes(1);
         });
 
-        test("should update the loading state if fileId hasn't changed and shouldLoadPreview returns true", () => {
+        test('should not update loading state when shouldLoadPreview returns true (same session)', () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
-            wrapper.setState({ isLoading: false }); // Simulate existing preview
-            wrapper.setProps({ fileId: 'bar' });
+            wrapper.setState({ isLoading: false });
+            wrapper.setProps({ foo: 'bar' });
 
-            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.loadPreview).toHaveBeenCalled();
+            expect(instance.destroyPreview).toHaveBeenCalledWith(false);
+            expect(wrapper.state('isLoading')).toBe(false);
         });
 
         test('should update the preview with the new token if it changes', () => {
