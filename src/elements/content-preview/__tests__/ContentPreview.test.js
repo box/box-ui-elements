@@ -675,6 +675,89 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('loading indicator defer and timeout', () => {
+        test('componentDidMount sets up defer timer when loadingIndicatorDelayMs > 0', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            expect(typeof instance.loadingIndicatorDelayTimeoutId).toBe('number');
+            expect(wrapper.state('isDeferringLoading')).toBe(true);
+            expect(wrapper.state('isLoading')).toBe(false);
+
+            jest.useRealTimers();
+        });
+
+        test('timeout firing transitions from isDeferringLoading to isLoading', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            expect(wrapper.state('isDeferringLoading')).toBe(true);
+            expect(instance.loadingIndicatorShownThisSession).toBe(false);
+
+            jest.advanceTimersByTime(200);
+
+            expect(wrapper.state('isDeferringLoading')).toBe(false);
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.loadingIndicatorShownThisSession).toBe(true);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeUndefined();
+
+            jest.useRealTimers();
+        });
+
+        test('endLoadingSession clears timeout before it fires (fast-load scenario)', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            instance.endLoadingSession();
+
+            jest.advanceTimersByTime(200);
+
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('isDeferringLoading')).toBe(false);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeUndefined();
+
+            jest.useRealTimers();
+        });
+
+        test('getLoadingIndicatorDelayMs returns 0 for negative or non-numeric values', () => {
+            const wrapperNegative = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: -100,
+            });
+            expect(wrapperNegative.instance().getLoadingIndicatorDelayMs()).toBe(0);
+
+            const wrapperNonNumeric = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 'not-a-number',
+            });
+            expect(wrapperNonNumeric.instance().getLoadingIndicatorDelayMs()).toBe(0);
+
+            const wrapperValid = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 150,
+            });
+            expect(wrapperValid.instance().getLoadingIndicatorDelayMs()).toBe(150);
+        });
+    });
+
     describe('fetchFileErrorCallback()', () => {
         let instance;
         let error;

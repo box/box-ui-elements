@@ -149,7 +149,7 @@ type State = {
     error?: ErrorType,
     file?: BoxItem,
     isLoading: boolean,
-    isDeferringLoading?: boolean, // DEMO: deferred spinner cues – remove for production
+    isDeferringLoading?: boolean,
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
@@ -285,6 +285,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     fetchFileStartTime: ?number;
 
+    loadingIndicatorShownThisSession: boolean;
+
+    loadingIndicatorDelayTimeoutId: TimeoutID | void;
+
     /**
      * [constructor]
      *
@@ -413,7 +417,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         const delayMs = this.getLoadingIndicatorDelayMs();
         if (delayMs > 0) {
-            this.setState({ isLoading: false, isDeferringLoading: true });
             this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
                 this.loadingIndicatorDelayTimeoutId = undefined;
                 this.loadingIndicatorShownThisSession = true;
@@ -459,7 +462,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (hasFileIdChanged) {
             this.destroyPreview();
             this.loadingIndicatorShownThisSession = false;
-            if (delayMs > 0) {
+            if (!currentFileId) {
+                this.endLoadingSession();
+            } else if (delayMs > 0) {
                 this.setState({ isLoading: false, isDeferringLoading: true, selectedVersion: undefined });
                 this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
                     this.loadingIndicatorDelayTimeoutId = undefined;
