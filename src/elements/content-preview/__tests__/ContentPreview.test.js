@@ -1842,7 +1842,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(customPreviewInstance.prop('apiHost')).toBe(props.apiHost);
                 expect(customPreviewInstance.prop('file')).toBe(file);
                 // onError and onLoad are instance methods
-                expect(customPreviewInstance.prop('onError')).toBe(instance.onError);
+                expect(customPreviewInstance.prop('onError')).toBe(instance.onPreviewError);
                 expect(customPreviewInstance.prop('onLoad')).toBe(instance.onPreviewLoad);
             });
 
@@ -1912,10 +1912,11 @@ describe('elements/content-preview/ContentPreview', () => {
             });
 
             test('should catch and suppress errors from onLoad callback', () => {
+                const mockLogger = { logError: jest.fn(), onReadyMetric: jest.fn() };
                 const onLoadWithError = jest.fn(() => {
                     throw new Error('Metrics error');
                 });
-                const wrapper = getWrapper({ ...props, onLoad: onLoadWithError });
+                const wrapper = getWrapper({ ...props, onLoad: onLoadWithError, logger: mockLogger });
                 const instance = wrapper.instance();
                 wrapper.setState({ isLoading: true });
                 instance.focusPreview = jest.fn();
@@ -1943,7 +1944,7 @@ describe('elements/content-preview/ContentPreview', () => {
             });
 
             test('should use logger instead of console.warn for onLoad errors', () => {
-                const mockLogger = { logError: jest.fn(), logForDebugging: jest.fn() };
+                const mockLogger = { logError: jest.fn(), onReadyMetric: jest.fn() };
                 const onLoadWithError = jest.fn(() => {
                     throw new Error('Test error');
                 });
