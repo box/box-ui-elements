@@ -32,7 +32,7 @@ import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
 import { withAnnotations, withAnnotatorContext } from '../common/annotator-context';
-import { withErrorBoundary } from '../common/error-boundary';
+import ErrorBoundary, { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
@@ -82,6 +82,16 @@ type StartAt = {
     unit: 'pages' | 'seconds',
     value: number,
 };
+
+// Callback types for customPreviewContent
+type CustomPreviewOnError = (
+    error: ErrorType | ElementsXhrError,
+    code: string,
+    context: Object,
+    origin?: string,
+) => void;
+
+type CustomPreviewOnLoad = (data: { file?: BoxItem, metrics?: Object, ... }) => void;
 
 type Props = {
     advancedContentInsights: {
@@ -136,14 +146,42 @@ type Props = {
     theme?: Theme,
     token: Token,
     useHotkeys: boolean,
-    /** Optional custom content to render instead of Box.Preview */
+    /**
+     * Optional custom component to render instead of Box.Preview.
+     * When provided, renders custom preview implementation while preserving
+     * ContentPreview layout (sidebar, navigation, header). Custom component
+     * receives file metadata and must handle its own rendering and error states.
+     * Box.Preview library will not be loaded when this prop is set.
+     *
+     * Props passed to custom component:
+     * - fileId: ID of the file being previewed
+     * - token: Auth token for API calls
+     * - apiHost: Box API endpoint
+     * - file: Current file object with full metadata
+     * - onError: Optional callback for preview failures - call when content fails to load
+     * - onLoad: Optional callback for successful load - call when content is ready
+     *
+     * Expected behavior:
+     * - Component should call onLoad() when content is successfully rendered
+     * - Component should call onError(error, code, context) on failures
+     * - Component should handle its own loading states and error display
+     * - Component should handle its own keyboard shortcuts (ContentPreview hotkeys are disabled)
+     * - Component should be memoized/pure for performance
+     *
+     * @example
+     * <ContentPreview
+     *   customPreviewContent={MarkdownEditor}
+     *   fileId="123"
+     *   token={token}
+     * />
+     */
     customPreviewContent?: React.ComponentType<{
         fileId: string,
         token: Token,
         apiHost: string,
         file: BoxItem,
-        onError?: Function,
-        onLoad?: Function,
+        onError?: CustomPreviewOnError,
+        onLoad?: CustomPreviewOnLoad,
     }>,
 } & ErrorContextProps &
     WithLoggerProps &
@@ -375,9 +413,22 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        const { customPreviewContent } = this.props;
+        const { customPreviewContent, logger, onError } = this.props;
 
-        // Skip loading preview library if using custom content
+        // Validate customPreviewContent type at runtime
+        if (customPreviewContent && typeof customPreviewContent !== 'function') {
+            const error = new Error('customPreviewContent must be a React component (function or class)');
+            logger.logError(error, 'INVALID_CUSTOM_PREVIEW_TYPE', {
+                receivedType: typeof customPreviewContent,
+                receivedValue: String(customPreviewContent),
+            });
+            onError(error, 'INVALID_PROP', { error }, ORIGIN_CONTENT_PREVIEW);
+            // Don't proceed with custom content
+            return;
+        }
+
+        // Don't load Box.Preview library when custom content is provided
+        // (avoids unnecessary resource loading and potential conflicts with custom renderer)
         if (!customPreviewContent) {
             this.loadStylesheet();
             this.loadScript();
@@ -751,14 +802,24 @@ class ContentPreview extends React.PureComponent<Props, State> {
             };
         }
 
-        // Set loading to false before calling onLoad, so errors in metrics don't prevent UI update
+        // Set loading to false before calling onLoad to ensure UI updates even if callback throws.
+        // Common failure scenario: metrics/analytics errors that shouldn't block preview functionality.
         this.setState({ isLoading: false });
 
         try {
             onLoad(loadData);
         } catch (error) {
-            // Log but don't throw - metrics errors shouldn't break preview
-            console.warn('ContentPreview: onLoad callback threw error:', error);
+            // Catch and log errors from onLoad callback (typically metrics/analytics failures).
+            // WARNING: If onLoad contains critical business logic, this may hide important errors.
+            // Consider whether errors should propagate to parent components via error boundaries.
+            const { logger } = this.props;
+            logger.logError(error, 'PREVIEW_ONLOAD_CALLBACK_ERROR', {
+                fileId: this.state.currentFileId,
+                fileName: this.state.file?.name,
+                errorMessage: error.message,
+                errorType: error.name,
+                hasMetrics: !!loadData.metrics,
+            });
         }
 
         this.focusPreview();
@@ -840,7 +901,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
 
-        // Skip loading Box.Preview if custom content is provided
+        // Early return: Box.Preview initialization not needed when using custom content.
+        // Custom component will be rendered directly in the Measure block (see render method)
         if (customPreviewContent) {
             return;
         }
@@ -1202,8 +1264,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         const { useHotkeys, customPreviewContent }: Props = this.props;
 
-        // Skip hotkey handling when custom content is rendered (e.g., markdown editor)
-        // Custom content should handle its own keyboard shortcuts
+        // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
+        // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
+        // as ContentPreview's default handlers only work with Box.Preview viewer.
         if (!useHotkeys || customPreviewContent) {
             return;
         }
@@ -1463,20 +1526,67 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
                                                 {({ measureRef: previewRef }) => {
-                                                    const { customPreviewContent: CustomPreview } = this.props;
+                                                    const { customPreviewContent: CustomPreview, logger } = this.props;
 
                                                     return (
                                                         <div ref={previewRef} className="bcpr-content">
-                                                            {CustomPreview && (
-                                                                <CustomPreview
-                                                                    fileId={currentFileId}
-                                                                    token={token}
-                                                                    apiHost={apiHost}
-                                                                    file={file}
-                                                                    onError={this.onError}
-                                                                    onLoad={this.onPreviewLoad}
-                                                                />
-                                                            )}
+                                                            {CustomPreview &&
+                                                                (() => {
+                                                                    // Validate required props before rendering custom content
+                                                                    if (!currentFileId || !token || !apiHost) {
+                                                                        const missingProps = [];
+                                                                        if (!currentFileId) missingProps.push('fileId');
+                                                                        if (!token) missingProps.push('token');
+                                                                        if (!apiHost) missingProps.push('apiHost');
+
+                                                                        const validationError = new Error(
+                                                                            `CustomPreview: Missing required props: ${missingProps.join(', ')}`,
+                                                                        );
+                                                                        logger.logError(
+                                                                            validationError,
+                                                                            'CUSTOM_PREVIEW_INVALID_PROPS',
+                                                                            {
+                                                                                missingProps,
+                                                                                fileId: currentFileId,
+                                                                            },
+                                                                        );
+                                                                        this.onPreviewError({
+                                                                            error: {
+                                                                                ...validationError,
+                                                                                code: 'CUSTOM_PREVIEW_INVALID_PROPS',
+                                                                            },
+                                                                        });
+                                                                        return null;
+                                                                    }
+
+                                                                    // Wrap custom preview in error boundary to catch render errors
+                                                                    // bcpr-content class provides consistent sizing/layout with Box.Preview
+                                                                    return (
+                                                                        <ErrorBoundary
+                                                                            errorOrigin={ORIGIN_CONTENT_PREVIEW}
+                                                                            onError={elementsError => {
+                                                                                logger.logError(
+                                                                                    new Error(elementsError.message),
+                                                                                    'CUSTOM_PREVIEW_RENDER_ERROR',
+                                                                                    {
+                                                                                        fileId: currentFileId,
+                                                                                        fileName: file.name,
+                                                                                        errorCode: elementsError.code,
+                                                                                    },
+                                                                                );
+                                                                            }}
+                                                                        >
+                                                                            <CustomPreview
+                                                                                fileId={currentFileId}
+                                                                                token={token}
+                                                                                apiHost={apiHost}
+                                                                                file={file}
+                                                                                onError={this.onPreviewError}
+                                                                                onLoad={this.onPreviewLoad}
+                                                                            />
+                                                                        </ErrorBoundary>
+                                                                    );
+                                                                })()}
                                                         </div>
                                                     );
                                                 }}
