@@ -20,6 +20,7 @@ export interface Options extends ItemData {
 }
 
 export interface CreateSharingServiceArgs {
+    hasSharedLink: boolean;
     itemApiInstance: API;
     onUpdateSharedLink: (itemData: ItemData) => void;
     onRemoveSharedLink: (itemData: ItemData) => void;
@@ -27,6 +28,7 @@ export interface CreateSharingServiceArgs {
 }
 
 export const createSharingService = ({
+    hasSharedLink,
     itemApiInstance,
     onUpdateSharedLink,
     onRemoveSharedLink,
@@ -35,6 +37,10 @@ export const createSharingService = ({
     const { id, permissions } = options;
 
     const changeSharedLinkAccess = async (access: string): Promise<void> => {
+        if (!hasSharedLink) {
+            return Promise.reject(Object.assign(new Error('Shared link not found'), { status: 404 }));
+        }
+
         return itemApiInstance.share(
             { id, permissions },
             access,
@@ -45,6 +51,10 @@ export const createSharingService = ({
     };
 
     const changeSharedLinkPermission = async (permissionLevel: string): Promise<void> => {
+        if (!hasSharedLink) {
+            return Promise.reject(Object.assign(new Error('Shared link not found'), { status: 404 }));
+        }
+
         return itemApiInstance.updateSharedLink(
             { id, permissions },
             { permissions: convertSharedLinkPermissions(permissionLevel) },
@@ -55,6 +65,10 @@ export const createSharingService = ({
     };
 
     const updateSharedLink = async (sharedLinkSettings: SharedLinkSettings) => {
+        if (!hasSharedLink) {
+            return Promise.reject(Object.assign(new Error('Shared link not found'), { status: 404 }));
+        }
+
         const { access, isDownloadAvailable, serverUrl } = options;
 
         return new Promise((resolve, reject) => {
@@ -91,6 +105,10 @@ export const createSharingService = ({
     };
 
     const deleteSharedLink = async () => {
+        if (!hasSharedLink) {
+            return Promise.reject(Object.assign(new Error('Shared link not found'), { status: 404 }));
+        }
+
         return new Promise((resolve, reject) => {
             itemApiInstance.share(
                 { id, permissions },
