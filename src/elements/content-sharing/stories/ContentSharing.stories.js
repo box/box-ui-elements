@@ -21,6 +21,7 @@ export const withContentSharingV2Enabled = {
             contentSharingV2: true,
         },
         hasProviders: true,
+        variant: 'modal',
     },
 };
 

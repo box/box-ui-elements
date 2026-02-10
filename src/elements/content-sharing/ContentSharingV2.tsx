@@ -4,7 +4,15 @@ import isEmpty from 'lodash/isEmpty';
 
 import { useNotification } from '@box/blueprint-web';
 import { UnifiedShareModal } from '@box/unified-share-modal';
-import type { CollaborationRole, Collaborator, Configuration, Item, SharedLink, User } from '@box/unified-share-modal';
+import type {
+    CollaborationRole,
+    Collaborator,
+    Configuration,
+    Item,
+    SharedLink,
+    User,
+    VariantType,
+} from '@box/unified-share-modal';
 
 import API from '../../api';
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
@@ -30,9 +38,11 @@ export interface ContentSharingV2Props {
     itemId: string;
     /** itemType - "file" or "folder" */
     itemType: ItemType;
+    /** variant - "desktop" or "modal" variant of the Unified Share Modal */
+    variant?: VariantType;
 }
 
-function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType }: ContentSharingV2Props) {
+function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, variant }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [hasError, setHasError] = React.useState<boolean>(false);
@@ -223,6 +233,7 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType }
                 item={item}
                 sharedLink={sharedLink}
                 sharingService={sharingService}
+                variant={variant}
             >
                 {children}
             </UnifiedShareModal>
