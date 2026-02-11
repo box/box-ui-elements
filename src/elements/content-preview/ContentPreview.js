@@ -285,7 +285,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     fetchFileStartTime: ?number;
 
-    loadingIndicatorShownThisSession: boolean;
+    loadingWasDeferred: boolean;
 
     loadingIndicatorDelayTimeoutId: ?TimeoutID;
 
@@ -301,6 +301,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             cache,
             fileId,
             language,
+            loadingIndicatorDelayMs,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -309,7 +310,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         } = props;
 
         this.id = uniqueid('bcpr_');
-        this.loadingIndicatorShownThisSession = false;
+        this.loadingWasDeferred = false;
         this.api = new API({
             apiHost,
             cache,
@@ -322,10 +323,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             token,
             version: CLIENT_VERSION,
         });
-        const delayMs = this.getLoadingIndicatorDelayMs();
         this.state = {
             ...this.initialState,
-            ...(delayMs ? { isLoadingDeferred: true } : {}),
+            ...(loadingIndicatorDelayMs ? { isLoadingDeferred: true } : {}),
             currentFileId: fileId,
             // eslint-disable-next-line react/no-unused-state
             prevFileIdProp: fileId,
@@ -369,17 +369,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     }
 
-    getLoadingIndicatorDelayMs(): number {
-        return this.props.loadingIndicatorDelayMs || 0;
-    }
-
     /**
      * Ends the current loading session: clear defer timer, reset session flag, hide loading state.
      * Call when preview has loaded, errored, or file fetch failed.
      */
     endLoadingSession = (): void => {
         this.clearLoadingIndicatorDelayTimeout();
-        this.loadingIndicatorShownThisSession = false;
+        this.loadingWasDeferred = false;
         this.setState({ isLoading: false, isLoadingDeferred: false });
     };
 
@@ -403,18 +399,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.loadScript();
 
         const { currentFileId } = this.state;
-        if (!currentFileId) {
-            this.focusPreview();
-            return;
-        }
+        const { loadingIndicatorDelayMs } = this.props;
 
-        const delayMs = this.getLoadingIndicatorDelayMs();
-        if (delayMs) {
+        if (currentFileId && loadingIndicatorDelayMs) {
             this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
                 this.loadingIndicatorDelayTimeoutId = null;
-                this.loadingIndicatorShownThisSession = true;
+                this.loadingWasDeferred = true;
                 this.setState({ isLoadingDeferred: false });
-            }, delayMs);
+            }, loadingIndicatorDelayMs);
         }
 
         this.fetchFile(currentFileId);
@@ -450,18 +442,18 @@ class ContentPreview extends React.PureComponent<Props, State> {
             features?.advancedContentInsights,
         );
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
-        const delayMs = this.getLoadingIndicatorDelayMs();
+        const { loadingIndicatorDelayMs } = this.props;
 
         if (hasFileIdChanged) {
             this.destroyPreview();
-            this.loadingIndicatorShownThisSession = false;
-            if (delayMs) {
+            this.loadingWasDeferred = false;
+            if (loadingIndicatorDelayMs) {
                 this.setState({ isLoading: true, isLoadingDeferred: true, selectedVersion: undefined });
                 this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
                     this.loadingIndicatorDelayTimeoutId = null;
-                    this.loadingIndicatorShownThisSession = true;
+                    this.loadingWasDeferred = true;
                     this.setState({ isLoadingDeferred: false });
-                }, delayMs);
+                }, loadingIndicatorDelayMs);
             } else {
                 this.setState({ isLoading: true, selectedVersion: undefined });
             }
@@ -913,7 +905,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
             experiences: previewExperiences,
-            loadingIndicatorDelayMs: this.getLoadingIndicatorDelayMs(),
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),
@@ -995,11 +986,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         // If the file is watermarked or if its a new file, then update the state
         // In this case preview should reload without prompting the user
         if (isWatermarked || !isExistingFile) {
-            const keepDeferred = this.getLoadingIndicatorDelayMs() && !this.loadingIndicatorShownThisSession;
+            const isDeferred = this.props.loadingIndicatorDelayMs && !this.loadingWasDeferred;
             this.setState({
                 ...this.initialState,
                 file,
-                ...(keepDeferred ? { isLoadingDeferred: true } : {}),
+                ...(isDeferred ? { isLoadingDeferred: true } : {}),
             });
             // $FlowFixMe file version and sha1 should exist at this point
         } else if (currentFile.file_version.sha1 !== file.file_version.sha1) {

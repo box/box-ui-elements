@@ -662,30 +662,30 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.state.isReloadNotificationVisible).toBeTruthy();
         });
 
-        test('should keep isLoading true when loadingIndicatorShownThisSession is true and new file arrives', () => {
-            const wrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
-            const inst = wrapper.instance();
-            inst.setState({ file: undefined, isLoading: true });
-            inst.loadingIndicatorShownThisSession = true;
+        test('should keep isLoading true when loadingWasDeferred is true and new file arrives', () => {
+            const delayWrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
+            const delayInstance = delayWrapper.instance();
+            delayInstance.setState({ file: undefined, isLoading: true });
+            delayInstance.loadingWasDeferred = true;
             const newFile = { id: '456', file_version: { sha1: 'sha' } };
-            inst.fetchFileSuccessCallback(newFile);
+            delayInstance.fetchFileSuccessCallback(newFile);
 
-            expect(inst.state.file).toEqual(newFile);
-            expect(inst.state.isLoading).toBe(true);
-            expect(inst.state.isLoadingDeferred).toBe(false);
+            expect(delayInstance.state.file).toEqual(newFile);
+            expect(delayInstance.state.isLoading).toBe(true);
+            expect(delayInstance.state.isLoadingDeferred).toBe(false);
         });
 
         test('should keep isLoadingDeferred true when spinner has not been shown yet', () => {
-            const wrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
-            const inst = wrapper.instance();
-            inst.setState({ file: undefined, isLoading: true, isLoadingDeferred: true });
-            inst.loadingIndicatorShownThisSession = false;
+            const delayWrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
+            const delayInstance = delayWrapper.instance();
+            delayInstance.setState({ file: undefined, isLoading: true, isLoadingDeferred: true });
+            delayInstance.loadingWasDeferred = false;
             const newFile = { id: '456', file_version: { sha1: 'sha' } };
-            inst.fetchFileSuccessCallback(newFile);
+            delayInstance.fetchFileSuccessCallback(newFile);
 
-            expect(inst.state.file).toEqual(newFile);
-            expect(inst.state.isLoading).toBe(true);
-            expect(inst.state.isLoadingDeferred).toBe(true);
+            expect(delayInstance.state.file).toEqual(newFile);
+            expect(delayInstance.state.isLoading).toBe(true);
+            expect(delayInstance.state.isLoadingDeferred).toBe(true);
         });
     });
 
@@ -717,13 +717,13 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.state('isLoadingDeferred')).toBe(true);
             expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.loadingIndicatorShownThisSession).toBe(false);
+            expect(instance.loadingWasDeferred).toBe(false);
 
             jest.advanceTimersByTime(200);
 
             expect(wrapper.state('isLoadingDeferred')).toBe(false);
             expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.loadingIndicatorShownThisSession).toBe(true);
+            expect(instance.loadingWasDeferred).toBe(true);
             expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
 
             jest.useRealTimers();
@@ -747,21 +747,6 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
 
             jest.useRealTimers();
-        });
-
-        test('getLoadingIndicatorDelayMs returns 0 for undefined and returns the value for valid numbers', () => {
-            const wrapperUndefined = getWrapper({
-                token: 'token',
-                fileId: '123',
-            });
-            expect(wrapperUndefined.instance().getLoadingIndicatorDelayMs()).toBe(0);
-
-            const wrapperValid = getWrapper({
-                token: 'token',
-                fileId: '123',
-                loadingIndicatorDelayMs: 150,
-            });
-            expect(wrapperValid.instance().getLoadingIndicatorDelayMs()).toBe(150);
         });
     });
 
@@ -979,11 +964,11 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should end loading session and call onError', () => {
             const onError = jest.fn();
             const wrapper = getWrapper({ ...props, onError });
-            const inst = wrapper.instance();
-            inst.setState({ isLoading: true });
+            const instance = wrapper.instance();
+            instance.setState({ isLoading: true });
             const errorPayload = { error: { code: 'some_code', message: 'msg' } };
-            inst.onPreviewError(errorPayload);
-            expect(inst.state.isLoading).toBe(false);
+            instance.onPreviewError(errorPayload);
+            expect(instance.state.isLoading).toBe(false);
             expect(onError).toHaveBeenCalledWith(
                 errorPayload.error,
                 'some_code',
@@ -1183,6 +1168,7 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should set isLoading true when shouldLoadPreview returns true', () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setState({ isLoading: false });
+            // Trigger componentDidUpdate without changing fileId
             wrapper.setProps({ foo: 'bar' });
 
             expect(instance.loadPreview).toHaveBeenCalled();
