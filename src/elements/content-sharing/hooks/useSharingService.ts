@@ -26,7 +26,7 @@ export const useSharingService = ({
 
     // itemApiInstance should only be called once or the API will cause an issue where it gets cancelled
     const itemApiInstance = React.useMemo(() => {
-        if (!item || !sharedLink) {
+        if (!item) {
             return null;
         }
 
@@ -39,7 +39,7 @@ export const useSharingService = ({
         }
 
         return null;
-    }, [api, item, itemType, sharedLink]);
+    }, [api, item, itemType]);
 
     const sharingService = React.useMemo(() => {
         if (!itemApiInstance) {
@@ -48,13 +48,13 @@ export const useSharingService = ({
 
         const options = {
             id: itemId,
-            access: sharedLink.access,
+            access: sharedLink?.access,
             permissions: {
                 can_set_share_access: sharingServiceProps?.can_set_share_access,
                 can_share: sharingServiceProps?.can_share,
             },
             serverUrl: sharingServiceProps?.serverUrl,
-            isDownloadAvailable: sharedLink.settings?.isDownloadAvailable ?? false,
+            isDownloadAvailable: sharedLink?.settings?.isDownloadAvailable ?? false,
         };
 
         const handleUpdateSharedLink = updatedItemData => {
@@ -70,6 +70,7 @@ export const useSharingService = ({
         };
 
         return createSharingService({
+            hasSharedLink: !!sharedLink?.url,
             itemApiInstance,
             onUpdateSharedLink: handleUpdateSharedLink,
             onRemoveSharedLink: handleRemoveSharedLink,

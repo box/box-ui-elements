@@ -44,6 +44,17 @@ export const withSharedLink = {
     },
 };
 
+export const DesktopVariant = {
+    args: {
+        api: mockApiWithSharedLink,
+        variant: 'desktop',
+    },
+    play: async context => {
+        await withModernization.play(context);
+        expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    },
+};
+
 export const withCollaborators = {
     args: {
         api: mockApiWithCollaborators,

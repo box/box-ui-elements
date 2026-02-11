@@ -9,7 +9,7 @@
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 
-import type { Configuration } from '@box/unified-share-modal';
+import type { Configuration, VariantType } from '@box/unified-share-modal';
 import API from '../../api';
 
 import { isFeatureEnabled } from '../common/feature-checking';
@@ -66,6 +66,8 @@ type ContentSharingProps = {
     token: string,
     /** uuid - Unique identifier, used for refreshing element visibility when called from the ES6 wrapper */
     uuid?: string,
+    /** variant - "desktop" or "modal" variant of the Unified Share Modal */
+    variant?: VariantType,
 };
 
 const createAPI = (apiHost, itemID, itemType, token) =>
@@ -91,6 +93,7 @@ function ContentSharing({
     messages,
     token,
     uuid,
+    variant,
 }: ContentSharingProps) {
     const [api, setAPI] = React.useState<API | null>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
@@ -125,7 +128,13 @@ function ContentSharing({
             api && (
                 <Internationalize language={language} messages={messages}>
                     <Providers hasProviders={hasProviders}>
-                        <ContentSharingV2 api={api} config={config} itemId={itemID} itemType={itemType}>
+                        <ContentSharingV2
+                            api={api}
+                            config={config}
+                            itemId={itemID}
+                            itemType={itemType}
+                            variant={variant}
+                        >
                             {children}
                         </ContentSharingV2>
                     </Providers>

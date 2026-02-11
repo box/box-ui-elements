@@ -9,6 +9,13 @@ export const withSharedLink = {
     },
 };
 
+export const desktopVariant = {
+    args: {
+        api: mockApiWithSharedLink,
+        variant: 'desktop',
+    },
+};
+
 export default {
     title: 'Elements/ContentSharingV2',
     component: ContentSharingV2Template,
