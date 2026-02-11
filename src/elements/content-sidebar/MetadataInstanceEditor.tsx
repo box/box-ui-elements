@@ -31,6 +31,7 @@ export interface MetadataInstanceEditorProps {
     taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
     template: MetadataTemplateInstance;
     isAdvancedExtractAgentEnabled?: boolean;
+    isConfidenceScoreReviewEnabled?: boolean;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -51,6 +52,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     taxonomyOptionsFetcher,
     template,
     isAdvancedExtractAgentEnabled = false,
+    isConfidenceScoreReviewEnabled = false,
 }) => {
     const previewContext: PreviewContextType | null = useContext(PreviewContext);
     const customRef = previewContext?.previewBodyRef?.current;
@@ -75,6 +77,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
             customRef={customRef}
         />
     );
