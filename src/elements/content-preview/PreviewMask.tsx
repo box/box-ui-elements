@@ -7,15 +7,15 @@ import './PreviewMask.scss';
 export type Props = {
     errorCode?: string;
     extension?: string;
-    isDeferringLoading?: boolean;
     isLoading?: boolean;
+    isLoadingDeferred?: boolean;
 };
 
 export default function PreviewMask({
     errorCode,
     extension,
-    isDeferringLoading = false,
     isLoading,
+    isLoadingDeferred = false,
 }: Props): React.ReactElement | null {
     if (errorCode) {
         return (
@@ -25,16 +25,8 @@ export default function PreviewMask({
         );
     }
 
-    if (isDeferringLoading) {
-        return <div className="bcpr-PreviewMask" />;
-    }
-
     if (isLoading) {
-        return (
-            <div className="bcpr-PreviewMask">
-                <PreviewLoading extension={extension} />
-            </div>
-        );
+        return <div className="bcpr-PreviewMask">{!isLoadingDeferred && <PreviewLoading extension={extension} />}</div>;
     }
 
     return null;

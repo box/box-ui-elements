@@ -672,11 +672,25 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(inst.state.file).toEqual(newFile);
             expect(inst.state.isLoading).toBe(true);
+            expect(inst.state.isLoadingDeferred).toBe(false);
+        });
+
+        test('should keep isLoadingDeferred true when spinner has not been shown yet', () => {
+            const wrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
+            const inst = wrapper.instance();
+            inst.setState({ file: undefined, isLoading: true, isLoadingDeferred: true });
+            inst.loadingIndicatorShownThisSession = false;
+            const newFile = { id: '456', file_version: { sha1: 'sha' } };
+            inst.fetchFileSuccessCallback(newFile);
+
+            expect(inst.state.file).toEqual(newFile);
+            expect(inst.state.isLoading).toBe(true);
+            expect(inst.state.isLoadingDeferred).toBe(true);
         });
     });
 
     describe('loading indicator defer and timeout', () => {
-        test('componentDidMount sets up defer timer when loadingIndicatorDelayMs > 0', () => {
+        test('componentDidMount sets up defer timer when loadingIndicatorDelayMs is set', () => {
             jest.useFakeTimers();
             const wrapper = getWrapper({
                 token: 'token',
@@ -685,14 +699,14 @@ describe('elements/content-preview/ContentPreview', () => {
             });
             const instance = wrapper.instance();
 
-            expect(typeof instance.loadingIndicatorDelayTimeoutId).toBe('number');
-            expect(wrapper.state('isDeferringLoading')).toBe(true);
-            expect(wrapper.state('isLoading')).toBe(false);
+            expect(instance.loadingIndicatorDelayTimeoutId).not.toBeNull();
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+            expect(wrapper.state('isLoading')).toBe(true);
 
             jest.useRealTimers();
         });
 
-        test('timeout firing transitions from isDeferringLoading to isLoading', () => {
+        test('timeout firing clears isLoadingDeferred so spinner becomes visible', () => {
             jest.useFakeTimers();
             const wrapper = getWrapper({
                 token: 'token',
@@ -701,15 +715,16 @@ describe('elements/content-preview/ContentPreview', () => {
             });
             const instance = wrapper.instance();
 
-            expect(wrapper.state('isDeferringLoading')).toBe(true);
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+            expect(wrapper.state('isLoading')).toBe(true);
             expect(instance.loadingIndicatorShownThisSession).toBe(false);
 
             jest.advanceTimersByTime(200);
 
-            expect(wrapper.state('isDeferringLoading')).toBe(false);
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
             expect(wrapper.state('isLoading')).toBe(true);
             expect(instance.loadingIndicatorShownThisSession).toBe(true);
-            expect(instance.loadingIndicatorDelayTimeoutId).toBeUndefined();
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
 
             jest.useRealTimers();
         });
@@ -728,26 +743,18 @@ describe('elements/content-preview/ContentPreview', () => {
             jest.advanceTimersByTime(200);
 
             expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('isDeferringLoading')).toBe(false);
-            expect(instance.loadingIndicatorDelayTimeoutId).toBeUndefined();
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
 
             jest.useRealTimers();
         });
 
-        test('getLoadingIndicatorDelayMs returns 0 for negative or non-numeric values', () => {
-            const wrapperNegative = getWrapper({
+        test('getLoadingIndicatorDelayMs returns 0 for undefined and returns the value for valid numbers', () => {
+            const wrapperUndefined = getWrapper({
                 token: 'token',
                 fileId: '123',
-                loadingIndicatorDelayMs: -100,
             });
-            expect(wrapperNegative.instance().getLoadingIndicatorDelayMs()).toBe(0);
-
-            const wrapperNonNumeric = getWrapper({
-                token: 'token',
-                fileId: '123',
-                loadingIndicatorDelayMs: 'not-a-number',
-            });
-            expect(wrapperNonNumeric.instance().getLoadingIndicatorDelayMs()).toBe(0);
+            expect(wrapperUndefined.instance().getLoadingIndicatorDelayMs()).toBe(0);
 
             const wrapperValid = getWrapper({
                 token: 'token',
@@ -1173,14 +1180,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadPreview).toBeCalledTimes(1);
         });
 
-        test('should not update loading state when shouldLoadPreview returns true (same session)', () => {
+        test('should set isLoading true when shouldLoadPreview returns true', () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setState({ isLoading: false });
             wrapper.setProps({ foo: 'bar' });
 
             expect(instance.loadPreview).toHaveBeenCalled();
             expect(instance.destroyPreview).toHaveBeenCalledWith(false);
-            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('isLoading')).toBe(true);
         });
 
         test('should update the preview with the new token if it changes', () => {
