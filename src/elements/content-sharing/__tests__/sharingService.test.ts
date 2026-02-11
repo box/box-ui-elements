@@ -13,8 +13,9 @@ const options = { id: '123', permissions: { can_set_share_access: true, can_shar
 const mockOnUpdateSharedLink = jest.fn();
 const mockOnRemoveSharedLink = jest.fn();
 
-const createSharingServiceWrapper = () => {
+const createSharingServiceWrapper = (hasSharedLink = true) => {
     return createSharingService({
+        hasSharedLink,
         itemApiInstance: mockItemApiInstance,
         onUpdateSharedLink: mockOnUpdateSharedLink,
         onRemoveSharedLink: mockOnRemoveSharedLink,
@@ -63,6 +64,18 @@ describe('elements/content-sharing/sharingService', () => {
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
         });
+
+        test('should reject with 404 error when hasSharedLink is false', async () => {
+            const service = createSharingServiceWrapper(false);
+
+            await expect(service.changeSharedLinkPermission(PERMISSION_CAN_DOWNLOAD)).rejects.toEqual(
+                expect.objectContaining({
+                    message: 'Shared link not found',
+                    status: 404,
+                }),
+            );
+            expect(mockItemApiInstance.updateSharedLink).not.toHaveBeenCalled();
+        });
     });
 
     describe('changeSharedLinkAccess', () => {
@@ -87,6 +100,18 @@ describe('elements/content-sharing/sharingService', () => {
                 );
             },
         );
+
+        test('should reject with 404 error when hasSharedLink is false', async () => {
+            const service = createSharingServiceWrapper(false);
+
+            await expect(service.changeSharedLinkAccess('open')).rejects.toEqual(
+                expect.objectContaining({
+                    message: 'Shared link not found',
+                    status: 404,
+                }),
+            );
+            expect(mockItemApiInstance.share).not.toHaveBeenCalled();
+        });
     });
 
     describe('createSharedLink', () => {
@@ -96,22 +121,25 @@ describe('elements/content-sharing/sharingService', () => {
             expect(typeof service.createSharedLink).toBe('function');
         });
 
-        test('should call share with correct parameters when createSharedLink is called', async () => {
-            mockItemApiInstance.share.mockImplementation((_options, _access, successCallback) => {
-                successCallback({ id: '123', shared_link: null });
-            });
+        test.each([true, false])(
+            'should call share with correct parameters when createSharedLink is called',
+            async hasSharedLink => {
+                mockItemApiInstance.share.mockImplementation((_options, _access, successCallback) => {
+                    successCallback({ id: '123', shared_link: null });
+                });
 
-            const service = createSharingServiceWrapper();
-            await service.createSharedLink();
+                const service = createSharingServiceWrapper(hasSharedLink);
+                await service.createSharedLink();
 
-            expect(mockItemApiInstance.share).toHaveBeenCalledWith(
-                options,
-                undefined,
-                expect.any(Function),
-                expect.any(Function),
-                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
-            );
-        });
+                expect(mockItemApiInstance.share).toHaveBeenCalledWith(
+                    options,
+                    undefined,
+                    expect.any(Function),
+                    expect.any(Function),
+                    CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+                );
+            },
+        );
     });
 
     describe('deleteSharedLink', () => {
@@ -136,6 +164,18 @@ describe('elements/content-sharing/sharingService', () => {
                 expect.any(Function),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
             );
+        });
+
+        test('should reject with 404 error when hasSharedLink is false', async () => {
+            const service = createSharingServiceWrapper(false);
+
+            await expect(service.deleteSharedLink()).rejects.toEqual(
+                expect.objectContaining({
+                    message: 'Shared link not found',
+                    status: 404,
+                }),
+            );
+            expect(mockItemApiInstance.share).not.toHaveBeenCalled();
         });
     });
 
@@ -200,6 +240,7 @@ describe('elements/content-sharing/sharingService', () => {
             (convertSharedLinkSettings as jest.Mock).mockReturnValue(mockConvertedSharedLinkSettings);
 
             const service = createSharingService({
+                hasSharedLink: true,
                 itemApiInstance: mockItemApiInstance,
                 onUpdateSharedLink: mockOnUpdateSharedLink,
                 onRemoveSharedLink: mockOnRemoveSharedLink,
@@ -257,6 +298,27 @@ describe('elements/content-sharing/sharingService', () => {
             await service.updateSharedLink(sharedLinkSettings);
 
             expect(convertSharedLinkSettings).toHaveBeenCalledWith(sharedLinkSettings, undefined, undefined, undefined);
+        });
+
+        test('should reject with 404 error when hasSharedLink is false', async () => {
+            const service = createSharingServiceWrapper(false);
+
+            const sharedLinkSettings = {
+                expiration: null,
+                isDownloadEnabled: true,
+                isExpirationEnabled: false,
+                isPasswordEnabled: false,
+                password: '',
+                vanityName: 'vanity-name',
+            };
+
+            await expect(service.updateSharedLink(sharedLinkSettings)).rejects.toEqual(
+                expect.objectContaining({
+                    message: 'Shared link not found',
+                    status: 404,
+                }),
+            );
+            expect(mockItemApiInstance.updateSharedLink).not.toHaveBeenCalled();
         });
     });
 

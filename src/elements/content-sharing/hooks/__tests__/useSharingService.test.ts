@@ -106,13 +106,24 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
         expect(createSharingService).not.toHaveBeenCalled();
     });
 
-    test('should return null itemApiInstance and sharingService when sharedLink is null', () => {
+    test('should create sharingService when sharedLink is null', () => {
+        mockApi.getFileAPI.mockReturnValue({});
         const { result } = renderHookWithProps({ sharedLink: null });
 
-        expect(result.current.sharingService).toEqual({ sendInvitations: expect.any(Function) });
-        expect(mockApi.getFileAPI).not.toHaveBeenCalled();
-        expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
-        expect(createSharingService).not.toHaveBeenCalled();
+        expect(result.current.sharingService).toEqual({
+            ...mockSharingService,
+            sendInvitations: expect.any(Function),
+        });
+        expect(mockApi.getFileAPI).toHaveBeenCalled();
+        expect(createSharingService).toHaveBeenCalledWith(
+            expect.objectContaining({
+                hasSharedLink: false,
+                options: expect.objectContaining({
+                    access: undefined,
+                    isDownloadAvailable: false,
+                }),
+            }),
+        );
     });
 
     test('should return null itemApiInstance and sharingService when itemType is neither TYPE_FILE nor TYPE_FOLDER', () => {
@@ -122,6 +133,21 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
         expect(mockApi.getFileAPI).not.toHaveBeenCalled();
         expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
         expect(createSharingService).not.toHaveBeenCalled();
+    });
+
+    test('should create sharingService with hasSharedLink true when sharedLink has url', () => {
+        mockApi.getFileAPI.mockReturnValue({});
+        const sharedLinkWithUrl = {
+            ...mockSharedLink,
+            url: 'https://example.com/shared-link',
+        };
+        renderHookWithProps({ sharedLink: sharedLinkWithUrl });
+
+        expect(createSharingService).toHaveBeenCalledWith(
+            expect.objectContaining({
+                hasSharedLink: true,
+            }),
+        );
     });
 
     describe('when itemType is TYPE_FILE', () => {
@@ -140,6 +166,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 sendInvitations: expect.any(Function),
             });
             expect(createSharingService).toHaveBeenCalledWith({
+                hasSharedLink: false,
                 itemApiInstance: {},
                 onUpdateSharedLink: expect.any(Function),
                 onRemoveSharedLink: expect.any(Function),
@@ -196,6 +223,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 sendInvitations: expect.any(Function),
             });
             expect(createSharingService).toHaveBeenCalledWith({
+                hasSharedLink: false,
                 itemApiInstance: {},
                 onUpdateSharedLink: expect.any(Function),
                 onRemoveSharedLink: expect.any(Function),
