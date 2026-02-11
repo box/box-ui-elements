@@ -123,6 +123,7 @@ const AnnotationActivity = ({
         : { ...linkMessage, values: { number: linkValue } };
     const tetherProps = {
         attachment: 'top right',
+        className: 'bcs-AnnotationActivity-deleteConfirmationModal',
         constraints: [{ to: 'scrollParent', attachment: 'together' }],
         targetAttachment: 'bottom right',
     };
@@ -227,7 +228,7 @@ const AnnotationActivity = ({
                     )}
                     renderElement={ref => {
                         return isConfirmingDelete ? (
-                            <div ref={ref} className="bcs-AnnotationActivity-deleteConfirmationModal">
+                            <div ref={ref}>
                                 <DeleteConfirmation
                                     data-resin-component={ACTIVITY_TARGETS.ANNOTATION_OPTIONS}
                                     isOpen={isConfirmingDelete}
