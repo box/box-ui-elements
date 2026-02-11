@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
+import TetherComponent from 'react-tether';
 
 import AnnotationActivity from '../AnnotationActivity';
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
@@ -287,6 +288,24 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
             expect(onDelete).toHaveBeenCalledWith({ id: mockAnnotation.id, permissions });
             expect(wrapper.exists(DeleteConfirmation)).toBe(false);
+        });
+
+        test('should apply correct className to TetherComponent for z-index styling', () => {
+            const item = {
+                ...mockAnnotation,
+                permissions: { can_delete: true },
+            };
+
+            const wrapper = getWrapper({ item });
+
+            const tetherComponent = wrapper.find(TetherComponent);
+            expect(tetherComponent.exists()).toBe(true);
+            // Find the TetherComponent that has the delete confirmation modal className
+            const modalTetherComponent = tetherComponent.findWhere(
+                node => node.prop('className') === 'bcs-AnnotationActivity-deleteConfirmationModal',
+            );
+            expect(modalTetherComponent.exists()).toBe(true);
+            expect(modalTetherComponent.prop('className')).toBe('bcs-AnnotationActivity-deleteConfirmationModal');
         });
     });
 
