@@ -118,6 +118,7 @@ function MetadataSidebarRedesign({
     const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
         'metadata.deleteConfirmationModalCheckbox.enabled',
     );
+    const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
     const isSessionInitiated = useRef(false);
 
     const [isLargeFile, setIsLargeFile] = useState<boolean>(false);
@@ -326,6 +327,7 @@ function MetadataSidebarRedesign({
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+                            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
                         />
                     )}
                     {showList && (
@@ -340,6 +342,7 @@ function MetadataSidebarRedesign({
                             }}
                             templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
+                            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
                         />
                     )}
                 </AutofillContextProvider>

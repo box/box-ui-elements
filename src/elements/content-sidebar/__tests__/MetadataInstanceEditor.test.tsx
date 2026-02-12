@@ -163,6 +163,14 @@ describe('MetadataInstanceEditor', () => {
         expect(mockOnDiscardUnsavedChanges).toHaveBeenCalled();
     });
 
+    test('should render MetadataInstanceForm with isConfidenceScoreReviewEnabled prop', () => {
+        const props = { ...defaultProps, isConfidenceScoreReviewEnabled: true };
+        renderWithAutofill(<MetadataInstanceEditor {...props} />);
+
+        const templateHeader = screen.getByText(mockMetadataTemplateInstance.displayName);
+        expect(templateHeader).toBeInTheDocument();
+    });
+
     test('should call taxonomyOptionsFetcher on metadata taxonomy field search', async () => {
         const taxonomyField: MetadataTemplateField = {
             type: 'taxonomy',
