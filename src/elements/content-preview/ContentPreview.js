@@ -110,6 +110,7 @@ type Props = {
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
+    loadingIndicatorDelayMs?: number,
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
@@ -148,6 +149,7 @@ type State = {
     error?: ErrorType,
     file?: BoxItem,
     isLoading: boolean,
+    isLoadingDeferred?: boolean,
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
@@ -238,6 +240,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         canPrint: false,
         error: undefined,
         isLoading: true,
+        isLoadingDeferred: false,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
     };
@@ -255,6 +258,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
+        loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
         onAnnotatorEvent: noop,
         onContentInsightsEventReport: noop,
@@ -281,6 +285,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     fetchFileStartTime: ?number;
 
+    loadingWasDeferred: boolean;
+
+    loadingIndicatorDelayTimeoutId: ?TimeoutID;
+
     /**
      * [constructor]
      *
@@ -293,6 +301,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             cache,
             fileId,
             language,
+            loadingIndicatorDelayMs,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -301,6 +310,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         } = props;
 
         this.id = uniqueid('bcpr_');
+        this.loadingWasDeferred = false;
         this.api = new API({
             apiHost,
             cache,
@@ -315,6 +325,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
         this.state = {
             ...this.initialState,
+            ...(loadingIndicatorDelayMs ? { isLoadingDeferred: true } : {}),
             currentFileId: fileId,
             // eslint-disable-next-line react/no-unused-state
             prevFileIdProp: fileId,
@@ -337,9 +348,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Cleans up the preview instance
+     * Cleans up the preview instance.
      */
     destroyPreview(shouldReset: boolean = true) {
+        this.clearLoadingIndicatorDelayTimeout();
         const { onPreviewDestroy } = this.props;
         if (this.preview) {
             this.preview.destroy();
@@ -349,6 +361,23 @@ class ContentPreview extends React.PureComponent<Props, State> {
             onPreviewDestroy(shouldReset);
         }
     }
+
+    clearLoadingIndicatorDelayTimeout(): void {
+        if (this.loadingIndicatorDelayTimeoutId != null) {
+            clearTimeout(this.loadingIndicatorDelayTimeoutId);
+            this.loadingIndicatorDelayTimeoutId = null;
+        }
+    }
+
+    /**
+     * Ends the current loading session: clear defer timer, reset session flag, hide loading state.
+     * Call when preview has loaded, errored, or file fetch failed.
+     */
+    endLoadingSession = (): void => {
+        this.clearLoadingIndicatorDelayTimeout();
+        this.loadingWasDeferred = false;
+        this.setState({ isLoading: false, isLoadingDeferred: false });
+    };
 
     /**
      * Destroys api instances with caches
@@ -369,7 +398,18 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.loadStylesheet();
         this.loadScript();
 
-        this.fetchFile(this.state.currentFileId);
+        const { currentFileId } = this.state;
+        const { loadingIndicatorDelayMs } = this.props;
+
+        if (currentFileId && loadingIndicatorDelayMs) {
+            this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
+                this.loadingIndicatorDelayTimeoutId = null;
+                this.loadingWasDeferred = true;
+                this.setState({ isLoadingDeferred: false });
+            }, loadingIndicatorDelayMs);
+        }
+
+        this.fetchFile(currentFileId);
         this.focusPreview();
     }
 
@@ -402,10 +442,21 @@ class ContentPreview extends React.PureComponent<Props, State> {
             features?.advancedContentInsights,
         );
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
+        const { loadingIndicatorDelayMs } = this.props;
 
         if (hasFileIdChanged) {
             this.destroyPreview();
-            this.setState({ isLoading: true, selectedVersion: undefined });
+            this.loadingWasDeferred = false;
+            if (loadingIndicatorDelayMs) {
+                this.setState({ isLoading: true, isLoadingDeferred: true, selectedVersion: undefined });
+                this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
+                    this.loadingIndicatorDelayTimeoutId = null;
+                    this.loadingWasDeferred = true;
+                    this.setState({ isLoadingDeferred: false });
+                }, loadingIndicatorDelayMs);
+            } else {
+                this.setState({ isLoading: true, selectedVersion: undefined });
+            }
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevState)) {
             this.destroyPreview(false);
@@ -629,8 +680,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { code = ERROR_CODE_UNKNOWN } = error;
         const { onError } = this.props;
 
-        // In case of error, there should be no thumbnail sidebar to account for
-        this.setState({ isLoading: false, isThumbnailSidebarOpen: false });
+        this.endLoadingSession();
+        this.setState({ isThumbnailSidebarOpen: false });
 
         onError(
             error,
@@ -739,7 +790,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         onLoad(loadData);
 
-        this.setState({ isLoading: false });
+        this.endLoadingSession();
         this.focusPreview();
 
         if (this.preview && filesToPrefetch.length) {
@@ -865,6 +916,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.addListener('preload', this.endLoadingSession);
 
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
@@ -934,7 +986,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         // If the file is watermarked or if its a new file, then update the state
         // In this case preview should reload without prompting the user
         if (isWatermarked || !isExistingFile) {
-            this.setState({ ...this.initialState, file });
+            const isDeferred = this.props.loadingIndicatorDelayMs && !this.loadingWasDeferred;
+            this.setState({
+                ...this.initialState,
+                file,
+                ...(isDeferred ? { isLoadingDeferred: true } : {}),
+            });
             // $FlowFixMe file version and sha1 should exist at this point
         } else if (currentFile.file_version.sha1 !== file.file_version.sha1) {
             // If we are already prevewing the file that got updated then show the
@@ -959,7 +1016,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             code: errorCode,
             message: fileError.message,
         };
-        this.setState({ error, file: undefined, isLoading: false });
+        this.endLoadingSession();
+        this.setState({ error, file: undefined });
         onError(fileError, errorCode, {
             error: fileError,
         });
@@ -1369,6 +1427,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             error,
             file,
             isLoading,
+            isLoadingDeferred,
             isReloadNotificationVisible,
             isThumbnailSidebarOpen,
             selectedVersion,
@@ -1440,6 +1499,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             errorCode={errorCode}
                                             extension={currentExtension}
                                             isLoading={isLoading}
+                                            isLoadingDeferred={isLoadingDeferred}
                                         />
                                         <PreviewNavigation
                                             collection={collection}

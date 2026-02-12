@@ -661,6 +661,93 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.state.error).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toBeTruthy();
         });
+
+        test('should keep isLoading true when loadingWasDeferred is true and new file arrives', () => {
+            const delayWrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
+            const delayInstance = delayWrapper.instance();
+            delayInstance.setState({ file: undefined, isLoading: true });
+            delayInstance.loadingWasDeferred = true;
+            const newFile = { id: '456', file_version: { sha1: 'sha' } };
+            delayInstance.fetchFileSuccessCallback(newFile);
+
+            expect(delayInstance.state.file).toEqual(newFile);
+            expect(delayInstance.state.isLoading).toBe(true);
+            expect(delayInstance.state.isLoadingDeferred).toBe(false);
+        });
+
+        test('should keep isLoadingDeferred true when spinner has not been shown yet', () => {
+            const delayWrapper = getWrapper({ ...props, loadingIndicatorDelayMs: 300 });
+            const delayInstance = delayWrapper.instance();
+            delayInstance.setState({ file: undefined, isLoading: true, isLoadingDeferred: true });
+            delayInstance.loadingWasDeferred = false;
+            const newFile = { id: '456', file_version: { sha1: 'sha' } };
+            delayInstance.fetchFileSuccessCallback(newFile);
+
+            expect(delayInstance.state.file).toEqual(newFile);
+            expect(delayInstance.state.isLoading).toBe(true);
+            expect(delayInstance.state.isLoadingDeferred).toBe(true);
+        });
+    });
+
+    describe('loading indicator defer and timeout', () => {
+        test('componentDidMount sets up defer timer when loadingIndicatorDelayMs is set', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            expect(instance.loadingIndicatorDelayTimeoutId).not.toBeNull();
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+            expect(wrapper.state('isLoading')).toBe(true);
+
+            jest.useRealTimers();
+        });
+
+        test('timeout firing clears isLoadingDeferred so spinner becomes visible', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.loadingWasDeferred).toBe(false);
+
+            jest.advanceTimersByTime(200);
+
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.loadingWasDeferred).toBe(true);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
+
+            jest.useRealTimers();
+        });
+
+        test('endLoadingSession clears timeout before it fires (fast-load scenario)', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            instance.endLoadingSession();
+
+            jest.advanceTimersByTime(200);
+
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
+
+            jest.useRealTimers();
+        });
     });
 
     describe('fetchFileErrorCallback()', () => {
@@ -873,6 +960,24 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('onPreviewError()', () => {
+        test('should end loading session and call onError', () => {
+            const onError = jest.fn();
+            const wrapper = getWrapper({ ...props, onError });
+            const instance = wrapper.instance();
+            instance.setState({ isLoading: true });
+            const errorPayload = { error: { code: 'some_code', message: 'msg' } };
+            instance.onPreviewError(errorPayload);
+            expect(instance.state.isLoading).toBe(false);
+            expect(onError).toHaveBeenCalledWith(
+                errorPayload.error,
+                'some_code',
+                expect.objectContaining({ error: errorPayload.error }),
+                expect.any(String),
+            );
+        });
+    });
+
     describe('onPreviewMetric()', () => {
         let wrapper;
         let instance;
@@ -1060,11 +1165,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadPreview).toBeCalledTimes(1);
         });
 
-        test("should update the loading state if fileId hasn't changed and shouldLoadPreview returns true", () => {
+        test('should set isLoading true when shouldLoadPreview returns true', () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
-            wrapper.setState({ isLoading: false }); // Simulate existing preview
-            wrapper.setProps({ fileId: 'bar' });
+            wrapper.setState({ isLoading: false });
+            // Trigger componentDidUpdate without changing fileId
+            wrapper.setProps({ foo: 'bar' });
 
+            expect(instance.loadPreview).toHaveBeenCalled();
+            expect(instance.destroyPreview).toHaveBeenCalledWith(false);
             expect(wrapper.state('isLoading')).toBe(true);
         });
 
