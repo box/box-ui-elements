@@ -274,6 +274,11 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         ).toBeInTheDocument();
     });
 
+    test.each([true, false])('should render with confidence score feature %s', isFFEnabled => {
+        renderComponent({}, { 'metadata.confidenceScore.enabled': isFFEnabled });
+        expect(screen.getByRole('heading', { level: 2, name: 'Add Metadata Templates' })).toBeInTheDocument();
+    });
+
     test('should render empty state when no visible template instances are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             clearExtractError: jest.fn(),
