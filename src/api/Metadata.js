@@ -322,7 +322,12 @@ class Metadata extends File {
      * @param {string|void} [instanceId] - metadata instance id
      * @return {Object} array of metadata templates
      */
-    async getTemplates(id: string, scope: string, instanceId?: string): Promise<Array<MetadataTemplate>> {
+    async getTemplates(
+        id: string,
+        scope: string,
+        instanceId?: string,
+        isExternallyOwned: boolean = false,
+    ): Promise<Array<MetadataTemplate>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA_TEMPLATES;
         let templates = {};
         const url = instanceId
@@ -345,8 +350,11 @@ class Metadata extends File {
         }
 
         templates = getProp(templates, 'data.entries', []);
-        const templatesWithTaxonomies = await this.getTaxonomyLevelsForTemplates(templates, id);
 
+        // If the templates are from different enterprise, don't hydrate the taxonomy fields with its levels
+        const templatesWithTaxonomies = isExternallyOwned
+            ? templates
+            : await this.getTaxonomyLevelsForTemplates(templates, id);
         return templatesWithTaxonomies;
     }
 
@@ -455,22 +463,25 @@ class Metadata extends File {
         id: string,
         instance: MetadataInstanceV2,
         templates: Array<MetadataTemplate>,
-    ): Promise<?MetadataTemplate> {
+    ): Promise<?{ template: MetadataTemplate, isExternallyOwned: boolean }> {
         const instanceId = instance.$id;
         const templateKey = instance.$template;
         const scope = instance.$scope;
-        let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
+        const template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
 
         // Enterprise scopes are always enterprise_XXXXX
         if (!template && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
             // If the template does not exist, it can be a template from another
             // enterprise because the user is viewing a collaborated file.
-            const crossEnterpriseTemplate = await this.getTemplates(id, scope, instanceId);
+            // We can assume that the template is cross enterprise because templates
+            // array already contains all templates for the enterprise, since there is no pagination
+            const crossEnterpriseTemplates = await this.getTemplates(id, scope, instanceId, true);
             // The API always returns an array of at most one item
-            template = crossEnterpriseTemplate[0]; // eslint-disable-line
-        }
+            const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
 
-        return template;
+            return { template: crossEnterpriseTemplate, isExternallyOwned: true };
+        }
+        return { template, isExternallyOwned: false };
     }
 
     /**
@@ -502,7 +513,7 @@ class Metadata extends File {
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
             instances.map(async instance => {
-                const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
+                const { template } = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
                     editors.push(this.createEditor(instance, template, canEdit));
                 }
@@ -523,6 +534,7 @@ class Metadata extends File {
         instance: MetadataInstanceV2,
         template: MetadataTemplate,
         canEdit: boolean,
+        isExternallyOwned: boolean = false,
     ): MetadataTemplateInstance {
         const fields: MetadataTemplateInstanceField[] = [];
 
@@ -554,6 +566,7 @@ class Metadata extends File {
         }
 
         return {
+            isExternallyOwned,
             canEdit: instance.$canEdit && canEdit,
             displayName: template.displayName,
             hidden: template.hidden,
@@ -595,9 +608,9 @@ class Metadata extends File {
 
         await Promise.all(
             instances.map(async instance => {
-                const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
+                const { template, isExternallyOwned } = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
-                    templateInstances.push(this.createTemplateInstance(instance, template, canEdit));
+                    templateInstances.push(this.createTemplateInstance(instance, template, canEdit, isExternallyOwned));
                 }
             }),
         );
