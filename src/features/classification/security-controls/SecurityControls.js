@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Text, TextButton } from '@box/blueprint-web';
 
 import { DEFAULT_MAX_APP_COUNT, SECURITY_CONTROLS_FORMAT } from '../constants';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from './utils';
@@ -21,6 +22,7 @@ type Props = {
     controls: Controls,
     controlsFormat: ControlsFormat,
     definition?: string,
+    isRedesignEnabled?: boolean,
     itemName?: string,
     maxAppCount?: number,
     shouldRenderLabel?: boolean,
@@ -35,6 +37,7 @@ class SecurityControls extends React.Component<Props, State> {
     static defaultProps = {
         classificationName: '',
         definition: '',
+        isRedesignEnabled: false,
         itemName: '',
         controls: {},
         controlsFormat: SHORT,
@@ -58,6 +61,7 @@ class SecurityControls extends React.Component<Props, State> {
             controls,
             controlsFormat,
             definition,
+            isRedesignEnabled,
             itemName,
             maxAppCount,
             shouldRenderLabel,
@@ -81,41 +85,67 @@ class SecurityControls extends React.Component<Props, State> {
             return null;
         }
 
-        const { isSecurityControlsModalOpen } = this.state;
-        const shouldShowSecurityControlsModal =
-            controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
-
         let itemsList = (
             <ul className="bdl-SecurityControls">
                 {items.map(({ message, tooltipMessage }, index) => (
-                    <SecurityControlsItem key={index} message={message} tooltipMessage={tooltipMessage} />
+                    <SecurityControlsItem
+                        key={index}
+                        isRedesignEnabled={isRedesignEnabled}
+                        message={message}
+                        tooltipMessage={tooltipMessage}
+                    />
                 ))}
             </ul>
         );
 
+        const { isSecurityControlsModalOpen } = this.state;
+        const shouldShowSecurityControlsModal =
+            controlsFormat === SHORT_WITH_BTN && !!itemName && !!classificationName && !!definition;
+
+        const securityControlsModal = shouldShowSecurityControlsModal && (
+            <SecurityControlsModal
+                classificationColor={classificationColor}
+                classificationName={classificationName}
+                closeModal={this.closeModal}
+                definition={definition}
+                itemName={itemName}
+                isSecurityControlsModalOpen={isSecurityControlsModalOpen}
+                modalItems={modalItems}
+            />
+        );
+
         if (shouldRenderLabel) {
-            itemsList = <Label text={<FormattedMessage {...messages.securityControlsLabel} />}>{itemsList}</Label>;
+            itemsList = isRedesignEnabled ? (
+                <div className="bdl-Classification-propertySection">
+                    <Text
+                        as="p"
+                        className="bdl-Classification-sectionLabel"
+                        color="textOnLightSecondary"
+                        variant="bodyDefaultSemibold"
+                    >
+                        <FormattedMessage {...messages.securityControlsLabel} />
+                    </Text>
+                    {itemsList}
+                    {shouldShowSecurityControlsModal && (
+                        <TextButton className="bdl-SecurityControls-viewAllButton" onClick={this.openModal}>
+                            <FormattedMessage {...messages.viewAll} />
+                        </TextButton>
+                    )}
+                </div>
+            ) : (
+                <Label text={<FormattedMessage {...messages.securityControlsLabel} />}>{itemsList}</Label>
+            );
         }
 
         return (
             <>
                 {itemsList}
-                {shouldShowSecurityControlsModal && (
-                    <>
-                        <PlainButton className="lnk" onClick={this.openModal} type="button">
-                            <FormattedMessage {...messages.viewAll} />
-                        </PlainButton>
-                        <SecurityControlsModal
-                            classificationColor={classificationColor}
-                            classificationName={classificationName}
-                            closeModal={this.closeModal}
-                            definition={definition}
-                            itemName={itemName}
-                            isSecurityControlsModalOpen={isSecurityControlsModalOpen}
-                            modalItems={modalItems}
-                        />
-                    </>
+                {!isRedesignEnabled && shouldShowSecurityControlsModal && (
+                    <PlainButton className="lnk" onClick={this.openModal} type="button">
+                        <FormattedMessage {...messages.viewAll} />
+                    </PlainButton>
                 )}
+                {securityControlsModal}
             </>
         );
     }

@@ -1,7 +1,11 @@
 // @flow
 import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
+import { Status, Text } from '@box/blueprint-web';
+import { Shield } from '@box/blueprint-web-assets/icons/Line';
+import { GreenLight50 } from '@box/blueprint-web-assets/tokens/tokens';
 
+import classNames from 'classnames';
 import AsyncLoad from '../../elements/common/async-load';
 import ClassifiedBadge from './ClassifiedBadge';
 import Label from '../../components/label/Label';
@@ -33,6 +37,7 @@ type Props = {
     controlsFormat?: ControlsFormat,
     definition?: string,
     isImportedClassification?: boolean,
+    isRedesignEnabled?: boolean,
     isLoadingAppliedBy?: boolean,
     isLoadingControls?: boolean,
     itemName?: string,
@@ -54,6 +59,7 @@ const Classification = ({
     controlsFormat,
     definition,
     isImportedClassification = false,
+    isRedesignEnabled = false,
     isLoadingAppliedBy = false,
     isLoadingControls,
     itemName = '',
@@ -118,36 +124,77 @@ const Classification = ({
             );
         }
 
-        return (
+        return isRedesignEnabled ? (
+            <Text as="p" data-testid="classification-modifiedby" variant="bodyDefault">
+                {modifiedByDetails}
+            </Text>
+        ) : (
             <p className="bdl-Classification-modifiedBy" data-testid="classification-modifiedby">
                 {modifiedByDetails}
             </p>
         );
     };
 
+    const Wrapper = isRedesignEnabled ? 'div' : 'article';
+
     return (
-        <article className={`bdl-Classification ${className}`}>
-            {isClassified && (
-                <ClassifiedBadge
-                    color={color}
-                    name={((name: any): string)}
-                    onClick={onClick}
-                    tooltipText={isTooltipMessageEnabled ? definition : undefined}
-                />
-            )}
-            {isInlineMessageEnabled && (
-                <Label text={<FormattedMessage {...messages.definition} />}>
-                    <p className="bdl-Classification-definition">{definition}</p>
-                </Label>
-            )}
+        <Wrapper
+            className={classNames('bdl-Classification', className, {
+                'bdl-Classification--redesign': isRedesignEnabled,
+            })}
+        >
+            {isClassified &&
+                (isRedesignEnabled ? (
+                    <Status color={GreenLight50} icon={Shield} iconPosition="left" text={name} />
+                ) : (
+                    <ClassifiedBadge
+                        color={color}
+                        name={((name: any): string)}
+                        onClick={onClick}
+                        tooltipText={isTooltipMessageEnabled ? definition : undefined}
+                    />
+                ))}
+            {isInlineMessageEnabled &&
+                (isRedesignEnabled ? (
+                    <div className="bdl-Classification-propertySection">
+                        <Text
+                            as="p"
+                            className="bdl-Classification-sectionLabel"
+                            color="textOnLightSecondary"
+                            variant="bodyDefaultSemibold"
+                        >
+                            <FormattedMessage {...messages.definition} />
+                        </Text>
+                        <Text as="p" variant="bodyDefault">
+                            {definition}
+                        </Text>
+                    </div>
+                ) : (
+                    <Label text={<FormattedMessage {...messages.definition} />}>
+                        <p className="bdl-Classification-definition">{definition}</p>
+                    </Label>
+                ))}
             {isNotClassifiedMessageVisible && (
                 <span className="bdl-Classification-missingMessage">
                     <FormattedMessage {...messages.missing} />
                 </span>
             )}
-            {shouldRenderModificationDetails && (
-                <Label text={<FormattedMessage {...modificationTitleLabel} />}>{renderModificationDetails()}</Label>
-            )}
+            {shouldRenderModificationDetails &&
+                (isRedesignEnabled ? (
+                    <div className="bdl-Classification-propertySection">
+                        <Text
+                            as="p"
+                            className="bdl-Classification-sectionLabel"
+                            color="textOnLightSecondary"
+                            variant="bodyDefaultSemibold"
+                        >
+                            <FormattedMessage {...modificationTitleLabel} />
+                        </Text>
+                        <div className="bdl-Classification-propertyContent">{renderModificationDetails()}</div>
+                    </div>
+                ) : (
+                    <Label text={<FormattedMessage {...modificationTitleLabel} />}>{renderModificationDetails()}</Label>
+                ))}
 
             {isSecurityControlsEnabled && (
                 <SecurityControls
@@ -156,6 +203,7 @@ const Classification = ({
                     controls={controls}
                     controlsFormat={controlsFormat}
                     definition={definition}
+                    isRedesignEnabled={isRedesignEnabled}
                     itemName={itemName}
                     maxAppCount={maxAppCount}
                     shouldRenderLabel
@@ -163,7 +211,7 @@ const Classification = ({
                 />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}
-        </article>
+        </Wrapper>
     );
 };
 
