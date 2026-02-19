@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Status, Text } from '@box/blueprint-web';
+// $FlowFixMe - blueprint-web-assets icons not typed for Flow
 import { Shield } from '@box/blueprint-web-assets/icons/Line';
 
 import classNames from 'classnames';

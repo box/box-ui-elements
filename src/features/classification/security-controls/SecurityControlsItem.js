@@ -11,14 +11,14 @@ import type { MessageItem } from '../flowTypes';
 
 import './SecurityControlsItem.scss';
 
-type Props = {
-    ...MessageItem,
+type Props = MessageItem & {
     isRedesignEnabled?: boolean,
 };
 
 const ICON_SIZE = 13;
 
 const SecurityControlsItem = ({ isRedesignEnabled = false, message, tooltipMessage }: Props) => {
+    // $FlowFixMe
     const messageContent = React.isValidElement(message) ? message : <FormattedMessage {...message} />;
 
     return (
@@ -29,7 +29,6 @@ const SecurityControlsItem = ({ isRedesignEnabled = false, message, tooltipMessa
                 </Text>
             ) : (
                 <>
-                    {/* $FlowFixMe */}
                     {messageContent}
                     {tooltipMessage && (
                         <Tooltip
