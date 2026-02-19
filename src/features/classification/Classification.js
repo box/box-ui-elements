@@ -117,7 +117,7 @@ const Classification = ({
                 <LoadableAppliedByAiClassificationReason
                     answer={aiClassificationReason.answer}
                     citations={aiClassificationReason.citations}
-                    className={isRedesignEnabled ? undefined : 'bdl-Classification-appliedByAiDetails'}
+                    className={classNames({ 'bdl-Classification-appliedByAiDetails': !isRedesignEnabled })}
                     modifiedAt={aiClassificationReason.modifiedAt}
                 />
             );
@@ -144,7 +144,7 @@ const Classification = ({
         >
             {isClassified &&
                 (isRedesignEnabled ? (
-                    <Status color={color} icon={Shield} iconPosition="left" text={((name: any): string)} />
+                    <Status color={color} icon={Shield} iconPosition="left" text={name} />
                 ) : (
                     <ClassifiedBadge
                         color={color}
