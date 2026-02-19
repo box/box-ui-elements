@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import { Status, Text } from '@box/blueprint-web';
 import { Shield } from '@box/blueprint-web-assets/icons/Line';
-import { GreenLight50 } from '@box/blueprint-web-assets/tokens/tokens';
 
 import classNames from 'classnames';
 import AsyncLoad from '../../elements/common/async-load';
@@ -145,7 +144,7 @@ const Classification = ({
         >
             {isClassified &&
                 (isRedesignEnabled ? (
-                    <Status color={GreenLight50} icon={Shield} iconPosition="left" text={name} />
+                    <Status color={color} icon={Shield} iconPosition="left" text={((name: any): string)} />
                 ) : (
                     <ClassifiedBadge
                         color={color}

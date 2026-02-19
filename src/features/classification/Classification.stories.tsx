@@ -13,6 +13,7 @@ const controls = {
 };
 
 const baseProps = {
+    color: '#ffeb7f',
     definition,
     messageStyle: STYLE_INLINE,
     name: 'BOX-ONLY',
