@@ -118,7 +118,7 @@ const Classification = ({
                 <LoadableAppliedByAiClassificationReason
                     answer={aiClassificationReason.answer}
                     citations={aiClassificationReason.citations}
-                    className="bdl-Classification-appliedByAiDetails"
+                    className={isRedesignEnabled ? undefined : 'bdl-Classification-appliedByAiDetails'}
                     modifiedAt={aiClassificationReason.modifiedAt}
                 />
             );
