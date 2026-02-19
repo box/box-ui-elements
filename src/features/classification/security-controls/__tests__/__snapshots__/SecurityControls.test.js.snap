@@ -6,6 +6,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
+      isRedesignEnabled={false}
       key="0"
       message={
         {
@@ -15,6 +16,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
+      isRedesignEnabled={false}
       key="1"
       message={
         {
@@ -24,6 +26,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
+      isRedesignEnabled={false}
       key="2"
       message={
         {
@@ -33,6 +36,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       }
     />
     <SecurityControlsItem
+      isRedesignEnabled={false}
       key="3"
       message={
         {
@@ -54,6 +58,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
+      isRedesignEnabled={false}
       key="0"
       message={
         {
@@ -120,6 +125,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     className="bdl-SecurityControls"
   >
     <SecurityControlsItem
+      isRedesignEnabled={false}
       key="0"
       message={
         {

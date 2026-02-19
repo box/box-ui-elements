@@ -8,6 +8,13 @@
     }
 }
 
+.bdl-Classification--redesign {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+}
+
 .bdl-Classification-definition {
     max-height: $bdl-line-height * 5;
     margin-top: 3px;
@@ -22,4 +29,10 @@
 .bdl-Classification-appliedByAiDetails {
     margin-bottom: var(--space-5);
     margin-top: var(--space-05);
+}
+
+.bdl-Classification-propertySection {
+    .bdl-Classification-sectionLabel {
+        margin-block-end: var(--space-1);
+    }
 }
