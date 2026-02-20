@@ -65,8 +65,10 @@ describe('components/context-menu/ContextMenu', () => {
             const button = wrapper.find(FakeButton);
             expect(button.length).toBe(1);
 
-            expect(button.prop('id')).toEqual(instance.menuTargetID);
             expect(button.key()).toEqual(instance.menuTargetID);
+
+            const wrapperDiv = wrapper.find(`#${instance.menuTargetID}`);
+            expect(wrapperDiv.length).toBe(1);
         });
 
         test('should not render child menu when menu is closed', () => {
@@ -98,9 +100,11 @@ describe('components/context-menu/ContextMenu', () => {
             const menu = wrapper.find(FakeMenu);
             expect(menu.length).toBe(1);
 
-            expect(menu.prop('id')).toEqual(instance.menuID);
             expect(menu.key()).toEqual(instance.menuID);
             expect(menu.prop('initialFocusIndex')).toEqual(null);
+
+            const wrapperDiv = wrapper.find(`#${instance.menuID}`);
+            expect(wrapperDiv.length).toBe(1);
         });
 
         test('should render TetherComponent with correct props with correct default values', () => {
@@ -463,8 +467,9 @@ describe('components/context-menu/ContextMenu', () => {
                     </ContextMenu>,
                 );
                 const instance = wrapper.instance() as ContextMenu;
-                const menuTargetEl = document.getElementById(instance.menuTargetID) as HTMLButtonElement;
-                menuTargetEl.focus = onFocusTargetSpy;
+                const wrapperEl = document.getElementById(instance.menuTargetID) as HTMLDivElement;
+                const targetEl = wrapperEl.firstElementChild as HTMLButtonElement;
+                targetEl.focus = onFocusTargetSpy;
                 instance.focusTarget();
                 expect(onFocusTargetSpy).toHaveBeenCalled();
             });

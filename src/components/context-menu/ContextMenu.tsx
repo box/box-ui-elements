@@ -90,9 +90,13 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
 
     focusTarget = () => {
         // breaks encapsulation but the only alternative is passing a ref to an unknown child component
-        const menuTargetEl = document.getElementById(this.menuTargetID);
-        if (menuTargetEl) {
-            menuTargetEl.focus();
+        const wrapperEl = document.getElementById(this.menuTargetID);
+        if (wrapperEl) {
+            // The ID is now on the wrapper div, so we need to focus the first child element
+            const targetEl = wrapperEl.firstElementChild as HTMLElement;
+            if (targetEl && targetEl.focus) {
+                targetEl.focus();
+            }
         }
     };
 
@@ -146,13 +150,11 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         const menu = elements[1];
 
         const menuTargetProps = {
-            id: this.menuTargetID,
             key: this.menuTargetID,
             onContextMenu: this.handleContextMenu,
         };
 
         const menuProps = {
-            id: this.menuID,
             key: this.menuID,
             initialFocusIndex: null,
             onClose: this.handleMenuClose,
@@ -172,12 +174,16 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
                 {...tetherProps}
                 renderTarget={ref => {
                     return React.isValidElement(menuTarget) ? (
-                        <div ref={ref}>{React.cloneElement(menuTarget, menuTargetProps)}</div>
+                        <div ref={ref} id={this.menuTargetID}>
+                            {React.cloneElement(menuTarget, menuTargetProps)}
+                        </div>
                     ) : null;
                 }}
                 renderElement={ref => {
                     return isOpen && React.isValidElement(menu) ? (
-                        <div ref={ref}>{React.cloneElement(menu, menuProps)}</div>
+                        <div ref={ref} id={this.menuID}>
+                            {React.cloneElement(menu, menuProps)}
+                        </div>
                     ) : null;
                 }}
             />
