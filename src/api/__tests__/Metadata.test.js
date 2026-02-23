@@ -651,7 +651,7 @@ describe('api/Metadata', () => {
         ];
 
         test('should return undefined when no global template found', async () => {
-            const template = await metadata.getTemplateForInstance(
+            const result = await metadata.getTemplateForInstance(
                 'id',
                 {
                     $id: 'instanceId',
@@ -660,11 +660,12 @@ describe('api/Metadata', () => {
                 },
                 templatesFromServer,
             );
-            expect(template).toBeUndefined();
+            expect(result.template).toBeUndefined();
+            expect(result.isExternallyOwned).toBe(false);
         });
 
         test('should return found enterprise template', async () => {
-            const template = await metadata.getTemplateForInstance(
+            const result = await metadata.getTemplateForInstance(
                 'id',
                 {
                     $id: 'instanceId',
@@ -673,12 +674,13 @@ describe('api/Metadata', () => {
                 },
                 templatesFromServer,
             );
-            expect(template).toBe(templatesFromServer[1]);
+            expect(result.template).toBe(templatesFromServer[1]);
+            expect(result.isExternallyOwned).toBe(false);
         });
 
         test('should return templates scoped to instance id', async () => {
             metadata.getTemplates = jest.fn().mockResolvedValueOnce(['collabed_template']);
-            const template = await metadata.getTemplateForInstance(
+            const result = await metadata.getTemplateForInstance(
                 'id',
                 {
                     $id: 'instanceId',
@@ -687,8 +689,9 @@ describe('api/Metadata', () => {
                 },
                 templatesFromServer,
             );
-            expect(template).toBe('collabed_template');
-            expect(metadata.getTemplates).toBeCalledWith('id', 'enterprise', 'instanceId');
+            expect(result.template).toBe('collabed_template');
+            expect(result.isExternallyOwned).toBe(true);
+            expect(metadata.getTemplates).toBeCalledWith('id', 'enterprise', 'instanceId', true);
         });
     });
 
@@ -730,11 +733,11 @@ describe('api/Metadata', () => {
                 .mockReturnValueOnce('editor4');
             metadata.getTemplateForInstance = jest
                 .fn()
-                .mockResolvedValueOnce('template1')
-                .mockResolvedValueOnce('template2')
-                .mockResolvedValueOnce('template3')
-                .mockResolvedValueOnce('template4')
-                .mockResolvedValueOnce();
+                .mockResolvedValueOnce({ template: 'template1', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: 'template2', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: 'template3', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: 'template4', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: undefined, isExternallyOwned: false });
 
             const editors = await metadata.getEditors('id', instances, {}, [], [], true);
             expect(editors).toEqual(['editor1', 'editor2', 'editor3', 'editor4']);
