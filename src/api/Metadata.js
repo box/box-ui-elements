@@ -479,9 +479,11 @@ class Metadata extends File {
             // The API always returns an array of at most one item
             const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
 
-            return { template: crossEnterpriseTemplate, isExternallyOwned: true };
+            return crossEnterpriseTemplate != null
+                ? { template: crossEnterpriseTemplate, isExternallyOwned: true }
+                : undefined;
         }
-        return { template, isExternallyOwned: false };
+        return template != null ? { template, isExternallyOwned: false } : undefined;
     }
 
     /**
@@ -513,9 +515,9 @@ class Metadata extends File {
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
             instances.map(async instance => {
-                const { template } = await this.getTemplateForInstance(id, instance, templates);
-                if (template) {
-                    editors.push(this.createEditor(instance, template, canEdit));
+                const result = await this.getTemplateForInstance(id, instance, templates);
+                if (result && result.template) {
+                    editors.push(this.createEditor(instance, result.template, canEdit));
                 }
             }),
         );
@@ -608,9 +610,11 @@ class Metadata extends File {
 
         await Promise.all(
             instances.map(async instance => {
-                const { template, isExternallyOwned } = await this.getTemplateForInstance(id, instance, templates);
-                if (template) {
-                    templateInstances.push(this.createTemplateInstance(instance, template, canEdit, isExternallyOwned));
+                const result = await this.getTemplateForInstance(id, instance, templates);
+                if (result && result.template) {
+                    templateInstances.push(
+                        this.createTemplateInstance(instance, result.template, canEdit, result.isExternallyOwned),
+                    );
                 }
             }),
         );
