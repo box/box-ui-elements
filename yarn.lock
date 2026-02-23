@@ -1512,10 +1512,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^1.36.0":
-  version "1.36.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.36.0.tgz#31ada85bda6326aa00494a9efc5056ab9d617172"
-  integrity sha512-Eaatr+TV2+AovJlu6JcnhTBJCvEmyFUVDFYP4aegNPPL69FpAHB29QR5hLxgr/d1FK5ldBUVcfKPi2cj7IzroQ==
+"@box/metadata-editor@^1.38.0":
+  version "1.39.1"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.39.1.tgz#f2dbd25ff0f0dbb32dac9b2ab9c9c63d69a04b96"
+  integrity sha512-SMXLJ5S9fZcuh6X06k7wAxl/ETfhdv4+M7FXcmuWP9cMCpud/WYXXAMKJA3qaMBMZxcbil8SBEsaYl6OKXF2rQ==
 
 "@box/metadata-filter@^1.41.3":
   version "1.41.3"

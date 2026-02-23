@@ -810,11 +810,11 @@ describe('api/Metadata', () => {
                 .mockReturnValueOnce('templateInstance4');
             metadata.getTemplateForInstance = jest
                 .fn()
-                .mockResolvedValueOnce('template1')
-                .mockResolvedValueOnce('template2')
-                .mockResolvedValueOnce('template3')
-                .mockResolvedValueOnce('template4')
-                .mockResolvedValueOnce();
+                .mockResolvedValueOnce({ template: 'template1', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: 'template2', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: 'template3', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: 'template4', isExternallyOwned: false })
+                .mockResolvedValueOnce({ template: undefined, isExternallyOwned: false });
 
             const templateInstances = await metadata.getTemplateInstances('id', instances, {}, [], [], true);
             expect(templateInstances).toEqual([
