@@ -320,6 +320,7 @@ class Metadata extends File {
      * @param {string} id - file id
      * @param {string} scope - metadata scope
      * @param {string|void} [instanceId] - metadata instance id
+     * @param {boolean} [isExternallyOwned] - whether the provided template instance is externally owned
      * @return {Object} array of metadata templates
      */
     async getTemplates(
