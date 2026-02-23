@@ -6,10 +6,5 @@
     "typescript.validate.enable": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
-    },
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#342C23",
-        "titleBar.activeBackground": "#493E31",
-        "titleBar.activeForeground": "#FBFBFA"
     }
 }
