@@ -447,10 +447,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         // Validate customPreviewContent type at runtime
         if (customPreviewContent && typeof customPreviewContent !== 'function') {
             const error = new Error('customPreviewContent must be a React component (function or class)');
-            logger.logError(error, 'INVALID_CUSTOM_PREVIEW_TYPE', {
-                receivedType: typeof customPreviewContent,
-                receivedValue: String(customPreviewContent),
-            });
+            const logError = logger?.logError;
+            if (logError) {
+                logError(error, 'INVALID_CUSTOM_PREVIEW_TYPE', {
+                    receivedType: typeof customPreviewContent,
+                    receivedValue: String(customPreviewContent),
+                });
+            }
             onError(error, 'INVALID_PROP', { error }, ORIGIN_CONTENT_PREVIEW);
             // Don't proceed with custom content
             return;
@@ -864,13 +867,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
             // WARNING: If onLoad contains critical business logic, this may hide important errors.
             // Consider whether errors should propagate to parent components via error boundaries.
             const { logger } = this.props;
-            logger.logError(error, 'PREVIEW_ONLOAD_CALLBACK_ERROR', {
-                fileId: this.state.currentFileId,
-                fileName: this.state.file?.name,
-                errorMessage: error.message,
-                errorType: error.name,
-                hasMetrics: !!loadData.metrics,
-            });
+            const logError = logger?.logError;
+            if (logError) {
+                logError(error, 'PREVIEW_ONLOAD_CALLBACK_ERROR', {
+                    fileId: this.state.currentFileId,
+                    fileName: this.state.file?.name,
+                    errorMessage: error.message,
+                    errorType: error.name,
+                    hasMetrics: !!loadData.metrics,
+                });
+            }
         }
 
         this.focusPreview();
@@ -1587,65 +1593,110 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                 {({ measureRef: previewRef }) => {
                                                     const { customPreviewContent: CustomPreview, logger } = this.props;
 
+                                                    // Render custom preview if provided, otherwise normal preview
+                                                    const renderCustomPreview = () => {
+                                                        if (!CustomPreview) {
+                                                            return null;
+                                                        }
+
+                                                        // Validate required props before rendering custom content
+                                                        if (!currentFileId || !token || !apiHost) {
+                                                            const missingProps = [];
+                                                            if (!currentFileId) missingProps.push('fileId');
+                                                            if (!token) missingProps.push('token');
+                                                            if (!apiHost) missingProps.push('apiHost');
+
+                                                            const validationError = new Error(
+                                                                `CustomPreview: Missing required props: ${missingProps.join(', ')}`,
+                                                            );
+                                                            const logError = logger?.logError;
+                                                            if (logError) {
+                                                                logError(
+                                                                    validationError,
+                                                                    'CUSTOM_PREVIEW_INVALID_PROPS',
+                                                                    {
+                                                                        missingProps,
+                                                                        fileId: currentFileId,
+                                                                    },
+                                                                );
+                                                            }
+                                                            this.onPreviewError({
+                                                                error: ({
+                                                                    code: 'CUSTOM_PREVIEW_INVALID_PROPS',
+                                                                    message: validationError.message,
+                                                                }: any),
+                                                            });
+                                                            return null;
+                                                        }
+
+                                                        // Create wrapper for onError to match PreviewLibraryError signature
+                                                        const handleCustomError = (
+                                                            customError: ErrorType | ElementsXhrError,
+                                                        ) => {
+                                                            // Extract error code
+                                                            const errorCodeValue =
+                                                                customError &&
+                                                                typeof customError === 'object' &&
+                                                                'code' in customError
+                                                                    ? customError.code
+                                                                    : 'error_custom_preview';
+
+                                                            // Extract error message
+                                                            let errorMessageValue: string;
+                                                            if (customError instanceof Error) {
+                                                                errorMessageValue = customError.message;
+                                                            } else if (
+                                                                customError &&
+                                                                typeof customError === 'object' &&
+                                                                'message' in customError
+                                                            ) {
+                                                                errorMessageValue =
+                                                                    customError.message || 'Unknown error';
+                                                            } else {
+                                                                errorMessageValue = String(customError);
+                                                            }
+
+                                                            const errorObj: ErrorType = {
+                                                                code: errorCodeValue,
+                                                                message: errorMessageValue,
+                                                            };
+                                                            this.onPreviewError({ error: errorObj });
+                                                        };
+
+                                                        // Wrap custom preview in error boundary to catch render errors
+                                                        return (
+                                                            <ErrorBoundary
+                                                                errorOrigin={ORIGIN_CONTENT_PREVIEW}
+                                                                onError={elementsError => {
+                                                                    const logError = logger?.logError;
+                                                                    if (logError) {
+                                                                        logError(
+                                                                            new Error(elementsError.message),
+                                                                            'CUSTOM_PREVIEW_RENDER_ERROR',
+                                                                            {
+                                                                                fileId: currentFileId,
+                                                                                fileName: file.name,
+                                                                                errorCode: elementsError.code,
+                                                                            },
+                                                                        );
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <CustomPreview
+                                                                    fileId={currentFileId}
+                                                                    token={token}
+                                                                    apiHost={apiHost}
+                                                                    file={file}
+                                                                    onError={handleCustomError}
+                                                                    onLoad={this.onPreviewLoad}
+                                                                />
+                                                            </ErrorBoundary>
+                                                        );
+                                                    };
+
                                                     return (
                                                         <div ref={previewRef} className="bcpr-content">
-                                                            {CustomPreview &&
-                                                                (() => {
-                                                                    // Validate required props before rendering custom content
-                                                                    if (!currentFileId || !token || !apiHost) {
-                                                                        const missingProps = [];
-                                                                        if (!currentFileId) missingProps.push('fileId');
-                                                                        if (!token) missingProps.push('token');
-                                                                        if (!apiHost) missingProps.push('apiHost');
-
-                                                                        const validationError = new Error(
-                                                                            `CustomPreview: Missing required props: ${missingProps.join(', ')}`,
-                                                                        );
-                                                                        logger.logError(
-                                                                            validationError,
-                                                                            'CUSTOM_PREVIEW_INVALID_PROPS',
-                                                                            {
-                                                                                missingProps,
-                                                                                fileId: currentFileId,
-                                                                            },
-                                                                        );
-                                                                        this.onPreviewError({
-                                                                            error: {
-                                                                                ...validationError,
-                                                                                code: 'CUSTOM_PREVIEW_INVALID_PROPS',
-                                                                            },
-                                                                        });
-                                                                        return null;
-                                                                    }
-
-                                                                    // Wrap custom preview in error boundary to catch render errors
-                                                                    // bcpr-content class provides consistent sizing/layout with Box.Preview
-                                                                    return (
-                                                                        <ErrorBoundary
-                                                                            errorOrigin={ORIGIN_CONTENT_PREVIEW}
-                                                                            onError={elementsError => {
-                                                                                logger.logError(
-                                                                                    new Error(elementsError.message),
-                                                                                    'CUSTOM_PREVIEW_RENDER_ERROR',
-                                                                                    {
-                                                                                        fileId: currentFileId,
-                                                                                        fileName: file.name,
-                                                                                        errorCode: elementsError.code,
-                                                                                    },
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            <CustomPreview
-                                                                                fileId={currentFileId}
-                                                                                token={token}
-                                                                                apiHost={apiHost}
-                                                                                file={file}
-                                                                                onError={this.onPreviewError}
-                                                                                onLoad={this.onPreviewLoad}
-                                                                            />
-                                                                        </ErrorBoundary>
-                                                                    );
-                                                                })()}
+                                                            {renderCustomPreview()}
                                                         </div>
                                                     );
                                                 }}

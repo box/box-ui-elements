@@ -1841,8 +1841,8 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(customPreviewInstance.prop('token')).toBe(props.token);
                 expect(customPreviewInstance.prop('apiHost')).toBe(props.apiHost);
                 expect(customPreviewInstance.prop('file')).toBe(file);
-                // onError and onLoad are instance methods
-                expect(customPreviewInstance.prop('onError')).toBe(instance.onPreviewError);
+                // onError is wrapped in handleCustomError, onLoad is passed directly
+                expect(typeof customPreviewInstance.prop('onError')).toBe('function');
                 expect(customPreviewInstance.prop('onLoad')).toBe(instance.onPreviewLoad);
             });
 
@@ -2073,8 +2073,8 @@ describe('elements/content-preview/ContentPreview', () => {
                 const customPreviewInstance = measureContent.find(CustomPreview);
 
                 if (customPreviewInstance.exists()) {
-                    // Verify it receives onPreviewError, not onError
-                    expect(customPreviewInstance.prop('onError')).toBe(instance.onPreviewError);
+                    // Verify it receives a wrapped error handler function
+                    expect(typeof customPreviewInstance.prop('onError')).toBe('function');
                 }
             });
 
