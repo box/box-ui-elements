@@ -212,6 +212,7 @@ describe('api/Metadata', () => {
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
+                isExternallyOwned: false,
                 fields: [
                     {
                         description: 'Test description',
@@ -232,6 +233,7 @@ describe('api/Metadata', () => {
                 ],
                 scope: 'enterprise',
                 templateKey: 'instance_from_template',
+                type: undefined,
             });
         });
 
@@ -257,6 +259,7 @@ describe('api/Metadata', () => {
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
+                isExternallyOwned: false,
                 fields: [
                     {
                         key: 'testCustomField',
@@ -264,7 +267,9 @@ describe('api/Metadata', () => {
                         value: 'This is string',
                     },
                 ],
+                scope: undefined,
                 templateKey: 'properties',
+                type: undefined,
             });
         });
     });
