@@ -441,25 +441,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        const { customPreviewContent, logger, onError } = this.props;
-
-        // Validate customPreviewContent type at runtime
-        if (customPreviewContent && typeof customPreviewContent !== 'function') {
-            const error = new Error('customPreviewContent must be a React component (function or class)');
-            const logError = logger?.logError;
-            if (logError) {
-                logError(error, 'INVALID_CUSTOM_PREVIEW_TYPE', {
-                    receivedType: typeof customPreviewContent,
-                    receivedValue: String(customPreviewContent),
-                });
-            }
-            onError(error, 'INVALID_PROP', { error }, ORIGIN_CONTENT_PREVIEW);
-            // Don't proceed with custom content
-            return;
-        }
+        const { customPreviewContent } = this.props;
 
         // Don't load Box.Preview library when custom content is provided
         // (avoids unnecessary resource loading and potential conflicts with custom renderer)
+        // Flow type validation (React.ComponentType) ensures valid component at compile time
         if (!customPreviewContent) {
             this.loadStylesheet();
             this.loadScript();

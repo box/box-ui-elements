@@ -1917,34 +1917,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         describe('error handling', () => {
-            test('should validate customPreviewContent type in componentDidMount', () => {
-                const mockLogger = { logError: jest.fn(), onReadyMetric: jest.fn() };
-                const mockOnError = jest.fn();
-                const invalidCustomContent = 'not-a-component'; // String instead of component
-
-                getWrapper({
-                    ...props,
-                    customPreviewContent: invalidCustomContent,
-                    logger: mockLogger,
-                    onError: mockOnError,
-                });
-
-                expect(mockLogger.logError).toHaveBeenCalledWith(
-                    expect.any(Error),
-                    'INVALID_CUSTOM_PREVIEW_TYPE',
-                    expect.objectContaining({
-                        receivedType: 'string',
-                    }),
-                );
-
-                expect(mockOnError).toHaveBeenCalledWith(
-                    expect.any(Error),
-                    'INVALID_PROP',
-                    expect.any(Object),
-                    'content_preview',
-                );
-            });
-
             test('should validate required props before rendering CustomPreview', () => {
                 const mockLogger = { logError: jest.fn(), onReadyMetric: jest.fn() };
                 const CustomPreview = jest.fn(() => <div>Custom</div>);
