@@ -353,10 +353,10 @@ class Metadata extends File {
         templates = getProp(templates, 'data.entries', []);
 
         // If the templates are from different enterprise, don't hydrate the taxonomy fields with its levels
-        const templatesWithTaxonomies = isExternallyOwned
+        const templatesToReturn = isExternallyOwned
             ? templates
             : await this.getTaxonomyLevelsForTemplates(templates, id);
-        return templatesWithTaxonomies;
+        return templatesToReturn;
     }
 
     /**
