@@ -477,10 +477,7 @@ class Metadata extends File {
             const crossEnterpriseTemplates = await this.getTemplates(id, scope, instanceId, true);
             // The API always returns an array of at most one item
             const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
-
-            return crossEnterpriseTemplate != null
-                ? { template: crossEnterpriseTemplate, isExternallyOwned: true }
-                : undefined;
+            return { template: crossEnterpriseTemplate, isExternallyOwned: true };
         }
         return template != null ? { template, isExternallyOwned: false } : undefined;
     }
