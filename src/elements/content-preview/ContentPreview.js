@@ -85,12 +85,7 @@ type StartAt = {
 };
 
 // Callback types for customPreviewContent
-type CustomPreviewOnError = (
-    error: ErrorType | ElementsXhrError,
-    code: string,
-    context: Object,
-    origin?: string,
-) => void;
+type CustomPreviewOnError = (error: Error | ErrorType | ElementsXhrError) => void;
 
 type CustomPreviewOnLoad = (data: { file?: BoxItem, metrics?: Object, ... }) => void;
 
@@ -161,11 +156,14 @@ type Props = {
      * - apiHost: Box API endpoint
      * - file: Current file object with full metadata
      * - onError: Optional callback for preview failures - call when content fails to load
+     *            Pass error object with optional 'code' property for error categorization
      * - onLoad: Optional callback for successful load - call when content is ready
      *
      * Expected behavior:
      * - Component should call onLoad() when content is successfully rendered
-     * - Component should call onError(error, code, context) on failures
+     * - Component should call onError(error) on failures, where error can be:
+     *   - Error instance with optional 'code' property
+     *   - Object with 'code' and 'message' properties
      * - Component should handle its own loading states and error display
      * - Component should handle its own keyboard shortcuts (ContentPreview hotkeys are disabled)
      * - Component should be memoized/pure for performance
