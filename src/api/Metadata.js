@@ -479,7 +479,7 @@ class Metadata extends File {
             const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
             return { template: crossEnterpriseTemplate, isExternallyOwned: true };
         }
-        return template != null ? { template, isExternallyOwned: false } : undefined;
+        return { template, isExternallyOwned: false };
     }
 
     /**
