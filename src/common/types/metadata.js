@@ -171,6 +171,7 @@ type MetadataTemplateInstanceField = {
 
 type MetadataTemplateInstance = {
     canEdit: boolean,
+    isExternallyOwned?: boolean,
     displayName?: string,
     hidden?: boolean,
     id: string,
