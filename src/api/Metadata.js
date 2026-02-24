@@ -472,10 +472,8 @@ class Metadata extends File {
 
         // Enterprise scopes are always enterprise_XXXXX
         if (!template && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-            // If the template does not exist, it can be a template from another
-            // enterprise because the user is viewing a collaborated file.
-            // We can assume that the template is cross enterprise because templates
-            // array already contains all templates for the enterprise, since there is no pagination
+            // Any missing template is likely from another enterprise (e.g. collaborated file);
+            // Templates array has no pagination so we can assume cross-enterprise as it contains all templates.
             const crossEnterpriseTemplates = await this.getTemplates(id, scope, instanceId, true);
             // The API always returns an array of at most one item
             const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
