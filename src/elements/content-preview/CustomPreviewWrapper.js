@@ -10,6 +10,26 @@ import type { LoggerProps } from '../../common/types/logging';
 type CustomPreviewOnError = (error: Error | ErrorType | ElementsXhrError) => void;
 type CustomPreviewOnLoad = (data: Object) => void;
 
+/**
+ * Props that are automatically injected into ContentPreview children.
+ * Import this type to ensure your custom preview component accepts the required props.
+ *
+ * @example
+ * import type { ContentPreviewChildProps } from 'box-ui-elements';
+ *
+ * const MyCustomPreview = ({ fileId, token, apiHost, file, onError, onLoad }: ContentPreviewChildProps) => {
+ *     // Your implementation
+ * };
+ */
+export type ContentPreviewChildProps = {
+    fileId: string,
+    token: Token,
+    apiHost: string,
+    file: BoxItem,
+    onError: CustomPreviewOnError,
+    onLoad: CustomPreviewOnLoad,
+};
+
 type Props = {
     children: React.Node,
     apiHost: string,
@@ -23,8 +43,8 @@ type Props = {
 
 /**
  * Wrapper component for custom preview content.
- * Handles prop validation, error transformation, and error boundary wrapping.
- * Clones the child element with injected props (fileId, token, apiHost, file, onError, onLoad).
+ * Clones the child element and injects props (fileId, token, apiHost, file, onError, onLoad).
+ * Wraps children in ErrorBoundary and transforms errors to ContentPreview error format.
  */
 function CustomPreviewWrapper({
     children,
@@ -36,49 +56,6 @@ function CustomPreviewWrapper({
     onPreviewLoad,
     token,
 }: Props): React.Node {
-    // Validate children is a single React element
-    if (!React.isValidElement(children)) {
-        const validationError = new Error('CustomPreview: children must be a single valid React element');
-        const logError = logger?.logError;
-        if (logError) {
-            logError(validationError, 'CUSTOM_PREVIEW_INVALID_CHILDREN', {
-                receivedType: typeof children,
-                fileId,
-            });
-        }
-        onPreviewError({
-            error: ({
-                code: 'CUSTOM_PREVIEW_INVALID_CHILDREN',
-                message: validationError.message,
-            }: any),
-        });
-        return null;
-    }
-
-    // Validate required props
-    if (!fileId || !token || !apiHost) {
-        const missingProps = [];
-        if (!fileId) missingProps.push('fileId');
-        if (!token) missingProps.push('token');
-        if (!apiHost) missingProps.push('apiHost');
-
-        const validationError = new Error(`CustomPreview: Missing required props: ${missingProps.join(', ')}`);
-        const logError = logger?.logError;
-        if (logError) {
-            logError(validationError, 'CUSTOM_PREVIEW_INVALID_PROPS', {
-                missingProps,
-                fileId,
-            });
-        }
-        onPreviewError({
-            error: ({
-                code: 'CUSTOM_PREVIEW_INVALID_PROPS',
-                message: validationError.message,
-            }: any),
-        });
-        return null;
-    }
-
     // Create wrapper for onError to transform to PreviewLibraryError signature
     const handleCustomError: CustomPreviewOnError = (customError: ErrorType | ElementsXhrError) => {
         // Extract error code
@@ -117,7 +94,6 @@ function CustomPreviewWrapper({
     };
 
     // Clone child element and inject props
-    // Flow refinement: React.isValidElement check above ensures children is React.Element
     const childWithProps = React.cloneElement((children: any), {
         fileId,
         token,

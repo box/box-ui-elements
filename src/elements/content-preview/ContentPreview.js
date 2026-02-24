@@ -33,7 +33,7 @@ import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
 import { withAnnotations, withAnnotatorContext } from '../common/annotator-context';
 import { withErrorBoundary } from '../common/error-boundary';
-import CustomPreviewWrapper from './CustomPreviewWrapper';
+import CustomPreviewWrapper, { type ContentPreviewChildProps } from './CustomPreviewWrapper';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
@@ -1618,6 +1618,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 }
 
 export type ContentPreviewProps = Props;
+export type { ContentPreviewChildProps };
 export { ContentPreview as ContentPreviewComponent };
 export default flow([
     makeResponsive,

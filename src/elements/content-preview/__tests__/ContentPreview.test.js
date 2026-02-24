@@ -1915,30 +1915,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         describe('error handling', () => {
-            test('should validate required props before rendering CustomPreview', () => {
-                const mockLogger = { logError: jest.fn(), onReadyMetric: jest.fn() };
-                const MockCustomPreview = jest.fn(() => <div>Custom</div>);
-
-                // Create wrapper without setting currentFileId in state
-                const wrapper = getWrapper({
-                    ...props,
-                    children: MockCustomPreview,
-                    logger: mockLogger,
-                });
-                wrapper.setState({ file }); // Set file but currentFileId will be undefined in some scenario
-
-                // Get instance and manually call onPreviewError to set up spy
-                const instance = wrapper.instance();
-                instance.onPreviewError = jest.fn();
-
-                // Force a re-render to trigger validation
-                wrapper.update();
-
-                // In a real scenario where props are missing, logError would be called
-                // This test documents the expected behavior
-                expect(mockLogger.logError).toBeDefined();
-            });
-
             test('should wrap CustomPreview in ErrorBoundary', () => {
                 const wrapper = getWrapper(props);
                 wrapper.setState({ file });
@@ -1975,23 +1951,6 @@ describe('elements/content-preview/ContentPreview', () => {
                     // Verify CustomPreviewWrapper receives onPreviewError
                     expect(wrapperInstance.prop('onPreviewError')).toBe(instance.onPreviewError);
                 }
-            });
-
-            test('should handle missing props gracefully in render', () => {
-                const mockLogger = { logError: jest.fn(), onReadyMetric: jest.fn() };
-                const wrapper = getWrapper({
-                    ...props,
-                    children: jest.fn(() => <div>Custom</div>),
-                    logger: mockLogger,
-                    token: undefined, // Missing required prop
-                });
-                wrapper.setState({ file, currentFileId: file.id });
-
-                // Trigger render
-                wrapper.update();
-
-                // Should handle missing props without crashing
-                expect(wrapper.exists()).toBe(true);
             });
         });
     });
