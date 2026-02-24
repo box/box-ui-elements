@@ -1819,9 +1819,12 @@ describe('elements/content-preview/ContentPreview', () => {
                 const renderProp = measureComponent.prop('children');
                 const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
 
-                // Now verify custom preview content is rendered
-                const CustomPreview = customPreviewContent;
-                expect(measureContent.find(CustomPreview).exists()).toBe(true);
+                // Now verify CustomPreviewWrapper is rendered
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+
+                // Verify CustomPreview is passed as a prop to the wrapper
+                const wrapperInstance = measureContent.find('CustomPreviewWrapper');
+                expect(wrapperInstance.prop('CustomPreview')).toBe(customPreviewContent);
             });
 
             test('should pass correct props to custom preview content', () => {
@@ -1834,16 +1837,17 @@ describe('elements/content-preview/ContentPreview', () => {
                 const renderProp = measureComponent.prop('children');
                 const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
 
-                const CustomPreview = customPreviewContent;
-                const customPreviewInstance = measureContent.find(CustomPreview);
+                // Find the CustomPreviewWrapper
+                const wrapperInstance = measureContent.find('CustomPreviewWrapper');
 
-                expect(customPreviewInstance.prop('fileId')).toBe(file.id);
-                expect(customPreviewInstance.prop('token')).toBe(props.token);
-                expect(customPreviewInstance.prop('apiHost')).toBe(props.apiHost);
-                expect(customPreviewInstance.prop('file')).toBe(file);
-                // onError is wrapped in handleCustomError, onLoad is passed directly
-                expect(typeof customPreviewInstance.prop('onError')).toBe('function');
-                expect(customPreviewInstance.prop('onLoad')).toBe(instance.onPreviewLoad);
+                // Verify props passed to wrapper
+                expect(wrapperInstance.prop('fileId')).toBe(file.id);
+                expect(wrapperInstance.prop('token')).toBe(props.token);
+                expect(wrapperInstance.prop('apiHost')).toBe(props.apiHost);
+                expect(wrapperInstance.prop('file')).toBe(file);
+                expect(wrapperInstance.prop('CustomPreview')).toBe(customPreviewContent);
+                expect(wrapperInstance.prop('onPreviewError')).toBe(instance.onPreviewError);
+                expect(wrapperInstance.prop('onPreviewLoad')).toBe(instance.onPreviewLoad);
             });
 
             test('should not render custom preview content when file is not loaded', () => {

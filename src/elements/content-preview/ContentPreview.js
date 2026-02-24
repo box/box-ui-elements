@@ -32,7 +32,8 @@ import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
 import { withAnnotations, withAnnotatorContext } from '../common/annotator-context';
-import ErrorBoundary, { withErrorBoundary } from '../common/error-boundary';
+import { withErrorBoundary } from '../common/error-boundary';
+import CustomPreviewWrapper from './CustomPreviewWrapper';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
@@ -1575,110 +1576,20 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                 {({ measureRef: previewRef }) => {
                                                     const { customPreviewContent: CustomPreview, logger } = this.props;
 
-                                                    // Render custom preview if provided, otherwise normal preview
-                                                    const renderCustomPreview = () => {
-                                                        if (!CustomPreview) {
-                                                            return null;
-                                                        }
-
-                                                        // Validate required props before rendering custom content
-                                                        if (!currentFileId || !token || !apiHost) {
-                                                            const missingProps = [];
-                                                            if (!currentFileId) missingProps.push('fileId');
-                                                            if (!token) missingProps.push('token');
-                                                            if (!apiHost) missingProps.push('apiHost');
-
-                                                            const validationError = new Error(
-                                                                `CustomPreview: Missing required props: ${missingProps.join(', ')}`,
-                                                            );
-                                                            const logError = logger?.logError;
-                                                            if (logError) {
-                                                                logError(
-                                                                    validationError,
-                                                                    'CUSTOM_PREVIEW_INVALID_PROPS',
-                                                                    {
-                                                                        missingProps,
-                                                                        fileId: currentFileId,
-                                                                    },
-                                                                );
-                                                            }
-                                                            this.onPreviewError({
-                                                                error: ({
-                                                                    code: 'CUSTOM_PREVIEW_INVALID_PROPS',
-                                                                    message: validationError.message,
-                                                                }: any),
-                                                            });
-                                                            return null;
-                                                        }
-
-                                                        // Create wrapper for onError to match PreviewLibraryError signature
-                                                        const handleCustomError = (
-                                                            customError: ErrorType | ElementsXhrError,
-                                                        ) => {
-                                                            // Extract error code
-                                                            const errorCodeValue =
-                                                                customError &&
-                                                                typeof customError === 'object' &&
-                                                                'code' in customError
-                                                                    ? customError.code
-                                                                    : 'error_custom_preview';
-
-                                                            // Extract error message
-                                                            let errorMessageValue: string;
-                                                            if (customError instanceof Error) {
-                                                                errorMessageValue = customError.message;
-                                                            } else if (
-                                                                customError &&
-                                                                typeof customError === 'object' &&
-                                                                'message' in customError
-                                                            ) {
-                                                                errorMessageValue =
-                                                                    customError.message || 'Unknown error';
-                                                            } else {
-                                                                errorMessageValue = String(customError);
-                                                            }
-
-                                                            const errorObj: ErrorType = {
-                                                                code: errorCodeValue,
-                                                                message: errorMessageValue,
-                                                            };
-                                                            this.onPreviewError({ error: errorObj });
-                                                        };
-
-                                                        // Wrap custom preview in error boundary to catch render errors
-                                                        return (
-                                                            <ErrorBoundary
-                                                                errorOrigin={ORIGIN_CONTENT_PREVIEW}
-                                                                onError={elementsError => {
-                                                                    const logError = logger?.logError;
-                                                                    if (logError) {
-                                                                        logError(
-                                                                            new Error(elementsError.message),
-                                                                            'CUSTOM_PREVIEW_RENDER_ERROR',
-                                                                            {
-                                                                                fileId: currentFileId,
-                                                                                fileName: file.name,
-                                                                                errorCode: elementsError.code,
-                                                                            },
-                                                                        );
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <CustomPreview
+                                                    return (
+                                                        <div ref={previewRef} className="bcpr-content">
+                                                            {CustomPreview ? (
+                                                                <CustomPreviewWrapper
+                                                                    CustomPreview={CustomPreview}
                                                                     fileId={currentFileId}
                                                                     token={token}
                                                                     apiHost={apiHost}
                                                                     file={file}
-                                                                    onError={handleCustomError}
-                                                                    onLoad={this.onPreviewLoad}
+                                                                    logger={logger}
+                                                                    onPreviewError={this.onPreviewError}
+                                                                    onPreviewLoad={this.onPreviewLoad}
                                                                 />
-                                                            </ErrorBoundary>
-                                                        );
-                                                    };
-
-                                                    return (
-                                                        <div ref={previewRef} className="bcpr-content">
-                                                            {renderCustomPreview()}
+                                                            ) : null}
                                                         </div>
                                                     );
                                                 }}
