@@ -856,28 +856,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
             };
         }
 
-        // End loading session before calling onLoad to ensure UI updates even if callback throws.
-        // Common failure scenario: metrics/analytics errors that shouldn't block preview functionality.
+        // End loading session before calling onLoad
         this.endLoadingSession();
 
-        try {
-            onLoad(loadData);
-        } catch (error) {
-            // Catch and log errors from onLoad callback (typically metrics/analytics failures).
-            // WARNING: If onLoad contains critical business logic, this may hide important errors.
-            // Consider whether errors should propagate to parent components via error boundaries.
-            const { logger } = this.props;
-            const logError = logger?.logError;
-            if (logError) {
-                logError(error, 'PREVIEW_ONLOAD_CALLBACK_ERROR', {
-                    fileId: this.state.currentFileId,
-                    fileName: this.state.file?.name,
-                    errorMessage: error.message,
-                    errorType: error.name,
-                    hasMetrics: !!loadData.metrics,
-                });
-            }
-        }
+        onLoad(loadData);
 
         this.focusPreview();
 
