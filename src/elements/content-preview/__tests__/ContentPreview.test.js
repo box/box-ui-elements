@@ -1878,6 +1878,20 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(wrapperInstance.prop('children')).toEqual(props.children);
                 expect(wrapperInstance.prop('onPreviewError')).toBe(instance.onPreviewError);
                 expect(wrapperInstance.prop('onPreviewLoad')).toBe(instance.onPreviewLoad);
+
+                // Shallow dive into CustomPreviewWrapper to verify children are cloned with injected props
+                const wrapperChildren = wrapperInstance.dive();
+                const errorBoundary = wrapperChildren.find('ErrorBoundary');
+                expect(errorBoundary.exists()).toBe(true);
+
+                // The cloned child is inside ErrorBoundary
+                const clonedChild = errorBoundary.prop('children');
+                expect(clonedChild.props.fileId).toBe(file.id);
+                expect(clonedChild.props.token).toBe(props.token);
+                expect(clonedChild.props.apiHost).toBe(props.apiHost);
+                expect(clonedChild.props.file).toBe(file);
+                expect(typeof clonedChild.props.onError).toBe('function');
+                expect(typeof clonedChild.props.onLoad).toBe('function');
             });
 
             test('should not render custom preview content when file is not loaded', () => {
@@ -1955,9 +1969,15 @@ describe('elements/content-preview/ContentPreview', () => {
                 const renderProp = measureComponent.prop('children');
                 const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
 
-                // Verify CustomPreviewWrapper is present (which contains ErrorBoundary)
+                // Find CustomPreviewWrapper
                 const wrapperInstance = measureContent.find('CustomPreviewWrapper');
                 expect(wrapperInstance.exists()).toBe(true);
+
+                // Shallow dive into CustomPreviewWrapper to verify ErrorBoundary
+                const wrapperChildren = wrapperInstance.dive();
+                const errorBoundary = wrapperChildren.find('ErrorBoundary');
+                expect(errorBoundary.exists()).toBe(true);
+                expect(errorBoundary.prop('errorOrigin')).toBe('content_preview');
             });
 
             test('should call onPreviewError not onError in CustomPreview', () => {
