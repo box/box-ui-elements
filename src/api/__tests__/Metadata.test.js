@@ -741,7 +741,7 @@ describe('api/Metadata', () => {
                 .mockResolvedValueOnce({ template: 'template2', isExternallyOwned: false })
                 .mockResolvedValueOnce({ template: 'template3', isExternallyOwned: false })
                 .mockResolvedValueOnce({ template: 'template4', isExternallyOwned: false })
-                .mockResolvedValueOnce({ template: undefined, isExternallyOwned: false });
+                .mockResolvedValueOnce(undefined);
 
             const editors = await metadata.getEditors('id', instances, {}, [], [], true);
             expect(editors).toEqual(['editor1', 'editor2', 'editor3', 'editor4']);
@@ -821,7 +821,7 @@ describe('api/Metadata', () => {
                 .mockResolvedValueOnce({ template: 'template2', isExternallyOwned: false })
                 .mockResolvedValueOnce({ template: 'template3', isExternallyOwned: false })
                 .mockResolvedValueOnce({ template: 'template4', isExternallyOwned: false })
-                .mockResolvedValueOnce({ template: undefined, isExternallyOwned: false });
+                .mockResolvedValueOnce(undefined);
 
             const templateInstances = await metadata.getTemplateInstances('id', instances, {}, [], [], true);
             expect(templateInstances).toEqual([
