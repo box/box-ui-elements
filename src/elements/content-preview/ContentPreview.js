@@ -84,11 +84,6 @@ type StartAt = {
     value: number,
 };
 
-// Callback types for customPreviewContent
-type CustomPreviewOnError = (error: Error | ErrorType | ElementsXhrError) => void;
-
-type CustomPreviewOnLoad = (data: { file?: BoxItem, metrics?: Object, ... }) => void;
-
 type Props = {
     advancedContentInsights: {
         isActive: boolean,
@@ -144,13 +139,12 @@ type Props = {
     token: Token,
     useHotkeys: boolean,
     /**
-     * Optional custom component to render instead of Box.Preview.
+     * Optional React element to render instead of Box.Preview.
      * When provided, renders custom preview implementation while preserving
-     * ContentPreview layout (sidebar, navigation, header). Custom component
-     * receives file metadata and must handle its own rendering and error states.
-     * Box.Preview library will not be loaded when this prop is set.
+     * ContentPreview layout (sidebar, navigation, header).
+     * Box.Preview library will not be loaded when children are provided.
      *
-     * Props passed to custom component:
+     * The child element will be cloned with injected props:
      * - fileId: ID of the file being previewed
      * - token: Auth token for API calls
      * - apiHost: Box API endpoint
@@ -169,20 +163,11 @@ type Props = {
      * - Component should be memoized/pure for performance
      *
      * @example
-     * <ContentPreview
-     *   customPreviewContent={MarkdownEditor}
-     *   fileId="123"
-     *   token={token}
-     * />
+     * <ContentPreview fileId="123" token={token}>
+     *   <MarkdownEditor />
+     * </ContentPreview>
      */
-    customPreviewContent?: React.ComponentType<{
-        fileId: string,
-        token: Token,
-        apiHost: string,
-        file: BoxItem,
-        onError?: CustomPreviewOnError,
-        onLoad?: CustomPreviewOnLoad,
-    }>,
+    children?: React.Node,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -441,12 +426,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        const { customPreviewContent } = this.props;
+        const { children } = this.props;
 
-        // Don't load Box.Preview library when custom content is provided
+        // Don't load Box.Preview library when custom content is provided as children
         // (avoids unnecessary resource loading and potential conflicts with custom renderer)
-        // Flow type validation (React.ComponentType) ensures valid component at compile time
-        if (!customPreviewContent) {
+        // Flow type validation ensures valid React element at compile time
+        if (!children) {
             this.loadStylesheet();
             this.loadScript();
         }
@@ -911,7 +896,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const {
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
-            customPreviewContent,
+            children,
             enableThumbnailsSidebar,
             features,
             fileOptions,
@@ -925,9 +910,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
 
-        // Early return: Box.Preview initialization not needed when using custom content.
-        // Custom component will be rendered directly in the Measure block (see render method)
-        if (customPreviewContent) {
+        // Early return: Box.Preview initialization not needed when using custom content children.
+        // Custom content will be rendered directly in the Measure block (see render method)
+        if (children) {
             return;
         }
 
@@ -1293,12 +1278,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys, customPreviewContent }: Props = this.props;
+        const { useHotkeys, children }: Props = this.props;
 
-        // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
+        // Skip ContentPreview hotkeys when custom content children are provided to prevent conflicts.
         // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
         // as ContentPreview's default handlers only work with Box.Preview viewer.
-        if (!useHotkeys || customPreviewContent) {
+        if (!useHotkeys || children) {
             return;
         }
 
@@ -1558,13 +1543,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
                                                 {({ measureRef: previewRef }) => {
-                                                    const { customPreviewContent: CustomPreview, logger } = this.props;
+                                                    const { children, logger } = this.props;
 
                                                     return (
                                                         <div ref={previewRef} className="bcpr-content">
-                                                            {CustomPreview ? (
+                                                            {children ? (
                                                                 <CustomPreviewWrapper
-                                                                    CustomPreview={CustomPreview}
                                                                     fileId={currentFileId}
                                                                     token={token}
                                                                     apiHost={apiHost}
@@ -1572,7 +1556,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     logger={logger}
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
-                                                                />
+                                                                >
+                                                                    {children}
+                                                                </CustomPreviewWrapper>
                                                             ) : null}
                                                         </div>
                                                     );

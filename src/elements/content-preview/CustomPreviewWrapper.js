@@ -11,7 +11,7 @@ type CustomPreviewOnError = (error: Error | ErrorType | ElementsXhrError) => voi
 type CustomPreviewOnLoad = (data: Object) => void;
 
 type Props = {
-    CustomPreview: React.ComponentType<any>,
+    children: React.Node,
     apiHost: string,
     file: BoxItem,
     fileId: string,
@@ -24,9 +24,10 @@ type Props = {
 /**
  * Wrapper component for custom preview content.
  * Handles prop validation, error transformation, and error boundary wrapping.
+ * Clones the child element with injected props (fileId, token, apiHost, file, onError, onLoad).
  */
 function CustomPreviewWrapper({
-    CustomPreview,
+    children,
     apiHost,
     file,
     fileId,
@@ -35,6 +36,25 @@ function CustomPreviewWrapper({
     onPreviewLoad,
     token,
 }: Props): React.Node {
+    // Validate children is a single React element
+    if (!React.isValidElement(children)) {
+        const validationError = new Error('CustomPreview: children must be a single valid React element');
+        const logError = logger?.logError;
+        if (logError) {
+            logError(validationError, 'CUSTOM_PREVIEW_INVALID_CHILDREN', {
+                receivedType: typeof children,
+                fileId,
+            });
+        }
+        onPreviewError({
+            error: ({
+                code: 'CUSTOM_PREVIEW_INVALID_CHILDREN',
+                message: validationError.message,
+            }: any),
+        });
+        return null;
+    }
+
     // Validate required props
     if (!fileId || !token || !apiHost) {
         const missingProps = [];
@@ -96,16 +116,20 @@ function CustomPreviewWrapper({
         }
     };
 
+    // Clone child element and inject props
+    // Flow refinement: React.isValidElement check above ensures children is React.Element
+    const childWithProps = React.cloneElement((children: any), {
+        fileId,
+        token,
+        apiHost,
+        file,
+        onError: handleCustomError,
+        onLoad: onPreviewLoad,
+    });
+
     return (
         <ErrorBoundary errorOrigin={ORIGIN_CONTENT_PREVIEW} onError={handleRenderError}>
-            <CustomPreview
-                fileId={fileId}
-                token={token}
-                apiHost={apiHost}
-                file={file}
-                onError={handleCustomError}
-                onLoad={onPreviewLoad}
-            />
+            {childWithProps}
         </ErrorBoundary>
     );
 }
