@@ -832,11 +832,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             };
         }
 
-        // End loading session before calling onLoad
-        this.endLoadingSession();
-
         onLoad(loadData);
 
+        this.endLoadingSession();
         this.focusPreview();
 
         if (this.preview && filesToPrefetch.length) {
