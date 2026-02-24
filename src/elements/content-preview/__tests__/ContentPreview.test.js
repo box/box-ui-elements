@@ -1710,26 +1710,57 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         describe('componentDidMount()', () => {
-            test('should skip loading preview library when children are provided', () => {
+            test('should always load preview library assets', () => {
                 const loadStylesheetSpy = jest.spyOn(ContentPreview.prototype, 'loadStylesheet');
                 const loadScriptSpy = jest.spyOn(ContentPreview.prototype, 'loadScript');
                 getWrapper(props);
-                expect(loadStylesheetSpy).not.toHaveBeenCalled();
-                expect(loadScriptSpy).not.toHaveBeenCalled();
-                loadStylesheetSpy.mockRestore();
-                loadScriptSpy.mockRestore();
-            });
-
-            test('should load preview library when children are not provided', () => {
-                const propsWithoutChildren = { ...props };
-                delete propsWithoutChildren.children;
-                const loadStylesheetSpy = jest.spyOn(ContentPreview.prototype, 'loadStylesheet');
-                const loadScriptSpy = jest.spyOn(ContentPreview.prototype, 'loadScript');
-                getWrapper(propsWithoutChildren);
                 expect(loadStylesheetSpy).toHaveBeenCalled();
                 expect(loadScriptSpy).toHaveBeenCalled();
                 loadStylesheetSpy.mockRestore();
                 loadScriptSpy.mockRestore();
+            });
+        });
+
+        describe('componentDidUpdate() - children prop transitions', () => {
+            test('should destroy preview instance when transitioning from default to custom', () => {
+                const propsWithoutChildren = { ...props };
+                delete propsWithoutChildren.children;
+                const wrapper = getWrapper(propsWithoutChildren);
+                wrapper.setState({ file });
+
+                // Simulate having an active preview instance
+                const mockPreview = {
+                    destroy: jest.fn(),
+                    removeAllListeners: jest.fn(),
+                };
+                wrapper.instance().preview = mockPreview;
+
+                const destroyPreviewSpy = jest.spyOn(wrapper.instance(), 'destroyPreview');
+
+                // Transition from default (no children) to custom (children)
+                wrapper.setProps({ children: <CustomPreview /> });
+
+                expect(destroyPreviewSpy).toHaveBeenCalled();
+                expect(mockPreview.destroy).toHaveBeenCalled();
+                expect(mockPreview.removeAllListeners).toHaveBeenCalled();
+
+                destroyPreviewSpy.mockRestore();
+            });
+
+            test('should not destroy preview when transitioning from custom to default', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file });
+
+                const destroyPreviewSpy = jest.spyOn(wrapper.instance(), 'destroyPreview');
+
+                // Transition from custom (children) to default (no children)
+                wrapper.setProps({ children: undefined });
+
+                // destroyPreview should only be called by hasFileIdChanged or shouldLoadPreview logic
+                // not by the children transition logic itself
+                expect(destroyPreviewSpy).not.toHaveBeenCalled();
+
+                destroyPreviewSpy.mockRestore();
             });
         });
 

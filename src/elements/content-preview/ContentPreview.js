@@ -426,15 +426,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        const { children } = this.props;
-
-        // Don't load Box.Preview library when custom content is provided as children
-        // (avoids unnecessary resource loading and potential conflicts with custom renderer)
-        // Flow type validation ensures valid React element at compile time
-        if (!children) {
-            this.loadStylesheet();
-            this.loadScript();
-        }
+        // Always load Box.Preview library assets
+        // Even when children are provided, we need assets ready for transitions
+        this.loadStylesheet();
+        this.loadScript();
 
         const { currentFileId } = this.state;
         const { loadingIndicatorDelayMs } = this.props;
@@ -470,8 +465,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { features, previewExperiences, token } = this.props;
-        const { features: prevFeatures, previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
+        const { children, features, previewExperiences, token } = this.props;
+        const {
+            children: prevChildren,
+            features: prevFeatures,
+            previewExperiences: prevPreviewExperiences,
+            token: prevToken,
+        } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
@@ -481,6 +481,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         );
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
         const { loadingIndicatorDelayMs } = this.props;
+
+        // Handle transition from default → custom: Destroy existing preview instance
+        const hasChildrenChanged = !!prevChildren !== !!children;
+        if (hasChildrenChanged && children && !prevChildren) {
+            this.destroyPreview();
+        }
 
         if (hasFileIdChanged) {
             this.destroyPreview();
