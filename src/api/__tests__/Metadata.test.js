@@ -665,7 +665,7 @@ describe('api/Metadata', () => {
                 },
                 templatesFromServer,
             );
-            expect(result).toEqual({ template: undefined, isExternallyOwned: false });
+            expect(result).toBeNull();
         });
 
         test('should return found enterprise template', async () => {
