@@ -1721,49 +1721,6 @@ describe('elements/content-preview/ContentPreview', () => {
             });
         });
 
-        describe('componentDidUpdate() - children prop transitions', () => {
-            test('should destroy preview instance when transitioning from default to custom', () => {
-                const propsWithoutChildren = { ...props };
-                delete propsWithoutChildren.children;
-                const wrapper = getWrapper(propsWithoutChildren);
-                wrapper.setState({ file });
-
-                // Simulate having an active preview instance
-                const mockPreview = {
-                    destroy: jest.fn(),
-                    removeAllListeners: jest.fn(),
-                };
-                wrapper.instance().preview = mockPreview;
-
-                const destroyPreviewSpy = jest.spyOn(wrapper.instance(), 'destroyPreview');
-
-                // Transition from default (no children) to custom (children)
-                wrapper.setProps({ children: <CustomPreview /> });
-
-                expect(destroyPreviewSpy).toHaveBeenCalled();
-                expect(mockPreview.destroy).toHaveBeenCalled();
-                expect(mockPreview.removeAllListeners).toHaveBeenCalled();
-
-                destroyPreviewSpy.mockRestore();
-            });
-
-            test('should not destroy preview when transitioning from custom to default', () => {
-                const wrapper = getWrapper(props);
-                wrapper.setState({ file });
-
-                const destroyPreviewSpy = jest.spyOn(wrapper.instance(), 'destroyPreview');
-
-                // Transition from custom (children) to default (no children)
-                wrapper.setProps({ children: undefined });
-
-                // destroyPreview should only be called by hasFileIdChanged or shouldLoadPreview logic
-                // not by the children transition logic itself
-                expect(destroyPreviewSpy).not.toHaveBeenCalled();
-
-                destroyPreviewSpy.mockRestore();
-            });
-        });
-
         describe('loadPreview()', () => {
             test('should return early without loading Box.Preview when children is provided', async () => {
                 const wrapper = getWrapper(props);

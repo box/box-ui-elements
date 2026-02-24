@@ -465,13 +465,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { children, features, previewExperiences, token } = this.props;
-        const {
-            children: prevChildren,
-            features: prevFeatures,
-            previewExperiences: prevPreviewExperiences,
-            token: prevToken,
-        } = prevProps;
+        const { features, previewExperiences, token } = this.props;
+        const { features: prevFeatures, previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
@@ -481,12 +476,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         );
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
         const { loadingIndicatorDelayMs } = this.props;
-
-        // Handle transition from default → custom: Destroy existing preview instance
-        const hasChildrenChanged = !!prevChildren !== !!children;
-        if (hasChildrenChanged && children && !prevChildren) {
-            this.destroyPreview();
-        }
 
         if (hasFileIdChanged) {
             this.destroyPreview();
