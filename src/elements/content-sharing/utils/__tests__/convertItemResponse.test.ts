@@ -24,7 +24,10 @@ describe('convertItemResponse', () => {
     test('should convert basic item without shared link', () => {
         const result = convertItemResponse(DEFAULT_ITEM_API_RESPONSE);
         expect(result).toEqual({
-            collaborationRoles: [{ id: 'editor' }, { id: 'viewer' }],
+            collaborationRoles: [
+                { id: 'editor', isDefault: true },
+                { id: 'viewer', isDefault: false },
+            ],
             item: {
                 id: '123456789',
                 classification: undefined,

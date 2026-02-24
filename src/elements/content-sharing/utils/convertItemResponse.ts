@@ -84,7 +84,10 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         };
     }
 
-    const collaborationRoles = allowed_invitee_roles.map(role => ({ id: role }));
+    const collaborationRoles = allowed_invitee_roles.map(role => ({
+        id: role,
+        isDefault: role === INVITEE_ROLE_EDITOR,
+    }));
 
     return {
         collaborationRoles,
