@@ -18,6 +18,7 @@ type ElementsLoadMetricData = {
 };
 
 type LoggerProps = {
+    logError?: (error: Error, errorCode: string, context?: Object) => void,
     onPreviewMetric: (data: Object) => void,
     onReadyMetric: (data: ElementsLoadMetricData) => void,
 };
