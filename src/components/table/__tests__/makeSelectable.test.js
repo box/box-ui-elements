@@ -733,6 +733,25 @@ describe('components/table/makeSelectable', () => {
                         testClassNamePreventsArrowNavigation(className, hotKey);
                     },
                 );
+
+                test('should not set focus if element with role="menu" is rendered', () => {
+                    const wrapper = getWrapper({
+                        selectedItems: ['a'],
+                    });
+
+                    jest.spyOn(document, 'querySelector').mockImplementation(selector => {
+                        if (selector === '[role="menu"]') {
+                            return document.createElement('div'); // mock element found
+                        }
+                        return null;
+                    });
+
+                    wrapper.setState({ focusedIndex: undefined });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ preventDefault: sandbox.stub() });
+                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                });
             });
 
             describe('up', () => {
@@ -766,6 +785,25 @@ describe('components/table/makeSelectable', () => {
                         testClassNamePreventsArrowNavigation(className, hotKey);
                     },
                 );
+
+                test('should not set focus if element with role="menu" is rendered', () => {
+                    const wrapper = getWrapper({
+                        selectedItems: ['a'],
+                    });
+
+                    jest.spyOn(document, 'querySelector').mockImplementation(selector => {
+                        if (selector === '[role="menu"]') {
+                            return document.createElement('div');
+                        }
+                        return null;
+                    });
+
+                    wrapper.setState({ focusedIndex: 1 });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ preventDefault: sandbox.stub() });
+                    expect(wrapper.state('focusedIndex')).toEqual(1);
+                });
             });
 
             describe('shift+down', () => {
@@ -1415,6 +1453,56 @@ describe('components/table/makeSelectable', () => {
 
                 expect(wrapper.state('focusedIndex')).toEqual(3); // should not change
             });
+        });
+    });
+
+    describe('isDropdownMenuOpen()', () => {
+        test('should return true when .dropdown-menu-element exists', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            jest.spyOn(document, 'querySelector').mockImplementation(selector => {
+                if (selector === '.dropdown-menu-element') {
+                    return document.createElement('div');
+                }
+                return null;
+            });
+
+            expect(instance.isDropdownMenuOpen()).toBe(true);
+        });
+
+        test('should return true when element with role="menu" exists', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            jest.spyOn(document, 'querySelector').mockImplementation(selector => {
+                if (selector === '[role="menu"]') {
+                    return document.createElement('div');
+                }
+                return null;
+            });
+
+            expect(instance.isDropdownMenuOpen()).toBe(true);
+        });
+
+        test('should return true when both .dropdown-menu-element and role="menu" exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+                return document.createElement('div');
+            });
+
+            expect(instance.isDropdownMenuOpen()).toBe(true);
+        });
+
+        test('should return false when neither .dropdown-menu-element nor role="menu" exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            jest.spyOn(document, 'querySelector').mockImplementation(() => null);
+
+            expect(instance.isDropdownMenuOpen()).toBe(false);
         });
     });
 
