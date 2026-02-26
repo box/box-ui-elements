@@ -1686,4 +1686,280 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(addEventListener).toBeCalledWith('loadeddata', expect.any(Function));
         });
     });
+
+    describe('children (custom preview content)', () => {
+        const CustomPreview = () => <div className="custom-preview">Custom Content</div>;
+        let onError;
+        let onLoad;
+
+        beforeEach(() => {
+            onError = jest.fn();
+            onLoad = jest.fn();
+            file = {
+                id: '123',
+                name: 'test.md',
+            };
+            props = {
+                token: 'token',
+                fileId: file.id,
+                apiHost: 'https://api.box.com',
+                children: <CustomPreview />,
+                onError,
+                onLoad,
+            };
+        });
+
+        describe('componentDidMount()', () => {
+            test('should always load preview library assets', () => {
+                const loadStylesheetSpy = jest.spyOn(ContentPreview.prototype, 'loadStylesheet');
+                const loadScriptSpy = jest.spyOn(ContentPreview.prototype, 'loadScript');
+                getWrapper(props);
+                expect(loadStylesheetSpy).toHaveBeenCalled();
+                expect(loadScriptSpy).toHaveBeenCalled();
+                loadStylesheetSpy.mockRestore();
+                loadScriptSpy.mockRestore();
+            });
+        });
+
+        describe('loadPreview()', () => {
+            test('should return early without loading Box.Preview when children is provided', async () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
+            test('should load Box.Preview normally when children is not provided', async () => {
+                const propsWithoutCustom = { ...props };
+                delete propsWithoutCustom.children;
+                const wrapper = getWrapper(propsWithoutCustom);
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+
+                await instance.loadPreview();
+
+                expect(instance.preview).toBeDefined();
+                expect(instance.preview.show).toHaveBeenCalled();
+            });
+        });
+
+        describe('onKeyDown()', () => {
+            test('should return early when children is provided', () => {
+                const wrapper = getWrapper({ ...props, useHotkeys: true });
+                const instance = wrapper.instance();
+                const event = {
+                    key: 'ArrowRight',
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                };
+
+                instance.onKeyDown(event);
+
+                expect(event.preventDefault).not.toHaveBeenCalled();
+                expect(event.stopPropagation).not.toHaveBeenCalled();
+            });
+
+            test('should not return early due to children when it is not provided', () => {
+                const propsWithoutCustom = { ...props, useHotkeys: true };
+                delete propsWithoutCustom.children;
+                const wrapper = getWrapper(propsWithoutCustom);
+                const instance = wrapper.instance();
+
+                // Spy on getViewer to verify we get past the children check
+                const getViewerSpy = jest.spyOn(instance, 'getViewer');
+
+                const event = {
+                    key: 'ArrowRight',
+                    which: 39,
+                    keyCode: 39,
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                    target: document.createElement('div'),
+                };
+
+                instance.onKeyDown(event);
+
+                // If we got past the children check, getViewer should have been called
+                // This proves the early return for children didn't trigger
+                expect(getViewerSpy).toHaveBeenCalled();
+                getViewerSpy.mockRestore();
+            });
+        });
+
+        describe('render()', () => {
+            test('should render custom preview content inside .bcpr-content when children is provided', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file });
+
+                // Find the Measure component and extract its render prop
+                const measureComponent = wrapper.find('Measure');
+                expect(measureComponent.exists()).toBe(true);
+
+                // Get the render function (children prop) and call it with mock measureRef
+                const renderProp = measureComponent.prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                // Now verify CustomPreviewWrapper is rendered
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+
+                // Verify children are passed to the wrapper
+                const wrapperInstance = measureContent.find('CustomPreviewWrapper');
+                expect(wrapperInstance.prop('children')).toEqual(props.children);
+            });
+
+            test('should pass correct props to custom preview content', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+
+                // Find the Measure component and extract its render prop
+                const measureComponent = wrapper.find('Measure');
+                const renderProp = measureComponent.prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                // Find the CustomPreviewWrapper
+                const wrapperInstance = measureContent.find('CustomPreviewWrapper');
+
+                // Verify props passed to wrapper
+                expect(wrapperInstance.prop('fileId')).toBe(file.id);
+                expect(wrapperInstance.prop('token')).toBe(props.token);
+                expect(wrapperInstance.prop('apiHost')).toBe(props.apiHost);
+                expect(wrapperInstance.prop('file')).toBe(file);
+                expect(wrapperInstance.prop('children')).toEqual(props.children);
+                expect(wrapperInstance.prop('onPreviewError')).toBe(instance.onPreviewError);
+                expect(wrapperInstance.prop('onPreviewLoad')).toBe(instance.onPreviewLoad);
+
+                // Shallow dive into CustomPreviewWrapper to verify children are cloned with injected props
+                const wrapperChildren = wrapperInstance.dive();
+                const errorBoundary = wrapperChildren.find('ErrorBoundary');
+                expect(errorBoundary.exists()).toBe(true);
+
+                // The cloned child is inside ErrorBoundary
+                const clonedChild = errorBoundary.prop('children');
+                expect(clonedChild.props.fileId).toBe(file.id);
+                expect(clonedChild.props.token).toBe(props.token);
+                expect(clonedChild.props.apiHost).toBe(props.apiHost);
+                expect(clonedChild.props.file).toBe(file);
+                expect(typeof clonedChild.props.onError).toBe('function');
+                expect(typeof clonedChild.props.onLoad).toBe('function');
+            });
+
+            test('should not render custom preview content when file is not loaded', () => {
+                const wrapper = getWrapper(props);
+                // Don't set file state - file should be undefined
+
+                // Check if Measure component exists (it may not render without file)
+                const measureComponent = wrapper.find('Measure');
+                if (measureComponent.exists()) {
+                    const renderProp = measureComponent.prop('children');
+                    const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                    expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(false);
+                } else {
+                    // If Measure doesn't exist, custom preview definitely isn't rendered
+                    expect(measureComponent.exists()).toBe(false);
+                }
+            });
+
+            test('should render normal preview when children is not provided', () => {
+                const propsWithoutCustom = { ...props };
+                delete propsWithoutCustom.children;
+                const wrapper = getWrapper(propsWithoutCustom);
+                wrapper.setState({ file });
+
+                // Find the Measure component and extract its render prop
+                const measureComponent = wrapper.find('Measure');
+                const renderProp = measureComponent.prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                const bcprContent = measureContent.find('.bcpr-content');
+                expect(bcprContent.exists()).toBe(true);
+                // Should only have the empty div, no CustomPreviewWrapper
+                expect(bcprContent.find('CustomPreviewWrapper').exists()).toBe(false);
+            });
+        });
+
+        describe('onPreviewLoad()', () => {
+            test('should set isLoading to false before calling onLoad callback', () => {
+                const wrapper = getWrapper(props);
+                const instance = wrapper.instance();
+                wrapper.setState({ isLoading: true });
+                instance.focusPreview = jest.fn();
+                instance.addFetchFileTimeToPreviewMetrics = jest.fn().mockReturnValue({
+                    conversion: 0,
+                    rendering: 100,
+                    total: 100,
+                });
+
+                const data = {
+                    file: { id: '123' },
+                    metrics: {
+                        time: {
+                            conversion: 0,
+                            rendering: 100,
+                            total: 100,
+                        },
+                    },
+                };
+
+                instance.onPreviewLoad(data);
+
+                expect(wrapper.state('isLoading')).toBe(false);
+                expect(onLoad).toHaveBeenCalled();
+            });
+        });
+
+        describe('error handling', () => {
+            test('should wrap CustomPreview in ErrorBoundary', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file });
+
+                // Find the Measure component and extract its render prop
+                const measureComponent = wrapper.find('Measure');
+                const renderProp = measureComponent.prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                // Find CustomPreviewWrapper
+                const wrapperInstance = measureContent.find('CustomPreviewWrapper');
+                expect(wrapperInstance.exists()).toBe(true);
+
+                // Shallow dive into CustomPreviewWrapper to verify ErrorBoundary
+                const wrapperChildren = wrapperInstance.dive();
+                const errorBoundary = wrapperChildren.find('ErrorBoundary');
+                expect(errorBoundary.exists()).toBe(true);
+                expect(errorBoundary.prop('errorOrigin')).toBe('content_preview');
+            });
+
+            test('should call onPreviewError not onError in CustomPreview', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+
+                // Verify the instance has onPreviewError method
+                expect(typeof instance.onPreviewError).toBe('function');
+
+                // Verify onError doesn't exist as an instance method
+                expect(instance.onError).toBeUndefined();
+
+                // Find CustomPreviewWrapper in render output
+                const measureComponent = wrapper.find('Measure');
+                const renderProp = measureComponent.prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                const wrapperInstance = measureContent.find('CustomPreviewWrapper');
+
+                if (wrapperInstance.exists()) {
+                    // Verify CustomPreviewWrapper receives onPreviewError
+                    expect(wrapperInstance.prop('onPreviewError')).toBe(instance.onPreviewError);
+                }
+            });
+        });
+    });
 });

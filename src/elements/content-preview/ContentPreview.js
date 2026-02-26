@@ -33,6 +33,7 @@ import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
 import { withAnnotations, withAnnotatorContext } from '../common/annotator-context';
 import { withErrorBoundary } from '../common/error-boundary';
+import CustomPreviewWrapper, { type ContentPreviewChildProps } from './CustomPreviewWrapper';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
@@ -137,6 +138,36 @@ type Props = {
     theme?: Theme,
     token: Token,
     useHotkeys: boolean,
+    /**
+     * Optional React element to render instead of Box.Preview.
+     * When provided, renders custom preview implementation while preserving
+     * ContentPreview layout (sidebar, navigation, header).
+     * Box.Preview library will not be loaded when children are provided.
+     *
+     * The child element will be cloned with injected props:
+     * - fileId: ID of the file being previewed
+     * - token: Auth token for API calls
+     * - apiHost: Box API endpoint
+     * - file: Current file object with full metadata
+     * - onError: Optional callback for preview failures - call when content fails to load
+     *            Pass error object with optional 'code' property for error categorization
+     * - onLoad: Optional callback for successful load - call when content is ready
+     *
+     * Expected behavior:
+     * - Component should call onLoad() when content is successfully rendered
+     * - Component should call onError(error) on failures, where error can be:
+     *   - Error instance with optional 'code' property
+     *   - Object with 'code' and 'message' properties
+     * - Component should handle its own loading states and error display
+     * - Component should handle its own keyboard shortcuts (ContentPreview hotkeys are disabled)
+     * - Component should be memoized/pure for performance
+     *
+     * @example
+     * <ContentPreview fileId="123" token={token}>
+     *   <MarkdownEditor />
+     * </ContentPreview>
+     */
+    children?: React.Node,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -395,6 +426,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
+        // Always load Box.Preview library assets
+        // Even when children are provided, we need assets ready for transitions
         this.loadStylesheet();
         this.loadScript();
 
@@ -856,6 +889,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const {
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
+            children,
             enableThumbnailsSidebar,
             features,
             fileOptions,
@@ -868,6 +902,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
             ...rest
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
+
+        // Early return: Box.Preview initialization not needed when using custom content children.
+        // Custom content will be rendered directly in the Measure block (see render method)
+        if (children) {
+            return;
+        }
+
         this.previewLibraryLoaded = this.isPreviewLibraryLoaded();
 
         if (!this.previewLibraryLoaded || !file || !tokenOrTokenFunction) {
@@ -1230,8 +1271,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys }: Props = this.props;
-        if (!useHotkeys) {
+        const { useHotkeys, children }: Props = this.props;
+
+        // Skip ContentPreview hotkeys when custom content children are provided to prevent conflicts.
+        // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
+        // as ContentPreview's default handlers only work with Box.Preview viewer.
+        if (!useHotkeys || children) {
             return;
         }
 
@@ -1490,9 +1535,27 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     >
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
-                                                {({ measureRef: previewRef }) => (
-                                                    <div ref={previewRef} className="bcpr-content" />
-                                                )}
+                                                {({ measureRef: previewRef }) => {
+                                                    const { children, logger } = this.props;
+
+                                                    return (
+                                                        <div ref={previewRef} className="bcpr-content">
+                                                            {children ? (
+                                                                <CustomPreviewWrapper
+                                                                    fileId={currentFileId}
+                                                                    token={token}
+                                                                    apiHost={apiHost}
+                                                                    file={file}
+                                                                    logger={logger}
+                                                                    onPreviewError={this.onPreviewError}
+                                                                    onPreviewLoad={this.onPreviewLoad}
+                                                                >
+                                                                    {children}
+                                                                </CustomPreviewWrapper>
+                                                            ) : null}
+                                                        </div>
+                                                    );
+                                                }}
                                             </Measure>
                                         )}
                                         <PreviewMask
@@ -1548,6 +1611,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 }
 
 export type ContentPreviewProps = Props;
+export type { ContentPreviewChildProps };
 export { ContentPreview as ContentPreviewComponent };
 export default flow([
     makeResponsive,
