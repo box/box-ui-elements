@@ -139,12 +139,12 @@ type Props = {
     token: Token,
     useHotkeys: boolean,
     /**
-     * Optional React element to render instead of Box.Preview.
+     * Optional render function for custom preview content.
      * When provided, renders custom preview implementation while preserving
      * ContentPreview layout (sidebar, navigation, header).
-     * Box.Preview library will not be loaded when children are provided.
+     * Box.Preview library will not be loaded when renderCustomPreview is provided.
      *
-     * The child element will be cloned with injected props:
+     * The render function receives a props object with:
      * - fileId: ID of the file being previewed
      * - token: Auth token for API calls
      * - apiHost: Box API endpoint
@@ -163,11 +163,13 @@ type Props = {
      * - Component should be memoized/pure for performance
      *
      * @example
-     * <ContentPreview fileId="123" token={token}>
-     *   <MarkdownEditor />
-     * </ContentPreview>
+     * <ContentPreview
+     *   fileId="123"
+     *   token={token}
+     *   renderCustomPreview={(props) => <MarkdownEditor {...props} />}
+     * />
      */
-    children?: React.Node,
+    renderCustomPreview?: (props: ContentPreviewChildProps) => React.Node,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -889,7 +891,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const {
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
-            children,
+            renderCustomPreview,
             enableThumbnailsSidebar,
             features,
             fileOptions,
@@ -903,9 +905,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: Props = this.props;
         const { file, selectedVersion, startAt }: State = this.state;
 
-        // Early return: Box.Preview initialization not needed when using custom content children.
+        // Early return: Box.Preview initialization not needed when using custom render function.
         // Custom content will be rendered directly in the Measure block (see render method)
-        if (children) {
+        if (renderCustomPreview) {
             return;
         }
 
@@ -1271,12 +1273,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys, children }: Props = this.props;
+        const { useHotkeys, renderCustomPreview }: Props = this.props;
 
-        // Skip ContentPreview hotkeys when custom content children are provided to prevent conflicts.
+        // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
         // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
         // as ContentPreview's default handlers only work with Box.Preview viewer.
-        if (!useHotkeys || children) {
+        if (!useHotkeys || renderCustomPreview) {
             return;
         }
 
@@ -1536,12 +1538,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
                                                 {({ measureRef: previewRef }) => {
-                                                    const { children, logger } = this.props;
+                                                    const { renderCustomPreview, logger } = this.props;
 
                                                     return (
                                                         <div ref={previewRef} className="bcpr-content">
-                                                            {children ? (
+                                                            {renderCustomPreview ? (
                                                                 <CustomPreviewWrapper
+                                                                    renderCustomPreview={renderCustomPreview}
                                                                     fileId={currentFileId}
                                                                     token={token}
                                                                     apiHost={apiHost}
@@ -1549,9 +1552,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     logger={logger}
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
-                                                                >
-                                                                    {children}
-                                                                </CustomPreviewWrapper>
+                                                                />
                                                             ) : null}
                                                         </div>
                                                     );
