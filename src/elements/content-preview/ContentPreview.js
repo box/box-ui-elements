@@ -1273,12 +1273,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys, children }: Props = this.props;
+        const { useHotkeys, renderCustomPreview }: Props = this.props;
 
-        // Skip ContentPreview hotkeys when custom content children are provided to prevent conflicts.
+        // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
         // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
         // as ContentPreview's default handlers only work with Box.Preview viewer.
-        if (!useHotkeys || children) {
+        if (!useHotkeys || renderCustomPreview) {
             return;
         }
 
