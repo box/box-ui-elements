@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`components/ContentSidebar/ActivityFeed/task-form/TaskForm addResinInfo() should set assignee added and removed information correctly 1`] = `null`;
