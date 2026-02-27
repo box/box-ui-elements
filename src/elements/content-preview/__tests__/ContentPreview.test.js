@@ -1687,7 +1687,7 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
-    describe('children (custom preview content)', () => {
+    describe('renderCustomPreview (custom preview content)', () => {
         const CustomPreview = () => <div className="custom-preview">Custom Content</div>;
         let onError;
         let onLoad;
@@ -1703,7 +1703,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 token: 'token',
                 fileId: file.id,
                 apiHost: 'https://api.box.com',
-                children: <CustomPreview />,
+                renderCustomPreview: childProps => <CustomPreview {...childProps} />,
                 onError,
                 onLoad,
             };
@@ -1722,7 +1722,7 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         describe('loadPreview()', () => {
-            test('should return early without loading Box.Preview when children is provided', async () => {
+            test('should return early without loading Box.Preview when renderCustomPreview is provided', async () => {
                 const wrapper = getWrapper(props);
                 wrapper.setState({ file });
                 const instance = wrapper.instance();
@@ -1735,9 +1735,9 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(instance.preview).toBeUndefined();
             });
 
-            test('should load Box.Preview normally when children is not provided', async () => {
+            test('should load Box.Preview normally when renderCustomPreview is not provided', async () => {
                 const propsWithoutCustom = { ...props };
-                delete propsWithoutCustom.children;
+                delete propsWithoutCustom.renderCustomPreview;
                 const wrapper = getWrapper(propsWithoutCustom);
                 wrapper.setState({ file });
                 const instance = wrapper.instance();
@@ -1751,7 +1751,7 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         describe('onKeyDown()', () => {
-            test('should return early when children is provided', () => {
+            test('should return early when renderCustomPreview is provided', () => {
                 const wrapper = getWrapper({ ...props, useHotkeys: true });
                 const instance = wrapper.instance();
                 const event = {
@@ -1766,13 +1766,13 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(event.stopPropagation).not.toHaveBeenCalled();
             });
 
-            test('should not return early due to children when it is not provided', () => {
+            test('should not return early due to renderCustomPreview when it is not provided', () => {
                 const propsWithoutCustom = { ...props, useHotkeys: true };
-                delete propsWithoutCustom.children;
+                delete propsWithoutCustom.renderCustomPreview;
                 const wrapper = getWrapper(propsWithoutCustom);
                 const instance = wrapper.instance();
 
-                // Spy on getViewer to verify we get past the children check
+                // Spy on getViewer to verify we get past the renderCustomPreview check
                 const getViewerSpy = jest.spyOn(instance, 'getViewer');
 
                 const event = {
@@ -1786,15 +1786,15 @@ describe('elements/content-preview/ContentPreview', () => {
 
                 instance.onKeyDown(event);
 
-                // If we got past the children check, getViewer should have been called
-                // This proves the early return for children didn't trigger
+                // If we got past the renderCustomPreview check, getViewer should have been called
+                // This proves the early return for renderCustomPreview didn't trigger
                 expect(getViewerSpy).toHaveBeenCalled();
                 getViewerSpy.mockRestore();
             });
         });
 
         describe('render()', () => {
-            test('should render custom preview content inside .bcpr-content when children is provided', () => {
+            test('should render custom preview content inside .bcpr-content when renderCustomPreview is provided', () => {
                 const wrapper = getWrapper(props);
                 wrapper.setState({ file });
 
@@ -1809,9 +1809,9 @@ describe('elements/content-preview/ContentPreview', () => {
                 // Now verify CustomPreviewWrapper is rendered
                 expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
 
-                // Verify children are passed to the wrapper
+                // Verify renderCustomPreview is passed to the wrapper
                 const wrapperInstance = measureContent.find('CustomPreviewWrapper');
-                expect(wrapperInstance.prop('children')).toEqual(props.children);
+                expect(wrapperInstance.prop('renderCustomPreview')).toEqual(props.renderCustomPreview);
             });
 
             test('should pass correct props to custom preview content', () => {
@@ -1832,23 +1832,25 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(wrapperInstance.prop('token')).toBe(props.token);
                 expect(wrapperInstance.prop('apiHost')).toBe(props.apiHost);
                 expect(wrapperInstance.prop('file')).toBe(file);
-                expect(wrapperInstance.prop('children')).toEqual(props.children);
+                expect(wrapperInstance.prop('renderCustomPreview')).toEqual(props.renderCustomPreview);
                 expect(wrapperInstance.prop('onPreviewError')).toBe(instance.onPreviewError);
                 expect(wrapperInstance.prop('onPreviewLoad')).toBe(instance.onPreviewLoad);
 
-                // Shallow dive into CustomPreviewWrapper to verify children are cloned with injected props
+                // Shallow dive into CustomPreviewWrapper to verify render function is called with props
                 const wrapperChildren = wrapperInstance.dive();
                 const errorBoundary = wrapperChildren.find('ErrorBoundary');
                 expect(errorBoundary.exists()).toBe(true);
 
-                // The cloned child is inside ErrorBoundary
-                const clonedChild = errorBoundary.prop('children');
-                expect(clonedChild.props.fileId).toBe(file.id);
-                expect(clonedChild.props.token).toBe(props.token);
-                expect(clonedChild.props.apiHost).toBe(props.apiHost);
-                expect(clonedChild.props.file).toBe(file);
-                expect(typeof clonedChild.props.onError).toBe('function');
-                expect(typeof clonedChild.props.onLoad).toBe('function');
+                // The rendered content is wrapped in a fragment inside ErrorBoundary
+                const fragment = errorBoundary.prop('children');
+                // The actual custom preview content is inside the fragment
+                const renderedContent = fragment.props.children;
+                expect(renderedContent.props.fileId).toBe(file.id);
+                expect(renderedContent.props.token).toBe(props.token);
+                expect(renderedContent.props.apiHost).toBe(props.apiHost);
+                expect(renderedContent.props.file).toBe(file);
+                expect(typeof renderedContent.props.onError).toBe('function');
+                expect(typeof renderedContent.props.onLoad).toBe('function');
             });
 
             test('should not render custom preview content when file is not loaded', () => {
@@ -1868,9 +1870,9 @@ describe('elements/content-preview/ContentPreview', () => {
                 }
             });
 
-            test('should render normal preview when children is not provided', () => {
+            test('should render normal preview when renderCustomPreview is not provided', () => {
                 const propsWithoutCustom = { ...props };
-                delete propsWithoutCustom.children;
+                delete propsWithoutCustom.renderCustomPreview;
                 const wrapper = getWrapper(propsWithoutCustom);
                 wrapper.setState({ file });
 
