@@ -142,7 +142,6 @@ type Props = {
      * Optional render function for custom preview content.
      * When provided, renders custom preview implementation while preserving
      * ContentPreview layout (sidebar, navigation, header).
-     * Box.Preview library will not be loaded when renderCustomPreview is provided.
      *
      * The render function receives a props object with:
      * - fileId: ID of the file being previewed
