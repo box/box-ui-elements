@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import cloneDeep from 'lodash/cloneDeep';
-import { render } from '../../../test-utils/testing-library';
+import { render, screen } from '../../../test-utils/testing-library';
 import { ActivitySidebarComponent } from '../ActivitySidebar';
 import { formattedReplies } from '../fixtures';
 import ActivityFeed from '../activity-feed';
@@ -19,6 +19,10 @@ jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 jest.mock('../activity-feed', () => {
     return jest.fn(() => <div data-testid="activity-feed-mock">Activity Feed Mock</div>);
+});
+
+jest.mock('../activity-feed-v2', () => {
+    return jest.fn(() => <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>);
 });
 
 jest.mock('../SidebarContent', () => {
@@ -507,6 +511,30 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(historyReplace).not.toHaveBeenCalled();
             expect(mockGeneratePath).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('render() - threadedRepliesV2 feature gate', () => {
+        test('should render ActivityFeedV2 when threadedRepliesV2 is enabled', () => {
+            renderActivitySidebar({
+                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
+            });
+            expect(screen.getByTestId('activity-feed-adapter-v2')).toBeInTheDocument();
+            expect(screen.queryByTestId('activity-feed-mock')).not.toBeInTheDocument();
+        });
+
+        test('should render ActivityFeed when threadedRepliesV2 is not enabled', () => {
+            renderActivitySidebar({
+                features: { activityFeed: { threadedRepliesV2: { enabled: false } } },
+            });
+            expect(screen.getByTestId('activity-feed-mock')).toBeInTheDocument();
+            expect(screen.queryByTestId('activity-feed-adapter-v2')).not.toBeInTheDocument();
+        });
+
+        test('should render ActivityFeed when threadedRepliesV2 feature is not set', () => {
+            renderActivitySidebar();
+            expect(screen.getByTestId('activity-feed-mock')).toBeInTheDocument();
+            expect(screen.queryByTestId('activity-feed-adapter-v2')).not.toBeInTheDocument();
         });
     });
 

@@ -14,6 +14,8 @@ import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
 import { generatePath, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
+// $FlowFixMe
+import ActivityFeedV2 from './activity-feed-v2';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
@@ -1310,7 +1312,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
         const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
+        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
+
+        if (isThreadedRepliesV2Enabled) {
+            return (
+                <SidebarContent
+                    className="bcs-activity"
+                    elementId={elementId}
+                    sidebarView={SIDEBAR_VIEW_ACTIVITY}
+                    title={this.renderTitle()}
+                >
+                    <ActivityFeedV2 />
+                </SidebarContent>
+            );
+        }
 
         return (
             <SidebarContent
