@@ -6,5 +6,5 @@
  */
 
 import * as React from "react";
-declare function ActivityFeedV2(): React.Element<>;
+declare function ActivityFeedV2(): React.Node;
 declare export default typeof ActivityFeedV2;
