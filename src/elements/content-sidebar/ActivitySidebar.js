@@ -14,6 +14,7 @@ import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
 import { generatePath, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
+// $FlowFixMe
 import ActivityFeedV2 from './activity-feed-v2';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
