@@ -1,12 +1,13 @@
 import {
     DEFAULT_ITEM_API_RESPONSE,
-    MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
-    mockOwnerId,
+    MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     mockOwnerEmail,
+    mockOwnerId,
     mockOwnerName,
 } from '../__mocks__/ContentSharingV2Mocks';
 import { convertItemResponse } from '../convertItemResponse';
+import { getAllowedPermissionLevels } from '../getAllowedPermissionLevels';
 
 jest.mock('../getAllowedAccessLevels', () => ({
     getAllowedAccessLevels: jest.fn().mockReturnValue(['open', 'company', 'collaborators']),
@@ -93,6 +94,22 @@ describe('convertItemResponse', () => {
                 url: 'https://example.com/shared-link',
                 vanityDomain: 'https://example.com/vanity-url',
                 vanityName: 'vanity-name',
+            });
+        });
+
+        test('should pass extension to getAllowedPermissionLevels', () => {
+            const MOCK_ITEM_WITH_EXTENSION = {
+                ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
+                extension: 'pdf',
+            };
+            convertItemResponse(MOCK_ITEM_WITH_EXTENSION);
+            expect(getAllowedPermissionLevels).toHaveBeenCalledWith({
+                access: 'open',
+                canChangeAccessLevel: true,
+                extension: 'pdf',
+                isDownloadSettingAvailable: true,
+                itemType: 'file',
+                permission: 'can_download',
             });
         });
 

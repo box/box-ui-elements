@@ -1,4 +1,10 @@
-import { ACCESS_COLLAB, ACCESS_OPEN, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../constants';
+import {
+    ACCESS_COLLAB,
+    ACCESS_OPEN,
+    PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_EDIT,
+    PERMISSION_CAN_PREVIEW,
+} from '../../../constants';
 import { convertISOStringToUTCDate } from '../../../utils/datetime';
 
 import type { SharedLinkSettings } from '../types';
@@ -18,8 +24,11 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
         return {};
     }
 
+    const isEdit = permissionLevel === PERMISSION_CAN_EDIT;
+
     return {
-        [PERMISSION_CAN_DOWNLOAD]: permissionLevel === PERMISSION_CAN_DOWNLOAD,
+        [PERMISSION_CAN_DOWNLOAD]: isEdit || permissionLevel === PERMISSION_CAN_DOWNLOAD,
+        [PERMISSION_CAN_EDIT]: isEdit,
         [PERMISSION_CAN_PREVIEW]: permissionLevel === PERMISSION_CAN_PREVIEW,
     };
 };

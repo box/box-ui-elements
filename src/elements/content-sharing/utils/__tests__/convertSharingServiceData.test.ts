@@ -3,6 +3,7 @@ import {
     ACCESS_COMPANY,
     ACCESS_OPEN,
     PERMISSION_CAN_DOWNLOAD,
+    PERMISSION_CAN_EDIT,
     PERMISSION_CAN_PREVIEW,
 } from '../../../../constants';
 import { convertISOStringToUTCDate } from '../../../../utils/datetime';
@@ -22,9 +23,19 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
     describe('convertSharedLinkPermissions', () => {
         test.each([
-            [PERMISSION_CAN_DOWNLOAD, { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_PREVIEW]: false }],
-            [PERMISSION_CAN_PREVIEW, { [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_PREVIEW]: true }],
-        ])('should return correct permissions for download permission level', (permissionLevel, expected) => {
+            [
+                PERMISSION_CAN_DOWNLOAD,
+                { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_EDIT]: false, [PERMISSION_CAN_PREVIEW]: false },
+            ],
+            [
+                PERMISSION_CAN_EDIT,
+                { [PERMISSION_CAN_DOWNLOAD]: true, [PERMISSION_CAN_EDIT]: true, [PERMISSION_CAN_PREVIEW]: false },
+            ],
+            [
+                PERMISSION_CAN_PREVIEW,
+                { [PERMISSION_CAN_DOWNLOAD]: false, [PERMISSION_CAN_EDIT]: false, [PERMISSION_CAN_PREVIEW]: true },
+            ],
+        ])('should return correct permissions for %s permission level', (permissionLevel, expected) => {
             const result = convertSharedLinkPermissions(permissionLevel);
             expect(result).toEqual(expected);
         });
