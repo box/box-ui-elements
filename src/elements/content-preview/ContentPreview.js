@@ -1158,7 +1158,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {number} index - Index of file to preview
      * @return {void}
      */
-    async navigateToIndex(index: number) {
+    navigateToIndex(index: number) {
         const { collection, onBeforeNavigate, onNavigate }: Props = this.props;
         const { length } = collection;
         if (length < 2 || index < 0 || index > length - 1) {
@@ -1168,28 +1168,44 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const fileOrId = collection[index];
         const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
 
+        const doNavigate = () => {
+            this.setState(
+                {
+                    currentFileId: fileId,
+                },
+                () => {
+                    // Execute navigation callback
+                    onNavigate(fileId);
+                },
+            );
+        };
+
         // Call onBeforeNavigate if provided, and cancel if it returns false
         if (onBeforeNavigate) {
             try {
-                const canNavigate = await onBeforeNavigate(fileId);
-                if (!canNavigate) {
-                    return;
-                }
-            } catch (error) {
-                // If guard throws error, cancel navigation
-                return;
-            }
-        }
+                const result = onBeforeNavigate(fileId);
 
-        this.setState(
-            {
-                currentFileId: fileId,
-            },
-            () => {
-                // Execute navigation callback
-                onNavigate(fileId);
-            },
-        );
+                // Handle both sync and async guards
+                if (result instanceof Promise) {
+                    result
+                        .then(canNavigate => {
+                            if (canNavigate) {
+                                doNavigate();
+                            }
+                        })
+                        .catch(() => {
+                            // If guard throws error, cancel navigation
+                        });
+                } else if (result) {
+                    doNavigate();
+                }
+                // If result is false, navigation is cancelled
+            } catch (error) {
+                // If guard throws error synchronously, cancel navigation
+            }
+        } else {
+            doNavigate();
+        }
     }
 
     /**
