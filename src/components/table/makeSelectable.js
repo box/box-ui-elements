@@ -646,7 +646,9 @@ function makeSelectable(BaseTable) {
 
         isFlyoutOpen = () => document.querySelector('.flyout-overlay') !== null;
 
-        isDropdownMenuOpen = () => document.querySelector('.dropdown-menu-element') !== null;
+        isDropdownMenuOpen = () =>
+            document.querySelector('.dropdown-menu-element') !== null ||
+            document.querySelector('[role="menu"]') !== null;
 
         shouldNotAllowArrowKeyNavigation = event =>
             this.isTargetQuickSearch(event) || this.isFlyoutOpen() || this.isDropdownMenuOpen();

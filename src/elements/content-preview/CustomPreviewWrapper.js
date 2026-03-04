@@ -11,15 +11,23 @@ type CustomPreviewOnError = (error: Error | ErrorType | ElementsXhrError) => voi
 type CustomPreviewOnLoad = (data: Object) => void;
 
 /**
- * Props that are automatically injected into ContentPreview children.
+ * Props passed to the renderCustomPreview function.
  * Import this type to ensure your custom preview component accepts the required props.
  *
  * @example
  * import type { ContentPreviewChildProps } from 'box-ui-elements';
  *
+ * // Define your custom preview component
  * const MyCustomPreview = ({ fileId, token, apiHost, file, onError, onLoad }: ContentPreviewChildProps) => {
  *     // Your implementation
  * };
+ *
+ * // Use with ContentPreview
+ * <ContentPreview
+ *   fileId="123"
+ *   token={token}
+ *   renderCustomPreview={(props) => <MyCustomPreview {...props} />}
+ * />
  */
 export type ContentPreviewChildProps = {
     fileId: string,
@@ -31,7 +39,7 @@ export type ContentPreviewChildProps = {
 };
 
 type Props = {
-    children: React.Node,
+    renderCustomPreview: (props: ContentPreviewChildProps) => React.Node,
     apiHost: string,
     file: BoxItem,
     fileId: string,
@@ -43,11 +51,11 @@ type Props = {
 
 /**
  * Wrapper component for custom preview content.
- * Clones the child element and injects props (fileId, token, apiHost, file, onError, onLoad).
- * Wraps children in ErrorBoundary and transforms errors to ContentPreview error format.
+ * Calls the render function with props (fileId, token, apiHost, file, onError, onLoad).
+ * Wraps rendered content in ErrorBoundary and transforms errors to ContentPreview error format.
  */
 function CustomPreviewWrapper({
-    children,
+    renderCustomPreview,
     apiHost,
     file,
     fileId,
@@ -93,19 +101,22 @@ function CustomPreviewWrapper({
         }
     };
 
-    // Clone child element and inject props
-    const childWithProps = React.cloneElement((children: any), {
+    // Build props object for render function
+    const childProps: ContentPreviewChildProps = {
         fileId,
         token,
         apiHost,
         file,
         onError: handleCustomError,
         onLoad: onPreviewLoad,
-    });
+    };
+
+    // Call render function with props and wrap in fragment to ensure it's a valid React.Element
+    const customContent = <>{renderCustomPreview(childProps)}</>;
 
     return (
         <ErrorBoundary errorOrigin={ORIGIN_CONTENT_PREVIEW} onError={handleRenderError}>
-            {childWithProps}
+            {customContent}
         </ErrorBoundary>
     );
 }
