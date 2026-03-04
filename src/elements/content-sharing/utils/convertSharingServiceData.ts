@@ -13,6 +13,7 @@ export interface ConvertSharedLinkSettingsReturnType {
     password?: string | null;
     permissions?: {
         can_download?: boolean;
+        can_edit?: boolean;
         can_preview: boolean;
     };
     unshared_at: string | null;

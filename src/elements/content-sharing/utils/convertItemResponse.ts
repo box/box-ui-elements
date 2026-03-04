@@ -1,4 +1,5 @@
-import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD } from '../../../constants';
+import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_EDIT } from '../../../constants';
+
 import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../constants';
 import { getAllowedAccessLevels } from './getAllowedAccessLevels';
 import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
@@ -11,13 +12,13 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         allowed_shared_link_access_levels,
         allowed_shared_link_access_levels_disabled_reasons,
         classification,
-        extension,
         id,
         name,
         owned_by: ownedBy,
         permissions,
         shared_link,
         shared_link_features,
+        shared_link_permission_options,
         type,
     } = itemApiData;
 
@@ -55,7 +56,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             vanity_url: vanityUrl,
         } = shared_link;
 
-        const isDownloadAllowed = permission === PERMISSION_CAN_DOWNLOAD;
+        const isDownloadAllowed = permission === PERMISSION_CAN_DOWNLOAD || permission === PERMISSION_CAN_EDIT;
         const canChangeDownload = canChangeAccessLevel && isDownloadSettingAvailable && access !== ACCESS_COLLAB; // access must be "company" or "open"
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
         const canChangeExpiration = canChangeAccessLevel && isEditAllowed;
@@ -68,14 +69,9 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             ),
             expiresAt: expirationTimestamp ? new Date(expirationTimestamp).getTime() : undefined, // convert to milliseconds
             permission,
-            permissionLevels: getAllowedPermissionLevels({
-                access,
-                canChangeAccessLevel,
-                extension,
-                isDownloadSettingAvailable,
-                itemType: type,
-                permission,
-            }),
+            permissionLevels:
+                shared_link_permission_options ??
+                getAllowedPermissionLevels(canChangeAccessLevel, isDownloadSettingAvailable, permission),
             settings: {
                 canChangeDownload,
                 canChangeExpiration,
@@ -100,8 +96,8 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
     return {
         collaborationRoles,
         item: {
-            id,
             classification: classificationData,
+            id,
             name,
             permissions: {
                 canInviteCollaborator: !!canInvite,
@@ -110,6 +106,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             },
             type,
         },
+        ownedBy,
         sharedLink,
         sharingService: {
             can_set_share_access: canChangeAccessLevel,
@@ -117,6 +114,5 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             ownerEmail: ownedBy.login,
             ownerId: ownedBy.id,
         },
-        ownedBy,
     };
 };

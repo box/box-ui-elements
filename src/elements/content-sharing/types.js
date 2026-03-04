@@ -2,6 +2,8 @@
 import type { CollaborationRole, Collaborator, DateValue, Item, SharedLink } from '@box/unified-share-modal';
 
 import API from '../../api';
+
+import type { RequestOptions } from '../../common/types/api';
 import type {
     Access,
     BoxItemClassification,
@@ -20,7 +22,6 @@ import type {
     item,
     sharedLinkType as USMSharedLinkType,
 } from '../../features/unified-share-modal/flowTypes';
-import type { RequestOptions } from '../../common/types/api';
 
 // "SLS" denotes values that are used in the Shared Link Settings modal
 type ContentSharingEnterpriseDataType = {
@@ -88,6 +89,7 @@ export type ContentSharingItemAPIResponse = {
         password: boolean,
         vanity_name: boolean,
     },
+    shared_link_permission_options?: Array<'can_preview' | 'can_download' | 'can_edit'>,
     type: ItemType,
 };
 
