@@ -566,11 +566,11 @@ export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof Metadata
         expect(templateHeader).toBeInTheDocument();
 
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
-        userEvent.click(autofillButton);
+        await userEvent.click(autofillButton);
 
         await waitFor(
             () => {
-                expect(canvas.getByText('4/1/2024')).toBeInTheDocument();
+                expect(canvasElement).toHaveTextContent('4/1/2024');
             },
             { timeout: 5000 },
         );
