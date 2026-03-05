@@ -110,6 +110,7 @@ export const DEFAULT_ITEM_API_RESPONSE = {
     permissions: MOCK_PERMISSIONS,
     shared_link: null,
     shared_link_features: { password: true },
+    shared_link_permission_options: ['can_edit', 'can_download', 'can_preview'],
     type: MOCK_ITEM.type,
 };
 

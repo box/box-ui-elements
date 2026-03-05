@@ -1,12 +1,14 @@
 import {
     DEFAULT_ITEM_API_RESPONSE,
-    MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
-    mockOwnerId,
+    MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     mockOwnerEmail,
+    mockOwnerId,
     mockOwnerName,
 } from '../__mocks__/ContentSharingV2Mocks';
+
 import { convertItemResponse } from '../convertItemResponse';
+import { getAllowedPermissionLevels } from '../getAllowedPermissionLevels';
 
 jest.mock('../getAllowedAccessLevels', () => ({
     getAllowedAccessLevels: jest.fn().mockReturnValue(['open', 'company', 'collaborators']),
@@ -29,8 +31,8 @@ describe('convertItemResponse', () => {
                 { id: 'viewer', isDefault: false },
             ],
             item: {
-                id: '123456789',
                 classification: undefined,
+                id: '123456789',
                 name: 'Box Development Guide.pdf',
                 permissions: {
                     canInviteCollaborator: true,
@@ -79,7 +81,7 @@ describe('convertItemResponse', () => {
                 accessLevels: ['open', 'company', 'collaborators'],
                 expiresAt: 1704067200000,
                 permission: 'can_download',
-                permissionLevels: ['canDownload', 'canPreview'],
+                permissionLevels: ['can_edit', 'can_download', 'can_preview'],
                 settings: {
                     canChangeDownload: true,
                     canChangeExpiration: true,
@@ -94,6 +96,21 @@ describe('convertItemResponse', () => {
                 vanityDomain: 'https://example.com/vanity-url',
                 vanityName: 'vanity-name',
             });
+        });
+
+        test('should use shared_link_permission_options from API when available', () => {
+            const result = convertItemResponse(MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK);
+            expect(result.sharedLink?.permissionLevels).toEqual(['can_edit', 'can_download', 'can_preview']);
+            expect(getAllowedPermissionLevels).not.toHaveBeenCalled();
+        });
+
+        test('should call getAllowedPermissionLevels when shared_link_permission_options is not available', () => {
+            const mockItemWithoutPermissionOptions = {
+                ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
+                shared_link_permission_options: undefined,
+            };
+            convertItemResponse(mockItemWithoutPermissionOptions);
+            expect(getAllowedPermissionLevels).toHaveBeenCalledWith(true, true, 'can_download');
         });
 
         test('should convert shared link settings correctly if user cannot change access level', () => {

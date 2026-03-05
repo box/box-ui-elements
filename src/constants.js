@@ -124,6 +124,7 @@ export const FIELD_SHARED_LINK_ACCESS_LEVELS_DISABLED_REASONS: 'allowed_shared_l
 export const FIELD_SHARED_LINK_FEATURES: 'shared_link_features' = 'shared_link_features';
 export const FIELD_ALLOWED_INVITEE_ROLES: 'allowed_invitee_roles' = 'allowed_invitee_roles';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
+export const FIELD_SHARED_LINK_PERMISSION_OPTIONS: 'shared_link_permission_options' = 'shared_link_permission_options';
 export const FIELD_HAS_COLLABORATIONS = 'has_collaborations';
 export const FIELD_IS_EXTERNALLY_OWNED = 'is_externally_owned';
 export const FIELD_TOTAL_COUNT = 'total_count';
