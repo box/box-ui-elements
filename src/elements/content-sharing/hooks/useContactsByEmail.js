@@ -55,7 +55,10 @@ function useContactsByEmail(
                     api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                         itemID,
                         response => resolveAPICall(resolve, response, transformUsers),
-                        handleError,
+                        error => {
+                            handleError(error);
+                            resolve({});
+                        },
                         { filter_term: email },
                     );
                 });
@@ -74,7 +77,10 @@ function useContactsByEmail(
                         api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                             itemID,
                             (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
-                            handleError,
+                            error => {
+                                handleError(error);
+                                resolve({});
+                            },
                             { filter_term: parsedFilterTerm },
                         );
                     });
