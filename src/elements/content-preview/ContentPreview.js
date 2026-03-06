@@ -108,6 +108,7 @@ type Props = {
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
     hasProviders?: boolean,
+    hideSidebar?: boolean,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -117,6 +118,7 @@ type Props = {
     messages?: StringMap,
     onAnnotator: Function,
     onAnnotatorEvent: Function,
+    onBeforeNavigate?: (targetFileId: string) => boolean | Promise<boolean>,
     onClose?: Function,
     onContentInsightsEventReport: Function,
     onDownload: Function,
@@ -289,6 +291,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         contentSidebarProps: {},
         enableThumbnailsSidebar: false,
         hasHeader: false,
+        hideSidebar: false,
         language: DEFAULT_LOCALE,
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
@@ -1149,13 +1152,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     /**
      * Shows a preview of a file at the specified index in the current collection.
+     * Calls onBeforeNavigate if provided, and cancels navigation if it returns false.
      *
      * @public
      * @param {number} index - Index of file to preview
      * @return {void}
      */
     navigateToIndex(index: number) {
-        const { collection, onNavigate }: Props = this.props;
+        const { collection, onBeforeNavigate, onNavigate }: Props = this.props;
         const { length } = collection;
         if (length < 2 || index < 0 || index > length - 1) {
             return;
@@ -1164,15 +1168,44 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const fileOrId = collection[index];
         const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
 
-        this.setState(
-            {
-                currentFileId: fileId,
-            },
-            () => {
-                // Execute navigation callback
-                onNavigate(fileId);
-            },
-        );
+        const doNavigate = () => {
+            this.setState(
+                {
+                    currentFileId: fileId,
+                },
+                () => {
+                    // Execute navigation callback
+                    onNavigate(fileId);
+                },
+            );
+        };
+
+        // Call onBeforeNavigate if provided, and cancel if it returns false
+        if (onBeforeNavigate) {
+            try {
+                const result = onBeforeNavigate(fileId);
+
+                // Handle both sync and async guards
+                if (result instanceof Promise) {
+                    result
+                        .then(canNavigate => {
+                            if (canNavigate) {
+                                doNavigate();
+                            }
+                        })
+                        .catch(() => {
+                            // If guard throws error, cancel navigation
+                        });
+                } else if (result) {
+                    doNavigate();
+                }
+                // If result is false, navigation is cancelled
+            } catch (error) {
+                // If guard throws error synchronously, cancel navigation
+            }
+        } else {
+            doNavigate();
+        }
     }
 
     /**
@@ -1454,6 +1487,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             contentSidebarProps,
             hasHeader,
             hasProviders,
+            hideSidebar,
             history,
             isLarge,
             isVeryLarge,
@@ -1571,7 +1605,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             onNavigateRight={this.navigateRight}
                                         />
                                     </div>
-                                    {file && (
+                                    {file && !hideSidebar && (
                                         <LoadableSidebar
                                             {...contentSidebarProps}
                                             apiHost={apiHost}

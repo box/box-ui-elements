@@ -1964,4 +1964,324 @@ describe('elements/content-preview/ContentPreview', () => {
             });
         });
     });
+
+    describe('navigateToIndex() with onBeforeNavigate guard', () => {
+        // SYNC GUARD TESTS
+        test('should navigate when sync guard returns true', () => {
+            const onBeforeNavigate = jest.fn().mockReturnValue(true);
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+
+            expect(onBeforeNavigate).toHaveBeenCalledWith('file2');
+            expect(wrapper.state('currentFileId')).toBe('file2');
+            expect(onNavigate).toHaveBeenCalledWith('file2');
+        });
+
+        test('should block navigation when sync guard returns false', () => {
+            const onBeforeNavigate = jest.fn().mockReturnValue(false);
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+
+            expect(onBeforeNavigate).toHaveBeenCalledWith('file2');
+            expect(wrapper.state('currentFileId')).toBe('file1'); // Should NOT change
+            expect(onNavigate).not.toHaveBeenCalled();
+        });
+
+        test('should block navigation when sync guard throws error', () => {
+            const onBeforeNavigate = jest.fn().mockImplementation(() => {
+                throw new Error('Validation failed');
+            });
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            // Should not throw
+            expect(() => instance.navigateToIndex(1)).not.toThrow();
+
+            expect(wrapper.state('currentFileId')).toBe('file1'); // Should NOT change
+            expect(onNavigate).not.toHaveBeenCalled();
+        });
+
+        // ASYNC GUARD TESTS
+        test('should navigate when async guard resolves to true', async () => {
+            const onBeforeNavigate = jest.fn().mockResolvedValue(true);
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+
+            expect(onBeforeNavigate).toHaveBeenCalledWith('file2');
+
+            // Navigation happens asynchronously
+            await Promise.resolve();
+            await Promise.resolve(); // Extra tick for setState callback
+
+            expect(wrapper.state('currentFileId')).toBe('file2');
+            expect(onNavigate).toHaveBeenCalledWith('file2');
+        });
+
+        test('should block navigation when async guard resolves to false', async () => {
+            const onBeforeNavigate = jest.fn().mockResolvedValue(false);
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+            await Promise.resolve();
+            await Promise.resolve();
+
+            expect(wrapper.state('currentFileId')).toBe('file1'); // Should NOT change
+            expect(onNavigate).not.toHaveBeenCalled();
+        });
+
+        test('should block navigation when async guard rejects', async () => {
+            const onBeforeNavigate = jest.fn().mockRejectedValue(new Error('Async error'));
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+            await Promise.resolve();
+            await Promise.resolve();
+
+            expect(wrapper.state('currentFileId')).toBe('file1'); // Should NOT change
+            expect(onNavigate).not.toHaveBeenCalled();
+        });
+
+        // OBJECT COLLECTION TESTS
+        test('should pass extracted fileId to guard when collection contains objects', () => {
+            const onBeforeNavigate = jest.fn().mockReturnValue(true);
+            const wrapper = getWrapper({
+                collection: [{ id: 'file1' }, { id: 'file2' }],
+                onBeforeNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+
+            expect(onBeforeNavigate).toHaveBeenCalledWith('file2');
+        });
+
+        // INTEGRATION TESTS
+        test('should call guard when navigating left', () => {
+            const onBeforeNavigate = jest.fn().mockReturnValue(false);
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                fileId: 'file2',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateLeft();
+
+            expect(onBeforeNavigate).toHaveBeenCalledWith('file1');
+            expect(wrapper.state('currentFileId')).toBe('file2'); // Blocked
+        });
+
+        test('should call guard when navigating right', () => {
+            const onBeforeNavigate = jest.fn().mockReturnValue(false);
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateRight();
+
+            expect(onBeforeNavigate).toHaveBeenCalledWith('file2');
+            expect(wrapper.state('currentFileId')).toBe('file1'); // Blocked
+        });
+
+        // EDGE CASES
+        test('should not call guard when navigating to same index', () => {
+            const onBeforeNavigate = jest.fn().mockReturnValue(true);
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            // Already at index 0, navigateLeft shouldn't do anything
+            instance.navigateLeft();
+
+            expect(onBeforeNavigate).not.toHaveBeenCalled();
+        });
+
+        test('should not call guard when collection is too small', () => {
+            const onBeforeNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1'],
+                onBeforeNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(0);
+
+            expect(onBeforeNavigate).not.toHaveBeenCalled();
+        });
+
+        test('should not call guard when index is out of bounds', () => {
+            const onBeforeNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onBeforeNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(10);
+
+            expect(onBeforeNavigate).not.toHaveBeenCalled();
+        });
+
+        test('should navigate without guard when onBeforeNavigate is not provided', () => {
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+
+            instance.navigateToIndex(1);
+
+            expect(wrapper.state('currentFileId')).toBe('file2');
+            expect(onNavigate).toHaveBeenCalledWith('file2');
+        });
+    });
+
+    describe('hideSidebar prop', () => {
+        test('should not render sidebar components when hideSidebar is true', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                hideSidebar: true,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            // Check that the conditional rendering logic excludes the sidebar
+            // by checking the .bcpr-body structure
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.exists()).toBe(true);
+
+            // The bcpr-body should only have bcpr-container child when sidebar hidden
+            expect(bodyDiv.children().length).toBe(1);
+            expect(bodyDiv.find('.bcpr-container').exists()).toBe(true);
+        });
+
+        test('should render sidebar components when hideSidebar is false', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                hideSidebar: false,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            // Check that the conditional rendering logic includes the sidebar
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.exists()).toBe(true);
+
+            // The bcpr-body should have both bcpr-container and LoadableSidebar
+            expect(bodyDiv.children().length).toBe(2);
+            expect(bodyDiv.find('.bcpr-container').exists()).toBe(true);
+        });
+
+        test('should render sidebar components when hideSidebar is not provided (default)', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                // hideSidebar not provided, should default to false
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            // Check default behavior - sidebar should render
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.children().length).toBe(2);
+        });
+
+        test('should hide sidebar when hideSidebar changes from false to true', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                hideSidebar: false,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            let bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.children().length).toBe(2);
+
+            wrapper.setProps({ hideSidebar: true });
+
+            bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.children().length).toBe(1);
+        });
+
+        test('should show sidebar when hideSidebar changes from true to false', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                hideSidebar: true,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            let bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.children().length).toBe(1);
+
+            wrapper.setProps({ hideSidebar: false });
+
+            bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.children().length).toBe(2);
+        });
+    });
 });
