@@ -1078,7 +1078,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
                 filter_term: MOCK_EMAIL,
             });
-            expect(response).resolves.toBeFalsy();
+            expect(response).resolves.toEqual({});
             expect(wrapper.exists(Notification)).toBeFalsy();
         });
     });

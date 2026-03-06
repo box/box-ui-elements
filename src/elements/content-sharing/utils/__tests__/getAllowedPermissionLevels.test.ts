@@ -1,4 +1,5 @@
 import { PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../../constants';
+
 import { getAllowedPermissionLevels } from '../getAllowedPermissionLevels';
 
 describe('getAllowedPermissionLevels', () => {

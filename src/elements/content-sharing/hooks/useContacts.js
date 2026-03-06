@@ -51,7 +51,10 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
                 api.getMarkerBasedUsersAPI(false).getUsersInEnterprise(
                     itemID,
                     (response: UserCollection) => resolveAPICall(resolve, response, transformUsers),
-                    handleError,
+                    error => {
+                        handleError(error);
+                        resolve([]);
+                    },
                     { filter_term: filterTerm },
                 );
             });
@@ -59,7 +62,10 @@ function useContacts(api: API, itemID: string, options: ContentSharingHooksOptio
                 api.getMarkerBasedGroupsAPI(false).getGroupsInEnterprise(
                     itemID,
                     (response: GroupCollection) => resolveAPICall(resolve, response, transformGroups),
-                    handleError,
+                    error => {
+                        handleError(error);
+                        resolve([]);
+                    },
                     {
                         fields: [FIELD_NAME, FIELD_PERMISSIONS].toString(),
                         filter_term: filterTerm,

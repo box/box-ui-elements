@@ -271,7 +271,7 @@ describe('elements/content-sharing/hooks/useContacts', () => {
                 { fields: 'name,permissions', filter_term: MOCK_FILTER },
             );
             expect(handleError).toHaveBeenCalled();
-            expect(contacts).resolves.toBeFalsy();
+            expect(contacts).resolves.toEqual([]);
         });
     });
 });
