@@ -198,7 +198,6 @@
         "copyfiles": "^2.2.0",
         "css-loader": "^7.1.2",
         "css-minimizer-webpack-plugin": "^7.0.0",
-        "cssnano": "^4.1.10",
         "cypress": "^13.17.0",
         "deepmerge": "^4.2.2",
         "draft-js": "^0.11.7",
