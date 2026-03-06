@@ -224,11 +224,9 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
                 }),
             );
 
-            result.current({ emails: [MOCK_EMAIL] });
-
-            // Wait a short time to ensure handleError is called
+            let contacts;
             await act(async () => {
-                await new Promise(resolve => setTimeout(resolve, 100));
+                contacts = await result.current({ emails: [MOCK_EMAIL] });
             });
 
             expect(getUsersInEnterprise).toHaveBeenCalledWith(
@@ -238,6 +236,7 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
                 { filter_term: MOCK_EMAIL },
             );
             expect(handleError).toHaveBeenCalled();
+            expect(contacts).toEqual({});
         });
     });
 });
