@@ -71,9 +71,9 @@ class HotkeyHelpModal extends Component {
             this.types = hotkeyLayer.getActiveTypes();
         }
 
-        if (!prevType) {
+        if (!prevType && this.types.length) {
             this.setState({
-                currentType: this.types.length ? this.types[0] : null,
+                currentType: this.types[0],
             });
         }
     }
