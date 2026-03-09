@@ -83,6 +83,32 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             expect(instance.state.currentType).toBe('other');
         });
 
+        test('should not call setState when no types are available', () => {
+            const emptyContext = {
+                getActiveHotkeys: sandbox.stub().returns({}),
+                getActiveTypes: sandbox.stub().returns([]),
+            };
+
+            const wrapper = mount(
+                <HotkeyTestWrapper
+                    contextValue={emptyContext}
+                    initialState={{ isOpen: false }}
+                    renderChild={state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />}
+                />,
+            );
+
+            const instance = wrapper.find('HotkeyHelpModal').instance();
+            const setStateSpy = sandbox.spy(instance, 'setState');
+
+            act(() => {
+                wrapper.find('HotkeyTestWrapper').setState({ isOpen: true });
+            });
+
+            // setState should not be called when types are empty,
+            // preventing an infinite componentDidUpdate loop
+            expect(setStateSpy.callCount).toBe(0);
+        });
+
         test('should refresh hotkey and hotkey types from hotkeyService when modal is opened', () => {
             const wrapper = mount(
                 <HotkeyTestWrapper
