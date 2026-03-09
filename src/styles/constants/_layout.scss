@@ -4,7 +4,7 @@ $menu-z-index: 170 !default;
 $submenu-z-index: 171 !default;
 $overlay-z-index: 190 !default;
 $tooltip-z-index: 190 !default;
-$notifications-wrapper-z-index: 200 !default;
+$notifications-wrapper-z-index: 400 !default; // above blueprint modal (370) for compatibility
 
 // Borders
 $bdl-border-radius-size: 4px;

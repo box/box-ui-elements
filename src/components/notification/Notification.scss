@@ -11,10 +11,12 @@
     left: 0;
     z-index: $notifications-wrapper-z-index;
     height: 0; /* allows elements around notifications to be clickable */
+    pointer-events: none; /* wrapper doesn’t block clicks elsewhere */
 }
 
 .notification-container {
     height: 0;
+    pointer-events: auto; /* notifications and their buttons receive hover/click */
 }
 
 .notification {
@@ -30,9 +32,9 @@
     background-color: $bdl-gray-10;
     border: 2px solid $bdl-gray;
     border-radius: $bdl-border-radius-size-large;
-    box-shadow: 0 2px 6px fade-out($black, .85);
+    box-shadow: 0 2px 6px fade-out($black, 0.85);
     opacity: 1;
-    transition: opacity .1s ease-out;
+    transition: opacity 0.1s ease-out;
 
     &.info {
         background-color: $bdl-green-light-20;
