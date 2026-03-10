@@ -45,7 +45,7 @@
         "url": "https://github.com/box/box-ui-elements/issues"
     },
     "engines": {
-        "node": ">=18.x || ^20.x || ^22.x",
+        "node": "^20.x || ^22.x",
         "yarn": ">=1.10.0"
     },
     "scripts": {
@@ -358,6 +358,7 @@
     },
     "resolutions": {
         "qs": "^6.14.1",
+        "serialize-javascript": "^7.0.3",
         "tar": "^7.5.10"
     },
     "msw": {
