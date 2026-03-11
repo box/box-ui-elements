@@ -253,4 +253,49 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             });
         });
     });
+
+    describe('callback props', () => {
+        const onLoad = jest.fn();
+        const onError = jest.fn();
+        const onClose = jest.fn();
+
+        const error = { status: 400 };
+        const errorApi = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({
+                getFile: jest.fn().mockImplementation((id, successFn, errorFn) => {
+                    errorFn(error);
+                }),
+            }),
+        };
+
+        test('should call onLoad and not onError when item data loads successfully', async () => {
+            renderComponent({ onLoad, onError });
+
+            await waitFor(() => {
+                expect(onLoad).toHaveBeenCalled();
+            });
+
+            expect(onError).not.toHaveBeenCalled();
+        });
+
+        test('should call onError and not onLoad when item data fails to load', async () => {
+            renderComponent({ api: errorApi, onLoad, onError });
+
+            await waitFor(() => {
+                expect(onError).toHaveBeenCalledWith(error);
+            });
+
+            expect(onLoad).not.toHaveBeenCalled();
+        });
+
+        test('should call onClose when modal is closed', async () => {
+            renderComponent({ onClose });
+            expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+
+            const closeButton = screen.getByRole('button', { name: 'Close' });
+            closeButton.click();
+            expect(onClose).toHaveBeenCalled();
+        });
+    });
 });

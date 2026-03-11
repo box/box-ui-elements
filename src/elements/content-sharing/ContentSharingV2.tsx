@@ -1,6 +1,6 @@
+import isEmpty from 'lodash/isEmpty';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import isEmpty from 'lodash/isEmpty';
 
 import { useNotification } from '@box/blueprint-web';
 import { UnifiedShareModal } from '@box/unified-share-modal';
@@ -38,11 +38,27 @@ export interface ContentSharingV2Props {
     itemId: string;
     /** itemType - "file" or "folder" */
     itemType: ItemType;
+    /** onClose - Callback when the modal is closed by user action */
+    onClose?: () => void;
+    /** onError - Callback when item data fails to load, preventing USM from opening */
+    onError?: (error: ElementsXhrError) => void;
+    /** onLoad - Callback when item data loads successfully, use to add loading indicator */
+    onLoad?: () => void;
     /** variant - "desktop" or "modal" variant of the Unified Share Modal */
     variant?: VariantType;
 }
 
-function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, variant }: ContentSharingV2Props) {
+function ContentSharingV2({
+    api,
+    children,
+    config: usmConfig,
+    itemId,
+    itemType,
+    onClose,
+    onError,
+    onLoad,
+    variant,
+}: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [hasError, setHasError] = React.useState<boolean>(false);
@@ -52,7 +68,7 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, 
     const [collaborationRoles, setCollaborationRoles] = React.useState<CollaborationRole[] | null>(null);
     const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
-    const [owner, setOwner] = React.useState({ id: '', email: '', name: '' });
+    const [owner, setOwner] = React.useState({ email: '', id: '', name: '' });
 
     const { formatMessage } = useIntl();
     const { addNotification } = useNotification();
@@ -86,7 +102,7 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, 
         setSharedLink(sharedLinkFromApi);
         setSharingServiceProps(sharingServicePropsFromApi);
         setCollaborationRoles(collaborationRolesFromApi);
-        setOwner({ id: ownedBy.id, email: ownedBy.login, name: ownedBy.name });
+        setOwner({ email: ownedBy.login, id: ownedBy.id, name: ownedBy.name });
     }, []);
 
     // Handle initial data retrieval errors
@@ -114,12 +130,12 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, 
             addNotification({
                 closeButtonAriaLabel: formatMessage(messages.noticeCloseLabel),
                 sensitivity: 'foreground' as const,
+                styledText: formatMessage(errorMessage),
                 typeIconAriaLabel: formatMessage(messages.errorNoticeIcon),
                 variant: 'error',
-                styledText: formatMessage(errorMessage),
             });
         },
-        [hasError, addNotification, formatMessage],
+        [addNotification, formatMessage, hasError],
     );
 
     // Reset state if the API has changed
@@ -142,21 +158,23 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, 
             try {
                 const itemData = await fetchItem({ api, itemId, itemType });
                 handleGetItemSuccess(itemData);
+                onLoad?.();
             } catch (error) {
                 getError(error);
+                onError?.(error);
             }
         })();
-    }, [api, item, itemId, itemType, sharedLink, handleGetItemSuccess, getError]);
+    }, [api, item, itemId, itemType, sharedLink, getError, handleGetItemSuccess, onError, onLoad]);
 
     // Get current user
     React.useEffect(() => {
         if (!api || isEmpty(api) || !item || currentUser) return;
 
         const getUserSuccess = userData => {
-            const { id, enterprise, hostname } = userData;
+            const { enterprise, hostname, id } = userData;
             setCurrentUser({
-                id,
                 enterprise: { name: enterprise ? enterprise.name : '' },
+                id,
             });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
@@ -222,6 +240,12 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, 
 
     const config = React.useMemo(() => ({ sharedLinkEmail: false, ...usmConfig }), [usmConfig]);
 
+    const handleOpenChange = (open: boolean) => {
+        if (!open) {
+            onClose?.();
+        }
+    };
+
     return (
         item && (
             <UnifiedShareModal
@@ -231,6 +255,7 @@ function ContentSharingV2({ api, children, config: usmConfig, itemId, itemType, 
                 contactService={contactService}
                 currentUser={currentUser}
                 item={item}
+                onOpenChange={handleOpenChange}
                 sharedLink={sharedLink}
                 sharingService={sharingService}
                 variant={variant}
