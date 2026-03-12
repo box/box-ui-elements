@@ -23,9 +23,6 @@ export enum Action {
 export interface Annotator {
     addListener: (event: string | symbol, listener: (...args: any[]) => void) => void;
     emit: (event: string | symbol, ...args: any[]) => void;
-    getActiveId?: () => string | null;
-    getAnnotationContainerEl?: () => HTMLElement | null;
-    isPopupOpen?: () => boolean;
     removeAllListeners: () => void;
     removeListener: (event: string | symbol, listener: (...args: any[]) => void) => void;
 }
@@ -83,15 +80,3 @@ export interface AnnotationActionEvent {
     error?: Error;
     meta: Metadata;
 }
-
-export type AnnotationStateInfo = {
-    activeAnnotationId: string | null;
-    isPopupOpen: boolean;
-};
-
-export type AnnotatorControls = {
-    deselect: () => void;
-    getActiveId: () => string | null;
-    getAnnotationContainerEl: () => HTMLElement | null;
-    isPopupOpen: () => boolean;
-};

@@ -4,17 +4,7 @@ import { generatePath, match as matchType, matchPath } from 'react-router-dom';
 import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
 import { isFeatureEnabled, type FeatureConfig } from '../feature-checking';
-import {
-    Action,
-    AnnotationStateInfo,
-    Annotator,
-    AnnotatorControls,
-    AnnotationActionEvent,
-    AnnotatorState,
-    GetMatchPath,
-    MatchParams,
-    Status,
-} from './types';
+import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
 import { FeedEntryType, SidebarNavigation } from '../types/SidebarNavigation';
 
 export type ActiveChangeEvent = {
@@ -55,9 +45,7 @@ export type ComponentWithAnnotations = {
 export type WithAnnotationsProps = {
     features?: FeatureConfig;
     location?: Location;
-    onAnnotationStateChange?: (state: AnnotationStateInfo) => void;
     onAnnotator: (annotator: Annotator) => void;
-    onAnnotatorReady?: (controls: AnnotatorControls | null) => void;
     onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
     onPreviewDestroy: (shouldReset?: boolean) => void;
     routerDisabled?: boolean;
@@ -109,7 +97,7 @@ export default function withAnnotations<P extends object>(
                 activeAnnotationId = getProp(match, 'params.annotationId', null);
             }
 
-            // Seed the initial state with the activeAnnotationId, derived from the URL path or sidebarNavigation prop
+            // Seed the initial state with the activeAnnotationId if any from the location path
             this.state = { ...defaultState, activeAnnotationId };
         }
 
@@ -311,22 +299,6 @@ export default function withAnnotations<P extends object>(
 
         handleActiveChange: ActiveChangeEventHandler = ({ annotationId, fileVersionId }): void => {
             this.setState({ activeAnnotationFileVersionId: fileVersionId, activeAnnotationId: annotationId });
-
-            const { onAnnotationStateChange, onError } = this.props;
-            if (onAnnotationStateChange) {
-                try {
-                    const isPopupOpen =
-                        this.annotator && this.annotator.isPopupOpen ? this.annotator.isPopupOpen() : false;
-                    onAnnotationStateChange({
-                        activeAnnotationId: annotationId,
-                        isPopupOpen,
-                    });
-                } catch (error) {
-                    if (onError && error instanceof Error) {
-                        onError(error, 'annotation_state_change_callback_error', { showNotification: false });
-                    }
-                }
-            }
         };
 
         handleAnnotationFetchError = ({ error }: { error: Error }): void => {
@@ -347,23 +319,6 @@ export default function withAnnotations<P extends object>(
             this.annotator.addListener('annotations_reply_create', this.handleAnnotationReplyCreate);
             this.annotator.addListener('annotations_reply_delete', this.handleAnnotationReplyDelete);
             this.annotator.addListener('annotations_reply_update', this.handleAnnotationReplyUpdate);
-
-            const { onAnnotatorReady, onError } = this.props;
-            if (onAnnotatorReady) {
-                try {
-                    onAnnotatorReady({
-                        deselect: () => this.emitActiveAnnotationChangeEvent(null),
-                        getActiveId: () => (annotator.getActiveId ? annotator.getActiveId() : null),
-                        getAnnotationContainerEl: () =>
-                            annotator.getAnnotationContainerEl ? annotator.getAnnotationContainerEl() : null,
-                        isPopupOpen: () => (annotator.isPopupOpen ? annotator.isPopupOpen() : false),
-                    });
-                } catch (error) {
-                    if (onError && error instanceof Error) {
-                        onError(error, 'annotator_ready_callback_error', { showNotification: false });
-                    }
-                }
-            }
         };
 
         handlePreviewDestroy = (shouldReset = true): void => {
@@ -383,27 +338,6 @@ export default function withAnnotations<P extends object>(
             }
 
             this.annotator = null;
-
-            // Always notify consumers of annotator teardown, independent of whether component state is reset
-            const { onAnnotationStateChange, onAnnotatorReady, onError } = this.props;
-            try {
-                if (onAnnotatorReady) {
-                    onAnnotatorReady(null);
-                }
-            } catch (error) {
-                if (onError && error instanceof Error) {
-                    onError(error, 'annotator_ready_callback_error', { showNotification: false });
-                }
-            }
-            try {
-                if (onAnnotationStateChange) {
-                    onAnnotationStateChange({ activeAnnotationId: null, isPopupOpen: false });
-                }
-            } catch (error) {
-                if (onError && error instanceof Error) {
-                    onError(error, 'annotation_state_change_callback_error', { showNotification: false });
-                }
-            }
         };
 
         render(): JSX.Element {
