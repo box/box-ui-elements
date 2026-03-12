@@ -255,7 +255,6 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     describe('callback props', () => {
-        const onLoad = jest.fn();
         const onError = jest.fn();
         const onClose = jest.fn();
 
@@ -269,24 +268,12 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             }),
         };
 
-        test('should call onLoad and not onError when item data loads successfully', async () => {
-            renderComponent({ onLoad, onError });
-
-            await waitFor(() => {
-                expect(onLoad).toHaveBeenCalled();
-            });
-
-            expect(onError).not.toHaveBeenCalled();
-        });
-
-        test('should call onError and not onLoad when item data fails to load', async () => {
-            renderComponent({ api: errorApi, onLoad, onError });
+        test('should call onError when item data fails to load', async () => {
+            renderComponent({ api: errorApi, onError });
 
             await waitFor(() => {
                 expect(onError).toHaveBeenCalledWith(error);
             });
-
-            expect(onLoad).not.toHaveBeenCalled();
         });
 
         test('should call onClose when modal is closed', async () => {

@@ -42,8 +42,6 @@ export interface ContentSharingV2Props {
     onClose?: () => void;
     /** onError - Callback when item data fails to load, preventing USM from opening */
     onError?: (error: ElementsXhrError) => void;
-    /** onLoad - Callback when item data loads successfully, use to add loading indicator */
-    onLoad?: () => void;
     /** variant - "desktop" or "modal" variant of the Unified Share Modal */
     variant?: VariantType;
 }
@@ -56,7 +54,6 @@ function ContentSharingV2({
     itemType,
     onClose,
     onError,
-    onLoad,
     variant,
 }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
@@ -158,13 +155,12 @@ function ContentSharingV2({
             try {
                 const itemData = await fetchItem({ api, itemId, itemType });
                 handleGetItemSuccess(itemData);
-                onLoad?.();
             } catch (error) {
                 getError(error);
                 onError?.(error);
             }
         })();
-    }, [api, item, itemId, itemType, sharedLink, getError, handleGetItemSuccess, onError, onLoad]);
+    }, [api, item, itemId, itemType, sharedLink, getError, handleGetItemSuccess, onError]);
 
     // Get current user
     React.useEffect(() => {
