@@ -49,8 +49,7 @@ export const DesktopVariant = {
         api: mockApiWithSharedLink,
         variant: 'desktop',
     },
-    play: async context => {
-        await withModernization.play(context);
+    play: async () => {
         expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
     },
 };

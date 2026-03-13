@@ -253,4 +253,36 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             });
         });
     });
+
+    describe('callback props', () => {
+        const onError = jest.fn();
+        const onClose = jest.fn();
+
+        const error = { status: 400 };
+        const errorApi = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({
+                getFile: jest.fn().mockImplementation((id, successFn, errorFn) => {
+                    errorFn(error);
+                }),
+            }),
+        };
+
+        test('should call onError when item data fails to load', async () => {
+            renderComponent({ api: errorApi, onError });
+
+            await waitFor(() => {
+                expect(onError).toHaveBeenCalledWith(error);
+            });
+        });
+
+        test('should call onClose when modal is closed', async () => {
+            renderComponent({ onClose });
+            expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+
+            const closeButton = screen.getByRole('button', { name: 'Close' });
+            closeButton.click();
+            expect(onClose).toHaveBeenCalled();
+        });
+    });
 });
