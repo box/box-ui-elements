@@ -359,7 +359,7 @@
     "resolutions": {
         "draft-js/immutable": "^3.8.3",
         "qs": "^6.14.1",
-        "tar": "^7.5.10"
+        "tar": "^7.5.11"
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
