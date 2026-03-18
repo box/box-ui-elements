@@ -21,6 +21,7 @@ import { withBlueprintModernization } from '../common/withBlueprintModernization
 import ContentSharingV2 from './ContentSharingV2';
 import SharingModal from './SharingModal';
 
+import type { ElementsXhrError } from '../../common/types/api';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
@@ -62,6 +63,10 @@ type ContentSharingProps = {
     language: string,
     /** messages - Localized strings used by the element */
     messages?: StringMap,
+    /** onClose - Callback when the modal is closed by user action */
+    onClose?: () => void,
+    /** onError - Callback when item data fails to load, preventing USM from opening */
+    onError?: (error: ElementsXhrError) => void,
     /** token - Valid access token */
     token: string,
     /** uuid - Unique identifier, used for refreshing element visibility when called from the ES6 wrapper */
@@ -91,6 +96,8 @@ function ContentSharing({
     itemType,
     language,
     messages,
+    onClose,
+    onError,
     token,
     uuid,
     variant,
@@ -133,6 +140,8 @@ function ContentSharing({
                             config={config}
                             itemId={itemID}
                             itemType={itemType}
+                            onClose={onClose}
+                            onError={onError}
                             variant={variant}
                         >
                             {children}
@@ -164,5 +173,4 @@ function ContentSharing({
     );
 }
 
-export { ContentSharing as ContentSharingComponent };
 export default withBlueprintModernization(ContentSharing);
