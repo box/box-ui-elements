@@ -43,7 +43,7 @@ export interface ContentSharingV2Props {
     onClose?: () => void;
     /** onError - Callback when item data fails to load, preventing USM from opening */
     onError?: (error: ElementsXhrError) => void;
-    /** onSendSharedLink - Callback to email a shared link */
+    /** onSendSharedLink - Callback to email the shared link to the selected contacts */
     onSendSharedLink?: SharingService['sendSharedLink'];
     /** variant - "desktop" or "modal" variant of the Unified Share Modal */
     variant?: VariantType;
@@ -60,6 +60,9 @@ function ContentSharingV2({
     onSendSharedLink,
     variant,
 }: ContentSharingV2Props) {
+    const { formatMessage } = useIntl();
+    const { addNotification } = useNotification();
+
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
     const [item, setItem] = React.useState<Item | null>(null);
     const [hasError, setHasError] = React.useState<boolean>(false);
@@ -78,8 +81,6 @@ function ContentSharingV2({
         };
     }, [onSendSharedLink, usmConfig]);
 
-    const { formatMessage } = useIntl();
-    const { addNotification } = useNotification();
     const sharingService = useSharingService({
         api,
         avatarUrlMap,
