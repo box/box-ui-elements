@@ -9,7 +9,7 @@
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 
-import type { Configuration, VariantType } from '@box/unified-share-modal';
+import type { Configuration, SharingService, VariantType } from '@box/unified-share-modal';
 import API from '../../api';
 
 import { isFeatureEnabled } from '../common/feature-checking';
@@ -67,6 +67,8 @@ type ContentSharingProps = {
     onClose?: () => void,
     /** onError - Callback when item data fails to load, preventing USM from opening */
     onError?: (error: ElementsXhrError) => void,
+    /** onSendSharedLink - Callback to email a shared link */
+    onSendSharedLink?: SharingService['sendSharedLink'],
     /** token - Valid access token */
     token: string,
     /** uuid - Unique identifier, used for refreshing element visibility when called from the ES6 wrapper */
@@ -98,6 +100,7 @@ function ContentSharing({
     messages,
     onClose,
     onError,
+    onSendSharedLink,
     token,
     uuid,
     variant,
@@ -142,6 +145,7 @@ function ContentSharing({
                             itemType={itemType}
                             onClose={onClose}
                             onError={onError}
+                            onSendSharedLink={onSendSharedLink}
                             variant={variant}
                         >
                             {children}

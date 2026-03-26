@@ -1,7 +1,12 @@
 import { Collaborator } from '@box/unified-share-modal';
 
 import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED } from '../../../constants';
-import { COLLAB_USER_TYPE, COLLAB_GROUP_TYPE } from '../constants';
+import {
+    API_TO_USM_COLLAB_ROLE_MAP,
+    COLLAB_USER_TYPE,
+    COLLAB_GROUP_TYPE,
+    USM_TO_API_COLLAB_ROLE_MAP,
+} from '../constants';
 
 import type { Collaboration, Collaborations } from '../../../common/types/core';
 import type { AvatarURLMap } from '../types';
@@ -40,14 +45,13 @@ export const convertCollab = ({
         email: collabEmail,
         expiresAt: executeAt,
         hasCustomAvatar: !!avatarUrl,
-        hasCustomRole: !!role,
-        id: id.toString(),
+        id: `${id}`,
         isCurrentUser,
         isExternal,
         isPending: false,
         name: collabName,
-        role: role ? `${role[0].toUpperCase()}${role.slice(1)}` : '',
-        userId: collabId.toString(),
+        role: API_TO_USM_COLLAB_ROLE_MAP[role],
+        userId: `${collabId}`,
     };
 };
 
@@ -81,19 +85,23 @@ export const convertCollabsResponse = (
     });
 };
 
-export const convertCollabsRequest = (collabRequest, existingCollaboratorsList) => {
-    const existingCollab = [];
-    if (existingCollaboratorsList && existingCollaboratorsList.length > 0) {
-        existingCollaboratorsList.forEach(collab => {
-            existingCollab.push(collab.userId);
+export const convertCollabsRequest = (request, currentCollabs) => {
+    const currentCollabIds = new Set();
+
+    if (currentCollabs) {
+        currentCollabs.forEach(collab => {
+            currentCollabIds.add(collab.userId);
         });
     }
+    const { contacts, role: usmRole } = request;
+
+    const role = USM_TO_API_COLLAB_ROLE_MAP[usmRole];
 
     const groups = [];
     const users = [];
-    const { role } = collabRequest;
-    collabRequest.contacts.forEach(contact => {
-        if (existingCollab.includes(contact.id)) {
+
+    contacts.forEach(contact => {
+        if (currentCollabIds.has(contact.id)) {
             return;
         }
 

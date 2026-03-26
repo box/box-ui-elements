@@ -10,6 +10,7 @@ import type {
     Configuration,
     Item,
     SharedLink,
+    SharingService,
     User,
     VariantType,
 } from '@box/unified-share-modal';
@@ -42,6 +43,8 @@ export interface ContentSharingV2Props {
     onClose?: () => void;
     /** onError - Callback when item data fails to load, preventing USM from opening */
     onError?: (error: ElementsXhrError) => void;
+    /** onSendSharedLink - Callback to email a shared link */
+    onSendSharedLink?: SharingService['sendSharedLink'];
     /** variant - "desktop" or "modal" variant of the Unified Share Modal */
     variant?: VariantType;
 }
@@ -54,6 +57,7 @@ function ContentSharingV2({
     itemType,
     onClose,
     onError,
+    onSendSharedLink,
     variant,
 }: ContentSharingV2Props) {
     const [avatarUrlMap, setAvatarUrlMap] = React.useState<AvatarURLMap | null>(null);
@@ -67,9 +71,16 @@ function ContentSharingV2({
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
     const [owner, setOwner] = React.useState({ email: '', id: '', name: '' });
 
+    const config = React.useMemo(() => {
+        return {
+            sharedLinkEmail: !!onSendSharedLink,
+            ...usmConfig,
+        };
+    }, [onSendSharedLink, usmConfig]);
+
     const { formatMessage } = useIntl();
     const { addNotification } = useNotification();
-    const { sharingService } = useSharingService({
+    const sharingService = useSharingService({
         api,
         avatarUrlMap,
         collaborators,
@@ -77,6 +88,7 @@ function ContentSharingV2({
         item,
         itemId,
         itemType,
+        onSendSharedLink,
         sharedLink,
         sharingServiceProps,
         setCollaborators,
@@ -233,8 +245,6 @@ function ContentSharingV2({
             setCollaborators(collaboratorsWithAvatars);
         }
     }, [avatarUrlMap, collaboratorsData, currentUser, owner]);
-
-    const config = React.useMemo(() => ({ sharedLinkEmail: false, ...usmConfig }), [usmConfig]);
 
     const handleOpenChange = (open: boolean) => {
         if (!open) {

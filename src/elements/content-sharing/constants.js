@@ -86,3 +86,25 @@ export const PEOPLE_IN_ITEM = 'peopleInThisItem';
 
 export const COLLAB_USER_TYPE = 'user';
 export const COLLAB_GROUP_TYPE = 'group';
+
+export const API_TO_USM_COLLAB_ROLE_MAP = {
+    'co-owner': 'co_owner',
+    editor: 'editor',
+    owner: 'owner',
+    previewer: 'previewer',
+    'previewer uploader': 'previewer_uploader',
+    uploader: 'uploader',
+    viewer: 'viewer',
+    'viewer uploader': 'viewer_uploader',
+};
+
+export const USM_TO_API_COLLAB_ROLE_MAP = {
+    co_owner: 'co-owner',
+    editor: 'editor',
+    owner: 'owner',
+    previewer: 'previewer',
+    previewer_uploader: 'previewer uploader',
+    uploader: 'uploader',
+    viewer: 'viewer',
+    viewer_uploader: 'viewer uploader',
+};
