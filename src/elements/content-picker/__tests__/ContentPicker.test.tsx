@@ -13,6 +13,15 @@ jest.mock('../../../utils/Xhr', () => {
                         return Promise.resolve({ data: mockRootFolder });
                     case 'https://api.box.com/2.0/recent_items':
                         return Promise.resolve({ data: mockRecentItems });
+                    case 'https://api.box.com/2.0/search':
+                        return Promise.resolve({
+                            data: {
+                                entries: [],
+                                limit: 50,
+                                offset: 0,
+                                total_count: 0,
+                            },
+                        });
                     default:
                         return Promise.reject(new Error('Not Found'));
                 }
