@@ -76,6 +76,7 @@ function ContentSharingV2({
 
     const config = React.useMemo(() => {
         return {
+            collaborationMessage: false,
             sharedLinkEmail: !!onSendSharedLink,
             ...usmConfig,
         };

@@ -89,7 +89,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         };
     }
 
-    const collaborationRoles = allowed_invitee_roles.map(role => ({
+    const collaborationRoles = allowed_invitee_roles.toSorted().map(role => ({
         id: API_TO_USM_COLLAB_ROLE_MAP[role],
         isDefault: role === INVITEE_ROLE_EDITOR,
     }));
