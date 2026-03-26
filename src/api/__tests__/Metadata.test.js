@@ -272,6 +272,137 @@ describe('api/Metadata', () => {
                 type: undefined,
             });
         });
+
+        test('should extract confidenceScore and targetLocation when isConfidenceScoreEnabled is true', () => {
+            const targetLocationString =
+                '[{"itemId":"123","page":1,"text":"Test","boundingBox":{"left":0.1,"top":0.2,"right":0.3,"bottom":0.4}}]';
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        confidenceScore: 0.95,
+                        confidenceLevel: 'high',
+                        process: 'AI_ACCEPTED',
+                        targetLocation: targetLocationString,
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    {
+                        description: 'Test description',
+                        displayName: 'Test string field',
+                        id: '123',
+                        key: 'testStringField',
+                        type: 'string',
+                    },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, true);
+
+            expect(result.fields[0].value).toBe('California');
+            expect(result.fields[0].confidenceScore).toEqual({ value: 0.95, level: 'high', isAccepted: true });
+            expect(result.fields[0].targetLocation).toEqual([
+                { itemId: '123', page: 1, text: 'Test', boundingBox: { left: 0.1, top: 0.2, right: 0.3, bottom: 0.4 } },
+            ]);
+        });
+
+        test('should not set confidenceScore or targetLocation when isConfidenceScoreEnabled is false', () => {
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        confidenceScore: 0.95,
+                        confidenceLevel: 'high',
+                        process: 'AI_ACCEPTED',
+                        targetLocation:
+                            '[{"itemId":"1","page":1,"text":"T","boundingBox":{"left":0,"top":0,"right":1,"bottom":1}}]',
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    { description: 'Test', displayName: 'Test field', id: '1', key: 'testStringField', type: 'string' },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, false);
+
+            expect(result.fields[0].value).toBe('California');
+            expect(result.fields[0].confidenceScore).toBeUndefined();
+            expect(result.fields[0].targetLocation).toBeUndefined();
+        });
+
+        test('should not set confidenceScore when details are incomplete', () => {
+            const targetLocationString =
+                '[{"itemId":"1","page":1,"text":"T","boundingBox":{"left":0,"top":0,"right":1,"bottom":1}}]';
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        // no confidenceScore or confidenceLevel
+                        targetLocation: targetLocationString,
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    { description: 'Test', displayName: 'Test field', id: '1', key: 'testStringField', type: 'string' },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, true);
+
+            expect(result.fields[0].value).toBe('California');
+            expect(result.fields[0].confidenceScore).toBeUndefined();
+            expect(result.fields[0].targetLocation).toEqual([
+                { itemId: '1', page: 1, text: 'T', boundingBox: { left: 0, top: 0, right: 1, bottom: 1 } },
+            ]);
+        });
+
+        test('should extract values from detailed field in custom metadata (properties template)', () => {
+            const instance = {
+                $canEdit: true,
+                $id: '321',
+                $template: '',
+                testCustomField: {
+                    values: 'DetailedStringValue',
+                    details: {},
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [],
+                id: '123456',
+                templateKey: 'properties',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, false);
+
+            expect(result.fields[0].value).toBe('DetailedStringValue');
+        });
     });
 
     describe('getTaxonomyLevelsForTemplates()', () => {
@@ -581,6 +712,34 @@ describe('api/Metadata', () => {
                 id: 'file_id',
             });
         });
+
+        test('should apply detailed view query string param when isMetadataRedesign and isConfidenceScoreEnabled are true', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    entries: [],
+                },
+            });
+            await metadata.getInstances('id', true, true);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url?view=detailed',
+                id: 'file_id',
+            });
+        });
+
+        test('should not apply view query string param when isMetadataRedesign is false even if isConfidenceScoreEnabled is true', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    entries: [],
+                },
+            });
+            await metadata.getInstances('id', false, true);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url',
+                id: 'file_id',
+            });
+        });
     });
 
     describe('getUserAddableTemplates()', () => {
@@ -858,6 +1017,35 @@ describe('api/Metadata', () => {
             expect(metadata.getTemplateForInstance.mock.calls[4][1]).toBe(instances[4]);
             expect(metadata.getTemplateForInstance.mock.calls[4][2]).toEqual([{}]);
         });
+
+        test('should pass isConfidenceScoreEnabled to createTemplateInstance', async () => {
+            const instances = [{ $id: '1', $scope: 'enterprise', $template: 'enterprise1' }];
+
+            metadata.createTemplateInstance = jest.fn().mockReturnValueOnce('templateInstance1');
+            metadata.getTemplateForInstance = jest
+                .fn()
+                .mockResolvedValueOnce({ template: 'template1', isExternallyOwned: false });
+
+            await metadata.getTemplateInstances('id', instances, {}, [], [], true, true);
+
+            expect(metadata.createTemplateInstance).toBeCalledTimes(1);
+            // 5th argument (index 4) is isConfidenceScoreEnabled
+            expect(metadata.createTemplateInstance.mock.calls[0][4]).toBe(true);
+        });
+
+        test('should pass isConfidenceScoreEnabled=false to createTemplateInstance by default', async () => {
+            const instances = [{ $id: '1', $scope: 'enterprise', $template: 'enterprise1' }];
+
+            metadata.createTemplateInstance = jest.fn().mockReturnValueOnce('templateInstance1');
+            metadata.getTemplateForInstance = jest
+                .fn()
+                .mockResolvedValueOnce({ template: 'template1', isExternallyOwned: false });
+
+            await metadata.getTemplateInstances('id', instances, {}, [], [], true);
+
+            expect(metadata.createTemplateInstance).toBeCalledTimes(1);
+            expect(metadata.createTemplateInstance.mock.calls[0][4]).toBe(false);
+        });
     });
 
     describe('getMetadata()', () => {
@@ -950,7 +1138,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1005,7 +1193,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1017,6 +1205,7 @@ describe('api/Metadata', () => {
                 'enterprise',
                 'global',
                 true,
+                false,
             );
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledWith({
@@ -1030,6 +1219,43 @@ describe('api/Metadata', () => {
                 templateInstances: 'templateInstances',
                 templates: 'templates',
             });
+        });
+
+        test('should pass isConfidenceScoreEnabled to getInstances and getTemplateInstances when true', async () => {
+            const file = {
+                id: 'id',
+                is_externally_owned: false,
+                permissions: { can_upload: true },
+            };
+
+            const cache = new Cache();
+
+            metadata.errorHandler = jest.fn();
+            metadata.successHandler = jest.fn();
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
+            metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
+            metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
+            metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
+            metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
+
+            // isMetadataRedesign=true, isConfidenceScoreEnabled=true
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true, true);
+
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, true);
+            expect(metadata.getTemplateInstances).toHaveBeenCalledWith(
+                file.id,
+                'filteredInstances',
+                'custom',
+                'enterprise',
+                'global',
+                true,
+                true,
+            );
         });
 
         test('should make request and update cache and call success handler after returning cached value when refreshCache is true', async () => {
@@ -1062,7 +1288,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1120,7 +1346,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1177,7 +1403,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1232,7 +1458,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).not.toHaveBeenCalled();
@@ -1272,7 +1498,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');

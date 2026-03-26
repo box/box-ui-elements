@@ -142,8 +142,17 @@ describe('useSidebarMetadataFetcher', () => {
     const onSuccessMock = jest.fn();
     const isFeatureEnabledMock = true;
 
-    const setupHook = (fileId = '123') =>
-        renderHook(() => useSidebarMetadataFetcher(api, fileId, onErrorMock, onSuccessMock, isFeatureEnabledMock));
+    const setupHook = (fileId = '123', isConfidenceScoreEnabled = false) =>
+        renderHook(() =>
+            useSidebarMetadataFetcher(
+                api,
+                fileId,
+                onErrorMock,
+                onSuccessMock,
+                isFeatureEnabledMock,
+                isConfidenceScoreEnabled,
+            ),
+        );
 
     beforeEach(() => {
         onErrorMock.mockClear();
@@ -348,6 +357,38 @@ describe('useSidebarMetadataFetcher', () => {
                 error: mockInternalServerError,
                 isErrorDisplayed: true,
             }),
+        );
+    });
+
+    test('should pass isConfidenceScoreEnabled=true to getMetadata', async () => {
+        const { result } = setupHook('123', true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            true,
+        );
+    });
+
+    test('should pass isConfidenceScoreEnabled=false to getMetadata by default', async () => {
+        const { result } = setupHook('123');
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            false,
         );
     });
 

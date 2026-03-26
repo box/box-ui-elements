@@ -27,7 +27,9 @@ export interface MetadataInstanceEditorProps {
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
     onDiscardUnsavedChanges: () => void;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
+    onToggleReviewFilter?: () => void;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
+    shouldShowOnlyReviewFields?: boolean;
     taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
     template: MetadataTemplateInstance;
     isAdvancedExtractAgentEnabled?: boolean;
@@ -48,7 +50,9 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     onDelete,
     onDiscardUnsavedChanges,
     onSubmit,
+    onToggleReviewFilter,
     setIsUnsavedChangesModalOpen,
+    shouldShowOnlyReviewFields = false,
     taxonomyOptionsFetcher,
     template,
     isAdvancedExtractAgentEnabled = false,
@@ -73,8 +77,10 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             onDelete={onDelete}
             onDiscardUnsavedChanges={onDiscardUnsavedChanges}
             onSubmit={onSubmit}
+            onToggleReviewFilter={onToggleReviewFilter}
             selectedTemplateInstance={template}
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+            shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
