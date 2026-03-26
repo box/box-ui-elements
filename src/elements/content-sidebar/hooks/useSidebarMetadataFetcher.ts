@@ -70,6 +70,7 @@ function useSidebarMetadataFetcher(
     onError: ErrorContextProps['onError'],
     onSuccess: SuccessContextProps['onSuccess'],
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
+    isConfidenceScoreEnabled: boolean = false,
 ): DataFetcher {
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
@@ -111,7 +112,7 @@ function useSidebarMetadataFetcher(
     const fetchMetadataErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string) => {
             setTemplates(null);
-            setTemplateInstances(null);
+            setTemplateInstances([]);
             onApiError(e, code, messages.sidebarMetadataFetchingErrorContent);
         },
         [onApiError],
@@ -126,9 +127,10 @@ function useSidebarMetadataFetcher(
                 isFeatureEnabled,
                 { refreshCache: true },
                 true,
+                isConfidenceScoreEnabled,
             );
         },
-        [api, fetchMetadataErrorCallback, fetchMetadataSuccessCallback, isFeatureEnabled],
+        [api, fetchMetadataErrorCallback, fetchMetadataSuccessCallback, isFeatureEnabled, isConfidenceScoreEnabled],
     );
 
     const fetchFileSuccessCallback = React.useCallback(

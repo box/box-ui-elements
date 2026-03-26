@@ -157,7 +157,43 @@ type MetadataOptions = {
     result_count: number,
 };
 
+type MetadataConfidenceScoreData = {
+    value: number,
+    level: string,
+    isAccepted: boolean,
+};
+
+type MetadataBoundingBox = {
+    left: number,
+    top: number,
+    right: number,
+    bottom: number,
+};
+
+type MetadataTargetLocationEntry = {
+    itemId: string,
+    page: number,
+    text: string,
+    boundingBox?: MetadataBoundingBox,
+};
+
+type MetadataDetailedFieldDetails = {
+    updatedAt: number,
+    updatedBy: string,
+    updatedAppId: string,
+    confidenceScore?: number,
+    confidenceLevel?: string,
+    process?: string,
+    targetLocation?: string,
+};
+
+type MetadataDetailedFieldValue = {
+    values: MetadataFieldValue,
+    details?: MetadataDetailedFieldDetails,
+};
+
 type MetadataTemplateInstanceField = {
+    confidenceScore?: MetadataConfidenceScoreData,
     description?: string,
     displayName?: string,
     hidden?: boolean,
@@ -165,6 +201,7 @@ type MetadataTemplateInstanceField = {
     key: string, // V2
     levels?: Array<TaxonomyLevel>,
     options?: Array<MetadataTemplateFieldOption>, // V3
+    targetLocation?: Array<MetadataTargetLocationEntry>,
     type: MetadataFieldType,
     value: MetadataFieldValue,
 };
@@ -182,6 +219,11 @@ type MetadataTemplateInstance = {
 };
 
 export type {
+    MetadataBoundingBox,
+    MetadataConfidenceScoreData,
+    MetadataDetailedFieldDetails,
+    MetadataDetailedFieldValue,
+    MetadataTargetLocationEntry,
     MetadataTemplateInstanceField,
     MetadataTemplateInstance,
     MetadataFieldType,

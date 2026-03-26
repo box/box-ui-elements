@@ -16,7 +16,13 @@ import uniq from 'lodash/uniq';
 import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId, getTypedFolderId } from '../utils/file';
-import { handleOnAbort, formatMetadataFieldValue } from './utils';
+import {
+    extractDetailedFieldValue,
+    formatMetadataFieldValue,
+    handleOnAbort,
+    mapDetailedFieldToConfidenceScore,
+    parseTargetLocation,
+} from './utils';
 import File from './File';
 import {
     HEADER_CONTENT_TYPE,
@@ -389,12 +395,20 @@ class Metadata extends File {
      *
      * @param {string} id - file id
      * @param {boolean} isMetadataRedesign - feature flag
+     * @param {boolean} isConfidenceScoreEnabled - whether to fetch detailed view with confidence scores
      * @return {Object} array of metadata instances
      */
-    async getInstances(id: string, isMetadataRedesign: boolean = false): Promise<Array<MetadataInstanceV2>> {
+    async getInstances(
+        id: string,
+        isMetadataRedesign: boolean = false,
+        isConfidenceScoreEnabled: boolean = false,
+    ): Promise<Array<MetadataInstanceV2>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
+
         const baseUrl = this.getMetadataUrl(id);
-        const url = isMetadataRedesign ? `${baseUrl}?view=hydrated` : baseUrl;
+        const view = isConfidenceScoreEnabled ? 'detailed' : 'hydrated';
+        const url = isMetadataRedesign ? `${baseUrl}?view=${view}` : baseUrl;
+
         let instances = {};
         try {
             instances = await this.xhr.get({
@@ -533,6 +547,7 @@ class Metadata extends File {
         template: MetadataTemplate,
         canEdit: boolean,
         isExternallyOwned: boolean = false,
+        isConfidenceScoreEnabled: boolean = false,
     ): MetadataTemplateInstance {
         const fields: MetadataTemplateInstanceField[] = [];
 
@@ -543,12 +558,27 @@ class Metadata extends File {
             // Get Metadata Fields for Instances created from predefined template
             const templateFields = template.fields || [];
             templateFields.forEach(field => {
-                const value = formatMetadataFieldValue(field, instance[field.key]);
+                const rawValue = instance[field.key];
+                const value = formatMetadataFieldValue(field, extractDetailedFieldValue(rawValue));
 
-                fields.push({
+                const fieldEntry: MetadataTemplateInstanceField = {
                     ...field,
                     value,
-                });
+                };
+
+                if (isConfidenceScoreEnabled) {
+                    const confidenceScore = mapDetailedFieldToConfidenceScore(rawValue);
+                    if (confidenceScore) {
+                        fieldEntry.confidenceScore = confidenceScore;
+                    }
+
+                    const targetLocation = parseTargetLocation(rawValue);
+                    if (targetLocation) {
+                        fieldEntry.targetLocation = targetLocation;
+                    }
+                }
+
+                fields.push(fieldEntry);
             });
         } else {
             // Get Metadata Fields for Custom Instances
@@ -557,7 +587,7 @@ class Metadata extends File {
                     fields.push({
                         key,
                         type: 'string',
-                        value: instance[key],
+                        value: extractDetailedFieldValue(instance[key]),
                     });
                 }
             });
@@ -594,6 +624,7 @@ class Metadata extends File {
         enterpriseTemplates: Array<MetadataTemplate>,
         globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
+        isConfidenceScoreEnabled: boolean = false,
     ): Promise<Array<MetadataTemplateInstance>> {
         // Get all usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -609,7 +640,13 @@ class Metadata extends File {
                 const result = await this.getTemplateForInstance(id, instance, templates);
                 if (result && result.template) {
                     templateInstances.push(
-                        this.createTemplateInstance(instance, result.template, canEdit, result.isExternallyOwned),
+                        this.createTemplateInstance(
+                            instance,
+                            result.template,
+                            canEdit,
+                            result.isExternallyOwned,
+                            isConfidenceScoreEnabled,
+                        ),
                     );
                 }
             }),
@@ -640,6 +677,7 @@ class Metadata extends File {
         hasMetadataFeature: boolean,
         options: RequestOptions = {},
         isMetadataRedesign: boolean = false,
+        isConfidenceScoreEnabled: boolean = false,
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
         this.errorCode = ERROR_CODE_FETCH_METADATA;
@@ -672,7 +710,7 @@ class Metadata extends File {
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
             const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
-                this.getInstances(id, isMetadataRedesign),
+                this.getInstances(id, isMetadataRedesign, isConfidenceScoreEnabled),
                 this.getTemplates(id, METADATA_SCOPE_GLOBAL),
                 hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
             ]);
@@ -688,6 +726,7 @@ class Metadata extends File {
                       enterpriseTemplates,
                       globalTemplates,
                       !!permissions.can_upload,
+                      isConfidenceScoreEnabled,
                   )
                 : [];
             const editors = !isMetadataRedesign

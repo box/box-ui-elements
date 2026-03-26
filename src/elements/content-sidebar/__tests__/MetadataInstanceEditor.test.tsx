@@ -171,6 +171,16 @@ describe('MetadataInstanceEditor', () => {
         expect(templateHeader).toBeInTheDocument();
     });
 
+    test('should render without onToggleReviewFilter prop (optional)', () => {
+        const props = { ...defaultProps, onToggleReviewFilter: undefined };
+        expect(() => renderWithAutofill(<MetadataInstanceEditor {...props} />)).not.toThrow();
+    });
+
+    test('should render without shouldShowOnlyReviewFields prop (defaults to false)', () => {
+        const props = { ...defaultProps, shouldShowOnlyReviewFields: undefined };
+        expect(() => renderWithAutofill(<MetadataInstanceEditor {...props} />)).not.toThrow();
+    });
+
     test('should call taxonomyOptionsFetcher on metadata taxonomy field search', async () => {
         const taxonomyField: MetadataTemplateField = {
             type: 'taxonomy',

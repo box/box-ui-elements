@@ -96,6 +96,16 @@ function MetadataSidebarRedesign({
     createSessionRequest,
     getStructuredTextRep,
 }: MetadataSidebarRedesignProps) {
+    const { formatMessage } = useIntl();
+    const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
+    const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
+    const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
+    const isAdvancedExtractAgentEnabled: boolean = useFeatureEnabled('metadata.extractAdvancedAgents.enabled');
+    const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
+        'metadata.deleteConfirmationModalCheckbox.enabled',
+    );
+    const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
+
     const {
         clearExtractError,
         extractSuggestions,
@@ -108,17 +118,7 @@ function MetadataSidebarRedesign({
         errorMessage,
         status,
         templateInstances,
-    } = useSidebarMetadataFetcher(api, fileId, onError, onSuccess, isFeatureEnabled);
-
-    const { formatMessage } = useIntl();
-    const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
-    const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
-    const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
-    const isAdvancedExtractAgentEnabled: boolean = useFeatureEnabled('metadata.extractAdvancedAgents.enabled');
-    const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
-        'metadata.deleteConfirmationModalCheckbox.enabled',
-    );
-    const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
+    } = useSidebarMetadataFetcher(api, fileId, onError, onSuccess, isFeatureEnabled, isConfidenceScoreReviewEnabled);
     const isSessionInitiated = useRef(false);
 
     const [isLargeFile, setIsLargeFile] = useState<boolean>(false);
@@ -126,6 +126,7 @@ function MetadataSidebarRedesign({
     const [editingTemplate, setEditingTemplate] = useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState<boolean>(false);
+    const [shouldShowOnlyReviewFields, setShouldShowOnlyReviewFields] = useState<boolean>(false);
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
@@ -186,6 +187,7 @@ function MetadataSidebarRedesign({
     const handleCancel = () => {
         clearExtractError();
         setEditingTemplate(null);
+        setShouldShowOnlyReviewFields(false);
     };
 
     const handleDiscardUnsavedChanges = () => {
@@ -323,7 +325,9 @@ function MetadataSidebarRedesign({
                             onDelete={handleDeleteInstance}
                             onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
                             onSubmit={handleSubmit}
+                            onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
                             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
@@ -336,9 +340,10 @@ function MetadataSidebarRedesign({
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
-                            onEdit={templateInstance => {
+                            onEdit={(templateInstance, shouldEnableReviewFilter = false) => {
                                 setEditingTemplate(templateInstance);
                                 setIsDeleteButtonDisabled(false);
+                                setShouldShowOnlyReviewFields(shouldEnableReviewFilter);
                             }}
                             templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
