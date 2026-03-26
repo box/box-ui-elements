@@ -68,7 +68,7 @@ type ContentSharingProps = {
     /** onError - Callback when item data fails to load, preventing USM from opening */
     onError?: (error: ElementsXhrError) => void,
     /** onSendSharedLink - Callback to email the shared link to the selected contacts */
-    onSendSharedLink?: SharingService['sendSharedLink'],
+    onSendSharedLink?: $PropertyType<SharingService, 'sendSharedLink'>,
     /** token - Valid access token */
     token: string,
     /** uuid - Unique identifier, used for refreshing element visibility when called from the ES6 wrapper */
