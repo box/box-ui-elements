@@ -459,6 +459,32 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         });
     });
 
+    test('should pass isConfidenceScoreReviewEnabled to useSidebarMetadataFetcher', () => {
+        renderComponent({}, { 'metadata.confidenceScore.enabled': true });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            true, // isConfidenceScoreReviewEnabled
+        );
+    });
+
+    test('should pass isConfidenceScoreReviewEnabled=false when feature flag is off', () => {
+        renderComponent({}, { 'metadata.confidenceScore.enabled': false });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            false,
+        );
+    });
+
     test('should call createSessionRequest once', async () => {
         const createSessionRequest = jest.fn().mockResolvedValue({});
         renderComponent({ api, createSessionRequest }, { 'metadata.aiSuggestions.enabled': true });

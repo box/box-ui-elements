@@ -7,7 +7,13 @@
 import type Xhr from '../utils/Xhr';
 import type { Comment } from '../common/types/feed';
 import { getAbortError } from '../utils/error';
-import type { MetadataTemplateField, MetadataFieldValue } from '../common/types/metadata';
+import type {
+    MetadataConfidenceScoreData,
+    MetadataDetailedFieldValue,
+    MetadataFieldValue,
+    MetadataTargetLocationEntry,
+    MetadataTemplateField,
+} from '../common/types/metadata';
 import { FIELD_TYPE_TAXONOMY } from '../features/metadata-instance-fields/constants';
 
 /**
@@ -40,10 +46,66 @@ const formatMetadataFieldValue = (field: MetadataTemplateField, value: MetadataF
     return value;
 };
 
+const isDetailedFieldValue = (fieldValue: any): boolean %checks =>
+    fieldValue != null && typeof fieldValue === 'object' && !Array.isArray(fieldValue) && 'values' in fieldValue;
+
+const extractDetailedFieldValue = (fieldValue: any): MetadataFieldValue => {
+    if (isDetailedFieldValue(fieldValue)) {
+        return ((fieldValue: any): MetadataDetailedFieldValue).values;
+    }
+    return fieldValue;
+};
+
+const mapDetailedFieldToConfidenceScore = (fieldValue: any): ?MetadataConfidenceScoreData => {
+    if (!isDetailedFieldValue(fieldValue)) {
+        return undefined;
+    }
+
+    const { details } = ((fieldValue: any): MetadataDetailedFieldValue);
+    if (!details || details.confidenceScore == null || !details.confidenceLevel) {
+        return undefined;
+    }
+
+    return {
+        value: details.confidenceScore,
+        level: details.confidenceLevel,
+        isAccepted: details.process === 'AI_ACCEPTED',
+    };
+};
+
+const parseTargetLocation = (fieldValue: any): ?Array<MetadataTargetLocationEntry> => {
+    if (!isDetailedFieldValue(fieldValue)) {
+        return undefined;
+    }
+
+    const { details } = ((fieldValue: any): MetadataDetailedFieldValue);
+    if (!details || !details.targetLocation) {
+        return undefined;
+    }
+
+    try {
+        const parsed = JSON.parse(details.targetLocation);
+        if (!Array.isArray(parsed)) {
+            return undefined;
+        }
+        return parsed;
+    } catch {
+        return undefined;
+    }
+};
+
 const handleOnAbort = (xhr: Xhr) => {
     xhr.abort();
 
     throw getAbortError();
 };
 
-export { formatComment, formatMetadataFieldValue, handleOnAbort };
+export {
+    extractDetailedFieldValue,
+    formatComment,
+    formatMetadataFieldValue,
+    handleOnAbort,
+    isDetailedFieldValue,
+    mapDetailedFieldToConfidenceScore,
+    parseTargetLocation,
+};
