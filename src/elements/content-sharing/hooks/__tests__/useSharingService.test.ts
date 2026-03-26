@@ -1,5 +1,7 @@
 import { renderHook } from '@testing-library/react';
 
+import type { CollaborationFormData, SharingResponse } from '@box/unified-share-modal';
+
 import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
 import { createSharingService } from '../../sharingService';
 import { convertCollab, convertCollabsRequest, convertItemResponse } from '../../utils';
@@ -57,6 +59,7 @@ const mockConvertedData = {
     sharedLink: mockSharedLink,
 };
 
+const mockOnSendSharedLink = jest.fn();
 const mockSetItem = jest.fn();
 const mockSetSharedLink = jest.fn();
 const mockSetCollaborators = jest.fn();
@@ -71,6 +74,7 @@ const renderHookWithProps = (props = {}) => {
             item: mockItem,
             itemId: mockItemId,
             itemType: TYPE_FILE,
+            onSendSharedLink: mockOnSendSharedLink,
             sharedLink: mockSharedLink,
             sharingServiceProps: mockSharingServiceProps,
             setCollaborators: mockSetCollaborators,
@@ -100,7 +104,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
     test('should return null itemApiInstance and sharingService when item is null', () => {
         const { result } = renderHookWithProps({ item: null });
 
-        expect(result.current.sharingService).toEqual({ sendInvitations: expect.any(Function) });
+        expect(result.current).toEqual({ sendInvitations: expect.any(Function), sendSharedLink: mockOnSendSharedLink });
         expect(mockApi.getFileAPI).not.toHaveBeenCalled();
         expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
         expect(createSharingService).not.toHaveBeenCalled();
@@ -110,9 +114,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
         mockApi.getFileAPI.mockReturnValue({});
         const { result } = renderHookWithProps({ sharedLink: null });
 
-        expect(result.current.sharingService).toEqual({
+        expect(result.current).toEqual({
             ...mockSharingService,
             sendInvitations: expect.any(Function),
+            sendSharedLink: mockOnSendSharedLink,
         });
         expect(mockApi.getFileAPI).toHaveBeenCalled();
         expect(createSharingService).toHaveBeenCalledWith(
@@ -129,7 +134,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
     test('should return null itemApiInstance and sharingService when itemType is neither TYPE_FILE nor TYPE_FOLDER', () => {
         const { result } = renderHookWithProps({ itemType: 'hubs' });
 
-        expect(result.current.sharingService).toEqual({ sendInvitations: expect.any(Function) });
+        expect(result.current).toEqual({ sendInvitations: expect.any(Function), sendSharedLink: mockOnSendSharedLink });
         expect(mockApi.getFileAPI).not.toHaveBeenCalled();
         expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
         expect(createSharingService).not.toHaveBeenCalled();
@@ -161,9 +166,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
             expect(mockApi.getFileAPI).toHaveBeenCalled();
             expect(mockApi.getFolderAPI).not.toHaveBeenCalled();
-            expect(result.current.sharingService).toEqual({
+            expect(result.current).toEqual({
                 ...mockSharingService,
                 sendInvitations: expect.any(Function),
+                sendSharedLink: mockOnSendSharedLink,
             });
             expect(createSharingService).toHaveBeenCalledWith({
                 hasSharedLink: false,
@@ -218,9 +224,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
             expect(mockApi.getFolderAPI).toHaveBeenCalled();
             expect(mockApi.getFileAPI).not.toHaveBeenCalled();
-            expect(result.current.sharingService).toEqual({
+            expect(result.current).toEqual({
                 ...mockSharingService,
                 sendInvitations: expect.any(Function),
+                sendSharedLink: mockOnSendSharedLink,
             });
             expect(createSharingService).toHaveBeenCalledWith({
                 hasSharedLink: false,
@@ -345,10 +352,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 mockSendInvitations.mockResolvedValue(mockResult);
                 const { result } = renderHookWithProps();
 
-                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                const sendInvitationsResult = (await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                });
+                } as unknown as CollaborationFormData)) as SharingResponse;
 
                 expect(mockFormatMessage).toHaveBeenCalledWith(
                     expect.objectContaining({ id: 'be.contentSharing.sendInvitationsSuccess' }),
@@ -365,23 +372,24 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 mockSendInvitations.mockResolvedValue(mockResult);
                 const { result } = renderHookWithProps();
 
-                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                const sendInvitationsResult = (await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                });
+                } as unknown as CollaborationFormData)) as SharingResponse;
 
                 expect(mockFormatMessage).toHaveBeenNthCalledWith(
                     1,
-                    expect.objectContaining({ id: 'be.contentSharing.sendInvitationsError' }),
-                    { count: 1 }, // Counts of invitations not sent
-                );
-                expect(mockFormatMessage).toHaveBeenNthCalledWith(
-                    2,
                     expect.objectContaining({ id: 'be.contentSharing.sendInvitationsSuccess' }),
                     { count: 2 }, // Counts of successfully invited collaborators
                 );
-                expect(sendInvitationsResult.messages[0].type).toEqual('error');
-                expect(sendInvitationsResult.messages[1].type).toEqual('success');
+                expect(mockFormatMessage).toHaveBeenNthCalledWith(
+                    2,
+                    expect.objectContaining({ id: 'be.contentSharing.sendInvitationsError' }),
+                    { count: 1 }, // Counts of invitations not sent
+                );
+
+                expect(sendInvitationsResult.messages[0].type).toEqual('success');
+                expect(sendInvitationsResult.messages[1].type).toEqual('error');
             });
 
             test('should return error notification when no contacts are successfully invited', async () => {
@@ -389,10 +397,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 mockSendInvitations.mockResolvedValue(mockResult);
                 const { result } = renderHookWithProps();
 
-                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                const sendInvitationsResult = (await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                });
+                } as unknown as CollaborationFormData)) as SharingResponse;
 
                 expect(mockFormatMessage).toHaveBeenCalledWith(
                     expect.objectContaining({ id: 'be.contentSharing.sendInvitationsError' }),
@@ -405,10 +413,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 mockSendInvitations.mockResolvedValue(null);
                 const { result } = renderHookWithProps();
 
-                const sendInvitationsResult = await result.current.sharingService.sendInvitations({
+                const sendInvitationsResult = await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                });
+                } as unknown as CollaborationFormData);
 
                 expect(sendInvitationsResult).toBeNull();
             });

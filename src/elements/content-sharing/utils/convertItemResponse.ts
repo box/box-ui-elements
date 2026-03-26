@@ -1,8 +1,9 @@
 import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_EDIT } from '../../../constants';
 
-import { API_TO_USM_CLASSIFICATION_COLORS_MAP } from '../constants';
 import { getAllowedAccessLevels } from './getAllowedAccessLevels';
 import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
+
+import { API_TO_USM_CLASSIFICATION_COLORS_MAP, API_TO_USM_COLLAB_ROLE_MAP } from '../constants';
 
 import type { ContentSharingItemAPIResponse, ItemData } from '../types';
 
@@ -42,7 +43,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         };
     }
 
-    const isEditAllowed = allowed_invitee_roles.indexOf(INVITEE_ROLE_EDITOR) !== -1;
+    const isEditAllowed = allowed_invitee_roles.includes(INVITEE_ROLE_EDITOR);
 
     let sharedLink;
     if (shared_link) {
@@ -89,7 +90,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
     }
 
     const collaborationRoles = allowed_invitee_roles.map(role => ({
-        id: role,
+        id: API_TO_USM_COLLAB_ROLE_MAP[role],
         isDefault: role === INVITEE_ROLE_EDITOR,
     }));
 

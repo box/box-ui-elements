@@ -57,7 +57,9 @@ function useInvites(api: API, itemID: string, itemType: ItemType, options: UseIn
                 if (!transformRequest) return Promise.resolve(null);
 
                 const { users, groups } = transformRequest(collabRequest);
+
                 setIsLoading(true);
+
                 try {
                     return await Promise.all([
                         ...users.map(user => sendCollabRequest(user)),

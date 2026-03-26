@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
-import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
+import type { SharingService } from '@box/unified-share-modal';
+
 import { convertItemResponse, convertCollab, convertCollabsRequest } from '../utils';
 import { createSharingService } from '../sharingService';
 import useInvites from './useInvites';
+
+import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
 
 import messages from '../messages';
 
@@ -16,12 +19,13 @@ export const useSharingService = ({
     item,
     itemId,
     itemType,
+    onSendSharedLink,
     sharedLink,
     sharingServiceProps,
     setCollaborators,
     setItem,
     setSharedLink,
-}) => {
+}): SharingService => {
     const { formatMessage } = useIntl();
 
     // itemApiInstance should only be called once or the API will cause an issue where it gets cancelled
@@ -41,7 +45,7 @@ export const useSharingService = ({
         return null;
     }, [api, item, itemType]);
 
-    const sharingService = React.useMemo(() => {
+    const sharedLinkService = React.useMemo(() => {
         if (!itemApiInstance) {
             return null;
         }
@@ -79,21 +83,25 @@ export const useSharingService = ({
     }, [itemApiInstance, itemId, sharedLink, sharingServiceProps, setItem, setSharedLink]);
 
     // Create the sendInvitations callbacks using the existing memoized useInvites hook
-    const handleSuccess = response => {
-        const { id: ownerId, login: ownerEmail } = response.created_by;
-        const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
-        setCollaborators(prevList => {
-            const newCollab = convertCollab({
-                avatarUrlMap,
-                collab: response,
-                currentUserId,
-                isCurrentUserOwner: currentUserId === ownerId,
-                ownerEmailDomain,
-            });
+    const handleSuccess = React.useCallback(
+        response => {
+            const { id: ownerId, login: ownerEmail } = response.created_by;
+            const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
-            return newCollab ? [...prevList, newCollab] : prevList;
-        });
-    };
+            setCollaborators(prevCollabs => {
+                const nextCollab = convertCollab({
+                    avatarUrlMap,
+                    collab: response,
+                    currentUserId,
+                    isCurrentUserOwner: currentUserId === ownerId,
+                    ownerEmailDomain,
+                });
+
+                return nextCollab ? [...prevCollabs, nextCollab] : prevCollabs;
+            });
+        },
+        [avatarUrlMap, currentUserId, setCollaborators],
+    );
 
     const handleSendInvitations = useInvites(api, itemId, itemType, {
         collaborators,
@@ -102,33 +110,51 @@ export const useSharingService = ({
         transformRequest: data => convertCollabsRequest(data, collaborators),
     });
 
-    const sendInvitations = (...request) => {
-        return handleSendInvitations(...request).then(response => {
-            const { contacts: collabRequest } = request[0];
-            if (!response || !collabRequest || collabRequest.length === 0) {
+    const sendInvitations = React.useCallback(
+        async data => {
+            if (!handleSendInvitations) {
+                return null;
+            }
+
+            const response = await handleSendInvitations(data);
+
+            const { contacts } = data;
+
+            if (!response || !contacts?.length) {
                 return null;
             }
 
             const successCount = response.length;
-            const errorCount = collabRequest.length - successCount;
+            const errorCount = contacts.length - successCount;
 
-            const notification = [];
-            if (errorCount > 0) {
-                notification.push({
-                    text: formatMessage(messages.sendInvitationsError, { count: errorCount }),
-                    type: 'error',
-                });
-            }
-            if (successCount > 0) {
-                notification.push({
+            const notifications = [];
+
+            if (successCount) {
+                notifications.push({
                     text: formatMessage(messages.sendInvitationsSuccess, { count: successCount }),
                     type: 'success',
                 });
             }
 
-            return notification.length > 0 ? { messages: notification } : null;
-        });
-    };
+            if (errorCount) {
+                notifications.push({
+                    text: formatMessage(messages.sendInvitationsError, { count: errorCount }),
+                    type: 'error',
+                });
+            }
 
-    return { sharingService: { ...sharingService, sendInvitations } };
+            return notifications.length ? { messages: notifications } : null;
+        },
+        [formatMessage, handleSendInvitations],
+    );
+
+    const sharingService = React.useMemo(() => {
+        return {
+            sendInvitations,
+            sendSharedLink: onSendSharedLink,
+            ...sharedLinkService,
+        };
+    }, [onSendSharedLink, sendInvitations, sharedLinkService]);
+
+    return sharingService;
 };
