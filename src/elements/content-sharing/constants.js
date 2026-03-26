@@ -87,6 +87,16 @@ export const PEOPLE_IN_ITEM = 'peopleInThisItem';
 export const COLLAB_USER_TYPE = 'user';
 export const COLLAB_GROUP_TYPE = 'group';
 
+export const SORTED_INVITEE_ROLES = [
+    'co-owner',
+    'editor',
+    'viewer uploader',
+    'previewer uploader',
+    'viewer',
+    'previewer',
+    'uploader',
+];
+
 export const API_TO_USM_COLLAB_ROLE_MAP = {
     'co-owner': 'co_owner',
     editor: 'editor',

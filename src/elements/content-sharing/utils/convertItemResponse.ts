@@ -3,7 +3,7 @@ import { ACCESS_COLLAB, INVITEE_ROLE_EDITOR, PERMISSION_CAN_DOWNLOAD, PERMISSION
 import { getAllowedAccessLevels } from './getAllowedAccessLevels';
 import { getAllowedPermissionLevels } from './getAllowedPermissionLevels';
 
-import { API_TO_USM_CLASSIFICATION_COLORS_MAP, API_TO_USM_COLLAB_ROLE_MAP } from '../constants';
+import { API_TO_USM_CLASSIFICATION_COLORS_MAP, API_TO_USM_COLLAB_ROLE_MAP, SORTED_INVITEE_ROLES } from '../constants';
 
 import type { ContentSharingItemAPIResponse, ItemData } from '../types';
 
@@ -89,7 +89,9 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         };
     }
 
-    const collaborationRoles = allowed_invitee_roles.toSorted().map(role => ({
+    const sortedAllowedRoles = SORTED_INVITEE_ROLES.filter(role => allowed_invitee_roles.includes(role));
+
+    const collaborationRoles = sortedAllowedRoles.map(role => ({
         id: API_TO_USM_COLLAB_ROLE_MAP[role],
         isDefault: role === INVITEE_ROLE_EDITOR,
     }));
