@@ -1419,19 +1419,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@^4.104.7":
-  version "4.104.7"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.104.7.tgz#45ce699aaba5e20226444112bab31eb1ca003035"
-  integrity sha512-RFrWEnjz/s1QzLuAZasLUSiGaRwGPxaM/zUM91lyl/5jRytGpY65xym5+jKQXtGihmzwxkoIb/Q4Pl/npLFOAA==
+"@box/blueprint-web-assets@^4.110.3":
+  version "4.110.3"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.110.3.tgz#3692716f89d6e6807a5d9dbb0500c80db1bc34c5"
+  integrity sha512-TEMIhSq49YQWG8gkOcRx/4H6XSOYGG73pqfvSeR7mqwNJA6DzeyVAWC3zD/QLJaMMbiyVyHWPT9S3jhhguPtlA==
 
-"@box/blueprint-web@^13.5.12":
-  version "13.5.12"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-13.5.12.tgz#d50929563deae3d1f043cca16caa13ea267f647e"
-  integrity sha512-rjsScSPXr8+9Uu2oQBCgHwoVkFBFTGCvOVMPnJ9JD0OekVF24ZyAg0aW6Yo0xlRnkcDz+26As0M9obB6thmcFA==
+"@box/blueprint-web@^13.10.0":
+  version "13.10.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-13.10.0.tgz#a02684a04f03e452209b563724408a7e3fff5436"
+  integrity sha512-RlE1Im7qpI93UPMHbFMJTru2IL1n4m5W3JgY3FdEAiLg2QJ7ICDwyaa1uctjcVuD0Y00Dsakd+pItQpi2f8fdw==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.104.7"
+    "@box/blueprint-web-assets" "^4.110.3"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1480,18 +1480,18 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/combobox-with-api@^1.32.1":
-  version "1.32.1"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-1.32.1.tgz#69637dd7c96553342f62f1dbc9d75fcac990f848"
-  integrity sha512-ZzGbm4smQXmzvkgjUtSzxeDXnZFDMdW3Y+I6IG8UHyP7l8gjEoks0CzZ6HSipSbTy87beuUYT+jGFKvvmtnJgw==
+"@box/combobox-with-api@^1.41.42":
+  version "1.41.42"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-1.41.42.tgz#dad8db323e828ec373cfa495352638ca379198f0"
+  integrity sha512-HVesv8NNhgRKS+CJah9ZEcui9xr6dxI77irybSI8316KALFu2tvNB3w2BiAACe6ewVRmppaKge8IU+9ntUaRWg==
   dependencies:
-    "@box/tree" "^1.29.1"
+    "@box/tree" "^1.37.42"
     react-accessible-treeview "2.9.0"
 
-"@box/copy-input@^1.39.17":
-  version "1.39.17"
-  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-1.39.17.tgz#52ae6d53ac1b70edc7fd82b475ef4eb1ec5ca37f"
-  integrity sha512-Wgjp2Y6LQ7gVTHWm5E8WDovo5HKVcAQ7NaUA5SfMas8lOdYSJ808r1Ogi6ZGWOeSWB+JAUbP5d1R//2+bxWnSQ==
+"@box/copy-input@^1.39.41":
+  version "1.39.41"
+  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-1.39.41.tgz#c24244edfe7ad3278189b525ed37eb1542b43ee6"
+  integrity sha512-zPHsdbrnZ+oZ9kPMREAZ+yX063/9ksleZzrElO0PG2qCVJDRUifGCyOuuFZgdCT/Fb4jqw1FCRpzR66tnmysww==
 
 "@box/frontend@^11.0.1":
   version "11.0.1"
@@ -1502,10 +1502,10 @@
     rimraf "^3.0.0"
     semver "^7.4.0"
 
-"@box/item-icon@^0.27.1":
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-0.27.1.tgz#93e653b64ec32bd3f12e8f3527fe367763eb36f2"
-  integrity sha512-La1vgr4wD0SfbfQCUtthdbkm67AG7ju3BVC2/Jt14yw4q7+6IHwiKKY2L0GXr9JRMv/XOGxwiLSq+hzUHFtMKg==
+"@box/item-icon@^2.30.42":
+  version "2.30.42"
+  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-2.30.42.tgz#378123cc57f3b7b0e972816a9d2f82bf755c4c14"
+  integrity sha512-xOSFr3NkMwjyLpU1ezVZC8Z+ICDzA8SyWa/elFDZsr90xpb5v/uQ8YTviWvB3CXiLwJkJbVBXcUT99cPuA6aMg==
 
 "@box/languages@^1.0.0":
   version "1.1.2"
@@ -1539,25 +1539,25 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/tree@^1.29.1":
-  version "1.29.1"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-1.29.1.tgz#498092e93aa6b811448042fb984a121091a66bed"
-  integrity sha512-290GesW0792Wgjt0C5YfP3aJ8jfmFJxqOpjtGU/QMGf1KkXgUuQwgen3tBuO1NJiZ2X1YH+3GpMeq7qzyeUOsQ==
+"@box/tree@^1.37.42":
+  version "1.37.42"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-1.37.42.tgz#c769a92f883eb8d9b6499d38019874838dfcaadb"
+  integrity sha512-BZXk+BFSuwQHNYDC3kv1yJFXFXEou+y4YMLUbdHaAq3dhHZ56cVTfaAe83cwaShBH+3tEAHcIxkwD6OZqSxRyg==
 
-"@box/types@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@box/types/-/types-0.2.1.tgz#cd0a3915b2306e4cf581f6091b95f5d2db75ea60"
-  integrity sha512-wd6nRR9QxBl7lYKJ/Hix0AKg1PNC3leZWOJ9Nt+d4j45WxCYBiCemZAtY2ekL5BITpVw8vlLmquzSpPhDTeO5A==
+"@box/types@^2.1.8":
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/@box/types/-/types-2.1.8.tgz#8ff5972f2fc0ea80e511dbcfcdc76dce72f8891f"
+  integrity sha512-Cj869wVrXRH0Z5gz5hOlmGciJqbWaEuZcbL4Jd09gF9igBbzmGzfVfiuOgas1940oXwXuTUnQzTyf5mJ646UiQ==
 
-"@box/unified-share-modal@^2.7.10":
-  version "2.7.10"
-  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-2.7.10.tgz#3eacb8aa5269fe8c5d1aed4b0f7e90b44ee24005"
-  integrity sha512-+xNAQfkeA4Yyizw+svfWVxbYg2hmF2FuDStlsWvX5BaUuhMo/Kd+jCL7/mUDqwhiPP65k4eNNzGjnXnlHGiVUA==
+"@box/unified-share-modal@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-2.9.1.tgz#503febd1a8da4a30d9cbca613b5094bff80e8268"
+  integrity sha512-qIVNeYuPPi7J9EJGmKc5In9cIVMOK1wG+MLUDLTtodx6T39x92bQA19d9ozPpOWqcWjdcBQVEt70J5ew3Zei2w==
 
-"@box/user-selector@^1.73.18":
-  version "1.73.18"
-  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-1.73.18.tgz#b282ff0e71a11a0d106f12bdc025fe60f49ae44e"
-  integrity sha512-hN+k1fYOpQfmw2dWnMRSGDTK4skNqFHTxS0uv0wjFUmon0VbEBBLbmljB7E8BSstdjO0BxNdLmY2TYgJ17fSWA==
+"@box/user-selector@^1.73.42":
+  version "1.73.42"
+  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-1.73.42.tgz#e55cd6a99a05f2df84aac8d04460149c5c6a2edf"
+  integrity sha512-1pBov+wMi4gPFoGl7Oi52hXjb7ZTwNf/gelCt5fteAvfsdLs/7rGiUvQVx6d8FVC2SOrGF0RiA6D3AFlPFLjKQ==
 
 "@bundled-es-modules/cookie@^2.0.1":
   version "2.0.1"
