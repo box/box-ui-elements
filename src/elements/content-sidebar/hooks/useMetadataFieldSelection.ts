@@ -16,8 +16,8 @@ function convertTargetLocationToBoundingBox(
         id: `bbox-${id}-${index + 1}`,
         x: clampPercentage(item.boundingBox.left * 100 - 0.5),
         y: clampPercentage(item.boundingBox.top * 100 - 0.5),
-        width: clampPercentage(item.boundingBox.right - item.boundingBox.left * 100 + 1),
-        height: clampPercentage(item.boundingBox.bottom - item.boundingBox.top * 100 + 1),
+        width: clampPercentage((item.boundingBox.right - item.boundingBox.left) * 100 + 1),
+        height: clampPercentage((item.boundingBox.bottom - item.boundingBox.top) * 100 + 1),
         pageNumber: item.page + 1,
     }));
 }

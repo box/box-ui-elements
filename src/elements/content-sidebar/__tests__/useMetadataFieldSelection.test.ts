@@ -51,7 +51,7 @@ describe('useMetadataFieldSelection', () => {
                             itemId: 'item-1',
                             page: 0,
                             text: 'test text',
-                            boundingBox: { left: 0.1, top: 0.2, right: 50, bottom: 60 },
+                            boundingBox: { left: 0.1, top: 0.2, right: 0.5, bottom: 0.6 },
                         },
                     ],
                 }),
@@ -61,10 +61,10 @@ describe('useMetadataFieldSelection', () => {
         expect(mockShowBoundingBoxHighlights).toHaveBeenCalledWith([
             {
                 id: 'bbox-field-1-1',
-                x: expect.any(Number),
-                y: expect.any(Number),
-                width: expect.any(Number),
-                height: expect.any(Number),
+                x: 9.5,
+                y: 19.5,
+                width: 41,
+                height: 41,
                 pageNumber: 1,
             },
         ]);
@@ -125,7 +125,7 @@ describe('useMetadataFieldSelection', () => {
                             itemId: 'item-1',
                             page: 0,
                             text: 'test text',
-                            boundingBox: { left: 0.1, top: 0.2, right: 50, bottom: 60 },
+                            boundingBox: { left: 0.1, top: 0.2, right: 0.5, bottom: 0.6 },
                         },
                     ],
                 }),
@@ -245,13 +245,13 @@ describe('useMetadataFieldSelection', () => {
                                 itemId: 'item-1',
                                 page: 0,
                                 text: 'first',
-                                boundingBox: { left: 0.1, top: 0.2, right: 50, bottom: 60 },
+                                boundingBox: { left: 0.1, top: 0.2, right: 0.5, bottom: 0.6 },
                             },
                             {
                                 itemId: 'item-2',
                                 page: 2,
                                 text: 'second',
-                                boundingBox: { left: 0.3, top: 0.4, right: 70, bottom: 80 },
+                                boundingBox: { left: 0.3, top: 0.4, right: 0.7, bottom: 0.8 },
                             },
                         ],
                     }),
@@ -259,8 +259,8 @@ describe('useMetadataFieldSelection', () => {
             });
 
             expect(mockShowBoundingBoxHighlights).toHaveBeenCalledWith([
-                expect.objectContaining({ id: 'bbox-field-1-1', pageNumber: 1 }),
-                expect.objectContaining({ id: 'bbox-field-1-2', pageNumber: 3 }),
+                { id: 'bbox-field-1-1', x: 9.5, y: 19.5, width: 41, height: 41, pageNumber: 1 },
+                { id: 'bbox-field-1-2', x: 29.5, y: 39.5, width: 41, height: 41, pageNumber: 3 },
             ]);
         });
 
@@ -285,22 +285,23 @@ describe('useMetadataFieldSelection', () => {
                                 itemId: 'item-1',
                                 page: 0,
                                 text: 'test',
-                                boundingBox: { left: 0, top: 0, right: 200, bottom: 200 },
+                                boundingBox: { left: 0, top: 0, right: 1.5, bottom: 1.5 },
                             },
                         ],
                     }),
                 );
             });
 
-            const calledWith = mockShowBoundingBoxHighlights.mock.calls[0][0][0];
-            expect(calledWith.x).toBeGreaterThanOrEqual(0);
-            expect(calledWith.x).toBeLessThanOrEqual(100);
-            expect(calledWith.y).toBeGreaterThanOrEqual(0);
-            expect(calledWith.y).toBeLessThanOrEqual(100);
-            expect(calledWith.width).toBeGreaterThanOrEqual(0);
-            expect(calledWith.width).toBeLessThanOrEqual(100);
-            expect(calledWith.height).toBeGreaterThanOrEqual(0);
-            expect(calledWith.height).toBeLessThanOrEqual(100);
+            expect(mockShowBoundingBoxHighlights).toHaveBeenCalledWith([
+                {
+                    id: 'bbox-field-1-1',
+                    x: 0,
+                    y: 0,
+                    width: 100,
+                    height: 100,
+                    pageNumber: 1,
+                },
+            ]);
         });
     });
 });
