@@ -368,14 +368,76 @@ export const mockUpdateCustomMetadataRequest = {
 export const aiSuggestionsForMyAttribute = {
     url: `${apiV2Path}/ai/extract_structured`,
     response: {
-        myAttribute: 'it works fine',
+        answer: {
+            myAttribute: 'it works fine',
+        },
+        created_at: '2024-04-01T00:00:00.000+00:00',
+        completion_reason: 'done',
     },
 };
 
 export const aiSuggestionForDateField = {
     url: `${apiV2Path}/ai/extract_structured`,
     response: {
-        dateField: '2024-04-01T00:00:00Z',
+        answer: {
+            dateField: '2024-04-01T00:00:00Z',
+        },
+        created_at: '2024-04-01T00:00:00.000+00:00',
+        completion_reason: 'done',
+    },
+};
+
+export const aiSuggestionsMultiFieldLowConfidence = {
+    url: `${apiV2Path}/ai/extract_structured`,
+    response: {
+        answer: {
+            someAttribute1: 'Suggestion Value 1',
+            someAttribute2: 'Suggestion Value 2',
+            someAttribute3: 'Suggestion Value 3',
+        },
+        created_at: '2024-04-01T00:00:00.000+00:00',
+        completion_reason: 'done',
+        confidence_score: {
+            someAttribute1: {
+                level: 'LOW',
+                score: 0.2,
+            },
+            someAttribute2: {
+                level: 'LOW',
+                score: 0.15,
+            },
+            someAttribute3: {
+                level: 'LOW',
+                score: 0.25,
+            },
+        },
+    },
+};
+
+export const aiSuggestionsMultiFieldHighConfidence = {
+    url: `${apiV2Path}/ai/extract_structured`,
+    response: {
+        answer: {
+            someAttribute1: 'Suggestion Value 1',
+            someAttribute2: 'Suggestion Value 2',
+            someAttribute3: 'Suggestion Value 3',
+        },
+        created_at: '2024-04-01T00:00:00.000+00:00',
+        completion_reason: 'done',
+        confidence_score: {
+            someAttribute1: {
+                level: 'HIGH',
+                score: 0.95,
+            },
+            someAttribute2: {
+                level: 'HIGH',
+                score: 0.92,
+            },
+            someAttribute3: {
+                level: 'HIGH',
+                score: 0.97,
+            },
+        },
     },
 };
 
