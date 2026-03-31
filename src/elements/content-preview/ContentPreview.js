@@ -102,6 +102,7 @@ type Props = {
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
     enableThumbnailsSidebar: boolean,
+    enableBoundingBoxHighlights: boolean,
     features?: FeatureConfig,
     fileId?: string,
     fileOptions?: Object,
