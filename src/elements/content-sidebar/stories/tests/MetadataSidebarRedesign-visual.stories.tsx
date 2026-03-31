@@ -8,6 +8,8 @@ import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
     aiSuggestionForDateField,
     aiSuggestionsForMyAttribute,
+    aiSuggestionsMultiFieldHighConfidence,
+    aiSuggestionsMultiFieldLowConfidence,
     fileIdWithMetadata,
     fileIdWithoutMetadata,
     mockEmptyMetadataInstances,
@@ -40,6 +42,11 @@ const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign
 };
 const mockFeatures = {
     'metadata.redesign.enabled': true,
+};
+const confidenceFeatures = {
+    ...mockFeatures,
+    'metadata.aiSuggestions.enabled': true,
+    'metadata.confidenceScore.enabled': true,
 };
 const mockLogger = {
     onReadyMetric: ({ endMarkName }) => {
@@ -574,6 +581,159 @@ export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof Metadata
             },
             { timeout: 5000 },
         );
+    },
+};
+
+// ──────────────────────────────────────────────────────────
+// Confidence score stories: Autofill on empty fields (auto-apply)
+// ──────────────────────────────────────────────────────────
+
+export const AutofillWithLowConfidenceOnEmptyFields: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: { features: confidenceFeatures },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsMultiFieldLowConfidence.url, () =>
+                    HttpResponse.json(aiSuggestionsMultiFieldLowConfidence.response),
+                ),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillButton = await canvas.findByRole('button', {
+            name: 'Autofill Select Dropdowns with Box AI',
+        });
+        await userEvent.click(autofillButton);
+
+        await waitFor(
+            () => {
+                const lowBadges = canvas.getAllByText('LOW');
+                expect(lowBadges.length).toBeGreaterThanOrEqual(1);
+                expect(canvas.getAllByRole('button', { name: 'Accept extracted value' }).length).toBeGreaterThanOrEqual(
+                    1,
+                );
+                expect(canvas.getAllByRole('button', { name: 'Clear extracted value' }).length).toBeGreaterThanOrEqual(
+                    1,
+                );
+            },
+            { timeout: 5000 },
+        );
+    },
+};
+
+export const AutofillWithHighConfidenceOnEmptyFields: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: { features: confidenceFeatures },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsMultiFieldHighConfidence.url, () =>
+                    HttpResponse.json(aiSuggestionsMultiFieldHighConfidence.response),
+                ),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillButton = await canvas.findByRole('button', {
+            name: 'Autofill Select Dropdowns with Box AI',
+        });
+        await userEvent.click(autofillButton);
+
+        await waitFor(
+            () => {
+                const aiBadges = canvas.getAllByTestId('ai-confidence-badge');
+                expect(aiBadges.length).toBeGreaterThanOrEqual(1);
+                expect(canvas.queryByText('LOW')).not.toBeInTheDocument();
+                expect(canvas.queryByRole('button', { name: 'Accept extracted value' })).not.toBeInTheDocument();
+            },
+            { timeout: 5000 },
+        );
+    },
+};
+
+// ──────────────────────────────────────────────────────────
+// Confidence score stories: Multi-field review notice
+// ──────────────────────────────────────────────────────────
+
+export const MultiFieldAutofillShowsReviewNotice: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: { features: confidenceFeatures },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsMultiFieldLowConfidence.url, () =>
+                    HttpResponse.json(aiSuggestionsMultiFieldLowConfidence.response),
+                ),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillButton = await canvas.findByRole('button', {
+            name: 'Autofill Select Dropdowns with Box AI',
+        });
+        await userEvent.click(autofillButton);
+
+        await waitFor(
+            () => {
+                expect(canvas.getByText(/3 fields need review/i)).toBeVisible();
+                expect(canvas.getByRole('button', { name: 'View' })).toBeVisible();
+            },
+            { timeout: 5000 },
+        );
+    },
+};
+
+export const AcceptAllDismissesReviewNotice: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: { features: confidenceFeatures },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsMultiFieldLowConfidence.url, () =>
+                    HttpResponse.json(aiSuggestionsMultiFieldLowConfidence.response),
+                ),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillButton = await canvas.findByRole('button', {
+            name: 'Autofill Select Dropdowns with Box AI',
+        });
+        await userEvent.click(autofillButton);
+
+        await waitFor(
+            () => {
+                expect(canvas.getByText(/3 fields need review/i)).toBeVisible();
+            },
+            { timeout: 5000 },
+        );
+
+        let acceptButtons = canvas.getAllByRole('button', { name: 'Accept extracted value' });
+        await userEvent.click(acceptButtons[0]);
+        await waitFor(() => {
+            expect(canvas.getByText(/2 fields need review/i)).toBeVisible();
+        });
+
+        acceptButtons = canvas.getAllByRole('button', { name: 'Accept extracted value' });
+        await userEvent.click(acceptButtons[0]);
+        await waitFor(() => {
+            expect(canvas.getByText(/1 field needs review/i)).toBeVisible();
+        });
+
+        acceptButtons = canvas.getAllByRole('button', { name: 'Accept extracted value' });
+        await userEvent.click(acceptButtons[0]);
+        await waitFor(() => {
+            expect(canvas.queryByText(/fields? needs? review/i)).not.toBeInTheDocument();
+        });
     },
 };
 

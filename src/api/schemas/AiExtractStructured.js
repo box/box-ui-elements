@@ -87,4 +87,12 @@ export interface AiExtractStructured {
      * – `AiAgentReference`        : reference a custom AI-Agent by ID
      */
     +ai_agent?: AiAgentExtractStructured | AiAgentReference;
+    /**
+     * When `true`, the response includes confidence scores for each extracted field.
+     */
+    +include_confidence_score?: boolean;
+    /**
+     * When `true`, the response includes reference locations (bounding boxes) for each extracted field.
+     */
+    +include_reference?: boolean;
 }

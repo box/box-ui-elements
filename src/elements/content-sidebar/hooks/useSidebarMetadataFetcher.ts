@@ -6,10 +6,10 @@ import {
     type MetadataTemplate,
     type MetadataTemplateInstance,
     type MetadataTemplateField,
-    type MetadataFieldValue,
 } from '@box/metadata-editor';
 import isEmpty from 'lodash/isEmpty';
 import API from '../../../api';
+import { formatMetadataFieldValue } from '../../../api/utils';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
 import {
@@ -222,16 +222,20 @@ function useSidebarMetadataFetcher(
         async (templateKey: string, scope: string, agentId?: string): Promise<MetadataTemplateField[]> => {
             const aiAPI = api.getIntelligenceAPI();
             setExtractErrorCode(null);
-            let answer = null;
+            let response = null;
             const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
+            const confidenceScoreParams = isConfidenceScoreEnabled
+                ? { include_confidence_score: true, include_reference: true }
+                : {};
             const requestBody: AiExtractStructured = {
                 items: [{ id: file.id, type: file.type }],
                 metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 ...customAiAgent,
+                ...confidenceScoreParams,
             };
 
             try {
-                answer = (await aiAPI.extractStructured(requestBody)) as Record<string, MetadataFieldValue>;
+                response = await aiAPI.extractStructured(requestBody);
             } catch (error) {
                 // Axios makes the status code nested under the response object
                 if (error.response?.status === 408) {
@@ -255,6 +259,10 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
+            const answer = response?.answer;
+            const confidenceScores = response?.confidence_score;
+            const references = response?.reference;
+
             if (isEmpty(answer)) {
                 const error = new Error('No suggestions found.');
                 onError(error, ERROR_CODE_EMPTY_METADATA_SUGGESTIONS, { showNotification: true });
@@ -265,27 +273,33 @@ function useSidebarMetadataFetcher(
             const fields = templateInstance?.fields || [];
 
             return fields.map(field => {
-                const value = answer[field.key];
+                const rawValue = answer[field.key];
 
-                if (!value) {
+                if (rawValue == null || rawValue === '') {
                     return field;
                 }
-                if (field.type === 'taxonomy') {
-                    return {
-                        ...field,
-                        aiSuggestion: value.map(item => ({
-                            value: item.id,
-                            displayValue: item.displayName,
-                        })),
+
+                const aiSuggestion = formatMetadataFieldValue(field, rawValue);
+                const result = { ...field, aiSuggestion };
+
+                const fieldConfidence = confidenceScores?.[field.key];
+                if (fieldConfidence) {
+                    result.aiSuggestionConfidenceScore = {
+                        value: fieldConfidence.score,
+                        level: fieldConfidence.level,
+                        isAccepted: false,
                     };
                 }
-                return {
-                    ...field,
-                    aiSuggestion: value,
-                };
+
+                const ref = references?.[field.key];
+                if (ref) {
+                    result.targetLocation = ref;
+                }
+
+                return result;
             });
         },
-        [api, file, onError, templates],
+        [api, file, isConfidenceScoreEnabled, onError, templates],
     );
 
     React.useEffect(() => {
