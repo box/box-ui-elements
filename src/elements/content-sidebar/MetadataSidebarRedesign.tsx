@@ -20,6 +20,7 @@ import {
 } from '@box/metadata-editor';
 import { TreeQueryInput } from '@box/combobox-with-api';
 
+import type { BoxAnnotationsBoundingBox } from './types/BoxAISidebarTypes';
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -44,6 +45,7 @@ import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemp
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
+import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -59,6 +61,10 @@ interface PropsWithoutContext extends ExternalProps {
     fileExtension?: string;
     fileId: string;
     filteredTemplateIds?: string[];
+    getPreview?: () => {
+        showBoundingBoxHighlights?: (boundingBoxes: BoxAnnotationsBoundingBox[]) => void;
+        hideBoundingBoxHighlights?: () => void;
+    };
     hasSidebarInitialized?: boolean;
 }
 
@@ -89,6 +95,7 @@ function MetadataSidebarRedesign({
     fileExtension,
     fileId,
     filteredTemplateIds = [],
+    getPreview,
     history,
     onError,
     onSuccess,
@@ -127,6 +134,7 @@ function MetadataSidebarRedesign({
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState<boolean>(false);
     const [shouldShowOnlyReviewFields, setShouldShowOnlyReviewFields] = useState<boolean>(false);
+    const { selectedMetadataFieldId, handleSelectMetadataField } = useMetadataFieldSelection(getPreview);
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
@@ -332,6 +340,8 @@ function MetadataSidebarRedesign({
                             template={editingTemplate}
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                            onSelectMetadataField={handleSelectMetadataField}
+                            selectedMetadataFieldId={selectedMetadataFieldId}
                         />
                     )}
                     {showList && (
@@ -345,6 +355,8 @@ function MetadataSidebarRedesign({
                                 setIsDeleteButtonDisabled(false);
                                 setShouldShowOnlyReviewFields(shouldEnableReviewFilter);
                             }}
+                            onSelectMetadataField={handleSelectMetadataField}
+                            selectedMetadataFieldId={selectedMetadataFieldId}
                             templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
