@@ -77,6 +77,7 @@ class Intelligence extends Base {
             throw new Error('Invalid item!');
         }
 
+        // See: https://developer.box.com/reference/post-ai-extract-structured
         const url = `${this.getBaseApiUrl()}/ai/extract_structured`;
 
         const suggestionsResponse = await this.xhr.post({
@@ -85,9 +86,7 @@ class Intelligence extends Base {
             id: `file_${item.id}`,
         });
 
-        return !!suggestionsResponse?.data?.answer && typeof suggestionsResponse.data.answer === 'object'
-            ? suggestionsResponse.data.answer
-            : suggestionsResponse.data;
+        return suggestionsResponse.data;
     }
 }
 

@@ -89,52 +89,76 @@ const newTemplateInstance = {
     hidden: false,
 };
 
+const defaultGetFileImplementation = (_id, successCallback, errorCallback) => {
+    try {
+        successCallback(mockFile);
+    } catch (error) {
+        errorCallback(error);
+    }
+};
+
+const defaultGetMetadataImplementation = (_file, successCallback, errorCallback) => {
+    try {
+        successCallback({
+            editors: [],
+            templates: mockTemplates,
+            templateInstances: mockTemplateInstances,
+        });
+    } catch (error) {
+        errorCallback(error);
+    }
+};
+
+const defaultDeleteMetadataImplementation = (_file, template, successCallback, errorCallback) => {
+    try {
+        successCallback(template);
+    } catch (error) {
+        errorCallback(error);
+    }
+};
+
+const defaultCreateMetadataRedesignImplementation = (_file, _template, successCallback, errorCallback) => {
+    try {
+        successCallback();
+    } catch (error) {
+        errorCallback(error);
+    }
+};
+
+const defaultUpdateMetadataRedesignImplementation = (
+    _file,
+    _metadataInstance,
+    _JSONPatch,
+    successCallback,
+    errorCallback,
+) => {
+    try {
+        successCallback();
+    } catch (error) {
+        errorCallback(error);
+    }
+};
+
 const mockAPI = {
-    getFile: jest.fn((id, successCallback, errorCallback) => {
-        try {
-            successCallback(mockFile);
-        } catch (error) {
-            errorCallback(error);
-        }
-    }),
-    getMetadata: jest.fn((_file, successCallback, errorCallback) => {
-        try {
-            successCallback({
-                editors: [],
-                templates: mockTemplates,
-                templateInstances: mockTemplateInstances,
-            });
-        } catch (error) {
-            errorCallback(error);
-        }
-    }),
-    deleteMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
-        try {
-            successCallback(template);
-        } catch (error) {
-            errorCallback(error);
-        }
-    }),
-    createMetadataRedesign: jest.fn((_file, template, successCallback, errorCallback) => {
-        try {
-            successCallback();
-        } catch (error) {
-            errorCallback(error);
-        }
-    }),
-    updateMetadataRedesign: jest.fn((_file, _metadataInstance, _JSONPatch, successCallback, errorCallback) => {
-        try {
-            successCallback();
-        } catch (error) {
-            errorCallback(error);
-        }
-    }),
+    getFile: jest.fn(),
+    getMetadata: jest.fn(),
+    deleteMetadata: jest.fn(),
+    createMetadataRedesign: jest.fn(),
+    updateMetadataRedesign: jest.fn(),
     extractStructured: jest.fn(),
 };
 const api = {
     getFileAPI: jest.fn().mockReturnValue(mockAPI),
     getMetadataAPI: jest.fn().mockReturnValue(mockAPI),
     getIntelligenceAPI: jest.fn().mockReturnValue(mockAPI),
+};
+
+const setupDefaultMockImplementations = () => {
+    mockAPI.getFile.mockImplementation(defaultGetFileImplementation);
+    mockAPI.getMetadata.mockImplementation(defaultGetMetadataImplementation);
+    mockAPI.deleteMetadata.mockImplementation(defaultDeleteMetadataImplementation);
+    mockAPI.createMetadataRedesign.mockImplementation(defaultCreateMetadataRedesignImplementation);
+    mockAPI.updateMetadataRedesign.mockImplementation(defaultUpdateMetadataRedesignImplementation);
 };
 
 describe('useSidebarMetadataFetcher', () => {
@@ -157,11 +181,14 @@ describe('useSidebarMetadataFetcher', () => {
     beforeEach(() => {
         onErrorMock.mockClear();
         onSuccessMock.mockClear();
-        mockAPI.getFile.mockClear();
-        mockAPI.getMetadata.mockClear();
-        mockAPI.deleteMetadata.mockClear();
-        mockAPI.updateMetadataRedesign.mockClear();
-        mockAPI.extractStructured.mockClear();
+        // Reset call history and per-test overrides, then restore deterministic defaults.
+        mockAPI.getFile.mockReset();
+        mockAPI.getMetadata.mockReset();
+        mockAPI.deleteMetadata.mockReset();
+        mockAPI.createMetadataRedesign.mockReset();
+        mockAPI.updateMetadataRedesign.mockReset();
+        mockAPI.extractStructured.mockReset();
+        setupDefaultMockImplementations();
     });
 
     test('should fetch the file and metadata successfully', async () => {
@@ -394,11 +421,10 @@ describe('useSidebarMetadataFetcher', () => {
 
     describe('extractSuggestions', () => {
         test('should extract suggestions successfully', async () => {
-            const mockSuggestions = {
-                field1: 'value1',
-                field2: 'value2',
-            };
-            mockAPI.extractStructured.mockResolvedValue(mockSuggestions);
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1', field2: 'value2' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+            });
 
             const { result } = setupHook();
 
@@ -427,13 +453,6 @@ describe('useSidebarMetadataFetcher', () => {
                 templateKey: 'taxonomyTemplateKey',
             };
 
-            const mockTaxonomySuggestions = {
-                taxonomyField: [
-                    { id: 'taxonomy-id-1', displayName: 'Taxonomy Item 1' },
-                    { id: 'taxonomy-id-2', displayName: 'Taxonomy Item 2' },
-                ],
-            };
-
             mockAPI.getMetadata.mockImplementation((file, successCallback) => {
                 successCallback({
                     editors: [],
@@ -441,7 +460,15 @@ describe('useSidebarMetadataFetcher', () => {
                     templateInstances: [],
                 });
             });
-            mockAPI.extractStructured.mockResolvedValue(mockTaxonomySuggestions);
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: {
+                    taxonomyField: [
+                        { id: 'taxonomy-id-1', displayName: 'Taxonomy Item 1' },
+                        { id: 'taxonomy-id-2', displayName: 'Taxonomy Item 2' },
+                    ],
+                },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+            });
 
             const { result } = setupHook();
 
@@ -498,8 +525,13 @@ describe('useSidebarMetadataFetcher', () => {
             await waitFor(() => expect(result.current.extractErrorCode).toBeNull());
         });
 
-        test('should handle empty suggestions', async () => {
-            mockAPI.extractStructured.mockResolvedValue([]);
+        test.each`
+            description             | response
+            ${'empty answer'}       | ${{ answer: {}, created_at: '2026-03-27T08:10:14.106-07:00' }}
+            ${'null response'}      | ${null}
+            ${'undefined response'} | ${undefined}
+        `('should handle $description from extractStructured', async ({ response }) => {
+            mockAPI.extractStructured.mockResolvedValue(response);
 
             const { result } = setupHook();
             const suggestions = await result.current.extractSuggestions('templateKey', 'global');
@@ -570,6 +602,237 @@ describe('useSidebarMetadataFetcher', () => {
                     ai_agent: expect.anything(),
                 }),
             );
+        });
+
+        test('should include include_confidence_score and include_reference when isConfidenceScoreEnabled is true', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+                include_confidence_score: true,
+                include_reference: true,
+            });
+        });
+
+        test('should not include include_confidence_score and include_reference when isConfidenceScoreEnabled is false', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+            });
+
+            const { result } = setupHook('123', false);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_confidence_score: expect.anything(),
+                    include_reference: expect.anything(),
+                }),
+            );
+        });
+
+        test('should parse response with confidence scores', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1', field2: 'value2' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                confidence_score: {
+                    field1: { level: 'HIGH', score: 0.95 },
+                    field2: { level: 'LOW', score: 0.3 },
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...mockTemplates[0].fields[0],
+                    aiSuggestion: 'value1',
+                    aiSuggestionConfidenceScore: { value: 0.95, level: 'HIGH', isAccepted: false },
+                },
+                {
+                    ...mockTemplates[0].fields[1],
+                    aiSuggestion: 'value2',
+                    aiSuggestionConfidenceScore: { value: 0.3, level: 'LOW', isAccepted: false },
+                },
+            ]);
+        });
+
+        test('should parse response with references', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                confidence_score: {
+                    field1: { level: 'MEDIUM', score: 0.85 },
+                },
+                reference: {
+                    field1: [
+                        {
+                            itemId: 'file_123',
+                            page: 0,
+                            text: 'extracted text',
+                            boundingBox: { left: 0.1, top: 0.2, right: 0.3, bottom: 0.4 },
+                        },
+                    ],
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...mockTemplates[0].fields[0],
+                    aiSuggestion: 'value1',
+                    aiSuggestionConfidenceScore: { value: 0.85, level: 'MEDIUM', isAccepted: false },
+                    targetLocation: [
+                        {
+                            itemId: 'file_123',
+                            page: 0,
+                            text: 'extracted text',
+                            boundingBox: { left: 0.1, top: 0.2, right: 0.3, bottom: 0.4 },
+                        },
+                    ],
+                },
+                mockTemplates[0].fields[1],
+            ]);
+        });
+
+        test('should parse taxonomy response with confidence scores', async () => {
+            const taxonomyTemplate = {
+                canEdit: true,
+                id: 'metadata_template_taxonomy',
+                fields: [
+                    {
+                        key: 'taxonomyField',
+                        type: 'taxonomy' as MetadataTemplateFieldType,
+                        hidden: false,
+                    },
+                ],
+                scope: 'global',
+                templateKey: 'taxonomyTemplateKey',
+            };
+
+            mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+                successCallback({
+                    editors: [],
+                    templates: [taxonomyTemplate],
+                    templateInstances: [],
+                });
+            });
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: {
+                    taxonomyField: [
+                        { id: 'taxonomy-id-1', displayName: 'Taxonomy Item 1' },
+                        { id: 'taxonomy-id-2', displayName: 'Taxonomy Item 2' },
+                    ],
+                },
+                confidence_score: {
+                    taxonomyField: { level: 'MEDIUM', score: 0.72 },
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+
+            await waitFor(() => expect(result.current.templates).toEqual([taxonomyTemplate]));
+
+            const suggestions = await result.current.extractSuggestions('taxonomyTemplateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...taxonomyTemplate.fields[0],
+                    aiSuggestion: [
+                        { value: 'taxonomy-id-1', displayValue: 'Taxonomy Item 1' },
+                        { value: 'taxonomy-id-2', displayValue: 'Taxonomy Item 2' },
+                    ],
+                    aiSuggestionConfidenceScore: { value: 0.72, level: 'MEDIUM', isAccepted: false },
+                },
+            ]);
+        });
+
+        test('should handle response with empty confidence_score when FF is enabled', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                confidence_score: {},
+                created_at: '2026-03-27T08:10:14.106-07:00',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...mockTemplates[0].fields[0],
+                    aiSuggestion: 'value1',
+                },
+                mockTemplates[0].fields[1],
+            ]);
+        });
+
+        test('should handle response where only some fields have confidence scores', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1', field2: 'value2' },
+                confidence_score: {
+                    field1: { level: 'HIGH', score: 0.9 },
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...mockTemplates[0].fields[0],
+                    aiSuggestion: 'value1',
+                    aiSuggestionConfidenceScore: { value: 0.9, level: 'HIGH', isAccepted: false },
+                },
+                {
+                    ...mockTemplates[0].fields[1],
+                    aiSuggestion: 'value2',
+                },
+            ]);
+        });
+
+        test('should handle reference entries without bounding box', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                confidence_score: {
+                    field1: { level: 'HIGH', score: 0.8 },
+                },
+                reference: {
+                    field1: [{ itemId: 'file_123', page: 1, text: 'some text' }],
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions[0].targetLocation).toEqual([{ itemId: 'file_123', page: 1, text: 'some text' }]);
         });
     });
 });
