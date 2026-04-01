@@ -12,12 +12,13 @@ function convertTargetLocationToBoundingBox(
         return undefined;
     }
 
+    // Adding extra space (-0.25 for left and top, +0.5 for width and height) to provide paddings for bounding boxes
     return targetLocationEntries.map((item: MetadataTargetLocationEntry, index: number) => ({
         id: `bbox-${id}-${index + 1}`,
-        x: clampPercentage(item.boundingBox.left * 100 - 0.5),
-        y: clampPercentage(item.boundingBox.top * 100 - 0.5),
-        width: clampPercentage((item.boundingBox.right - item.boundingBox.left) * 100 + 1),
-        height: clampPercentage((item.boundingBox.bottom - item.boundingBox.top) * 100 + 1),
+        x: clampPercentage(item.boundingBox.left * 100 - 0.25),
+        y: clampPercentage(item.boundingBox.top * 100 - 0.25),
+        width: clampPercentage((item.boundingBox.right - item.boundingBox.left) * 100 + 0.5),
+        height: clampPercentage((item.boundingBox.bottom - item.boundingBox.top) * 100 + 0.5),
         pageNumber: item.page + 1,
     }));
 }

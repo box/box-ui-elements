@@ -61,10 +61,10 @@ describe('useMetadataFieldSelection', () => {
         expect(mockShowBoundingBoxHighlights).toHaveBeenCalledWith([
             {
                 id: 'bbox-field-1-1',
-                x: 9.5,
-                y: 19.5,
-                width: 41,
-                height: 41,
+                x: 9.75,
+                y: 19.75,
+                width: 40.5,
+                height: 40.5,
                 pageNumber: 1,
             },
         ]);
@@ -259,8 +259,8 @@ describe('useMetadataFieldSelection', () => {
             });
 
             expect(mockShowBoundingBoxHighlights).toHaveBeenCalledWith([
-                { id: 'bbox-field-1-1', x: 9.5, y: 19.5, width: 41, height: 41, pageNumber: 1 },
-                { id: 'bbox-field-1-2', x: 29.5, y: 39.5, width: 41, height: 41, pageNumber: 3 },
+                { id: 'bbox-field-1-1', x: 9.75, y: 19.75, width: 40.5, height: 40.5, pageNumber: 1 },
+                { id: 'bbox-field-1-2', x: 29.75, y: 39.75, width: 40.5, height: 40.5, pageNumber: 3 },
             ]);
         });
 
