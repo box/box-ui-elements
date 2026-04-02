@@ -61,7 +61,7 @@ interface PropsWithoutContext extends ExternalProps {
     fileExtension?: string;
     fileId: string;
     filteredTemplateIds?: string[];
-    getPreview?: () => {
+    getPreview: () => {
         showBoundingBoxHighlights?: (boundingBoxes: BoxAnnotationsBoundingBox[]) => void;
         hideBoundingBoxHighlights?: () => void;
     };

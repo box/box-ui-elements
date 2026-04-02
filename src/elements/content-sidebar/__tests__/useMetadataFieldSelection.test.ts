@@ -2,6 +2,15 @@ import { type MetadataTemplateField } from '@box/metadata-editor';
 import { act, renderHook } from '../../../test-utils/testing-library';
 import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
 
+const mockTargetLocation = [
+    {
+        itemId: 'item-1',
+        page: 0,
+        text: 'test text',
+        boundingBox: { left: 0.1, top: 0.2, right: 0.5, bottom: 0.6 },
+    },
+];
+
 const createMockField = (overrides: Partial<MetadataTemplateField> = {}): MetadataTemplateField => ({
     id: 'field-1',
     key: 'testField',
@@ -34,7 +43,7 @@ describe('useMetadataFieldSelection', () => {
         const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
         act(() => {
-            result.current.handleSelectMetadataField(createMockField());
+            result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
         });
 
         expect(result.current.selectedMetadataFieldId).toBe('field-1');
@@ -70,13 +79,14 @@ describe('useMetadataFieldSelection', () => {
         ]);
     });
 
-    test('should not call showBoundingBoxHighlights when field has no targetLocation', () => {
+    test('should not select field or show highlights when field has no targetLocation', () => {
         const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
         act(() => {
             result.current.handleSelectMetadataField(createMockField());
         });
 
+        expect(result.current.selectedMetadataFieldId).toBeNull();
         expect(mockShowBoundingBoxHighlights).not.toHaveBeenCalled();
     });
 
@@ -84,7 +94,7 @@ describe('useMetadataFieldSelection', () => {
         const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
         act(() => {
-            result.current.handleSelectMetadataField(createMockField());
+            result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
         });
 
         expect(result.current.selectedMetadataFieldId).toBe('field-1');
@@ -101,7 +111,7 @@ describe('useMetadataFieldSelection', () => {
         const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
         act(() => {
-            result.current.handleSelectMetadataField(createMockField());
+            result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
         });
 
         act(() => {
@@ -114,36 +124,16 @@ describe('useMetadataFieldSelection', () => {
         expect(mockHideBoundingBoxHighlights).toHaveBeenCalled();
     });
 
-    test('should not crash when getPreview is undefined', () => {
-        const { result } = renderHook(() => useMetadataFieldSelection(undefined));
-
-        act(() => {
-            result.current.handleSelectMetadataField(
-                createMockField({
-                    targetLocation: [
-                        {
-                            itemId: 'item-1',
-                            page: 0,
-                            text: 'test text',
-                            boundingBox: { left: 0.1, top: 0.2, right: 0.5, bottom: 0.6 },
-                        },
-                    ],
-                }),
-            );
-        });
-
-        expect(result.current.selectedMetadataFieldId).toBe('field-1');
-    });
-
-    test('should not crash when getPreview returns undefined', () => {
+    test('should not select field or crash when getPreview returns undefined', () => {
         const getPreviewReturningUndefined = jest.fn().mockReturnValue(undefined);
         const { result } = renderHook(() => useMetadataFieldSelection(getPreviewReturningUndefined));
 
         act(() => {
-            result.current.handleSelectMetadataField(createMockField());
+            result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
         });
 
-        expect(result.current.selectedMetadataFieldId).toBe('field-1');
+        expect(result.current.selectedMetadataFieldId).toBeNull();
+        expect(mockShowBoundingBoxHighlights).not.toHaveBeenCalled();
     });
 
     describe('click outside behavior', () => {
@@ -151,7 +141,7 @@ describe('useMetadataFieldSelection', () => {
             const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
             act(() => {
-                result.current.handleSelectMetadataField(createMockField());
+                result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
             });
 
             expect(result.current.selectedMetadataFieldId).toBe('field-1');
@@ -169,7 +159,7 @@ describe('useMetadataFieldSelection', () => {
             const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
             act(() => {
-                result.current.handleSelectMetadataField(createMockField());
+                result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
             });
 
             const metadataFieldElement = document.createElement('div');
@@ -190,7 +180,7 @@ describe('useMetadataFieldSelection', () => {
             const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
             act(() => {
-                result.current.handleSelectMetadataField(createMockField());
+                result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
             });
 
             const boundingBoxElement = document.createElement('div');
@@ -222,7 +212,7 @@ describe('useMetadataFieldSelection', () => {
             const { result, unmount } = renderHook(() => useMetadataFieldSelection(getPreview));
 
             act(() => {
-                result.current.handleSelectMetadataField(createMockField());
+                result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
             });
 
             unmount();

@@ -27,7 +27,7 @@ const METADATA_FIELD_SELECTOR = '[data-metadata-field]';
 const BOUNDING_BOX_SELECTOR = '.ba-BoundingBoxHighlightRect';
 
 function useMetadataFieldSelection(
-    getPreview?: () => {
+    getPreview: () => {
         showBoundingBoxHighlights?: (boundingBoxes: BoxAnnotationsBoundingBox[]) => void;
         hideBoundingBoxHighlights?: () => void;
     },
@@ -36,7 +36,7 @@ function useMetadataFieldSelection(
 
     const handleDeselectMetadataField = useCallback(() => {
         setSelectedMetadataFieldId(null);
-        const preview = getPreview?.();
+        const preview = getPreview();
         if (!preview) {
             return;
         }
@@ -73,17 +73,15 @@ function useMetadataFieldSelection(
                 return;
             }
 
-            setSelectedMetadataFieldId(field.id);
+            const preview = getPreview();
+            const boundingBoxes = convertTargetLocationToBoundingBox(field.id, field.targetLocation);
 
-            const preview = getPreview?.();
-            if (!preview) {
+            if (!preview || !boundingBoxes || !preview.showBoundingBoxHighlights) {
                 return;
             }
 
-            const boundingBoxes = convertTargetLocationToBoundingBox(field.id, field.targetLocation);
-            if (boundingBoxes) {
-                preview.showBoundingBoxHighlights?.(boundingBoxes);
-            }
+            setSelectedMetadataFieldId(field.id);
+            preview.showBoundingBoxHighlights(boundingBoxes);
         },
         [getPreview, handleDeselectMetadataField],
     );

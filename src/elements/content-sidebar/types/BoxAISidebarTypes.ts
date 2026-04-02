@@ -15,10 +15,28 @@ export type BoxAISidebarCacheSetter = (
 ) => void;
 
 export type BoxAnnotationsBoundingBox = {
+    /**
+     * The unique id for the bounding box (used for UI state only)
+     */
     id: string;
+    /**
+     * The x coordinate of the bounding box starting point (0-100 percentage of the width of the page)
+     */
     x: number;
+    /**
+     * The y coordinate of the bounding box starting point (0-100 percentage of the height of the page)
+     */
     y: number;
+    /**
+     * The width of the bounding box (0-100 percentage of the width of the page)
+     */
     width: number;
+    /**
+     * The height of the bounding box (0-100 percentage of the height of the page)
+     */
     height: number;
+    /**
+     * The page number of the bounding box (1-indexed)
+     */
     pageNumber: number;
 };
