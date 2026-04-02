@@ -110,6 +110,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             api,
             fileExtension: 'pdf',
             getStructuredTextRep,
+            getPreview: jest.fn().mockReturnValue({}),
             fileId: 'test-file-id-1',
             elementId: 'element-1',
             filteredTemplateIds: emptyFilteredTemplateIds,
