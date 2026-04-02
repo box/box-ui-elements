@@ -68,13 +68,13 @@ function useMetadataFieldSelection(
 
     const handleSelectMetadataField = useCallback(
         (field: MetadataTemplateField | null) => {
-            if (!field || !field.id) {
-                handleDeselectMetadataField();
+            const preview = getPreview();
+            if (!preview || !preview.showBoundingBoxHighlights) {
                 return;
             }
 
-            const preview = getPreview();
-            if (!preview || !preview.showBoundingBoxHighlights) {
+            if (!field || !field.id) {
+                handleDeselectMetadataField();
                 return;
             }
 
