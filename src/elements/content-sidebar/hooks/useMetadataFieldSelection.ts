@@ -74,9 +74,14 @@ function useMetadataFieldSelection(
             }
 
             const preview = getPreview();
+            if (!preview || !preview.showBoundingBoxHighlights) {
+                return;
+            }
+
             const boundingBoxes = convertTargetLocationToBoundingBox(field.id, field.targetLocation);
 
-            if (!preview || !boundingBoxes || !preview.showBoundingBoxHighlights) {
+            if (!boundingBoxes) {
+                handleDeselectMetadataField();
                 return;
             }
 

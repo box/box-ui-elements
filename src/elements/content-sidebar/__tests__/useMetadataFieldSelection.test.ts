@@ -79,7 +79,7 @@ describe('useMetadataFieldSelection', () => {
         ]);
     });
 
-    test('should not select field or show highlights when field has no targetLocation', () => {
+    test('should deselect and hide highlights when field has no targetLocation', () => {
         const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
         act(() => {
@@ -88,6 +88,7 @@ describe('useMetadataFieldSelection', () => {
 
         expect(result.current.selectedMetadataFieldId).toBeNull();
         expect(mockShowBoundingBoxHighlights).not.toHaveBeenCalled();
+        expect(mockHideBoundingBoxHighlights).toHaveBeenCalled();
     });
 
     test('should deselect field and hide highlights when handleSelectMetadataField is called with null', () => {
@@ -254,14 +255,16 @@ describe('useMetadataFieldSelection', () => {
             ]);
         });
 
-        test('should not call showBoundingBoxHighlights when targetLocation is empty array', () => {
+        test('should deselect and hide highlights when targetLocation is empty array', () => {
             const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
             act(() => {
                 result.current.handleSelectMetadataField(createMockField({ targetLocation: [] }));
             });
 
+            expect(result.current.selectedMetadataFieldId).toBeNull();
             expect(mockShowBoundingBoxHighlights).not.toHaveBeenCalled();
+            expect(mockHideBoundingBoxHighlights).toHaveBeenCalled();
         });
 
         test('should clamp bounding box values to valid percentage range', () => {
