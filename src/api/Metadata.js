@@ -1183,7 +1183,12 @@ class Metadata extends File {
             if (isConfidenceScoreEnabled) {
                 const details = template.fields.reduce((acc, field) => {
                     if (field.confidenceScore) {
-                        const entry: { confidenceScore: number, confidenceLevel: string, process?: string } = {
+                        const entry: {
+                            confidenceScore: number,
+                            confidenceLevel: string,
+                            process?: string,
+                            targetLocation?: string,
+                        } = {
                             confidenceScore: field.confidenceScore.value,
                             confidenceLevel: field.confidenceScore.level,
                         };
