@@ -102,6 +102,7 @@ type Props = {
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
     enableThumbnailsSidebar: boolean,
+    enableBoundingBoxHighlights: boolean,
     features?: FeatureConfig,
     fileId?: string,
     fileOptions?: Object,
@@ -290,6 +291,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         contentOpenWithProps: {},
         contentSidebarProps: {},
         enableThumbnailsSidebar: false,
+        enableBoundingBoxHighlights: false,
         hasHeader: false,
         hideSidebar: false,
         language: DEFAULT_LOCALE,
@@ -895,6 +897,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             annotatorState: { activeAnnotationId } = {},
             renderCustomPreview,
             enableThumbnailsSidebar,
+            enableBoundingBoxHighlights,
             features,
             fileOptions,
             onAnnotatorEvent,
@@ -944,6 +947,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const previewOptions = {
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             container: `#${this.id} .bcpr-content`,
+            enableBoundingBoxHighlights,
             enableThumbnailsSidebar,
             features,
             fileOptions: fileOpts,

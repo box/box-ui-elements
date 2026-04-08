@@ -2,6 +2,7 @@ import {
     MetadataInstanceForm,
     type FormValues,
     type JSONPatchOperations,
+    type MetadataTemplateField,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
 import { TaxonomyOptionsFetcher } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
@@ -34,6 +35,8 @@ export interface MetadataInstanceEditorProps {
     template: MetadataTemplateInstance;
     isAdvancedExtractAgentEnabled?: boolean;
     isConfidenceScoreReviewEnabled?: boolean;
+    onSelectMetadataField?: (field: MetadataTemplateField | null) => void;
+    selectedMetadataFieldId?: string | null;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -57,6 +60,8 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     template,
     isAdvancedExtractAgentEnabled = false,
     isConfidenceScoreReviewEnabled = false,
+    onSelectMetadataField,
+    selectedMetadataFieldId,
 }) => {
     const previewContext: PreviewContextType | null = useContext(PreviewContext);
     const customRef = previewContext?.previewBodyRef?.current;
@@ -84,6 +89,8 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+            onSelectMetadataField={onSelectMetadataField}
+            selectedMetadataFieldId={selectedMetadataFieldId}
             customRef={customRef}
         />
     );
