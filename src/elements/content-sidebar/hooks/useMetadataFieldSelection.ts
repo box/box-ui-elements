@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { type MetadataTemplateField, type MetadataTargetLocationEntry } from '@box/metadata-editor';
 import clampPercentage from '../utils/clampPercentage';
 
-import type { BoxAnnotationsBoundingBox } from '../types/BoxAISidebarTypes';
+import type { BoxAnnotationsBoundingBox, GetPreviewForMetadataReturnType } from '../types/BoxAISidebarTypes';
 
 function convertTargetLocationToBoundingBox(
     id: string,
@@ -26,12 +26,7 @@ function convertTargetLocationToBoundingBox(
 const METADATA_FIELD_SELECTOR = '[data-metadata-field]';
 const BOUNDING_BOX_SELECTOR = '.ba-BoundingBoxHighlightRect';
 
-function useMetadataFieldSelection(
-    getPreview: () => {
-        showBoundingBoxHighlights?: (boundingBoxes: BoxAnnotationsBoundingBox[]) => void;
-        hideBoundingBoxHighlights?: () => void;
-    },
-) {
+function useMetadataFieldSelection(getPreview: () => GetPreviewForMetadataReturnType) {
     const [selectedMetadataFieldId, setSelectedMetadataFieldId] = useState<string | null>(null);
 
     const handleDeselectMetadataField = useCallback(() => {

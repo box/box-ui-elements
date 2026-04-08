@@ -125,9 +125,9 @@ describe('useMetadataFieldSelection', () => {
         expect(mockHideBoundingBoxHighlights).toHaveBeenCalled();
     });
 
-    test('should not select field or crash when getPreview returns undefined', () => {
-        const getPreviewReturningUndefined = jest.fn().mockReturnValue(undefined);
-        const { result } = renderHook(() => useMetadataFieldSelection(getPreviewReturningUndefined));
+    test('should not select field or crash when getPreview returns null', () => {
+        const getPreviewReturningNull = jest.fn().mockReturnValue(null);
+        const { result } = renderHook(() => useMetadataFieldSelection(getPreviewReturningNull));
 
         act(() => {
             result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));

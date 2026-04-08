@@ -357,6 +357,20 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should pass enableBoundingBoxHighlights to preview options when disabled', async () => {
+            const wrapper = getWrapper({ ...props, enableBoundingBoxHighlights: false });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    enableBoundingBoxHighlights: false,
+                }),
+            );
+        });
+
         test('should default enableBoundingBoxHighlights to false in preview options', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });

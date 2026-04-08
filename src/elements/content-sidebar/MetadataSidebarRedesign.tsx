@@ -20,7 +20,7 @@ import {
 } from '@box/metadata-editor';
 import { TreeQueryInput } from '@box/combobox-with-api';
 
-import type { BoxAnnotationsBoundingBox } from './types/BoxAISidebarTypes';
+import type { GetPreviewForMetadataReturnType } from './types/BoxAISidebarTypes';
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -61,10 +61,7 @@ interface PropsWithoutContext extends ExternalProps {
     fileExtension?: string;
     fileId: string;
     filteredTemplateIds?: string[];
-    getPreview: () => {
-        showBoundingBoxHighlights?: (boundingBoxes: BoxAnnotationsBoundingBox[]) => void;
-        hideBoundingBoxHighlights?: () => void;
-    };
+    getPreview: () => GetPreviewForMetadataReturnType;
     hasSidebarInitialized?: boolean;
 }
 

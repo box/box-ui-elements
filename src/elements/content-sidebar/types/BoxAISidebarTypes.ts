@@ -14,6 +14,11 @@ export type BoxAISidebarCacheSetter = (
     value: AgentState | QuestionType[] | SuggestedQuestionType[] | string | boolean | null,
 ) => void;
 
+export type GetPreviewForMetadataReturnType = {
+    showBoundingBoxHighlights?: (boundingBoxes: BoxAnnotationsBoundingBox[]) => void;
+    hideBoundingBoxHighlights?: () => void;
+} | null;
+
 export type BoxAnnotationsBoundingBox = {
     /**
      * The unique id for the bounding box (used for UI state only)
