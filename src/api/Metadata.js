@@ -25,6 +25,7 @@ import {
 } from './utils';
 import File from './File';
 import {
+    AI_ACCEPTED_PROCESS,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -1121,6 +1122,7 @@ class Metadata extends File {
      * @param {Object} template - Metadata Redesign template
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {boolean} isConfidenceScoreEnabled - whether to include confidence score details in the payload
      * @return {Promise}
      */
     async createMetadataRedesign(
@@ -1128,6 +1130,7 @@ class Metadata extends File {
         template: MetadataTemplateInstance,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        isConfidenceScoreEnabled: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_CREATE_METADATA;
         if (!file || !template) {
@@ -1176,6 +1179,34 @@ class Metadata extends File {
 
                 return acc;
             }, {});
+
+            if (isConfidenceScoreEnabled) {
+                const details = template.fields.reduce((acc, field) => {
+                    if (field.confidenceScore) {
+                        const entry: {
+                            confidenceScore: number,
+                            confidenceLevel: string,
+                            process?: string,
+                            targetLocation?: string,
+                        } = {
+                            confidenceScore: field.confidenceScore.value,
+                            confidenceLevel: field.confidenceScore.level,
+                        };
+                        if (field.confidenceScore.isAccepted) {
+                            entry.process = AI_ACCEPTED_PROCESS;
+                        }
+                        if (field.targetLocation) {
+                            entry.targetLocation = JSON.stringify(field.targetLocation);
+                        }
+                        acc[field.key] = entry;
+                    }
+                    return acc;
+                }, {});
+
+                if (Object.keys(details).length > 0) {
+                    fieldsValues.$details = details;
+                }
+            }
 
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),
