@@ -138,13 +138,13 @@ type MetadataSuggestion = {
 
 type MetadataOptionEntryAncestor = {
     id: string,
-    display_name: string,
+    displayName: string,
     level: string,
 };
 
 type MetadataOptionEntry = {
     id: string,
-    display_name: string,
+    displayName: string,
     level: number,
     ancestors: MetadataOptionEntryAncestor[],
     deprecated: boolean,
