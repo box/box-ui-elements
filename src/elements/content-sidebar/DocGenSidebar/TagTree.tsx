@@ -1,6 +1,8 @@
 import * as React from 'react';
+import classNames from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import { Accordion } from '@box/blueprint-web';
+import { useFeatureConfig } from '../../common/feature-checking';
 
 import './DocGenSidebar.scss';
 import { JsonPathsMap } from './types';
@@ -11,6 +13,8 @@ interface TagTreeProps {
 }
 
 const TagTree = ({ data, level = 0 }: TagTreeProps) => {
+    const { enabled: isPreviewModernizationEnabled } = useFeatureConfig('previewModernization');
+
     if (!data) {
         return null;
     }
@@ -28,7 +32,14 @@ const TagTree = ({ data, level = 0 }: TagTreeProps) => {
                                 fixed
                                 className="bcs-DocGen-collapsible"
                             >
-                                <span className="bcs-DocGen-tagPath" tabIndex={0} role="button" aria-disabled="true">
+                                <span
+                                    className={classNames('bcs-DocGen-tagPath', {
+                                        'bcs-DocGen-tagPath--modernized': isPreviewModernizationEnabled,
+                                    })}
+                                    tabIndex={0}
+                                    role="button"
+                                    aria-disabled="true"
+                                >
                                     {key}
                                 </span>
                             </Accordion.Item>
