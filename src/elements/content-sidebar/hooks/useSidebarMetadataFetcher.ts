@@ -284,16 +284,20 @@ function useSidebarMetadataFetcher(
 
                 const fieldConfidence = confidenceScores?.[field.key];
                 if (fieldConfidence) {
+                    const lowestConfidence = Array.isArray(fieldConfidence)
+                        ? fieldConfidence.reduce((min, curr) => (curr.score < min.score ? curr : min))
+                        : fieldConfidence;
                     result.aiSuggestionConfidenceScore = {
-                        value: fieldConfidence.score,
-                        level: fieldConfidence.level,
+                        value: lowestConfidence.score,
+                        level: lowestConfidence.level,
                         isAccepted: false,
                     };
                 }
 
                 const ref = references?.[field.key];
                 if (ref) {
-                    result.targetLocation = ref;
+                    const flattenedRef = Array.isArray(ref) ? ref.flat() : ref;
+                    result.targetLocation = flattenedRef;
                 }
 
                 return result;

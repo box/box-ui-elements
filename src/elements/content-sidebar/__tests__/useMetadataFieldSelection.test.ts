@@ -267,6 +267,53 @@ describe('useMetadataFieldSelection', () => {
             expect(mockHideBoundingBoxHighlights).toHaveBeenCalled();
         });
 
+        test('should filter out target location entries without boundingBox', () => {
+            const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
+
+            act(() => {
+                result.current.handleSelectMetadataField(
+                    createMockField({
+                        targetLocation: [
+                            {
+                                itemId: 'item-1',
+                                page: 0,
+                                text: 'first',
+                                boundingBox: { left: 0.1, top: 0.2, right: 0.5, bottom: 0.6 },
+                            },
+                            {
+                                itemId: 'item-2',
+                                page: 1,
+                                text: 'second',
+                            },
+                        ],
+                    }),
+                );
+            });
+
+            expect(mockShowBoundingBoxHighlights).toHaveBeenCalledWith([
+                { id: 'bbox-field-1-1', x: 9.75, y: 19.75, width: 40.5, height: 40.5, pageNumber: 1 },
+            ]);
+        });
+
+        test('should deselect when all target location entries lack boundingBox', () => {
+            const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
+
+            act(() => {
+                result.current.handleSelectMetadataField(
+                    createMockField({
+                        targetLocation: [
+                            { itemId: 'item-1', page: 0, text: 'first' },
+                            { itemId: 'item-2', page: 1, text: 'second' },
+                        ],
+                    }),
+                );
+            });
+
+            expect(result.current.selectedMetadataFieldId).toBeNull();
+            expect(mockShowBoundingBoxHighlights).not.toHaveBeenCalled();
+            expect(mockHideBoundingBoxHighlights).toHaveBeenCalled();
+        });
+
         test('should clamp bounding box values to valid percentage range', () => {
             const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
 
