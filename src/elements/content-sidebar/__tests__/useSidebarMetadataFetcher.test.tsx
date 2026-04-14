@@ -815,6 +815,120 @@ describe('useSidebarMetadataFetcher', () => {
             ]);
         });
 
+        test('should pick the lowest confidence score when confidence_score is an array', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1', field2: 'value2' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                confidence_score: {
+                    field1: [
+                        { level: 'HIGH', score: 1 },
+                        { level: 'LOW', score: 0.3 },
+                        { level: 'MEDIUM', score: 0.7 },
+                    ],
+                    field2: { level: 'MEDIUM', score: 0.6 },
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([
+                {
+                    ...mockTemplates[0].fields[0],
+                    aiSuggestion: 'value1',
+                    aiSuggestionConfidenceScore: { value: 0.3, level: 'LOW', isAccepted: false },
+                },
+                {
+                    ...mockTemplates[0].fields[1],
+                    aiSuggestion: 'value2',
+                    aiSuggestionConfidenceScore: { value: 0.6, level: 'MEDIUM', isAccepted: false },
+                },
+            ]);
+        });
+
+        test('should pick the lowest confidence score from array with two equal scores', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                confidence_score: {
+                    field1: [
+                        { level: 'HIGH', score: 1 },
+                        { level: 'HIGH', score: 1 },
+                    ],
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions[0].aiSuggestionConfidenceScore).toEqual({
+                value: 1,
+                level: 'HIGH',
+                isAccepted: false,
+            });
+        });
+
+        test('should flatten nested arrays of references', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                confidence_score: {
+                    field1: { level: 'HIGH', score: 0.9 },
+                },
+                reference: {
+                    field1: [
+                        [
+                            { itemId: 'file_123', page: 0, text: 'ref 1' },
+                            { itemId: 'file_123', page: 1, text: 'ref 2' },
+                        ],
+                        [{ itemId: 'file_456', page: 0, text: 'ref 3' }],
+                    ],
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions[0].targetLocation).toEqual([
+                { itemId: 'file_123', page: 0, text: 'ref 1' },
+                { itemId: 'file_123', page: 1, text: 'ref 2' },
+                { itemId: 'file_456', page: 0, text: 'ref 3' },
+            ]);
+        });
+
+        test('should handle flat array of references without nesting', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                reference: {
+                    field1: [
+                        { itemId: 'file_123', page: 0, text: 'ref 1' },
+                        { itemId: 'file_123', page: 1, text: 'ref 2' },
+                    ],
+                },
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true);
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions[0].targetLocation).toEqual([
+                { itemId: 'file_123', page: 0, text: 'ref 1' },
+                { itemId: 'file_123', page: 1, text: 'ref 2' },
+            ]);
+        });
+
         test('should handle reference entries without bounding box', async () => {
             mockAPI.extractStructured.mockResolvedValue({
                 answer: { field1: 'value1' },

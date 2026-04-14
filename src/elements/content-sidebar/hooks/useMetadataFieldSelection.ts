@@ -4,6 +4,13 @@ import clampPercentage from '../utils/clampPercentage';
 
 import type { BoxAnnotationsBoundingBox, GetPreviewForMetadataReturnType } from '../types/BoxAISidebarTypes';
 
+type TargetLocationEntryWithBoundingBoxRequired = MetadataTargetLocationEntry &
+    Required<Pick<MetadataTargetLocationEntry, 'boundingBox'>>;
+
+function checkHasBoundingBox(entry: MetadataTargetLocationEntry): entry is TargetLocationEntryWithBoundingBoxRequired {
+    return !!entry.boundingBox;
+}
+
 function convertTargetLocationToBoundingBox(
     id: string,
     targetLocationEntries?: MetadataTargetLocationEntry[],
@@ -13,7 +20,7 @@ function convertTargetLocationToBoundingBox(
     }
 
     // Adding extra space (-0.25 for left and top, +0.5 for width and height) to provide paddings for bounding boxes
-    return targetLocationEntries.map((item: MetadataTargetLocationEntry, index: number) => ({
+    return targetLocationEntries.filter(checkHasBoundingBox).map((item, index: number) => ({
         id: `bbox-${id}-${index + 1}`,
         x: clampPercentage(item.boundingBox.left * 100 - 0.25),
         y: clampPercentage(item.boundingBox.top * 100 - 0.25),
@@ -75,7 +82,7 @@ function useMetadataFieldSelection(getPreview: () => GetPreviewForMetadataReturn
 
             const boundingBoxes = convertTargetLocationToBoundingBox(field.id, field.targetLocation);
 
-            if (!boundingBoxes) {
+            if (!boundingBoxes || boundingBoxes.length === 0) {
                 handleDeselectMetadataField();
                 return;
             }
