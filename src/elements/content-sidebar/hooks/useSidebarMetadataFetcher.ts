@@ -190,9 +190,10 @@ function useSidebarMetadataFetcher(
                 },
                 (error: ElementsXhrError, code: string) =>
                     onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
+                isConfidenceScoreEnabled,
             );
         },
-        [api, file, onApiError, onSuccess],
+        [api, file, onApiError, onSuccess, isConfidenceScoreEnabled],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(

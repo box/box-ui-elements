@@ -2918,6 +2918,518 @@ describe('api/Metadata', () => {
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
         });
+
+        test('should not include $details when isConfidenceScoreEnabled is false', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                        confidenceScore: { value: 1, level: 'HIGH', isAccepted: false },
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: { invoiceDate: '2024-01-15' },
+            });
+        });
+
+        test('should include $details with confidence scores when isConfidenceScoreEnabled is true and fields have confidenceScore', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                        confidenceScore: { value: 1, level: 'HIGH', isAccepted: false },
+                    },
+                    {
+                        key: 'totalAmount',
+                        type: 'float',
+                        value: '100.50',
+                        confidenceScore: { value: 0.85, level: 'MEDIUM', isAccepted: true },
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    invoiceDate: '2024-01-15',
+                    totalAmount: 100.5,
+                    $details: {
+                        invoiceDate: {
+                            confidenceScore: 1,
+                            confidenceLevel: 'HIGH',
+                        },
+                        totalAmount: {
+                            confidenceScore: 0.85,
+                            confidenceLevel: 'MEDIUM',
+                            process: 'AI_ACCEPTED',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should include process as AI_ACCEPTED only when isAccepted is true', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'vendorName',
+                        type: 'string',
+                        value: 'Acme Corp',
+                        confidenceScore: { value: 0.95, level: 'HIGH', isAccepted: true },
+                    },
+                    {
+                        key: 'invoiceNumber',
+                        type: 'string',
+                        value: 'INV-001',
+                        confidenceScore: { value: 0.5, level: 'LOW', isAccepted: false },
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    vendorName: 'Acme Corp',
+                    invoiceNumber: 'INV-001',
+                    $details: {
+                        vendorName: {
+                            confidenceScore: 0.95,
+                            confidenceLevel: 'HIGH',
+                            process: 'AI_ACCEPTED',
+                        },
+                        invoiceNumber: {
+                            confidenceScore: 0.5,
+                            confidenceLevel: 'LOW',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should not include $details when isConfidenceScoreEnabled is true but no fields have confidenceScore', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: { invoiceDate: '2024-01-15' },
+            });
+        });
+
+        test('should include stringified targetLocation in $details when field has targetLocation', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const targetLocation = [
+                {
+                    itemId: '123',
+                    page: 1,
+                    text: 'California',
+                    boundingBox: { left: 0.1, top: 0.2, right: 0.3, bottom: 0.4 },
+                },
+            ];
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'state',
+                        type: 'string',
+                        value: 'California',
+                        confidenceScore: { value: 0.9, level: 'HIGH', isAccepted: false },
+                        targetLocation,
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    state: 'California',
+                    $details: {
+                        state: {
+                            confidenceScore: 0.9,
+                            confidenceLevel: 'HIGH',
+                            targetLocation: JSON.stringify(targetLocation),
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should include targetLocation with process when isAccepted is true', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const targetLocation = [
+                {
+                    itemId: '456',
+                    page: 2,
+                    text: '$500.00',
+                    boundingBox: { left: 0.5, top: 0.6, right: 0.7, bottom: 0.8 },
+                },
+            ];
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'totalAmount',
+                        type: 'float',
+                        value: '500',
+                        confidenceScore: { value: 0.95, level: 'HIGH', isAccepted: true },
+                        targetLocation,
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    totalAmount: 500,
+                    $details: {
+                        totalAmount: {
+                            confidenceScore: 0.95,
+                            confidenceLevel: 'HIGH',
+                            process: 'AI_ACCEPTED',
+                            targetLocation: JSON.stringify(targetLocation),
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should not include targetLocation in $details when field has no targetLocation', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                        confidenceScore: { value: 1, level: 'HIGH', isAccepted: false },
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    invoiceDate: '2024-01-15',
+                    $details: {
+                        invoiceDate: {
+                            confidenceScore: 1,
+                            confidenceLevel: 'HIGH',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should handle mix of fields with and without targetLocation', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const targetLocation = [
+                {
+                    itemId: '789',
+                    page: 1,
+                    text: 'Acme Corp',
+                    boundingBox: { left: 0.1, top: 0.1, right: 0.5, bottom: 0.2 },
+                },
+            ];
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'vendorName',
+                        type: 'string',
+                        value: 'Acme Corp',
+                        confidenceScore: { value: 0.99, level: 'HIGH', isAccepted: true },
+                        targetLocation,
+                    },
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-06-01',
+                        confidenceScore: { value: 0.7, level: 'MEDIUM', isAccepted: false },
+                    },
+                    {
+                        key: 'notes',
+                        type: 'string',
+                        value: 'Some notes',
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    vendorName: 'Acme Corp',
+                    invoiceDate: '2024-06-01',
+                    notes: 'Some notes',
+                    $details: {
+                        vendorName: {
+                            confidenceScore: 0.99,
+                            confidenceLevel: 'HIGH',
+                            process: 'AI_ACCEPTED',
+                            targetLocation: JSON.stringify(targetLocation),
+                        },
+                        invoiceDate: {
+                            confidenceScore: 0.7,
+                            confidenceLevel: 'MEDIUM',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should only add $details for fields that have confidenceScore, skipping those without', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                        confidenceScore: { value: 1, level: 'HIGH', isAccepted: false },
+                    },
+                    {
+                        key: 'notes',
+                        type: 'string',
+                        value: 'Some notes',
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    invoiceDate: '2024-01-15',
+                    notes: 'Some notes',
+                    $details: {
+                        invoiceDate: {
+                            confidenceScore: 1,
+                            confidenceLevel: 'HIGH',
+                        },
+                    },
+                },
+            });
+        });
     });
 
     describe('deleteMetadata()', () => {
