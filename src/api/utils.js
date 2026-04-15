@@ -11,6 +11,7 @@ import type {
     MetadataConfidenceScoreData,
     MetadataDetailedFieldValue,
     MetadataFieldValue,
+    MetadataInstanceV2,
     MetadataTargetLocationEntry,
     MetadataTemplateField,
 } from '../common/types/metadata';
@@ -94,6 +95,39 @@ const parseTargetLocation = (fieldValue: any): ?Array<MetadataTargetLocationEntr
     }
 };
 
+const mergeDetailedAndHydratedInstances = (
+    detailedEntries: Array<MetadataInstanceV2>,
+    hydratedEntries: Array<MetadataInstanceV2>,
+): Array<MetadataInstanceV2> => {
+    const hydratedById: { [string]: MetadataInstanceV2 } = {};
+    hydratedEntries.forEach(entry => {
+        hydratedById[entry.$id] = entry;
+    });
+
+    return detailedEntries.map(detailedEntry => {
+        const hydratedEntry = hydratedById[detailedEntry.$id];
+        if (!hydratedEntry) {
+            return detailedEntry;
+        }
+
+        const merged = { ...detailedEntry };
+        Object.keys(merged).forEach(key => {
+            if (key.startsWith('$')) {
+                return;
+            }
+
+            if (isDetailedFieldValue(merged[key]) && key in hydratedEntry) {
+                merged[key] = {
+                    ...merged[key],
+                    values: hydratedEntry[key],
+                };
+            }
+        });
+
+        return merged;
+    });
+};
+
 const handleOnAbort = (xhr: Xhr) => {
     xhr.abort();
 
@@ -107,5 +141,6 @@ export {
     handleOnAbort,
     isDetailedFieldValue,
     mapDetailedFieldToConfidenceScore,
+    mergeDetailedAndHydratedInstances,
     parseTargetLocation,
 };
