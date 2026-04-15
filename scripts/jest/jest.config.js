@@ -12,6 +12,8 @@ module.exports = {
             '<rootDir>/scripts/jest/mocks/fileMock.js',
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
         '^uuid$': require.resolve('uuid'),
+        '^react-markdown$': '<rootDir>/scripts/jest/mocks/reactMarkdownMock.js',
+        '^remark-gfm$': '<rootDir>/scripts/jest/mocks/remarkGfmMock.js',
     },
     restoreMocks: true,
     rootDir: '../../',
@@ -26,6 +28,6 @@ module.exports = {
     testMatch: ['**/__tests__/**/*.test.+(js|jsx|ts|tsx)'],
     testPathIgnorePatterns: ['stories.test.js$', 'stories.test.tsx$', 'stories.test.d.ts'],
     transformIgnorePatterns: [
-        'node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data|@box/blueprint-web|@box/blueprint-web-assets|@box/metadata-editor|@box/box-ai-content-answers|@box/box-ai-agent-selector|@box/item-icon|@box/combobox-with-api|@box/tree|@box/metadata-filter|@box/metadata-view|@box/types|@box/box-item-type-selector|@box/unified-share-modal|@box/user-selector|@box/copy-input)/)',
+        'node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data|@box/blueprint-web|@box/blueprint-web-assets|@box/metadata-editor|@box/box-ai-content-answers|@box/box-ai-agent-selector|@box/item-icon|@box/combobox-with-api|@box/tree|@box/metadata-filter|@box/metadata-view|@box/content-field|@box/types|@box/box-item-type-selector|@box/unified-share-modal|@box/user-selector|@box/copy-input)/)',
     ],
 };
