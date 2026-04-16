@@ -713,18 +713,52 @@ describe('api/Metadata', () => {
             });
         });
 
-        test('should apply detailed view query string param when isMetadataRedesign and isConfidenceScoreEnabled are true', async () => {
+        test('should make both detailed and hydrated calls when isMetadataRedesign and isConfidenceScoreEnabled are true', async () => {
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
-            metadata.xhr.get = jest.fn().mockReturnValueOnce({
-                data: {
-                    entries: [],
-                },
-            });
-            await metadata.getInstances('id', true, true);
+            metadata.xhr.get = jest
+                .fn()
+                .mockResolvedValueOnce({
+                    data: {
+                        entries: [
+                            {
+                                $id: 'inst-1',
+                                region: {
+                                    values: ['uuid-1'],
+                                    details: { updatedAt: 1000, updatedBy: 'user1', updatedAppId: 'app1' },
+                                },
+                            },
+                        ],
+                    },
+                })
+                .mockResolvedValueOnce({
+                    data: {
+                        entries: [
+                            {
+                                $id: 'inst-1',
+                                region: [{ id: 'uuid-1', displayName: 'Japan', level: '1', nodePath: [] }],
+                            },
+                        ],
+                    },
+                });
+            const result = await metadata.getInstances('id', true, true);
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'metadata_url?view=detailed',
                 id: 'file_id',
             });
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url?view=hydrated',
+                id: 'file_id',
+            });
+            expect(result).toEqual([
+                {
+                    $id: 'inst-1',
+                    region: {
+                        values: [{ id: 'uuid-1', displayName: 'Japan', level: '1', nodePath: [] }],
+                        details: { updatedAt: 1000, updatedBy: 'user1', updatedAppId: 'app1' },
+                    },
+                },
+            ]);
         });
 
         test('should not apply view query string param when isMetadataRedesign is false even if isConfidenceScoreEnabled is true', async () => {

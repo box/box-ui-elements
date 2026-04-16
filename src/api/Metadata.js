@@ -21,6 +21,7 @@ import {
     formatMetadataFieldValue,
     handleOnAbort,
     mapDetailedFieldToConfidenceScore,
+    mergeDetailedAndHydratedInstances,
     parseTargetLocation,
 } from './utils';
 import File from './File';
@@ -392,6 +393,35 @@ class Metadata extends File {
     }
 
     /**
+     * Fetches both detailed and hydrated metadata views and merges them so that
+     * the result is in detailed format but with hydrated taxonomy values.
+     *
+     * @param {string} baseUrl - metadata API base URL
+     * @param {string} requestId - typed file id
+     * @return {Array} merged metadata instances
+     */
+    async getDetailedInstancesWithHydratedTaxonomy(
+        baseUrl: string,
+        requestId: string,
+    ): Promise<Array<MetadataInstanceV2>> {
+        try {
+            const [detailedResponse, hydratedResponse] = await Promise.all([
+                this.xhr.get({ url: `${baseUrl}?view=detailed`, id: requestId }),
+                this.xhr.get({ url: `${baseUrl}?view=hydrated`, id: requestId }),
+            ]);
+            const detailedEntries = getProp(detailedResponse, 'data.entries', []);
+            const hydratedEntries = getProp(hydratedResponse, 'data.entries', []);
+            return mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+        } catch (e) {
+            const { status } = e;
+            if (isUserCorrectableError(status)) {
+                throw e;
+            }
+        }
+        return [];
+    }
+
+    /**
      * Gets metadata instances for a Box file
      *
      * @param {string} id - file id
@@ -407,14 +437,19 @@ class Metadata extends File {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
 
         const baseUrl = this.getMetadataUrl(id);
-        const view = isConfidenceScoreEnabled ? 'detailed' : 'hydrated';
-        const url = isMetadataRedesign ? `${baseUrl}?view=${view}` : baseUrl;
+        const requestId = getTypedFileId(id);
+
+        if (isMetadataRedesign && isConfidenceScoreEnabled) {
+            return this.getDetailedInstancesWithHydratedTaxonomy(baseUrl, requestId);
+        }
+
+        const url = isMetadataRedesign ? `${baseUrl}?view=hydrated` : baseUrl;
 
         let instances = {};
         try {
             instances = await this.xhr.get({
                 url,
-                id: getTypedFileId(id),
+                id: requestId,
             });
         } catch (e) {
             const { status } = e;
