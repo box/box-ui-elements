@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import type { Location } from 'history';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
@@ -135,6 +136,8 @@ function MetadataSidebarRedesign({
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
+    const [pendingNavLocation, setPendingNavLocation] = useState<Location | null>(null);
+    const unblockRouterRef = useRef<(() => void) | null>(null);
     const shouldFetchStructuredTextRep =
         isBoxAiSuggestionsEnabled &&
         fileExtension?.toLowerCase() === 'pdf' &&
@@ -177,6 +180,43 @@ function MetadataSidebarRedesign({
         }
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
+    const blockRouterHistory = useCallback(() => {
+        unblockRouterRef.current = history.block(location => {
+            setPendingNavLocation(location);
+            setIsUnsavedChangesModalOpen(true);
+            return false;
+        });
+    }, [history]);
+
+    const unblockRouterHistory = useCallback(() => {
+        unblockRouterRef.current?.();
+        unblockRouterRef.current = null;
+    }, []);
+
+    const handleUnsavedChangesModalOpen = useCallback(
+        (isOpen: boolean) => {
+            setIsUnsavedChangesModalOpen(isOpen);
+            if (!isOpen && pendingNavLocation && isConfidenceScoreReviewEnabled) {
+                // re-sync the URL back to metadata is the URL was updated via host app
+                unblockRouterHistory();
+                history.replace(`/${SIDEBAR_VIEW_METADATA}`);
+                blockRouterHistory();
+                setPendingNavLocation(null);
+            }
+        },
+        [pendingNavLocation, isConfidenceScoreReviewEnabled, unblockRouterHistory, history, blockRouterHistory],
+    );
+
+    useEffect(() => {
+        if (!editingTemplate || !isConfidenceScoreReviewEnabled) {
+            return undefined;
+        }
+
+        blockRouterHistory();
+
+        return () => unblockRouterHistory();
+    }, [editingTemplate, history, isConfidenceScoreReviewEnabled, unblockRouterHistory, blockRouterHistory]);
+
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         clearExtractError();
 
@@ -196,8 +236,12 @@ function MetadataSidebarRedesign({
     };
 
     const handleDiscardUnsavedChanges = () => {
-        // check if user tried to edit another template before unsaved changes modal
-        if (pendingTemplateToEdit) {
+        if (pendingNavLocation && isConfidenceScoreReviewEnabled) {
+            unblockRouterHistory();
+            setEditingTemplate(null);
+            history.push(pendingNavLocation);
+            setPendingNavLocation(null);
+        } else if (pendingTemplateToEdit) {
             setEditingTemplate(pendingTemplateToEdit);
             setIsDeleteButtonDisabled(true);
 
@@ -331,7 +375,7 @@ function MetadataSidebarRedesign({
                             onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
                             onSubmit={handleSubmit}
                             onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
-                            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
                             shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
