@@ -182,6 +182,9 @@ function MetadataSidebarRedesign({
 
     const blockRouterHistory = useCallback(() => {
         unblockRouterRef.current = history.block(location => {
+            if (location.pathname === `/${SIDEBAR_VIEW_METADATA}`) {
+                return undefined;
+            }
             setPendingNavLocation(location);
             setIsUnsavedChangesModalOpen(true);
             return false;
@@ -198,13 +201,11 @@ function MetadataSidebarRedesign({
             setIsUnsavedChangesModalOpen(isOpen);
             if (!isOpen && pendingNavLocation && isConfidenceScoreReviewEnabled) {
                 // re-sync the URL back to metadata is the URL was updated via host app
-                unblockRouterHistory();
                 history.replace(`/${SIDEBAR_VIEW_METADATA}`);
-                blockRouterHistory();
                 setPendingNavLocation(null);
             }
         },
-        [pendingNavLocation, isConfidenceScoreReviewEnabled, unblockRouterHistory, history, blockRouterHistory],
+        [pendingNavLocation, isConfidenceScoreReviewEnabled, history],
     );
 
     useEffect(() => {
