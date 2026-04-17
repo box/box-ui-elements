@@ -6,6 +6,7 @@ module.exports = {
         '@box/box-item-type-selector',
         '@box/combobox-with-api',
         '@box/copy-input',
+        '@box/content-field',
         '@box/item-icon',
         '@box/metadata-editor',
         '@box/metadata-filter',

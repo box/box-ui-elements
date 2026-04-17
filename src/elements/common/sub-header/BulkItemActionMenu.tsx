@@ -26,7 +26,7 @@ export const BulkItemActionMenu = ({ actions, selectedItemIds }: BulkItemActionM
                 <Button
                     role="button"
                     aria-label={formatMessage(messages.bulkItemActionMenuAriaLabel)}
-                    icon={Ellipsis}
+                    endIcon={Ellipsis}
                     size="large"
                     variant="secondary"
                 />

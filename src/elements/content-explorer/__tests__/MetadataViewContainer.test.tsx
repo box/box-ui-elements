@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import type { FloatType } from '@box/metadata-filter';
 import type { Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
 import { render, screen, userEvent, waitFor, within } from '../../../test-utils/testing-library';
@@ -282,7 +283,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             actionBarProps: { initialFilterValues },
         });
 
-        expect(screen.getByRole('button', { name: 'All Filters 2' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'All Filters 4' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Industry/i })).toHaveTextContent(/\(1\)/);
         // Category filter should not be present since there's no corresponding column
         expect(screen.queryByRole('button', { name: /Category/i })).not.toBeInTheDocument();
@@ -443,13 +444,16 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             const internalFilters = {
                 'price-filter': {
                     fieldType: 'float' as const,
-                    value: { range: { gt: 10, lt: 100 }, advancedFilterOption: 'range' },
+                    value: { range: { gt: 10, lt: 100 }, advancedFilterOption: 'between' } as FloatType,
                 },
             };
 
             const result = convertFilterValuesToExternal(internalFilters);
 
-            expect(result['price-filter'].value).toEqual({ range: { gt: 10, lt: 100 }, advancedFilterOption: 'range' });
+            expect(result['price-filter'].value).toEqual({
+                range: { gt: 10, lt: 100 },
+                advancedFilterOption: 'between',
+            });
             expect(result['price-filter'].fieldType).toBe('float');
         });
 
@@ -457,7 +461,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             const internalFilters = {
                 'rating-filter': {
                     fieldType: 'float' as const,
-                    value: { range: { gt: 4.5, lt: 5.0 }, advancedFilterOption: 'range' },
+                    value: { range: { gt: 4.5, lt: 5.0 }, advancedFilterOption: 'between' } as FloatType,
                 },
             };
 
@@ -465,7 +469,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
 
             expect(result['rating-filter'].value).toEqual({
                 range: { gt: 4.5, lt: 5.0 },
-                advancedFilterOption: 'range',
+                advancedFilterOption: 'between',
             });
             expect(result['rating-filter'].fieldType).toBe('float');
         });
@@ -482,7 +486,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
                 },
                 'price-filter': {
                     fieldType: 'float' as const,
-                    value: { range: { gt: 0, lt: 50 }, advancedFilterOption: 'range' },
+                    value: { range: { gt: 0, lt: 50 }, advancedFilterOption: 'between' } as FloatType,
                 },
                 'category-filter': {
                     fieldType: 'multiSelect' as const,
@@ -498,7 +502,7 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
             const result = convertFilterValuesToExternal(internalFilters);
 
             expect(result['status-filter'].value).toEqual(['active']);
-            expect(result['price-filter'].value).toEqual({ range: { gt: 0, lt: 50 }, advancedFilterOption: 'range' });
+            expect(result['price-filter'].value).toEqual({ range: { gt: 0, lt: 50 }, advancedFilterOption: 'between' });
             expect(result['category-filter'].value).toEqual(['tech', 'finance']);
         });
 
