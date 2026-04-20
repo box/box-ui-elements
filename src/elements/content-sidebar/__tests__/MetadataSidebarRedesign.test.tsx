@@ -9,10 +9,16 @@ import {
     type MetadataSidebarRedesignProps,
 } from '../MetadataSidebarRedesign';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
+import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
 
 jest.mock('../hooks/useSidebarMetadataFetcher');
 const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFunction<
     typeof useSidebarMetadataFetcher
+>;
+
+jest.mock('../hooks/useMetadataFieldSelection');
+const mockUseMetadataFieldSelection = useMetadataFieldSelection as jest.MockedFunction<
+    typeof useMetadataFieldSelection
 >;
 
 const getStructuredTextRep = jest.fn().mockResolvedValue('structured-text-rep');
@@ -104,6 +110,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             api,
             fileExtension: 'pdf',
             getStructuredTextRep,
+            getPreview: jest.fn().mockReturnValue({}),
             fileId: 'test-file-id-1',
             elementId: 'element-1',
             filteredTemplateIds: emptyFilteredTemplateIds,
@@ -117,6 +124,11 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     };
 
     beforeEach(() => {
+        mockUseMetadataFieldSelection.mockReturnValue({
+            selectedMetadataFieldId: null,
+            handleSelectMetadataField: jest.fn(),
+        });
+
         mockUseSidebarMetadataFetcher.mockReturnValue({
             clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
@@ -499,5 +511,12 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         expect(createSessionRequest).not.toHaveBeenCalledTimes(1);
         expect(createSessionRequest).not.toHaveBeenCalledWith({ items: [{ id: undefined }] }, undefined);
+    });
+
+    test('should pass getPreview to useMetadataFieldSelection', () => {
+        const getPreview = jest.fn();
+        renderComponent({ getPreview });
+
+        expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview);
     });
 });

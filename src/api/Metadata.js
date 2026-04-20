@@ -21,10 +21,12 @@ import {
     formatMetadataFieldValue,
     handleOnAbort,
     mapDetailedFieldToConfidenceScore,
+    mergeDetailedAndHydratedInstances,
     parseTargetLocation,
 } from './utils';
 import File from './File';
 import {
+    AI_ACCEPTED_PROCESS,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -391,6 +393,35 @@ class Metadata extends File {
     }
 
     /**
+     * Fetches both detailed and hydrated metadata views and merges them so that
+     * the result is in detailed format but with hydrated taxonomy values.
+     *
+     * @param {string} baseUrl - metadata API base URL
+     * @param {string} requestId - typed file id
+     * @return {Array} merged metadata instances
+     */
+    async getDetailedInstancesWithHydratedTaxonomy(
+        baseUrl: string,
+        requestId: string,
+    ): Promise<Array<MetadataInstanceV2>> {
+        try {
+            const [detailedResponse, hydratedResponse] = await Promise.all([
+                this.xhr.get({ url: `${baseUrl}?view=detailed`, id: requestId }),
+                this.xhr.get({ url: `${baseUrl}?view=hydrated`, id: requestId }),
+            ]);
+            const detailedEntries = getProp(detailedResponse, 'data.entries', []);
+            const hydratedEntries = getProp(hydratedResponse, 'data.entries', []);
+            return mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+        } catch (e) {
+            const { status } = e;
+            if (isUserCorrectableError(status)) {
+                throw e;
+            }
+        }
+        return [];
+    }
+
+    /**
      * Gets metadata instances for a Box file
      *
      * @param {string} id - file id
@@ -406,14 +437,19 @@ class Metadata extends File {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
 
         const baseUrl = this.getMetadataUrl(id);
-        const view = isConfidenceScoreEnabled ? 'detailed' : 'hydrated';
-        const url = isMetadataRedesign ? `${baseUrl}?view=${view}` : baseUrl;
+        const requestId = getTypedFileId(id);
+
+        if (isMetadataRedesign && isConfidenceScoreEnabled) {
+            return this.getDetailedInstancesWithHydratedTaxonomy(baseUrl, requestId);
+        }
+
+        const url = isMetadataRedesign ? `${baseUrl}?view=hydrated` : baseUrl;
 
         let instances = {};
         try {
             instances = await this.xhr.get({
                 url,
-                id: getTypedFileId(id),
+                id: requestId,
             });
         } catch (e) {
             const { status } = e;
@@ -1121,6 +1157,7 @@ class Metadata extends File {
      * @param {Object} template - Metadata Redesign template
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {boolean} isConfidenceScoreEnabled - whether to include confidence score details in the payload
      * @return {Promise}
      */
     async createMetadataRedesign(
@@ -1128,6 +1165,7 @@ class Metadata extends File {
         template: MetadataTemplateInstance,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        isConfidenceScoreEnabled: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_CREATE_METADATA;
         if (!file || !template) {
@@ -1176,6 +1214,34 @@ class Metadata extends File {
 
                 return acc;
             }, {});
+
+            if (isConfidenceScoreEnabled) {
+                const details = template.fields.reduce((acc, field) => {
+                    if (field.confidenceScore) {
+                        const entry: {
+                            confidenceScore: number,
+                            confidenceLevel: string,
+                            process?: string,
+                            targetLocation?: string,
+                        } = {
+                            confidenceScore: field.confidenceScore.value,
+                            confidenceLevel: field.confidenceScore.level,
+                        };
+                        if (field.confidenceScore.isAccepted) {
+                            entry.process = AI_ACCEPTED_PROCESS;
+                        }
+                        if (field.targetLocation) {
+                            entry.targetLocation = JSON.stringify(field.targetLocation);
+                        }
+                        acc[field.key] = entry;
+                    }
+                    return acc;
+                }, {});
+
+                if (Object.keys(details).length > 0) {
+                    fieldsValues.$details = details;
+                }
+            }
 
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),

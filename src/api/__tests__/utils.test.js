@@ -7,6 +7,7 @@ import {
     handleOnAbort,
     isDetailedFieldValue,
     mapDetailedFieldToConfidenceScore,
+    mergeDetailedAndHydratedInstances,
     parseTargetLocation,
 } from '../utils';
 import { threadedComments, threadedCommentsFormatted } from '../fixtures';
@@ -249,6 +250,144 @@ describe('api/utils', () => {
             const expectedValue = [{ value: id, displayValue: displayName }];
 
             expect(formatMetadataFieldValue(taxonomyField, [{ id, displayName }])).toEqual(expectedValue);
+        });
+    });
+
+    describe('mergeDetailedAndHydratedInstances()', () => {
+        test('should replace detailed values with hydrated values for taxonomy fields', () => {
+            const detailedEntries = [
+                {
+                    $id: 'inst-1',
+                    $template: 'template1',
+                    $scope: 'enterprise',
+                    region: {
+                        values: ['uuid-1'],
+                        details: { updatedAt: 1000, updatedBy: 'user1', updatedAppId: 'app1' },
+                    },
+                    name: {
+                        values: 'Test Name',
+                        details: { updatedAt: 2000, updatedBy: 'user2', updatedAppId: 'app2' },
+                    },
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'inst-1',
+                    $template: 'template1',
+                    $scope: 'enterprise',
+                    region: [{ id: 'uuid-1', displayName: 'Japan', level: '1', nodePath: [] }],
+                    name: 'Test Name',
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result).toEqual([
+                {
+                    $id: 'inst-1',
+                    $template: 'template1',
+                    $scope: 'enterprise',
+                    region: {
+                        values: [{ id: 'uuid-1', displayName: 'Japan', level: '1', nodePath: [] }],
+                        details: { updatedAt: 1000, updatedBy: 'user1', updatedAppId: 'app1' },
+                    },
+                    name: {
+                        values: 'Test Name',
+                        details: { updatedAt: 2000, updatedBy: 'user2', updatedAppId: 'app2' },
+                    },
+                },
+            ]);
+        });
+
+        test('should return detailed entries unchanged when no matching hydrated entry exists', () => {
+            const detailedEntries = [
+                {
+                    $id: 'inst-1',
+                    region: { values: ['uuid-1'], details: {} },
+                },
+            ];
+            const hydratedEntries = [];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result).toEqual(detailedEntries);
+        });
+
+        test('should not modify $-prefixed system fields', () => {
+            const detailedEntries = [
+                {
+                    $id: 'inst-1',
+                    $scope: 'enterprise',
+                    $template: 'tmpl',
+                    field1: { values: 'val1', details: {} },
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'inst-1',
+                    $scope: 'enterprise',
+                    $template: 'tmpl',
+                    field1: 'val1',
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result[0].$id).toBe('inst-1');
+            expect(result[0].$scope).toBe('enterprise');
+            expect(result[0].$template).toBe('tmpl');
+        });
+
+        test('should handle multiple instances', () => {
+            const detailedEntries = [
+                {
+                    $id: 'inst-1',
+                    country: { values: ['id-1'], details: { updatedAt: 100 } },
+                },
+                {
+                    $id: 'inst-2',
+                    city: { values: ['id-2'], details: { updatedAt: 200 } },
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'inst-2',
+                    city: [{ id: 'id-2', displayName: 'Tokyo' }],
+                },
+                {
+                    $id: 'inst-1',
+                    country: [{ id: 'id-1', displayName: 'Japan' }],
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result[0].country.values).toEqual([{ id: 'id-1', displayName: 'Japan' }]);
+            expect(result[0].country.details).toEqual({ updatedAt: 100 });
+            expect(result[1].city.values).toEqual([{ id: 'id-2', displayName: 'Tokyo' }]);
+            expect(result[1].city.details).toEqual({ updatedAt: 200 });
+        });
+
+        test('should skip non-detailed fields during merge', () => {
+            const detailedEntries = [
+                {
+                    $id: 'inst-1',
+                    plainField: 'just a string',
+                    detailedField: { values: 'val', details: {} },
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'inst-1',
+                    plainField: 'just a string',
+                    detailedField: 'val',
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result[0].plainField).toBe('just a string');
+            expect(result[0].detailedField).toEqual({ values: 'val', details: {} });
         });
     });
 });

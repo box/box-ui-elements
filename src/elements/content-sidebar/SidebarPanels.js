@@ -490,6 +490,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                             ? match.params.filteredTemplateIds.split(',')
                                             : []
                                     }
+                                    getPreview={getPreview}
                                     hasSidebarInitialized={isInitialized}
                                     isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                                     ref={this.metadataSidebar}

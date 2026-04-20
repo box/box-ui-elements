@@ -444,6 +444,7 @@ export const SIDEBAR_VIEW_BOXAI: 'boxai' = 'boxai';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 export const SIDEBAR_VIEW_VERSIONS: 'versions' = 'versions';
 export const SIDEBAR_VIEW_DOCGEN: 'docgen' = 'docgen';
+export const AI_ACCEPTED_PROCESS: 'AI_ACCEPTED' = 'AI_ACCEPTED';
 
 /* ------------------ HTTP Requests ---------------------- */
 export const HTTP_GET: 'GET' = 'GET';
