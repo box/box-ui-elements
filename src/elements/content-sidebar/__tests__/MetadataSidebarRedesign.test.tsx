@@ -637,5 +637,28 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
             expect(mockUnblock).toHaveBeenCalled();
         });
+
+        test('should call setWarningModalOpenCallback with modal open fn on mount', () => {
+            setupWithEditableTemplates();
+            const setWarningModalOpenCallback = jest.fn();
+
+            renderComponent({ setWarningModalOpenCallback }, navBlockFeatures);
+
+            expect(setWarningModalOpenCallback).toHaveBeenCalledWith(expect.any(Function));
+        });
+
+        test('should call setWarningModalDiscardCallback when discard is clicked', async () => {
+            setupWithEditableTemplates();
+            const setWarningModalDiscardCallback = jest.fn();
+            const { mockHistory } = renderComponent({ setWarningModalDiscardCallback }, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            const discardButton = await screen.findByRole('button', { name: 'Discard Changes' });
+            await userEvent.click(discardButton);
+
+            expect(setWarningModalDiscardCallback).toHaveBeenCalledTimes(1);
+        });
     });
 });

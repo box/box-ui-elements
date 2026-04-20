@@ -2233,6 +2233,77 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('navigateToIndex() with metadata unsaved changes guard', () => {
+        const featuresWithFlag = { 'metadata.confidenceScore.enabled': true };
+
+        test('should open sidebar modal and stash fileId when metadata is editing and feature is on', () => {
+            const onNavigate = jest.fn();
+            const openModal = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onNavigate,
+                fileId: 'file1',
+                features: featuresWithFlag,
+            });
+            const instance = wrapper.instance();
+            wrapper.setState({ isMetadataEditing: true });
+            instance.sidebarOpenUnsavedModal = openModal;
+
+            instance.navigateToIndex(1);
+
+            expect(openModal).toHaveBeenCalledWith(true);
+            expect(instance.pendingNavFileId).toBe('file2');
+            expect(wrapper.state('currentFileId')).toBe('file1');
+            expect(onNavigate).not.toHaveBeenCalled();
+        });
+
+        test('should navigate normally when feature flag is off', () => {
+            const onNavigate = jest.fn();
+            const openModal = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onNavigate,
+                fileId: 'file1',
+                features: { 'metadata.confidenceScore.enabled': false },
+            });
+            const instance = wrapper.instance();
+            wrapper.setState({ isMetadataEditing: true });
+            instance.sidebarOpenUnsavedModal = openModal;
+
+            instance.navigateToIndex(1);
+
+            expect(openModal).not.toHaveBeenCalled();
+            expect(wrapper.state('currentFileId')).toBe('file2');
+        });
+
+        test('handleSetWarningModalDiscardCallback should navigate to pending fileId', () => {
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+            instance.pendingNavFileId = 'file2';
+
+            instance.handleSetWarningModalDiscardCallback();
+
+            expect(wrapper.state('currentFileId')).toBe('file2');
+            expect(onNavigate).toHaveBeenCalledWith('file2');
+            expect(instance.pendingNavFileId).toBeNull();
+        });
+
+        test('handleSetWarningModalOpenCallback should store the provided function', () => {
+            const wrapper = getWrapper({ fileId: 'file1' });
+            const instance = wrapper.instance();
+            const fn = jest.fn();
+
+            instance.handleSetWarningModalOpenCallback(fn);
+
+            expect(instance.sidebarOpenUnsavedModal).toBe(fn);
+        });
+    });
+
     describe('hideSidebar prop', () => {
         test('should not render sidebar components when hideSidebar is true', () => {
             const wrapper = getWrapper({

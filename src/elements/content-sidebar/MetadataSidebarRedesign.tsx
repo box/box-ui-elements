@@ -85,6 +85,9 @@ export interface MetadataSidebarRedesignProps
         payload: Record<string, unknown>,
         fileId: string,
     ) => Promise<{ metadata: { is_large_file: boolean } }>;
+    onEditingStateChange?: (isEditing: boolean) => void;
+    setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
+    setWarningModalDiscardCallback?: () => void;
 }
 
 function MetadataSidebarRedesign({
@@ -100,6 +103,9 @@ function MetadataSidebarRedesign({
     isFeatureEnabled,
     createSessionRequest,
     getStructuredTextRep,
+    onEditingStateChange,
+    setWarningModalOpenCallback,
+    setWarningModalDiscardCallback,
 }: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
@@ -180,6 +186,13 @@ function MetadataSidebarRedesign({
         }
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
+    useEffect(() => {
+        setEditingTemplate(null);
+        setPendingTemplateToEdit(null);
+        setIsUnsavedChangesModalOpen(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fileId]);
+
     const blockRouterHistory = useCallback(() => {
         unblockRouterRef.current = history.block(location => {
             if (location.pathname === `/${SIDEBAR_VIEW_METADATA}`) {
@@ -200,13 +213,21 @@ function MetadataSidebarRedesign({
         (isOpen: boolean) => {
             setIsUnsavedChangesModalOpen(isOpen);
             if (!isOpen && pendingNavLocation && isConfidenceScoreReviewEnabled) {
-                // re-sync the URL back to metadata is the URL was updated via host app
+                // re-sync the URL back to metadata if the URL was updated via host app
                 history.replace(`/${SIDEBAR_VIEW_METADATA}`);
                 setPendingNavLocation(null);
             }
         },
         [pendingNavLocation, isConfidenceScoreReviewEnabled, history],
     );
+
+    useEffect(() => {
+        onEditingStateChange?.(!!editingTemplate);
+    }, [editingTemplate, onEditingStateChange]);
+
+    useEffect(() => {
+        setWarningModalOpenCallback?.(handleUnsavedChangesModalOpen);
+    }, [setWarningModalOpenCallback, handleUnsavedChangesModalOpen]);
 
     useEffect(() => {
         if (!editingTemplate || !isConfidenceScoreReviewEnabled) {
@@ -216,7 +237,14 @@ function MetadataSidebarRedesign({
         blockRouterHistory();
 
         return () => unblockRouterHistory();
-    }, [editingTemplate, history, isConfidenceScoreReviewEnabled, unblockRouterHistory, blockRouterHistory]);
+    }, [
+        editingTemplate,
+        history,
+        isConfidenceScoreReviewEnabled,
+        unblockRouterHistory,
+        blockRouterHistory,
+        onEditingStateChange,
+    ]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         clearExtractError();
@@ -252,6 +280,7 @@ function MetadataSidebarRedesign({
         }
 
         setIsUnsavedChangesModalOpen(false);
+        setWarningModalDiscardCallback?.();
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
