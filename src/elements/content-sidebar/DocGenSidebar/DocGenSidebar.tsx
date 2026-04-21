@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
-import { useIntl } from 'react-intl';
+import { useIntl, type MessageDescriptor } from 'react-intl';
 
 import { LoadingIndicator } from '@box/blueprint-web';
 
@@ -31,9 +31,76 @@ import { WithLoggerProps } from '../../../common/types/logging';
 import commonMessages from '../../common/messages';
 
 import './DocGenSidebar.scss';
-import { DocGenTag, DocGenTemplateTagsResponse, JsonPathsMap } from './types';
+import type { DocGenTag, DocGenTemplateTagsResponse, JsonPathsMap } from './types';
+import { PDF_FIELD_TAG_TYPES, isPdfFormFieldTagType } from './types';
 
 const DEFAULT_RETRIES = 10;
+
+type DocGenSection = {
+    id: string;
+    message: MessageDescriptor;
+    tree: JsonPathsMap;
+};
+
+const PDF_FIELD_TYPE_MESSAGES: Record<(typeof PDF_FIELD_TAG_TYPES)[number], MessageDescriptor> = {
+    checkbox: messages.checkboxTags,
+    radiobutton: messages.radiobuttonTags,
+    dropdown: messages.dropdownTags,
+};
+
+const createNestedObject = (base: JsonPathsMap, paths: string[]) => {
+    paths.reduce((obj, path) => {
+        if (!obj[path]) obj[path] = {};
+        return obj[path];
+    }, base);
+};
+const tagsToJsonPaths = (docGenTags: DocGenTag[]): JsonPathsMap => {
+    const jsonPathsMap: JsonPathsMap = {};
+
+    docGenTags.forEach(tag => {
+        tag.json_paths.forEach(jsonPath => {
+            const paths = jsonPath.split('.');
+            createNestedObject(jsonPathsMap, paths);
+        });
+    });
+
+    return jsonPathsMap;
+};
+
+const buildDocGenSections = (data: DocGenTag[]): DocGenSection[] => {
+    const result: DocGenSection[] = [];
+    const imageTags = data.filter(tag => tag.tag_type === 'image');
+    const textTags = data.filter(tag => tag.tag_type !== 'image' && !isPdfFormFieldTagType(tag.tag_type));
+
+    if (textTags.length > 0) {
+        result.push({
+            id: 'text',
+            message: messages.textTags,
+            tree: tagsToJsonPaths(textTags),
+        });
+    }
+
+    if (imageTags.length > 0) {
+        result.push({
+            id: 'image',
+            message: messages.imageTags,
+            tree: tagsToJsonPaths(imageTags),
+        });
+    }
+
+    PDF_FIELD_TAG_TYPES.forEach(fieldType => {
+        const fieldTags = data.filter(tag => tag.tag_type === fieldType);
+        if (fieldTags.length > 0) {
+            result.push({
+                id: fieldType,
+                message: PDF_FIELD_TYPE_MESSAGES[fieldType],
+                tree: tagsToJsonPaths(fieldTags),
+            });
+        }
+    });
+
+    return result;
+};
 
 type ExternalProps = {
     enabled: boolean;
@@ -44,49 +111,12 @@ type ExternalProps = {
 
 type Props = ExternalProps & ErrorContextProps & WithLoggerProps;
 
-type TagState = {
-    text: DocGenTag[];
-    image: DocGenTag[];
-};
-
-type JsonPathsState = {
-    textTree: JsonPathsMap;
-    imageTree: JsonPathsMap;
-};
-
 const DocGenSidebar = ({ getDocGenTags }: Props) => {
     const { formatMessage } = useIntl();
 
     const [hasError, setHasError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [tags, setTags] = useState<TagState>({
-        text: [],
-        image: [],
-    });
-    const [jsonPaths, setJsonPaths] = useState<JsonPathsState>({
-        textTree: {},
-        imageTree: {},
-    });
-
-    const createNestedObject = (base: JsonPathsMap, paths: string[]) => {
-        paths.reduce((obj, path) => {
-            if (!obj[path]) obj[path] = {};
-            return obj[path];
-        }, base);
-    };
-
-    const tagsToJsonPaths = useCallback((docGenTags: DocGenTag[]): JsonPathsMap => {
-        const jsonPathsMap: JsonPathsMap = {};
-
-        docGenTags.forEach(tag => {
-            tag.json_paths.forEach(jsonPath => {
-                const paths = jsonPath.split('.');
-                createNestedObject(jsonPathsMap, paths);
-            });
-        });
-
-        return jsonPathsMap;
-    }, []);
+    const [sections, setSections] = useState<DocGenSection[]>([]);
 
     const loadTags = useCallback(
         async (attempts = DEFAULT_RETRIES) => {
@@ -101,17 +131,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
                     loadTags.call(this, attempts - 1);
                 } else if (response?.data) {
                     const { data } = response;
-                    // anything that is not an image tag for this view is treated as a text tag
-                    const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
-                    const imageTags = data?.filter(tag => tag.tag_type === 'image') || [];
-                    setTags({
-                        text: textTags,
-                        image: imageTags,
-                    });
-                    setJsonPaths({
-                        textTree: tagsToJsonPaths(textTags),
-                        imageTree: tagsToJsonPaths(imageTags),
-                    });
+                    setSections(buildDocGenSections(data));
                     setHasError(false);
                     setIsLoading(false);
                 } else {
@@ -125,14 +145,14 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         },
         // disabling eslint because the getDocGenTags prop is changing very frequently
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [tagsToJsonPaths],
+        [],
     );
 
     useEffect(() => {
         loadTags(DEFAULT_RETRIES);
     }, [loadTags]);
 
-    const isEmpty = tags.image.length + tags.text.length === 0;
+    const isEmpty = sections.length === 0;
 
     return (
         <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={formatMessage(messages.docGenTags)}>
@@ -147,8 +167,9 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
                 {!hasError && !isLoading && isEmpty && <EmptyTags />}
                 {!hasError && !isLoading && !isEmpty && (
                     <>
-                        <TagsSection message={messages.textTags} data={jsonPaths.textTree} />
-                        <TagsSection message={messages.imageTags} data={jsonPaths.imageTree} />
+                        {sections.map(section => (
+                            <TagsSection key={section.id} message={section.message} data={section.tree} />
+                        ))}
                     </>
                 )}
             </div>

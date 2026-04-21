@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '../../../test-utils/testing-library';
 
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
-import mockData from '../__mocks__/DocGenSidebar.mock';
+import mockData, { mockPdfTemplateData } from '../__mocks__/DocGenSidebar.mock';
 
 const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(
@@ -58,6 +58,25 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         renderComponent();
         const tagList = await screen.findAllByTestId('bcs-TagsSection');
         expect(tagList).toHaveLength(2);
+    });
+
+    test('should render PDF template tags in separate sections', async () => {
+        renderComponent({
+            getDocGenTags: jest.fn().mockReturnValue(
+                Promise.resolve({
+                    pagination: {},
+                    data: mockPdfTemplateData,
+                }),
+            ),
+        });
+
+        const tagList = await screen.findAllByTestId('bcs-TagsSection');
+        expect(tagList).toHaveLength(4);
+
+        expect(await screen.findByText('Text tags')).toBeInTheDocument();
+        expect(screen.getByText('Checkbox tags')).toBeInTheDocument();
+        expect(screen.getByText('Radiobutton tags')).toBeInTheDocument();
+        expect(screen.getByText('Dropdown tags')).toBeInTheDocument();
     });
 
     test('should render DocGen sidebar component correctly with tags list', async () => {

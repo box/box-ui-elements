@@ -113,4 +113,32 @@ const mockData = [
     },
 ];
 
+/** PDF template tags (text, checkbox, radiobutton, dropdown) */
+export const mockPdfTemplateData = [
+    {
+        tag_type: 'text',
+        tag_content: '{{NameField::optional}}',
+        json_paths: ['NameField'],
+        required: false,
+    },
+    {
+        tag_type: 'checkbox',
+        tag_content: '{{SubscribeCheckbox}}',
+        json_paths: ['SubscribeCheckbox'],
+        required: true,
+    },
+    {
+        tag_type: 'radiobutton',
+        tag_content: '{{Gender}}',
+        json_paths: ['Gender'],
+        required: true,
+    },
+    {
+        tag_type: 'dropdown',
+        tag_content: '{{CountryDropdown}}',
+        json_paths: ['CountryDropdown'],
+        required: true,
+    },
+];
+
 export default mockData;
