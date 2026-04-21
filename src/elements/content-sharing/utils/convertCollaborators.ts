@@ -26,53 +26,44 @@ export const convertCollab = ({
     isCurrentUserOwner,
     ownerEmailDomain,
 }: ConvertCollabProps): Collaborator | null => {
-    if (!collab || collab.status === STATUS_REJECTED) return null;
-
-    if (collab.status === STATUS_PENDING) {
-        const { invite_email: inviteEmail } = collab;
-        if (!inviteEmail) return null;
-
-        const { id, expires_at, role } = collab;
-
-        const isExternal = !isCurrentUserOwner && ownerEmailDomain && inviteEmail.split('@')[1] !== ownerEmailDomain;
-
-        return {
-            email: inviteEmail,
-            expiresAt: expires_at,
-            hasCustomAvatar: false,
-            id: `${id}`,
-            isCurrentUser: false,
-            isExternal,
-            isPending: true,
-            name: inviteEmail,
-            role: API_TO_USM_COLLAB_ROLE_MAP[role],
-        };
+    if (!collab || collab.status === STATUS_REJECTED) {
+        return null;
     }
 
-    const {
-        accessible_by: { id: collabId, login: collabEmail, name: collabName },
-        id,
-        expires_at: executeAt,
-        role,
-    } = collab;
+    const { accessible_by: accessibleBy, id, invite_email: inviteEmail, expires_at: expiresAt, role, status } = collab;
 
-    const isCurrentUser = collabId === currentUserId;
+    let collabId;
+    let collabEmail = inviteEmail;
+    let collabName = inviteEmail;
+
+    if (accessibleBy?.name) {
+        const { id: userId, login, name } = accessibleBy;
+
+        collabId = userId;
+        collabEmail = login;
+        collabName = name;
+    }
+
+    if (!collabName) {
+        return null;
+    }
+
     const isExternal =
-        !isCurrentUserOwner && collabEmail && ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
+        !isCurrentUserOwner && !!collabEmail && !!ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
     const avatarUrl = avatarUrlMap ? avatarUrlMap[collabId] : undefined;
 
     return {
         avatarUrl,
         email: collabEmail,
-        expiresAt: executeAt,
+        expiresAt,
         hasCustomAvatar: !!avatarUrl,
         id: `${id}`,
-        isCurrentUser,
+        isCurrentUser: collabId != null && collabId === currentUserId,
         isExternal,
-        isPending: false,
+        isPending: status === STATUS_PENDING,
         name: collabName,
         role: API_TO_USM_COLLAB_ROLE_MAP[role],
-        userId: `${collabId}`,
+        ...(collabId != null ? { userId: `${collabId}` } : {}),
     };
 };
 

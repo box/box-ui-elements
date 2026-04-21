@@ -60,14 +60,26 @@ const mockCollaborationsFromApi: Collaborations = {
             role: 'editor',
             status: STATUS_PENDING,
             expires_at: '2024-12-31T23:59:59Z',
+            accessible_by: {
+                id: '126',
+            },
             created_by: ownerFromApi,
-            invite_email: 'bbear@external.example.com',
         },
         {
             id: '127',
             role: 'editor',
+            status: STATUS_PENDING,
+            expires_at: '2024-12-31T23:59:59Z',
+            accessible_by: null,
+            created_by: ownerFromApi,
+            invite_email: 'bbear@external.example.com',
+        },
+        {
+            id: '128',
+            role: 'editor',
             status: STATUS_REJECTED,
             expires_at: '2024-12-31T23:59:59Z',
+            accessible_by: null,
             created_by: ownerFromApi,
             invite_email: 'rrobot@external.example.com',
         },
@@ -103,26 +115,49 @@ describe('convertCollaborators', () => {
         });
 
         test('should convert pending collaboration with invite_email to a pending collaborator', () => {
-            const pendingInviteCollab = mockCollaborations[4];
-
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: pendingInviteCollab,
+                collab: mockCollaborations[5],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
 
             expect(result).toEqual({
+                avatarUrl: undefined,
                 email: 'bbear@external.example.com',
                 expiresAt: '2024-12-31T23:59:59Z',
                 hasCustomAvatar: false,
-                id: '126',
+                id: '127',
                 isCurrentUser: false,
                 isExternal: true,
                 isPending: true,
                 name: 'bbear@external.example.com',
                 role: 'editor',
+            });
+        });
+
+        test('should convert pending collaboration with accessible_by', () => {
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab: mockCollaborations[3],
+                currentUserId: mockOwnerId,
+                isCurrentUserOwner: false,
+                ownerEmailDomain,
+            });
+
+            expect(result).toEqual({
+                avatarUrl: undefined,
+                email: 'dpenguin@example.com',
+                expiresAt: '2024-12-31T23:59:59Z',
+                hasCustomAvatar: false,
+                id: '125',
+                isCurrentUser: false,
+                isExternal: false,
+                isPending: true,
+                name: 'Dancing Penguin',
+                role: 'editor',
+                userId: '458',
             });
         });
 
@@ -138,10 +173,10 @@ describe('convertCollaborators', () => {
             expect(result).toBeNull();
         });
 
-        test('should return null for pending collab without invite_email', () => {
+        test('should return null for pending collab with accessible_by without collab name', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[3],
+                collab: mockCollaborations[4],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
@@ -153,7 +188,7 @@ describe('convertCollaborators', () => {
         test('should return null for rejected collab', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[5],
+                collab: mockCollaborations[6],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
@@ -240,7 +275,7 @@ describe('convertCollaborators', () => {
                 mockAvatarUrlMap,
             );
 
-            expect(result).toHaveLength(4); // Owner + accepted & pending collaborators
+            expect(result).toHaveLength(5); // Owner + collaborators (rejected and unnamed pending omitted)
             expect(result).toEqual([
                 {
                     avatarUrl: undefined,
@@ -282,10 +317,24 @@ describe('convertCollaborators', () => {
                     userId: '457',
                 },
                 {
+                    avatarUrl: undefined,
+                    email: 'dpenguin@example.com',
+                    expiresAt: '2024-12-31T23:59:59Z',
+                    hasCustomAvatar: false,
+                    id: '125',
+                    isCurrentUser: false,
+                    isExternal: false,
+                    isPending: true,
+                    name: 'Dancing Penguin',
+                    role: 'editor',
+                    userId: '458',
+                },
+                {
+                    avatarUrl: undefined,
                     email: 'bbear@external.example.com',
                     expiresAt: '2024-12-31T23:59:59Z',
                     hasCustomAvatar: false,
-                    id: '126',
+                    id: '127',
                     isCurrentUser: false,
                     isExternal: false,
                     isPending: true,
