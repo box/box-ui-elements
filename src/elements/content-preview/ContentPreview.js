@@ -1212,7 +1212,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     navigateToIndex(index: number) {
-        const { collection, features }: Props = this.props;
+        const { collection, contentSidebarProps }: Props = this.props;
         const { isMetadataEditing } = this.state;
         const { length } = collection;
         if (length < 2 || index < 0 || index > length - 1) {
@@ -1226,7 +1226,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (
             isMetadataEditing &&
             this.sidebarOpenUnsavedModal &&
-            isFeatureEnabled(features, 'metadata.confidenceScore.enabled')
+            isFeatureEnabled(contentSidebarProps.features, 'metadata.confidenceScore.enabled')
         ) {
             this.pendingNavFileId = fileId;
             this.sidebarOpenUnsavedModal(true);
