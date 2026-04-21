@@ -446,6 +446,7 @@ type AccessibleByUserOrGroup = {
 type CollaborationOptions = {
     expires_at: string | null,
     id: number | string,
+    invite_email?: string,
     role: string,
     status?: string,
 };

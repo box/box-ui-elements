@@ -1,6 +1,6 @@
 import { Collaborator } from '@box/unified-share-modal';
 
-import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED } from '../../../constants';
+import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED, STATUS_PENDING, STATUS_REJECTED } from '../../../constants';
 import {
     API_TO_USM_COLLAB_ROLE_MAP,
     COLLAB_USER_TYPE,
@@ -26,7 +26,28 @@ export const convertCollab = ({
     isCurrentUserOwner,
     ownerEmailDomain,
 }: ConvertCollabProps): Collaborator | null => {
-    if (!collab || collab.status !== STATUS_ACCEPTED) return null;
+    if (!collab || collab.status === STATUS_REJECTED) return null;
+
+    if (collab.status === STATUS_PENDING) {
+        const { invite_email: inviteEmail } = collab;
+        if (!inviteEmail) return null;
+
+        const { id, expires_at, role } = collab;
+
+        const isExternal = !isCurrentUserOwner && ownerEmailDomain && inviteEmail.split('@')[1] !== ownerEmailDomain;
+
+        return {
+            email: inviteEmail,
+            expiresAt: expires_at,
+            hasCustomAvatar: false,
+            id: `${id}`,
+            isCurrentUser: false,
+            isExternal,
+            isPending: true,
+            name: inviteEmail,
+            role: API_TO_USM_COLLAB_ROLE_MAP[role],
+        };
+    }
 
     const {
         accessible_by: { id: collabId, login: collabEmail, name: collabName },

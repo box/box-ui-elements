@@ -1,4 +1,4 @@
-import { STATUS_ACCEPTED } from '../../../../constants';
+import { STATUS_ACCEPTED, STATUS_PENDING, STATUS_REJECTED } from '../../../../constants';
 import { convertCollab, convertCollabsResponse, convertCollabsRequest } from '../convertCollaborators';
 import {
     collabUser1,
@@ -50,10 +50,26 @@ const mockCollaborationsFromApi: Collaborations = {
         {
             id: '125',
             role: 'editor',
-            status: 'pending',
+            status: STATUS_PENDING,
             expires_at: '2024-12-31T23:59:59Z',
             accessible_by: collabUser3,
             created_by: ownerFromApi,
+        },
+        {
+            id: '126',
+            role: 'editor',
+            status: STATUS_PENDING,
+            expires_at: '2024-12-31T23:59:59Z',
+            created_by: ownerFromApi,
+            invite_email: 'bbear@external.example.com',
+        },
+        {
+            id: '127',
+            role: 'editor',
+            status: STATUS_REJECTED,
+            expires_at: '2024-12-31T23:59:59Z',
+            created_by: ownerFromApi,
+            invite_email: 'rrobot@external.example.com',
         },
     ],
 };
@@ -86,7 +102,43 @@ describe('convertCollaborators', () => {
             });
         });
 
-        test('should return null for collaboration with non-accepted status', () => {
+        test('should convert pending collaboration with invite_email to a pending collaborator', () => {
+            const pendingInviteCollab = mockCollaborations[4];
+
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab: pendingInviteCollab,
+                currentUserId: mockOwnerId,
+                isCurrentUserOwner: false,
+                ownerEmailDomain,
+            });
+
+            expect(result).toEqual({
+                email: 'bbear@external.example.com',
+                expiresAt: '2024-12-31T23:59:59Z',
+                hasCustomAvatar: false,
+                id: '126',
+                isCurrentUser: false,
+                isExternal: true,
+                isPending: true,
+                name: 'bbear@external.example.com',
+                role: 'editor',
+            });
+        });
+
+        test.each([undefined, null])('should return null for %s collaboration', collab => {
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab,
+                currentUserId: mockOwnerId,
+                isCurrentUserOwner: false,
+                ownerEmailDomain,
+            });
+
+            expect(result).toBeNull();
+        });
+
+        test('should return null for pending collab without invite_email', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[3],
@@ -98,10 +150,10 @@ describe('convertCollaborators', () => {
             expect(result).toBeNull();
         });
 
-        test.each([undefined, null])('should return null for %s collaboration', collab => {
+        test('should return null for rejected collab', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab,
+                collab: mockCollaborations[5],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
@@ -188,7 +240,7 @@ describe('convertCollaborators', () => {
                 mockAvatarUrlMap,
             );
 
-            expect(result).toHaveLength(3); // Only accepted collaborations
+            expect(result).toHaveLength(4); // Owner + accepted & pending collaborators
             expect(result).toEqual([
                 {
                     avatarUrl: undefined,
@@ -228,6 +280,17 @@ describe('convertCollaborators', () => {
                     name: 'Raccoon Queen',
                     role: 'viewer',
                     userId: '457',
+                },
+                {
+                    email: 'bbear@external.example.com',
+                    expiresAt: '2024-12-31T23:59:59Z',
+                    hasCustomAvatar: false,
+                    id: '126',
+                    isCurrentUser: false,
+                    isExternal: false,
+                    isPending: true,
+                    name: 'bbear@external.example.com',
+                    role: 'editor',
                 },
             ]);
         });
