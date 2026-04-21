@@ -46,7 +46,7 @@ type ExternalProps = {
     templateFilters?: Array<string> | string,
     onEditingStateChange?: (isEditing: boolean) => void,
     setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void,
-    setWarningModalDiscardCallback?: (handleWarningModalDiscard: () => void) => void,
+    onWarningModalDiscard?: () => void,
 };
 
 type PropsWithoutContext = {

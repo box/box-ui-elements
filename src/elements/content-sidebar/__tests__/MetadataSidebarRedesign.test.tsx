@@ -647,10 +647,10 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect(setWarningModalOpenCallback).toHaveBeenCalledWith(expect.any(Function));
         });
 
-        test('should call setWarningModalDiscardCallback when discard is clicked', async () => {
+        test('should call onWarningModalDiscard when discard is clicked', async () => {
             setupWithEditableTemplates();
-            const setWarningModalDiscardCallback = jest.fn();
-            const { mockHistory } = renderComponent({ setWarningModalDiscardCallback }, navBlockFeatures);
+            const onWarningModalDiscard = jest.fn();
+            const { mockHistory } = renderComponent({ onWarningModalDiscard }, navBlockFeatures);
 
             const blockSpy = await startEditing(mockHistory);
             triggerBlockCallback(blockSpy);
@@ -658,7 +658,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             const discardButton = await screen.findByRole('button', { name: 'Discard Changes' });
             await userEvent.click(discardButton);
 
-            expect(setWarningModalDiscardCallback).toHaveBeenCalledTimes(1);
+            expect(onWarningModalDiscard).toHaveBeenCalledTimes(1);
         });
     });
 });

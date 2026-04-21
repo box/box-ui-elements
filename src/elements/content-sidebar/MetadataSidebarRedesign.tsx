@@ -87,7 +87,7 @@ export interface MetadataSidebarRedesignProps
     ) => Promise<{ metadata: { is_large_file: boolean } }>;
     onEditingStateChange?: (isEditing: boolean) => void;
     setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
-    setWarningModalDiscardCallback?: () => void;
+    onWarningModalDiscard?: () => void;
 }
 
 function MetadataSidebarRedesign({
@@ -105,7 +105,7 @@ function MetadataSidebarRedesign({
     getStructuredTextRep,
     onEditingStateChange,
     setWarningModalOpenCallback,
-    setWarningModalDiscardCallback,
+    onWarningModalDiscard,
 }: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
@@ -280,7 +280,7 @@ function MetadataSidebarRedesign({
         }
 
         setIsUnsavedChangesModalOpen(false);
-        setWarningModalDiscardCallback?.();
+        onWarningModalDiscard?.();
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {

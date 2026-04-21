@@ -2276,7 +2276,7 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('currentFileId')).toBe('file2');
         });
 
-        test('handleSetWarningModalDiscardCallback should navigate to pending fileId', () => {
+        test('handleWarningModalDiscard should navigate to pending fileId', () => {
             const onNavigate = jest.fn();
             const wrapper = getWrapper({
                 collection: ['file1', 'file2'],
@@ -2286,7 +2286,7 @@ describe('elements/content-preview/ContentPreview', () => {
             const instance = wrapper.instance();
             instance.pendingNavFileId = 'file2';
 
-            instance.handleSetWarningModalDiscardCallback();
+            instance.handleWarningModalDiscard();
 
             expect(wrapper.state('currentFileId')).toBe('file2');
             expect(onNavigate).toHaveBeenCalledWith('file2');

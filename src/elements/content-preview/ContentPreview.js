@@ -1160,24 +1160,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     }
 
-    /**
-     * Shows a preview of a file at the specified index in the current collection.
-     * Calls onBeforeNavigate if provided, and cancels navigation if it returns false.
-     *
-     * @public
-     * @param {number} index - Index of file to preview
-     * @return {void}
-     */
-    navigateToIndex(index: number) {
-        const { collection, features, onBeforeNavigate, onNavigate }: Props = this.props;
-        const { isMetadataEditing } = this.state;
-        const { length } = collection;
-        if (length < 2 || index < 0 || index > length - 1) {
-            return;
-        }
-
-        const fileOrId = collection[index];
-        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+    handleNavigateWithGuard(fileId: string) {
+        const { onBeforeNavigate, onNavigate }: Props = this.props;
 
         const doNavigate = () => {
             this.setState(
@@ -1190,17 +1174,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 },
             );
         };
-
-        // Internal guard: delegate to sidebar's unsaved changes modal when editing
-        if (
-            isMetadataEditing &&
-            this.sidebarOpenUnsavedModal &&
-            isFeatureEnabled(features, 'metadata.confidenceScore.enabled')
-        ) {
-            this.pendingNavFileId = fileId;
-            this.sidebarOpenUnsavedModal(true);
-            return;
-        }
 
         // Call onBeforeNavigate if provided, and cancel if it returns false
         if (onBeforeNavigate) {
@@ -1228,6 +1201,39 @@ class ContentPreview extends React.PureComponent<Props, State> {
         } else {
             doNavigate();
         }
+    }
+
+    /**
+     * Shows a preview of a file at the specified index in the current collection.
+     * Calls onBeforeNavigate if provided, and cancels navigation if it returns false.
+     *
+     * @public
+     * @param {number} index - Index of file to preview
+     * @return {void}
+     */
+    navigateToIndex(index: number) {
+        const { collection, features }: Props = this.props;
+        const { isMetadataEditing } = this.state;
+        const { length } = collection;
+        if (length < 2 || index < 0 || index > length - 1) {
+            return;
+        }
+
+        const fileOrId = collection[index];
+        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+
+        // Internal guard: delegate to sidebar's unsaved changes modal when editing
+        if (
+            isMetadataEditing &&
+            this.sidebarOpenUnsavedModal &&
+            isFeatureEnabled(features, 'metadata.confidenceScore.enabled')
+        ) {
+            this.pendingNavFileId = fileId;
+            this.sidebarOpenUnsavedModal(true);
+            return;
+        }
+
+        this.handleNavigateWithGuard(fileId);
     }
 
     /**
@@ -1484,12 +1490,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.sidebarOpenUnsavedModal = fn;
     };
 
-    handleSetWarningModalDiscardCallback = () => {
+    handleWarningModalDiscard = () => {
         const fileId = this.pendingNavFileId;
         this.pendingNavFileId = null;
         if (fileId != null) {
-            const { onNavigate }: Props = this.props;
-            this.setState({ currentFileId: fileId }, () => onNavigate(fileId));
+            this.handleNavigateWithGuard(fileId);
         }
     };
 
@@ -1562,7 +1567,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     hostOnEditingStateChange?.(isEditing);
                 },
                 setWarningModalOpenCallback: this.handleSetWarningModalOpenCallback,
-                setWarningModalDiscardCallback: this.handleSetWarningModalDiscardCallback,
+                onWarningModalDiscard: this.handleWarningModalDiscard,
             },
         };
 
