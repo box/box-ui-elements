@@ -2234,7 +2234,7 @@ describe('elements/content-preview/ContentPreview', () => {
     });
 
     describe('navigateToIndex() with metadata unsaved changes guard', () => {
-        const featuresWithFlag = { 'metadata.confidenceScore.enabled': true };
+        const featuresWithFlag = { metadata: { confidenceScore: { enabled: true } } };
 
         test('should open sidebar modal and stash fileId when metadata is editing and feature is on', () => {
             const onNavigate = jest.fn();
@@ -2243,7 +2243,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 collection: ['file1', 'file2'],
                 onNavigate,
                 fileId: 'file1',
-                features: featuresWithFlag,
+                contentSidebarProps: { features: featuresWithFlag },
             });
             const instance = wrapper.instance();
             wrapper.setState({ isMetadataEditing: true });
@@ -2264,7 +2264,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 collection: ['file1', 'file2'],
                 onNavigate,
                 fileId: 'file1',
-                features: { 'metadata.confidenceScore.enabled': false },
+                contentSidebarProps: { features: { metadata: { confidenceScore: { enabled: false } } } },
             });
             const instance = wrapper.instance();
             wrapper.setState({ isMetadataEditing: true });
