@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import type { Location } from 'history';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
@@ -47,6 +46,7 @@ import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionS
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
+import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -142,8 +142,19 @@ function MetadataSidebarRedesign({
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
-    const [pendingNavLocation, setPendingNavLocation] = useState<Location | null>(null);
-    const unblockRouterRef = useRef<(() => void) | null>(null);
+    const { handleUnsavedChangesModalOpen, pendingNavLocation, setPendingNavLocation, unblockRouterHistory } =
+        useMetadataSidebarUnsavedChangesGuard({
+            editingTemplate,
+            fileId,
+            history,
+            isConfidenceScoreReviewEnabled,
+            onEditingStateChange,
+            setEditingTemplate,
+            setIsUnsavedChangesModalOpen,
+            setPendingTemplateToEdit,
+            setWarningModalOpenCallback,
+        });
+
     const shouldFetchStructuredTextRep =
         isBoxAiSuggestionsEnabled &&
         fileExtension?.toLowerCase() === 'pdf' &&
@@ -185,66 +196,6 @@ function MetadataSidebarRedesign({
             setAppliedTemplateInstances([...templateInstances, editingTemplate]);
         }
     }, [editingTemplate, templateInstances, templateInstances.length]);
-
-    useEffect(() => {
-        setEditingTemplate(null);
-        setPendingTemplateToEdit(null);
-        setIsUnsavedChangesModalOpen(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fileId]);
-
-    const blockRouterHistory = useCallback(() => {
-        unblockRouterRef.current = history.block(location => {
-            if (location.pathname === `/${SIDEBAR_VIEW_METADATA}`) {
-                return undefined;
-            }
-            setPendingNavLocation(location);
-            setIsUnsavedChangesModalOpen(true);
-            return false;
-        });
-    }, [history]);
-
-    const unblockRouterHistory = useCallback(() => {
-        unblockRouterRef.current?.();
-        unblockRouterRef.current = null;
-    }, []);
-
-    const handleUnsavedChangesModalOpen = useCallback(
-        (isOpen: boolean) => {
-            setIsUnsavedChangesModalOpen(isOpen);
-            if (!isOpen && pendingNavLocation && isConfidenceScoreReviewEnabled) {
-                // re-sync the URL back to metadata if the URL was updated via host app
-                history.replace(`/${SIDEBAR_VIEW_METADATA}`);
-                setPendingNavLocation(null);
-            }
-        },
-        [pendingNavLocation, isConfidenceScoreReviewEnabled, history],
-    );
-
-    useEffect(() => {
-        onEditingStateChange?.(!!editingTemplate);
-    }, [editingTemplate, onEditingStateChange]);
-
-    useEffect(() => {
-        setWarningModalOpenCallback?.(handleUnsavedChangesModalOpen);
-    }, [setWarningModalOpenCallback, handleUnsavedChangesModalOpen]);
-
-    useEffect(() => {
-        if (!editingTemplate || !isConfidenceScoreReviewEnabled) {
-            return undefined;
-        }
-
-        blockRouterHistory();
-
-        return () => unblockRouterHistory();
-    }, [
-        editingTemplate,
-        history,
-        isConfidenceScoreReviewEnabled,
-        unblockRouterHistory,
-        blockRouterHistory,
-        onEditingStateChange,
-    ]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         clearExtractError();
