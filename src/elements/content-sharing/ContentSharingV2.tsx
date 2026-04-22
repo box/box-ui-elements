@@ -181,11 +181,8 @@ function ContentSharingV2({
         if (!api || isEmpty(api) || !item || currentUser) return;
 
         const getUserSuccess = userData => {
-            const { enterprise, hostname, id } = userData;
-            setCurrentUser({
-                enterprise: { name: enterprise ? enterprise.name : '' },
-                id,
-            });
+            const { hostname, id } = userData;
+            setCurrentUser({ id });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
                 serverUrl: hostname ? `${hostname}v/` : '',
