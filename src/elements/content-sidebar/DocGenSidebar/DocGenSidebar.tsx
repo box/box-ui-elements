@@ -48,35 +48,33 @@ const PDF_FIELD_TYPE_MESSAGES: Record<(typeof PDF_FIELD_TAG_TYPES)[number], Mess
     dropdown: messages.dropdownTags,
 };
 
-const createNestedObject = (base: JsonPathsMap, paths: string[]) => {
-    paths.reduce((obj, path) => {
-        if (!obj[path]) obj[path] = {};
-        return obj[path];
-    }, base);
-};
-const tagsToJsonPaths = (docGenTags: DocGenTag[]): JsonPathsMap => {
-    const jsonPathsMap: JsonPathsMap = {};
+const buildJsonPathTree = (docGenTags: DocGenTag[]): JsonPathsMap => {
+    const pathTree: JsonPathsMap = {};
 
     docGenTags.forEach(tag => {
         tag.json_paths.forEach(jsonPath => {
-            const paths = jsonPath.split('.');
-            createNestedObject(jsonPathsMap, paths);
+            const segments = jsonPath.split('.');
+            segments.reduce((node, segment) => {
+                if (!node[segment]) node[segment] = {};
+                return node[segment];
+            }, pathTree);
         });
     });
 
-    return jsonPathsMap;
+    return pathTree;
 };
 
 const buildDocGenSections = (data: DocGenTag[]): DocGenSection[] => {
     const result: DocGenSection[] = [];
     const imageTags = data.filter(tag => tag.tag_type === 'image');
+    // anything that is not an image tag or pdf tag would be treated as a text tag
     const textTags = data.filter(tag => tag.tag_type !== 'image' && !isPdfFormFieldTagType(tag.tag_type));
 
     if (textTags.length > 0) {
         result.push({
             id: 'text',
             message: messages.textTags,
-            tree: tagsToJsonPaths(textTags),
+            tree: buildJsonPathTree(textTags),
         });
     }
 
@@ -84,7 +82,7 @@ const buildDocGenSections = (data: DocGenTag[]): DocGenSection[] => {
         result.push({
             id: 'image',
             message: messages.imageTags,
-            tree: tagsToJsonPaths(imageTags),
+            tree: buildJsonPathTree(imageTags),
         });
     }
 
@@ -94,7 +92,7 @@ const buildDocGenSections = (data: DocGenTag[]): DocGenSection[] => {
             result.push({
                 id: fieldType,
                 message: PDF_FIELD_TYPE_MESSAGES[fieldType],
-                tree: tagsToJsonPaths(fieldTags),
+                tree: buildJsonPathTree(fieldTags),
             });
         }
     });

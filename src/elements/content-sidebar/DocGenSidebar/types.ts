@@ -15,6 +15,7 @@ export type DocGenTag = {
     tag_content: string;
     /* eslint-disable-next-line camelcase */
     json_paths: Array<string>;
+    required: boolean;
 };
 
 export type DocGenTemplateTagsResponse = {
