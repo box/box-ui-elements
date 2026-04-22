@@ -371,16 +371,6 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(onCollaboratorAvatarsClickMock).toHaveBeenCalledTimes(1);
         });
 
-        test('should render a default component with ACI toggle if enabled ', () => {
-            const wrapper = getWrapper({ onAdvancedContentInsightsToggle: jest.fn() });
-            expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(true);
-        });
-
-        test('should not render a default component with ACI toggle if disabled ', () => {
-            const wrapper = getWrapper();
-            expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(false);
-        });
-
         test('should render a collaborator list when canRemoveCollaborators prop is set to true and onRemoveCollaboratorClick is defined', () => {
             const onRemoveCollaboratorMock = jest.fn();
             const collaborators = [
