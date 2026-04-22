@@ -13,6 +13,7 @@ interface Params {
     setIsUnsavedChangesModalOpen: (open: boolean) => void;
     setPendingTemplateToEdit: (t: MetadataTemplateInstance | null) => void;
     setWarningModalOpenCallback?: (fn: (isOpen: boolean) => void) => void;
+    onWarningModalClose?: () => void;
 }
 
 interface Result {
@@ -32,6 +33,7 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     setIsUnsavedChangesModalOpen,
     setPendingTemplateToEdit,
     setWarningModalOpenCallback,
+    onWarningModalClose,
 }: Params): Result {
     const [pendingNavLocation, setPendingNavLocation] = useState<Location | null>(null);
     const unblockRouterRef = useRef<(() => void) | null>(null);
@@ -62,13 +64,25 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     const handleUnsavedChangesModalOpen = useCallback(
         (isOpen: boolean) => {
             setIsUnsavedChangesModalOpen(isOpen);
-            if (!isOpen && pendingNavLocation && isConfidenceScoreReviewEnabled) {
-                // re-sync the URL back to metadata if the URL was updated via host app
+            if (isOpen || !isConfidenceScoreReviewEnabled) {
+                return;
+            }
+
+            // re-sync the URL back to metadata if the URL was updated via host app
+            if (pendingNavLocation) {
                 history.replace(`/${SIDEBAR_VIEW_METADATA}`);
                 setPendingNavLocation(null);
             }
+
+            onWarningModalClose?.();
         },
-        [pendingNavLocation, isConfidenceScoreReviewEnabled, history, setIsUnsavedChangesModalOpen],
+        [
+            setIsUnsavedChangesModalOpen,
+            isConfidenceScoreReviewEnabled,
+            pendingNavLocation,
+            history,
+            onWarningModalClose,
+        ],
     );
 
     useEffect(() => {

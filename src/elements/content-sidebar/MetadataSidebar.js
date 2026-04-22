@@ -47,6 +47,7 @@ type ExternalProps = {
     onEditingStateChange?: (isEditing: boolean) => void,
     setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void,
     onWarningModalDiscard?: () => void,
+    onWarningModalClose?: () => void,
 };
 
 type PropsWithoutContext = {

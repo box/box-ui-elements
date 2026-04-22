@@ -1498,6 +1498,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     };
 
+    handleWarningModalClose = () => {
+        this.pendingNavFileId = null;
+    };
+
     /**
      * Fetches a thumbnail for the page given
      *
@@ -1568,6 +1572,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 },
                 setWarningModalOpenCallback: this.handleSetWarningModalOpenCallback,
                 onWarningModalDiscard: this.handleWarningModalDiscard,
+                onWarningModalClose: this.handleWarningModalClose,
             },
         };
 

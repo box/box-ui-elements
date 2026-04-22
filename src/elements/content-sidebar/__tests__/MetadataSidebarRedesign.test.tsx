@@ -660,5 +660,56 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
             expect(onWarningModalDiscard).toHaveBeenCalledTimes(1);
         });
+
+        test('should call onWarningModalClose when parent-driven modal closes with no pending location', () => {
+            setupWithEditableTemplates();
+            const onWarningModalClose = jest.fn();
+            let capturedCallback: ((isOpen: boolean) => void) | undefined;
+            const setWarningModalOpenCallback = jest.fn(fn => {
+                capturedCallback = fn;
+            });
+
+            renderComponent({ onWarningModalClose, setWarningModalOpenCallback }, navBlockFeatures);
+
+            expect(capturedCallback).toBeDefined();
+            capturedCallback!(true);
+            capturedCallback!(false);
+
+            expect(onWarningModalClose).toHaveBeenCalledTimes(1);
+        });
+
+        test('should call onWarningModalClose when closing modal after a router-blocked nav', async () => {
+            setupWithEditableTemplates();
+            const onWarningModalClose = jest.fn();
+            const { mockHistory } = renderComponent({ onWarningModalClose }, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            const continueButton = await screen.findByRole('button', { name: 'Continue Editing' });
+            await userEvent.click(continueButton);
+
+            expect(mockHistory.replace).toHaveBeenCalledWith('/metadata');
+            expect(onWarningModalClose).toHaveBeenCalledTimes(1);
+        });
+
+        test('should NOT call onWarningModalClose when feature flag is disabled', () => {
+            setupWithEditableTemplates();
+            const onWarningModalClose = jest.fn();
+            let capturedCallback: ((isOpen: boolean) => void) | undefined;
+            const setWarningModalOpenCallback = jest.fn(fn => {
+                capturedCallback = fn;
+            });
+
+            renderComponent(
+                { onWarningModalClose, setWarningModalOpenCallback },
+                { 'metadata.confidenceScore.enabled': false },
+            );
+
+            expect(capturedCallback).toBeDefined();
+            capturedCallback!(false);
+
+            expect(onWarningModalClose).not.toHaveBeenCalled();
+        });
     });
 });

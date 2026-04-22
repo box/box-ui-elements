@@ -2293,6 +2293,23 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.pendingNavFileId).toBeNull();
         });
 
+        test('handleWarningModalClose should clear pendingNavFileId without navigating', () => {
+            const onNavigate = jest.fn();
+            const wrapper = getWrapper({
+                collection: ['file1', 'file2'],
+                onNavigate,
+                fileId: 'file1',
+            });
+            const instance = wrapper.instance();
+            instance.pendingNavFileId = 'file2';
+
+            instance.handleWarningModalClose();
+
+            expect(instance.pendingNavFileId).toBeNull();
+            expect(onNavigate).not.toHaveBeenCalled();
+            expect(wrapper.state('currentFileId')).toBe('file1');
+        });
+
         test('handleSetWarningModalOpenCallback should store the provided function', () => {
             const wrapper = getWrapper({ fileId: 'file1' });
             const instance = wrapper.instance();

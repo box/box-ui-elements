@@ -88,6 +88,7 @@ export interface MetadataSidebarRedesignProps
     onEditingStateChange?: (isEditing: boolean) => void;
     setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
     onWarningModalDiscard?: () => void;
+    onWarningModalClose?: () => void;
 }
 
 function MetadataSidebarRedesign({
@@ -106,6 +107,7 @@ function MetadataSidebarRedesign({
     onEditingStateChange,
     setWarningModalOpenCallback,
     onWarningModalDiscard,
+    onWarningModalClose,
 }: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
@@ -148,6 +150,7 @@ function MetadataSidebarRedesign({
             fileId,
             history,
             isConfidenceScoreReviewEnabled,
+            onWarningModalClose,
             onEditingStateChange,
             setEditingTemplate,
             setIsUnsavedChangesModalOpen,
