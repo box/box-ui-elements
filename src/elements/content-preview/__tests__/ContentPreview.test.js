@@ -2276,7 +2276,7 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('currentFileId')).toBe('file2');
         });
 
-        test('handleWarningModalDiscard should navigate to pending fileId', () => {
+        test('onWarningModalDiscard should navigate to pending fileId', () => {
             const onNavigate = jest.fn();
             const wrapper = getWrapper({
                 collection: ['file1', 'file2'],
@@ -2286,14 +2286,14 @@ describe('elements/content-preview/ContentPreview', () => {
             const instance = wrapper.instance();
             instance.pendingNavFileId = 'file2';
 
-            instance.handleWarningModalDiscard();
+            instance.onWarningModalDiscard();
 
             expect(wrapper.state('currentFileId')).toBe('file2');
             expect(onNavigate).toHaveBeenCalledWith('file2');
             expect(instance.pendingNavFileId).toBeNull();
         });
 
-        test('handleWarningModalClose should clear pendingNavFileId without navigating', () => {
+        test('onWarningModalClose should clear pendingNavFileId without navigating', () => {
             const onNavigate = jest.fn();
             const wrapper = getWrapper({
                 collection: ['file1', 'file2'],
@@ -2303,19 +2303,19 @@ describe('elements/content-preview/ContentPreview', () => {
             const instance = wrapper.instance();
             instance.pendingNavFileId = 'file2';
 
-            instance.handleWarningModalClose();
+            instance.onWarningModalClose();
 
             expect(instance.pendingNavFileId).toBeNull();
             expect(onNavigate).not.toHaveBeenCalled();
             expect(wrapper.state('currentFileId')).toBe('file1');
         });
 
-        test('handleSetWarningModalOpenCallback should store the provided function', () => {
+        test('registerOpenWarningModalCallback should store the provided function', () => {
             const wrapper = getWrapper({ fileId: 'file1' });
             const instance = wrapper.instance();
             const fn = jest.fn();
 
-            instance.handleSetWarningModalOpenCallback(fn);
+            instance.registerOpenWarningModalCallback(fn);
 
             expect(instance.sidebarOpenUnsavedModal).toBe(fn);
         });

@@ -1482,15 +1482,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     }
 
-    handleMetadataEditingStateChange = (isEditing: boolean) => {
+    onMetadataEditingStateChange = (isEditing: boolean) => {
         this.setState({ isMetadataEditing: isEditing });
     };
 
-    handleSetWarningModalOpenCallback = (fn: (isOpen: boolean) => void) => {
+    registerOpenWarningModalCallback = (fn: (isOpen: boolean) => void) => {
         this.sidebarOpenUnsavedModal = fn;
     };
 
-    handleWarningModalDiscard = () => {
+    onWarningModalDiscard = () => {
         const fileId = this.pendingNavFileId;
         this.pendingNavFileId = null;
         if (fileId != null) {
@@ -1498,7 +1498,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     };
 
-    handleWarningModalClose = () => {
+    onWarningModalClose = () => {
         this.pendingNavFileId = null;
     };
 
@@ -1567,12 +1567,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
             metadataSidebarProps: {
                 ...contentSidebarProps.metadataSidebarProps,
                 onEditingStateChange: (isEditing: boolean) => {
-                    this.handleMetadataEditingStateChange(isEditing);
+                    this.onMetadataEditingStateChange(isEditing);
                     hostOnEditingStateChange?.(isEditing);
                 },
-                setWarningModalOpenCallback: this.handleSetWarningModalOpenCallback,
-                onWarningModalDiscard: this.handleWarningModalDiscard,
-                onWarningModalClose: this.handleWarningModalClose,
+                registerOpenWarningModalCallback: this.registerOpenWarningModalCallback,
+                onWarningModalDiscard: this.onWarningModalDiscard,
+                onWarningModalClose: this.onWarningModalClose,
             },
         };
 

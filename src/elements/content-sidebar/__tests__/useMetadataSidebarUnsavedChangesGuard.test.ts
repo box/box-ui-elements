@@ -13,7 +13,7 @@ const mockSetEditingTemplate = jest.fn();
 const mockSetIsUnsavedChangesModalOpen = jest.fn();
 const mockSetPendingTemplateToEdit = jest.fn();
 const mockOnEditingStateChange = jest.fn();
-const mockSetWarningModalOpenCallback = jest.fn();
+const mockRegisterOpenWarningModalCallback = jest.fn();
 
 const mockTemplate = {
     canEdit: true,
@@ -38,7 +38,7 @@ const defaultProps: Params = {
     setEditingTemplate: mockSetEditingTemplate,
     setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
     setPendingTemplateToEdit: mockSetPendingTemplateToEdit,
-    setWarningModalOpenCallback: mockSetWarningModalOpenCallback,
+    registerOpenWarningModalCallback: mockRegisterOpenWarningModalCallback,
 };
 
 function setup(overrides: Partial<Params> = {}) {
@@ -115,10 +115,12 @@ describe('useMetadataSidebarUnsavedChangesGuard', () => {
         });
     });
 
-    describe('setWarningModalOpenCallback effect', () => {
+    describe('registerOpenWarningModalCallback effect', () => {
         test('should register handleUnsavedChangesModalOpen on mount', () => {
             const { result } = setup();
-            expect(mockSetWarningModalOpenCallback).toHaveBeenCalledWith(result.current.handleUnsavedChangesModalOpen);
+            expect(mockRegisterOpenWarningModalCallback).toHaveBeenCalledWith(
+                result.current.handleUnsavedChangesModalOpen,
+            );
         });
     });
 

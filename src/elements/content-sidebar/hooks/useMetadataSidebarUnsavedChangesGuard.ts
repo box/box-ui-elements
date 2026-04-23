@@ -12,7 +12,7 @@ interface Params {
     setEditingTemplate: (t: MetadataTemplateInstance | null) => void;
     setIsUnsavedChangesModalOpen: (open: boolean) => void;
     setPendingTemplateToEdit: (t: MetadataTemplateInstance | null) => void;
-    setWarningModalOpenCallback?: (fn: (isOpen: boolean) => void) => void;
+    registerOpenWarningModalCallback?: (fn: (isOpen: boolean) => void) => void;
     onWarningModalClose?: () => void;
 }
 
@@ -32,7 +32,7 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     setEditingTemplate,
     setIsUnsavedChangesModalOpen,
     setPendingTemplateToEdit,
-    setWarningModalOpenCallback,
+    registerOpenWarningModalCallback,
     onWarningModalClose,
 }: Params): Result {
     const [pendingNavLocation, setPendingNavLocation] = useState<Location | null>(null);
@@ -90,8 +90,8 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     }, [editingTemplate, onEditingStateChange]);
 
     useEffect(() => {
-        setWarningModalOpenCallback?.(handleUnsavedChangesModalOpen);
-    }, [setWarningModalOpenCallback, handleUnsavedChangesModalOpen]);
+        registerOpenWarningModalCallback?.(handleUnsavedChangesModalOpen);
+    }, [registerOpenWarningModalCallback, handleUnsavedChangesModalOpen]);
 
     useEffect(() => {
         if (!editingTemplate || !isConfidenceScoreReviewEnabled) {

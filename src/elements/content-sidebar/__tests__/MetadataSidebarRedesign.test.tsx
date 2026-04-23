@@ -638,13 +638,13 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect(mockUnblock).toHaveBeenCalled();
         });
 
-        test('should call setWarningModalOpenCallback with modal open fn on mount', () => {
+        test('should call registerOpenWarningModalCallback with modal open fn on mount', () => {
             setupWithEditableTemplates();
-            const setWarningModalOpenCallback = jest.fn();
+            const registerOpenWarningModalCallback = jest.fn();
 
-            renderComponent({ setWarningModalOpenCallback }, navBlockFeatures);
+            renderComponent({ registerOpenWarningModalCallback }, navBlockFeatures);
 
-            expect(setWarningModalOpenCallback).toHaveBeenCalledWith(expect.any(Function));
+            expect(registerOpenWarningModalCallback).toHaveBeenCalledWith(expect.any(Function));
         });
 
         test('should call onWarningModalDiscard when discard is clicked', async () => {
@@ -665,11 +665,11 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             setupWithEditableTemplates();
             const onWarningModalClose = jest.fn();
             let capturedCallback: ((isOpen: boolean) => void) | undefined;
-            const setWarningModalOpenCallback = jest.fn(fn => {
+            const registerOpenWarningModalCallback = jest.fn(fn => {
                 capturedCallback = fn;
             });
 
-            renderComponent({ onWarningModalClose, setWarningModalOpenCallback }, navBlockFeatures);
+            renderComponent({ onWarningModalClose, registerOpenWarningModalCallback }, navBlockFeatures);
 
             expect(capturedCallback).toBeDefined();
             capturedCallback!(true);
@@ -697,12 +697,12 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             setupWithEditableTemplates();
             const onWarningModalClose = jest.fn();
             let capturedCallback: ((isOpen: boolean) => void) | undefined;
-            const setWarningModalOpenCallback = jest.fn(fn => {
+            const registerOpenWarningModalCallback = jest.fn(fn => {
                 capturedCallback = fn;
             });
 
             renderComponent(
-                { onWarningModalClose, setWarningModalOpenCallback },
+                { onWarningModalClose, registerOpenWarningModalCallback },
                 { 'metadata.confidenceScore.enabled': false },
             );
 

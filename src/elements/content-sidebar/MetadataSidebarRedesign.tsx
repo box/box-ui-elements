@@ -86,7 +86,7 @@ export interface MetadataSidebarRedesignProps
         fileId: string,
     ) => Promise<{ metadata: { is_large_file: boolean } }>;
     onEditingStateChange?: (isEditing: boolean) => void;
-    setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
+    registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
     onWarningModalDiscard?: () => void;
     onWarningModalClose?: () => void;
 }
@@ -105,7 +105,7 @@ function MetadataSidebarRedesign({
     createSessionRequest,
     getStructuredTextRep,
     onEditingStateChange,
-    setWarningModalOpenCallback,
+    registerOpenWarningModalCallback,
     onWarningModalDiscard,
     onWarningModalClose,
 }: MetadataSidebarRedesignProps) {
@@ -155,7 +155,7 @@ function MetadataSidebarRedesign({
             setEditingTemplate,
             setIsUnsavedChangesModalOpen,
             setPendingTemplateToEdit,
-            setWarningModalOpenCallback,
+            registerOpenWarningModalCallback,
         });
 
     const shouldFetchStructuredTextRep =

@@ -45,7 +45,7 @@ type ExternalProps = {
     selectedTemplateKey?: string,
     templateFilters?: Array<string> | string,
     onEditingStateChange?: (isEditing: boolean) => void,
-    setWarningModalOpenCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void,
+    registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void,
     onWarningModalDiscard?: () => void,
     onWarningModalClose?: () => void,
 };
