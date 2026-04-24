@@ -107,7 +107,7 @@ const SubHeaderRight = ({
                     {bulkItemActions && bulkItemActions.length > 0 && (
                         <BulkItemActionMenu actions={bulkItemActions} selectedItemIds={selectedItemIds} />
                     )}
-                    <Button icon={Pencil} size="large" variant="primary" onClick={onSidePanelToggle}>
+                    <Button endIcon={Pencil} size="large" variant="primary" onClick={onSidePanelToggle}>
                         {formatMessage(messages.metadata)}
                     </Button>
                 </>

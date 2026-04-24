@@ -45,6 +45,10 @@ export const withModernizedBlueprint = {
         enableModernizedComponents: true,
         defaultView: 'docgen',
         docGenSidebarProps,
+        features: {
+            ...global.FEATURE_FLAGS,
+            previewModernization: { enabled: true },
+        },
     },
 };
 

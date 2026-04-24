@@ -190,7 +190,7 @@ function BoxAISidebarContent(
     const renderActions = () => (
         <>
             {renderBoxAISidebarTitle()}
-            <ClearConversationButton onClick={onClearAction} />
+            <ClearConversationButton hasRequestInProgress={hasRequestInProgress} onClick={onClearAction} />
             <Tooltip content={formatMessage(messages.sidebarBoxAISwitchToModalView)} variant="standard">
                 <IconButton
                     aria-label={formatMessage(messages.sidebarBoxAISwitchToModalView)}
