@@ -245,6 +245,7 @@ function MetadataSidebarRedesign({
         }
         clearExtractError();
         setEditingTemplate(null);
+        setShouldShowOnlyReviewFields(false);
     };
 
     const isExistingMetadataInstance = (): boolean => {
