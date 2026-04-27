@@ -1,4 +1,4 @@
-import { STATUS_ACCEPTED } from '../../../../constants';
+import { STATUS_ACCEPTED, STATUS_PENDING, STATUS_REJECTED } from '../../../../constants';
 import { convertCollab, convertCollabsResponse, convertCollabsRequest } from '../convertCollaborators';
 import {
     collabUser1,
@@ -50,10 +50,38 @@ const mockCollaborationsFromApi: Collaborations = {
         {
             id: '125',
             role: 'editor',
-            status: 'pending',
+            status: STATUS_PENDING,
             expires_at: '2024-12-31T23:59:59Z',
             accessible_by: collabUser3,
             created_by: ownerFromApi,
+        },
+        {
+            id: '126',
+            role: 'editor',
+            status: STATUS_PENDING,
+            expires_at: '2024-12-31T23:59:59Z',
+            accessible_by: {
+                id: '126',
+            },
+            created_by: ownerFromApi,
+        },
+        {
+            id: '127',
+            role: 'editor',
+            status: STATUS_PENDING,
+            expires_at: '2024-12-31T23:59:59Z',
+            accessible_by: null,
+            created_by: ownerFromApi,
+            invite_email: 'bbear@external.example.com',
+        },
+        {
+            id: '128',
+            role: 'editor',
+            status: STATUS_REJECTED,
+            expires_at: '2024-12-31T23:59:59Z',
+            accessible_by: null,
+            created_by: ownerFromApi,
+            invite_email: 'rrobot@external.example.com',
         },
     ],
 };
@@ -86,7 +114,30 @@ describe('convertCollaborators', () => {
             });
         });
 
-        test('should return null for collaboration with non-accepted status', () => {
+        test('should convert pending collaboration with invite_email to a pending collaborator', () => {
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab: mockCollaborations[5],
+                currentUserId: mockOwnerId,
+                isCurrentUserOwner: false,
+                ownerEmailDomain,
+            });
+
+            expect(result).toEqual({
+                avatarUrl: undefined,
+                email: 'bbear@external.example.com',
+                expiresAt: '2024-12-31T23:59:59Z',
+                hasCustomAvatar: false,
+                id: '127',
+                isCurrentUser: false,
+                isExternal: true,
+                isPending: true,
+                name: 'bbear@external.example.com',
+                role: 'editor',
+            });
+        });
+
+        test('should convert pending collaboration with accessible_by', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[3],
@@ -95,13 +146,49 @@ describe('convertCollaborators', () => {
                 ownerEmailDomain,
             });
 
-            expect(result).toBeNull();
+            expect(result).toEqual({
+                avatarUrl: undefined,
+                email: 'dpenguin@example.com',
+                expiresAt: '2024-12-31T23:59:59Z',
+                hasCustomAvatar: false,
+                id: '125',
+                isCurrentUser: false,
+                isExternal: false,
+                isPending: true,
+                name: 'Dancing Penguin',
+                role: 'editor',
+                userId: '458',
+            });
         });
 
         test.each([undefined, null])('should return null for %s collaboration', collab => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab,
+                currentUserId: mockOwnerId,
+                isCurrentUserOwner: false,
+                ownerEmailDomain,
+            });
+
+            expect(result).toBeNull();
+        });
+
+        test('should return null for pending collab with accessible_by without collab name', () => {
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab: mockCollaborations[4],
+                currentUserId: mockOwnerId,
+                isCurrentUserOwner: false,
+                ownerEmailDomain,
+            });
+
+            expect(result).toBeNull();
+        });
+
+        test('should return null for rejected collab', () => {
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab: mockCollaborations[6],
                 currentUserId: mockOwnerId,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
@@ -188,7 +275,7 @@ describe('convertCollaborators', () => {
                 mockAvatarUrlMap,
             );
 
-            expect(result).toHaveLength(3); // Only accepted collaborations
+            expect(result).toHaveLength(5); // Owner + collaborators (rejected and unnamed pending omitted)
             expect(result).toEqual([
                 {
                     avatarUrl: undefined,
@@ -228,6 +315,31 @@ describe('convertCollaborators', () => {
                     name: 'Raccoon Queen',
                     role: 'viewer',
                     userId: '457',
+                },
+                {
+                    avatarUrl: undefined,
+                    email: 'dpenguin@example.com',
+                    expiresAt: '2024-12-31T23:59:59Z',
+                    hasCustomAvatar: false,
+                    id: '125',
+                    isCurrentUser: false,
+                    isExternal: false,
+                    isPending: true,
+                    name: 'Dancing Penguin',
+                    role: 'editor',
+                    userId: '458',
+                },
+                {
+                    avatarUrl: undefined,
+                    email: 'bbear@external.example.com',
+                    expiresAt: '2024-12-31T23:59:59Z',
+                    hasCustomAvatar: false,
+                    id: '127',
+                    isCurrentUser: false,
+                    isExternal: false,
+                    isPending: true,
+                    name: 'bbear@external.example.com',
+                    role: 'editor',
                 },
             ]);
         });
