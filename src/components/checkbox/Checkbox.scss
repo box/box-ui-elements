@@ -78,16 +78,7 @@
     line-height: 0.1; // This keeps the tooltip wrapper height consistent with the child element
 
     > .info-tooltip {
-        position: relative;
-        display: inline-block;
-        flex: none;
-        width: 16px;
-        height: 16px;
         margin-left: 5px;
-
-        > svg path {
-            fill: $primary-color;
-        }
     }
 }
 
