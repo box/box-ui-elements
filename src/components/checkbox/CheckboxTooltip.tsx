@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Focusable, Tooltip, TooltipProvider } from '@box/blueprint-web';
 import { InfoBadge } from '@box/blueprint-web-assets/icons/Fill';
 
-import { bdlBoxBlue } from 'src/styles/variables';
+import { bdlBoxBlue } from '../../styles/variables';
 
 export interface CheckboxTooltipProps {
     tooltip: string;
