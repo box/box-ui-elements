@@ -11,11 +11,10 @@ import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
 import InlineNotice from '../../components/inline-notice';
 import PlainButton from '../../components/plain-button';
-import { ITEM_TYPE_FILE, ITEM_TYPE_WEBLINK } from '../../common/constants';
+import { ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
-import AdvancedContentInsightsToggle from '../advanced-content-insights/AdvancedContentInsightsToggle';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import SharedLinkSection from './SharedLinkSection';
@@ -688,12 +687,10 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
-            isAdvancedContentInsightsChecked,
             isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
             onAddLink,
-            onAdvancedContentInsightsToggle,
             onCopyError,
             onCopyInit,
             onCopySuccess,
@@ -716,9 +713,6 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
 
         const hasExpandedSections = isEmailLinkSectionExpanded || isInviteSectionExpanded || showCollaboratorList;
-
-        const showContentInsightsToggle =
-            onAdvancedContentInsightsToggle && !hasExpandedSections && item?.type === ITEM_TYPE_FILE;
 
         return (
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
@@ -759,19 +753,6 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             trackingProps={sharedLinkTracking}
                             tooltips={tooltips}
                         />
-                    )}
-
-                    {showContentInsightsToggle && (
-                        <>
-                            <hr className="bdl-UnifiedShareForm-separator" />
-                            <div className="bdl-UnifiedShareForm-row">
-                                <AdvancedContentInsightsToggle
-                                    isChecked={isAdvancedContentInsightsChecked}
-                                    isDisabled={submitting || isFetching}
-                                    onChange={onAdvancedContentInsightsToggle}
-                                />
-                            </div>
-                        </>
                     )}
 
                     {isEmailLinkSectionExpanded && !showCollaboratorList && (

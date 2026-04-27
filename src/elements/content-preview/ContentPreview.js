@@ -37,7 +37,7 @@ import CustomPreviewWrapper, { type ContentPreviewChildProps } from './CustomPre
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
-import { withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
+import { isFeatureEnabled, withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
 // $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { EVENT_JS_READY } from '../common/logger/constants';
@@ -185,6 +185,7 @@ type State = {
     file?: BoxItem,
     isLoading: boolean,
     isLoadingDeferred?: boolean,
+    isMetadataEditing: boolean,
     isReloadNotificationVisible: boolean,
     isThumbnailSidebarOpen: boolean,
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
@@ -271,11 +272,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     dynamicOnPreviewLoadAction: ?() => void;
 
+    sidebarOpenUnsavedModal: ?(isOpen: boolean) => void = null;
+
+    pendingNavFileId: ?string = null;
+
     initialState: State = {
         canPrint: false,
         error: undefined,
         isLoading: true,
         isLoadingDeferred: false,
+        isMetadataEditing: false,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
     };
@@ -1154,23 +1160,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
     }
 
-    /**
-     * Shows a preview of a file at the specified index in the current collection.
-     * Calls onBeforeNavigate if provided, and cancels navigation if it returns false.
-     *
-     * @public
-     * @param {number} index - Index of file to preview
-     * @return {void}
-     */
-    navigateToIndex(index: number) {
-        const { collection, onBeforeNavigate, onNavigate }: Props = this.props;
-        const { length } = collection;
-        if (length < 2 || index < 0 || index > length - 1) {
-            return;
-        }
-
-        const fileOrId = collection[index];
-        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+    handleNavigateWithGuard(fileId: string) {
+        const { onBeforeNavigate, onNavigate }: Props = this.props;
 
         const doNavigate = () => {
             this.setState(
@@ -1210,6 +1201,39 @@ class ContentPreview extends React.PureComponent<Props, State> {
         } else {
             doNavigate();
         }
+    }
+
+    /**
+     * Shows a preview of a file at the specified index in the current collection.
+     * Calls onBeforeNavigate if provided, and cancels navigation if it returns false.
+     *
+     * @public
+     * @param {number} index - Index of file to preview
+     * @return {void}
+     */
+    navigateToIndex(index: number) {
+        const { collection, contentSidebarProps }: Props = this.props;
+        const { isMetadataEditing } = this.state;
+        const { length } = collection;
+        if (length < 2 || index < 0 || index > length - 1) {
+            return;
+        }
+
+        const fileOrId = collection[index];
+        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+
+        // Internal guard: delegate to sidebar's unsaved changes modal when editing
+        if (
+            isMetadataEditing &&
+            this.sidebarOpenUnsavedModal &&
+            isFeatureEnabled(contentSidebarProps.features, 'metadata.confidenceScore.enabled')
+        ) {
+            this.pendingNavFileId = fileId;
+            this.sidebarOpenUnsavedModal(true);
+            return;
+        }
+
+        this.handleNavigateWithGuard(fileId);
     }
 
     /**
@@ -1458,6 +1482,26 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     }
 
+    onMetadataEditingStateChange = (isEditing: boolean) => {
+        this.setState({ isMetadataEditing: isEditing });
+    };
+
+    registerOpenWarningModalCallback = (fn: (isOpen: boolean) => void) => {
+        this.sidebarOpenUnsavedModal = fn;
+    };
+
+    onWarningModalDiscard = () => {
+        const fileId = this.pendingNavFileId;
+        this.pendingNavFileId = null;
+        if (fileId != null) {
+            this.handleNavigateWithGuard(fileId);
+        }
+    };
+
+    onWarningModalClose = () => {
+        this.pendingNavFileId = null;
+    };
+
     /**
      * Fetches a thumbnail for the page given
      *
@@ -1516,6 +1560,21 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isThumbnailSidebarOpen,
             selectedVersion,
         }: State = this.state;
+
+        const hostOnEditingStateChange = contentSidebarProps.metadataSidebarProps?.onEditingStateChange;
+        const mergedContentSidebarProps = {
+            ...contentSidebarProps,
+            metadataSidebarProps: {
+                ...contentSidebarProps.metadataSidebarProps,
+                onEditingStateChange: (isEditing: boolean) => {
+                    this.onMetadataEditingStateChange(isEditing);
+                    hostOnEditingStateChange?.(isEditing);
+                },
+                registerOpenWarningModalCallback: this.registerOpenWarningModalCallback,
+                onWarningModalDiscard: this.onWarningModalDiscard,
+                onWarningModalClose: this.onWarningModalClose,
+            },
+        };
 
         const styleClassName = classNames(
             'be bcpr',
@@ -1611,7 +1670,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     </div>
                                     {file && !hideSidebar && (
                                         <LoadableSidebar
-                                            {...contentSidebarProps}
+                                            {...mergedContentSidebarProps}
                                             apiHost={apiHost}
                                             token={token}
                                             cache={this.api.getCache()}

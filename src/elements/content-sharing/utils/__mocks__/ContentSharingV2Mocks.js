@@ -92,9 +92,6 @@ export const EMPTY_COLLABORATIONS_RESPONSE = {
 
 export const DEFAULT_USER_API_RESPONSE = {
     id: '789',
-    enterprise: {
-        name: 'Otter Enterprise',
-    },
 };
 
 export const DEFAULT_ITEM_API_RESPONSE = {
