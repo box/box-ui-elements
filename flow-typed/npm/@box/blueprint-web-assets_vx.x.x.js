@@ -16,6 +16,7 @@ declare module '@box/blueprint-web-assets/icons/Medium' {
   declare export var MagicWand: React$ComponentType<any>;
   declare export var DocGen: React$ComponentType<any>;
   declare export var Pencil: React$ComponentType<any>;
+  declare export var InfoBadge: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/icons/MediumFilled' {
