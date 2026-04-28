@@ -46,6 +46,7 @@ declare module '@box/blueprint-web-assets/icons/Fill' {
   declare export var Ellipsis: React$ComponentType<any>;
   declare export var PointerChevronLeft: React$ComponentType<any>;
   declare export var ArrowsExpand: React$ComponentType<any>;
+  declare export var InfoBadge: React$ComponentType<any>;
 }
 
 declare module '@box/blueprint-web-assets/icons/Logo' {
