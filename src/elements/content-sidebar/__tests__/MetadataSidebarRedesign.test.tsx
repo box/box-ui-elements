@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
-import { screen, render, waitFor } from '../../../test-utils/testing-library';
+import { screen, render, waitFor, within } from '../../../test-utils/testing-library';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
@@ -352,6 +352,37 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();
 
         expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
+    });
+
+    test('should call handleDeleteMetadataInstance when delete button is clicked', async () => {
+        const handleDeleteMetadataInstance = jest.fn();
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance,
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockCustomTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+            extractErrorCode: null,
+        });
+
+        renderComponent({}, { 'metadata.deleteConfirmationModalCheckbox.enabled': true });
+
+        expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeVisible();
+        expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeVisible();
+
+        await userEvent.click(screen.getByRole('button', { name: 'Edit' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
+
+        await userEvent.click(screen.getByText('Confirm deletion of Metadata instance'));
+        const dialog = screen.getByRole('dialog');
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }));
+
+        expect(handleDeleteMetadataInstance).toHaveBeenCalledWith(mockCustomTemplateInstance);
     });
 
     test('should render filter dropdown when more than one templates are present', () => {
