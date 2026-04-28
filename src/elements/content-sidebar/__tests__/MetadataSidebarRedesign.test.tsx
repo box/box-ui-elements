@@ -375,7 +375,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeVisible();
         expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeVisible();
 
-        await userEvent.click(screen.getByRole('button', { name: /^Edit\s*$/ }));
+        await userEvent.click(screen.getByRole('button', { name: 'Edit' }));
         await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
         await userEvent.click(screen.getByText('Confirm deletion of Metadata instance'));
