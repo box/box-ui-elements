@@ -2,7 +2,8 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '../../../test-utils/testing-library';
 
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
-import mockData from '../__mocks__/DocGenSidebar.mock';
+import type { DocGenTag } from '../DocGenSidebar/types';
+import mockData, { mockPdfTemplateData } from '../__mocks__/DocGenSidebar.mock';
 
 const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(
@@ -27,7 +28,6 @@ const processAndResolveMock = jest
         }),
     );
 
-const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
 const processingTagsMock = jest.fn().mockReturnValue(
     Promise.resolve({
         message: 'Processing tags for this file.',
@@ -56,8 +56,48 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
     test('should render DocGen sidebar component correctly with tags list', async () => {
         renderComponent();
-        const tagList = await screen.findAllByTestId('bcs-TagsSection');
-        expect(tagList).toHaveLength(2);
+        expect(await screen.findByText('Text tags')).toBeInTheDocument();
+        expect(await screen.findByText('Image tags')).toBeInTheDocument();
+    });
+
+    test('should show empty state when the API returns no tags', async () => {
+        renderComponent({
+            getDocGenTags: jest.fn().mockReturnValue(Promise.resolve({ pagination: {}, data: [] })),
+        });
+        expect(await screen.findByText('This document has no tags')).toBeInTheDocument();
+        expect(screen.queryByText('Text tags')).not.toBeInTheDocument();
+    });
+
+    test('should render PDF form field tags in separate sections', async () => {
+        renderComponent({
+            getDocGenTags: jest.fn().mockReturnValue(
+                Promise.resolve({
+                    pagination: {},
+                    data: mockPdfTemplateData,
+                }),
+            ),
+        });
+
+        expect(await screen.findByText('Text tags')).toBeInTheDocument();
+        expect(await screen.findByText('Checkbox tags')).toBeInTheDocument();
+        expect(await screen.findByText('Radiobutton tags')).toBeInTheDocument();
+        expect(await screen.findByText('Dropdown tags')).toBeInTheDocument();
+    });
+
+    test('should list tags with an unknown `tag_type` under Text tags', async () => {
+        const data: DocGenTag[] = [
+            {
+                tag_type: 'unknown',
+                tag_content: '{{x}}',
+                json_paths: ['pathFromUnknown'],
+                required: true,
+            } as unknown as DocGenTag,
+        ];
+        renderComponent({
+            getDocGenTags: jest.fn().mockReturnValue(Promise.resolve({ pagination: {}, data })),
+        });
+        expect(await screen.findByText('Text tags')).toBeInTheDocument();
+        expect(await screen.findByText('pathFromUnknown')).toBeInTheDocument();
     });
 
     test('should render DocGen sidebar component correctly with tags list', async () => {
@@ -72,15 +112,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         nestedTag = await screen.findByText('name');
         expect(nestedTag).toBeInTheDocument();
-    });
-
-    test('should render empty state when there are no tags', async () => {
-        renderComponent({
-            getDocGenTags: noTagsMock,
-        });
-
-        const emptyState = await screen.findByText('This document has no tags');
-        expect(emptyState).toBeInTheDocument();
     });
 
     test('should render loading state', async () => {
