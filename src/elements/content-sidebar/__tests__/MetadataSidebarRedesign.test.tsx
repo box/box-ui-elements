@@ -1,6 +1,7 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { RouteComponentProps } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
 import { screen, render, waitFor } from '../../../test-utils/testing-library';
@@ -104,8 +105,17 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     };
 
     const renderComponent = (props = {}, features = {}) => {
-        const emptyFilteredTemplateIds = [];
-        const routeComponentProps = {} as RouteComponentProps;
+        const mockHistory = createMemoryHistory({ initialEntries: ['/metadata'] });
+        jest.spyOn(mockHistory, 'block');
+        jest.spyOn(mockHistory, 'push');
+        jest.spyOn(mockHistory, 'replace');
+
+        const routeComponentProps = {
+            history: mockHistory,
+            location: mockHistory.location,
+            match: { params: {}, isExact: true, path: '/metadata', url: '/metadata' },
+        } as unknown as RouteComponentProps;
+
         const defaultProps = {
             api,
             fileExtension: 'pdf',
@@ -113,14 +123,18 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             getPreview: jest.fn().mockReturnValue({}),
             fileId: 'test-file-id-1',
             elementId: 'element-1',
-            filteredTemplateIds: emptyFilteredTemplateIds,
+            filteredTemplateIds: [],
             isFeatureEnabled: true,
             onError: jest.fn(),
             onSuccess: jest.fn(),
             ...routeComponentProps,
         } satisfies MetadataSidebarRedesignProps;
 
-        render(<MetadataSidebarRedesign {...defaultProps} {...props} />, { wrapperProps: { features } });
+        const renderResult = render(<MetadataSidebarRedesign {...defaultProps} {...props} />, {
+            wrapperProps: { features },
+        });
+
+        return { mockHistory, ...renderResult };
     };
 
     beforeEach(() => {
@@ -518,5 +532,184 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent({ getPreview });
 
         expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview);
+    });
+
+    describe('navigation blocking', () => {
+        const navBlockFeatures = { 'metadata.confidenceScore.enabled': true };
+
+        const setupWithEditableTemplates = () => {
+            mockUseSidebarMetadataFetcher.mockReturnValue({
+                clearExtractError: jest.fn(),
+                extractSuggestions: jest.fn(),
+                handleCreateMetadataInstance: jest.fn(),
+                handleDeleteMetadataInstance: jest.fn(),
+                handleUpdateMetadataInstance: jest.fn(),
+                templateInstances: [mockVisibleTemplateInstance],
+                templates: mockTemplates,
+                errorMessage: null,
+                status: STATUS.SUCCESS,
+                file: mockFile,
+                extractErrorCode: null,
+            });
+        };
+
+        const startEditing = async (mockHistory: ReturnType<typeof createMemoryHistory>) => {
+            const editButton = screen.getByRole('button', { name: 'Edit Visible Template' });
+            await userEvent.click(editButton);
+            return mockHistory.block as jest.Mock;
+        };
+
+        const triggerBlockCallback = (blockSpy: jest.Mock) => {
+            const blockCallback = blockSpy.mock.calls[0][0];
+            const fakeLocation = { pathname: '/boxai', search: '', hash: '', state: undefined };
+            blockCallback(fakeLocation);
+        };
+
+        test('should install history.block when editing and feature flag is on', async () => {
+            setupWithEditableTemplates();
+            const { mockHistory } = renderComponent({}, navBlockFeatures);
+
+            expect(mockHistory.block).not.toHaveBeenCalled();
+
+            await startEditing(mockHistory);
+
+            expect(mockHistory.block).toHaveBeenCalledTimes(1);
+            expect(mockHistory.block).toHaveBeenCalledWith(expect.any(Function));
+        });
+
+        test('should not install history.block when feature flag is off', async () => {
+            setupWithEditableTemplates();
+            const { mockHistory } = renderComponent({}, { 'metadata.confidenceScore.enabled': false });
+
+            await startEditing(mockHistory);
+
+            expect(mockHistory.block).not.toHaveBeenCalled();
+        });
+
+        test('should show unsaved changes modal when navigation is attempted while editing', async () => {
+            setupWithEditableTemplates();
+            const { mockHistory } = renderComponent({}, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            expect(await screen.findByText('Unsaved Changes')).toBeInTheDocument();
+        });
+
+        test('should navigate to pending location on discard', async () => {
+            setupWithEditableTemplates();
+            const { mockHistory } = renderComponent({}, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            const discardButton = await screen.findByRole('button', { name: 'Discard Changes' });
+            await userEvent.click(discardButton);
+
+            expect(mockHistory.push).toHaveBeenCalledWith(expect.objectContaining({ pathname: '/boxai' }));
+            expect(screen.queryByText('Unsaved Changes')).not.toBeInTheDocument();
+        });
+
+        test('should re-sync URL to metadata on continue editing', async () => {
+            setupWithEditableTemplates();
+            const { mockHistory } = renderComponent({}, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            const continueButton = await screen.findByRole('button', { name: 'Continue Editing' });
+            await userEvent.click(continueButton);
+
+            expect(mockHistory.replace).toHaveBeenCalledWith('/metadata');
+            expect(screen.queryByText('Unsaved Changes')).not.toBeInTheDocument();
+        });
+
+        test('should remove history.block on unmount', async () => {
+            setupWithEditableTemplates();
+            const mockUnblock = jest.fn();
+            const { mockHistory, unmount } = renderComponent({}, navBlockFeatures);
+
+            (mockHistory.block as jest.Mock).mockReturnValue(mockUnblock);
+
+            await startEditing(mockHistory);
+
+            unmount();
+
+            expect(mockUnblock).toHaveBeenCalled();
+        });
+
+        test('should call registerOpenWarningModalCallback with modal open fn on mount', () => {
+            setupWithEditableTemplates();
+            const registerOpenWarningModalCallback = jest.fn();
+
+            renderComponent({ registerOpenWarningModalCallback }, navBlockFeatures);
+
+            expect(registerOpenWarningModalCallback).toHaveBeenCalledWith(expect.any(Function));
+        });
+
+        test('should call onWarningModalDiscard when discard is clicked', async () => {
+            setupWithEditableTemplates();
+            const onWarningModalDiscard = jest.fn();
+            const { mockHistory } = renderComponent({ onWarningModalDiscard }, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            const discardButton = await screen.findByRole('button', { name: 'Discard Changes' });
+            await userEvent.click(discardButton);
+
+            expect(onWarningModalDiscard).toHaveBeenCalledTimes(1);
+        });
+
+        test('should call onWarningModalClose when parent-driven modal closes with no pending location', () => {
+            setupWithEditableTemplates();
+            const onWarningModalClose = jest.fn();
+            let capturedCallback: ((isOpen: boolean) => void) | undefined;
+            const registerOpenWarningModalCallback = jest.fn(fn => {
+                capturedCallback = fn;
+            });
+
+            renderComponent({ onWarningModalClose, registerOpenWarningModalCallback }, navBlockFeatures);
+
+            expect(capturedCallback).toBeDefined();
+            capturedCallback!(true);
+            capturedCallback!(false);
+
+            expect(onWarningModalClose).toHaveBeenCalledTimes(1);
+        });
+
+        test('should call onWarningModalClose when closing modal after a router-blocked nav', async () => {
+            setupWithEditableTemplates();
+            const onWarningModalClose = jest.fn();
+            const { mockHistory } = renderComponent({ onWarningModalClose }, navBlockFeatures);
+
+            const blockSpy = await startEditing(mockHistory);
+            triggerBlockCallback(blockSpy);
+
+            const continueButton = await screen.findByRole('button', { name: 'Continue Editing' });
+            await userEvent.click(continueButton);
+
+            expect(mockHistory.replace).toHaveBeenCalledWith('/metadata');
+            expect(onWarningModalClose).toHaveBeenCalledTimes(1);
+        });
+
+        test('should NOT call onWarningModalClose when feature flag is disabled', () => {
+            setupWithEditableTemplates();
+            const onWarningModalClose = jest.fn();
+            let capturedCallback: ((isOpen: boolean) => void) | undefined;
+            const registerOpenWarningModalCallback = jest.fn(fn => {
+                capturedCallback = fn;
+            });
+
+            renderComponent(
+                { onWarningModalClose, registerOpenWarningModalCallback },
+                { 'metadata.confidenceScore.enabled': false },
+            );
+
+            expect(capturedCallback).toBeDefined();
+            capturedCallback!(false);
+
+            expect(onWarningModalClose).not.toHaveBeenCalled();
+        });
     });
 });
