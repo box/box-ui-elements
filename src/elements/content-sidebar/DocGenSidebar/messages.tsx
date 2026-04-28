@@ -11,6 +11,21 @@ const messages = defineMessages({
         description: 'Image tags section header',
         defaultMessage: 'Image tags',
     },
+    checkboxTags: {
+        id: 'be.docGenSidebar.checkboxTags',
+        description: 'Checkbox tags section header',
+        defaultMessage: 'Checkbox tags',
+    },
+    radiobuttonTags: {
+        id: 'be.docGenSidebar.radiobuttonTags',
+        description: 'Radiobutton tags section header',
+        defaultMessage: 'Radiobutton tags',
+    },
+    dropdownTags: {
+        id: 'be.docGenSidebar.dropdownTags',
+        description: 'Dropdown tags section header',
+        defaultMessage: 'Dropdown tags',
+    },
     docGenTags: {
         id: 'be.docGenSidebar.docGenTags',
         description: 'DocGen sidebar header',
