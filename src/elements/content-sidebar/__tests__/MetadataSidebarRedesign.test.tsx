@@ -362,7 +362,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance,
             handleUpdateMetadataInstance: jest.fn(),
-            templateInstances: [mockCustomTemplateInstance, mockVisibleTemplateInstance],
+            templateInstances: [mockCustomTemplateInstance],
             templates: mockTemplates,
             errorMessage: null,
             status: STATUS.SUCCESS,
