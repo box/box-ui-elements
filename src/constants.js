@@ -246,13 +246,14 @@ export const CLIENT_NAME_FOLDER_PICKER: 'FolderPicker' = 'FolderPicker';
 export const CLIENT_VERSION = __VERSION__;
 
 /* ---------------------- Statuses -------------------------- */
-export const STATUS_PENDING: 'pending' = 'pending';
-export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
-export const STATUS_STAGED: 'staged' = 'staged';
+export const STATUS_ACCEPTED: 'accepted' = 'accepted';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
-export const STATUS_ACCEPTED: 'accepted' = 'accepted';
 export const STATUS_INACTIVE: 'inactive' = 'inactive';
+export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
+export const STATUS_PENDING: 'pending' = 'pending';
+export const STATUS_REJECTED: 'rejected' = 'rejected';
+export const STATUS_STAGED: 'staged' = 'staged';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';

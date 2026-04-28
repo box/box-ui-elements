@@ -4,7 +4,7 @@ import type { HttpHandler } from 'msw';
 import type { Meta } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
 import { mockFileRequest } from '../../stories/__mocks__/ContentSidebarMocks';
-import mockDocGenTags from '../../__mocks__/DocGenSidebar.mock';
+import mockDocGenTags, { mockPdfTemplateData } from '../../__mocks__/DocGenSidebar.mock';
 
 const defaultArgs = {
     detailsSidebarProps: {
@@ -33,6 +33,16 @@ const docGenSidebarProps = {
     }),
 };
 
+const docGenSidebarPdfTemplateProps = {
+    enabled: true,
+    isDocGenTemplate: true,
+    checkDocGenTemplate: noop,
+    getDocGenTags: async () => ({
+        pagination: {},
+        data: mockPdfTemplateData,
+    }),
+};
+
 export const basic = {
     args: {
         defaultView: 'docgen',
@@ -45,6 +55,25 @@ export const withModernizedBlueprint = {
         enableModernizedComponents: true,
         defaultView: 'docgen',
         docGenSidebarProps,
+        features: {
+            ...global.FEATURE_FLAGS,
+            previewModernization: { enabled: true },
+        },
+    },
+};
+
+export const pdfTemplate = {
+    args: {
+        defaultView: 'docgen',
+        docGenSidebarProps: docGenSidebarPdfTemplateProps,
+    },
+};
+
+export const pdfTemplateWithModernizedBlueprint = {
+    args: {
+        enableModernizedComponents: true,
+        defaultView: 'docgen',
+        docGenSidebarProps: docGenSidebarPdfTemplateProps,
         features: {
             ...global.FEATURE_FLAGS,
             previewModernization: { enabled: true },
