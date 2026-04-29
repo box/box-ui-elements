@@ -181,12 +181,28 @@ function ContentSharingV2({
         if (!api || isEmpty(api) || !item || currentUser) return;
 
         const getUserSuccess = userData => {
-            const { hostname, id } = userData;
+            const { enterprise, hostname, id } = userData;
             setCurrentUser({ id });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
                 serverUrl: hostname ? `${hostname}v/` : '',
             }));
+
+            if (!enterprise?.name) {
+                setSharedLink(prevSharedLink => {
+                    if (!prevSharedLink?.settings) {
+                        return prevSharedLink;
+                    }
+
+                    return {
+                        ...prevSharedLink,
+                        settings: {
+                            ...prevSharedLink.settings,
+                            canChangeExpiration: false,
+                        },
+                    };
+                });
+            }
         };
 
         (async () => {

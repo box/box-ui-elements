@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, type RenderResult, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, type RenderResult, screen, waitFor } from '@testing-library/react';
 import { Notification, TooltipProvider } from '@box/blueprint-web';
 import { useSharingService } from '../hooks/useSharingService';
 import {
@@ -13,6 +13,11 @@ import {
 } from '../utils/__mocks__/ContentSharingV2Mocks';
 import { CONTENT_SHARING_ITEM_FIELDS } from '../constants';
 import ContentSharingV2 from '../ContentSharingV2';
+
+const FREE_USER_API_RESPONSE = {
+    id: '123',
+    enterprise: null,
+};
 
 const createApiMock = (fileApi, folderApi, usersApi, collaborationsApi) => ({
     getFileAPI: jest.fn().mockReturnValue(fileApi),
@@ -117,6 +122,9 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         expect(await screen.findByRole('button', { name: 'Can view and download' })).toBeVisible();
         expect(screen.getByRole('button', { name: 'Link Settings' })).toBeVisible();
         expect(screen.getByRole('button', { name: 'Copy' })).toBeVisible();
+        // Should have expiration toggle enabled for Business+ users
+        fireEvent.click(screen.getByRole('button', { name: 'Link Settings' }));
+        expect(screen.getByRole('switch', { name: 'Link expiration' })).not.toBeDisabled();
     });
 
     test('should see the classification elements if classification is present', async () => {
@@ -181,6 +189,21 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         renderComponent({ api: apiWithSharedLink, config: { sharedLinkEmail: true } });
         expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
         expect(await screen.findByRole('button', { name: 'Send Shared Link' })).toBeVisible();
+    });
+
+    test('should have disabled expiration toggle for users without enterprise', async () => {
+        const apiFreeUser = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
+            getUsersAPI: jest.fn().mockReturnValue({
+                getUser: jest.fn().mockImplementation(createSuccessMock(FREE_USER_API_RESPONSE)),
+                getAvatarUrlWithAccessToken: getAvatarUrlMock,
+            }),
+        };
+
+        renderComponent({ api: apiFreeUser });
+        fireEvent.click(await screen.findByRole('button', { name: 'Link Settings' }));
+        expect(screen.getByRole('switch', { name: 'Link expiration' })).toBeDisabled();
     });
 
     describe('getError function', () => {
