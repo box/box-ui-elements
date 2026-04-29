@@ -26,6 +26,11 @@ const messages = defineMessages({
         description: 'Dropdown tags section header',
         defaultMessage: 'Dropdown tags',
     },
+    ciTest: {
+        id: 'be.docGenSidebar.ciTest',
+        description: 'Throwaway message used to verify the CI i18n drift check fires (do not merge)',
+        defaultMessage: 'ci test',
+    },
     docGenTags: {
         id: 'be.docGenSidebar.docGenTags',
         description: 'DocGen sidebar header',
