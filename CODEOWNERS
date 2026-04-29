@@ -24,8 +24,8 @@
 /src/elements/content-uploader/             @box/ui-elements @box/create-communicate
 /src/elements/wrappers/                     @box/ui-elements
 /src/features/                              @box/ui-elements
-/src/features/access-stats/                 @box/ui-elements @box/preview
-/src/features/content-insights/             @box/ui-elements @box/preview
+/src/features/access-stats/                 @box/ui-elements @box/enterprise-insights
+/src/features/content-insights/             @box/ui-elements @box/enterprise-insights
 /src/features/item-details/                 @box/ui-elements @box/preview
 /src/features/metadata-based-view/          @box/ui-elements @box/preview
 /src/features/metadata-instance-editor/     @box/ui-elements @box/preview
