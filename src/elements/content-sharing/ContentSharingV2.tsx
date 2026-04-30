@@ -183,6 +183,10 @@ function ContentSharingV2({
         if (!api || isEmpty(api) || !item || currentUser) return;
 
         const getUserSuccess = userData => {
+            if (!userData) {
+                return;
+            }
+
             const { enterprise, hostname, id } = userData;
             setCurrentUser({ id });
             setSharingServiceProps(prevSharingServiceProps => ({
@@ -209,13 +213,19 @@ function ContentSharingV2({
             return;
         }
 
-        setSharedLink(prevSharedLink => ({
-            ...prevSharedLink,
-            settings: {
-                ...prevSharedLink.settings,
-                canChangeExpiration: false,
-            },
-        }));
+        setSharedLink(prevSharedLink => {
+            if (!prevSharedLink) {
+                return prevSharedLink;
+            }
+
+            return {
+                ...prevSharedLink,
+                settings: {
+                    ...prevSharedLink.settings,
+                    canChangeExpiration: false,
+                },
+            };
+        });
     }, [isEnterpriseUser, sharedLink]);
 
     // Get collaborators
