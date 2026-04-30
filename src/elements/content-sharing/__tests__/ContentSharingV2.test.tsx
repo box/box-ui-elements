@@ -1,10 +1,11 @@
 import React from 'react';
-import { render, type RenderResult, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, type RenderResult, screen, waitFor } from '@testing-library/react';
 import { Notification, TooltipProvider } from '@box/blueprint-web';
 import { useSharingService } from '../hooks/useSharingService';
 import {
     DEFAULT_ITEM_API_RESPONSE,
     DEFAULT_USER_API_RESPONSE,
+    FREE_USER_API_RESPONSE,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
@@ -117,6 +118,9 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         expect(await screen.findByRole('button', { name: 'Can view and download' })).toBeVisible();
         expect(screen.getByRole('button', { name: 'Link Settings' })).toBeVisible();
         expect(screen.getByRole('button', { name: 'Copy' })).toBeVisible();
+        // Should have expiration toggle enabled for Business+ users
+        fireEvent.click(screen.getByRole('button', { name: 'Link Settings' }));
+        expect(screen.getByRole('switch', { name: 'Link expiration' })).not.toBeDisabled();
     });
 
     test('should see the classification elements if classification is present', async () => {
@@ -181,6 +185,21 @@ describe('elements/content-sharing/ContentSharingV2', () => {
         renderComponent({ api: apiWithSharedLink, config: { sharedLinkEmail: true } });
         expect(await screen.findByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
         expect(await screen.findByRole('button', { name: 'Send Shared Link' })).toBeVisible();
+    });
+
+    test('should have disabled expiration toggle for users without enterprise', async () => {
+        const freeUserApi = {
+            ...defaultApiMock,
+            getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
+            getUsersAPI: jest.fn().mockReturnValue({
+                getUser: jest.fn().mockImplementation(createSuccessMock(FREE_USER_API_RESPONSE)),
+                getAvatarUrlWithAccessToken: getAvatarUrlMock,
+            }),
+        };
+
+        renderComponent({ api: freeUserApi });
+        fireEvent.click(await screen.findByRole('button', { name: 'Link Settings' }));
+        expect(screen.getByRole('switch', { name: 'Link expiration' })).toBeDisabled();
     });
 
     describe('getError function', () => {

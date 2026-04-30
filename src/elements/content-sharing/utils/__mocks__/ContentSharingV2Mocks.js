@@ -92,6 +92,12 @@ export const EMPTY_COLLABORATIONS_RESPONSE = {
 
 export const DEFAULT_USER_API_RESPONSE = {
     id: '789',
+    enterprise: { id: '12345', name: 'Test Enterprise' },
+};
+
+export const FREE_USER_API_RESPONSE = {
+    id: '123',
+    enterprise: null,
 };
 
 export const DEFAULT_ITEM_API_RESPONSE = {
