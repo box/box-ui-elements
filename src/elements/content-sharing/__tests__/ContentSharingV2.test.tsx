@@ -5,6 +5,7 @@ import { useSharingService } from '../hooks/useSharingService';
 import {
     DEFAULT_ITEM_API_RESPONSE,
     DEFAULT_USER_API_RESPONSE,
+    FREE_USER_API_RESPONSE,
     MOCK_ITEM,
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
@@ -13,11 +14,6 @@ import {
 } from '../utils/__mocks__/ContentSharingV2Mocks';
 import { CONTENT_SHARING_ITEM_FIELDS } from '../constants';
 import ContentSharingV2 from '../ContentSharingV2';
-
-const FREE_USER_API_RESPONSE = {
-    id: '123',
-    enterprise: null,
-};
 
 const createApiMock = (fileApi, folderApi, usersApi, collaborationsApi) => ({
     getFileAPI: jest.fn().mockReturnValue(fileApi),
@@ -192,7 +188,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
     });
 
     test('should have disabled expiration toggle for users without enterprise', async () => {
-        const apiFreeUser = {
+        const freeUserApi = {
             ...defaultApiMock,
             getFileAPI: jest.fn().mockReturnValue({ getFile: getFileMockWithSharedLink }),
             getUsersAPI: jest.fn().mockReturnValue({
@@ -201,7 +197,7 @@ describe('elements/content-sharing/ContentSharingV2', () => {
             }),
         };
 
-        renderComponent({ api: apiFreeUser });
+        renderComponent({ api: freeUserApi });
         fireEvent.click(await screen.findByRole('button', { name: 'Link Settings' }));
         expect(screen.getByRole('switch', { name: 'Link expiration' })).toBeDisabled();
     });

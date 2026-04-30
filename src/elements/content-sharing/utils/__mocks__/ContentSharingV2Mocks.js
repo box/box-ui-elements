@@ -95,6 +95,11 @@ export const DEFAULT_USER_API_RESPONSE = {
     enterprise: { id: '12345', name: 'Test Enterprise' },
 };
 
+export const FREE_USER_API_RESPONSE = {
+    id: '123',
+    enterprise: null,
+};
+
 export const DEFAULT_ITEM_API_RESPONSE = {
     allowed_invitee_roles: ['editor', 'viewer'],
     allowed_shared_link_access_levels: ['open', 'company', 'collaborators'],
