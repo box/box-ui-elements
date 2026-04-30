@@ -26,6 +26,7 @@ export const MOCK_ITEM = {
 
 export const MOCK_SHARED_LINK = {
     access: 'open',
+    download_url: 'https://example.com/shared_link=abc123',
     effective_permission: 'can_download',
     is_password_enabled: true,
     unshared_at: 1704067200000,
@@ -112,7 +113,7 @@ export const DEFAULT_ITEM_API_RESPONSE = {
     owned_by: mockOwner,
     permissions: MOCK_PERMISSIONS,
     shared_link: null,
-    shared_link_features: { password: true },
+    shared_link_features: { download_url: true, password: true },
     shared_link_permission_options: ['can_edit', 'can_download', 'can_preview'],
     type: MOCK_ITEM.type,
 };
