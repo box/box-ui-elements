@@ -23,7 +23,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         type,
     } = itemApiData;
 
-    const { download_url: isDirectLinkAvailable, password: isPasswordAvailable } = shared_link_features;
+    const { download_url: isDirectLinkAvailable, password: isPasswordAvailable, vanity_name: isVanityNameAvailable } = shared_link_features;
 
     const {
         can_download: isDownloadSettingAvailable,
@@ -85,6 +85,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
                 isDownloadEnabled: isDownloadAllowed,
                 isPasswordAvailable: isPasswordAvailable ?? false,
                 isPasswordEnabled,
+                isVanityNameAvailable: isVanityNameAvailable ?? false,
             },
             url,
             vanityDomain: vanityUrl,
