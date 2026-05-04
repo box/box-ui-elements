@@ -289,6 +289,16 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(onAnnotationDelete).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
         });
 
+        test('should call onAnnotationEdit with id and permissions (no text) when onEdit fires', () => {
+            const onAnnotationEdit = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationEdit={onAnnotationEdit} />);
+
+            const onEdit = lastThreadedAnnotationProps.onEdit as (id: string) => void;
+            onEdit('annotation-1');
+
+            expect(onAnnotationEdit).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
+        });
+
         test('should call onAnnotationStatusChange with resolved when onResolve fires', () => {
             const onAnnotationStatusChange = jest.fn();
             render(

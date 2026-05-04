@@ -22,7 +22,7 @@ type FeedItemRowProps = {
     isDisabled: boolean;
     item: TransformedFeedItem;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
-    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
+    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text?: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
@@ -160,7 +160,7 @@ const FeedItemRow = ({
                     }}
                     onEdit={(id: string) => {
                         if (onAnnotationEdit) {
-                            onAnnotationEdit({ id, permissions: item.annotation.permissions, text: '' });
+                            onAnnotationEdit({ id, permissions: item.annotation.permissions });
                         }
                     }}
                     onPost={handleReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, onReplyCreate)}

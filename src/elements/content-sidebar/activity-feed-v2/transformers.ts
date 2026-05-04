@@ -226,7 +226,7 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 isResolved: commentIsResolved,
                 messages: transformCommentToMessages(comment),
                 originalText: comment.tagged_message || comment.message || '',
-                permissions: comment.permissions,
+                permissions: comment.permissions ?? {},
                 resolvedAt: commentIsResolved ? toUnixMs(comment.modified_at) : undefined,
                 resolvedBy: commentIsResolved
                     ? (comment as unknown as { modified_by?: { name?: string } }).modified_by?.name
@@ -243,7 +243,7 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 id: annotation.id,
                 isResolved: annotationIsResolved,
                 messages: transformAnnotationToMessages(annotation),
-                permissions: annotation.permissions,
+                permissions: annotation.permissions ?? {},
                 resolvedAt: annotationIsResolved ? toUnixMs(annotation.modified_at) : undefined,
                 resolvedBy: annotationIsResolved ? annotation.modified_by?.name : undefined,
                 status: annotation.status,

@@ -992,18 +992,44 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         );
     }, DEFAULT_COLLAB_DEBOUNCE);
 
-    getMentionAsync = (searchStr: string): Promise<Array<Object>> => {
+    pendingMentionResolve: ?(entries: SelectorItems<>) => void = null;
+
+    pendingMentionReject: ?(error: Error) => void = null;
+
+    // Debounced inner fetch. Keeps the most recent resolver/rejecter (set by
+    // getMentionAsync) and calls them when the debounced request settles.
+    debouncedFetchMentionCollaborators = debounce((searchStr: string) => {
         const { api, file } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            (collaborators: { entries: SelectorItems<> }) => {
+                if (this.pendingMentionResolve) {
+                    this.pendingMentionResolve(collaborators.entries);
+                    this.pendingMentionResolve = null;
+                    this.pendingMentionReject = null;
+                }
+            },
+            (error, code, contextInfo) => {
+                this.errorCallback(error, code, contextInfo);
+                if (this.pendingMentionReject) {
+                    this.pendingMentionReject(error);
+                    this.pendingMentionResolve = null;
+                    this.pendingMentionReject = null;
+                }
+            },
+            searchStr,
+        );
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    getMentionAsync = (searchStr: string): Promise<Array<Object>> => {
+        // Supersede any in-flight promise so callers don't get stale results
+        if (this.pendingMentionResolve) {
+            this.pendingMentionResolve([]);
+        }
         return new Promise((resolve, reject) => {
-            api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
-                file.id,
-                (collaborators: { entries: SelectorItems<> }) => resolve(collaborators.entries),
-                (error, code, contextInfo) => {
-                    this.errorCallback(error, code, contextInfo);
-                    reject(error);
-                },
-                searchStr,
-            );
+            this.pendingMentionResolve = resolve;
+            this.pendingMentionReject = reject;
+            this.debouncedFetchMentionCollaborators(searchStr);
         });
     };
 

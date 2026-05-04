@@ -71,7 +71,7 @@ export type ActivityFeedV2Props = {
     hasTasks?: boolean;
     isDisabled?: boolean;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
-    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
+    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text?: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
