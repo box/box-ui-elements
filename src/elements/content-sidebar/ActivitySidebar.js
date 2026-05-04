@@ -477,7 +477,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { api, file, hasReplies, onCommentUpdate } = this.props;
+        const { api, features, file, hasReplies, onCommentUpdate } = this.props;
+        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
 
         const errorCallback = (e, code) => {
             if (onError) {
@@ -494,7 +495,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onCommentUpdate();
         };
 
-        if (hasReplies) {
+        if (hasReplies || isThreadedRepliesV2Enabled) {
             api.getFeedAPI(false).updateThreadedComment(
                 file,
                 id,
@@ -991,6 +992,21 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         );
     }, DEFAULT_COLLAB_DEBOUNCE);
 
+    getMentionAsync = (searchStr: string): Promise<Array<Object>> => {
+        const { api, file } = this.props;
+        return new Promise((resolve, reject) => {
+            api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+                file.id,
+                (collaborators: { entries: SelectorItems<> }) => resolve(collaborators.entries),
+                (error, code, contextInfo) => {
+                    this.errorCallback(error, code, contextInfo);
+                    reject(error);
+                },
+                searchStr,
+            );
+        });
+    };
+
     /**
      * Returns feed item based on the item id
      *
@@ -1316,15 +1332,39 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
 
         if (isThreadedRepliesV2Enabled) {
+            const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
             return (
-                <SidebarContent
-                    className="bcs-activity"
-                    elementId={elementId}
-                    sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                    title={this.renderTitle()}
+                <div
+                    aria-labelledby={label}
+                    className="bcs-content"
+                    data-testid="bcs-content"
+                    id={`${label}-content`}
+                    role="tabpanel"
                 >
-                    <ActivityFeedV2 />
-                </SidebarContent>
+                    <ActivityFeedV2
+                        activeFeedEntryId={activeFeedEntryId}
+                        approverSelectorContacts={approverSelectorContacts}
+                        createTask={this.createTask}
+                        currentUser={currentUser}
+                        feedItems={this.getFilteredFeedItems()}
+                        getApproverWithQuery={this.getApprover}
+                        getAvatarUrl={this.getAvatarUrl}
+                        getMentionAsync={this.getMentionAsync}
+                        hasTasks={this.props.hasTasks}
+                        isDisabled={isDisabled}
+                        onAnnotationDelete={this.handleAnnotationDelete}
+                        onAnnotationEdit={this.handleAnnotationEdit}
+                        onAnnotationSelect={this.handleAnnotationSelect}
+                        onAnnotationStatusChange={this.handleAnnotationStatusChange}
+                        onCommentCreate={this.createComment}
+                        onCommentDelete={this.deleteComment}
+                        onCommentUpdate={this.updateComment}
+                        onReplyCreate={this.createReply}
+                        onTaskDelete={this.deleteTask}
+                        onTaskView={onTaskView}
+                        onVersionHistoryClick={onVersionHistoryClick}
+                    />
+                </div>
             );
         }
 
