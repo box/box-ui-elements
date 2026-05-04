@@ -994,16 +994,19 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     pendingMentionResolve: ?(entries: SelectorItems<>) => void = null;
 
-    pendingMentionReject: ?(error: Error) => void = null;
+    pendingMentionReject: ?(error: ElementsXhrError) => void = null;
 
-    // Debounced inner fetch. Keeps the most recent resolver/rejecter (set by
-    // getMentionAsync) and calls them when the debounced request settles.
-    debouncedFetchMentionCollaborators = debounce((searchStr: string) => {
+    mentionGeneration: number = 0;
+
+    // Debounced inner fetch. The generation arg guards against in-flight
+    // responses from superseded requests resolving/rejecting the current
+    // promise with stale data.
+    debouncedFetchMentionCollaborators = debounce((searchStr: string, generation: number) => {
         const { api, file } = this.props;
         api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
             file.id,
             (collaborators: { entries: SelectorItems<> }) => {
-                if (this.pendingMentionResolve) {
+                if (generation === this.mentionGeneration && this.pendingMentionResolve) {
                     this.pendingMentionResolve(collaborators.entries);
                     this.pendingMentionResolve = null;
                     this.pendingMentionReject = null;
@@ -1011,7 +1014,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             },
             (error, code, contextInfo) => {
                 this.errorCallback(error, code, contextInfo);
-                if (this.pendingMentionReject) {
+                if (generation === this.mentionGeneration && this.pendingMentionReject) {
                     this.pendingMentionReject(error);
                     this.pendingMentionResolve = null;
                     this.pendingMentionReject = null;
@@ -1022,14 +1025,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     getMentionAsync = (searchStr: string): Promise<Array<Object>> => {
-        // Supersede any in-flight promise so callers don't get stale results
         if (this.pendingMentionResolve) {
             this.pendingMentionResolve([]);
         }
+        this.mentionGeneration += 1;
+        const generation = this.mentionGeneration;
         return new Promise((resolve, reject) => {
             this.pendingMentionResolve = resolve;
             this.pendingMentionReject = reject;
-            this.debouncedFetchMentionCollaborators(searchStr);
+            this.debouncedFetchMentionCollaborators(searchStr, generation);
         });
     };
 
