@@ -49,14 +49,21 @@ type FeedItemRowProps = {
 const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | undefined => {
     if (!target) return undefined;
 
-    if (target.type === 'region') {
-        return { page: target.location?.value ?? 0, type: AnnotationBadgeType.Region };
-    }
-    if (target.type === 'point') {
-        return { page: target.location?.value ?? 0, type: AnnotationBadgeType.Point };
-    }
+    const targetType = target.type as string;
+    const page = target.location?.value ?? 0;
 
-    return undefined;
+    switch (targetType) {
+        case 'drawing':
+            return { page, type: AnnotationBadgeType.Drawing };
+        case 'highlight':
+            return { highlightedText: '', type: AnnotationBadgeType.Highlight };
+        case 'point':
+            return { page, type: AnnotationBadgeType.Point };
+        case 'region':
+            return { page, type: AnnotationBadgeType.Region };
+        default:
+            return undefined;
+    }
 };
 
 const handleReplyPost =

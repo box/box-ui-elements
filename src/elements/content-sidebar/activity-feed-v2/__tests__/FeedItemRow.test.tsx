@@ -301,6 +301,63 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             });
         });
 
+        test('should pass point badge for point annotation target', () => {
+            render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({ page: 3, type: 'point' });
+        });
+
+        test('should pass region badge for region annotation target', () => {
+            const regionAnnotation: TransformedAnnotationItem = {
+                ...mockAnnotation,
+                annotation: {
+                    ...mockAnnotation.annotation,
+                    target: {
+                        location: { type: 'page', value: 2 },
+                        shape: { height: 10, type: 'rect', width: 20, x: 5, y: 5 },
+                        type: 'region',
+                    },
+                } as TransformedAnnotationItem['annotation'],
+            };
+            render(<FeedItemRow {...defaultProps} item={regionAnnotation} />);
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({ page: 2, type: 'region' });
+        });
+
+        test('should pass drawing badge for drawing annotation target', () => {
+            const drawingAnnotation: TransformedAnnotationItem = {
+                ...mockAnnotation,
+                annotation: {
+                    ...mockAnnotation.annotation,
+                    target: { location: { type: 'page', value: 1 }, type: 'drawing' },
+                } as TransformedAnnotationItem['annotation'],
+            };
+            render(<FeedItemRow {...defaultProps} item={drawingAnnotation} />);
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({ page: 1, type: 'drawing' });
+        });
+
+        test('should pass highlight badge with empty text for highlight annotation target', () => {
+            const highlightAnnotation: TransformedAnnotationItem = {
+                ...mockAnnotation,
+                annotation: {
+                    ...mockAnnotation.annotation,
+                    target: { location: { type: 'page', value: 1 }, type: 'highlight' },
+                } as TransformedAnnotationItem['annotation'],
+            };
+            render(<FeedItemRow {...defaultProps} item={highlightAnnotation} />);
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({ highlightedText: '', type: 'highlight' });
+        });
+
+        test('should pass undefined badge for unknown annotation target type', () => {
+            const unknownAnnotation: TransformedAnnotationItem = {
+                ...mockAnnotation,
+                annotation: {
+                    ...mockAnnotation.annotation,
+                    target: { location: { type: 'page', value: 1 }, type: 'unknown' },
+                } as TransformedAnnotationItem['annotation'],
+            };
+            render(<FeedItemRow {...defaultProps} item={unknownAnnotation} />);
+            expect(lastThreadedAnnotationProps.annotationTarget).toBeUndefined();
+        });
+
         test('should call onReplyCreate via onPost with annotation type', async () => {
             const onReplyCreate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} onReplyCreate={onReplyCreate} />);
