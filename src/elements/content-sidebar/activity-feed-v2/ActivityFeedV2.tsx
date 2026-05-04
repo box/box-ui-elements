@@ -104,10 +104,10 @@ const ActivityFeedV2 = ({
 
     const userSelectorProps = React.useMemo(
         () => ({
-            ariaRoleDescription: intl.formatMessage(messages.sidebarActivityTitle),
+            ariaRoleDescription: intl.formatMessage(messages.noActivityCommentPrompt),
             fetchAvatarUrls,
             fetchUsers,
-            loadingAriaLabel: intl.formatMessage(messages.sidebarActivityTitle),
+            loadingAriaLabel: intl.formatMessage(messages.loading),
         }),
         [fetchAvatarUrls, fetchUsers, intl],
     );

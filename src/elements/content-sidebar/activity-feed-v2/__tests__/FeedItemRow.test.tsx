@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { render, screen } from '../../../../test-utils/testing-library';
 import FeedItemRow from '../FeedItemRow';
+import type { TaskNew } from '../../../../common/types/tasks';
+
 import type {
     TransformedCommentItem,
     TransformedAnnotationItem,
@@ -102,8 +104,34 @@ const mockAnnotation: TransformedAnnotationItem = {
     type: 'annotation',
 };
 
+const mockOriginalTask = {
+    assigned_to: { entries: [], limit: 20, next_marker: null },
+    completion_rule: 'ALL_ASSIGNEES',
+    created_at: '2024-01-01T00:00:00Z',
+    created_by: {
+        id: 'tc',
+        role: 'CREATOR',
+        status: 'NOT_STARTED',
+        target: { id: 'user-1', name: 'Creator' },
+        type: 'task_collaborator',
+    },
+    description: 'Review',
+    id: 'task-1',
+    permissions: {
+        can_create_task_collaborator: false,
+        can_create_task_link: false,
+        can_delete: true,
+        can_update: true,
+    },
+    status: 'NOT_STARTED',
+    task_links: { entries: [], limit: 20, next_marker: null },
+    task_type: 'GENERAL',
+    type: 'task',
+} as unknown as TaskNew;
+
 const mockTask: TransformedFeedItem = {
     id: 'task-1',
+    originalTask: mockOriginalTask,
     props: {
         assignees: [],
         author: { id: 'user-1', name: 'Creator' },
@@ -383,7 +411,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onDelete = lastTaskProps.onDelete as () => void;
             onDelete();
 
-            expect(onTaskDelete).toHaveBeenCalled();
+            expect(onTaskDelete).toHaveBeenCalledWith(mockOriginalTask);
         });
 
         test('should call onTaskView with taskId and isCreator when view fires', () => {

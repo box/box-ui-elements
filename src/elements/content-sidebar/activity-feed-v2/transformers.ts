@@ -250,12 +250,15 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 type: 'annotation',
             };
         }
-        case FEED_ITEM_TYPE_TASK:
+        case FEED_ITEM_TYPE_TASK: {
+            const task = item as unknown as TaskNew;
             return {
                 id: item.id,
-                props: transformTaskToProps(item as unknown as TaskNew, currentUserId),
+                originalTask: task,
+                props: transformTaskToProps(task, currentUserId),
                 type: 'task',
             };
+        }
         case FEED_ITEM_TYPE_VERSION:
             return {
                 id: item.id,

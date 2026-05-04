@@ -199,7 +199,7 @@ const FeedItemRow = ({
                     key={item.id}
                     {...item.props}
                     disabled={isDisabled}
-                    onDelete={onTaskDelete ? () => onTaskDelete(item.props as unknown as TaskNew) : undefined}
+                    onDelete={onTaskDelete ? () => onTaskDelete(item.originalTask) : undefined}
                     onView={
                         onTaskView
                             ? (taskId: string) => onTaskView(taskId, currentUserId === item.props.author.id)

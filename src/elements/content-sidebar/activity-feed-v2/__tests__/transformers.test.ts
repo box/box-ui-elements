@@ -473,6 +473,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformFeedItem(task as unknown as FeedItem);
             expect(result).not.toBeNull();
             expect(result!.type).toBe('task');
+            expect((result as { originalTask: unknown }).originalTask).toBe(task);
         });
 
         test('should transform a version feed item', () => {

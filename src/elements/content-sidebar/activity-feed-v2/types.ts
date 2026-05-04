@@ -55,7 +55,7 @@ export type TransformedAnnotationItem = {
 export type TransformedFeedItem =
     | TransformedAnnotationItem
     | TransformedCommentItem
-    | { type: 'task'; id: string; props: TaskItemProps }
+    | { type: 'task'; id: string; originalTask: TaskNew; props: TaskItemProps }
     | { type: 'version'; id: string; props: VersionItemProps }
     | { type: 'app_activity'; id: string; props: AppActivityItemProps };
 
