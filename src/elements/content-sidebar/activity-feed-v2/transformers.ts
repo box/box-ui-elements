@@ -1,7 +1,7 @@
 /**
  * @file Transforms BUIE FeedItems into @box/activity-feed component props.
  *
- * Read data comes from UAA (already parsed into BUIE FeedItem types).
+ * Read data comes from the file activities endpoint (already parsed into BUIE FeedItem types).
  * Write/mutate operations still use the traditional v2 API via ActivitySidebar callbacks.
  * @author Box
  */
@@ -109,12 +109,12 @@ const toUserAuthor = (user?: User | null): TextMessageAuthorType => ({
 });
 
 const toPermissions = (
-    perms?: { can_delete?: boolean; can_edit?: boolean; can_reply?: boolean; can_resolve?: boolean } | null,
+    permissions?: { can_delete?: boolean; can_edit?: boolean; can_reply?: boolean; can_resolve?: boolean } | null,
 ): Permissions => ({
-    canDelete: perms?.can_delete ?? false,
-    canEdit: perms?.can_edit ?? false,
-    canReply: perms?.can_reply ?? false,
-    canResolve: perms?.can_resolve ?? false,
+    canDelete: permissions?.can_delete ?? false,
+    canEdit: permissions?.can_edit ?? false,
+    canReply: permissions?.can_reply ?? false,
+    canResolve: permissions?.can_resolve ?? false,
 });
 
 const commentToTextMessage = (comment: Comment): TextMessageType => ({

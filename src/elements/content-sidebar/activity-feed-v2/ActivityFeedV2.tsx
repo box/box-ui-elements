@@ -1,7 +1,7 @@
 /**
  * @file Activity Feed V2 adapter - wraps @box/activity-feed compound components.
  *
- * Read data comes from UAA (already parsed into BUIE FeedItem types by Feed.js).
+ * Read data comes from the file activities endpoint (already parsed into BUIE FeedItem types by Feed.js).
  * Write/mutate operations still use the traditional v2 API via ActivitySidebar callbacks.
  * @author Box
  */
@@ -112,21 +112,19 @@ const ActivityFeedV2 = ({
     );
 
     // collaborationPopoverProps must be defined so MentionComponent can
-    // destructure onSubmit/onClose from it without crashing.
+    // destructure onSubmit/onClose from it without crashing. getAvatarUrl is
+    // intentionally omitted: the mentionContext contract is synchronous
+    // ((id: string) => string) but BUIE's getAvatarUrl is async, so there is
+    // no correct sync adapter without a caching layer. Leave it undefined
+    // until the vendor contract supports async resolution.
     const mentionContext = React.useMemo(
         () => ({
             collaborationPopoverProps: {
                 onClose: noop,
                 onSubmit: noop,
             },
-            getAvatarUrl: getAvatarUrl
-                ? (userId: string) => {
-                      getAvatarUrl(userId).catch(noop);
-                      return '';
-                  }
-                : undefined,
         }),
-        [getAvatarUrl],
+        [],
     );
 
     const [mentionMe, setMentionMe] = React.useState(false);

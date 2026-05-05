@@ -205,6 +205,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     }
 
+    componentWillUnmount() {
+        // Cancel the pending debounce and bump the generation so any in-flight
+        // response from getCollaboratorsWithQuery is ignored after unmount.
+        if (typeof this.debouncedFetchMentionCollaborators.cancel === 'function') {
+            this.debouncedFetchMentionCollaborators.cancel();
+        }
+        this.mentionGeneration += 1;
+        this.pendingMentionResolve = null;
+        this.pendingMentionReject = null;
+    }
+
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
         const { api, emitAnnotationRemoveEvent, file } = this.props;
 
@@ -1013,8 +1024,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 }
             },
             (error, code, contextInfo) => {
+                if (generation !== this.mentionGeneration) {
+                    return;
+                }
                 this.errorCallback(error, code, contextInfo);
-                if (generation === this.mentionGeneration && this.pendingMentionReject) {
+                if (this.pendingMentionReject) {
                     this.pendingMentionReject(error);
                     this.pendingMentionResolve = null;
                     this.pendingMentionReject = null;
