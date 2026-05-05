@@ -93,6 +93,7 @@ describe('convertItemResponse', () => {
                     isDownloadEnabled: true,
                     isPasswordAvailable: true,
                     isPasswordEnabled: true,
+                    isVanityNameAvailable: true,
                 },
                 url: 'https://example.com/shared-link',
                 vanityDomain: 'https://example.com/vanity-url',
@@ -137,7 +138,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     access: 'collaborators',
                 },
-                shared_link_features: { download_url: false, password: false },
+                shared_link_features: { download_url: false, password: false, vanity_name: false },
                 permissions: {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.permissions,
                 },
@@ -147,6 +148,7 @@ describe('convertItemResponse', () => {
             expect(result.sharedLink.settings.canChangePassword).toEqual(false);
             expect(result.sharedLink.settings.canChangeExpiration).toEqual(false);
             expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);
+            expect(result.sharedLink.settings.isVanityNameAvailable).toEqual(false);
         });
     });
 
@@ -164,7 +166,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     download_url: undefined,
                 },
-                shared_link_features: { download_url: false, password: true },
+                shared_link_features: { download_url: false, password: true, vanity_name: true },
             };
             const result = convertItemResponse(mockItemWithoutDirectLink);
             expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);

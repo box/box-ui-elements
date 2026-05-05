@@ -23,7 +23,11 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         type,
     } = itemApiData;
 
-    const { download_url: isDirectLinkAvailable, password: isPasswordAvailable } = shared_link_features;
+    const {
+        download_url: isDirectLinkAvailable,
+        password: isPasswordAvailable,
+        vanity_name: isVanityNameAvailable,
+    } = shared_link_features;
 
     const {
         can_download: isDownloadSettingAvailable,
@@ -79,12 +83,13 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
                 canChangeDownload,
                 canChangeExpiration,
                 canChangePassword,
-                canChangeVanityName: false, // vanity URLs cannot be set via the API
+                canChangeVanityName: false,
                 isDirectLinkAvailable,
                 isDownloadAvailable: isDownloadSettingAvailable,
                 isDownloadEnabled: isDownloadAllowed,
-                isPasswordAvailable: isPasswordAvailable ?? false,
+                isPasswordAvailable,
                 isPasswordEnabled,
+                isVanityNameAvailable,
             },
             url,
             vanityDomain: vanityUrl,
