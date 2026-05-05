@@ -71,7 +71,6 @@ export type ActivityFeedV2Props = {
     hasTasks?: boolean;
     isDisabled?: boolean;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
-    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text?: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
@@ -92,5 +91,5 @@ export type ActivityFeedV2Props = {
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
-    onVersionHistoryClick?: (version: VersionItemProps) => void;
+    onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
 };

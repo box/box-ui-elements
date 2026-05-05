@@ -38,7 +38,6 @@ const ActivityFeedV2 = ({
     hasTasks = true,
     isDisabled = false,
     onAnnotationDelete,
-    onAnnotationEdit,
     onAnnotationSelect,
     onAnnotationStatusChange,
     onCommentCreate,
@@ -232,7 +231,6 @@ const ActivityFeedV2 = ({
                                 isDisabled={isDisabled}
                                 item={item}
                                 onAnnotationDelete={onAnnotationDelete}
-                                onAnnotationEdit={onAnnotationEdit}
                                 onAnnotationSelect={onAnnotationSelect}
                                 onAnnotationStatusChange={onAnnotationStatusChange}
                                 onCommentDelete={onCommentDelete}

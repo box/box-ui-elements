@@ -224,24 +224,6 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(onCommentUpdate).toHaveBeenCalledWith('comment-1', 'Hello world', 'open', false, commentPermissions);
         });
 
-        test('should call onCommentUpdate with undefined text/status when onEdit fires', () => {
-            const onCommentUpdate = jest.fn();
-            render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
-
-            const onEdit = lastThreadedAnnotationProps.onEdit as (id: string) => void;
-            onEdit('comment-1');
-
-            expect(onCommentUpdate).toHaveBeenCalledWith(
-                'comment-1',
-                undefined,
-                undefined,
-                false,
-                commentPermissions,
-                null,
-                null,
-            );
-        });
-
         test('should call onReplyCreate via onPost with serialized text', async () => {
             const onReplyCreate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onReplyCreate={onReplyCreate} />);
@@ -287,16 +269,6 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             onThreadDelete();
 
             expect(onAnnotationDelete).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
-        });
-
-        test('should call onAnnotationEdit with id and permissions (no text) when onEdit fires', () => {
-            const onAnnotationEdit = jest.fn();
-            render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationEdit={onAnnotationEdit} />);
-
-            const onEdit = lastThreadedAnnotationProps.onEdit as (id: string) => void;
-            onEdit('annotation-1');
-
-            expect(onAnnotationEdit).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
         });
 
         test('should call onAnnotationStatusChange with resolved when onResolve fires', () => {
@@ -453,14 +425,17 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(screen.getByTestId('version')).toBeVisible();
         });
 
-        test('should call onVersionHistoryClick when version is clicked', () => {
+        test('should remap onVersionClick args to snake_case when version is clicked', () => {
             const onVersionHistoryClick = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockVersion} onVersionHistoryClick={onVersionHistoryClick} />);
 
-            const onVersionClick = lastVersionProps.onVersionClick as () => void;
-            onVersionClick();
+            const onVersionClick = lastVersionProps.onVersionClick as (info: {
+                id: string;
+                versionNumber: number;
+            }) => void;
+            onVersionClick({ id: 'version-1', versionNumber: 5 });
 
-            expect(onVersionHistoryClick).toHaveBeenCalled();
+            expect(onVersionHistoryClick).toHaveBeenCalledWith({ id: 'version-1', version_number: 5 });
         });
     });
 

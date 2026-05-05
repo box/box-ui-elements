@@ -1383,7 +1383,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         hasTasks={this.props.hasTasks}
                         isDisabled={isDisabled}
                         onAnnotationDelete={this.handleAnnotationDelete}
-                        onAnnotationEdit={this.handleAnnotationEdit}
                         onAnnotationSelect={this.handleAnnotationSelect}
                         onAnnotationStatusChange={this.handleAnnotationStatusChange}
                         onCommentCreate={this.createComment}

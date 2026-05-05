@@ -13,7 +13,7 @@ import type { Annotation, AnnotationPermission, Target } from '../../../common/t
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskNew } from '../../../common/types/tasks';
 
-import type { AnnotationBadgeTargetType, TransformedFeedItem, UserSelectorProps, VersionItemProps } from './types';
+import type { AnnotationBadgeTargetType, TransformedFeedItem, UserSelectorProps } from './types';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
@@ -22,7 +22,6 @@ type FeedItemRowProps = {
     isDisabled: boolean;
     item: TransformedFeedItem;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
-    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text?: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
@@ -42,7 +41,7 @@ type FeedItemRowProps = {
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
-    onVersionHistoryClick?: (version: VersionItemProps) => void;
+    onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
     userSelectorProps: UserSelectorProps;
 };
 
@@ -87,7 +86,6 @@ const FeedItemRow = ({
     isDisabled,
     item,
     onAnnotationDelete,
-    onAnnotationEdit,
     onAnnotationSelect,
     onAnnotationStatusChange,
     onCommentDelete,
@@ -110,11 +108,6 @@ const FeedItemRow = ({
                     onDelete={(id: string) => {
                         if (onCommentDelete) {
                             onCommentDelete({ id, permissions: item.permissions });
-                        }
-                    }}
-                    onEdit={(id: string) => {
-                        if (onCommentUpdate) {
-                            onCommentUpdate(id, undefined, undefined, false, item.permissions, null, null);
                         }
                     }}
                     onPost={handleReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, onReplyCreate)}
@@ -156,11 +149,6 @@ const FeedItemRow = ({
                     onDelete={(id: string) => {
                         if (onAnnotationDelete) {
                             onAnnotationDelete({ id, permissions: item.annotation.permissions });
-                        }
-                    }}
-                    onEdit={(id: string) => {
-                        if (onAnnotationEdit) {
-                            onAnnotationEdit({ id, permissions: item.annotation.permissions });
                         }
                     }}
                     onPost={handleReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, onReplyCreate)}
@@ -213,7 +201,12 @@ const FeedItemRow = ({
                 <ActivityFeed.List.Version
                     key={item.id}
                     {...item.props}
-                    onVersionClick={onVersionHistoryClick ? () => onVersionHistoryClick(item.props) : undefined}
+                    onVersionClick={
+                        onVersionHistoryClick
+                            ? ({ id, versionNumber }: { id: string; versionNumber: number }) =>
+                                  onVersionHistoryClick({ id, version_number: versionNumber })
+                            : undefined
+                    }
                 />
             );
 
