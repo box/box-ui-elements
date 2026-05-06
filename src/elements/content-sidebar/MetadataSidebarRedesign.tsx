@@ -89,6 +89,7 @@ export interface MetadataSidebarRedesignProps
     registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
     onWarningModalDiscard?: () => void;
     onWarningModalClose?: () => void;
+    trackEvent?: (eventName: string, data?: Record<string, unknown>) => void;
 }
 
 function MetadataSidebarRedesign({
@@ -108,6 +109,7 @@ function MetadataSidebarRedesign({
     registerOpenWarningModalCallback,
     onWarningModalDiscard,
     onWarningModalClose,
+    trackEvent,
 }: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
@@ -368,6 +370,7 @@ function MetadataSidebarRedesign({
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
                             onSelectMetadataField={handleSelectMetadataField}
                             selectedMetadataFieldId={selectedMetadataFieldId}
+                            trackEvent={trackEvent}
                         />
                     )}
                     {showList && (
@@ -386,6 +389,7 @@ function MetadataSidebarRedesign({
                             templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                            trackEvent={trackEvent}
                         />
                     )}
                 </AutofillContextProvider>

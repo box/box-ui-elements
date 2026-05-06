@@ -48,6 +48,7 @@ type ExternalProps = {
     registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void,
     onWarningModalDiscard?: () => void,
     onWarningModalClose?: () => void,
+    trackEvent?: (eventName: string, data?: Record<string, unknown>) => void,
 };
 
 type PropsWithoutContext = {
