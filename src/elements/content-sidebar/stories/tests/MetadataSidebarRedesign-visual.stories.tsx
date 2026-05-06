@@ -717,7 +717,16 @@ export const AcceptAllDismissesReviewNotice: StoryObj<typeof MetadataSidebarRede
             { timeout: 5000 },
         );
 
-        let acceptButtons = canvas.getAllByRole('button', { name: 'Accept extracted value' });
+        let acceptButtons: HTMLElement[] = [];
+
+        await waitFor(
+            () => {
+                acceptButtons = canvas.getAllByRole('button', { name: 'Accept extracted value' });
+                expect(acceptButtons.length).toBeGreaterThanOrEqual(1);
+            },
+            { timeout: 5000 },
+        );
+
         await userEvent.click(acceptButtons[0]);
         await waitFor(() => {
             expect(canvas.getByText(/2 fields need review/i)).toBeVisible();
