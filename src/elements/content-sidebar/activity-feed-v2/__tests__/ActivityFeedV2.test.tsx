@@ -129,6 +129,10 @@ const feedItems = [
 ] as ActivityFeedV2Props['feedItems'];
 
 describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('should render the ActivityFeed root, list, and editor when feedItems is provided', () => {
         render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
 

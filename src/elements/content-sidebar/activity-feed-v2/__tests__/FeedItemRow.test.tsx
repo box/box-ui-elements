@@ -16,23 +16,21 @@ let lastTaskProps: Record<string, unknown> = {};
 let lastVersionProps: Record<string, unknown> = {};
 
 jest.mock('@box/activity-feed', () => {
-    const ActivityFeedList = ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="activity-feed-list">{children}</div>
-    );
+    const ActivityFeedList = ({ children }: { children: React.ReactNode }) => <ul>{children}</ul>;
     ActivityFeedList.AppActivity = (props: Record<string, unknown>) => (
-        <div data-testid="app-activity">{String(props.id)}</div>
+        <article aria-label="app activity">{String(props.id)}</article>
     );
     ActivityFeedList.Task = (props: Record<string, unknown>) => {
         lastTaskProps = props;
-        return <div data-testid="task">{String(props.id)}</div>;
+        return <article aria-label="task">{String(props.id)}</article>;
     };
     ActivityFeedList.ThreadedAnnotation = (props: Record<string, unknown>) => {
         lastThreadedAnnotationProps = props;
-        return <div data-testid="threaded-annotation">{String(props.isResolved)}</div>;
+        return <article aria-label="threaded annotation">{String(props.isResolved)}</article>;
     };
     ActivityFeedList.Version = (props: Record<string, unknown>) => {
         lastVersionProps = props;
-        return <div data-testid="version">{String(props.id)}</div>;
+        return <article aria-label="version">{String(props.id)}</article>;
     };
     return { ActivityFeed: { List: ActivityFeedList } };
 });
@@ -170,10 +168,14 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         lastVersionProps = {};
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     describe('comment rendering', () => {
         test('should render a comment as ThreadedAnnotation with correct props', () => {
             render(<FeedItemRow {...defaultProps} item={mockComment} />);
-            expect(screen.getByTestId('threaded-annotation')).toBeVisible();
+            expect(screen.getByRole('article', { name: 'threaded annotation' })).toBeVisible();
             expect(lastThreadedAnnotationProps.isResolved).toBe(false);
             expect(lastThreadedAnnotationProps.isAnnotations).toBe(false);
         });
@@ -238,7 +240,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
     describe('annotation rendering', () => {
         test('should render an annotation as ThreadedAnnotation', () => {
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
-            expect(screen.getByTestId('threaded-annotation')).toBeVisible();
+            expect(screen.getByRole('article', { name: 'threaded annotation' })).toBeVisible();
         });
 
         test('should call onAnnotationSelect when onAnnotationBadgeClick fires', () => {
@@ -382,7 +384,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
     describe('task rendering', () => {
         test('should render a task and pass disabled prop', () => {
             render(<FeedItemRow {...defaultProps} isDisabled item={mockTask} />);
-            expect(screen.getByTestId('task')).toBeVisible();
+            expect(screen.getByRole('article', { name: 'task' })).toBeVisible();
             expect(lastTaskProps.disabled).toBe(true);
         });
 
@@ -422,7 +424,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
     describe('version rendering', () => {
         test('should render a version item', () => {
             render(<FeedItemRow {...defaultProps} item={mockVersion} />);
-            expect(screen.getByTestId('version')).toBeVisible();
+            expect(screen.getByRole('article', { name: 'version' })).toBeVisible();
         });
 
         test('should remap onVersionClick args to snake_case when version is clicked', () => {
@@ -442,7 +444,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
     describe('app activity rendering', () => {
         test('should render an app activity item', () => {
             render(<FeedItemRow {...defaultProps} item={mockAppActivity} />);
-            expect(screen.getByTestId('app-activity')).toBeVisible();
+            expect(screen.getByRole('article', { name: 'app activity' })).toBeVisible();
         });
     });
 
