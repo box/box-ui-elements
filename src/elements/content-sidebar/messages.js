@@ -67,6 +67,16 @@ const messages = defineMessages({
         description: 'Tooltip text for when Box Sign is blocked due to an item being watermarked',
         id: 'be.contentSidebar.boxSignWatermarkBlockedTooltip',
     },
+    mentionUserSelectorLoading: {
+        defaultMessage: 'Loading users',
+        description: 'Accessibility label announced while the mention user selector is loading results',
+        id: 'be.contentSidebar.mentionUserSelectorLoading',
+    },
+    mentionUserSelectorRoleDescription: {
+        defaultMessage: 'Mention a user',
+        description: 'Accessibility role description for the mention user selector input',
+        id: 'be.contentSidebar.mentionUserSelectorRoleDescription',
+    },
     tasksAddTask: {
         id: 'be.contentSidebar.addTask',
         defaultMessage: 'Add Task',
