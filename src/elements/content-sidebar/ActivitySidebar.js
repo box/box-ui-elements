@@ -206,12 +206,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
-        // Cancel the pending debounce and bump the generation so any in-flight
+        // Cancel pending debounces and bump the generation so any in-flight
         // response from getCollaboratorsWithQuery is ignored after unmount.
-        if (typeof this.debouncedFetchMentionCollaborators.cancel === 'function') {
-            this.debouncedFetchMentionCollaborators.cancel();
-        }
+        [this.getMention, this.debouncedFetchMentionCollaborators].forEach(fn => {
+            if (typeof fn?.cancel === 'function') fn.cancel();
+        });
         this.mentionGeneration += 1;
+        // Resolve any pending getMentionAsync promise with an empty result so
+        // awaiters (e.g. ActivityFeedV2's fetchUsers) don't hang forever.
+        if (this.pendingMentionResolve) {
+            this.pendingMentionResolve([]);
+        }
         this.pendingMentionResolve = null;
         this.pendingMentionReject = null;
     }

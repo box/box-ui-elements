@@ -65,14 +65,15 @@ const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | u
     }
 };
 
-const handleReplyPost =
+const buildReplyPost =
     (
         parentId: string,
         parentType: CommentFeedItemType,
+        isDisabled: boolean,
         onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     ) =>
     async (content: unknown) => {
-        if (!onReplyCreate) return;
+        if (isDisabled || !onReplyCreate) return;
         try {
             const { text } = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
             onReplyCreate(parentId, parentType, text);
@@ -97,7 +98,16 @@ const FeedItemRow = ({
     userSelectorProps,
 }: FeedItemRowProps) => {
     switch (item.type) {
-        case 'comment':
+        case 'comment': {
+            const { permissions } = item;
+            const handleDelete = (id: string) => {
+                if (isDisabled) return;
+                onCommentDelete?.({ id, permissions });
+            };
+            const handleStatusChange = (status: FeedItemStatus) => (id: string) => {
+                if (isDisabled) return;
+                onCommentUpdate?.(id, item.originalText, status, false, permissions);
+            };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
@@ -105,34 +115,28 @@ const FeedItemRow = ({
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAvatarClick={noop}
-                    onDelete={(id: string) => {
-                        if (onCommentDelete) {
-                            onCommentDelete({ id, permissions: item.permissions });
-                        }
-                    }}
-                    onPost={handleReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, onReplyCreate)}
-                    onResolve={(id: string) => {
-                        if (onCommentUpdate) {
-                            onCommentUpdate(id, item.originalText, 'resolved', false, item.permissions);
-                        }
-                    }}
-                    onThreadDelete={() => {
-                        if (onCommentDelete) {
-                            onCommentDelete({ id: item.id, permissions: item.permissions });
-                        }
-                    }}
-                    onUnresolve={(id: string) => {
-                        if (onCommentUpdate) {
-                            onCommentUpdate(id, item.originalText, 'open', false, item.permissions);
-                        }
-                    }}
+                    onDelete={handleDelete}
+                    onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, isDisabled, onReplyCreate)}
+                    onResolve={handleStatusChange('resolved')}
+                    onThreadDelete={() => handleDelete(item.id)}
+                    onUnresolve={handleStatusChange('open')}
                     resolvedAt={item.resolvedAt}
                     resolvedBy={item.resolvedBy}
                     userSelectorProps={userSelectorProps}
                 />
             );
+        }
 
-        case 'annotation':
+        case 'annotation': {
+            const { permissions } = item.annotation;
+            const handleDelete = (id: string) => {
+                if (isDisabled) return;
+                onAnnotationDelete?.({ id, permissions });
+            };
+            const handleStatusChange = (status: FeedItemStatus) => (id: string) => {
+                if (isDisabled) return;
+                onAnnotationStatusChange?.({ id, permissions, status });
+            };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
@@ -140,46 +144,19 @@ const FeedItemRow = ({
                     isAnnotations={false}
                     isResolved={item.isResolved}
                     messages={item.messages}
-                    onAnnotationBadgeClick={() => {
-                        if (onAnnotationSelect) {
-                            onAnnotationSelect(item.annotation);
-                        }
-                    }}
+                    onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
                     onAvatarClick={noop}
-                    onDelete={(id: string) => {
-                        if (onAnnotationDelete) {
-                            onAnnotationDelete({ id, permissions: item.annotation.permissions });
-                        }
-                    }}
-                    onPost={handleReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, onReplyCreate)}
-                    onResolve={(id: string) => {
-                        if (onAnnotationStatusChange) {
-                            onAnnotationStatusChange({
-                                id,
-                                permissions: item.annotation.permissions,
-                                status: 'resolved',
-                            });
-                        }
-                    }}
-                    onThreadDelete={() => {
-                        if (onAnnotationDelete) {
-                            onAnnotationDelete({ id: item.id, permissions: item.annotation.permissions });
-                        }
-                    }}
-                    onUnresolve={(id: string) => {
-                        if (onAnnotationStatusChange) {
-                            onAnnotationStatusChange({
-                                id,
-                                permissions: item.annotation.permissions,
-                                status: 'open',
-                            });
-                        }
-                    }}
+                    onDelete={handleDelete}
+                    onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, isDisabled, onReplyCreate)}
+                    onResolve={handleStatusChange('resolved')}
+                    onThreadDelete={() => handleDelete(item.id)}
+                    onUnresolve={handleStatusChange('open')}
                     resolvedAt={item.resolvedAt}
                     resolvedBy={item.resolvedBy}
                     userSelectorProps={userSelectorProps}
                 />
             );
+        }
 
         case 'task':
             return (

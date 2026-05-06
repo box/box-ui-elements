@@ -1,34 +1,36 @@
 import * as React from 'react';
+
+import type { ThreadedAnnotationsPropsV2 } from '@box/threaded-annotations';
+
 import { render, screen } from '../../../../test-utils/testing-library';
 import FeedItemRow from '../FeedItemRow';
-import type { TaskNew } from '../../../../common/types/tasks';
 
+import type { TaskNew } from '../../../../common/types/tasks';
 import type {
-    TransformedCommentItem,
+    TaskItemProps,
     TransformedAnnotationItem,
+    TransformedCommentItem,
     TransformedFeedItem,
     UserSelectorProps,
+    VersionItemProps,
 } from '../types';
 
-// Capture props passed to mocked components for callback testing
-let lastThreadedAnnotationProps: Record<string, unknown> = {};
-let lastTaskProps: Record<string, unknown> = {};
-let lastVersionProps: Record<string, unknown> = {};
+let lastThreadedAnnotationProps: Partial<ThreadedAnnotationsPropsV2> = {};
+let lastTaskProps: Partial<TaskItemProps> = {};
+let lastVersionProps: Partial<VersionItemProps> = {};
 
 jest.mock('@box/activity-feed', () => {
     const ActivityFeedList = ({ children }: { children: React.ReactNode }) => <ul>{children}</ul>;
-    ActivityFeedList.AppActivity = (props: Record<string, unknown>) => (
-        <article aria-label="app activity">{String(props.id)}</article>
-    );
-    ActivityFeedList.Task = (props: Record<string, unknown>) => {
+    ActivityFeedList.AppActivity = (props: { id: string }) => <article aria-label="app activity">{props.id}</article>;
+    ActivityFeedList.Task = (props: Partial<TaskItemProps>) => {
         lastTaskProps = props;
         return <article aria-label="task">{String(props.id)}</article>;
     };
-    ActivityFeedList.ThreadedAnnotation = (props: Record<string, unknown>) => {
+    ActivityFeedList.ThreadedAnnotation = (props: Partial<ThreadedAnnotationsPropsV2>) => {
         lastThreadedAnnotationProps = props;
         return <article aria-label="threaded annotation">{String(props.isResolved)}</article>;
     };
-    ActivityFeedList.Version = (props: Record<string, unknown>) => {
+    ActivityFeedList.Version = (props: Partial<VersionItemProps>) => {
         lastVersionProps = props;
         return <article aria-label="version">{String(props.id)}</article>;
     };
@@ -184,8 +186,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onCommentDelete = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentDelete={onCommentDelete} />);
 
-            const onDelete = lastThreadedAnnotationProps.onDelete as (id: string) => void;
-            onDelete('comment-1');
+            lastThreadedAnnotationProps.onDelete?.('comment-1');
 
             expect(onCommentDelete).toHaveBeenCalledWith({ id: 'comment-1', permissions: commentPermissions });
         });
@@ -194,8 +195,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onCommentDelete = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentDelete={onCommentDelete} />);
 
-            const onThreadDelete = lastThreadedAnnotationProps.onThreadDelete as () => void;
-            onThreadDelete();
+            lastThreadedAnnotationProps.onThreadDelete?.();
 
             expect(onCommentDelete).toHaveBeenCalledWith({ id: 'comment-1', permissions: commentPermissions });
         });
@@ -204,8 +204,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onCommentUpdate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
 
-            const onResolve = lastThreadedAnnotationProps.onResolve as (id: string) => void;
-            onResolve('comment-1');
+            lastThreadedAnnotationProps.onResolve?.('comment-1');
 
             expect(onCommentUpdate).toHaveBeenCalledWith(
                 'comment-1',
@@ -220,8 +219,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onCommentUpdate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
 
-            const onUnresolve = lastThreadedAnnotationProps.onUnresolve as (id: string) => void;
-            onUnresolve('comment-1');
+            lastThreadedAnnotationProps.onUnresolve?.('comment-1');
 
             expect(onCommentUpdate).toHaveBeenCalledWith('comment-1', 'Hello world', 'open', false, commentPermissions);
         });
@@ -230,8 +228,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onReplyCreate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onReplyCreate={onReplyCreate} />);
 
-            const onPost = lastThreadedAnnotationProps.onPost as (content: unknown) => Promise<void>;
-            await onPost({ type: 'doc', content: [] });
+            await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
 
             expect(onReplyCreate).toHaveBeenCalledWith('comment-1', 'comment', 'serialized-text');
         });
@@ -247,8 +244,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onAnnotationSelect = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationSelect={onAnnotationSelect} />);
 
-            const onAnnotationBadgeClick = lastThreadedAnnotationProps.onAnnotationBadgeClick as () => void;
-            onAnnotationBadgeClick();
+            lastThreadedAnnotationProps.onAnnotationBadgeClick?.('annotation-1');
 
             expect(onAnnotationSelect).toHaveBeenCalledWith(mockAnnotation.annotation);
         });
@@ -257,8 +253,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onAnnotationDelete = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationDelete={onAnnotationDelete} />);
 
-            const onDelete = lastThreadedAnnotationProps.onDelete as (id: string) => void;
-            onDelete('annotation-1');
+            lastThreadedAnnotationProps.onDelete?.('annotation-1');
 
             expect(onAnnotationDelete).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
         });
@@ -267,8 +262,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onAnnotationDelete = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationDelete={onAnnotationDelete} />);
 
-            const onThreadDelete = lastThreadedAnnotationProps.onThreadDelete as () => void;
-            onThreadDelete();
+            lastThreadedAnnotationProps.onThreadDelete?.();
 
             expect(onAnnotationDelete).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
         });
@@ -283,8 +277,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
                 />,
             );
 
-            const onResolve = lastThreadedAnnotationProps.onResolve as (id: string) => void;
-            onResolve('annotation-1');
+            lastThreadedAnnotationProps.onResolve?.('annotation-1');
 
             expect(onAnnotationStatusChange).toHaveBeenCalledWith({
                 id: 'annotation-1',
@@ -303,8 +296,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
                 />,
             );
 
-            const onUnresolve = lastThreadedAnnotationProps.onUnresolve as (id: string) => void;
-            onUnresolve('annotation-1');
+            lastThreadedAnnotationProps.onUnresolve?.('annotation-1');
 
             expect(onAnnotationStatusChange).toHaveBeenCalledWith({
                 id: 'annotation-1',
@@ -374,8 +366,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onReplyCreate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} onReplyCreate={onReplyCreate} />);
 
-            const onPost = lastThreadedAnnotationProps.onPost as (content: unknown) => Promise<void>;
-            await onPost({ type: 'doc', content: [] });
+            await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
 
             expect(onReplyCreate).toHaveBeenCalledWith('annotation-1', 'annotation', 'serialized-text');
         });
@@ -392,8 +383,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onTaskDelete = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockTask} onTaskDelete={onTaskDelete} />);
 
-            const onDelete = lastTaskProps.onDelete as () => void;
-            onDelete();
+            lastTaskProps.onDelete?.('task-1');
 
             expect(onTaskDelete).toHaveBeenCalledWith(mockOriginalTask);
         });
@@ -402,8 +392,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onTaskView = jest.fn();
             render(<FeedItemRow {...defaultProps} currentUserId="user-1" item={mockTask} onTaskView={onTaskView} />);
 
-            const onView = lastTaskProps.onView as (taskId: string) => void;
-            onView('task-1');
+            lastTaskProps.onView?.('task-1');
 
             expect(onTaskView).toHaveBeenCalledWith('task-1', true);
         });
@@ -414,8 +403,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
                 <FeedItemRow {...defaultProps} currentUserId="other-user" item={mockTask} onTaskView={onTaskView} />,
             );
 
-            const onView = lastTaskProps.onView as (taskId: string) => void;
-            onView('task-1');
+            lastTaskProps.onView?.('task-1');
 
             expect(onTaskView).toHaveBeenCalledWith('task-1', false);
         });
@@ -431,11 +419,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             const onVersionHistoryClick = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockVersion} onVersionHistoryClick={onVersionHistoryClick} />);
 
-            const onVersionClick = lastVersionProps.onVersionClick as (info: {
-                id: string;
-                versionNumber: number;
-            }) => void;
-            onVersionClick({ id: 'version-1', versionNumber: 5 });
+            lastVersionProps.onVersionClick?.({ id: 'version-1', versionNumber: 5 });
 
             expect(onVersionHistoryClick).toHaveBeenCalledWith({ id: 'version-1', version_number: 5 });
         });
@@ -448,33 +432,77 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         });
     });
 
+    describe('isDisabled', () => {
+        test('should not fire comment mutation callbacks (delete, resolve, unresolve, reply) when isDisabled', async () => {
+            const onCommentDelete = jest.fn();
+            const onCommentUpdate = jest.fn();
+            const onReplyCreate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    isDisabled
+                    item={mockComment}
+                    onCommentDelete={onCommentDelete}
+                    onCommentUpdate={onCommentUpdate}
+                    onReplyCreate={onReplyCreate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onDelete?.('comment-1');
+            lastThreadedAnnotationProps.onThreadDelete?.();
+            lastThreadedAnnotationProps.onResolve?.('comment-1');
+            lastThreadedAnnotationProps.onUnresolve?.('comment-1');
+            await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
+
+            expect(onCommentDelete).not.toHaveBeenCalled();
+            expect(onCommentUpdate).not.toHaveBeenCalled();
+            expect(onReplyCreate).not.toHaveBeenCalled();
+        });
+
+        test('should not fire annotation mutation callbacks (delete, resolve, unresolve, reply) when isDisabled', async () => {
+            const onAnnotationDelete = jest.fn();
+            const onAnnotationStatusChange = jest.fn();
+            const onReplyCreate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    isDisabled
+                    item={mockAnnotation}
+                    onAnnotationDelete={onAnnotationDelete}
+                    onAnnotationStatusChange={onAnnotationStatusChange}
+                    onReplyCreate={onReplyCreate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onDelete?.('annotation-1');
+            lastThreadedAnnotationProps.onThreadDelete?.();
+            lastThreadedAnnotationProps.onResolve?.('annotation-1');
+            lastThreadedAnnotationProps.onUnresolve?.('annotation-1');
+            await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
+
+            expect(onAnnotationDelete).not.toHaveBeenCalled();
+            expect(onAnnotationStatusChange).not.toHaveBeenCalled();
+            expect(onReplyCreate).not.toHaveBeenCalled();
+        });
+    });
+
     describe('callbacks not provided', () => {
         test('should not throw when comment callbacks are not provided', () => {
             render(<FeedItemRow {...defaultProps} item={mockComment} />);
 
-            const onDelete = lastThreadedAnnotationProps.onDelete as (id: string) => void;
-            const onResolve = lastThreadedAnnotationProps.onResolve as (id: string) => void;
-            const onUnresolve = lastThreadedAnnotationProps.onUnresolve as (id: string) => void;
-            const onThreadDelete = lastThreadedAnnotationProps.onThreadDelete as () => void;
-
-            expect(() => onDelete('c1')).not.toThrow();
-            expect(() => onResolve('c1')).not.toThrow();
-            expect(() => onUnresolve('c1')).not.toThrow();
-            expect(() => onThreadDelete()).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onDelete?.('c1')).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onResolve?.('c1')).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onUnresolve?.('c1')).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onThreadDelete?.()).not.toThrow();
         });
 
         test('should not throw when annotation callbacks are not provided', () => {
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
 
-            const onDelete = lastThreadedAnnotationProps.onDelete as (id: string) => void;
-            const onResolve = lastThreadedAnnotationProps.onResolve as (id: string) => void;
-            const onAnnotationBadgeClick = lastThreadedAnnotationProps.onAnnotationBadgeClick as () => void;
-            const onThreadDelete = lastThreadedAnnotationProps.onThreadDelete as () => void;
-
-            expect(() => onDelete('a1')).not.toThrow();
-            expect(() => onResolve('a1')).not.toThrow();
-            expect(() => onAnnotationBadgeClick()).not.toThrow();
-            expect(() => onThreadDelete()).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onDelete?.('a1')).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onResolve?.('a1')).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onAnnotationBadgeClick?.('a1')).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onThreadDelete?.()).not.toThrow();
         });
     });
 });
