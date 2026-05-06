@@ -10,8 +10,12 @@
     height: 100%;
     overflow: hidden auto;
 
-    // Horizontal padding on list items only, not the header or editor.
-    ul > li {
+    // `display: contents` keeps the wrapper transparent to the vendor's flex layout.
+    &-list {
+        display: contents;
+    }
+
+    &-list > ul > li {
         padding-right: var(--bp-space-040);
         padding-left: var(--bp-space-040);
     }

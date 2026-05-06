@@ -22,7 +22,8 @@ import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './ty
 
 import { TASK_COMPLETION_RULE_ALL, TASK_TYPE_APPROVAL } from '../../../constants';
 
-import messages from '../../common/messages';
+import commonMessages from '../../common/messages';
+import messages from '../messages';
 
 import './ActivityFeedV2.scss';
 
@@ -51,7 +52,7 @@ const ActivityFeedV2 = ({
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
-    const headerTitle = intl.formatMessage(messages.sidebarActivityTitle);
+    const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
     React.useEffect(() => {
         if (activeFeedEntryId && scrollHandle) {
@@ -85,10 +86,11 @@ const ActivityFeedV2 = ({
             if (getAvatarUrl) {
                 await Promise.all(
                     userContacts.map(async contact => {
+                        // Key by contact.value; contact.id may collide when ids don't parse as numbers.
                         try {
-                            const url = await getAvatarUrl(String(contact.id));
+                            const url = await getAvatarUrl(contact.value);
                             if (url) {
-                                urls[String(contact.id)] = url;
+                                urls[contact.value] = url;
                             }
                         } catch {
                             // Individual avatar failure should not block other avatars
@@ -103,10 +105,10 @@ const ActivityFeedV2 = ({
 
     const userSelectorProps = React.useMemo(
         () => ({
-            ariaRoleDescription: intl.formatMessage(messages.noActivityCommentPrompt),
+            ariaRoleDescription: intl.formatMessage(messages.mentionUserSelectorRoleDescription),
             fetchAvatarUrls,
             fetchUsers,
-            loadingAriaLabel: intl.formatMessage(messages.loading),
+            loadingAriaLabel: intl.formatMessage(messages.mentionUserSelectorLoading),
         }),
         [fetchAvatarUrls, fetchUsers, intl],
     );
@@ -181,14 +183,14 @@ const ActivityFeedV2 = ({
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
+            let serialized;
             try {
-                const { hasMention, text } = serializeMentionMarkup(
-                    content as Parameters<typeof serializeMentionMarkup>[0],
-                );
-                onCommentCreate(text, hasMention);
+                serialized = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
             } catch {
-                // Silently ignore serialization failures from malformed editor content
+                return;
             }
+            if (!serialized.text.trim()) return;
+            onCommentCreate(serialized.text, serialized.hasMention);
         },
         [onCommentCreate],
     );
@@ -221,26 +223,28 @@ const ActivityFeedV2 = ({
                     </ActivityFeed.Header.Actions>
                 </ActivityFeed.Header>
                 {feedItems && (
-                    <ActivityFeed.List>
-                        {filteredItems.map(item => (
-                            <FeedItemRow
-                                key={item.id}
-                                currentUserId={currentUserId}
-                                isDisabled={isDisabled}
-                                item={item}
-                                onAnnotationDelete={onAnnotationDelete}
-                                onAnnotationSelect={onAnnotationSelect}
-                                onAnnotationStatusChange={onAnnotationStatusChange}
-                                onCommentDelete={onCommentDelete}
-                                onCommentUpdate={onCommentUpdate}
-                                onReplyCreate={onReplyCreate}
-                                onTaskDelete={onTaskDelete}
-                                onTaskView={onTaskView}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                                userSelectorProps={userSelectorProps}
-                            />
-                        ))}
-                    </ActivityFeed.List>
+                    <div className="bcs-NewActivityFeed-list">
+                        <ActivityFeed.List>
+                            {filteredItems.map(item => (
+                                <FeedItemRow
+                                    key={item.id}
+                                    currentUserId={currentUserId}
+                                    isDisabled={isDisabled}
+                                    item={item}
+                                    onAnnotationDelete={onAnnotationDelete}
+                                    onAnnotationSelect={onAnnotationSelect}
+                                    onAnnotationStatusChange={onAnnotationStatusChange}
+                                    onCommentDelete={onCommentDelete}
+                                    onCommentUpdate={onCommentUpdate}
+                                    onReplyCreate={onReplyCreate}
+                                    onTaskDelete={onTaskDelete}
+                                    onTaskView={onTaskView}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    userSelectorProps={userSelectorProps}
+                                />
+                            ))}
+                        </ActivityFeed.List>
+                    </div>
                 )}
                 <ActivityFeed.Editor
                     disableComponent={isDisabled || !currentUser}

@@ -74,12 +74,14 @@ const buildReplyPost =
     ) =>
     async (content: unknown) => {
         if (isDisabled || !onReplyCreate) return;
+        let serialized;
         try {
-            const { text } = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
-            onReplyCreate(parentId, parentType, text);
+            serialized = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
         } catch {
-            // Silently ignore serialization failures from malformed editor content
+            return;
         }
+        if (!serialized.text.trim()) return;
+        onReplyCreate(parentId, parentType, serialized.text);
     };
 
 const FeedItemRow = ({
