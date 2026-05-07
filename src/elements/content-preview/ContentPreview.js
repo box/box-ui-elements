@@ -132,6 +132,9 @@ type Props = {
     previewLibraryVersion: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    accessPattern?: 'file_list' | 'direct_link' | 'shared_link',
+    previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
+    sharedLinkAuth?: 'logged_in' | 'logged_out' | 'na',
     sharedLink?: string,
     sharedLinkPassword?: string,
     showAnnotations?: boolean,
@@ -899,6 +902,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            accessPattern,
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
             renderCustomPreview,
@@ -910,6 +914,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             onAnnotator,
             onContentInsightsEventReport,
             previewExperiences,
+            previewMode,
+            sharedLinkAuth,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
@@ -951,6 +957,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
+            accessPattern,
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             container: `#${this.id} .bcpr-content`,
             enableBoundingBoxHighlights,
@@ -960,6 +967,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
             experiences: previewExperiences,
+            previewMode,
+            sharedLinkAuth,
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),

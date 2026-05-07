@@ -385,6 +385,38 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should forward host-supplied monitoring dimensions to preview options', async () => {
+            const wrapper = getWrapper({
+                ...props,
+                accessPattern: 'file_list',
+                previewMode: 'default',
+                sharedLinkAuth: 'na',
+            });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    accessPattern: 'file_list',
+                    previewMode: 'default',
+                    sharedLinkAuth: 'na',
+                }),
+            );
+        });
+
+        test('should pass monitoring dimensions as undefined when host omits them', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            const options = instance.preview.show.mock.calls[0][2];
+            expect(options.accessPattern).toBeUndefined();
+            expect(options.previewMode).toBeUndefined();
+            expect(options.sharedLinkAuth).toBeUndefined();
+        });
+
         test('should call preview show with file version params if provided', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({
