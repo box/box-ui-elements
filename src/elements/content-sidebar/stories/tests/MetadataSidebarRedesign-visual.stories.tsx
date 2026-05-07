@@ -724,7 +724,7 @@ export const AcceptAllDismissesReviewNotice: StoryObj<typeof MetadataSidebarRede
                 acceptButtons = canvas.getAllByRole('button', { name: 'Accept extracted value' });
                 expect(acceptButtons.length).toBeGreaterThanOrEqual(1);
             },
-            { timeout: 5000 },
+            { timeout: 1000 },
         );
 
         await userEvent.click(acceptButtons[0]);
