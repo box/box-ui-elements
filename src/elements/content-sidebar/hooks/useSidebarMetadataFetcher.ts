@@ -62,6 +62,7 @@ interface DataFetcher {
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
+    refetchMetadata: () => void;
 }
 
 function useSidebarMetadataFetcher(
@@ -132,6 +133,13 @@ function useSidebarMetadataFetcher(
         },
         [api, fetchMetadataErrorCallback, fetchMetadataSuccessCallback, isFeatureEnabled, isConfidenceScoreEnabled],
     );
+
+    const refetchMetadata = React.useCallback(() => {
+        if (file) {
+            setStatus(STATUS.LOADING);
+            fetchMetadata(file);
+        }
+    }, [file, fetchMetadata]);
 
     const fetchFileSuccessCallback = React.useCallback(
         (fetchedFile: BoxItem) => {
@@ -326,6 +334,7 @@ function useSidebarMetadataFetcher(
         extractErrorCode,
         errorMessage,
         file,
+        refetchMetadata,
         status,
         templateInstances,
         templates,

@@ -150,8 +150,8 @@ class Base {
      * @return {string} base url
      */
     getBaseApiUrl(): string {
-        const suffix: string = this.apiHost.endsWith('/') ? '2.0' : '/2.0';
-        return `${this.apiHost}${suffix}`;
+        // const suffix: string = this.apiHost.endsWith('/') ? '2.0' : '/2.0';
+        return `https://api.box.com/2.0`;
     }
 
     /**

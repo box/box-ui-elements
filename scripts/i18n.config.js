@@ -9,6 +9,7 @@ module.exports = {
         '@box/content-field',
         '@box/item-icon',
         '@box/metadata-editor',
+        '@box/metadata-template-editor',
         '@box/metadata-filter',
         '@box/metadata-view',
         '@box/unified-share-modal',

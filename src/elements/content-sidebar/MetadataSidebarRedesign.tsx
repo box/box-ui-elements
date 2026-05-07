@@ -2,7 +2,7 @@
  * @file Redesigned Metadata sidebar component
  * @author Box
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -18,6 +18,12 @@ import {
     type MetadataTemplate,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
+import {
+    MetadataTemplateEditorModal,
+    MetadataTemplateEditorMode,
+    type MetadataTemplateCreateBody,
+    type MetadataTemplatePatchItem,
+} from '@box/metadata-template-editor';
 import { TreeQueryInput } from '@box/combobox-with-api';
 
 import type { GetPreviewForMetadataReturnType } from './types/BoxAISidebarTypes';
@@ -28,9 +34,12 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { useFeatureEnabled } from '../common/feature-checking';
 import {
+    ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
+    ERROR_CODE_METADATA_TEMPLATE_DEFINITION_SAVE,
+    METADATA_SCOPE_ENTERPRISE,
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
-    ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
+    SUCCESS_CODE_SAVE_METADATA_TEMPLATE_DEFINITION,
 } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
@@ -47,6 +56,12 @@ import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from '.
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
+import {
+    createAdminMetadataTemplate,
+    fetchAdminMetadataTaxonomiesFormatted,
+    fetchAdminMetadataTemplateDetails,
+    updateAdminMetadataTemplate,
+} from '../../utils/adminConsoleMetadataTemplates';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -126,6 +141,7 @@ function MetadataSidebarRedesign({
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
+        refetchMetadata,
         templates,
         extractErrorCode,
         errorMessage,
@@ -158,6 +174,11 @@ function MetadataSidebarRedesign({
             registerOpenWarningModalCallback,
         });
 
+    const [isTemplateDefinitionCreateModalOpen, setIsTemplateDefinitionCreateModalOpen] = useState(false);
+    const [templateDefinitionEditTarget, setTemplateDefinitionEditTarget] = useState<{
+        scope: string;
+        templateKey: string;
+    } | null>(null);
     const shouldFetchStructuredTextRep =
         isBoxAiSuggestionsEnabled &&
         fileExtension?.toLowerCase() === 'pdf' &&
@@ -277,11 +298,89 @@ function MetadataSidebarRedesign({
 
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
+    const enterpriseTemplateNamespace = useMemo(
+        () => templates?.find(t => t.scope?.startsWith(`${METADATA_SCOPE_ENTERPRISE}_`))?.scope,
+        [templates],
+    );
+
+    const taxonomyNamespaceForTemplateEditor = enterpriseTemplateNamespace ?? templateDefinitionEditTarget?.scope;
+
+    const fetchTaxonomiesForTemplateEditor = useCallback(async () => {
+        if (!taxonomyNamespaceForTemplateEditor) {
+            return [];
+        }
+        return fetchAdminMetadataTaxonomiesFormatted(taxonomyNamespaceForTemplateEditor);
+    }, [taxonomyNamespaceForTemplateEditor]);
+
+    const fetchTemplateForDefinitionEdit = useCallback(async () => {
+        if (!templateDefinitionEditTarget) {
+            throw new Error('No template selected for edit');
+        }
+        return fetchAdminMetadataTemplateDetails(
+            templateDefinitionEditTarget.scope,
+            templateDefinitionEditTarget.templateKey,
+        );
+    }, [templateDefinitionEditTarget]);
+
+    const handleTemplateDefinitionEditSubmit = useCallback(
+        async (requestBody: MetadataTemplatePatchItem[]) => {
+            if (!templateDefinitionEditTarget) {
+                return;
+            }
+            await updateAdminMetadataTemplate(
+                templateDefinitionEditTarget.scope,
+                templateDefinitionEditTarget.templateKey,
+                requestBody,
+            );
+            refetchMetadata();
+            onSuccess(SUCCESS_CODE_SAVE_METADATA_TEMPLATE_DEFINITION, true);
+        },
+        [onSuccess, refetchMetadata, templateDefinitionEditTarget],
+    );
+
+    const handleTemplateDefinitionCreateSubmit = useCallback(
+        async (body: MetadataTemplateCreateBody) => {
+            await createAdminMetadataTemplate(
+                body,
+                (templates ?? []).map(t => t.templateKey),
+            );
+            refetchMetadata();
+            onSuccess(SUCCESS_CODE_SAVE_METADATA_TEMPLATE_DEFINITION, true);
+        },
+        [onSuccess, refetchMetadata, templates],
+    );
+
+    const handleTemplateDefinitionSubmitError = useCallback(
+        (error: unknown) => {
+            onError(
+                error instanceof Error ? error : new Error(String(error)),
+                ERROR_CODE_METADATA_TEMPLATE_DEFINITION_SAVE,
+            );
+        },
+        [onError],
+    );
+
+    const handleCloseTemplateDefinitionEditModal = useCallback(() => {
+        setTemplateDefinitionEditTarget(null);
+    }, []);
+
     const metadataDropdown = isSuccess && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
+            isTemplateManagementEnabled={true}
+            onEditTemplate={(identifier: { namespaceFQN: string; templateKey: string }) => {
+                setTemplateDefinitionEditTarget({
+                    scope: identifier.namespaceFQN,
+                    templateKey: identifier.templateKey,
+                });
+            }}
+            onCreateTemplate={() => {
+                if (enterpriseTemplateNamespace) {
+                    setIsTemplateDefinitionCreateModalOpen(true);
+                }
+            }}
         />
     );
 
@@ -334,6 +433,32 @@ function MetadataSidebarRedesign({
             title={formatMessage(messages.sidebarMetadataTitle)}
             subheader={filterDropdown}
         >
+            {enterpriseTemplateNamespace && (
+                <MetadataTemplateEditorModal
+                    mode={MetadataTemplateEditorMode.Create}
+                    namespace={enterpriseTemplateNamespace}
+                    open={isTemplateDefinitionCreateModalOpen}
+                    onOpenChange={setIsTemplateDefinitionCreateModalOpen}
+                    onCancel={() => setIsTemplateDefinitionCreateModalOpen(false)}
+                    onCreateTemplate={handleTemplateDefinitionCreateSubmit}
+                    fetchTaxonomies={fetchTaxonomiesForTemplateEditor}
+                    onSubmitError={handleTemplateDefinitionSubmitError}
+                />
+            )}
+            <MetadataTemplateEditorModal
+                mode={MetadataTemplateEditorMode.Edit}
+                open={Boolean(templateDefinitionEditTarget)}
+                onOpenChange={open => {
+                    if (!open) {
+                        handleCloseTemplateDefinitionEditModal();
+                    }
+                }}
+                onCancel={handleCloseTemplateDefinitionEditModal}
+                fetchTemplate={fetchTemplateForDefinitionEdit}
+                onEditTemplate={handleTemplateDefinitionEditSubmit}
+                fetchTaxonomies={fetchTaxonomiesForTemplateEditor}
+                onSubmitError={handleTemplateDefinitionSubmitError}
+            />
             <div className="bcs-MetadataSidebarRedesign-content">
                 {errorMessageDisplay}
                 {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
