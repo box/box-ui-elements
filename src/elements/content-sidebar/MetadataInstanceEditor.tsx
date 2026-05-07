@@ -37,6 +37,7 @@ export interface MetadataInstanceEditorProps {
     isConfidenceScoreReviewEnabled?: boolean;
     onSelectMetadataField?: (field: MetadataTemplateField | null) => void;
     selectedMetadataFieldId?: string | null;
+    trackEvent?: (eventName: string, data?: Record<string, unknown>) => void;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -62,6 +63,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isConfidenceScoreReviewEnabled = false,
     onSelectMetadataField,
     selectedMetadataFieldId,
+    trackEvent,
 }) => {
     const previewContext: PreviewContextType | null = useContext(PreviewContext);
     const customRef = previewContext?.previewBodyRef?.current;
@@ -92,6 +94,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             onSelectMetadataField={onSelectMetadataField}
             selectedMetadataFieldId={selectedMetadataFieldId}
             customRef={customRef}
+            trackEvent={trackEvent}
         />
     );
 };
