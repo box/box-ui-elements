@@ -205,6 +205,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     }
 
+    componentWillUnmount() {
+        // Cancel pending debounces and bump the generation so any in-flight
+        // response from getCollaboratorsWithQuery is ignored after unmount.
+        [this.getMention, this.debouncedFetchMentionCollaborators].forEach(fn => {
+            if (typeof fn?.cancel === 'function') fn.cancel();
+        });
+        this.mentionGeneration += 1;
+        // Resolve any pending getMentionAsync promise with an empty result so
+        // awaiters (e.g. ActivityFeedV2's fetchUsers) don't hang forever.
+        if (this.pendingMentionResolve) {
+            this.pendingMentionResolve([]);
+        }
+        this.pendingMentionResolve = null;
+        this.pendingMentionReject = null;
+    }
+
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
         const { api, emitAnnotationRemoveEvent, file } = this.props;
 
@@ -477,7 +493,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { api, file, hasReplies, onCommentUpdate } = this.props;
+        const { api, features, file, hasReplies, onCommentUpdate } = this.props;
+        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
 
         const errorCallback = (e, code) => {
             if (onError) {
@@ -494,7 +511,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onCommentUpdate();
         };
 
-        if (hasReplies) {
+        if (hasReplies || isThreadedRepliesV2Enabled) {
             api.getFeedAPI(false).updateThreadedComment(
                 file,
                 id,
@@ -991,6 +1008,54 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         );
     }, DEFAULT_COLLAB_DEBOUNCE);
 
+    pendingMentionResolve: ?(entries: SelectorItems<>) => void = null;
+
+    pendingMentionReject: ?(error: ElementsXhrError) => void = null;
+
+    mentionGeneration: number = 0;
+
+    // Debounced inner fetch. The generation arg guards against in-flight
+    // responses from superseded requests resolving/rejecting the current
+    // promise with stale data.
+    debouncedFetchMentionCollaborators = debounce((searchStr: string, generation: number) => {
+        const { api, file } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            (collaborators: { entries: SelectorItems<> }) => {
+                if (generation === this.mentionGeneration && this.pendingMentionResolve) {
+                    this.pendingMentionResolve(collaborators.entries);
+                    this.pendingMentionResolve = null;
+                    this.pendingMentionReject = null;
+                }
+            },
+            (error, code, contextInfo) => {
+                if (generation !== this.mentionGeneration) {
+                    return;
+                }
+                this.errorCallback(error, code, contextInfo);
+                if (this.pendingMentionReject) {
+                    this.pendingMentionReject(error);
+                    this.pendingMentionResolve = null;
+                    this.pendingMentionReject = null;
+                }
+            },
+            searchStr,
+        );
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    getMentionAsync = (searchStr: string): Promise<Array<Object>> => {
+        if (this.pendingMentionResolve) {
+            this.pendingMentionResolve([]);
+        }
+        this.mentionGeneration += 1;
+        const generation = this.mentionGeneration;
+        return new Promise((resolve, reject) => {
+            this.pendingMentionResolve = resolve;
+            this.pendingMentionReject = reject;
+            this.debouncedFetchMentionCollaborators(searchStr, generation);
+        });
+    };
+
     /**
      * Returns feed item based on the item id
      *
@@ -1316,15 +1381,38 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
 
         if (isThreadedRepliesV2Enabled) {
+            const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
             return (
-                <SidebarContent
-                    className="bcs-activity"
-                    elementId={elementId}
-                    sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                    title={this.renderTitle()}
+                <div
+                    aria-labelledby={label}
+                    className="bcs-content"
+                    data-testid="bcs-content"
+                    id={`${label}-content`}
+                    role="tabpanel"
                 >
-                    <ActivityFeedV2 />
-                </SidebarContent>
+                    <ActivityFeedV2
+                        activeFeedEntryId={activeFeedEntryId}
+                        approverSelectorContacts={approverSelectorContacts}
+                        createTask={this.createTask}
+                        currentUser={currentUser}
+                        feedItems={this.getFilteredFeedItems()}
+                        getApproverWithQuery={this.getApprover}
+                        getAvatarUrl={this.getAvatarUrl}
+                        getMentionAsync={this.getMentionAsync}
+                        hasTasks={this.props.hasTasks}
+                        isDisabled={isDisabled}
+                        onAnnotationDelete={this.handleAnnotationDelete}
+                        onAnnotationSelect={this.handleAnnotationSelect}
+                        onAnnotationStatusChange={this.handleAnnotationStatusChange}
+                        onCommentCreate={this.createComment}
+                        onCommentDelete={this.deleteComment}
+                        onCommentUpdate={this.updateComment}
+                        onReplyCreate={this.createReply}
+                        onTaskDelete={this.deleteTask}
+                        onTaskView={onTaskView}
+                        onVersionHistoryClick={onVersionHistoryClick}
+                    />
+                </div>
             );
         }
 

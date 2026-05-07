@@ -8,6 +8,7 @@ import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
+jest.mock('../activity-feed-v2', () => () => <div data-testid="activity-feed-adapter-v2" />);
 
 const userError = 'Bad box user!';
 
