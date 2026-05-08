@@ -389,6 +389,8 @@ describe('elements/content-preview/ContentPreview', () => {
             const wrapper = getWrapper({
                 ...props,
                 accessPattern: 'file_list',
+                prefetchStatus: 'hit',
+                preloadStatus: 'miss',
                 previewMode: 'default',
                 sharedLinkAuth: 'na',
             });
@@ -400,6 +402,8 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect.any(Function),
                 expect.objectContaining({
                     accessPattern: 'file_list',
+                    prefetchStatus: 'hit',
+                    preloadStatus: 'miss',
                     previewMode: 'default',
                     sharedLinkAuth: 'na',
                 }),
@@ -413,6 +417,8 @@ describe('elements/content-preview/ContentPreview', () => {
             await instance.loadPreview();
             const options = instance.preview.show.mock.calls[0][2];
             expect(options.accessPattern).toBeUndefined();
+            expect(options.prefetchStatus).toBeUndefined();
+            expect(options.preloadStatus).toBeUndefined();
             expect(options.previewMode).toBeUndefined();
             expect(options.sharedLinkAuth).toBeUndefined();
         });
