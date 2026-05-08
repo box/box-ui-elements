@@ -364,8 +364,7 @@
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
         "qs": "^6.14.1",
         "serialize-javascript": "^7.0.5",
-        "tar": "^7.5.11",
-        "wait-on/axios": "^1.15.2"
+        "tar": "^7.5.11"
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
