@@ -1,0 +1,25 @@
+@import '../common/variables';
+
+.bcs-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    background-color: transparent;
+    transition: background-color 0.15s ease;
+
+    &:hover,
+    &:focus-visible,
+    &.bcs-resize-handle-is-dragging {
+        background-color: $bdl-box-blue;
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $bdl-box-blue;
+        outline-offset: -2px;
+    }
+}
