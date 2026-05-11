@@ -118,7 +118,7 @@
         "@babel/plugin-transform-modules-commonjs": "^7.24.7",
         "@babel/plugin-transform-object-assign": "^7.24.7",
         "@babel/plugin-transform-object-rest-spread": "^7.24.7",
-        "@babel/preset-env": "^7.29.5",
+        "@babel/preset-env": "^7.24.7",
         "@babel/preset-flow": "^7.24.7",
         "@babel/preset-react": "^7.24.7",
         "@babel/preset-typescript": "^7.24.7",
