@@ -123,7 +123,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             getPreview: jest.fn().mockReturnValue({}),
             fileId: 'test-file-id-1',
             elementId: 'element-1',
-            filteredTemplateIds: [],
+            filteredTemplateIds: undefined,
             isFeatureEnabled: true,
             onError: jest.fn(),
             onSuccess: jest.fn(),
@@ -449,7 +449,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             extractErrorCode: null,
         });
 
-        const filteredTemplateIds = [mockVisibleTemplateInstance.id];
+        const filteredTemplateIds = mockVisibleTemplateInstance.id;
 
         renderComponent({ filteredTemplateIds });
 
@@ -473,7 +473,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             extractErrorCode: null,
         });
 
-        const filteredTemplateIds = ['non-existing-template-id'];
+        const filteredTemplateIds = 'non-existing-template-id';
 
         renderComponent({ filteredTemplateIds });
 

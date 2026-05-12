@@ -42,19 +42,15 @@ describe('useMetadataSidebarFilteredTemplates', () => {
     });
 
     test('should initialize with empty filteredTemplates', () => {
-        const filteredTemplateIds = [];
-        const { result } = renderHook(() =>
-            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
-        );
+        const { result } = renderHook(() => useMetadataSidebarFilteredTemplates(history, undefined, templateInstances));
 
         expect(result.current.filteredTemplates).toEqual([]);
         expect(result.current.templateInstancesList).toEqual(templateInstances);
     });
 
     test('should set filteredTemplates based on filteredTemplateIds', () => {
-        const filteredTemplateIds = ['template1'];
         const { result } = renderHook(() =>
-            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
+            useMetadataSidebarFilteredTemplates(history, 'template1', templateInstances),
         );
 
         expect(result.current.filteredTemplates).toEqual(['template1']);
@@ -62,10 +58,7 @@ describe('useMetadataSidebarFilteredTemplates', () => {
     });
 
     test('should update filteredTemplates when handleSetFilteredTemplates is called', () => {
-        const filteredTemplateIds = [];
-        const { result } = renderHook(() =>
-            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
-        );
+        const { result } = renderHook(() => useMetadataSidebarFilteredTemplates(history, undefined, templateInstances));
 
         act(() => {
             result.current.handleSetFilteredTemplates(['template2']);
@@ -77,9 +70,8 @@ describe('useMetadataSidebarFilteredTemplates', () => {
     });
 
     test('should reset filteredTemplates when handleSetFilteredTemplates is called with empty array', () => {
-        const filteredTemplateIds = ['template1'];
         const { result } = renderHook(() =>
-            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
+            useMetadataSidebarFilteredTemplates(history, 'template1', templateInstances),
         );
 
         act(() => {
@@ -93,25 +85,24 @@ describe('useMetadataSidebarFilteredTemplates', () => {
 
     test('should memoize templateInstancesList correctly', () => {
         const { result, rerender } = renderHook(
-            ({ filteredTemplateIds }) =>
+            ({ filteredTemplateIds }: { filteredTemplateIds: string | undefined }) =>
                 useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
             {
-                initialProps: { filteredTemplateIds: ['template1'] },
+                initialProps: { filteredTemplateIds: 'template1' },
             },
         );
 
         expect(result.current.templateInstancesList).toEqual([templateInstances[0]]);
 
-        rerender({ filteredTemplateIds: [] });
+        rerender({ filteredTemplateIds: undefined });
 
         expect(result.current.templateInstancesList).toEqual(templateInstances);
     });
 
     test('should filter out hidden template instances', () => {
-        const filteredTemplateIds = ['template1'];
         const templateInstancesWithHidden = [...templateInstances, hiddenTemplateInstances];
         const { result } = renderHook(() =>
-            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstancesWithHidden),
+            useMetadataSidebarFilteredTemplates(history, 'template1', templateInstancesWithHidden),
         );
 
         expect(result.current.filteredTemplates).toEqual(['template1']);
@@ -119,9 +110,8 @@ describe('useMetadataSidebarFilteredTemplates', () => {
     });
 
     test('should filter out non existing template instances', () => {
-        const filteredTemplateIds = ['template1', 'template4'];
         const { result } = renderHook(() =>
-            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
+            useMetadataSidebarFilteredTemplates(history, 'template1,template4', templateInstances),
         );
 
         expect(result.current.filteredTemplates).toEqual(['template1']);

@@ -13,27 +13,39 @@ interface MetadataSidebarFilter {
 
 export function useMetadataSidebarFilteredTemplates(
     history: History,
-    filteredTemplateIds: string[],
+    filteredTemplateIds: string | undefined,
     templateInstances: MetadataTemplateInstance[],
 ): MetadataSidebarFilter {
     const [filteredTemplates, setFilteredTemplates] = React.useState([]);
 
     React.useEffect(() => {
+        const ids = filteredTemplateIds ? filteredTemplateIds.split(',') : [];
         const matchingFilteredTemplateIds = templateInstances
-            .filter(instance => filteredTemplateIds.includes(instance.id) && !instance.hidden)
+            .filter(instance => ids.includes(instance.id) && !instance.hidden)
             .map(instance => instance.id);
 
-        setFilteredTemplates(matchingFilteredTemplateIds);
+        setFilteredTemplates(prev => {
+            if (
+                prev.length === matchingFilteredTemplateIds.length &&
+                prev.every((id, i) => id === matchingFilteredTemplateIds[i])
+            ) {
+                return prev;
+            }
+            return matchingFilteredTemplateIds;
+        });
     }, [filteredTemplateIds, templateInstances]);
 
-    const handleSetFilteredTemplates = (templateIds: string[]) => {
-        if (templateIds.length === 0) {
-            history.push(`/${SIDEBAR_VIEW_METADATA}`);
-        } else {
-            history.push(`/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`);
-        }
-        setFilteredTemplates(templateIds);
-    };
+    const handleSetFilteredTemplates = React.useCallback(
+        (templateIds: string[]) => {
+            if (templateIds.length === 0) {
+                history.push(`/${SIDEBAR_VIEW_METADATA}`);
+            } else {
+                history.push(`/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`);
+            }
+            setFilteredTemplates(templateIds);
+        },
+        [history],
+    );
 
     const templateInstancesList = React.useMemo(() => {
         const filteredTemplateInstances = templateInstances.filter((instance: MetadataTemplateInstance) =>

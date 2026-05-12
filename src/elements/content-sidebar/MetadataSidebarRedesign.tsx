@@ -61,7 +61,7 @@ interface PropsWithoutContext extends ExternalProps {
     elementId: string;
     fileExtension?: string;
     fileId: string;
-    filteredTemplateIds?: string[];
+    filteredTemplateIds?: string;
     getPreview: () => GetPreviewForMetadataReturnType;
     hasSidebarInitialized?: boolean;
 }
@@ -97,7 +97,7 @@ function MetadataSidebarRedesign({
     elementId,
     fileExtension,
     fileId,
-    filteredTemplateIds = [],
+    filteredTemplateIds,
     getPreview,
     history,
     onError,

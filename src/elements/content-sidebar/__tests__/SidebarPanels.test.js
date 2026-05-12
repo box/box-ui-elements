@@ -381,7 +381,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     path: '/metadata/filteredTemplates/123,124',
                     features: { metadata: { redesign: { enabled: true } } },
                 });
-                expect(wrapper.find('MetadataSidebarRedesigned').props().filteredTemplateIds).toEqual(['123', '124']);
+                expect(wrapper.find('MetadataSidebarRedesigned').props().filteredTemplateIds).toEqual('123,124');
             });
             test('should render redesigned  sidebar if it is enabled', () => {
                 const wrapper = getWrapper({

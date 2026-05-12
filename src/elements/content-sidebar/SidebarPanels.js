@@ -485,11 +485,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     elementId={elementId}
                                     fileExtension={file.extension}
                                     fileId={fileId}
-                                    filteredTemplateIds={
-                                        match.params.filteredTemplateIds
-                                            ? match.params.filteredTemplateIds.split(',')
-                                            : []
-                                    }
+                                    filteredTemplateIds={match.params.filteredTemplateIds}
                                     getPreview={getPreview}
                                     hasSidebarInitialized={isInitialized}
                                     isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
