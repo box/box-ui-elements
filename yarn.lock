@@ -1188,6 +1188,11 @@
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
 
+"@box/metadata-template-browser@^1.21.21":
+  version "1.21.24"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-1.21.24.tgz#28952afb6e69117f85d218453553120c8fc33696"
+  integrity sha512-zzsIhMqZkmzaAYqzjBqb1jYgh4PpfzNFGnFPHB2ZglDjJDdpw5EKHlIT39FKQHPFZEInsnD0xpmjq1e8PDIq1g==
+
 "@box/metadata-view@^1.53.26":
   version "1.53.26"
   resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-1.53.26.tgz#fdb3ebb1e079ba899c491c5bc9971bc4402f63e2"

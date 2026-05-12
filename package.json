@@ -139,6 +139,7 @@
         "@box/item-icon": "^2.32.14",
         "@box/languages": "^1.0.0",
         "@box/metadata-editor": "^1.69.6",
+        "@box/metadata-template-browser": "^1.21.21",
         "@box/metadata-filter": "^1.80.23",
         "@box/metadata-view": "^1.53.26",
         "@box/react-virtualized": "^9.22.3-rc-box.10",
