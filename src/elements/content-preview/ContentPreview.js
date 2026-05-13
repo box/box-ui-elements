@@ -85,6 +85,7 @@ type StartAt = {
 };
 
 type Props = {
+    accessPattern?: 'file_list' | 'direct_link' | 'shared_link',
     advancedContentInsights: {
         isActive: boolean,
         ownerEId: number,
@@ -126,17 +127,16 @@ type Props = {
     onLoad: Function,
     onNavigate: Function,
     onVersionChange: VersionChangeCallback,
+    preloadStatus?: 'hit' | 'miss',
     previewExperiences?: {
         [name: string]: TargetingApi,
     },
     previewLibraryVersion: string,
+    previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    accessPattern?: 'file_list' | 'direct_link' | 'shared_link',
-    preloadStatus?: 'hit' | 'miss',
-    previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
-    sharedLinkAuth?: 'logged_in' | 'logged_out' | 'na',
     sharedLink?: string,
+    sharedLinkAuth?: 'logged_in' | 'logged_out' | 'na',
     sharedLinkPassword?: string,
     showAnnotations?: boolean,
     showAnnotationsControls?: boolean,
