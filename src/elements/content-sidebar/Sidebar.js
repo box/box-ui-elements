@@ -80,6 +80,7 @@ type Props = {
     size: $Values<typeof VIEW_SIZE_TYPE>,
     theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,
+    viewWidth: number,
 };
 
 type State = {
@@ -92,11 +93,12 @@ export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
 export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 export const SIDEBAR_SELECTED_PANEL_KEY: 'sidebar-selected-panel' = 'sidebar-selected-panel';
 
-// Resize constants — defaults mirror the hardcoded SCSS values ($sidebarTabsWidth + $sidebarContent[Increased]Width).
-// When the resizable feature flag is on, these become the minimum drag-to-resize values.
+// Default widths mirror the hardcoded SCSS values ($sidebarTabsWidth + $sidebarContent[Increased]Width).
+// When the resizable feature flag is on, these become the minimum drag-to-resize widths.
 const SIDEBAR_DEFAULT_WIDTH = 400;
 const SIDEBAR_DEFAULT_WIDTH_WIDER = 440;
-const SIDEBAR_MAX_WIDTH_RATIO = 0.5; // cap at 50% of viewport width
+// Cap dragged width at this fraction of the current viewport width.
+const SIDEBAR_MAX_WIDTH_RATIO = 0.5;
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
@@ -345,6 +347,7 @@ class Sidebar extends React.Component<Props, State> {
             size,
             theme,
             versionsSidebarProps,
+            viewWidth,
         }: Props = this.props;
         const { width }: State = this.state;
         const isOpen = this.isOpen();
@@ -363,10 +366,7 @@ class Sidebar extends React.Component<Props, State> {
         const isResizable =
             isFeatureEnabled(features, 'contentSidebar.resizable.enabled') && isViewportWideEnoughToResize;
         const minWidth = this.getDefaultWidth(hasNativeBoxAISidebar, hasCustomBoxAISidebar);
-        const maxWidth =
-            typeof window !== 'undefined'
-                ? Math.max(minWidth, Math.round(window.innerWidth * SIDEBAR_MAX_WIDTH_RATIO))
-                : minWidth;
+        const maxWidth = Math.max(minWidth, Math.round(viewWidth * SIDEBAR_MAX_WIDTH_RATIO));
         const currentWidth = width != null ? Math.min(Math.max(width, minWidth), maxWidth) : minWidth;
         // Only force inline width once the user has actually dragged — otherwise leave the SCSS defaults in place.
         const shouldApplyInlineWidth = isResizable && isOpen && width != null;

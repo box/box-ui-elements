@@ -11,16 +11,12 @@ type Props = {
     maxWidth: number,
     minWidth: number,
     onResize: (width: number) => void,
-    onResizeEnd?: () => void,
-    onResizeStart?: () => void,
     width: number,
 };
 
-const KEYBOARD_STEP = 16;
-
 const clamp = (value: number, min: number, max: number): number => Math.min(Math.max(value, min), max);
 
-const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, onResizeStart, width }: Props) => {
+const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, width }: Props) => {
     const startXRef = React.useRef<number>(0);
     const startWidthRef = React.useRef<number>(width);
     const [isDragging, setIsDragging] = React.useState(false);
@@ -39,43 +35,31 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, onResi
     const handlePointerUp = React.useCallback(
         (event: PointerEvent) => {
             setIsDragging(false);
-            const { target } = event;
-            if (target instanceof Element && target.hasPointerCapture?.(event.pointerId)) {
+            const {target} = event;
+            if (
+                target &&
+                typeof target.hasPointerCapture === 'function' &&
+                typeof target.releasePointerCapture === 'function' &&
+                target.hasPointerCapture(event.pointerId)
+            ) {
                 target.releasePointerCapture(event.pointerId);
             }
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
-            onResizeEnd?.();
         },
-        [handlePointerMove, onResizeEnd],
+        [handlePointerMove],
     );
 
-    const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    const handlePointerDown = (event: SyntheticPointerEvent<HTMLDivElement>) => {
         event.preventDefault();
         startXRef.current = event.clientX;
         startWidthRef.current = width;
         setIsDragging(true);
-        event.currentTarget.setPointerCapture?.(event.pointerId);
+        if (typeof event.currentTarget.setPointerCapture === 'function') {
+            event.currentTarget.setPointerCapture(event.pointerId);
+        }
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
-        onResizeStart?.();
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        // ArrowLeft grows (same direction as dragging left), ArrowRight shrinks.
-        if (event.key === 'ArrowLeft') {
-            event.preventDefault();
-            onResize(clamp(width + KEYBOARD_STEP, minWidth, maxWidth));
-        } else if (event.key === 'ArrowRight') {
-            event.preventDefault();
-            onResize(clamp(width - KEYBOARD_STEP, minWidth, maxWidth));
-        } else if (event.key === 'Home') {
-            event.preventDefault();
-            onResize(minWidth);
-        } else if (event.key === 'End') {
-            event.preventDefault();
-            onResize(maxWidth);
-        }
     };
 
     React.useEffect(() => {
@@ -85,25 +69,14 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, onResi
         };
     }, [handlePointerMove, handlePointerUp]);
 
-    // role="separator" with aria-valuenow is a focusable ARIA widget and needs both
-    // pointer + keyboard interactions on the element itself.
-    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
     return (
         <div
-            aria-label="Resize sidebar"
-            aria-orientation="vertical"
-            aria-valuemax={maxWidth}
-            aria-valuemin={minWidth}
-            aria-valuenow={width}
+            aria-hidden="true"
             className={`bcs-resize-handle${isDragging ? ' bcs-resize-handle-is-dragging' : ''}`}
             data-testid="sidebar-resize-handle"
-            onKeyDown={handleKeyDown}
             onPointerDown={handlePointerDown}
-            role="separator"
-            tabIndex={0}
         />
     );
-    /* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
 };
 
 export default SidebarResizeHandle;
