@@ -16,7 +16,7 @@ import ExpirationSection from './ExpirationSection';
 import AllowDownloadSection from './AllowDownloadSection';
 import messages from './messages';
 
-import { PEOPLE_WITH_LINK, PEOPLE_IN_COMPANY, PEOPLE_IN_ITEM } from '../shared-link-modal/constants';
+import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from '../unified-share-modal/constants';
 
 import './SharedLinkSettingsModal.scss';
 
@@ -31,10 +31,10 @@ function getAccessNoticeMessageId(accessLevel, canDownload) {
     let message;
 
     switch (accessLevel) {
-        case PEOPLE_WITH_LINK:
+        case ANYONE_WITH_LINK:
             message = canDownload ? messages.withLinkViewDownload : messages.withLinkView;
             break;
-        case PEOPLE_IN_COMPANY:
+        case ANYONE_IN_COMPANY:
             message = canDownload ? messages.inCompanyViewDownload : messages.inCompanyView;
             break;
         case PEOPLE_IN_ITEM:
@@ -293,13 +293,8 @@ class SharedLinkSettingsModal extends Component {
     }
 
     renderExpirationSection() {
-        const {
-            canChangeExpiration,
-            dateDisplayFormat,
-            dateFormat,
-            expirationCheckboxProps,
-            expirationInputProps,
-        } = this.props;
+        const { canChangeExpiration, dateDisplayFormat, dateFormat, expirationCheckboxProps, expirationInputProps } =
+            this.props;
         const { expirationDate, isExpirationEnabled, expirationError } = this.state;
 
         return (
