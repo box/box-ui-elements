@@ -14,6 +14,8 @@ import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
+import withMediaQuery from '../../components/media-query/withMediaQuery';
+import { VIEW_SIZE_TYPE } from '../../components/media-query/constants';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarResizeHandle from './SidebarResizeHandle';
@@ -75,6 +77,7 @@ type Props = {
     /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
     shouldFetchSidebarData?: boolean,
     signSidebarProps: SignSidebarProps,
+    size: $Values<typeof VIEW_SIZE_TYPE>,
     theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,
 };
@@ -93,7 +96,7 @@ export const SIDEBAR_SELECTED_PANEL_KEY: 'sidebar-selected-panel' = 'sidebar-sel
 // When the resizable feature flag is on, these become the minimum drag-to-resize values.
 const SIDEBAR_DEFAULT_WIDTH = 400;
 const SIDEBAR_DEFAULT_WIDTH_WIDER = 440;
-const SIDEBAR_MAX_WIDTH_RATIO = 0.6; // cap at 60% of viewport width
+const SIDEBAR_MAX_WIDTH_RATIO = 0.5; // cap at 50% of viewport width
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
@@ -325,6 +328,7 @@ class Sidebar extends React.Component<Props, State> {
             customSidebarPanels = [],
             detailsSidebarProps,
             docGenSidebarProps,
+            features,
             file,
             fileId,
             getPreview,
@@ -338,6 +342,7 @@ class Sidebar extends React.Component<Props, State> {
             onAnnotationSelect,
             onVersionChange,
             signSidebarProps,
+            size,
             theme,
             versionsSidebarProps,
         }: Props = this.props;
@@ -354,9 +359,9 @@ class Sidebar extends React.Component<Props, State> {
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
 
-        // SPIKE: mocked true. Before shipping, destructure `features` from props and replace with
-        // `isFeatureEnabled(features, 'contentSidebar.resizable.enabled')`.
-        const isResizable = true;
+        const isViewportWideEnoughToResize = size === VIEW_SIZE_TYPE.large || size === VIEW_SIZE_TYPE.xlarge;
+        const isResizable =
+            isFeatureEnabled(features, 'contentSidebar.resizable.enabled') && isViewportWideEnoughToResize;
         const minWidth = this.getDefaultWidth(hasNativeBoxAISidebar, hasCustomBoxAISidebar);
         const maxWidth =
             typeof window !== 'undefined'
@@ -449,4 +454,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withCurrentUser, withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withCurrentUser, withFeatureConsumer, withMediaQuery, withRouter])(Sidebar);

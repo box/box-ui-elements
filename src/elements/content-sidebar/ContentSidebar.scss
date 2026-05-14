@@ -77,6 +77,15 @@ $sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
             &.bcs-is-wider {
                 max-width: none;
             }
+
+            // Neutralize resizable overrides on small screens — sidebar is a bottom sheet here
+            &.bcs-is-resizable.bcs-is-open {
+                min-width: 0;
+
+                &.bcs-is-wider {
+                    min-width: 0;
+                }
+            }
         }
 
         &.bcs-is-open {

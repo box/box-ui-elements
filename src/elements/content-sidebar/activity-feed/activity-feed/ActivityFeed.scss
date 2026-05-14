@@ -161,6 +161,12 @@
     width: $sidebarContentIncreasedWidth;
 }
 
+// When resizable, the activity feed fills the parent (which is itself fluid via inline width on .bcs)
+.bcs-is-resizable .bcs-activity-feed,
+.bcs-is-resizable.bcs-is-wider .bcs-activity-feed {
+    width: 100%;
+}
+
 @include breakpoint($medium-screen) {
     .be .bcs-activity-feed {
         width: 100%;
