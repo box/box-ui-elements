@@ -28,7 +28,7 @@ type FeedItemRowProps = {
     currentUserId?: string;
     isDisabled: boolean;
     item: TransformedFeedItem;
-    onAnnotationCopyLink?: (params: { id: string; rootId: string }) => void;
+    onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
     onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
@@ -37,7 +37,7 @@ type FeedItemRowProps = {
         permissions: AnnotationPermission;
         status: FeedItemStatus;
     }) => void;
-    onCommentCopyLink?: (params: { id: string; rootId: string }) => void;
+    onCommentCopyLink?: (params: { id: string }) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentUpdate?: (
         id: string,
@@ -182,9 +182,7 @@ const FeedItemRow = ({
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAvatarClick={noop}
-                    onCopyLink={
-                        onCommentCopyLink ? (id: string) => onCommentCopyLink({ id, rootId: item.id }) : undefined
-                    }
+                    onCopyLink={onCommentCopyLink ? (id: string) => onCommentCopyLink({ id }) : undefined}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
                     onEditError={logEditError}
@@ -236,7 +234,13 @@ const FeedItemRow = ({
                     onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
                     onAvatarClick={noop}
                     onCopyLink={
-                        onAnnotationCopyLink ? (id: string) => onAnnotationCopyLink({ id, rootId: item.id }) : undefined
+                        onAnnotationCopyLink && item.annotation.file_version?.id
+                            ? () =>
+                                  onAnnotationCopyLink({
+                                      annotationId: item.id,
+                                      fileVersionId: item.annotation.file_version.id,
+                                  })
+                            : undefined
                     }
                     onDelete={handleDelete}
                     onEdit={handleEdit}

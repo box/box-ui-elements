@@ -302,13 +302,13 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(onCommentUpdate).not.toHaveBeenCalled();
         });
 
-        test('should pass onCopyLink when onCommentCopyLink is provided', () => {
+        test('should pass onCopyLink with the clicked message id when onCommentCopyLink is provided', () => {
             const onCommentCopyLink = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentCopyLink={onCommentCopyLink} />);
 
             lastThreadedAnnotationProps.onCopyLink?.('reply-1');
 
-            expect(onCommentCopyLink).toHaveBeenCalledWith({ id: 'reply-1', rootId: 'comment-1' });
+            expect(onCommentCopyLink).toHaveBeenCalledWith({ id: 'reply-1' });
         });
 
         test('should omit onCopyLink when onCommentCopyLink is not provided', () => {
@@ -574,17 +574,33 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(onAnnotationEdit).not.toHaveBeenCalled();
         });
 
-        test('should pass onCopyLink when onAnnotationCopyLink is provided', () => {
+        test('should pass onCopyLink with annotationId (thread root) and fileVersionId regardless of which message was clicked', () => {
             const onAnnotationCopyLink = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationCopyLink={onAnnotationCopyLink} />);
 
-            lastThreadedAnnotationProps.onCopyLink?.('annotation-1');
+            lastThreadedAnnotationProps.onCopyLink?.('annotation-reply-1');
 
-            expect(onAnnotationCopyLink).toHaveBeenCalledWith({ id: 'annotation-1', rootId: 'annotation-1' });
+            expect(onAnnotationCopyLink).toHaveBeenCalledWith({ annotationId: 'annotation-1', fileVersionId: 'fv1' });
         });
 
         test('should omit onCopyLink when onAnnotationCopyLink is not provided', () => {
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.onCopyLink).toBeUndefined();
+        });
+
+        test('should omit onCopyLink when annotation has no file_version', () => {
+            const annotationWithoutVersion = {
+                ...mockAnnotation,
+                annotation: { ...mockAnnotation.annotation, file_version: null },
+            };
+            const onAnnotationCopyLink = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={annotationWithoutVersion}
+                    onAnnotationCopyLink={onAnnotationCopyLink}
+                />,
+            );
             expect(lastThreadedAnnotationProps.onCopyLink).toBeUndefined();
         });
 

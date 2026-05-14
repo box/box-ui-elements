@@ -70,7 +70,7 @@ export type ActivityFeedV2Props = {
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     hasTasks?: boolean;
     isDisabled?: boolean;
-    onAnnotationCopyLink?: (params: { id: string; rootId: string }) => void;
+    onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
     onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
@@ -79,7 +79,7 @@ export type ActivityFeedV2Props = {
         permissions: AnnotationPermission;
         status: FeedItemStatus;
     }) => void;
-    onCommentCopyLink?: (params: { id: string; rootId: string }) => void;
+    onCommentCopyLink?: (params: { id: string }) => void;
     onCommentCreate?: (text: string, hasMention: boolean) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentUpdate?: (
