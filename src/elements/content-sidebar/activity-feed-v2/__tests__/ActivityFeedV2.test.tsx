@@ -14,6 +14,8 @@ jest.mock('@box/threaded-annotations', () => ({
     serializeMentionMarkup: (doc: unknown) => ({ hasMention: false, text: JSON.stringify(doc) }),
 }));
 
+const mockScrollTo = jest.fn<boolean, [string]>(() => true);
+
 jest.mock('@box/activity-feed', () => {
     const actual = jest.requireActual('@box/activity-feed');
     const ActivityFeedRoot = ({ children }: { children: React.ReactNode }) => (
@@ -41,7 +43,7 @@ jest.mock('@box/activity-feed', () => {
             List: ActivityFeedList,
             Root: ActivityFeedRoot,
         },
-        useActivityFeedScroll: () => ({ scrollTo: jest.fn() }),
+        useActivityFeedScroll: () => ({ scrollTo: mockScrollTo }),
     };
 });
 
@@ -129,6 +131,10 @@ const feedItems = [
 ] as ActivityFeedV2Props['feedItems'];
 
 describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
+    beforeEach(() => {
+        mockScrollTo.mockReturnValue(true);
+    });
+
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -295,5 +301,89 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             />,
         );
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
+    });
+
+    describe('scroll to end on mount', () => {
+        test('should scroll to the last rendered items id when the tab opens', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={feedItems} />);
+            expect(mockScrollTo).toHaveBeenCalledWith('app-activity-1');
+        });
+
+        test('should not scroll when activeFeedEntryId is set (deep link takes precedence)', () => {
+            render(
+                <ActivityFeedV2 activeFeedEntryId="comment-1" currentUser={mockCurrentUser} feedItems={feedItems} />,
+            );
+            expect(mockScrollTo).toHaveBeenCalledWith('comment-1');
+            expect(mockScrollTo).not.toHaveBeenCalledWith('app-activity-1');
+        });
+
+        test('should retry scroll-to-entry on later renders when first attempt returns false', () => {
+            mockScrollTo.mockReturnValueOnce(false).mockReturnValue(true);
+            const { rerender } = render(
+                <ActivityFeedV2
+                    activeFeedEntryId="annotation-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+            expect(mockScrollTo).toHaveBeenCalledWith('annotation-1');
+            expect(mockScrollTo).toHaveBeenCalledTimes(1);
+
+            rerender(
+                <ActivityFeedV2 activeFeedEntryId="annotation-1" currentUser={mockCurrentUser} feedItems={feedItems} />,
+            );
+            expect(mockScrollTo).toHaveBeenCalledTimes(2);
+            expect(mockScrollTo).toHaveBeenLastCalledWith('annotation-1');
+        });
+
+        test('should not re-scroll to scroll-to-entry target after success', () => {
+            const { rerender } = render(
+                <ActivityFeedV2 activeFeedEntryId="annotation-1" currentUser={mockCurrentUser} feedItems={feedItems} />,
+            );
+            expect(mockScrollTo).toHaveBeenCalledTimes(1);
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="annotation-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[...feedItems!]}
+                />,
+            );
+            expect(mockScrollTo).toHaveBeenCalledTimes(1);
+        });
+
+        test('should not scroll when feedItems is empty', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            expect(mockScrollTo).not.toHaveBeenCalled();
+        });
+
+        test('should scroll to the last visible row after filters remove the tail', () => {
+            const trailingAppActivity = { ...mockAppActivity, id: 'app-activity-2' };
+            const resolvedCommentAfterTail = { ...mockComment, id: 'resolved-last', status: 'resolved' };
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={
+                        [mockComment, trailingAppActivity, resolvedCommentAfterTail] as ActivityFeedV2Props['feedItems']
+                    }
+                />,
+            );
+            expect(mockScrollTo).toHaveBeenLastCalledWith('app-activity-2');
+        });
+
+        test('should retry scroll-to-end on later renders when first attempt returns false', () => {
+            mockScrollTo.mockReturnValueOnce(false).mockReturnValue(true);
+            const { rerender } = render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={feedItems} />);
+            expect(mockScrollTo).toHaveBeenCalledTimes(1);
+            rerender(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[...feedItems!]} />);
+            expect(mockScrollTo).toHaveBeenCalledTimes(2);
+        });
+
+        test('should not re-scroll to the end after a successful scroll when filters change', () => {
+            const { rerender } = render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={feedItems} />);
+            expect(mockScrollTo).toHaveBeenCalledTimes(1);
+            rerender(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[mockComment]} />);
+            expect(mockScrollTo).toHaveBeenCalledTimes(1);
+        });
     });
 });

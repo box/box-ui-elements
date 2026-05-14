@@ -70,13 +70,16 @@ export type ActivityFeedV2Props = {
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     hasTasks?: boolean;
     isDisabled?: boolean;
+    onAnnotationCopyLink?: (params: { id: string; rootId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
+    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
         permissions: AnnotationPermission;
         status: FeedItemStatus;
     }) => void;
+    onCommentCopyLink?: (params: { id: string; rootId: string }) => void;
     onCommentCreate?: (text: string, hasMention: boolean) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentUpdate?: (
@@ -89,6 +92,14 @@ export type ActivityFeedV2Props = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        permissions: BoxCommentPermission,
+        onSuccess?: (() => void) | null,
+        onError?: (() => void) | null,
+    ) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;

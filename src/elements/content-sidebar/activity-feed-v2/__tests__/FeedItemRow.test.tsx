@@ -45,8 +45,10 @@ jest.mock('@box/threaded-annotations', () => ({
         Point: 'point',
         Region: 'region',
     },
-    serializeMentionMarkup: () => ({ hasMention: false, text: 'serialized-text' }),
+    serializeMentionMarkup: jest.fn(() => ({ hasMention: false, text: 'serialized-text' })),
 }));
+
+const mockedSerialize = jest.mocked(jest.requireMock('@box/threaded-annotations').serializeMentionMarkup);
 
 const userSelectorProps: UserSelectorProps = {
     ariaRoleDescription: 'user selector',
@@ -56,6 +58,8 @@ const userSelectorProps: UserSelectorProps = {
 };
 
 const commentPermissions = { can_delete: true, can_edit: true, can_reply: true, can_resolve: true };
+
+const replyPermissions = { canDelete: true, canEdit: true, canReply: false, canResolve: false };
 
 const mockComment: TransformedCommentItem = {
     id: 'comment-1',
@@ -67,6 +71,13 @@ const mockComment: TransformedCommentItem = {
             createdAt: 0,
             author: { name: 'User', id: 1, email: 'u@b.com' },
             permissions: { canDelete: true, canEdit: true, canReply: true, canResolve: true },
+        },
+        {
+            id: 'reply-1',
+            message: { type: 'doc', content: [] },
+            createdAt: 0,
+            author: { name: 'User', id: 1, email: 'u@b.com' },
+            permissions: replyPermissions,
         },
     ],
     originalText: 'Hello world',
@@ -98,6 +109,13 @@ const mockAnnotation: TransformedAnnotationItem = {
             createdAt: 0,
             author: { name: 'User', id: 1, email: 'u@b.com' },
             permissions: { canDelete: true, canEdit: true, canReply: true, canResolve: true },
+        },
+        {
+            id: 'annotation-reply-1',
+            message: { type: 'doc', content: [] },
+            createdAt: 0,
+            author: { name: 'User', id: 1, email: 'u@b.com' },
+            permissions: replyPermissions,
         },
     ],
     permissions: annotationPermissions,
@@ -168,6 +186,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         lastThreadedAnnotationProps = {};
         lastTaskProps = {};
         lastVersionProps = {};
+        mockedSerialize.mockReturnValue({ hasMention: false, text: 'serialized-text' });
     });
 
     afterEach(() => {
@@ -231,6 +250,123 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
 
             expect(onReplyCreate).toHaveBeenCalledWith('comment-1', 'comment', 'serialized-text');
+        });
+
+        test('should pass isEditDisabled=false when not disabled and not resolved', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isEditDisabled).toBe(false);
+        });
+
+        test('should pass isEditDisabled=true when resolved', () => {
+            render(<FeedItemRow {...defaultProps} item={{ ...mockComment, isResolved: true }} />);
+            expect(lastThreadedAnnotationProps.isEditDisabled).toBe(true);
+        });
+
+        test('should route onEdit of root id to onCommentUpdate with serialized text and hasMention', () => {
+            mockedSerialize.mockReturnValue({ hasMention: true, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                'edited-text',
+                undefined,
+                true,
+                commentPermissions,
+            );
+        });
+
+        test('should route onEdit of reply id to onReplyUpdate with reply permissions', () => {
+            mockedSerialize.mockReturnValue({ hasMention: false, text: 'edited-reply' });
+            const onReplyUpdate = jest.fn();
+            const onCommentUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockComment}
+                    onCommentUpdate={onCommentUpdate}
+                    onReplyUpdate={onReplyUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('reply-1', { type: 'doc', content: [] });
+
+            expect(onReplyUpdate).toHaveBeenCalledWith('reply-1', 'comment-1', 'edited-reply', {
+                can_delete: true,
+                can_edit: true,
+                can_reply: false,
+                can_resolve: false,
+            });
+            expect(onCommentUpdate).not.toHaveBeenCalled();
+        });
+
+        test('should pass onCopyLink when onCommentCopyLink is provided', () => {
+            const onCommentCopyLink = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockComment} onCommentCopyLink={onCommentCopyLink} />);
+
+            lastThreadedAnnotationProps.onCopyLink?.('reply-1');
+
+            expect(onCommentCopyLink).toHaveBeenCalledWith({ id: 'reply-1', rootId: 'comment-1' });
+        });
+
+        test('should omit onCopyLink when onCommentCopyLink is not provided', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+            expect(lastThreadedAnnotationProps.onCopyLink).toBeUndefined();
+        });
+
+        test('should log and skip onEdit when serialize fails', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            mockedSerialize.mockImplementation(() => {
+                throw new Error('bad content');
+            });
+            const onCommentUpdate = jest.fn();
+            const onReplyUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockComment}
+                    onCommentUpdate={onCommentUpdate}
+                    onReplyUpdate={onReplyUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).not.toHaveBeenCalled();
+            expect(onReplyUpdate).not.toHaveBeenCalled();
+            expect(consoleError).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to serialize editor content',
+                expect.any(Error),
+            );
+            consoleError.mockRestore();
+        });
+
+        test('should log and skip onEdit when a reply id has no resolvable permissions', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            const onReplyUpdate = jest.fn();
+            const orphanReplyComment = { ...mockComment, messages: [mockComment.messages[0]] };
+            render(<FeedItemRow {...defaultProps} item={orphanReplyComment} onReplyUpdate={onReplyUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('reply-1', { type: 'doc', content: [] });
+
+            expect(onReplyUpdate).not.toHaveBeenCalled();
+            expect(consoleError).toHaveBeenCalledWith(
+                'ActivityFeedV2: no permissions found for reply "reply-1" in thread "comment-1"',
+            );
+            consoleError.mockRestore();
+        });
+
+        test('should log via onEditError so failed edits leave a trail', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+
+            const message = lastThreadedAnnotationProps.onEditError?.(new Error('save failed'));
+
+            expect(message).toBeUndefined();
+            expect(consoleError).toHaveBeenCalledWith('ActivityFeedV2: failed to save edit', expect.any(Error));
+            consoleError.mockRestore();
         });
     });
 
@@ -338,16 +474,20 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.annotationTarget).toEqual({ page: 1, type: 'drawing' });
         });
 
-        test('should pass highlight badge with empty text for highlight annotation target', () => {
+        test('should pass highlight badge with page number for highlight annotation target', () => {
             const highlightAnnotation: TransformedAnnotationItem = {
                 ...mockAnnotation,
                 annotation: {
                     ...mockAnnotation.annotation,
-                    target: { location: { type: 'page', value: 1 }, type: 'highlight' },
+                    target: { location: { type: 'page', value: 4 }, type: 'highlight' },
                 } as TransformedAnnotationItem['annotation'],
             };
             render(<FeedItemRow {...defaultProps} item={highlightAnnotation} />);
-            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({ highlightedText: '', type: 'highlight' });
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                highlightedText: '',
+                page: 4,
+                type: 'highlight',
+            });
         });
 
         test('should pass undefined badge for unknown annotation target type', () => {
@@ -369,6 +509,63 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
 
             expect(onReplyCreate).toHaveBeenCalledWith('annotation-1', 'annotation', 'serialized-text');
+        });
+
+        test('should pass isEditDisabled=true when resolved', () => {
+            render(<FeedItemRow {...defaultProps} item={{ ...mockAnnotation, isResolved: true }} />);
+            expect(lastThreadedAnnotationProps.isEditDisabled).toBe(true);
+        });
+
+        test('should route onEdit of root id to onAnnotationEdit with serialized text', () => {
+            mockedSerialize.mockReturnValue({ hasMention: false, text: 'edited-annotation' });
+            const onAnnotationEdit = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationEdit={onAnnotationEdit} />);
+
+            lastThreadedAnnotationProps.onEdit?.('annotation-1', { type: 'doc', content: [] });
+
+            expect(onAnnotationEdit).toHaveBeenCalledWith({
+                id: 'annotation-1',
+                permissions: annotationPermissions,
+                text: 'edited-annotation',
+            });
+        });
+
+        test('should route onEdit of reply id to onReplyUpdate with reply permissions', () => {
+            mockedSerialize.mockReturnValue({ hasMention: false, text: 'edited-reply' });
+            const onAnnotationEdit = jest.fn();
+            const onReplyUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockAnnotation}
+                    onAnnotationEdit={onAnnotationEdit}
+                    onReplyUpdate={onReplyUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] });
+
+            expect(onReplyUpdate).toHaveBeenCalledWith('annotation-reply-1', 'annotation-1', 'edited-reply', {
+                can_delete: true,
+                can_edit: true,
+                can_reply: false,
+                can_resolve: false,
+            });
+            expect(onAnnotationEdit).not.toHaveBeenCalled();
+        });
+
+        test('should pass onCopyLink when onAnnotationCopyLink is provided', () => {
+            const onAnnotationCopyLink = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockAnnotation} onAnnotationCopyLink={onAnnotationCopyLink} />);
+
+            lastThreadedAnnotationProps.onCopyLink?.('annotation-1');
+
+            expect(onAnnotationCopyLink).toHaveBeenCalledWith({ id: 'annotation-1', rootId: 'annotation-1' });
+        });
+
+        test('should omit onCopyLink when onAnnotationCopyLink is not provided', () => {
+            render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.onCopyLink).toBeUndefined();
         });
     });
 
@@ -433,10 +630,11 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
     });
 
     describe('isDisabled', () => {
-        test('should not fire comment mutation callbacks (delete, resolve, unresolve, reply) when isDisabled', async () => {
+        test('should not fire comment mutation callbacks (delete, resolve, unresolve, reply, edit) when isDisabled', async () => {
             const onCommentDelete = jest.fn();
             const onCommentUpdate = jest.fn();
             const onReplyCreate = jest.fn();
+            const onReplyUpdate = jest.fn();
             render(
                 <FeedItemRow
                     {...defaultProps}
@@ -445,6 +643,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
                     onCommentDelete={onCommentDelete}
                     onCommentUpdate={onCommentUpdate}
                     onReplyCreate={onReplyCreate}
+                    onReplyUpdate={onReplyUpdate}
                 />,
             );
 
@@ -453,24 +652,32 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             lastThreadedAnnotationProps.onResolve?.('comment-1');
             lastThreadedAnnotationProps.onUnresolve?.('comment-1');
             await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+            lastThreadedAnnotationProps.onEdit?.('reply-1', { type: 'doc', content: [] });
 
             expect(onCommentDelete).not.toHaveBeenCalled();
             expect(onCommentUpdate).not.toHaveBeenCalled();
             expect(onReplyCreate).not.toHaveBeenCalled();
+            expect(onReplyUpdate).not.toHaveBeenCalled();
+            expect(lastThreadedAnnotationProps.isEditDisabled).toBe(true);
         });
 
-        test('should not fire annotation mutation callbacks (delete, resolve, unresolve, reply) when isDisabled', async () => {
+        test('should not fire annotation mutation callbacks (delete, resolve, unresolve, reply, edit) when isDisabled', async () => {
             const onAnnotationDelete = jest.fn();
+            const onAnnotationEdit = jest.fn();
             const onAnnotationStatusChange = jest.fn();
             const onReplyCreate = jest.fn();
+            const onReplyUpdate = jest.fn();
             render(
                 <FeedItemRow
                     {...defaultProps}
                     isDisabled
                     item={mockAnnotation}
                     onAnnotationDelete={onAnnotationDelete}
+                    onAnnotationEdit={onAnnotationEdit}
                     onAnnotationStatusChange={onAnnotationStatusChange}
                     onReplyCreate={onReplyCreate}
+                    onReplyUpdate={onReplyUpdate}
                 />,
             );
 
@@ -479,10 +686,15 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             lastThreadedAnnotationProps.onResolve?.('annotation-1');
             lastThreadedAnnotationProps.onUnresolve?.('annotation-1');
             await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
+            lastThreadedAnnotationProps.onEdit?.('annotation-1', { type: 'doc', content: [] });
+            lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] });
 
             expect(onAnnotationDelete).not.toHaveBeenCalled();
+            expect(onAnnotationEdit).not.toHaveBeenCalled();
             expect(onAnnotationStatusChange).not.toHaveBeenCalled();
             expect(onReplyCreate).not.toHaveBeenCalled();
+            expect(onReplyUpdate).not.toHaveBeenCalled();
+            expect(lastThreadedAnnotationProps.isEditDisabled).toBe(true);
         });
     });
 
@@ -494,6 +706,8 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(() => lastThreadedAnnotationProps.onResolve?.('c1')).not.toThrow();
             expect(() => lastThreadedAnnotationProps.onUnresolve?.('c1')).not.toThrow();
             expect(() => lastThreadedAnnotationProps.onThreadDelete?.()).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] })).not.toThrow();
+            expect(() => lastThreadedAnnotationProps.onEdit?.('reply-1', { type: 'doc', content: [] })).not.toThrow();
         });
 
         test('should not throw when annotation callbacks are not provided', () => {
@@ -503,6 +717,12 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(() => lastThreadedAnnotationProps.onResolve?.('a1')).not.toThrow();
             expect(() => lastThreadedAnnotationProps.onAnnotationBadgeClick?.('a1')).not.toThrow();
             expect(() => lastThreadedAnnotationProps.onThreadDelete?.()).not.toThrow();
+            expect(() =>
+                lastThreadedAnnotationProps.onEdit?.('annotation-1', { type: 'doc', content: [] }),
+            ).not.toThrow();
+            expect(() =>
+                lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] }),
+            ).not.toThrow();
         });
     });
 });

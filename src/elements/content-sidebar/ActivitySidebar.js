@@ -92,6 +92,8 @@ type ExternalProps = {
     hasVersions?: boolean,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
+    onAnnotationCopyLink?: (params: { id: string, rootId: string }) => void,
+    onCommentCopyLink?: (params: { id: string, rootId: string }) => void,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
@@ -1371,6 +1373,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasReplies,
             hasVersions,
             isDisabled = false,
+            onAnnotationCopyLink,
+            onCommentCopyLink,
             onVersionHistoryClick,
             getUserProfileUrl,
             onTaskView,
@@ -1401,13 +1405,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         getMentionAsync={this.getMentionAsync}
                         hasTasks={this.props.hasTasks}
                         isDisabled={isDisabled}
+                        onAnnotationCopyLink={onAnnotationCopyLink}
                         onAnnotationDelete={this.handleAnnotationDelete}
+                        onAnnotationEdit={this.handleAnnotationEdit}
                         onAnnotationSelect={this.handleAnnotationSelect}
                         onAnnotationStatusChange={this.handleAnnotationStatusChange}
+                        onCommentCopyLink={onCommentCopyLink}
                         onCommentCreate={this.createComment}
                         onCommentDelete={this.deleteComment}
                         onCommentUpdate={this.updateComment}
                         onReplyCreate={this.createReply}
+                        onReplyUpdate={this.updateReply}
                         onTaskDelete={this.deleteTask}
                         onTaskView={onTaskView}
                         onVersionHistoryClick={onVersionHistoryClick}

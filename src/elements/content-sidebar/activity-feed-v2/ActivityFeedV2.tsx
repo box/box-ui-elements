@@ -38,13 +38,17 @@ const ActivityFeedV2 = ({
     getMentionAsync,
     hasTasks = true,
     isDisabled = false,
+    onAnnotationCopyLink,
     onAnnotationDelete,
+    onAnnotationEdit,
     onAnnotationSelect,
     onAnnotationStatusChange,
+    onCommentCopyLink,
     onCommentCreate,
     onCommentDelete,
     onCommentUpdate,
     onReplyCreate,
+    onReplyUpdate,
     onTaskDelete,
     onTaskView,
     onVersionHistoryClick,
@@ -54,11 +58,8 @@ const ActivityFeedV2 = ({
     const currentUserId = currentUser?.id;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
-    React.useEffect(() => {
-        if (activeFeedEntryId && scrollHandle) {
-            scrollHandle.scrollTo(activeFeedEntryId);
-        }
-    }, [activeFeedEntryId, scrollHandle]);
+    const scrolledEntryIdRef = React.useRef<string | null>(null);
+    const hasScrolledToEndRef = React.useRef(false);
 
     const fetchUsers = React.useCallback(
         async (inputValue: string): Promise<UserContact[]> => {
@@ -180,6 +181,29 @@ const ActivityFeedV2 = ({
         });
     }, [currentUserId, mentionMe, showResolved, transformedItems]);
 
+    React.useEffect(() => {
+        const alreadyScrolledToThisEntry = scrolledEntryIdRef.current === activeFeedEntryId;
+        if (!activeFeedEntryId || !scrollHandle || alreadyScrolledToThisEntry) {
+            return;
+        }
+        const didScroll = scrollHandle.scrollTo(activeFeedEntryId);
+        if (didScroll) {
+            scrolledEntryIdRef.current = activeFeedEntryId;
+        }
+    }, [activeFeedEntryId, filteredItems, scrollHandle]);
+
+    React.useEffect(() => {
+        const hasDeepLink = Boolean(activeFeedEntryId);
+        if (hasScrolledToEndRef.current || hasDeepLink || !scrollHandle || filteredItems.length === 0) {
+            return;
+        }
+        const lastItemId = filteredItems[filteredItems.length - 1].id;
+        const didScroll = scrollHandle.scrollTo(lastItemId);
+        if (didScroll) {
+            hasScrolledToEndRef.current = true;
+        }
+    }, [activeFeedEntryId, filteredItems, scrollHandle]);
+
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
@@ -231,12 +255,16 @@ const ActivityFeedV2 = ({
                                     currentUserId={currentUserId}
                                     isDisabled={isDisabled}
                                     item={item}
+                                    onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}
+                                    onAnnotationEdit={onAnnotationEdit}
                                     onAnnotationSelect={onAnnotationSelect}
                                     onAnnotationStatusChange={onAnnotationStatusChange}
+                                    onCommentCopyLink={onCommentCopyLink}
                                     onCommentDelete={onCommentDelete}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
+                                    onReplyUpdate={onReplyUpdate}
                                     onTaskDelete={onTaskDelete}
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}

@@ -13,21 +13,31 @@ import type { Annotation, AnnotationPermission, Target } from '../../../common/t
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskNew } from '../../../common/types/tasks';
 
-import type { AnnotationBadgeTargetType, TransformedFeedItem, UserSelectorProps } from './types';
+import type {
+    AnnotationBadgeTargetType,
+    TransformedCommentItem,
+    TransformedFeedItem,
+    UserSelectorProps,
+} from './types';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT } from '../../../constants';
+
+type EditorContent = Parameters<typeof serializeMentionMarkup>[0];
 
 type FeedItemRowProps = {
     currentUserId?: string;
     isDisabled: boolean;
     item: TransformedFeedItem;
+    onAnnotationCopyLink?: (params: { id: string; rootId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
+    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
         permissions: AnnotationPermission;
         status: FeedItemStatus;
     }) => void;
+    onCommentCopyLink?: (params: { id: string; rootId: string }) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentUpdate?: (
         id: string,
@@ -39,6 +49,14 @@ type FeedItemRowProps = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        permissions: BoxCommentPermission,
+        onSuccess?: (() => void) | null,
+        onError?: (() => void) | null,
+    ) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
@@ -55,13 +73,23 @@ const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | u
         case 'drawing':
             return { page, type: AnnotationBadgeType.Drawing };
         case 'highlight':
-            return { highlightedText: '', type: AnnotationBadgeType.Highlight };
+            return { highlightedText: '', page, type: AnnotationBadgeType.Highlight };
         case 'point':
             return { page, type: AnnotationBadgeType.Point };
         case 'region':
             return { page, type: AnnotationBadgeType.Region };
         default:
             return undefined;
+    }
+};
+
+const serializeEditorContent = (content: unknown): { hasMention: boolean; text: string } | null => {
+    try {
+        return serializeMentionMarkup(content as EditorContent);
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('ActivityFeedV2: failed to serialize editor content', error);
+        return null;
     }
 };
 
@@ -74,26 +102,46 @@ const buildReplyPost =
     ) =>
     async (content: unknown) => {
         if (isDisabled || !onReplyCreate) return;
-        let serialized;
-        try {
-            serialized = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
-        } catch {
-            return;
-        }
-        if (!serialized.text.trim()) return;
+        const serialized = serializeEditorContent(content);
+        if (!serialized || !serialized.text.trim()) return;
         onReplyCreate(parentId, parentType, serialized.text);
     };
+
+const findMessagePermissions = (
+    messages: TransformedCommentItem['messages'],
+    id: string,
+): BoxCommentPermission | undefined => {
+    const message = messages.find(m => m.id === id);
+    if (!message) return undefined;
+    const { canDelete, canEdit, canReply, canResolve } = message.permissions;
+    return {
+        can_delete: canDelete,
+        can_edit: canEdit,
+        can_reply: canReply,
+        can_resolve: canResolve,
+    };
+};
+
+const logEditError = (error: unknown): string | undefined => {
+    // eslint-disable-next-line no-console
+    console.error('ActivityFeedV2: failed to save edit', error);
+    return undefined;
+};
 
 const FeedItemRow = ({
     currentUserId,
     isDisabled,
     item,
+    onAnnotationCopyLink,
     onAnnotationDelete,
+    onAnnotationEdit,
     onAnnotationSelect,
     onAnnotationStatusChange,
+    onCommentCopyLink,
     onCommentDelete,
     onCommentUpdate,
     onReplyCreate,
+    onReplyUpdate,
     onTaskDelete,
     onTaskView,
     onVersionHistoryClick,
@@ -110,14 +158,36 @@ const FeedItemRow = ({
                 if (isDisabled) return;
                 onCommentUpdate?.(id, item.originalText, status, false, permissions);
             };
+            const handleEdit = (id: string, content: unknown) => {
+                if (isDisabled) return;
+                const serialized = serializeEditorContent(content);
+                if (!serialized) return;
+                if (id === item.id) {
+                    onCommentUpdate?.(id, serialized.text, undefined, serialized.hasMention, permissions);
+                    return;
+                }
+                const replyPermissions = findMessagePermissions(item.messages, id);
+                if (!replyPermissions) {
+                    // eslint-disable-next-line no-console
+                    console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${item.id}"`);
+                    return;
+                }
+                onReplyUpdate?.(id, item.id, serialized.text, replyPermissions);
+            };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
                     isAnnotations={false}
+                    isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAvatarClick={noop}
+                    onCopyLink={
+                        onCommentCopyLink ? (id: string) => onCommentCopyLink({ id, rootId: item.id }) : undefined
+                    }
                     onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onEditError={logEditError}
                     onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, isDisabled, onReplyCreate)}
                     onResolve={handleStatusChange('resolved')}
                     onThreadDelete={() => handleDelete(item.id)}
@@ -139,16 +209,38 @@ const FeedItemRow = ({
                 if (isDisabled) return;
                 onAnnotationStatusChange?.({ id, permissions, status });
             };
+            const handleEdit = (id: string, content: unknown) => {
+                if (isDisabled) return;
+                const serialized = serializeEditorContent(content);
+                if (!serialized) return;
+                if (id === item.id) {
+                    onAnnotationEdit?.({ id, permissions, text: serialized.text });
+                    return;
+                }
+                const replyPermissions = findMessagePermissions(item.messages, id);
+                if (!replyPermissions) {
+                    // eslint-disable-next-line no-console
+                    console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${item.id}"`);
+                    return;
+                }
+                onReplyUpdate?.(id, item.id, serialized.text, replyPermissions);
+            };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
                     annotationTarget={annotationTargetToBadge(item.annotation.target)}
                     isAnnotations={false}
+                    isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
                     onAvatarClick={noop}
+                    onCopyLink={
+                        onAnnotationCopyLink ? (id: string) => onAnnotationCopyLink({ id, rootId: item.id }) : undefined
+                    }
                     onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onEditError={logEditError}
                     onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, isDisabled, onReplyCreate)}
                     onResolve={handleStatusChange('resolved')}
                     onThreadDelete={() => handleDelete(item.id)}
