@@ -44,6 +44,11 @@ type ExternalProps = {
     isFeatureEnabled: boolean,
     selectedTemplateKey?: string,
     templateFilters?: Array<string> | string,
+    onEditingStateChange?: (isEditing: boolean) => void,
+    registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void,
+    onWarningModalDiscard?: () => void,
+    onWarningModalClose?: () => void,
+    trackEvent?: (eventName: string, data?: { [string]: any }) => void,
 };
 
 type PropsWithoutContext = {

@@ -23,7 +23,11 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         type,
     } = itemApiData;
 
-    const { password: isPasswordAvailable } = shared_link_features;
+    const {
+        download_url: isDirectLinkAvailable,
+        password: isPasswordAvailable,
+        vanity_name: isVanityNameAvailable,
+    } = shared_link_features;
 
     const {
         can_download: isDownloadSettingAvailable,
@@ -49,6 +53,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
     if (shared_link) {
         const {
             access,
+            download_url: downloadUrl,
             effective_permission: permission,
             is_password_enabled: isPasswordEnabled,
             unshared_at: expirationTimestamp,
@@ -68,6 +73,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
                 allowed_shared_link_access_levels,
                 allowed_shared_link_access_levels_disabled_reasons,
             ),
+            downloadUrl,
             expiresAt: expirationTimestamp ? new Date(expirationTimestamp).getTime() : undefined, // convert to milliseconds
             permission,
             permissionLevels:
@@ -77,11 +83,13 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
                 canChangeDownload,
                 canChangeExpiration,
                 canChangePassword,
-                canChangeVanityName: false, // vanity URLs cannot be set via the API
+                canChangeVanityName: false,
+                isDirectLinkAvailable,
                 isDownloadAvailable: isDownloadSettingAvailable,
                 isDownloadEnabled: isDownloadAllowed,
-                isPasswordAvailable: isPasswordAvailable ?? false,
+                isPasswordAvailable,
                 isPasswordEnabled,
+                isVanityNameAvailable,
             },
             url,
             vanityDomain: vanityUrl,

@@ -79,6 +79,7 @@ describe('convertItemResponse', () => {
             expect(result.sharedLink).toEqual({
                 access: 'open',
                 accessLevels: ['open', 'company', 'collaborators'],
+                downloadUrl: 'https://example.com/shared_link=abc123',
                 expiresAt: 1704067200000,
                 permission: 'can_download',
                 permissionLevels: ['can_edit', 'can_download', 'can_preview'],
@@ -87,10 +88,12 @@ describe('convertItemResponse', () => {
                     canChangeExpiration: true,
                     canChangePassword: true,
                     canChangeVanityName: false,
+                    isDirectLinkAvailable: true,
                     isDownloadAvailable: true,
                     isDownloadEnabled: true,
                     isPasswordAvailable: true,
                     isPasswordEnabled: true,
+                    isVanityNameAvailable: true,
                 },
                 url: 'https://example.com/shared-link',
                 vanityDomain: 'https://example.com/vanity-url',
@@ -135,7 +138,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     access: 'collaborators',
                 },
-                shared_link_features: { password: false },
+                shared_link_features: { download_url: false, password: false, vanity_name: false },
                 permissions: {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.permissions,
                 },
@@ -144,6 +147,30 @@ describe('convertItemResponse', () => {
             expect(result.sharedLink.settings.canChangeDownload).toEqual(false);
             expect(result.sharedLink.settings.canChangePassword).toEqual(false);
             expect(result.sharedLink.settings.canChangeExpiration).toEqual(false);
+            expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);
+            expect(result.sharedLink.settings.isVanityNameAvailable).toEqual(false);
+        });
+    });
+
+    describe('direct link availability', () => {
+        test('should extract downloadUrl from shared_link.download_url', () => {
+            const result = convertItemResponse(MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK);
+            expect(result.sharedLink?.downloadUrl).toEqual('https://example.com/shared_link=abc123');
+            expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(true);
+        });
+
+        test('should handle when direct link is not available (free users)', () => {
+            const mockItemWithoutDirectLink = {
+                ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
+                shared_link: {
+                    ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
+                    download_url: undefined,
+                },
+                shared_link_features: { download_url: false, password: true, vanity_name: true },
+            };
+            const result = convertItemResponse(mockItemWithoutDirectLink);
+            expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);
+            expect(result.sharedLink.downloadUrl).toBeUndefined();
         });
     });
 });

@@ -1,6 +1,6 @@
 import { Collaborator } from '@box/unified-share-modal';
 
-import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED } from '../../../constants';
+import { INVITEE_ROLE_OWNER, STATUS_ACCEPTED, STATUS_PENDING, STATUS_REJECTED } from '../../../constants';
 import {
     API_TO_USM_COLLAB_ROLE_MAP,
     COLLAB_USER_TYPE,
@@ -26,32 +26,44 @@ export const convertCollab = ({
     isCurrentUserOwner,
     ownerEmailDomain,
 }: ConvertCollabProps): Collaborator | null => {
-    if (!collab || collab.status !== STATUS_ACCEPTED) return null;
+    if (!collab || collab.status === STATUS_REJECTED) {
+        return null;
+    }
 
-    const {
-        accessible_by: { id: collabId, login: collabEmail, name: collabName },
-        id,
-        expires_at: executeAt,
-        role,
-    } = collab;
+    const { accessible_by: accessibleBy, id, invite_email: inviteEmail, expires_at: expiresAt, role, status } = collab;
 
-    const isCurrentUser = collabId === currentUserId;
+    let collabId;
+    let collabEmail = inviteEmail;
+    let collabName = inviteEmail;
+
+    if (accessibleBy?.name) {
+        const { id: userId, login, name } = accessibleBy;
+
+        collabId = userId;
+        collabEmail = login;
+        collabName = name;
+    }
+
+    if (!collabName) {
+        return null;
+    }
+
     const isExternal =
-        !isCurrentUserOwner && collabEmail && ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
+        !isCurrentUserOwner && !!collabEmail && !!ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
     const avatarUrl = avatarUrlMap ? avatarUrlMap[collabId] : undefined;
 
     return {
         avatarUrl,
         email: collabEmail,
-        expiresAt: executeAt,
+        expiresAt,
         hasCustomAvatar: !!avatarUrl,
         id: `${id}`,
-        isCurrentUser,
+        isCurrentUser: collabId != null && collabId === currentUserId,
         isExternal,
-        isPending: false,
+        isPending: status === STATUS_PENDING,
         name: collabName,
         role: API_TO_USM_COLLAB_ROLE_MAP[role],
-        userId: `${collabId}`,
+        ...(collabId != null ? { userId: `${collabId}` } : {}),
     };
 };
 

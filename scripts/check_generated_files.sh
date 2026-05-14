@@ -16,9 +16,14 @@ check_generated_files() {
     printf "${blue}-------------------------------------------------------------${end}"
     yarn --cwd /buie build:i18n || return 1
 
-    if [[ $(git status --porcelain 2>/dev/null | egrep "^(M| M)") != "" ]]; then
+    # `yarn --cwd /buie ...` runs the build at /buie, but the executor's shell
+    # working directory is ~/buie. Without `-C /buie`, git status would inspect
+    # the wrong tree and silently miss generated changes (e.g. en-US.properties
+    # drift when a PR adds defineMessages but forgets to commit the rebuilt
+    # properties file).
+    if [[ $(git -C /buie status --porcelain 2>/dev/null | egrep "^(M| M)") != "" ]]; then
         printf "${red}Your PR has uncommitted files!${end}"
-        git status --porcelain
+        git -C /buie status --porcelain
         return 1
     fi
 }

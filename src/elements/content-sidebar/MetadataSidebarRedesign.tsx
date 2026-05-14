@@ -46,6 +46,7 @@ import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionS
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
+import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -84,6 +85,11 @@ export interface MetadataSidebarRedesignProps
         payload: Record<string, unknown>,
         fileId: string,
     ) => Promise<{ metadata: { is_large_file: boolean } }>;
+    onEditingStateChange?: (isEditing: boolean) => void;
+    registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
+    onWarningModalDiscard?: () => void;
+    onWarningModalClose?: () => void;
+    trackEvent?: (eventName: string, data?: Record<string, unknown>) => void;
 }
 
 function MetadataSidebarRedesign({
@@ -99,6 +105,11 @@ function MetadataSidebarRedesign({
     isFeatureEnabled,
     createSessionRequest,
     getStructuredTextRep,
+    onEditingStateChange,
+    registerOpenWarningModalCallback,
+    onWarningModalDiscard,
+    onWarningModalClose,
+    trackEvent,
 }: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
@@ -135,6 +146,20 @@ function MetadataSidebarRedesign({
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
+    const { handleUnsavedChangesModalOpen, pendingNavLocation, setPendingNavLocation, unblockRouterHistory } =
+        useMetadataSidebarUnsavedChangesGuard({
+            editingTemplate,
+            fileId,
+            history,
+            isConfidenceScoreReviewEnabled,
+            onWarningModalClose,
+            onEditingStateChange,
+            setEditingTemplate,
+            setIsUnsavedChangesModalOpen,
+            setPendingTemplateToEdit,
+            registerOpenWarningModalCallback,
+        });
+
     const shouldFetchStructuredTextRep =
         isBoxAiSuggestionsEnabled &&
         fileExtension?.toLowerCase() === 'pdf' &&
@@ -196,8 +221,12 @@ function MetadataSidebarRedesign({
     };
 
     const handleDiscardUnsavedChanges = () => {
-        // check if user tried to edit another template before unsaved changes modal
-        if (pendingTemplateToEdit) {
+        if (pendingNavLocation && isConfidenceScoreReviewEnabled) {
+            unblockRouterHistory();
+            setEditingTemplate(null);
+            history.push(pendingNavLocation);
+            setPendingNavLocation(null);
+        } else if (pendingTemplateToEdit) {
             setEditingTemplate(pendingTemplateToEdit);
             setIsDeleteButtonDisabled(true);
 
@@ -207,6 +236,7 @@ function MetadataSidebarRedesign({
         }
 
         setIsUnsavedChangesModalOpen(false);
+        onWarningModalDiscard?.();
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
@@ -217,6 +247,7 @@ function MetadataSidebarRedesign({
         }
         clearExtractError();
         setEditingTemplate(null);
+        setShouldShowOnlyReviewFields(false);
     };
 
     const isExistingMetadataInstance = (): boolean => {
@@ -331,7 +362,7 @@ function MetadataSidebarRedesign({
                             onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
                             onSubmit={handleSubmit}
                             onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
-                            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
                             shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
@@ -339,6 +370,7 @@ function MetadataSidebarRedesign({
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
                             onSelectMetadataField={handleSelectMetadataField}
                             selectedMetadataFieldId={selectedMetadataFieldId}
+                            trackEvent={trackEvent}
                         />
                     )}
                     {showList && (
@@ -357,6 +389,7 @@ function MetadataSidebarRedesign({
                             templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                            trackEvent={trackEvent}
                         />
                     )}
                 </AutofillContextProvider>
