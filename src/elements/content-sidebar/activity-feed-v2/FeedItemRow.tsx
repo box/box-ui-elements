@@ -161,7 +161,7 @@ const FeedItemRow = ({
             const handleEdit = (id: string, content: unknown) => {
                 if (isDisabled) return;
                 const serialized = serializeEditorContent(content);
-                if (!serialized) return;
+                if (!serialized || !serialized.text.trim()) return;
                 if (id === item.id) {
                     onCommentUpdate?.(id, serialized.text, undefined, serialized.hasMention, permissions);
                     return;
@@ -212,7 +212,7 @@ const FeedItemRow = ({
             const handleEdit = (id: string, content: unknown) => {
                 if (isDisabled) return;
                 const serialized = serializeEditorContent(content);
-                if (!serialized) return;
+                if (!serialized || !serialized.text.trim()) return;
                 if (id === item.id) {
                     onAnnotationEdit?.({ id, permissions, text: serialized.text });
                     return;

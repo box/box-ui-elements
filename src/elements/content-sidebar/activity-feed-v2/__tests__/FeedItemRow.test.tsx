@@ -343,6 +343,26 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             consoleError.mockRestore();
         });
 
+        test('should skip onEdit when serialized text is whitespace only', () => {
+            mockedSerialize.mockReturnValue({ hasMention: false, text: '   \n\t  ' });
+            const onCommentUpdate = jest.fn();
+            const onReplyUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockComment}
+                    onCommentUpdate={onCommentUpdate}
+                    onReplyUpdate={onReplyUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+            lastThreadedAnnotationProps.onEdit?.('reply-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).not.toHaveBeenCalled();
+            expect(onReplyUpdate).not.toHaveBeenCalled();
+        });
+
         test('should log and skip onEdit when a reply id has no resolvable permissions', () => {
             const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
             const onReplyUpdate = jest.fn();
@@ -566,6 +586,26 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         test('should omit onCopyLink when onAnnotationCopyLink is not provided', () => {
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
             expect(lastThreadedAnnotationProps.onCopyLink).toBeUndefined();
+        });
+
+        test('should skip onEdit when serialized text is whitespace only', () => {
+            mockedSerialize.mockReturnValue({ hasMention: false, text: '   \n\t  ' });
+            const onAnnotationEdit = jest.fn();
+            const onReplyUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockAnnotation}
+                    onAnnotationEdit={onAnnotationEdit}
+                    onReplyUpdate={onReplyUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('annotation-1', { type: 'doc', content: [] });
+            lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] });
+
+            expect(onAnnotationEdit).not.toHaveBeenCalled();
+            expect(onReplyUpdate).not.toHaveBeenCalled();
         });
     });
 
