@@ -85,6 +85,7 @@ type StartAt = {
 };
 
 type Props = {
+    accessPattern?: 'file_list' | 'direct_link' | 'shared_link',
     advancedContentInsights: {
         isActive: boolean,
         ownerEId: number,
@@ -126,13 +127,16 @@ type Props = {
     onLoad: Function,
     onNavigate: Function,
     onVersionChange: VersionChangeCallback,
+    preloadStatus?: 'hit' | 'miss',
     previewExperiences?: {
         [name: string]: TargetingApi,
     },
     previewLibraryVersion: string,
+    previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,
+    sharedLinkAuth?: 'logged_in' | 'logged_out' | 'na',
     sharedLinkPassword?: string,
     showAnnotations?: boolean,
     showAnnotationsControls?: boolean,
@@ -899,6 +903,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            accessPattern,
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
             renderCustomPreview,
@@ -909,7 +914,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
+            preloadStatus,
             previewExperiences,
+            previewMode,
+            sharedLinkAuth,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
@@ -951,6 +959,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
+            accessPattern,
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             container: `#${this.id} .bcpr-content`,
             enableBoundingBoxHighlights,
@@ -960,6 +969,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
             experiences: previewExperiences,
+            preloadStatus,
+            previewMode,
+            sharedLinkAuth,
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),
