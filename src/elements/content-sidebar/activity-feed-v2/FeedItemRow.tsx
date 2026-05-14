@@ -49,14 +49,14 @@ type FeedItemRowProps = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
-    onReplyUpdate?: (
-        id: string,
-        parentId: string,
-        text: string,
-        permissions: BoxCommentPermission,
-        onSuccess?: (() => void) | null,
-        onError?: (() => void) | null,
-    ) => void;
+    onReplyUpdate?: (params: {
+        id: string;
+        onError?: () => void;
+        onSuccess?: () => void;
+        parentId: string;
+        permissions: BoxCommentPermission;
+        text: string;
+    }) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
@@ -172,7 +172,7 @@ const FeedItemRow = ({
                     console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${item.id}"`);
                     return;
                 }
-                onReplyUpdate?.(id, item.id, serialized.text, replyPermissions);
+                onReplyUpdate?.({ id, parentId: item.id, permissions: replyPermissions, text: serialized.text });
             };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
@@ -223,7 +223,7 @@ const FeedItemRow = ({
                     console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${item.id}"`);
                     return;
                 }
-                onReplyUpdate?.(id, item.id, serialized.text, replyPermissions);
+                onReplyUpdate?.({ id, parentId: item.id, permissions: replyPermissions, text: serialized.text });
             };
             return (
                 <ActivityFeed.List.ThreadedAnnotation

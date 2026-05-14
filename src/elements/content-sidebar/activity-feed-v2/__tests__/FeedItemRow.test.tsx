@@ -293,11 +293,11 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onEdit?.('reply-1', { type: 'doc', content: [] });
 
-            expect(onReplyUpdate).toHaveBeenCalledWith('reply-1', 'comment-1', 'edited-reply', {
-                can_delete: true,
-                can_edit: true,
-                can_reply: false,
-                can_resolve: false,
+            expect(onReplyUpdate).toHaveBeenCalledWith({
+                id: 'reply-1',
+                parentId: 'comment-1',
+                permissions: { can_delete: true, can_edit: true, can_reply: false, can_resolve: false },
+                text: 'edited-reply',
             });
             expect(onCommentUpdate).not.toHaveBeenCalled();
         });
@@ -545,11 +545,11 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] });
 
-            expect(onReplyUpdate).toHaveBeenCalledWith('annotation-reply-1', 'annotation-1', 'edited-reply', {
-                can_delete: true,
-                can_edit: true,
-                can_reply: false,
-                can_resolve: false,
+            expect(onReplyUpdate).toHaveBeenCalledWith({
+                id: 'annotation-reply-1',
+                parentId: 'annotation-1',
+                permissions: { can_delete: true, can_edit: true, can_reply: false, can_resolve: false },
+                text: 'edited-reply',
             });
             expect(onAnnotationEdit).not.toHaveBeenCalled();
         });
