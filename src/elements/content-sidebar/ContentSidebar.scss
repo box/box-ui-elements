@@ -8,6 +8,7 @@ $sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
 
 .be {
     &.bcs {
+        position: relative;
         display: flex;
         width: auto;
         min-width: $sidebarTabsWidth;
@@ -16,6 +17,16 @@ $sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
 
         &.bcs-is-wider {
             max-width: $sidebarIncreasedWidth;
+        }
+
+        // When resizable, the default min-width is the un-resized sidebar width.
+        // Inline style on the aside element overrides the default max-width to allow grow.
+        &.bcs-is-resizable.bcs-is-open {
+            min-width: $sidebarWidth;
+
+            &.bcs-is-wider {
+                min-width: $sidebarIncreasedWidth;
+            }
         }
     }
 
@@ -61,10 +72,19 @@ $sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
             min-width: 0;
             max-width: none;
             max-height: 48px;
-            transition: max-height .5s ease-in-out 0s;
+            transition: max-height 0.5s ease-in-out 0s;
 
             &.bcs-is-wider {
                 max-width: none;
+            }
+
+            // Neutralize resizable overrides on small screens — sidebar is a bottom sheet here
+            &.bcs-is-resizable.bcs-is-open {
+                min-width: 0;
+
+                &.bcs-is-wider {
+                    min-width: 0;
+                }
             }
         }
 
