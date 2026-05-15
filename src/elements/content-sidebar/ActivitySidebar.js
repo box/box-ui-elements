@@ -765,15 +765,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             api,
             file,
             features,
-            hasReplies: shouldShowReplies,
+            hasReplies,
             hasTasks: shouldShowTasks,
             hasVersions: shouldShowVersions,
         } = this.props;
+        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const shouldShowReplies = hasReplies || isThreadedRepliesV2Enabled;
         const shouldFetchReplies =
-            shouldRefreshCache &&
-            shouldShowReplies &&
-            activeFeedEntryId &&
-            activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
+            shouldRefreshCache && hasReplies && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
