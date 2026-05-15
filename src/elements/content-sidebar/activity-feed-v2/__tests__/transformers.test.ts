@@ -4,6 +4,7 @@ import type { BoxItemVersion } from '../../../../common/types/core';
 import type { TaskNew } from '../../../../common/types/tasks';
 
 import {
+    annotationTargetToBadge,
     textToDocumentNode,
     transformAnnotationToMessages,
     transformAppActivityToProps,
@@ -523,6 +524,71 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             if (result!.type === 'comment') {
                 expect(result!.isResolved).toBe(true);
             }
+        });
+    });
+
+    describe('annotationTargetToBadge()', () => {
+        test('should return undefined when target is missing', () => {
+            expect(annotationTargetToBadge()).toBeUndefined();
+        });
+
+        test('should return undefined for an unknown target type', () => {
+            const target = { location: { type: 'page', value: 1 }, type: 'unknown' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toBeUndefined();
+        });
+
+        test('should map drawing target to a drawing badge with the page number', () => {
+            const target = { location: { type: 'page', value: 1 }, type: 'drawing' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                page: 1,
+                type: 'drawing',
+            });
+        });
+
+        test('should map highlight target to a highlight badge with the highlighted text and the page number', () => {
+            const target = { location: { type: 'page', value: 4 }, text: 'selected excerpt', type: 'highlight' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                highlightedText: 'selected excerpt',
+                page: 4,
+                type: 'highlight',
+            });
+        });
+
+        test('should fall back to empty highlightedText when highlight target has no text', () => {
+            const target = { location: { type: 'page', value: 4 }, type: 'highlight' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                highlightedText: '',
+                page: 4,
+                type: 'highlight',
+            });
+        });
+
+        test('should map point target to a point badge with the page number', () => {
+            const target = { location: { type: 'page', value: 3 }, type: 'point', x: 0, y: 0 };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                page: 3,
+                type: 'point',
+            });
+        });
+
+        test('should map region target to a region badge with the page number', () => {
+            const target = {
+                location: { type: 'page', value: 2 },
+                shape: { height: 10, type: 'rect', width: 20, x: 5, y: 5 },
+                type: 'region',
+            };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                page: 2,
+                type: 'region',
+            });
+        });
+
+        test('should default page to 0 when location is missing', () => {
+            const target = { type: 'point', x: 0, y: 0 };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                page: 0,
+                type: 'point',
+            });
         });
     });
 });

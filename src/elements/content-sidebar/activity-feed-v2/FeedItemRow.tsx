@@ -7,13 +7,15 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 
 import { ActivityFeed } from '@box/activity-feed';
-import { AnnotationBadgeType, serializeMentionMarkup } from '@box/threaded-annotations';
 
-import type { Annotation, AnnotationPermission, Target } from '../../../common/types/annotations';
+import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskNew } from '../../../common/types/tasks';
 
-import type { AnnotationBadgeTargetType, TransformedFeedItem, UserSelectorProps } from './types';
+import { dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
+import { annotationTargetToBadge } from './transformers';
+
+import type { OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
@@ -21,13 +23,16 @@ type FeedItemRowProps = {
     currentUserId?: string;
     isDisabled: boolean;
     item: TransformedFeedItem;
+    onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
+    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
         permissions: AnnotationPermission;
         status: FeedItemStatus;
     }) => void;
+    onCommentCopyLink?: (params: { id: string }) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentUpdate?: (
         id: string,
@@ -39,30 +44,11 @@ type FeedItemRowProps = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyUpdate?: OnReplyUpdate;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
     userSelectorProps: UserSelectorProps;
-};
-
-const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | undefined => {
-    if (!target) return undefined;
-
-    const targetType = target.type as string;
-    const page = target.location?.value ?? 0;
-
-    switch (targetType) {
-        case 'drawing':
-            return { page, type: AnnotationBadgeType.Drawing };
-        case 'highlight':
-            return { highlightedText: '', type: AnnotationBadgeType.Highlight };
-        case 'point':
-            return { page, type: AnnotationBadgeType.Point };
-        case 'region':
-            return { page, type: AnnotationBadgeType.Region };
-        default:
-            return undefined;
-    }
 };
 
 const buildReplyPost =
@@ -74,13 +60,8 @@ const buildReplyPost =
     ) =>
     async (content: unknown) => {
         if (isDisabled || !onReplyCreate) return;
-        let serialized;
-        try {
-            serialized = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
-        } catch {
-            return;
-        }
-        if (!serialized.text.trim()) return;
+        const serialized = serializeEditorContent(content);
+        if (!serialized || !serialized.text.trim()) return;
         onReplyCreate(parentId, parentType, serialized.text);
     };
 
@@ -88,12 +69,16 @@ const FeedItemRow = ({
     currentUserId,
     isDisabled,
     item,
+    onAnnotationCopyLink,
     onAnnotationDelete,
+    onAnnotationEdit,
     onAnnotationSelect,
     onAnnotationStatusChange,
+    onCommentCopyLink,
     onCommentDelete,
     onCommentUpdate,
     onReplyCreate,
+    onReplyUpdate,
     onTaskDelete,
     onTaskView,
     onVersionHistoryClick,
@@ -110,14 +95,34 @@ const FeedItemRow = ({
                 if (isDisabled) return;
                 onCommentUpdate?.(id, item.originalText, status, false, permissions);
             };
+            const handleEdit = (id: string, content: unknown) => {
+                if (isDisabled) return;
+                const serialized = serializeEditorContent(content);
+                if (!serialized || !serialized.text.trim()) return;
+                if (id === item.id) {
+                    onCommentUpdate?.(id, serialized.text, undefined, serialized.hasMention, permissions);
+                    return;
+                }
+                dispatchReplyEdit({
+                    id,
+                    messages: item.messages,
+                    onReplyUpdate,
+                    parentId: item.id,
+                    text: serialized.text,
+                });
+            };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
                     isAnnotations={false}
+                    isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAvatarClick={noop}
+                    onCopyLink={onCommentCopyLink ? (id: string) => onCommentCopyLink({ id }) : undefined}
                     onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onEditError={logEditError}
                     onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, isDisabled, onReplyCreate)}
                     onResolve={handleStatusChange('resolved')}
                     onThreadDelete={() => handleDelete(item.id)}
@@ -131,6 +136,7 @@ const FeedItemRow = ({
 
         case 'annotation': {
             const { permissions } = item.annotation;
+            const fileVersionId = item.annotation.file_version?.id;
             const handleDelete = (id: string) => {
                 if (isDisabled) return;
                 onAnnotationDelete?.({ id, permissions });
@@ -139,16 +145,40 @@ const FeedItemRow = ({
                 if (isDisabled) return;
                 onAnnotationStatusChange?.({ id, permissions, status });
             };
+            const handleEdit = (id: string, content: unknown) => {
+                if (isDisabled) return;
+                const serialized = serializeEditorContent(content);
+                if (!serialized || !serialized.text.trim()) return;
+                if (id === item.id) {
+                    onAnnotationEdit?.({ id, permissions, text: serialized.text });
+                    return;
+                }
+                dispatchReplyEdit({
+                    id,
+                    messages: item.messages,
+                    onReplyUpdate,
+                    parentId: item.id,
+                    text: serialized.text,
+                });
+            };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
                     annotationTarget={annotationTargetToBadge(item.annotation.target)}
                     isAnnotations={false}
+                    isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
                     onAvatarClick={noop}
+                    onCopyLink={
+                        onAnnotationCopyLink && fileVersionId
+                            ? () => onAnnotationCopyLink({ annotationId: item.id, fileVersionId })
+                            : undefined
+                    }
                     onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onEditError={logEditError}
                     onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, isDisabled, onReplyCreate)}
                     onResolve={handleStatusChange('resolved')}
                     onThreadDelete={() => handleDelete(item.id)}

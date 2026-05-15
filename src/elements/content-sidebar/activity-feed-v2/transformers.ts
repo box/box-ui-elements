@@ -7,6 +7,7 @@
  */
 
 import { TaskCompletionRule, TaskType } from '@box/activity-feed';
+import { AnnotationBadgeType } from '@box/threaded-annotations';
 import type {
     DocumentNodeV2 as DocumentNode,
     MentionNodeV2 as MentionNode,
@@ -17,12 +18,18 @@ import type {
     TextNodeV2 as TextNode,
 } from '@box/threaded-annotations';
 
-import type { Annotation } from '../../../common/types/annotations';
+import type { Annotation, Target } from '../../../common/types/annotations';
 import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '../../../common/types/feed';
 import type { BoxItemVersion, User } from '../../../common/types/core';
 import type { TaskNew } from '../../../common/types/tasks';
 
-import type { AppActivityItemProps, TaskItemProps, TransformedFeedItem, VersionItemProps } from './types';
+import type {
+    AnnotationBadgeTargetType,
+    AppActivityItemProps,
+    TaskItemProps,
+    TransformedFeedItem,
+    VersionItemProps,
+} from './types';
 
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -129,6 +136,25 @@ export const transformCommentToMessages = (comment: Comment): TextMessageType[] 
     const root = commentToTextMessage(comment);
     const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply));
     return [root, ...replies];
+};
+
+export const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | undefined => {
+    if (!target) return undefined;
+
+    const page = target.location?.value ?? 0;
+
+    switch (target.type) {
+        case 'drawing':
+            return { page, type: AnnotationBadgeType.Drawing };
+        case 'highlight':
+            return { highlightedText: target.text ?? '', page, type: AnnotationBadgeType.Highlight };
+        case 'point':
+            return { page, type: AnnotationBadgeType.Point };
+        case 'region':
+            return { page, type: AnnotationBadgeType.Region };
+        default:
+            return undefined;
+    }
 };
 
 export const transformAnnotationToMessages = (annotation: Annotation): TextMessageType[] => {
