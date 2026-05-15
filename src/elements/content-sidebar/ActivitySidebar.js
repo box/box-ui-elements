@@ -97,6 +97,8 @@ type ExternalProps = {
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
+    onShowOnlyMentionsMeChange?: (checked: boolean) => void,
+    onShowResolvedChange?: (checked: boolean) => void,
     onTaskAssignmentUpdate: Function,
     onTaskCreate: Function,
     onTaskDelete: (id: string) => any,
@@ -105,6 +107,8 @@ type ExternalProps = {
     routerDisabled?: boolean,
     /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
     shouldFetchSidebarData?: boolean,
+    showOnlyMentionsMe?: boolean,
+    showResolved?: boolean,
 } & ErrorContextProps &
     WithAnnotatorContextProps;
 
@@ -1375,9 +1379,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             isDisabled = false,
             onAnnotationCopyLink,
             onCommentCopyLink,
+            onShowOnlyMentionsMeChange,
+            onShowResolvedChange,
             onVersionHistoryClick,
             getUserProfileUrl,
             onTaskView,
+            showOnlyMentionsMe,
+            showResolved,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
         const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
@@ -1418,9 +1426,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         onReplyUpdate={({ id, onError, onSuccess, parentId, permissions, text }) =>
                             this.updateReply(id, parentId, text, permissions, onSuccess, onError)
                         }
+                        onShowOnlyMentionsMeChange={onShowOnlyMentionsMeChange}
+                        onShowResolvedChange={onShowResolvedChange}
                         onTaskDelete={this.deleteTask}
                         onTaskView={onTaskView}
                         onVersionHistoryClick={onVersionHistoryClick}
+                        showOnlyMentionsMe={showOnlyMentionsMe}
+                        showResolved={showResolved}
                     />
                 </div>
             );

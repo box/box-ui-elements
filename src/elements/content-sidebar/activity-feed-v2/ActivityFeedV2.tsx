@@ -49,9 +49,13 @@ const ActivityFeedV2 = ({
     onCommentUpdate,
     onReplyCreate,
     onReplyUpdate,
+    onShowOnlyMentionsMeChange,
+    onShowResolvedChange,
     onTaskDelete,
     onTaskView,
     onVersionHistoryClick,
+    showOnlyMentionsMe: showOnlyMentionsMeProp,
+    showResolved: showResolvedProp,
 }: ActivityFeedV2Props) => {
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
@@ -130,8 +134,20 @@ const ActivityFeedV2 = ({
         [],
     );
 
-    const [mentionMe, setMentionMe] = React.useState(false);
-    const [showResolved, setShowResolved] = React.useState(false);
+    const [localShowOnlyMentionsMe, setLocalShowOnlyMentionsMe] = React.useState(false);
+    const [localShowResolved, setLocalShowResolved] = React.useState(false);
+    const showOnlyMentionsMe = showOnlyMentionsMeProp ?? localShowOnlyMentionsMe;
+    const showResolved = showResolvedProp ?? localShowResolved;
+
+    const handleShowOnlyMentionsMeChange = (checked: boolean) => {
+        if (showOnlyMentionsMeProp === undefined) setLocalShowOnlyMentionsMe(checked);
+        onShowOnlyMentionsMeChange?.(checked);
+    };
+    const handleShowResolvedChange = (checked: boolean) => {
+        if (showResolvedProp === undefined) setLocalShowResolved(checked);
+        onShowResolvedChange?.(checked);
+    };
+
     const [isTaskFormOpen, setIsTaskFormOpen] = React.useState(false);
     const [taskType, setTaskType] = React.useState<string>(TASK_TYPE_APPROVAL);
     const [taskError, setTaskError] = React.useState<Error | null>(null);
@@ -157,7 +173,7 @@ const ActivityFeedV2 = ({
             if ((item.type === 'comment' || item.type === 'annotation') && item.isResolved && !showResolved) {
                 return false;
             }
-            if (mentionMe && currentUserId) {
+            if (showOnlyMentionsMe && currentUserId) {
                 if (item.type === 'comment' || item.type === 'annotation') {
                     const hasMention = item.messages.some(msg =>
                         msg.message?.content?.some(
@@ -179,7 +195,7 @@ const ActivityFeedV2 = ({
             }
             return true;
         });
-    }, [currentUserId, mentionMe, showResolved, transformedItems]);
+    }, [currentUserId, showOnlyMentionsMe, showResolved, transformedItems]);
 
     React.useEffect(() => {
         const alreadyScrolledToThisEntry = scrolledEntryIdRef.current === activeFeedEntryId;
@@ -227,12 +243,12 @@ const ActivityFeedV2 = ({
                         <ActivityFeed.Header.FilterMenu>
                             <ActivityFeed.Header.ShowResolvedOption
                                 checked={showResolved}
-                                onCheckedChange={setShowResolved}
+                                onCheckedChange={handleShowResolvedChange}
                             />
                             <ActivityFeed.Header.MentionMeOption
-                                checked={mentionMe}
+                                checked={showOnlyMentionsMe}
                                 hasTasks={hasTasks}
-                                onCheckedChange={setMentionMe}
+                                onCheckedChange={handleShowOnlyMentionsMeChange}
                             />
                         </ActivityFeed.Header.FilterMenu>
                         {hasTasks && (

@@ -102,7 +102,11 @@ export type ActivityFeedV2Props = {
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
     onReplyUpdate?: OnReplyUpdate;
+    onShowOnlyMentionsMeChange?: (checked: boolean) => void;
+    onShowResolvedChange?: (checked: boolean) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
+    showOnlyMentionsMe?: boolean;
+    showResolved?: boolean;
 };

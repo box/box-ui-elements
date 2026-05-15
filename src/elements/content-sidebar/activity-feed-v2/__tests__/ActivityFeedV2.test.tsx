@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { render, screen } from '../../../../test-utils/testing-library';
+
+import { act, render, screen } from '../../../../test-utils/testing-library';
 import ActivityFeedV2 from '..';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 
@@ -15,6 +16,10 @@ jest.mock('@box/threaded-annotations', () => ({
 }));
 
 const mockScrollTo = jest.fn<boolean, [string]>(() => true);
+
+type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
+let lastShowResolvedOptionProps: FilterOptionProps = {};
+let lastMentionMeOptionProps: FilterOptionProps = {};
 
 jest.mock('@box/activity-feed', () => {
     const actual = jest.requireActual('@box/activity-feed');
@@ -33,7 +38,20 @@ jest.mock('@box/activity-feed', () => {
     );
     ActivityFeedList.Version = (props: { id: string }) => <div data-testid={`version-${props.id}`}>Version</div>;
     const ActivityFeedEditor = () => <div data-testid="activity-feed-editor">Editor</div>;
-    const ActivityFeedHeader = () => <div data-testid="activity-feed-header">Header</div>;
+    const ActivityFeedHeader = ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="activity-feed-header">{children}</div>
+    );
+    ActivityFeedHeader.Actions = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+    ActivityFeedHeader.FilterMenu = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+    ActivityFeedHeader.ShowResolvedOption = (props: FilterOptionProps) => {
+        lastShowResolvedOptionProps = props;
+        return <div data-testid="show-resolved-option">{String(props.checked)}</div>;
+    };
+    ActivityFeedHeader.MentionMeOption = (props: FilterOptionProps) => {
+        lastMentionMeOptionProps = props;
+        return <div data-testid="mention-me-option">{String(props.checked)}</div>;
+    };
+    ActivityFeedHeader.TaskButton = () => <div data-testid="task-button" />;
 
     return {
         ...actual,
@@ -133,6 +151,8 @@ const feedItems = [
 describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     beforeEach(() => {
         mockScrollTo.mockReturnValue(true);
+        lastShowResolvedOptionProps = {};
+        lastMentionMeOptionProps = {};
     });
 
     afterEach(() => {
@@ -301,6 +321,122 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             />,
         );
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
+    });
+
+    describe('filter controls', () => {
+        test('should default showResolved and showOnlyMentionsMe to false in the filter menu', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            expect(lastShowResolvedOptionProps.checked).toBe(false);
+            expect(lastMentionMeOptionProps.checked).toBe(false);
+        });
+
+        test('should reflect the controlled showResolved prop in the filter menu', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    showResolved
+                />,
+            );
+            expect(lastShowResolvedOptionProps.checked).toBe(true);
+        });
+
+        test('should reflect the controlled showOnlyMentionsMe prop in the filter menu', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    showOnlyMentionsMe
+                />,
+            );
+            expect(lastMentionMeOptionProps.checked).toBe(true);
+        });
+
+        test('should call onShowResolvedChange when the consumer toggles it', () => {
+            const onShowResolvedChange = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    onShowResolvedChange={onShowResolvedChange}
+                    showResolved={false}
+                />,
+            );
+
+            act(() => lastShowResolvedOptionProps.onCheckedChange?.(true));
+
+            expect(onShowResolvedChange).toHaveBeenCalledWith(true);
+            expect(onShowResolvedChange).toHaveBeenCalledTimes(1);
+        });
+
+        test('should call onShowOnlyMentionsMeChange when the consumer toggles it', () => {
+            const onShowOnlyMentionsMeChange = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    onShowOnlyMentionsMeChange={onShowOnlyMentionsMeChange}
+                    showOnlyMentionsMe={false}
+                />,
+            );
+
+            act(() => lastMentionMeOptionProps.onCheckedChange?.(true));
+
+            expect(onShowOnlyMentionsMeChange).toHaveBeenCalledWith(true);
+            expect(onShowOnlyMentionsMeChange).toHaveBeenCalledTimes(1);
+        });
+
+        test('should manage filter state internally when no controlled props are provided', () => {
+            const resolvedComment = { ...mockComment, id: 'resolved-1', status: 'resolved' };
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment, resolvedComment] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+            expect(screen.queryByTestId('threaded-annotation-resolved-1')).not.toBeInTheDocument();
+
+            act(() => lastShowResolvedOptionProps.onCheckedChange?.(true));
+
+            expect(screen.getByTestId('threaded-annotation-resolved-1')).toBeVisible();
+        });
+
+        test('should not update internal state when a controlled prop is provided', () => {
+            const resolvedComment = { ...mockComment, id: 'resolved-1', status: 'resolved' };
+            const onShowResolvedChange = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment, resolvedComment] as ActivityFeedV2Props['feedItems']}
+                    onShowResolvedChange={onShowResolvedChange}
+                    showResolved={false}
+                />,
+            );
+            expect(screen.queryByTestId('threaded-annotation-resolved-1')).not.toBeInTheDocument();
+
+            act(() => lastShowResolvedOptionProps.onCheckedChange?.(true));
+
+            expect(onShowResolvedChange).toHaveBeenCalledWith(true);
+            expect(screen.queryByTestId('threaded-annotation-resolved-1')).not.toBeInTheDocument();
+        });
+
+        test('should update internal state and notify the consumer when only a change handler is provided', () => {
+            const resolvedComment = { ...mockComment, id: 'resolved-1', status: 'resolved' };
+            const onShowResolvedChange = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment, resolvedComment] as ActivityFeedV2Props['feedItems']}
+                    onShowResolvedChange={onShowResolvedChange}
+                />,
+            );
+            expect(screen.queryByTestId('threaded-annotation-resolved-1')).not.toBeInTheDocument();
+
+            act(() => lastShowResolvedOptionProps.onCheckedChange?.(true));
+
+            expect(onShowResolvedChange).toHaveBeenCalledWith(true);
+            expect(screen.getByTestId('threaded-annotation-resolved-1')).toBeVisible();
+        });
     });
 
     describe('scroll to end on mount', () => {
