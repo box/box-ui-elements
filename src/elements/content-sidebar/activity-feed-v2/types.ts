@@ -28,6 +28,15 @@ export type UserSelectorProps = {
     loadingAriaLabel: string;
 };
 
+export type OnReplyUpdate = (params: {
+    id: string;
+    onError?: () => void;
+    onSuccess?: () => void;
+    parentId: string;
+    permissions: BoxCommentPermission;
+    text: string;
+}) => void;
+
 type ResolvedInfo = {
     isResolved: boolean;
     resolvedAt?: number;
@@ -92,14 +101,7 @@ export type ActivityFeedV2Props = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
-    onReplyUpdate?: (params: {
-        id: string;
-        onError?: () => void;
-        onSuccess?: () => void;
-        parentId: string;
-        permissions: BoxCommentPermission;
-        text: string;
-    }) => void;
+    onReplyUpdate?: OnReplyUpdate;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;

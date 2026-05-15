@@ -23,6 +23,17 @@ export type Rect = {
     y: number,
 };
 
+export type TargetDrawing = {
+    location: Page,
+    type: 'drawing',
+};
+
+export type TargetHighlight = {
+    location: Page,
+    text?: string,
+    type: 'highlight',
+};
+
 export type TargetRegion = {
     location: Page,
     shape?: Rect,
@@ -36,7 +47,7 @@ export type TargetPoint = {
     y: number,
 };
 
-export type Target = TargetRegion | TargetPoint;
+export type Target = TargetDrawing | TargetHighlight | TargetPoint | TargetRegion;
 
 export type AnnotationPermission = {
     can_delete?: boolean,

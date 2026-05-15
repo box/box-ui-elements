@@ -7,22 +7,17 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 
 import { ActivityFeed } from '@box/activity-feed';
-import { AnnotationBadgeType, serializeMentionMarkup } from '@box/threaded-annotations';
 
-import type { Annotation, AnnotationPermission, Target } from '../../../common/types/annotations';
+import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskNew } from '../../../common/types/tasks';
 
-import type {
-    AnnotationBadgeTargetType,
-    TransformedCommentItem,
-    TransformedFeedItem,
-    UserSelectorProps,
-} from './types';
+import { dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
+import { annotationTargetToBadge } from './transformers';
+
+import type { OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT } from '../../../constants';
-
-type EditorContent = Parameters<typeof serializeMentionMarkup>[0];
 
 type FeedItemRowProps = {
     currentUserId?: string;
@@ -49,48 +44,11 @@ type FeedItemRowProps = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
-    onReplyUpdate?: (params: {
-        id: string;
-        onError?: () => void;
-        onSuccess?: () => void;
-        parentId: string;
-        permissions: BoxCommentPermission;
-        text: string;
-    }) => void;
+    onReplyUpdate?: OnReplyUpdate;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
     userSelectorProps: UserSelectorProps;
-};
-
-const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | undefined => {
-    if (!target) return undefined;
-
-    const targetType = target.type as string;
-    const page = target.location?.value ?? 0;
-
-    switch (targetType) {
-        case 'drawing':
-            return { page, type: AnnotationBadgeType.Drawing };
-        case 'highlight':
-            return { highlightedText: '', page, type: AnnotationBadgeType.Highlight };
-        case 'point':
-            return { page, type: AnnotationBadgeType.Point };
-        case 'region':
-            return { page, type: AnnotationBadgeType.Region };
-        default:
-            return undefined;
-    }
-};
-
-const serializeEditorContent = (content: unknown): { hasMention: boolean; text: string } | null => {
-    try {
-        return serializeMentionMarkup(content as EditorContent);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('ActivityFeedV2: failed to serialize editor content', error);
-        return null;
-    }
 };
 
 const buildReplyPost =
@@ -106,27 +64,6 @@ const buildReplyPost =
         if (!serialized || !serialized.text.trim()) return;
         onReplyCreate(parentId, parentType, serialized.text);
     };
-
-const findMessagePermissions = (
-    messages: TransformedCommentItem['messages'],
-    id: string,
-): BoxCommentPermission | undefined => {
-    const message = messages.find(m => m.id === id);
-    if (!message) return undefined;
-    const { canDelete, canEdit, canReply, canResolve } = message.permissions;
-    return {
-        can_delete: canDelete,
-        can_edit: canEdit,
-        can_reply: canReply,
-        can_resolve: canResolve,
-    };
-};
-
-const logEditError = (error: unknown): string | undefined => {
-    // eslint-disable-next-line no-console
-    console.error('ActivityFeedV2: failed to save edit', error);
-    return undefined;
-};
 
 const FeedItemRow = ({
     currentUserId,
@@ -166,13 +103,13 @@ const FeedItemRow = ({
                     onCommentUpdate?.(id, serialized.text, undefined, serialized.hasMention, permissions);
                     return;
                 }
-                const replyPermissions = findMessagePermissions(item.messages, id);
-                if (!replyPermissions) {
-                    // eslint-disable-next-line no-console
-                    console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${item.id}"`);
-                    return;
-                }
-                onReplyUpdate?.({ id, parentId: item.id, permissions: replyPermissions, text: serialized.text });
+                dispatchReplyEdit({
+                    id,
+                    messages: item.messages,
+                    onReplyUpdate,
+                    parentId: item.id,
+                    text: serialized.text,
+                });
             };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
@@ -199,6 +136,7 @@ const FeedItemRow = ({
 
         case 'annotation': {
             const { permissions } = item.annotation;
+            const fileVersionId = item.annotation.file_version?.id;
             const handleDelete = (id: string) => {
                 if (isDisabled) return;
                 onAnnotationDelete?.({ id, permissions });
@@ -215,13 +153,13 @@ const FeedItemRow = ({
                     onAnnotationEdit?.({ id, permissions, text: serialized.text });
                     return;
                 }
-                const replyPermissions = findMessagePermissions(item.messages, id);
-                if (!replyPermissions) {
-                    // eslint-disable-next-line no-console
-                    console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${item.id}"`);
-                    return;
-                }
-                onReplyUpdate?.({ id, parentId: item.id, permissions: replyPermissions, text: serialized.text });
+                dispatchReplyEdit({
+                    id,
+                    messages: item.messages,
+                    onReplyUpdate,
+                    parentId: item.id,
+                    text: serialized.text,
+                });
             };
             return (
                 <ActivityFeed.List.ThreadedAnnotation
@@ -234,12 +172,8 @@ const FeedItemRow = ({
                     onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
                     onAvatarClick={noop}
                     onCopyLink={
-                        onAnnotationCopyLink && item.annotation.file_version?.id
-                            ? () =>
-                                  onAnnotationCopyLink({
-                                      annotationId: item.id,
-                                      fileVersionId: item.annotation.file_version.id,
-                                  })
+                        onAnnotationCopyLink && fileVersionId
+                            ? () => onAnnotationCopyLink({ annotationId: item.id, fileVersionId })
                             : undefined
                     }
                     onDelete={handleDelete}
