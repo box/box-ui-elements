@@ -35,14 +35,12 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, width }: Props) => 
     const handlePointerUp = React.useCallback(
         (event: PointerEvent) => {
             setIsDragging(false);
-            const {target} = event;
-            if (
-                target &&
-                typeof target.hasPointerCapture === 'function' &&
-                typeof target.releasePointerCapture === 'function' &&
-                target.hasPointerCapture(event.pointerId)
-            ) {
-                target.releasePointerCapture(event.pointerId);
+            const { target } = event;
+            // Flow lib types pointer-capture methods as `(string)`; the real DOM API takes a number.
+            // Flow's Element doesn't declare `hasPointerCapture` either, so cast for that one call.
+            const pointerId = ((event.pointerId: any): string);
+            if (target instanceof Element && (target: any).hasPointerCapture(pointerId)) {
+                target.releasePointerCapture(pointerId);
             }
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
@@ -55,8 +53,10 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, width }: Props) => 
         startXRef.current = event.clientX;
         startWidthRef.current = width;
         setIsDragging(true);
+        // Flow lib types setPointerCapture as `(string)`; the real DOM API takes a number.
+        // jsdom doesn't implement setPointerCapture, so guard the call.
         if (typeof event.currentTarget.setPointerCapture === 'function') {
-            event.currentTarget.setPointerCapture(event.pointerId);
+            event.currentTarget.setPointerCapture(((event.pointerId: any): string));
         }
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
