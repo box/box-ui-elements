@@ -28,6 +28,15 @@ export type UserSelectorProps = {
     loadingAriaLabel: string;
 };
 
+export type OnReplyUpdate = (params: {
+    id: string;
+    onError?: () => void;
+    onSuccess?: () => void;
+    parentId: string;
+    permissions: BoxCommentPermission;
+    text: string;
+}) => void;
+
 type ResolvedInfo = {
     isResolved: boolean;
     resolvedAt?: number;
@@ -70,13 +79,16 @@ export type ActivityFeedV2Props = {
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     hasTasks?: boolean;
     isDisabled?: boolean;
+    onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
+    onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;
     onAnnotationSelect?: (annotation: Annotation) => void;
     onAnnotationStatusChange?: (params: {
         id: string;
         permissions: AnnotationPermission;
         status: FeedItemStatus;
     }) => void;
+    onCommentCopyLink?: (params: { id: string }) => void;
     onCommentCreate?: (text: string, hasMention: boolean) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentUpdate?: (
@@ -89,7 +101,12 @@ export type ActivityFeedV2Props = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyUpdate?: OnReplyUpdate;
+    onShowOnlyMentionsMeChange?: (checked: boolean) => void;
+    onShowResolvedChange?: (checked: boolean) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
+    showOnlyMentionsMe?: boolean;
+    showResolved?: boolean;
 };

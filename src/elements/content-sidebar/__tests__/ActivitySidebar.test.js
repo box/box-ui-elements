@@ -796,6 +796,90 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 undefined,
             );
         });
+
+        test('should set shouldShowReplies to true when threadedRepliesV2 is enabled even if hasReplies is false', () => {
+            wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                },
+                hasReplies: false,
+            });
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+            instance.fetchFeedItemsErrorCallback = jest.fn();
+            instance.fetchFeedItemsSuccessCallback = jest.fn();
+
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                file,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({ shouldShowReplies: true }),
+                undefined,
+            );
+        });
+
+        test('should set shouldShowReplies to true when both hasReplies and threadedRepliesV2 are enabled', () => {
+            wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                },
+                hasReplies: true,
+            });
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+            instance.fetchFeedItemsErrorCallback = jest.fn();
+            instance.fetchFeedItemsSuccessCallback = jest.fn();
+
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                file,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({ shouldShowReplies: true }),
+                undefined,
+            );
+        });
+
+        test('should not use fetchRepliesForFeedItems for the active comment when only threadedRepliesV2 is enabled', () => {
+            wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                },
+                hasReplies: false,
+            });
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+            instance.fetchFeedItemsErrorCallback = jest.fn();
+            instance.fetchFeedItemsSuccessCallback = jest.fn();
+            instance.fetchRepliesForFeedItems = jest.fn();
+
+            instance.fetchFeedItems(true);
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                file,
+                true,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({ shouldShowReplies: true }),
+                undefined,
+            );
+        });
     });
 
     describe('fetchFeedItemsSuccessCallback()', () => {

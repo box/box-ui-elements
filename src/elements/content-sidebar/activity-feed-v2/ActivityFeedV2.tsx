@@ -38,27 +38,32 @@ const ActivityFeedV2 = ({
     getMentionAsync,
     hasTasks = true,
     isDisabled = false,
+    onAnnotationCopyLink,
     onAnnotationDelete,
+    onAnnotationEdit,
     onAnnotationSelect,
     onAnnotationStatusChange,
+    onCommentCopyLink,
     onCommentCreate,
     onCommentDelete,
     onCommentUpdate,
     onReplyCreate,
+    onReplyUpdate,
+    onShowOnlyMentionsMeChange,
+    onShowResolvedChange,
     onTaskDelete,
     onTaskView,
     onVersionHistoryClick,
+    showOnlyMentionsMe: showOnlyMentionsMeProp,
+    showResolved: showResolvedProp,
 }: ActivityFeedV2Props) => {
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
-    React.useEffect(() => {
-        if (activeFeedEntryId && scrollHandle) {
-            scrollHandle.scrollTo(activeFeedEntryId);
-        }
-    }, [activeFeedEntryId, scrollHandle]);
+    const scrolledEntryIdRef = React.useRef<string | null>(null);
+    const hasScrolledToEndRef = React.useRef(false);
 
     const fetchUsers = React.useCallback(
         async (inputValue: string): Promise<UserContact[]> => {
@@ -129,8 +134,20 @@ const ActivityFeedV2 = ({
         [],
     );
 
-    const [mentionMe, setMentionMe] = React.useState(false);
-    const [showResolved, setShowResolved] = React.useState(false);
+    const [localShowOnlyMentionsMe, setLocalShowOnlyMentionsMe] = React.useState(false);
+    const [localShowResolved, setLocalShowResolved] = React.useState(false);
+    const showOnlyMentionsMe = showOnlyMentionsMeProp ?? localShowOnlyMentionsMe;
+    const showResolved = showResolvedProp ?? localShowResolved;
+
+    const handleShowOnlyMentionsMeChange = (checked: boolean) => {
+        if (showOnlyMentionsMeProp === undefined) setLocalShowOnlyMentionsMe(checked);
+        onShowOnlyMentionsMeChange?.(checked);
+    };
+    const handleShowResolvedChange = (checked: boolean) => {
+        if (showResolvedProp === undefined) setLocalShowResolved(checked);
+        onShowResolvedChange?.(checked);
+    };
+
     const [isTaskFormOpen, setIsTaskFormOpen] = React.useState(false);
     const [taskType, setTaskType] = React.useState<string>(TASK_TYPE_APPROVAL);
     const [taskError, setTaskError] = React.useState<Error | null>(null);
@@ -156,7 +173,7 @@ const ActivityFeedV2 = ({
             if ((item.type === 'comment' || item.type === 'annotation') && item.isResolved && !showResolved) {
                 return false;
             }
-            if (mentionMe && currentUserId) {
+            if (showOnlyMentionsMe && currentUserId) {
                 if (item.type === 'comment' || item.type === 'annotation') {
                     const hasMention = item.messages.some(msg =>
                         msg.message?.content?.some(
@@ -178,7 +195,30 @@ const ActivityFeedV2 = ({
             }
             return true;
         });
-    }, [currentUserId, mentionMe, showResolved, transformedItems]);
+    }, [currentUserId, showOnlyMentionsMe, showResolved, transformedItems]);
+
+    React.useEffect(() => {
+        const alreadyScrolledToThisEntry = scrolledEntryIdRef.current === activeFeedEntryId;
+        if (!activeFeedEntryId || !scrollHandle || alreadyScrolledToThisEntry) {
+            return;
+        }
+        const didScroll = scrollHandle.scrollTo(activeFeedEntryId);
+        if (didScroll) {
+            scrolledEntryIdRef.current = activeFeedEntryId;
+        }
+    }, [activeFeedEntryId, filteredItems, scrollHandle]);
+
+    React.useEffect(() => {
+        const hasDeepLink = Boolean(activeFeedEntryId);
+        if (hasScrolledToEndRef.current || hasDeepLink || !scrollHandle || filteredItems.length === 0) {
+            return;
+        }
+        const lastItemId = filteredItems[filteredItems.length - 1].id;
+        const didScroll = scrollHandle.scrollTo(lastItemId);
+        if (didScroll) {
+            hasScrolledToEndRef.current = true;
+        }
+    }, [activeFeedEntryId, filteredItems, scrollHandle]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -203,12 +243,12 @@ const ActivityFeedV2 = ({
                         <ActivityFeed.Header.FilterMenu>
                             <ActivityFeed.Header.ShowResolvedOption
                                 checked={showResolved}
-                                onCheckedChange={setShowResolved}
+                                onCheckedChange={handleShowResolvedChange}
                             />
                             <ActivityFeed.Header.MentionMeOption
-                                checked={mentionMe}
+                                checked={showOnlyMentionsMe}
                                 hasTasks={hasTasks}
-                                onCheckedChange={setMentionMe}
+                                onCheckedChange={handleShowOnlyMentionsMeChange}
                             />
                         </ActivityFeed.Header.FilterMenu>
                         {hasTasks && (
@@ -231,12 +271,16 @@ const ActivityFeedV2 = ({
                                     currentUserId={currentUserId}
                                     isDisabled={isDisabled}
                                     item={item}
+                                    onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}
+                                    onAnnotationEdit={onAnnotationEdit}
                                     onAnnotationSelect={onAnnotationSelect}
                                     onAnnotationStatusChange={onAnnotationStatusChange}
+                                    onCommentCopyLink={onCommentCopyLink}
                                     onCommentDelete={onCommentDelete}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
+                                    onReplyUpdate={onReplyUpdate}
                                     onTaskDelete={onTaskDelete}
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}
