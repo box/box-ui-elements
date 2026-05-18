@@ -56,6 +56,11 @@ export type AnnotationPermission = {
     can_resolve?: boolean,
 };
 
+export type Resolution = {
+    resolved_at?: string | null,
+    resolved_by?: User | null,
+};
+
 export type Annotation = {
     created_at: string,
     created_by: User,
@@ -69,6 +74,7 @@ export type Annotation = {
     modified_by: User,
     permissions: AnnotationPermission,
     replies?: Array<Comment>,
+    resolution?: Resolution | null,
     status?: FeedItemStatus,
     target: Target,
     total_reply_count?: number,

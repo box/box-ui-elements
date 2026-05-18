@@ -507,7 +507,33 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result!.type).toBe('app_activity');
         });
 
-        test('should set isResolved true for resolved comments', () => {
+        test('should set isResolved, resolvedBy, and resolvedAt for resolved comments from the resolution field', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'Author', type: 'user' },
+                id: 'c1',
+                message: '',
+                modified_at: '2024-01-02T00:00:00Z',
+                modified_by: { id: '2', name: 'Editor', type: 'user' },
+                permissions: {},
+                resolution: {
+                    resolved_at: '2024-01-03T00:00:00Z',
+                    resolved_by: { id: '3', name: 'Resolver', type: 'user' },
+                },
+                status: 'resolved',
+                tagged_message: 'Resolved comment',
+                type: 'comment',
+            };
+            const result = transformFeedItem(comment as unknown as FeedItem);
+            expect(result!.type).toBe('comment');
+            if (result!.type === 'comment') {
+                expect(result!.isResolved).toBe(true);
+                expect(result!.resolvedBy).toBe('Resolver');
+                expect(result!.resolvedAt).toBe(new Date('2024-01-03T00:00:00Z').getTime());
+            }
+        });
+
+        test('should leave resolvedBy and resolvedAt undefined when a resolved comment has no resolution field', () => {
             const comment = {
                 created_at: '2024-01-01T00:00:00Z',
                 created_by: { id: '1', name: 'User', type: 'user' },
@@ -523,6 +549,35 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result!.type).toBe('comment');
             if (result!.type === 'comment') {
                 expect(result!.isResolved).toBe(true);
+                expect(result!.resolvedBy).toBeUndefined();
+                expect(result!.resolvedAt).toBeUndefined();
+            }
+        });
+
+        test('should set resolvedBy and resolvedAt for resolved annotations from the resolution field', () => {
+            const annotation = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'Author', type: 'user' },
+                description: { message: 'Annotation' },
+                file_version: { id: 'fv1', type: 'version', version_number: '1' },
+                id: 'a1',
+                modified_at: '2024-01-02T00:00:00Z',
+                modified_by: { id: '2', name: 'Editor', type: 'user' },
+                permissions: {},
+                resolution: {
+                    resolved_at: '2024-01-03T00:00:00Z',
+                    resolved_by: { id: '3', name: 'Resolver', type: 'user' },
+                },
+                status: 'resolved',
+                target: { location: { type: 'page', value: 1 }, type: 'point', x: 0, y: 0 },
+                type: 'annotation',
+            };
+            const result = transformFeedItem(annotation as unknown as FeedItem);
+            expect(result!.type).toBe('annotation');
+            if (result!.type === 'annotation') {
+                expect(result!.isResolved).toBe(true);
+                expect(result!.resolvedBy).toBe('Resolver');
+                expect(result!.resolvedAt).toBe(new Date('2024-01-03T00:00:00Z').getTime());
             }
         });
     });
