@@ -133,8 +133,8 @@
         "@box/cldr-data": "^34.2.0",
         "@box/collaboration-popover": "^1.62.3",
         "@box/combobox-with-api": "^1.42.22",
-        "@box/copy-input": "^1.42.5",
         "@box/content-field": "^1.40.23",
+        "@box/copy-input": "^1.42.5",
         "@box/frontend": "^11.0.1",
         "@box/item-icon": "^2.32.14",
         "@box/languages": "^1.0.0",
@@ -289,7 +289,7 @@
         "webpack": "^5.105.4",
         "webpack-bundle-analyzer": "^4.10.2",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.2.3"
+        "webpack-dev-server": "^5.2.4"
     },
     "peerDependencies": {
         "@box/activity-feed": "^1.19.4",
@@ -301,8 +301,8 @@
         "@box/cldr-data": ">=34.2.0",
         "@box/collaboration-popover": "^1.62.3",
         "@box/combobox-with-api": "^1.42.22",
-        "@box/copy-input": "^1.42.5",
         "@box/content-field": "^1.40.23",
+        "@box/copy-input": "^1.42.5",
         "@box/item-icon": "^2.32.14",
         "@box/metadata-editor": "^1.69.6",
         "@box/metadata-filter": "^1.80.23",
