@@ -1178,15 +1178,25 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^1.69.6":
-  version "1.69.6"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.69.6.tgz#56a0f185e4e5b64807b32e8c155812bead8b6598"
-  integrity sha512-pVQD0FyabgpIchYBpVbi44iMz+wzRVW5YeP0FslbfHMpCGJL9lABWWN0aBp68CXRXJbSZXr/4YQUQJ0YsmRmoA==
+"@box/metadata-editor@^1.70.12":
+  version "1.70.16"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.70.16.tgz#14cf1b5f493362e40a5b0a170563b11fa4ad0b83"
+  integrity sha512-skwir9zTUBrx0at0+Txj8+xDQ2P0py7j+iljbpGJl5eVZH/Ha91sFjL+eM69I9AxBeauW9p2LXM7ufKO2qtzfw==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
+
+"@box/metadata-template-browser@^1.21.24":
+  version "1.21.24"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-1.21.24.tgz#28952afb6e69117f85d218453553120c8fc33696"
+  integrity sha512-zzsIhMqZkmzaAYqzjBqb1jYgh4PpfzNFGnFPHB2ZglDjJDdpw5EKHlIT39FKQHPFZEInsnD0xpmjq1e8PDIq1g==
+
+"@box/metadata-template-editor@^1.21.3":
+  version "1.24.7"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-1.24.7.tgz#5ac77aee08d63ca22da0f580185044204ab9b5f5"
+  integrity sha512-eRRRA3GkLSZR1l7A5sBHSeUegj7tiixPnXep3ngBAgotArHV4bJA3kQtXA3+in15LXBM5I9t0cz2E4EtT75mog==
 
 "@box/metadata-view@^1.53.26":
   version "1.53.26"
@@ -1530,6 +1540,37 @@
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
+
+"@dnd-kit/accessibility@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/accessibility/-/accessibility-3.1.1.tgz#3b4202bd6bb370a0730f6734867785919beac6af"
+  integrity sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==
+  dependencies:
+    tslib "^2.0.0"
+
+"@dnd-kit/core@^6.1.0":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-6.3.1.tgz#4c36406a62c7baac499726f899935f93f0e6d003"
+  integrity sha512-xkGBRQQab4RLwgXxoqETICr6S5JlogafbhNsidmrkVv2YRs5MLwpjoF2qpiGjQt8S9AoxtIV603s0GIUpY5eYQ==
+  dependencies:
+    "@dnd-kit/accessibility" "^3.1.1"
+    "@dnd-kit/utilities" "^3.2.2"
+    tslib "^2.0.0"
+
+"@dnd-kit/sortable@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-8.0.0.tgz#086b7ac6723d4618a4ccb6f0227406d8a8862a96"
+  integrity sha512-U3jk5ebVXe1Lr7c2wU7SBZjcWdQP+j7peHJfCspnA81enlu88Mgd7CC8Q+pub9ubP7eKVETzJW+IBAhsqbSu/g==
+  dependencies:
+    "@dnd-kit/utilities" "^3.2.2"
+    tslib "^2.0.0"
+
+"@dnd-kit/utilities@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/utilities/-/utilities-3.2.2.tgz#5a32b6af356dc5f74d61b37d6f7129a4040ced7b"
+  integrity sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==
+  dependencies:
+    tslib "^2.0.0"
 
 "@dual-bundle/import-meta-resolve@^4.2.1":
   version "4.2.1"

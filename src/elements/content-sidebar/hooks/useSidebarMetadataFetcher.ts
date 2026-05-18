@@ -19,6 +19,7 @@ import {
     ERROR_CODE_UNKNOWN,
     ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
+    FIELD_OWNED_BY,
     FIELD_PERMISSIONS_CAN_UPLOAD,
     FIELD_PERMISSIONS,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
@@ -311,7 +312,7 @@ function useSidebarMetadataFetcher(
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
             api.getFileAPI().getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
-                fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
+                fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_OWNED_BY, FIELD_PERMISSIONS],
                 refreshCache: true,
             });
         }

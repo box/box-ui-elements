@@ -8,7 +8,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
-    AddMetadataTemplateDropdown,
     AutofillContextProvider,
     FilterInstancesDropdown,
     MetadataEmptyState,
@@ -41,12 +40,16 @@ import { type WithLoggerProps } from '../../common/types/logging';
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
+import MetadataTemplateDropdown from './MetadataTemplateDropdown';
+import { MOCK_ENTERPRISE_ID } from './constants/mockMetadataTemplateNamespaces';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
+import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
+import useMockCreatedTemplates from './hooks/useMockCreatedTemplates';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -120,6 +123,7 @@ function MetadataSidebarRedesign({
         'metadata.deleteConfirmationModalCheckbox.enabled',
     );
     const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
+    const isMetadataTemplateManagementEnabled: boolean = useFeatureEnabled('metadata.templateManagement.enabled');
 
     const {
         clearExtractError,
@@ -142,6 +146,10 @@ function MetadataSidebarRedesign({
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState<boolean>(false);
     const [shouldShowOnlyReviewFields, setShouldShowOnlyReviewFields] = useState<boolean>(false);
+    // The template dropdown is controlled so the host can dismiss it when the
+    // user escalates to the template editor modal or finishes a selection.
+    // Fresh data is fetched via `itemsService.getTemplates` on every reopen.
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const { selectedMetadataFieldId, handleSelectMetadataField } = useMetadataFieldSelection(getPreview);
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
@@ -204,6 +212,7 @@ function MetadataSidebarRedesign({
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         clearExtractError();
+        setIsDropdownOpen(false);
 
         if (editingTemplate) {
             setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
@@ -279,11 +288,42 @@ function MetadataSidebarRedesign({
 
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
+    // Mocked while the real enterprise FQN is not yet plumbed through the
+    // metadata API contract; pinned to the same constant the mock namespaces
+    // are prefixed with so breadcrumb back-navigation hits the level cache.
+    const enterpriseId = MOCK_ENTERPRISE_ID;
+
+    // Hardcoded until the metadata template management permission is exposed
+    // on the file/enterprise context — at which point this becomes a real
+    // permission read instead of a constant.
+    const canCreateAtRoot = true;
+
+    const { browserTemplatesByNamespace, editorTemplatesById, appendCreatedTemplate } = useMockCreatedTemplates();
+    const { openCreate: openCreateTemplate, modal: templateEditorModal } = useMetadataTemplateEditor({
+        onCreate: appendCreatedTemplate,
+    });
+
+    const handleCreateTemplate = useCallback(
+        (namespaceFqn: string) => {
+            setIsDropdownOpen(false);
+            openCreateTemplate(namespaceFqn);
+        },
+        [openCreateTemplate],
+    );
+
     const metadataDropdown = isSuccess && templates && (
-        <AddMetadataTemplateDropdown
-            availableTemplates={templates}
-            selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
+        <MetadataTemplateDropdown
+            browserTemplatesByNamespace={browserTemplatesByNamespace}
+            canCreateAtRoot={canCreateAtRoot}
+            editorTemplatesById={editorTemplatesById}
+            enterpriseId={enterpriseId}
+            isMetadataTemplateManagementEnabled={isMetadataTemplateManagementEnabled}
+            onCreateTemplate={handleCreateTemplate}
+            onOpenChange={setIsDropdownOpen}
             onSelect={handleTemplateSelect}
+            open={isDropdownOpen}
+            selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
+            templates={templates}
         />
     );
 
@@ -328,73 +368,79 @@ function MetadataSidebarRedesign({
     }, [createSessionRequest, fileId]);
 
     return (
-        <SidebarContent
-            actions={metadataDropdown}
-            className={'bcs-MetadataSidebarRedesign'}
-            elementId={elementId}
-            sidebarView={SIDEBAR_VIEW_METADATA}
-            title={formatMessage(messages.sidebarMetadataTitle)}
-            subheader={filterDropdown}
-        >
-            <div className="bcs-MetadataSidebarRedesign-content">
-                {errorMessageDisplay}
-                {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
-                {showEmptyState && (
-                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
-                )}
-                <AutofillContextProvider
-                    fetchSuggestions={extractSuggestions}
-                    isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                >
-                    {editingTemplate && (
-                        <MetadataInstanceEditor
-                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                            errorCode={extractErrorCode}
-                            isBetaLanguageEnabled={isBetaLanguageEnabled}
-                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                            isDeleteButtonDisabled={isDeleteButtonDisabled}
-                            isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
-                            isLargeFile={isLargeFile}
-                            isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
-                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                            onCancel={handleCancel}
-                            onDelete={handleDeleteInstance}
-                            onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
-                            onSubmit={handleSubmit}
-                            onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
-                            setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
-                            shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
-                            taxonomyOptionsFetcher={taxonomyOptionsFetcher}
-                            template={editingTemplate}
-                            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
-                            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
-                            onSelectMetadataField={handleSelectMetadataField}
-                            selectedMetadataFieldId={selectedMetadataFieldId}
-                            trackEvent={trackEvent}
+        <>
+            {templateEditorModal}
+            <SidebarContent
+                actions={metadataDropdown}
+                className={'bcs-MetadataSidebarRedesign'}
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_METADATA}
+                title={formatMessage(messages.sidebarMetadataTitle)}
+                subheader={filterDropdown}
+            >
+                <div className="bcs-MetadataSidebarRedesign-content">
+                    {errorMessageDisplay}
+                    {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
+                    {showEmptyState && (
+                        <MetadataEmptyState
+                            level={'file'}
+                            isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         />
                     )}
-                    {showList && (
-                        <MetadataInstanceList
-                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
-                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                            isBetaLanguageEnabled={isBetaLanguageEnabled}
-                            onEdit={(templateInstance, shouldEnableReviewFilter = false) => {
-                                setEditingTemplate(templateInstance);
-                                setIsDeleteButtonDisabled(false);
-                                setShouldShowOnlyReviewFields(shouldEnableReviewFilter);
-                            }}
-                            onSelectMetadataField={handleSelectMetadataField}
-                            selectedMetadataFieldId={selectedMetadataFieldId}
-                            templateInstances={templateInstancesList}
-                            taxonomyNodeFetcher={taxonomyNodeFetcher}
-                            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
-                            trackEvent={trackEvent}
-                        />
-                    )}
-                </AutofillContextProvider>
-            </div>
-        </SidebarContent>
+                    <AutofillContextProvider
+                        fetchSuggestions={extractSuggestions}
+                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                    >
+                        {editingTemplate && (
+                            <MetadataInstanceEditor
+                                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                                errorCode={extractErrorCode}
+                                isBetaLanguageEnabled={isBetaLanguageEnabled}
+                                isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                                isDeleteButtonDisabled={isDeleteButtonDisabled}
+                                isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
+                                isLargeFile={isLargeFile}
+                                isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
+                                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                                onCancel={handleCancel}
+                                onDelete={handleDeleteInstance}
+                                onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
+                                onSubmit={handleSubmit}
+                                onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
+                                setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
+                                shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
+                                taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+                                template={editingTemplate}
+                                isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+                                isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                                onSelectMetadataField={handleSelectMetadataField}
+                                selectedMetadataFieldId={selectedMetadataFieldId}
+                                trackEvent={trackEvent}
+                            />
+                        )}
+                        {showList && (
+                            <MetadataInstanceList
+                                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                                isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+                                isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                                isBetaLanguageEnabled={isBetaLanguageEnabled}
+                                onEdit={(templateInstance, shouldEnableReviewFilter = false) => {
+                                    setEditingTemplate(templateInstance);
+                                    setIsDeleteButtonDisabled(false);
+                                    setShouldShowOnlyReviewFields(shouldEnableReviewFilter);
+                                }}
+                                onSelectMetadataField={handleSelectMetadataField}
+                                selectedMetadataFieldId={selectedMetadataFieldId}
+                                templateInstances={templateInstancesList}
+                                taxonomyNodeFetcher={taxonomyNodeFetcher}
+                                isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                                trackEvent={trackEvent}
+                            />
+                        )}
+                    </AutofillContextProvider>
+                </div>
+            </SidebarContent>
+        </>
     );
 }
 
