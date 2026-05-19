@@ -253,10 +253,8 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 messages: transformCommentToMessages(comment),
                 originalText: comment.tagged_message || comment.message || '',
                 permissions: comment.permissions ?? {},
-                resolvedAt: commentIsResolved ? toUnixMs(comment.modified_at) : undefined,
-                resolvedBy: commentIsResolved
-                    ? (comment as unknown as { modified_by?: { name?: string } }).modified_by?.name
-                    : undefined,
+                resolvedAt: commentIsResolved ? toUnixMs(comment.resolution?.resolved_at) : undefined,
+                resolvedBy: commentIsResolved ? comment.resolution?.resolved_by?.name : undefined,
                 status: comment.status,
                 type: 'comment',
             };
@@ -270,8 +268,8 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 isResolved: annotationIsResolved,
                 messages: transformAnnotationToMessages(annotation),
                 permissions: annotation.permissions ?? {},
-                resolvedAt: annotationIsResolved ? toUnixMs(annotation.modified_at) : undefined,
-                resolvedBy: annotationIsResolved ? annotation.modified_by?.name : undefined,
+                resolvedAt: annotationIsResolved ? toUnixMs(annotation.resolution?.resolved_at) : undefined,
+                resolvedBy: annotationIsResolved ? annotation.resolution?.resolved_by?.name : undefined,
                 status: annotation.status,
                 type: 'annotation',
             };
