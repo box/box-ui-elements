@@ -6,6 +6,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
+import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import DroppableContent from './DroppableContent';
@@ -1297,55 +1298,68 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             be: !useUploadsManager,
         });
 
+        const renderUploader = () => {
+            if (enableModernizedUploads) {
+                return (
+                    <div ref={measureRef} className={styleClassName} id={this.id}>
+                        <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                        <UploadsManagerBP items={[]} />
+                    </div>
+                );
+            }
+
+            if (useUploadsManager) {
+                return (
+                    <div ref={measureRef} className={styleClassName} id={this.id}>
+                        <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                        <UploadsManager
+                            isDragging={isDraggingItemsToUploadsManager}
+                            isExpanded={isUploadsManagerExpanded}
+                            isResumableUploadsEnabled={isResumableUploadsEnabled}
+                            isVisible={isVisible}
+                            items={items}
+                            onItemActionClick={this.onClick}
+                            onRemoveActionClick={this.removeFileFromUploadQueue}
+                            onUpgradeCTAClick={onUpgradeCTAClick}
+                            onUploadsManagerActionClick={this.clickAllWithStatus}
+                            toggleUploadsManager={this.toggleUploadsManager}
+                            view={view}
+                        />
+                    </div>
+                )
+            }
+ 
+            return (
+                <div ref={measureRef} className={styleClassName} id={this.id}>
+                    <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                    <DroppableContent
+                        addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
+                        addFiles={this.addFilesToUploadQueue}
+                        allowedTypes={['Files']}
+                        isFolderUploadEnabled={isFolderUploadEnabled}
+                        isTouch={isTouch}
+                        items={items}
+                        onClick={this.onClick}
+                        view={view}
+                    />
+                    <Footer
+                        errorCode={errorCode}
+                        fileLimit={fileLimit}
+                        hasFiles={hasFiles}
+                        isLoading={isLoading}
+                        onCancel={this.cancel}
+                        onClose={onClose}
+                        onUpload={this.upload}
+                        isDone={isDone}
+                    />
+                </div>
+            )
+        }
+
         return (
             <Internationalize language={language} messages={messages}>
                 <TooltipProvider>
-                    {enableModernizedUploads ? (
-                        <div ref={measureRef} className={styleClassName} id={this.id}>
-                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        </div>
-                    ) : useUploadsManager ? (
-                        <div ref={measureRef} className={styleClassName} id={this.id}>
-                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                            <UploadsManager
-                                isDragging={isDraggingItemsToUploadsManager}
-                                isExpanded={isUploadsManagerExpanded}
-                                isResumableUploadsEnabled={isResumableUploadsEnabled}
-                                isVisible={isVisible}
-                                items={items}
-                                onItemActionClick={this.onClick}
-                                onRemoveActionClick={this.removeFileFromUploadQueue}
-                                onUpgradeCTAClick={onUpgradeCTAClick}
-                                onUploadsManagerActionClick={this.clickAllWithStatus}
-                                toggleUploadsManager={this.toggleUploadsManager}
-                                view={view}
-                            />
-                        </div>
-                    ) : (
-                        <div ref={measureRef} className={styleClassName} id={this.id}>
-                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                            <DroppableContent
-                                addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
-                                addFiles={this.addFilesToUploadQueue}
-                                allowedTypes={['Files']}
-                                isFolderUploadEnabled={isFolderUploadEnabled}
-                                isTouch={isTouch}
-                                items={items}
-                                onClick={this.onClick}
-                                view={view}
-                            />
-                            <Footer
-                                errorCode={errorCode}
-                                fileLimit={fileLimit}
-                                hasFiles={hasFiles}
-                                isLoading={isLoading}
-                                onCancel={this.cancel}
-                                onClose={onClose}
-                                onUpload={this.upload}
-                                isDone={isDone}
-                            />
-                        </div>
-                    )}
+                    {renderUploader()}
                 </TooltipProvider>
             </Internationalize>
         );
