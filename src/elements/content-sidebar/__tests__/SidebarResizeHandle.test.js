@@ -115,4 +115,23 @@ describe('elements/content-sidebar/SidebarResizeHandle', () => {
         expect(removeSpy).toHaveBeenCalledWith('pointerup', expect.any(Function));
         removeSpy.mockRestore();
     });
+
+    test('calls onResizeEnd with final width on pointerup', () => {
+        const onResize = jest.fn();
+        const onResizeEnd = jest.fn();
+        render(<SidebarResizeHandle {...defaultProps} onResize={onResize} onResizeEnd={onResizeEnd} width={400} />);
+        const handle = screen.getByTestId('sidebar-resize-handle');
+
+        fireEvent(
+            handle,
+            Object.assign(new MouseEvent('pointerdown', { bubbles: true, clientX: 1000 }), { pointerId: 1 }),
+        );
+        dispatchWindowPointer('pointermove', { clientX: 950, pointerId: 1 });
+
+        act(() => {
+            dispatchWindowPointer('pointerup', { clientX: 950, pointerId: 1 });
+        });
+
+        expect(onResizeEnd).toHaveBeenCalledWith(450);
+    });
 });

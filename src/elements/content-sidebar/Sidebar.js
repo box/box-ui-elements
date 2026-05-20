@@ -92,6 +92,7 @@ export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
 export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
 export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 export const SIDEBAR_SELECTED_PANEL_KEY: 'sidebar-selected-panel' = 'sidebar-selected-panel';
+export const SIDEBAR_WIDTH_KEY: 'bcs.sidebar.width' = 'bcs.sidebar.width';
 
 // Default widths mirror the hardcoded SCSS values ($sidebarTabsWidth + $sidebarContent[Increased]Width).
 // When the resizable feature flag is on, these become the minimum drag-to-resize widths.
@@ -122,9 +123,10 @@ class Sidebar extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
+        const persistedWidth = this.store.getItem(SIDEBAR_WIDTH_KEY);
         this.state = {
             isDirty: this.getLocationState('open') || false,
-            width: null,
+            width: typeof persistedWidth === 'number' ? persistedWidth : null,
         };
 
         this.setForcedByLocation();
@@ -140,6 +142,10 @@ class Sidebar extends React.Component<Props, State> {
 
     handleResize = (width: number): void => {
         this.setState({ width });
+    };
+
+    handleResizeEnd = (width: number): void => {
+        this.store.setItem(SIDEBAR_WIDTH_KEY, width);
     };
 
     componentDidMount() {
@@ -386,6 +392,7 @@ class Sidebar extends React.Component<Props, State> {
                         maxWidth={maxWidth}
                         minWidth={minWidth}
                         onResize={this.handleResize}
+                        onResizeEnd={this.handleResizeEnd}
                         width={currentWidth}
                     />
                 )}

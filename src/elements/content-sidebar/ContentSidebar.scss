@@ -27,6 +27,11 @@ $sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
             &.bcs-is-wider {
                 min-width: $sidebarIncreasedWidth;
             }
+
+            // Federated module panels use CSS Modules (hashed class names), so target by attribute
+            [role='tabpanel'] {
+                width: 100%;
+            }
         }
     }
 
