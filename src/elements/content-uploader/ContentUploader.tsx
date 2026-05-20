@@ -12,6 +12,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
+import { mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -1220,6 +1221,28 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Find legacy UploadItem by the id used by the modernized uploads manager.
+     */
+    findItemByModernizedId = (id: string): UploadItem | undefined => {
+        const { rootFolderId } = this.props;
+        return this.state.items.find(item => getFileId(item.file, rootFolderId) === id);
+    };
+
+    handleModernizedItemAction = (id: string) => {
+        const item = this.findItemByModernizedId(id);
+        if (item) {
+            this.onClick(item);
+        }
+    };
+
+    handleModernizedItemRemove = (id: string) => {
+        const item = this.findItemByModernizedId(id);
+        if (item) {
+            this.removeFileFromUploadQueue(item);
+        }
+    };
+
+    /**
      * Empties the items queue
      *
      * @return {void}
@@ -1282,6 +1305,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             messages,
             onClose,
             onUpgradeCTAClick,
+            rootFolderId,
             theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
@@ -1303,7 +1327,14 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        <UploadsManagerBP items={[]} />
+                        <UploadsManagerBP
+                            items={mapToModernizedUploadItems(items, rootFolderId)}
+                            isExpanded={isUploadsManagerExpanded}
+                            onToggle={this.toggleUploadsManager}
+                            onItemCancel={this.handleModernizedItemAction}
+                            onItemRetry={this.handleModernizedItemAction}
+                            onItemRemove={this.handleModernizedItemRemove}
+                        />
                     </div>
                 );
             }

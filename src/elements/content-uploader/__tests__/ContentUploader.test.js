@@ -6,6 +6,7 @@ import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../Cont
 import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
+import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import {
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
@@ -772,16 +773,93 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
             });
 
-            test('should render modernized uploads placeholder when enableModernizedUploads is true', () => {
+            test('should render modernized UploadsManagerBP when enableModernizedUploads is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
             });
 
-            test('should render modernized uploads placeholder even when useUploadsManager is true', () => {
+            test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
-                expect(wrapper.find(DroppableContent)).toHaveLength(0);
+            });
+
+            test('should map state.items to modernized item shape', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                wrapper.setState({
+                    items: [
+                        {
+                            name: 'foo.pdf',
+                            extension: 'pdf',
+                            progress: 42,
+                            status: STATUS_IN_PROGRESS,
+                            file: { name: 'foo.pdf' },
+                        },
+                    ],
+                });
+                const items = wrapper.find(UploadsManagerBP).prop('items');
+                expect(items).toHaveLength(1);
+                expect(items[0]).toMatchObject({
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 42,
+                    status: 'uploading',
+                });
+            });
+
+            test('should pass isExpanded from state', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                wrapper.setState({ isUploadsManagerExpanded: true });
+                expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+            });
+
+            test('should call onClick when onItemCancel is invoked', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const item = {
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    file: { name: 'foo.pdf' },
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
+
+                expect(onClickSpy).toHaveBeenCalledWith(item);
+            });
+
+            test('should call removeFileFromUploadQueue when onItemRemove is invoked', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const item = {
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_COMPLETE,
+                    file: { name: 'foo.pdf' },
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                const removeSpy = jest.spyOn(instance, 'removeFileFromUploadQueue').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onItemRemove')('foo.pdf');
+
+                expect(removeSpy).toHaveBeenCalledWith(item);
+            });
+
+            test('should no-op when modernized id does not match any item', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                wrapper.setState({ items: [] });
+                const instance = wrapper.instance();
+                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')('missing-id');
+
+                expect(onClickSpy).not.toHaveBeenCalled();
             });
         });
     });
