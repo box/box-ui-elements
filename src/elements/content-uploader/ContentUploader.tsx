@@ -104,6 +104,7 @@ export interface ContentUploaderProps {
     token?: Token;
     uploadHost: string;
     useUploadsManager?: boolean;
+    enableModernizedUploads?: boolean;
 }
 
 type State = {
@@ -169,6 +170,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         rootFolderId: DEFAULT_ROOT,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         useUploadsManager: false,
+        enableModernizedUploads: false,
     };
 
     /**
@@ -1268,6 +1270,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     render() {
         const {
             className,
+            enableModernizedUploads,
             fileLimit,
             isDraggingItemsToUploadsManager = false,
             isFolderUploadEnabled,
@@ -1297,7 +1300,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <TooltipProvider>
-                    {useUploadsManager ? (
+                    {enableModernizedUploads ? (
+                        <div ref={measureRef} className={styleClassName} id={this.id}>
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                        </div>
+                    ) : useUploadsManager ? (
                         <div ref={measureRef} className={styleClassName} id={this.id}>
                             <ThemingStyles selector={`#${this.id}`} theme={theme} />
                             <UploadsManager
