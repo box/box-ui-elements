@@ -1,4 +1,9 @@
-import { convertTimestampToSeconds, convertMillisecondsToHMMSS, convertSecondsToHMMSS } from '../timestamp';
+import {
+    convertMillisecondsToHMMSS,
+    convertMillisecondsToTimestamp,
+    convertSecondsToHMMSS,
+    convertTimestampToSeconds,
+} from '../timestamp';
 
 describe('utils/timestamp', () => {
     describe('convertMillisecondsToHMMSS', () => {
@@ -59,6 +64,27 @@ describe('utils/timestamp', () => {
             expect(convertTimestampToSeconds('')).toBe(0);
             expect(convertTimestampToSeconds('abc')).toBe(0);
             expect(convertTimestampToSeconds(undefined)).toBe(0);
+        });
+    });
+
+    describe('convertMillisecondsToTimestamp', () => {
+        test('should format sub-hour durations as M:SS', () => {
+            expect(convertMillisecondsToTimestamp(0)).toBe('0:00');
+            expect(convertMillisecondsToTimestamp(1000)).toBe('0:01');
+            expect(convertMillisecondsToTimestamp(4623)).toBe('0:04');
+            expect(convertMillisecondsToTimestamp(60000)).toBe('1:00');
+            expect(convertMillisecondsToTimestamp(3599999)).toBe('59:59');
+        });
+
+        test('should format hour-or-longer durations as H:MM:SS', () => {
+            expect(convertMillisecondsToTimestamp(3600000)).toBe('1:00:00');
+            expect(convertMillisecondsToTimestamp(3661000)).toBe('1:01:01');
+            expect(convertMillisecondsToTimestamp(90061000)).toBe('25:01:01');
+        });
+
+        test('should handle invalid input', () => {
+            expect(convertMillisecondsToTimestamp(NaN)).toBe('0:00');
+            expect(convertMillisecondsToTimestamp(-1)).toBe('0:00');
         });
     });
 
