@@ -13,6 +13,7 @@ import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
 import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
+import CancelAllUploadsModal from './CancelAllUploadsModal';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -113,6 +114,7 @@ export interface ContentUploaderProps {
 
 type State = {
     errorCode?: string;
+    isCancelAllModalOpen: boolean;
     isUploadsManagerExpanded: boolean;
     itemIds: Object;
     items: UploadItem[];
@@ -191,6 +193,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             items: [],
             errorCode: '',
             itemIds: {},
+            isCancelAllModalOpen: false,
             isUploadsManagerExpanded: false,
         };
         this.id = uniqueid('bcu_');
@@ -1207,6 +1210,24 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Open the Cancel All confirmation modal. Wired as the onCancelAll prop
+     * passed to the modernized uploads manager so the action requires explicit
+     * confirmation before destroying in-progress uploads.
+     */
+    handleCancelAllRequest = () => {
+        this.setState({ isCancelAllModalOpen: true });
+    };
+
+    handleCancelAllDismiss = () => {
+        this.setState({ isCancelAllModalOpen: false });
+    };
+
+    handleCancelAllConfirm = () => {
+        this.setState({ isCancelAllModalOpen: false });
+        this.handleUploadsManagerCancelAll();
+    };
+
+    /**
      * Cancel every pending or in-progress upload at once. Items keep their row
      * in the list with the canceled status. Only used by the modernized flow.
      */
@@ -1434,7 +1455,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
-        const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
+        const { view, items, errorCode, isCancelAllModalOpen, isUploadsManagerExpanded }: State = this.state;
         const isEmpty = items.length === 0;
         const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
 
@@ -1459,8 +1480,13 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onItemCancel={this.handleUploadsManagerItemCancel}
                             onItemRetry={this.handleUploadsManagerItemRetry}
                             onItemRemove={this.handleUploadsManagerItemRemove}
-                            onCancelAll={this.handleUploadsManagerCancelAll}
+                            onCancelAll={this.handleCancelAllRequest}
                             onRetryAll={this.handleUploadsManagerRetryAll}
+                        />
+                        <CancelAllUploadsModal
+                            isOpen={isCancelAllModalOpen}
+                            onConfirm={this.handleCancelAllConfirm}
+                            onDismiss={this.handleCancelAllDismiss}
                         />
                     </div>
                 );
