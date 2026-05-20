@@ -3,6 +3,11 @@
 
 @mixin font-family {
     font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    &:where(body.is-comic-sans),
+    :where(body.is-comic-sans) & {
+        font-family: 'Comic Sans MS', cursive;
+    }
 }
 
 @mixin font-aliasing {

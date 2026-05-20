@@ -2,6 +2,7 @@
 @import '../../styles/inputs';
 
 $font: lato, 'Helvetica Neue', helvetica, arial, sans-serif;
+$fontComicSans: 'Comic Sans MS', cursive;
 $minimumWidth: 300px;
 $sidebarHeaderHeight: 60px;
 $sidebarSubHeaderHeight: 56px;
@@ -27,6 +28,10 @@ $sidebarTabResponsiveSize: 48px;
     font-size: 13px;
     /* stylelint-enable declaration-no-important */
     font-family: $font;
+
+    :where(body.is-comic-sans) & {
+        font-family: $fontComicSans;
+    }
 
     * {
         @include rendering;
@@ -54,4 +59,8 @@ $sidebarTabResponsiveSize: 48px;
     // Firefox sets opacity for placeholder to less than 100%
     // See https://developer.mozilla.org/en-US/docs/Web/CSS/::placeholder#opaque_text
     opacity: 1;
+
+    :where(body.is-comic-sans) & {
+        font-family: $fontComicSans;
+    }
 }
