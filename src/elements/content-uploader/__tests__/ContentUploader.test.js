@@ -1026,6 +1026,62 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(complete.api.cancel).not.toHaveBeenCalled();
             });
 
+            test('updateViewAndCollection should not fire onComplete when all items are canceled (modernized)', () => {
+                const onComplete = jest.fn();
+                const wrapper = getWrapper({
+                    enableModernizedUploads: true,
+                    useUploadsManager: true,
+                    onComplete,
+                });
+                const instance = wrapper.instance();
+                const canceled = { status: 'canceled' };
+                instance.updateViewAndCollection([
+                    { ...canceled, file: { name: 'a' } },
+                    { ...canceled, file: { name: 'b' } },
+                ]);
+                expect(onComplete).not.toHaveBeenCalled();
+            });
+
+            test('updateViewAndCollection should fire onComplete when at least one item completes (modernized)', () => {
+                const onComplete = jest.fn();
+                const wrapper = getWrapper({
+                    enableModernizedUploads: true,
+                    useUploadsManager: true,
+                    onComplete,
+                });
+                const instance = wrapper.instance();
+                instance.updateViewAndCollection([
+                    { status: STATUS_COMPLETE, file: { name: 'a' } },
+                    { status: 'canceled', file: { name: 'b' } },
+                ]);
+                expect(onComplete).toHaveBeenCalled();
+            });
+
+            test('updateViewAndCollection should treat canceled items as terminal (modernized)', () => {
+                const wrapper = getWrapper({
+                    enableModernizedUploads: true,
+                    useUploadsManager: true,
+                });
+                const instance = wrapper.instance();
+                instance.updateViewAndCollection([
+                    { status: STATUS_COMPLETE, file: { name: 'a' } },
+                    { status: 'canceled', file: { name: 'b' } },
+                ]);
+                expect(wrapper.state('view')).not.toBe(VIEW_UPLOAD_IN_PROGRESS);
+            });
+
+            test('updateViewAndCollection should preserve legacy behavior when modernized flag is off', () => {
+                const onComplete = jest.fn();
+                const wrapper = getWrapper({
+                    enableModernizedUploads: false,
+                    useUploadsManager: true,
+                    onComplete,
+                });
+                const instance = wrapper.instance();
+                instance.updateViewAndCollection([{ status: STATUS_COMPLETE, file: { name: 'a' } }]);
+                expect(onComplete).toHaveBeenCalled();
+            });
+
             test('handleUploadsManagerRetryAll should restart errored and canceled items', () => {
                 const onClickRetry = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onClickRetry });

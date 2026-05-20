@@ -977,19 +977,31 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     updateViewAndCollection(items: UploadItem[], callback?: () => void) {
         const {
+            enableModernizedUploads,
             isPartialUploadEnabled,
             isResumableUploadsEnabled,
             onComplete,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
-        const someUploadIsInProgress = items.some(uploadItem => uploadItem.status !== STATUS_COMPLETE);
+        // When the modernized flow is on, canceled items are kept in the list
+        // but treated as terminal so they do not block completion logic. The
+        // legacy view/state machine sees canceled items as non-COMPLETE which
+        // would otherwise stall progress and emit a stale success notification.
+        const isTerminalForModernized = (uploadItem: UploadItem) =>
+            enableModernizedUploads && uploadItem.status === STATUS_CANCELED;
+        const someUploadIsInProgress = items.some(
+            uploadItem => uploadItem.status !== STATUS_COMPLETE && !isTerminalForModernized(uploadItem),
+        );
         const someUploadHasFailed = items.some(uploadItem => uploadItem.status === STATUS_ERROR);
         const allItemsArePending = !items.some(uploadItem => uploadItem.status !== STATUS_PENDING);
         const noFileIsPendingOrInProgress = items.every(
             uploadItem => uploadItem.status !== STATUS_PENDING && uploadItem.status !== STATUS_IN_PROGRESS,
         );
         const areAllItemsFinished = items.every(
-            uploadItem => uploadItem.status === STATUS_COMPLETE || uploadItem.status === STATUS_ERROR,
+            uploadItem =>
+                uploadItem.status === STATUS_COMPLETE ||
+                uploadItem.status === STATUS_ERROR ||
+                isTerminalForModernized(uploadItem),
         );
         const uploadItemsStatus = isResumableUploadsEnabled ? areAllItemsFinished : noFileIsPendingOrInProgress;
 
@@ -1023,7 +1035,13 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             if (this.isAutoExpanded) {
                 this.resetUploadManagerExpandState();
             } // Else manually expanded so don't close
-            onComplete(items);
+            // In the modernized flow, suppress the completion notification
+            // when no item actually finished successfully (e.g. user canceled
+            // every upload). This prevents a misleading "upload complete" toast.
+            const hasCompletedItem = items.some(uploadItem => uploadItem.status === STATUS_COMPLETE);
+            if (!enableModernizedUploads || hasCompletedItem) {
+                onComplete(items);
+            }
         }
 
         const state: Partial<State> = {
