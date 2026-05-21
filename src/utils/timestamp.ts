@@ -46,4 +46,23 @@ const convertSecondsToHMMSS = (seconds: number): string => {
     return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${secondsValue.toString().padStart(2, '0')}`;
 };
 
-export { convertTimestampToSeconds, convertMillisecondsToHMMSS, convertSecondsToHMMSS };
+/**
+ * Converts milliseconds to a video-style timestamp, omitting the hours field for durations under one hour.
+ * @param timestampInMilliseconds The timestamp in milliseconds
+ * @returns The formatted timestamp: M:SS when under an hour, H:MM:SS otherwise
+ */
+const convertMillisecondsToTimestamp = (timestampInMilliseconds: number): string => {
+    if (!timestampInMilliseconds || timestampInMilliseconds < 0) {
+        return '0:00';
+    }
+    const hours = Math.floor(timestampInMilliseconds / ONE_HOUR_MS);
+    const minutes = Math.floor((timestampInMilliseconds % ONE_HOUR_MS) / 60000);
+    const seconds = Math.floor((timestampInMilliseconds % 60000) / 1000);
+    const paddedSeconds = seconds.toString().padStart(2, '0');
+    if (hours === 0) {
+        return `${minutes.toString()}:${paddedSeconds}`;
+    }
+    return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${paddedSeconds}`;
+};
+
+export { convertMillisecondsToHMMSS, convertMillisecondsToTimestamp, convertSecondsToHMMSS, convertTimestampToSeconds };

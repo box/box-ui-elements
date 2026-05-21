@@ -3,6 +3,11 @@
 import type { BoxItemVersionMini, Reply, User } from './core';
 import type { ActionItemError, Comment, FeedItemStatus } from './feed';
 
+export type Frame = {
+    type: 'frame',
+    value: number,
+};
+
 export type Page = {
     type: 'page',
     value: number,
@@ -24,7 +29,7 @@ export type Rect = {
 };
 
 export type TargetDrawing = {
-    location: Page,
+    location: Frame | Page,
     type: 'drawing',
 };
 
@@ -35,7 +40,7 @@ export type TargetHighlight = {
 };
 
 export type TargetRegion = {
-    location: Page,
+    location: Frame | Page,
     shape?: Rect,
     type: 'region',
 };
