@@ -18,6 +18,8 @@ import type {
     TextNodeV2 as TextNode,
 } from '@box/threaded-annotations';
 
+import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
+
 import type { Annotation, Target } from '../../../common/types/annotations';
 import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '../../../common/types/feed';
 import type { BoxItemVersion, User } from '../../../common/types/core';
@@ -138,6 +140,13 @@ export const transformCommentToMessages = (comment: Comment): TextMessageType[] 
 
 export const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | undefined => {
     if (!target) return undefined;
+
+    if (target.location?.type === 'frame') {
+        return {
+            timestamp: convertMillisecondsToTimestamp(target.location.value ?? 0),
+            type: AnnotationBadgeType.Frame,
+        };
+    }
 
     const page = target.location?.value ?? 0;
 

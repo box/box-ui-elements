@@ -1517,7 +1517,7 @@ describe('elements/content-preview/ContentPreview', () => {
             annotationFileVersionId | selectedVersionId | locationType | setStateCount
             ${'123'}                | ${'124'}          | ${'page'}    | ${1}
             ${'124'}                | ${'124'}          | ${'page'}    | ${0}
-            ${'123'}                | ${'124'}          | ${'frame'}   | ${0}
+            ${'123'}                | ${'124'}          | ${'frame'}   | ${1}
             ${'123'}                | ${'124'}          | ${''}        | ${0}
             ${undefined}            | ${'124'}          | ${'page'}    | ${0}
         `(
@@ -1550,6 +1550,44 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
             },
         );
+
+        test('should set startAt with seconds-converted value for cross-version frame annotations', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '123' },
+                target: { location: { type: 'frame', value: 4623 } },
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ selectedVersion: { id: '124' } });
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit: jest.fn() });
+            instance.setState = jest.fn();
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(instance.setState).toHaveBeenCalledWith({
+                startAt: { unit: 'seconds', value: 4.623 },
+            });
+        });
+
+        test('should set startAt with the page number for cross-version page annotations', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '123' },
+                target: { location: { type: 'page', value: 5 } },
+            };
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            wrapper.setState({ selectedVersion: { id: '124' } });
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit: jest.fn() });
+            instance.setState = jest.fn();
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(instance.setState).toHaveBeenCalledWith({
+                startAt: { unit: 'pages', value: 5 },
+            });
+        });
 
         test.each`
             annotationFileVersionId | selectedVersionId | locationType | deferScrollToOnload
