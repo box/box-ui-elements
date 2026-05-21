@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import * as UploaderUtils from '../../../utils/uploads';
 import Browser from '../../../utils/Browser';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
@@ -763,6 +764,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             test('should render legacy UploadsManager when enableModernizedUploads is false and useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: false, useUploadsManager: true });
                 expect(wrapper.find(UploadsManager)).toHaveLength(1);
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
             });
 
@@ -770,16 +772,19 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: false, useUploadsManager: false });
                 expect(wrapper.find(DroppableContent)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
             });
 
-            test('should render modernized uploads placeholder when enableModernizedUploads is true', () => {
+            test('should render modernized UploadsManager when enableModernizedUploads is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
             });
 
-            test('should render modernized uploads placeholder even when useUploadsManager is true', () => {
+            test('should render modernized UploadsManager when enableModernizedUploads is true and useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
             });
