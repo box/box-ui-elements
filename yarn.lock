@@ -1072,12 +1072,12 @@
   resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-1.20.1.tgz#80bdb086fba77cd9cfad6aeec0c50d2914f5d2c6"
   integrity sha512-JkFFTbnkBr1jzJooIlw/IOuhMGL32ngHnQzl3hmwkYu5KmuIKDfdxd2WBn4eMFe8mTs0aKH4TqIMnsxpRiIZ3g==
 
-"@box/blueprint-web-assets@^4.119.0", "@box/blueprint-web-assets@^4.119.2":
+"@box/blueprint-web-assets@^4.119.2":
   version "4.119.2"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.119.2.tgz#4fcb01243cd6860047bc6012f3b8d9e7675e5241"
   integrity sha512-HYoNaHk37kiRIG33+DpLT7qZJYuUEbUuF7xGuV8sbGqBvhfmOOE6ODlMBYB5FNt5w/rFRlXXfGjnuJ4K8m65iw==
 
-"@box/blueprint-web@^14.31.2":
+"@box/blueprint-web@^14.32.1":
   version "14.32.1"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-14.32.1.tgz#99915179a4e1d6c7b3c1f5d714863f8471bc0c67"
   integrity sha512-h2iRVByGL4Ftc24hFzmsWAvusRTDZXHJoXnDFsqULv4ck0lRxyLYmSFFu7DeQbbrow4wrur6+LrX7rTHaMU2tA==
@@ -1154,7 +1154,7 @@
   resolved "https://registry.yarnpkg.com/@box/content-field/-/content-field-1.40.23.tgz#7f0bd866846b979b396c328a5fd62826fbc3bf3c"
   integrity sha512-BW/TUKqh8N7U3sOEPaDDy13iMDorr99v/SNffNaMn+VAL8WK8DVRROTC5bUszFhhGPO3I9ZC5DnUioy9i5D++A==
 
-"@box/copy-input@^1.42.14":
+"@box/copy-input@^1.42.16":
   version "1.42.16"
   resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-1.42.16.tgz#a5eb28e07d7296fc7277dae96fda73de96b1dfba"
   integrity sha512-QDjB0MjzYE1IeRFn4C8NPakLhNq/PULcmDgWTbcku2ch69IRTz4GkR488LPfi31K9Pj94dUF+qMYGM2Fe3JEYA==
@@ -1237,7 +1237,7 @@
   resolved "https://registry.yarnpkg.com/@box/types/-/types-2.1.8.tgz#8ff5972f2fc0ea80e511dbcfcdc76dce72f8891f"
   integrity sha512-Cj869wVrXRH0Z5gz5hOlmGciJqbWaEuZcbL4Jd09gF9igBbzmGzfVfiuOgas1940oXwXuTUnQzTyf5mJ646UiQ==
 
-"@box/unified-share-modal@^2.15.14":
+"@box/unified-share-modal@^2.15.16":
   version "2.15.16"
   resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-2.15.16.tgz#49deb182bf1ac7f1ffe4bae713ab12ff2822533e"
   integrity sha512-Y1bE+JWDQm058lT+AcsfwJqK3WvGAsZj6ro9PLvejJZ1LxzexvOzyQFkM0sL4Kmj/93k2VEKoAJ/onBgheAJoQ==
@@ -1247,7 +1247,7 @@
   resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-1.14.0.tgz#573cf4533f80332cf044693a23a299552f3355d8"
   integrity sha512-OtsKfRymJsWlErIC1tkU8Fn9aUbxDHF4PevalLpYPwLlXd/HtSbktBIGmxvr22PAH2sNQ9TILuXqBeJVe+/tsg==
 
-"@box/user-selector@^1.76.14":
+"@box/user-selector@^1.76.16":
   version "1.76.16"
   resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-1.76.16.tgz#3a4ba283a9bc5faae7b9f61529594f82f7361134"
   integrity sha512-UOZj9q7xYbj338WM7ZA6jGyz7EkHNVX8dy3vzFRIHuLOraKF6wWJymuRcYX2/GzNnOaQ2HGsnzMHJWHlWgOeug==
