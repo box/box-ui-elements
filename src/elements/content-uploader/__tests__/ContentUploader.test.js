@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import * as UploaderUtils from '../../../utils/uploads';
 import Browser from '../../../utils/Browser';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
+import UploadsManager from '../UploadsManager';
+import DroppableContent from '../DroppableContent';
 import {
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
@@ -753,6 +756,38 @@ describe('elements/content-uploader/ContentUploader', () => {
             await instance.addFolderDataTransferItemsToUploadQueue(mockFoldersList, jest.fn());
             expect(instance.addToQueue).toBeCalledTimes(1);
             expect(instance.addToQueue.mock.calls[0][0].length).toBe(mockFoldersList.length);
+        });
+    });
+
+    describe('render()', () => {
+        describe('enableModernizedUploads', () => {
+            test('should render legacy UploadsManager when enableModernizedUploads is false and useUploadsManager is true', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: false, useUploadsManager: true });
+                expect(wrapper.find(UploadsManager)).toHaveLength(1);
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
+                expect(wrapper.find(DroppableContent)).toHaveLength(0);
+            });
+
+            test('should render DroppableContent when enableModernizedUploads is false and useUploadsManager is false', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: false, useUploadsManager: false });
+                expect(wrapper.find(DroppableContent)).toHaveLength(1);
+                expect(wrapper.find(UploadsManager)).toHaveLength(0);
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
+            });
+
+            test('should render modernized UploadsManager when enableModernizedUploads is true', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
+                expect(wrapper.find(UploadsManager)).toHaveLength(0);
+                expect(wrapper.find(DroppableContent)).toHaveLength(0);
+            });
+
+            test('should render modernized UploadsManager when enableModernizedUploads is true and useUploadsManager is true', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
+                expect(wrapper.find(UploadsManager)).toHaveLength(0);
+                expect(wrapper.find(DroppableContent)).toHaveLength(0);
+            });
         });
     });
 });

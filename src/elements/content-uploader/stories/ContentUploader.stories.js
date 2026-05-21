@@ -10,6 +10,12 @@ export const withTheming = {
     },
 };
 
+export const withModernizedUploads = {
+    args: {
+        enableModernizedUploads: true,
+    },
+};
+
 export default {
     title: 'Elements/ContentUploader',
     component: ContentUploader,
