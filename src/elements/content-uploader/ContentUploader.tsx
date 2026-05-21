@@ -815,7 +815,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     uploadFile(item: UploadItem) {
-        const { overwrite, rootFolderId } = this.props;
+        const { enableModernizedUploads, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
 
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
@@ -831,6 +831,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             progressCallback: event => this.handleUploadProgress(item, event),
             successCallback: entries => this.handleUploadSuccess(item, entries),
             overwrite,
+            enableModernizedUploads,
             fileId: options && options.fileId ? options.fileId : null,
         };
 
@@ -850,7 +851,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     resumeFile(item: UploadItem) {
-        const { onResume, overwrite, rootFolderId } = this.props;
+        const { enableModernizedUploads, onResume, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
 
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
@@ -866,6 +867,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             progressCallback: event => this.handleUploadProgress(item, event),
             successCallback: entries => this.handleUploadSuccess(item, entries),
             overwrite,
+            enableModernizedUploads,
             sessionId: api && api.sessionId ? api.sessionId : null,
             fileId: options && options.fileId ? options.fileId : null,
         };

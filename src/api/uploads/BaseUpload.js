@@ -44,6 +44,10 @@ class BaseUpload extends Base {
 
     isUploadFallbackLogicEnabled: boolean = false;
 
+    hadNameConflict: boolean = false;
+
+    enableModernizedUploads: boolean = false;
+
     /**
      * Sends an upload pre-flight request. If a file ID is available,
      * send a pre-flight request to that file version.
@@ -168,6 +172,7 @@ class BaseUpload extends Base {
                 const conflictFileId = errorData.context_info.conflicts.id;
                 if (!this.fileId && !!conflictFileId) {
                     this.fileId = conflictFileId;
+                    this.hadNameConflict = true;
                 }
             } else if (this.conflictCallback) {
                 // conflictCallback handler for setting new file name

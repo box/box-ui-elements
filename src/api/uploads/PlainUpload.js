@@ -7,6 +7,8 @@
 import noop from 'lodash/noop';
 import { digest } from '../../utils/webcrypto';
 import { getFileLastModifiedAsISONoMSIfPossible } from '../../utils/uploads';
+import { STANDARD_UPLOAD_FIELDS_WITH_VERSION_NUMBER } from '../../utils/fields';
+import { updateQueryParameters } from '../../utils/url';
 import BaseUpload from './BaseUpload';
 import type { BoxItem } from '../../common/types/core';
 
@@ -74,6 +76,12 @@ class PlainUpload extends BaseUpload {
             }
         }
 
+        if (this.enableModernizedUploads && this.hadNameConflict) {
+            uploadUrl = updateQueryParameters(uploadUrl, {
+                fields: STANDARD_UPLOAD_FIELDS_WITH_VERSION_NUMBER.join(','),
+            });
+        }
+
         const attributes = JSON.stringify({
             name: this.fileName,
             parent: { id: this.folderId },
@@ -130,6 +138,8 @@ class PlainUpload extends BaseUpload {
         conflictCallback,
         // $FlowFixMe
         overwrite = true,
+        // $FlowFixMe
+        enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
         errorCallback: Function,
@@ -137,6 +147,7 @@ class PlainUpload extends BaseUpload {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
+        enableModernizedUploads?: boolean,
         overwrite: boolean | 'error',
         progressCallback: Function,
         successCallback: Function,
@@ -156,6 +167,8 @@ class PlainUpload extends BaseUpload {
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
         this.conflictCallback = conflictCallback;
+        this.hadNameConflict = false;
+        this.enableModernizedUploads = enableModernizedUploads;
 
         this.makePreflightRequest();
     }

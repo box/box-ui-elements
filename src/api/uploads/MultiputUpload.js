@@ -18,6 +18,7 @@ import {
     HTTP_STATUS_CODE_FORBIDDEN,
     MS_IN_S,
 } from '../../constants';
+import { updateQueryParameters } from '../../utils/url';
 import MultiputPart, {
     PART_STATE_UPLOADED,
     PART_STATE_UPLOADING,
@@ -28,6 +29,7 @@ import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig } from '../../common/types/upload';
 import type { StringAnyMap } from '../../common/types/core';
 import type { APIOptions } from '../../common/types/api';
+import { STANDARD_UPLOAD_FIELDS_WITH_VERSION_NUMBER } from '../../utils/fields';
 
 // Constants used for specifying log event types.
 
@@ -177,12 +179,15 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
+        // $FlowFixMe
+        enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
         errorCallback?: Function,
         file: File,
         fileId: ?string,
         folderId: string,
+        enableModernizedUploads?: boolean,
         overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
@@ -196,6 +201,7 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.conflictCallback = conflictCallback;
         this.fileId = fileId;
+        this.enableModernizedUploads = Boolean(enableModernizedUploads);
     }
 
     /**
@@ -222,6 +228,8 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
+        // $FlowFixMe
+        enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
         errorCallback?: Function,
@@ -229,6 +237,7 @@ class MultiputUpload extends BaseMultiput {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
+        enableModernizedUploads?: boolean,
         overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
@@ -251,6 +260,8 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.fileId = fileId;
         this.fileDescription = fileDescription;
+        this.hadNameConflict = false;
+        this.enableModernizedUploads = enableModernizedUploads;
 
         this.makePreflightRequest();
     }
@@ -447,6 +458,8 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
+        // $FlowFixMe
+        enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
         errorCallback?: Function,
@@ -457,6 +470,7 @@ class MultiputUpload extends BaseMultiput {
         progressCallback?: Function,
         sessionId: string,
         successCallback?: Function,
+        enableModernizedUploads?: boolean,
     }): void {
         this.setFileInfo({
             file,
@@ -467,6 +481,7 @@ class MultiputUpload extends BaseMultiput {
             conflictCallback,
             overwrite,
             fileId,
+            enableModernizedUploads,
         });
         this.sessionId = sessionId;
 
@@ -571,6 +586,7 @@ class MultiputUpload extends BaseMultiput {
                 successCallback: this.successCallback,
                 overwrite: this.overwrite,
                 fileId: this.fileId,
+                enableModernizedUploads: this.enableModernizedUploads,
             };
             this.upload(uploadOptions);
         } else {
@@ -967,8 +983,15 @@ class MultiputUpload extends BaseMultiput {
             'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo),
         };
 
+        let commitUrl = this.sessionEndpoints.commit;
+        if (this.enableModernizedUploads && this.hadNameConflict) {
+            commitUrl = updateQueryParameters(commitUrl, {
+                fields: STANDARD_UPLOAD_FIELDS_WITH_VERSION_NUMBER.join(','),
+            });
+        }
+
         this.xhr
-            .post({ url: this.sessionEndpoints.commit, data, headers })
+            .post({ url: commitUrl, data, headers })
             .then(this.commitSessionSuccessHandler)
             .catch(this.commitSessionErrorHandler);
     };
@@ -1247,6 +1270,7 @@ class MultiputUpload extends BaseMultiput {
     async resolveConflict(data: Object): Promise<any> {
         if (this.overwrite && data.context_info) {
             this.fileId = data.context_info.conflicts.id;
+            this.hadNameConflict = true;
             return;
         }
         if (this.conflictCallback) {
