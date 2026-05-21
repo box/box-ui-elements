@@ -732,5 +732,33 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 type: 'point',
             });
         });
+
+        test('should map a sub-hour frame-location target to a frame badge with M:SS timestamp', () => {
+            const target = {
+                location: { type: 'frame', value: 4623 },
+                shape: { height: 10, type: 'rect', width: 20, x: 5, y: 5 },
+                type: 'region',
+            };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                timestamp: '0:04',
+                type: 'frame',
+            });
+        });
+
+        test('should map an over-hour frame-location target to a frame badge with H:MM:SS timestamp', () => {
+            const target = { location: { type: 'frame', value: 3661000 }, type: 'region' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                timestamp: '1:01:01',
+                type: 'frame',
+            });
+        });
+
+        test('should default the frame timestamp to 0:00 when location.value is missing', () => {
+            const target = { location: { type: 'frame' }, type: 'region' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                timestamp: '0:00',
+                type: 'frame',
+            });
+        });
     });
 });
