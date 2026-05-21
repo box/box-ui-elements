@@ -48,6 +48,7 @@ import {
     METRIC_TYPE_UAA_PARITY_METRIC,
 } from '../../constants';
 import type {
+    TaskAssigneeCollection,
     TaskCompletionRule,
     TaskType,
     TaskNew,
@@ -418,6 +419,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         // need to load the pending item
         this.fetchFeedItems();
+    };
+
+    getTaskCollaborators = (task: TaskNew): Promise<TaskAssigneeCollection> => {
+        const { api, file } = this.props;
+        return new Promise((resolve, reject) => {
+            api.getTaskCollaboratorsAPI(false).getTaskCollaborators({
+                errorCallback: reject,
+                file: { id: file.id },
+                successCallback: resolve,
+                task: { id: task.id },
+            });
+        });
     };
 
     /**
@@ -1410,6 +1423,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         getApproverWithQuery={this.getApprover}
                         getAvatarUrl={this.getAvatarUrl}
                         getMentionAsync={this.getMentionAsync}
+                        getTaskCollaborators={this.getTaskCollaborators}
                         hasTasks={this.props.hasTasks}
                         isDisabled={isDisabled}
                         onAnnotationCopyLink={onAnnotationCopyLink}
@@ -1427,7 +1441,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         }
                         onShowOnlyMentionsMeChange={onShowOnlyMentionsMeChange}
                         onShowResolvedChange={onShowResolvedChange}
+                        onTaskAssignmentUpdate={this.updateTaskAssignment}
                         onTaskDelete={this.deleteTask}
+                        onTaskUpdate={this.updateTask}
                         onTaskView={onTaskView}
                         onVersionHistoryClick={onVersionHistoryClick}
                         showOnlyMentionsMe={showOnlyMentionsMe}

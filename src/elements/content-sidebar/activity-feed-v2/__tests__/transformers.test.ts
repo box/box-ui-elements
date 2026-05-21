@@ -17,7 +17,7 @@ import {
 describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
     describe('textToDocumentNode()', () => {
         test('should convert single-line text to a document node', () => {
-            const result = textToDocumentNode('Hello world');
+            const result = textToDocumentNode('Hello world', '');
             expect(result).toEqual({
                 type: 'doc',
                 content: [
@@ -30,7 +30,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
 
         test('should convert multi-line text to multiple paragraphs', () => {
-            const result = textToDocumentNode('Line 1\nLine 2\nLine 3');
+            const result = textToDocumentNode('Line 1\nLine 2\nLine 3', '');
             expect(result.content).toHaveLength(3);
             expect(result.content[0].content).toEqual([{ type: 'text', text: 'Line 1' }]);
             expect(result.content[1].content).toEqual([{ type: 'text', text: 'Line 2' }]);
@@ -38,18 +38,18 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
 
         test('should handle empty lines as paragraphs without content key', () => {
-            const result = textToDocumentNode('Before\n\nAfter');
+            const result = textToDocumentNode('Before\n\nAfter', '');
             expect(result.content).toHaveLength(3);
             expect(result.content[1]).toEqual({ type: 'paragraph' });
         });
 
         test('should handle empty string', () => {
-            const result = textToDocumentNode('');
+            const result = textToDocumentNode('', '');
             expect(result).toEqual({ type: 'doc', content: [] });
         });
 
         test('should parse @[id:name] mentions into mention nodes', () => {
-            const result = textToDocumentNode('Hello @[123:Jane Doe] how are you?');
+            const result = textToDocumentNode('Hello @[123:Jane Doe] how are you?', '');
             expect(result.content).toHaveLength(1);
             expect(result.content[0].content).toEqual([
                 { type: 'text', text: 'Hello ' },
@@ -67,7 +67,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
 
         test('should parse multiple mentions in one line', () => {
-            const result = textToDocumentNode('@[1:Alice] and @[2:Bob]');
+            const result = textToDocumentNode('@[1:Alice] and @[2:Bob]', '');
             expect(result.content[0].content).toHaveLength(3);
             expect(result.content[0].content[0]).toEqual({
                 type: 'mention',
@@ -81,10 +81,22 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
 
         test('should handle mentions across multiple lines', () => {
-            const result = textToDocumentNode('Hi @[1:Alice]\nBye @[2:Bob]');
+            const result = textToDocumentNode('Hi @[1:Alice]\nBye @[2:Bob]', '');
             expect(result.content).toHaveLength(2);
             expect(result.content[0].content[1].type).toBe('mention');
             expect(result.content[1].content[1].type).toBe('mention');
+        });
+
+        test('should pass authorId through to each mention node', () => {
+            const result = textToDocumentNode('@[1:Alice] and @[2:Bob]', '99');
+            expect(result.content[0].content[0]).toEqual({
+                type: 'mention',
+                attrs: { authorId: '99', mentionId: '1', mentionedUserId: '1', mentionedUserName: 'Alice' },
+            });
+            expect(result.content[0].content[2]).toEqual({
+                type: 'mention',
+                attrs: { authorId: '99', mentionId: '2', mentionedUserId: '2', mentionedUserName: 'Bob' },
+            });
         });
     });
 
@@ -141,13 +153,13 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(messages[1].author.name).toBe('Reply User');
         });
 
-        test('should use tagged_message over message and parse mentions', () => {
+        test('should use tagged_message over message and parse mentions with author id', () => {
             const messages = transformCommentToMessages(mockComment as unknown as Comment);
             expect(messages[0].message.content[0].content).toEqual([
                 { type: 'text', text: 'Hello ' },
                 {
                     type: 'mention',
-                    attrs: { authorId: '', mentionId: '456', mentionedUserId: '456', mentionedUserName: 'Jane' },
+                    attrs: { authorId: '123', mentionId: '456', mentionedUserId: '456', mentionedUserName: 'Jane' },
                 },
             ]);
         });
@@ -159,6 +171,17 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 type: 'text',
                 text: 'fallback message',
             });
+        });
+
+        test('should leave updatedAt undefined when comment has not been edited', () => {
+            const messages = transformCommentToMessages(mockComment as unknown as Comment);
+            expect(messages[0].updatedAt).toBeUndefined();
+        });
+
+        test('should set updatedAt to modified_at when comment has been edited', () => {
+            const editedComment = { ...mockComment, modified_at: '2024-01-02T00:00:00Z' };
+            const messages = transformCommentToMessages(editedComment as unknown as Comment);
+            expect(messages[0].updatedAt).toBe(new Date('2024-01-02T00:00:00Z').getTime());
         });
     });
 
@@ -223,6 +246,26 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const noDescription = { ...mockAnnotation, description: undefined };
             const messages = transformAnnotationToMessages(noDescription as unknown as Annotation);
             expect(messages[0].message).toEqual({ type: 'doc', content: [] });
+        });
+
+        test('should leave updatedAt undefined when annotation has not been edited', () => {
+            const messages = transformAnnotationToMessages(mockAnnotation as unknown as Annotation);
+            expect(messages[0].updatedAt).toBeUndefined();
+        });
+
+        test('should set updatedAt to modified_at when annotation has been edited', () => {
+            const editedAnnotation = { ...mockAnnotation, modified_at: '2024-02-05T00:00:00Z' };
+            const messages = transformAnnotationToMessages(editedAnnotation as unknown as Annotation);
+            expect(messages[0].updatedAt).toBe(new Date('2024-02-05T00:00:00Z').getTime());
+        });
+
+        test('should set authorId on mentions to the annotation creator id', () => {
+            const annotationWithMention = { ...mockAnnotation, description: { message: 'cc @[789:Replier]' } };
+            const messages = transformAnnotationToMessages(annotationWithMention as unknown as Annotation);
+            const [, mentionNode] = messages[0].message.content[0].content as Array<{
+                attrs?: { authorId: string };
+            }>;
+            expect(mentionNode.attrs?.authorId).toBe('456');
         });
     });
 
@@ -324,6 +367,20 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformTaskToProps(approvalTask as unknown as TaskNew);
             expect(result.taskType).toBe('APPROVAL');
         });
+
+        test('should set hasNextPage=false when assigned_to.next_marker is null', () => {
+            const result = transformTaskToProps(mockTask as unknown as TaskNew);
+            expect(result.hasNextPage).toBe(false);
+        });
+
+        test('should set hasNextPage=true when assigned_to.next_marker is present', () => {
+            const taskWithMore = {
+                ...mockTask,
+                assigned_to: { ...mockTask.assigned_to, next_marker: 'next-cursor' },
+            };
+            const result = transformTaskToProps(taskWithMore as unknown as TaskNew);
+            expect(result.hasNextPage).toBe(true);
+        });
     });
 
     describe('transformVersionToProps()', () => {
@@ -379,6 +436,36 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             };
             const result = transformVersionToProps(version as unknown as BoxItemVersion);
             expect(result.authorName).toBe('Trasher');
+        });
+
+        test('should prefer the action-specific user over modified_by for promotion', () => {
+            const version = {
+                ...mockVersion,
+                action_type: 'promoted',
+                modified_by: { id: '300', name: 'Uploader', type: 'user' },
+                promoted_by: { id: '500', name: 'Promoter', type: 'user' },
+                version_promoted: 'promoted',
+            };
+            const result = transformVersionToProps(version as unknown as BoxItemVersion);
+            expect(result.authorName).toBe('Promoter');
+            expect(result.actionType).toBe('promote');
+        });
+
+        test('should derive action from version flags when action_type is missing', () => {
+            const trashedVersion = { ...mockVersion, action_type: undefined, trashed_at: '2024-04-02T00:00:00Z' };
+            expect(transformVersionToProps(trashedVersion as unknown as BoxItemVersion).actionType).toBe('delete');
+
+            const restoredVersion = { ...mockVersion, action_type: undefined, restored_at: '2024-04-02T00:00:00Z' };
+            expect(transformVersionToProps(restoredVersion as unknown as BoxItemVersion).actionType).toBe('restore');
+
+            const promotedVersion = { ...mockVersion, action_type: undefined, version_promoted: 'promoted' };
+            expect(transformVersionToProps(promotedVersion as unknown as BoxItemVersion).actionType).toBe('promote');
+        });
+
+        test('should default to upload when action_type is unknown and no flags are set', () => {
+            const version = { ...mockVersion, action_type: 'unrecognized' };
+            const result = transformVersionToProps(version as unknown as BoxItemVersion);
+            expect(result.actionType).toBe('upload');
         });
     });
 
@@ -507,7 +594,33 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result!.type).toBe('app_activity');
         });
 
-        test('should set isResolved true for resolved comments', () => {
+        test('should set isResolved, resolvedBy, and resolvedAt for resolved comments from the resolution field', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'Author', type: 'user' },
+                id: 'c1',
+                message: '',
+                modified_at: '2024-01-02T00:00:00Z',
+                modified_by: { id: '2', name: 'Editor', type: 'user' },
+                permissions: {},
+                resolution: {
+                    resolved_at: '2024-01-03T00:00:00Z',
+                    resolved_by: { id: '3', name: 'Resolver', type: 'user' },
+                },
+                status: 'resolved',
+                tagged_message: 'Resolved comment',
+                type: 'comment',
+            };
+            const result = transformFeedItem(comment as unknown as FeedItem);
+            expect(result!.type).toBe('comment');
+            if (result!.type === 'comment') {
+                expect(result!.isResolved).toBe(true);
+                expect(result!.resolvedBy).toBe('Resolver');
+                expect(result!.resolvedAt).toBe(new Date('2024-01-03T00:00:00Z').getTime());
+            }
+        });
+
+        test('should leave resolvedBy and resolvedAt undefined when a resolved comment has no resolution field', () => {
             const comment = {
                 created_at: '2024-01-01T00:00:00Z',
                 created_by: { id: '1', name: 'User', type: 'user' },
@@ -523,6 +636,35 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result!.type).toBe('comment');
             if (result!.type === 'comment') {
                 expect(result!.isResolved).toBe(true);
+                expect(result!.resolvedBy).toBeUndefined();
+                expect(result!.resolvedAt).toBeUndefined();
+            }
+        });
+
+        test('should set resolvedBy and resolvedAt for resolved annotations from the resolution field', () => {
+            const annotation = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'Author', type: 'user' },
+                description: { message: 'Annotation' },
+                file_version: { id: 'fv1', type: 'version', version_number: '1' },
+                id: 'a1',
+                modified_at: '2024-01-02T00:00:00Z',
+                modified_by: { id: '2', name: 'Editor', type: 'user' },
+                permissions: {},
+                resolution: {
+                    resolved_at: '2024-01-03T00:00:00Z',
+                    resolved_by: { id: '3', name: 'Resolver', type: 'user' },
+                },
+                status: 'resolved',
+                target: { location: { type: 'page', value: 1 }, type: 'point', x: 0, y: 0 },
+                type: 'annotation',
+            };
+            const result = transformFeedItem(annotation as unknown as FeedItem);
+            expect(result!.type).toBe('annotation');
+            if (result!.type === 'annotation') {
+                expect(result!.isResolved).toBe(true);
+                expect(result!.resolvedBy).toBe('Resolver');
+                expect(result!.resolvedAt).toBe(new Date('2024-01-03T00:00:00Z').getTime());
             }
         });
     });
@@ -588,6 +730,34 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
                 page: 0,
                 type: 'point',
+            });
+        });
+
+        test('should map a sub-hour frame-location target to a frame badge with M:SS timestamp', () => {
+            const target = {
+                location: { type: 'frame', value: 4623 },
+                shape: { height: 10, type: 'rect', width: 20, x: 5, y: 5 },
+                type: 'region',
+            };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                timestamp: '0:04',
+                type: 'frame',
+            });
+        });
+
+        test('should map an over-hour frame-location target to a frame badge with H:MM:SS timestamp', () => {
+            const target = { location: { type: 'frame', value: 3661000 }, type: 'region' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                timestamp: '1:01:01',
+                type: 'frame',
+            });
+        });
+
+        test('should default the frame timestamp to 0:00 when location.value is missing', () => {
+            const target = { location: { type: 'frame' }, type: 'region' };
+            expect(annotationTargetToBadge(target as unknown as Annotation['target'])).toEqual({
+                timestamp: '0:00',
+                type: 'frame',
             });
         });
     });

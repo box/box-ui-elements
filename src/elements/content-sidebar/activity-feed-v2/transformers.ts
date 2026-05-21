@@ -18,6 +18,8 @@ import type {
     TextNodeV2 as TextNode,
 } from '@box/threaded-annotations';
 
+import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
+
 import type { Annotation, Target } from '../../../common/types/annotations';
 import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '../../../common/types/feed';
 import type { BoxItemVersion, User } from '../../../common/types/core';
@@ -41,11 +43,7 @@ import {
 
 const MENTION_REGEX = /@\[(\d+):([^\]]+)\]/g;
 
-/**
- * Parses a line of text into TipTap content nodes, converting @[id:name]
- * mention markup into MentionNode elements and plain text into TextNode elements.
- */
-const parseLine = (line: string): (MentionNode | TextNode)[] => {
+const parseLine = (line: string, authorId: string): (MentionNode | TextNode)[] => {
     const nodes: (MentionNode | TextNode)[] = [];
     let lastIndex = 0;
 
@@ -63,7 +61,7 @@ const parseLine = (line: string): (MentionNode | TextNode)[] => {
         nodes.push({
             type: 'mention',
             attrs: {
-                authorId: '',
+                authorId,
                 mentionId: userId,
                 mentionedUserId: userId,
                 mentionedUserName: userName,
@@ -81,18 +79,14 @@ const parseLine = (line: string): (MentionNode | TextNode)[] => {
     return nodes;
 };
 
-/**
- * Converts a tagged_message string to a TipTap DocumentNode.
- * Parses @[userId:userName] mention markup into MentionNode elements.
- */
-export const textToDocumentNode = (text: string): DocumentNode => {
+export const textToDocumentNode = (text: string, authorId: string): DocumentNode => {
     if (!text) {
         return { type: 'doc', content: [] };
     }
 
     const lines = text.split('\n');
     const content: ParagraphNode[] = lines.map(line => {
-        const nodes = parseLine(line);
+        const nodes = parseLine(line, authorId);
         return {
             type: 'paragraph' as const,
             ...(nodes.length > 0 ? { content: nodes } : {}),
@@ -106,6 +100,11 @@ const toUnixMs = (isoDate?: string | null): number | undefined => {
     if (!isoDate) return undefined;
     const ms = new Date(isoDate).getTime();
     return Number.isNaN(ms) ? undefined : ms;
+};
+
+const toUpdatedAt = (createdAt: string, modifiedAt: string): number | undefined => {
+    if (modifiedAt === createdAt) return undefined;
+    return toUnixMs(modifiedAt);
 };
 
 const toUserAuthor = (user?: User | null): TextMessageAuthorType => ({
@@ -128,8 +127,9 @@ const commentToTextMessage = (comment: Comment): TextMessageType => ({
     author: toUserAuthor(comment.created_by),
     createdAt: toUnixMs(comment.created_at) ?? 0,
     id: comment.id,
-    message: textToDocumentNode(comment.tagged_message || comment.message || ''),
+    message: textToDocumentNode(comment.tagged_message || comment.message || '', comment.created_by?.id ?? ''),
     permissions: toPermissions(comment.permissions),
+    updatedAt: toUpdatedAt(comment.created_at, comment.modified_at),
 });
 
 export const transformCommentToMessages = (comment: Comment): TextMessageType[] => {
@@ -140,6 +140,13 @@ export const transformCommentToMessages = (comment: Comment): TextMessageType[] 
 
 export const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetType | undefined => {
     if (!target) return undefined;
+
+    if (target.location?.type === 'frame') {
+        return {
+            timestamp: convertMillisecondsToTimestamp(target.location.value ?? 0),
+            type: AnnotationBadgeType.Frame,
+        };
+    }
 
     const page = target.location?.value ?? 0;
 
@@ -163,8 +170,9 @@ export const transformAnnotationToMessages = (annotation: Annotation): TextMessa
         author: toUserAuthor(annotation.created_by),
         createdAt: toUnixMs(annotation.created_at) ?? 0,
         id: annotation.id,
-        message: textToDocumentNode(messageText),
+        message: textToDocumentNode(messageText, annotation.created_by?.id ?? ''),
         permissions: toPermissions(annotation.permissions),
+        updatedAt: toUpdatedAt(annotation.created_at, annotation.modified_at),
     };
     const replies = (annotation.replies ?? []).map(reply => commentToTextMessage(reply));
     return [root, ...replies];
@@ -193,6 +201,7 @@ export const transformTaskToProps = (task: TaskNew, currentUserId?: string): Tas
     currentUserId,
     description: task.description,
     dueDate: toUnixMs(task.due_at),
+    hasNextPage: Boolean(task.assigned_to?.next_marker),
     id: task.id,
     permissions: {
         canCreateTaskCollaborator: task.permissions?.can_create_task_collaborator ?? false,
@@ -204,7 +213,7 @@ export const transformTaskToProps = (task: TaskNew, currentUserId?: string): Tas
     taskType: task.task_type === 'APPROVAL' ? TaskType.APPROVAL : TaskType.GENERAL,
 });
 
-const mapVersionActionType = (actionType?: string): VersionItemProps['actionType'] => {
+const mapActionTypeString = (actionType?: string): VersionItemProps['actionType'] | undefined => {
     switch (actionType) {
         case 'delete':
         case 'trashed':
@@ -217,15 +226,26 @@ const mapVersionActionType = (actionType?: string): VersionItemProps['actionType
             return 'restore';
         case 'upload':
         case 'created':
-        default:
             return 'upload';
+        default:
+            return undefined;
     }
 };
 
+const getVersionAction = (version: BoxItemVersion): VersionItemProps['actionType'] => {
+    if (version.version_promoted) return 'promote';
+    if (version.restored_at) return 'restore';
+    if (version.trashed_at) return 'delete';
+    return mapActionTypeString(version.action_type) ?? 'upload';
+};
+
+const getVersionUser = (version: BoxItemVersion): User | undefined =>
+    version.restored_by || version.trashed_by || version.promoted_by || version.modified_by || undefined;
+
 export const transformVersionToProps = (version: BoxItemVersion): VersionItemProps => {
-    const user = version.modified_by ?? version.trashed_by ?? version.restored_by ?? version.promoted_by;
+    const user = getVersionUser(version);
     return {
-        actionType: mapVersionActionType(version.action_type),
+        actionType: getVersionAction(version),
         authorName: user?.name ?? version.uploader_display_name,
         avatarUrl: user?.avatar_url,
         createdAt: toUnixMs(version.created_at),
@@ -253,10 +273,8 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 messages: transformCommentToMessages(comment),
                 originalText: comment.tagged_message || comment.message || '',
                 permissions: comment.permissions ?? {},
-                resolvedAt: commentIsResolved ? toUnixMs(comment.modified_at) : undefined,
-                resolvedBy: commentIsResolved
-                    ? (comment as unknown as { modified_by?: { name?: string } }).modified_by?.name
-                    : undefined,
+                resolvedAt: commentIsResolved ? toUnixMs(comment.resolution?.resolved_at) : undefined,
+                resolvedBy: commentIsResolved ? comment.resolution?.resolved_by?.name : undefined,
                 status: comment.status,
                 type: 'comment',
             };
@@ -270,8 +288,8 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 isResolved: annotationIsResolved,
                 messages: transformAnnotationToMessages(annotation),
                 permissions: annotation.permissions ?? {},
-                resolvedAt: annotationIsResolved ? toUnixMs(annotation.modified_at) : undefined,
-                resolvedBy: annotationIsResolved ? annotation.modified_by?.name : undefined,
+                resolvedAt: annotationIsResolved ? toUnixMs(annotation.resolution?.resolved_at) : undefined,
+                resolvedBy: annotationIsResolved ? annotation.resolution?.resolved_by?.name : undefined,
                 status: annotation.status,
                 type: 'annotation',
             };

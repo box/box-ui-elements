@@ -3,6 +3,11 @@
 import type { BoxItemVersionMini, Reply, User } from './core';
 import type { ActionItemError, Comment, FeedItemStatus } from './feed';
 
+export type Frame = {
+    type: 'frame',
+    value: number,
+};
+
 export type Page = {
     type: 'page',
     value: number,
@@ -24,7 +29,7 @@ export type Rect = {
 };
 
 export type TargetDrawing = {
-    location: Page,
+    location: Frame | Page,
     type: 'drawing',
 };
 
@@ -35,7 +40,7 @@ export type TargetHighlight = {
 };
 
 export type TargetRegion = {
-    location: Page,
+    location: Frame | Page,
     shape?: Rect,
     type: 'region',
 };
@@ -56,6 +61,11 @@ export type AnnotationPermission = {
     can_resolve?: boolean,
 };
 
+export type Resolution = {
+    resolved_at?: string | null,
+    resolved_by?: User | null,
+};
+
 export type Annotation = {
     created_at: string,
     created_by: User,
@@ -69,6 +79,7 @@ export type Annotation = {
     modified_by: User,
     permissions: AnnotationPermission,
     replies?: Array<Comment>,
+    resolution?: Resolution | null,
     status?: FeedItemStatus,
     target: Target,
     total_reply_count?: number,

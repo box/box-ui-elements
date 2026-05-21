@@ -19,7 +19,7 @@ import {
     FILE_ACTIVITY_TYPE_VERSION,
 } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
-import type { Annotation, AnnotationPermission, Annotations } from './annotations';
+import type { Annotation, AnnotationPermission, Annotations, Resolution } from './annotations';
 import type { TaskNew } from './tasks';
 
 type FeedItemType =
@@ -84,6 +84,7 @@ type Comment = {
     },
     permissions: BoxCommentPermission,
     replies?: Array<Comment>,
+    resolution?: Resolution | null,
     status?: FeedItemStatus,
     tagged_message: string,
     total_reply_count?: number,
@@ -230,6 +231,7 @@ export type {
     FocusableFeedItem,
     FocusableFeedItemType,
     Reply,
+    Resolution,
     Task,
     Tasks,
     ThreadedComments,

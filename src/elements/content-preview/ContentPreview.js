@@ -37,6 +37,7 @@ import CustomPreviewWrapper, { type ContentPreviewChildProps } from './CustomPre
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
+import { convertTimestampToSeconds } from '../../utils/timestamp';
 import { isFeatureEnabled, withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
 // $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
@@ -230,7 +231,8 @@ type PreviewLibraryError = {
     error: ErrorType,
 };
 
-const startAtTypes = {
+const startAtTypes: $ReadOnly<{ frame: 'seconds', page: 'pages' }> = {
+    frame: 'seconds',
     page: 'pages',
 };
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -1448,10 +1450,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const viewer = this.getViewer();
 
         if (unit && annotationFileVersionId && annotationFileVersionId !== currentPreviewFileVersionId) {
+            // Frame.value is milliseconds; Preview SDK startAt expects seconds for video.
+            const value = location.type === 'frame' ? convertTimestampToSeconds(location.value) : location.value;
             this.setState({
                 startAt: {
                     unit,
-                    value: location.value,
+                    value,
                 },
             });
         }
