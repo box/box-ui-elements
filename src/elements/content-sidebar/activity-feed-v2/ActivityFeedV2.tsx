@@ -168,18 +168,12 @@ const ActivityFeedV2 = ({
     const handleTaskEdit = React.useCallback(
         async (task: TaskNew) => {
             let fullAssignees = task.assigned_to;
-            if (task.assigned_to?.next_marker) {
-                if (!getTaskCollaborators) {
-                    // eslint-disable-next-line no-console
-                    console.error(`ActivityFeedV2: missing getTaskCollaborators for paginated task "${task.id}"`);
-                    return;
-                }
+            if (task.assigned_to?.next_marker && getTaskCollaborators) {
                 try {
                     fullAssignees = await getTaskCollaborators(task);
                 } catch (error) {
                     // eslint-disable-next-line no-console
                     console.error(`ActivityFeedV2: failed to load assignees for task "${task.id}"`, error);
-                    return;
                 }
             }
             setEditingTask(task);
