@@ -25,16 +25,6 @@ import messages from '../messages';
 import type { BoxItem } from '../../../common/types/core';
 import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from './types';
 
-// Without this, Radix's FocusScope calls focus() on the dropdown content without
-// preventScroll when the menu opens, which causes the outer page to scroll to the
-// top in cross-origin iframe embeddings (e.g. developer.box.com → codepen.io).
-const dropdownOpenFocusProps = {
-    onOpenAutoFocus: (event: Event) => {
-        event.preventDefault();
-        (event.currentTarget as HTMLElement | null).focus({ preventScroll: true });
-    },
-};
-
 export interface ItemOptionsProps extends ItemEventHandlers, ItemEventPermissions {
     item: BoxItem;
     itemActions?: ItemAction[];
@@ -128,12 +118,16 @@ const ItemOptions = ({
                     />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content
-                    {...dropdownOpenFocusProps}
                     align="end"
                     container={portalElement}
                     onCloseAutoFocus={event => {
                         event.preventDefault();
                         triggerRef.current?.focus({ preventScroll: true });
+                    }}
+                    // @ts-ignore next line - onOpenAutoFocus is intentionally stripped from DropdownMenuContentProps via Omit<MenuContentImplPrivateProps> in Radix's types, but it IS wired at runtime because DropdownMenuContentImpl spreads all props through to MenuContent, which passes it directly to FocusScope as onMountAutoFocus.
+                    onOpenAutoFocus={(event: Event) => {
+                        event.preventDefault();
+                        (event.currentTarget as HTMLElement | null).focus({ preventScroll: true });
                     }}
                 >
                     {isPreviewEnabled && (
