@@ -19,8 +19,9 @@ import FeedItemRow from './FeedItemRow';
 import { transformFeedItem } from './transformers';
 
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
+import type { TaskAssigneeCollection, TaskNew } from '../../../common/types/tasks';
 
-import { TASK_COMPLETION_RULE_ALL, TASK_TYPE_APPROVAL } from '../../../constants';
+import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_APPROVAL } from '../../../constants';
 
 import commonMessages from '../../common/messages';
 import messages from '../messages';
@@ -36,6 +37,7 @@ const ActivityFeedV2 = ({
     getApproverWithQuery,
     getAvatarUrl,
     getMentionAsync,
+    getTaskCollaborators,
     hasTasks = true,
     isDisabled = false,
     onAnnotationCopyLink,
@@ -51,7 +53,9 @@ const ActivityFeedV2 = ({
     onReplyUpdate,
     onShowOnlyMentionsMeChange,
     onShowResolvedChange,
+    onTaskAssignmentUpdate,
     onTaskDelete,
+    onTaskUpdate,
     onTaskView,
     onVersionHistoryClick,
     showOnlyMentionsMe: showOnlyMentionsMeProp,
@@ -151,11 +155,40 @@ const ActivityFeedV2 = ({
     const [isTaskFormOpen, setIsTaskFormOpen] = React.useState(false);
     const [taskType, setTaskType] = React.useState<string>(TASK_TYPE_APPROVAL);
     const [taskError, setTaskError] = React.useState<Error | null>(null);
+    const [editingTask, setEditingTask] = React.useState<TaskNew | null>(null);
+    const [editingAssignees, setEditingAssignees] = React.useState<TaskAssigneeCollection | null>(null);
 
     const handleTaskModalClose = React.useCallback(() => {
         setIsTaskFormOpen(false);
         setTaskError(null);
+        setEditingTask(null);
+        setEditingAssignees(null);
     }, []);
+
+    const handleTaskEdit = React.useCallback(
+        async (task: TaskNew) => {
+            let fullAssignees = task.assigned_to;
+            if (task.assigned_to?.next_marker) {
+                if (!getTaskCollaborators) {
+                    // eslint-disable-next-line no-console
+                    console.error(`ActivityFeedV2: missing getTaskCollaborators for paginated task "${task.id}"`);
+                    return;
+                }
+                try {
+                    fullAssignees = await getTaskCollaborators(task);
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.error(`ActivityFeedV2: failed to load assignees for task "${task.id}"`, error);
+                    return;
+                }
+            }
+            setEditingTask(task);
+            setEditingAssignees(fullAssignees);
+            setTaskType(task.task_type);
+            setIsTaskFormOpen(true);
+        },
+        [getTaskCollaborators],
+    );
 
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
@@ -281,7 +314,9 @@ const ActivityFeedV2 = ({
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
                                     onReplyUpdate={onReplyUpdate}
+                                    onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                     onTaskDelete={onTaskDelete}
+                                    onTaskEdit={onTaskUpdate ? handleTaskEdit : undefined}
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     userSelectorProps={userSelectorProps}
@@ -297,21 +332,37 @@ const ActivityFeedV2 = ({
                 />
             </ActivityFeed.Root>
             <TaskModal
+                editMode={editingTask ? TASK_EDIT_MODE_EDIT : undefined}
                 error={taskError}
                 isTaskFormOpen={isTaskFormOpen}
                 onModalClose={handleTaskModalClose}
                 onSubmitError={setTaskError}
                 onSubmitSuccess={handleTaskModalClose}
-                taskFormProps={{
-                    approvers: [],
-                    approverSelectorContacts,
-                    completionRule: TASK_COMPLETION_RULE_ALL,
-                    createTask,
-                    getApproverWithQuery,
-                    getAvatarUrl,
-                    id: '',
-                    message: '',
-                }}
+                taskFormProps={
+                    editingTask
+                        ? {
+                              approvers: editingAssignees?.entries ?? [],
+                              approverSelectorContacts,
+                              completionRule: editingTask.completion_rule,
+                              createTask: noop,
+                              dueDate: editingTask.due_at,
+                              editTask: onTaskUpdate,
+                              getApproverWithQuery,
+                              getAvatarUrl,
+                              id: editingTask.id,
+                              message: editingTask.description,
+                          }
+                        : {
+                              approvers: [],
+                              approverSelectorContacts,
+                              completionRule: TASK_COMPLETION_RULE_ALL,
+                              createTask,
+                              getApproverWithQuery,
+                              getAvatarUrl,
+                              id: '',
+                              message: '',
+                          }
+                }
                 taskType={taskType}
             />
         </div>

@@ -10,14 +10,21 @@ import { ActivityFeed } from '@box/activity-feed';
 
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
-import type { TaskNew } from '../../../common/types/tasks';
+import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 
 import { dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
 
 import type { OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
 
-import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT } from '../../../constants';
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    TASK_NEW_APPROVED,
+    TASK_NEW_COMPLETED,
+    TASK_NEW_NOT_STARTED,
+    TASK_NEW_REJECTED,
+} from '../../../constants';
 
 type FeedItemRowProps = {
     currentUserId?: string;
@@ -45,7 +52,9 @@ type FeedItemRowProps = {
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
     onReplyUpdate?: OnReplyUpdate;
+    onTaskAssignmentUpdate?: (taskId: string, taskAssignmentId: string, status: TaskCollabStatus) => void;
     onTaskDelete?: (task: TaskNew) => void;
+    onTaskEdit?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
     userSelectorProps: UserSelectorProps;
@@ -79,7 +88,9 @@ const FeedItemRow = ({
     onCommentUpdate,
     onReplyCreate,
     onReplyUpdate,
+    onTaskAssignmentUpdate,
     onTaskDelete,
+    onTaskEdit,
     onTaskView,
     onVersionHistoryClick,
     userSelectorProps,
@@ -190,13 +201,29 @@ const FeedItemRow = ({
             );
         }
 
-        case 'task':
+        case 'task': {
+            const currentUserAssignment = currentUserId
+                ? item.originalTask.assigned_to?.entries?.find(entry => entry.target?.id === currentUserId)
+                : undefined;
+            const canActOnAssignment =
+                !!onTaskAssignmentUpdate &&
+                !!currentUserAssignment &&
+                currentUserAssignment.permissions?.can_update === true &&
+                currentUserAssignment.status === TASK_NEW_NOT_STARTED;
+            const handleAssignmentUpdate = (status: TaskCollabStatus) => {
+                if (isDisabled || !canActOnAssignment) return;
+                onTaskAssignmentUpdate?.(item.id, currentUserAssignment!.id, status);
+            };
             return (
                 <ActivityFeed.List.Task
                     key={item.id}
                     {...item.props}
                     disabled={isDisabled}
+                    onApprove={canActOnAssignment ? () => handleAssignmentUpdate(TASK_NEW_APPROVED) : undefined}
+                    onComplete={canActOnAssignment ? () => handleAssignmentUpdate(TASK_NEW_COMPLETED) : undefined}
                     onDelete={onTaskDelete ? () => onTaskDelete(item.originalTask) : undefined}
+                    onEdit={onTaskEdit ? () => onTaskEdit(item.originalTask) : undefined}
+                    onReject={canActOnAssignment ? () => handleAssignmentUpdate(TASK_NEW_REJECTED) : undefined}
                     onView={
                         onTaskView
                             ? (taskId: string) => onTaskView(taskId, currentUserId === item.props.author.id)
@@ -204,6 +231,7 @@ const FeedItemRow = ({
                     }
                 />
             );
+        }
 
         case 'version':
             return (

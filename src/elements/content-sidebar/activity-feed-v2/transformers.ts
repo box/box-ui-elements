@@ -192,6 +192,7 @@ export const transformTaskToProps = (task: TaskNew, currentUserId?: string): Tas
     currentUserId,
     description: task.description,
     dueDate: toUnixMs(task.due_at),
+    hasNextPage: Boolean(task.assigned_to?.next_marker),
     id: task.id,
     permissions: {
         canCreateTaskCollaborator: task.permissions?.can_create_task_collaborator ?? false,

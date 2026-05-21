@@ -127,8 +127,17 @@ const mockAnnotation: TransformedAnnotationItem = {
     type: 'annotation',
 };
 
+const mockAssignment = {
+    id: 'assignment-1',
+    permissions: { can_delete: true, can_update: true },
+    role: 'ASSIGNEE',
+    status: 'NOT_STARTED',
+    target: { id: 'user-1', name: 'Creator', type: 'user' },
+    type: 'task_collaborator',
+};
+
 const mockOriginalTask = {
-    assigned_to: { entries: [], limit: 20, next_marker: null },
+    assigned_to: { entries: [mockAssignment], limit: 20, next_marker: null },
     completion_rule: 'ALL_ASSIGNEES',
     created_at: '2024-01-01T00:00:00Z',
     created_by: {
@@ -586,6 +595,137 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             lastTaskProps.onView?.('task-1');
 
             expect(onTaskView).toHaveBeenCalledWith('task-1', false);
+        });
+
+        test.each([
+            ['onApprove', 'APPROVED'],
+            ['onComplete', 'COMPLETED'],
+            ['onReject', 'REJECTED'],
+        ] as const)(
+            'should call onTaskAssignmentUpdate with the current user assignment id when %s fires',
+            (callback, expectedStatus) => {
+                const onTaskAssignmentUpdate = jest.fn();
+                render(
+                    <FeedItemRow
+                        {...defaultProps}
+                        currentUserId="user-1"
+                        item={mockTask}
+                        onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                    />,
+                );
+
+                lastTaskProps[callback]?.('task-1');
+
+                expect(onTaskAssignmentUpdate).toHaveBeenCalledWith('task-1', 'assignment-1', expectedStatus);
+            },
+        );
+
+        test('should omit onApprove/onComplete/onReject when current user is not assigned', () => {
+            const onTaskAssignmentUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    currentUserId="other-user"
+                    item={mockTask}
+                    onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                />,
+            );
+
+            expect(lastTaskProps.onApprove).toBeUndefined();
+            expect(lastTaskProps.onComplete).toBeUndefined();
+            expect(lastTaskProps.onReject).toBeUndefined();
+        });
+
+        test('should omit onApprove/onComplete/onReject when assignment lacks can_update permission', () => {
+            const taskWithoutUpdatePerm: TransformedFeedItem = {
+                ...mockTask,
+                originalTask: {
+                    ...mockOriginalTask,
+                    assigned_to: {
+                        ...mockOriginalTask.assigned_to,
+                        entries: [{ ...mockAssignment, permissions: { can_delete: true, can_update: false } }],
+                    },
+                } as unknown as TaskNew,
+            };
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    currentUserId="user-1"
+                    item={taskWithoutUpdatePerm}
+                    onTaskAssignmentUpdate={jest.fn()}
+                />,
+            );
+
+            expect(lastTaskProps.onApprove).toBeUndefined();
+            expect(lastTaskProps.onComplete).toBeUndefined();
+            expect(lastTaskProps.onReject).toBeUndefined();
+        });
+
+        test('should omit onApprove/onComplete/onReject when assignment status is not NOT_STARTED', () => {
+            const completedTask: TransformedFeedItem = {
+                ...mockTask,
+                originalTask: {
+                    ...mockOriginalTask,
+                    assigned_to: {
+                        ...mockOriginalTask.assigned_to,
+                        entries: [{ ...mockAssignment, status: 'COMPLETED' }],
+                    },
+                } as unknown as TaskNew,
+            };
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    currentUserId="user-1"
+                    item={completedTask}
+                    onTaskAssignmentUpdate={jest.fn()}
+                />,
+            );
+
+            expect(lastTaskProps.onApprove).toBeUndefined();
+            expect(lastTaskProps.onComplete).toBeUndefined();
+            expect(lastTaskProps.onReject).toBeUndefined();
+        });
+
+        test('should not call onTaskAssignmentUpdate when isDisabled', () => {
+            const onTaskAssignmentUpdate = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    currentUserId="user-1"
+                    isDisabled
+                    item={mockTask}
+                    onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                />,
+            );
+
+            lastTaskProps.onApprove?.('task-1');
+            lastTaskProps.onComplete?.('task-1');
+            lastTaskProps.onReject?.('task-1');
+
+            expect(onTaskAssignmentUpdate).not.toHaveBeenCalled();
+        });
+
+        test('should omit onApprove/onComplete/onReject when onTaskAssignmentUpdate is not provided', () => {
+            render(<FeedItemRow {...defaultProps} currentUserId="user-1" item={mockTask} />);
+
+            expect(lastTaskProps.onApprove).toBeUndefined();
+            expect(lastTaskProps.onComplete).toBeUndefined();
+            expect(lastTaskProps.onReject).toBeUndefined();
+        });
+
+        test('should call onTaskEdit with the original task when edit fires', () => {
+            const onTaskEdit = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockTask} onTaskEdit={onTaskEdit} />);
+
+            lastTaskProps.onEdit?.('task-1');
+
+            expect(onTaskEdit).toHaveBeenCalledWith(mockOriginalTask);
+        });
+
+        test('should omit onEdit when onTaskEdit is not provided', () => {
+            render(<FeedItemRow {...defaultProps} item={mockTask} />);
+
+            expect(lastTaskProps.onEdit).toBeUndefined();
         });
     });
 
