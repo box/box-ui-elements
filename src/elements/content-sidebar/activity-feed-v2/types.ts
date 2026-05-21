@@ -9,7 +9,7 @@ import type { TextMessageTypeV2 as TextMessageType } from '@box/threaded-annotat
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItems, FeedItemStatus } from '../../../common/types/feed';
 import type { User } from '../../../common/types/core';
-import type { TaskNew } from '../../../common/types/tasks';
+import type { TaskAssigneeCollection, TaskCollabStatus, TaskNew, TaskUpdatePayload } from '../../../common/types/tasks';
 
 export type { AppActivityItemProps, TaskItemProps, VersionItemProps } from '@box/activity-feed';
 export type { AnnotationBadgeTargetType } from '@box/threaded-annotations';
@@ -77,6 +77,7 @@ export type ActivityFeedV2Props = {
     getApproverWithQuery?: (searchStr: string) => void;
     getAvatarUrl?: (userId: string) => Promise<string | null | undefined>;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
+    getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     hasTasks?: boolean;
     isDisabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
@@ -104,7 +105,13 @@ export type ActivityFeedV2Props = {
     onReplyUpdate?: OnReplyUpdate;
     onShowOnlyMentionsMeChange?: (checked: boolean) => void;
     onShowResolvedChange?: (checked: boolean) => void;
+    onTaskAssignmentUpdate?: (taskId: string, taskAssignmentId: string, status: TaskCollabStatus) => void;
     onTaskDelete?: (task: TaskNew) => void;
+    onTaskUpdate?: (
+        task: TaskUpdatePayload,
+        onSuccess?: () => void,
+        onError?: (error: unknown, code?: string) => void,
+    ) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
     showOnlyMentionsMe?: boolean;

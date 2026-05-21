@@ -367,6 +367,20 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformTaskToProps(approvalTask as unknown as TaskNew);
             expect(result.taskType).toBe('APPROVAL');
         });
+
+        test('should set hasNextPage=false when assigned_to.next_marker is null', () => {
+            const result = transformTaskToProps(mockTask as unknown as TaskNew);
+            expect(result.hasNextPage).toBe(false);
+        });
+
+        test('should set hasNextPage=true when assigned_to.next_marker is present', () => {
+            const taskWithMore = {
+                ...mockTask,
+                assigned_to: { ...mockTask.assigned_to, next_marker: 'next-cursor' },
+            };
+            const result = transformTaskToProps(taskWithMore as unknown as TaskNew);
+            expect(result.hasNextPage).toBe(true);
+        });
     });
 
     describe('transformVersionToProps()', () => {
