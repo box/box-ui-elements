@@ -104,51 +104,68 @@ const ItemOptions = ({
     const OptionsTrigger = isGridView ? GridList.ActionIconButton : IconButton;
     const optionsTriggerProps = isGridView ? {} : iconButtonProps;
 
-    const OptionsDropdownMenu = ({ onOpenChange = noop }) => (
-        <DropdownMenu.Root onOpenChange={onOpenChange}>
-            <DropdownMenu.Trigger>
-                <OptionsTrigger
-                    aria-label={formatMessage(messages.moreOptions)}
-                    icon={Ellipsis}
-                    {...(optionsTriggerProps as IconButtonProps)}
-                />
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="end" container={portalElement}>
-                {isPreviewEnabled && (
-                    <DropdownMenu.Item onClick={() => onItemPreview(item)}>
-                        {formatMessage(messages.preview)}
-                    </DropdownMenu.Item>
-                )}
-                {isOpenEnabled && (
-                    <DropdownMenu.Item onClick={() => onItemPreview(item)}>
-                        {formatMessage(messages.open)}
-                    </DropdownMenu.Item>
-                )}
-                {isDeleteEnabled && (
-                    <DropdownMenu.Item onClick={() => onItemDelete(item)}>
-                        {formatMessage(messages.delete)}
-                    </DropdownMenu.Item>
-                )}
-                {isDownloadEnabled && (
-                    <DropdownMenu.Item onClick={() => onItemDownload(item)}>
-                        {formatMessage(messages.download)}
-                    </DropdownMenu.Item>
-                )}
-                {isRenameEnabled && (
-                    <DropdownMenu.Item onClick={() => onItemRename(item)}>
-                        {formatMessage(messages.rename)}
-                    </DropdownMenu.Item>
-                )}
-                {isShareEnabled && (
-                    <DropdownMenu.Item onClick={() => onItemShare(item)}>
-                        {formatMessage(messages.share)}
-                    </DropdownMenu.Item>
-                )}
-                {hasActions && hasOptions && <DropdownMenu.Separator />}
-                {hasActions && actions}
-            </DropdownMenu.Content>
-        </DropdownMenu.Root>
-    );
+    const OptionsDropdownMenu = ({ onOpenChange = noop }) => {
+        // ensure the item is focused after the menu dropdown is closed
+        const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+        return (
+            <DropdownMenu.Root onOpenChange={onOpenChange}>
+                <DropdownMenu.Trigger ref={triggerRef}>
+                    <OptionsTrigger
+                        aria-label={formatMessage(messages.moreOptions)}
+                        icon={Ellipsis}
+                        {...(optionsTriggerProps as IconButtonProps)}
+                    />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content
+                    align="end"
+                    container={portalElement}
+                    onCloseAutoFocus={event => {
+                        event.preventDefault();
+                        triggerRef.current?.focus({ preventScroll: true });
+                    }}
+                    // @ts-ignore next line - onOpenAutoFocus is intentionally stripped from DropdownMenuContentProps via Omit<MenuContentImplPrivateProps> in Radix's types, but it IS wired at runtime because DropdownMenuContentImpl spreads all props through to MenuContent, which passes it directly to FocusScope as onMountAutoFocus.
+                    onOpenAutoFocus={(event: Event) => {
+                        event.preventDefault();
+                        (event.currentTarget as HTMLElement | null).focus({ preventScroll: true });
+                    }}
+                >
+                    {isPreviewEnabled && (
+                        <DropdownMenu.Item onClick={() => onItemPreview(item)}>
+                            {formatMessage(messages.preview)}
+                        </DropdownMenu.Item>
+                    )}
+                    {isOpenEnabled && (
+                        <DropdownMenu.Item onClick={() => onItemPreview(item)}>
+                            {formatMessage(messages.open)}
+                        </DropdownMenu.Item>
+                    )}
+                    {isDeleteEnabled && (
+                        <DropdownMenu.Item onClick={() => onItemDelete(item)}>
+                            {formatMessage(messages.delete)}
+                        </DropdownMenu.Item>
+                    )}
+                    {isDownloadEnabled && (
+                        <DropdownMenu.Item onClick={() => onItemDownload(item)}>
+                            {formatMessage(messages.download)}
+                        </DropdownMenu.Item>
+                    )}
+                    {isRenameEnabled && (
+                        <DropdownMenu.Item onClick={() => onItemRename(item)}>
+                            {formatMessage(messages.rename)}
+                        </DropdownMenu.Item>
+                    )}
+                    {isShareEnabled && (
+                        <DropdownMenu.Item onClick={() => onItemShare(item)}>
+                            {formatMessage(messages.share)}
+                        </DropdownMenu.Item>
+                    )}
+                    {hasActions && hasOptions && <DropdownMenu.Separator />}
+                    {hasActions && actions}
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+        );
+    };
 
     // TODO: Update to one `return` statement after ContentPicker has been migrated to Blueprint
     if (viewMode) {
