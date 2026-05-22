@@ -14,8 +14,11 @@ import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
+import withMediaQuery from '../../components/media-query/withMediaQuery';
+import { VIEW_SIZE_TYPE } from '../../components/media-query/constants';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
+import SidebarResizeHandle from './SidebarResizeHandle';
 import SidebarUtils from './SidebarUtils';
 // $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
@@ -74,18 +77,29 @@ type Props = {
     /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
     shouldFetchSidebarData?: boolean,
     signSidebarProps: SignSidebarProps,
+    size: $Values<typeof VIEW_SIZE_TYPE>,
     theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,
+    viewWidth: number,
 };
 
 type State = {
     isDirty: boolean,
+    width: ?number,
 };
 
 export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
 export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
 export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
 export const SIDEBAR_SELECTED_PANEL_KEY: 'sidebar-selected-panel' = 'sidebar-selected-panel';
+export const SIDEBAR_WIDTH_KEY: 'bcs.sidebar.width' = 'bcs.sidebar.width';
+
+// Default widths mirror the hardcoded SCSS values ($sidebarTabsWidth + $sidebarContent[Increased]Width).
+// When the resizable feature flag is on, these become the minimum drag-to-resize widths.
+const SIDEBAR_DEFAULT_WIDTH = 400;
+const SIDEBAR_DEFAULT_WIDTH_WIDER = 440;
+// Cap dragged width at this fraction of the current viewport width.
+const SIDEBAR_MAX_WIDTH_RATIO = 0.5;
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
@@ -109,12 +123,30 @@ class Sidebar extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
+        const persistedWidth = this.store.getItem(SIDEBAR_WIDTH_KEY);
         this.state = {
             isDirty: this.getLocationState('open') || false,
+            width: typeof persistedWidth === 'number' ? persistedWidth : null,
         };
 
         this.setForcedByLocation();
     }
+
+    /**
+     * Default sidebar width based on whether the "wider" (Box AI) variant is active.
+     * Mirrors the SCSS fallback so flipping the flag on doesn't change the rendered width at rest.
+     */
+    getDefaultWidth(hasNativeBoxAISidebar: boolean, hasCustomBoxAISidebar: boolean): number {
+        return hasNativeBoxAISidebar || hasCustomBoxAISidebar ? SIDEBAR_DEFAULT_WIDTH_WIDER : SIDEBAR_DEFAULT_WIDTH;
+    }
+
+    handleResize = (width: number): void => {
+        this.setState({ width });
+    };
+
+    handleResizeEnd = (width: number): void => {
+        this.store.setItem(SIDEBAR_WIDTH_KEY, width);
+    };
 
     componentDidMount() {
         const { file, api, metadataSidebarProps, docGenSidebarProps, onOpenChange = noop }: Props = this.props;
@@ -304,6 +336,7 @@ class Sidebar extends React.Component<Props, State> {
             customSidebarPanels = [],
             detailsSidebarProps,
             docGenSidebarProps,
+            features,
             file,
             fileId,
             getPreview,
@@ -317,9 +350,12 @@ class Sidebar extends React.Component<Props, State> {
             onAnnotationSelect,
             onVersionChange,
             signSidebarProps,
+            size,
             theme,
             versionsSidebarProps,
+            viewWidth,
         }: Props = this.props;
+        const { width }: State = this.state;
         const isOpen = this.isOpen();
 
         const hasCustomBoxAISidebar = customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI);
@@ -331,14 +367,35 @@ class Sidebar extends React.Component<Props, State> {
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
+
+        const isViewportWideEnoughToResize = size === VIEW_SIZE_TYPE.large || size === VIEW_SIZE_TYPE.xlarge;
+        const isResizable =
+            isFeatureEnabled(features, 'contentSidebar.resizable.enabled') && isViewportWideEnoughToResize;
+        const minWidth = this.getDefaultWidth(hasNativeBoxAISidebar, hasCustomBoxAISidebar);
+        const maxWidth = Math.max(minWidth, Math.round(viewWidth * SIDEBAR_MAX_WIDTH_RATIO));
+        const currentWidth = width != null ? Math.min(Math.max(width, minWidth), maxWidth) : minWidth;
+        // Only force inline width once the user has actually dragged — otherwise leave the SCSS defaults in place.
+        const shouldApplyInlineWidth = isResizable && isOpen && width != null;
+        const inlineStyle = shouldApplyInlineWidth ? { width: currentWidth, maxWidth: currentWidth } : undefined;
+
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
+            'bcs-is-resizable': isResizable,
             'bcs-is-wider': hasNativeBoxAISidebar || hasCustomBoxAISidebar,
         });
         const defaultPanel = this.getDefaultPanel();
 
         return (
-            <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
+            <aside id={this.id} className={styleClassName} data-testid="preview-sidebar" style={inlineStyle}>
+                {isResizable && isOpen && !isLoading && (
+                    <SidebarResizeHandle
+                        maxWidth={maxWidth}
+                        minWidth={minWidth}
+                        onResize={this.handleResize}
+                        onResizeEnd={this.handleResizeEnd}
+                        width={currentWidth}
+                    />
+                )}
                 <ThemingStyles theme={theme} />
                 {isLoading ? (
                     <div className="bcs-loading">
@@ -404,4 +461,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withCurrentUser, withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withCurrentUser, withFeatureConsumer, withMediaQuery, withRouter])(Sidebar);

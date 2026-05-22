@@ -8,6 +8,7 @@ export const SIDEBAR_NAV_TARGETS = {
     METADATA: 'sidebarmetadata',
     TOGGLE: 'sidebartoggle',
     DOCGEN: 'sidebardocgen',
+    RESIZE_HANDLE: 'sidebarresizehandle',
 };
 
 export const SECTION_TARGETS = {
