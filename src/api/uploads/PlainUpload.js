@@ -76,7 +76,7 @@ class PlainUpload extends BaseUpload {
             }
         }
 
-        if (this.enableModernizedUploads && this.hadNameConflict) {
+        if (this.enableModernizedUploads && !!this.fileId) {
             uploadUrl = updateQueryParameters(uploadUrl, {
                 fields: STANDARD_UPLOAD_FIELDS_WITH_VERSION_NUMBER.join(','),
             });
@@ -167,7 +167,6 @@ class PlainUpload extends BaseUpload {
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
         this.conflictCallback = conflictCallback;
-        this.hadNameConflict = false;
         this.enableModernizedUploads = enableModernizedUploads;
 
         this.makePreflightRequest();

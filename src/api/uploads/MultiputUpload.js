@@ -260,7 +260,6 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.fileId = fileId;
         this.fileDescription = fileDescription;
-        this.hadNameConflict = false;
         this.enableModernizedUploads = enableModernizedUploads;
 
         this.makePreflightRequest();
@@ -984,7 +983,7 @@ class MultiputUpload extends BaseMultiput {
         };
 
         let commitUrl = this.sessionEndpoints.commit;
-        if (this.enableModernizedUploads && this.hadNameConflict) {
+        if (this.enableModernizedUploads && !!this.fileId) {
             commitUrl = updateQueryParameters(commitUrl, {
                 fields: STANDARD_UPLOAD_FIELDS_WITH_VERSION_NUMBER.join(','),
             });
@@ -1270,7 +1269,6 @@ class MultiputUpload extends BaseMultiput {
     async resolveConflict(data: Object): Promise<any> {
         if (this.overwrite && data.context_info) {
             this.fileId = data.context_info.conflicts.id;
-            this.hadNameConflict = true;
             return;
         }
         if (this.conflictCallback) {
