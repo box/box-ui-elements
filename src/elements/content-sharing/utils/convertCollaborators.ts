@@ -36,7 +36,7 @@ export const convertCollab = ({
     let collabEmail = inviteEmail;
     let collabName = inviteEmail;
 
-    if (accessibleBy?.name) {
+    if (accessibleBy?.id) {
         const { id: userId, login, name } = accessibleBy;
 
         collabId = userId;
@@ -44,7 +44,7 @@ export const convertCollab = ({
         collabName = name;
     }
 
-    if (!collabName) {
+    if (!collabName && !collabEmail) {
         return null;
     }
 
@@ -61,7 +61,7 @@ export const convertCollab = ({
         isCurrentUser: collabId != null && collabId === currentUserId,
         isExternal,
         isPending: status === STATUS_PENDING,
-        name: collabName,
+        name: collabName || collabEmail,
         role: API_TO_USM_COLLAB_ROLE_MAP[role],
         ...(collabId != null ? { userId: `${collabId}` } : {}),
     };

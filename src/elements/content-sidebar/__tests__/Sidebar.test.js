@@ -473,6 +473,95 @@ describe('elements/content-sidebar/Sidebar', () => {
         });
     });
 
+    describe('resizable', () => {
+        const resizableProps = {
+            features: { contentSidebar: { resizable: { enabled: true } } },
+            size: 'large',
+            viewWidth: 1600,
+        };
+
+        test('renders the resize handle and bcs-is-resizable class when feature is on and viewport is large', () => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper(resizableProps);
+
+            expect(wrapper.hasClass('bcs-is-resizable')).toBe(true);
+            expect(wrapper.find('SidebarResizeHandle').exists()).toBe(true);
+        });
+
+        test('does not render the resize handle when the feature flag is off', () => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper({
+                ...resizableProps,
+                features: { contentSidebar: { resizable: { enabled: false } } },
+            });
+
+            expect(wrapper.hasClass('bcs-is-resizable')).toBe(false);
+            expect(wrapper.find('SidebarResizeHandle').exists()).toBe(false);
+        });
+
+        test.each(['small', 'medium'])(
+            'does not render the resize handle on %s viewports even when the flag is on',
+            size => {
+                LocalStore.mockImplementationOnce(() => ({
+                    getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                    setItem: jest.fn(),
+                }));
+                const wrapper = getWrapper({ ...resizableProps, size });
+
+                expect(wrapper.hasClass('bcs-is-resizable')).toBe(false);
+                expect(wrapper.find('SidebarResizeHandle').exists()).toBe(false);
+            },
+        );
+
+        test('does not render the resize handle when the sidebar is closed', () => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_CLOSED),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper(resizableProps);
+
+            expect(wrapper.find('SidebarResizeHandle').exists()).toBe(false);
+        });
+
+        test('does not apply inline width until the user has dragged', () => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper(resizableProps);
+
+            expect(wrapper.find('aside').prop('style')).toBeUndefined();
+        });
+
+        test('applies inline width once handleResize has been called', () => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper(resizableProps);
+            wrapper.instance().handleResize(550);
+            wrapper.update();
+
+            expect(wrapper.find('aside').prop('style')).toEqual({ width: 550, maxWidth: 550 });
+        });
+
+        test('caps maxWidth at 50% of the viewport width', () => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper({ ...resizableProps, viewWidth: 1200 });
+
+            expect(wrapper.find('SidebarResizeHandle').prop('maxWidth')).toBe(600);
+        });
+    });
+
     describe('on panel change', () => {
         const mockSetItem = jest.fn();
         const mockPanelName = 'activity';

@@ -63,6 +63,15 @@ $sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
     }
 }
 
+// When resizable, let .bcs-content and its scroll children fill the resized aside
+.bcs-is-resizable .bcs-content {
+    width: 100%;
+
+    .bcs-scroll-content {
+        width: 100%;
+    }
+}
+
 @include breakpoint($medium-screen) {
     .bcs-content,
     .bcs-is-wider .bcs-content {
