@@ -37,6 +37,8 @@ import {
     FILE_ACTIVITY_TYPE_ANNOTATION,
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
     HTTP_STATUS_CODE_CONFLICT,
@@ -162,13 +164,17 @@ export const getParsedFileActivitiesResponse = (
                     if (taskItem.task_type) {
                         taskItem.task_type = taskItem.task_type.toUpperCase();
                     }
-                    // $FlowFixMe File Activities only returns a created_by user, Flow type fix is needed
                     taskItem.created_by = { target: taskItem.created_by };
 
                     return taskItem;
                 }
-                case FILE_ACTIVITY_TYPE_COMMENT: {
-                    const commentItem = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
+                case FILE_ACTIVITY_TYPE_COMMENT:
+                case FILE_ACTIVITY_TYPE_ENHANCED_COMMENT: {
+                    const rawCommentItem =
+                        item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_COMMENT
+                            ? source[FILE_ACTIVITY_TYPE_ENHANCED_COMMENT]
+                            : source[FILE_ACTIVITY_TYPE_COMMENT];
+                    const commentItem = { ...rawCommentItem };
 
                     if (commentItem.replies && commentItem.replies.length) {
                         const replies = parseReplies(commentItem.replies);
@@ -177,17 +183,25 @@ export const getParsedFileActivitiesResponse = (
                     }
 
                     commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
+                    commentItem.type = FILE_ACTIVITY_TYPE_COMMENT;
 
                     return commentItem;
                 }
-                case FILE_ACTIVITY_TYPE_ANNOTATION: {
-                    const annotationItem = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
+                case FILE_ACTIVITY_TYPE_ANNOTATION:
+                case FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION: {
+                    const rawAnnotationItem =
+                        item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION
+                            ? source[FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION]
+                            : source[FILE_ACTIVITY_TYPE_ANNOTATION];
+                    const annotationItem = { ...rawAnnotationItem };
 
                     if (annotationItem.replies && annotationItem.replies.length) {
                         const replies = parseReplies(annotationItem.replies);
 
                         annotationItem.replies = replies;
                     }
+
+                    annotationItem.type = FILE_ACTIVITY_TYPE_ANNOTATION;
 
                     return annotationItem;
                 }
@@ -554,6 +568,7 @@ class Feed extends Base {
             shouldShowTasks = true,
             shouldShowVersions = true,
             shouldUseUAA = false,
+            useEnhancedActivities = false,
         }: {
             shouldShowAnnotations?: boolean,
             shouldShowAppActivity?: boolean,
@@ -561,6 +576,7 @@ class Feed extends Base {
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
             shouldUseUAA?: boolean,
+            useEnhancedActivities?: boolean,
         } = {},
         logAPIParity?: Function,
     ): void {
@@ -597,12 +613,14 @@ class Feed extends Base {
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
-                ? [FILE_ACTIVITY_TYPE_ANNOTATION]
+                ? [useEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION : FILE_ACTIVITY_TYPE_ANNOTATION]
                 : [];
         const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
         const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
-        const commentActivityType = permissions[PERMISSION_CAN_COMMENT] ? [FILE_ACTIVITY_TYPE_COMMENT] : [];
+        const commentActivityType = permissions[PERMISSION_CAN_COMMENT]
+            ? [useEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT : FILE_ACTIVITY_TYPE_COMMENT]
+            : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
             ...appActivityActivityType,

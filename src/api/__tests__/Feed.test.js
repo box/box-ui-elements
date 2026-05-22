@@ -633,6 +633,32 @@ describe('api/Feed', () => {
                 done();
             });
         });
+
+        test('should request enhanced_annotation and enhanced_comment when useEnhancedActivities is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldUseUAA: true,
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowTasks: true,
+                shouldShowReplies: true,
+                shouldShowVersions: true,
+                useEnhancedActivities: true,
+            });
+            setImmediate(() => {
+                expect(feed.fetchFileActivities).toBeCalledWith(
+                    file.permissions,
+                    [
+                        'enhanced_annotation',
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        'enhanced_comment',
+                        FILE_ACTIVITY_TYPE_TASK,
+                        FILE_ACTIVITY_TYPE_VERSION,
+                    ],
+                    true,
+                );
+                done();
+            });
+        });
     });
 
     describe('fetchAnnotations()', () => {
@@ -2352,6 +2378,22 @@ describe('api/Feed', () => {
                     collaborators: { 42: mockUser },
                 },
             ]);
+        });
+
+        test('should parse enhanced_comment and enhanced_annotation activity types like their legacy counterparts', () => {
+            const enhancedComment = { ...threadedCommentsFormatted[0], id: 'enh-comment-1', message: 'enh' };
+            const enhancedAnnotation = { ...mockFormattedAnnotations[0], id: 'enh-annotation-1' };
+            const enhancedActivities = {
+                entries: [
+                    { activity_type: 'enhanced_comment', source: { enhanced_comment: enhancedComment } },
+                    { activity_type: 'enhanced_annotation', source: { enhanced_annotation: enhancedAnnotation } },
+                ],
+            };
+            const parsed = getParsedFileActivitiesResponse(enhancedActivities);
+            expect(parsed).toHaveLength(2);
+            const byId = Object.fromEntries(parsed.map(item => [item.id, item]));
+            expect(byId['enh-comment-1'].type).toBe(FILE_ACTIVITY_TYPE_COMMENT);
+            expect(byId['enh-annotation-1'].type).toBe(FILE_ACTIVITY_TYPE_ANNOTATION);
         });
 
         test('should return a parsed entries array when response is valid', () => {

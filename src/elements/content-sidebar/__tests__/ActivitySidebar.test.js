@@ -805,6 +805,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
                         shouldUseUAA: expectedUseUAA,
+                        useEnhancedActivities: false,
                     },
                     expectedUseUAA ? instance.logAPIParity : undefined,
                 );
@@ -839,6 +840,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowTasks: true,
                     shouldShowVersions: true,
                     shouldUseUAA: false,
+                    useEnhancedActivities: false,
                 },
                 undefined,
             );
