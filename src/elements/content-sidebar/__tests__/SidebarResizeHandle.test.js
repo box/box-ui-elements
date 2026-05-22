@@ -29,6 +29,12 @@ describe('elements/content-sidebar/SidebarResizeHandle', () => {
         expect(handle).toHaveClass('bcs-resize-handle');
     });
 
+    test('exposes a data-resin-target for analytics tracking', () => {
+        render(<SidebarResizeHandle {...defaultProps} />);
+        const handle = screen.getByTestId('sidebar-resize-handle');
+        expect(handle).toHaveAttribute('data-resin-target', 'sidebarresizehandle');
+    });
+
     test('calls onResize with growing width when dragging left from the handle', () => {
         const onResize = jest.fn();
         render(<SidebarResizeHandle {...defaultProps} onResize={onResize} width={400} />);

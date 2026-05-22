@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import './SidebarResizeHandle.scss';
 
 type Props = {
@@ -75,6 +76,7 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, width 
         <div
             aria-hidden="true"
             className={`bcs-resize-handle${isDragging ? ' bcs-resize-handle-is-dragging' : ''}`}
+            data-resin-target={SIDEBAR_NAV_TARGETS.RESIZE_HANDLE}
             data-testid="sidebar-resize-handle"
             onPointerDown={handlePointerDown}
         />
