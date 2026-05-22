@@ -119,7 +119,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[5],
                 currentUserId: mockOwnerId,
-                isCurrentUserOwner: false,
+                isCurrentUserOwner: true,
                 ownerEmailDomain,
             });
 
@@ -225,7 +225,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[2],
                 currentUserId: mockOwnerId,
-                isCurrentUserOwner: false,
+                isCurrentUserOwner: true,
                 ownerEmailDomain,
             });
 
@@ -310,7 +310,7 @@ describe('convertCollaborators', () => {
                     hasCustomAvatar: false,
                     id: '124',
                     isCurrentUser: false,
-                    isExternal: false,
+                    isExternal: true,
                     isPending: false,
                     name: 'Raccoon Queen',
                     role: 'viewer',
@@ -336,7 +336,7 @@ describe('convertCollaborators', () => {
                     hasCustomAvatar: false,
                     id: '127',
                     isCurrentUser: false,
-                    isExternal: false,
+                    isExternal: true,
                     isPending: true,
                     name: 'bbear@external.example.com',
                     role: 'editor',
