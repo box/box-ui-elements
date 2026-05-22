@@ -48,8 +48,10 @@ export const convertCollab = ({
         return null;
     }
 
+    // External collaborator icons will only be displayed in the USM if the current user owns
+    // the item and if the collaborator's email domain differs from the owner's email domain.
     const isExternal =
-        !isCurrentUserOwner && !!collabEmail && !!ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
+        isCurrentUserOwner && !!collabEmail && !!ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
     const avatarUrl = avatarUrlMap ? avatarUrlMap[collabId] : undefined;
 
     return {
