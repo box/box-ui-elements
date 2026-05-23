@@ -15,7 +15,7 @@ export const useSharingService = ({
     api,
     avatarUrlMap,
     collaborators,
-    currentUserId,
+    currentUser,
     item,
     itemId,
     itemType,
@@ -92,15 +92,15 @@ export const useSharingService = ({
                 const nextCollab = convertCollab({
                     avatarUrlMap,
                     collab: response,
-                    currentUserId,
-                    isCurrentUserOwner: currentUserId === ownerId,
+                    currentUser,
+                    isCurrentUserOwner: currentUser.id === ownerId,
                     ownerEmailDomain,
                 });
 
                 return nextCollab ? [...prevCollabs, nextCollab] : prevCollabs;
             });
         },
-        [avatarUrlMap, currentUserId, setCollaborators],
+        [avatarUrlMap, currentUser, setCollaborators],
     );
 
     const handleSendInvitations = useInvites(api, itemId, itemType, {

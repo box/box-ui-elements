@@ -18,6 +18,11 @@ const ownerFromApi = {
     email: mockOwnerEmail,
     name: mockOwnerName,
 };
+const mockCurrentUser = {
+    id: mockOwnerId,
+    email: mockOwnerEmail,
+    name: mockOwnerName,
+};
 const itemOwner = {
     id: mockOwnerEmail,
     status: STATUS_ACCEPTED,
@@ -94,7 +99,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[1],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
@@ -118,7 +123,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[5],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: true,
                 ownerEmailDomain,
             });
@@ -141,7 +146,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[3],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
@@ -165,7 +170,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab,
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
@@ -177,7 +182,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[4],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
@@ -189,7 +194,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[6],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
@@ -201,7 +206,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[0],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: true,
                 ownerEmailDomain,
             });
@@ -224,7 +229,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[2],
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: true,
                 ownerEmailDomain,
             });
@@ -238,7 +243,7 @@ describe('convertCollaborators', () => {
                 const result = convertCollab({
                     avatarUrlMap,
                     collab: mockCollaborations[1],
-                    currentUserId: mockOwnerId,
+                    currentUser: mockCurrentUser,
                     isCurrentUserOwner: false,
                     ownerEmailDomain,
                 });
@@ -257,7 +262,7 @@ describe('convertCollaborators', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: collabWithoutExpiration,
-                currentUserId: mockOwnerId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain,
             });
@@ -270,7 +275,7 @@ describe('convertCollaborators', () => {
         test('should convert valid collaborations data to Collaborator array', () => {
             const result = convertCollabsResponse(
                 mockCollaborationsFromApi,
-                mockOwnerId,
+                mockCurrentUser,
                 ownerFromApi,
                 mockAvatarUrlMap,
             );
@@ -346,13 +351,13 @@ describe('convertCollaborators', () => {
 
         test('should return empty array for empty entries', () => {
             const emptyCollaborations: Collaborations = { entries: [] };
-            const result = convertCollabsResponse(emptyCollaborations, mockOwnerId, ownerFromApi, mockAvatarUrlMap);
+            const result = convertCollabsResponse(emptyCollaborations, mockCurrentUser, ownerFromApi, mockAvatarUrlMap);
 
             expect(result).toEqual([]);
         });
 
         test('should handle null avatar URL map', () => {
-            const collabs = convertCollabsResponse(mockCollaborationsFromApi, mockOwnerId, ownerFromApi, null);
+            const collabs = convertCollabsResponse(mockCollaborationsFromApi, mockCurrentUser, ownerFromApi, null);
 
             collabs.map(collab => {
                 expect(collab.avatarUrl).toBeUndefined();

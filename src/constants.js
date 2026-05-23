@@ -171,6 +171,7 @@ export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_di
 export const FIELD_CLASSIFICATION: 'classification' = 'classification';
 export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
 export const FIELD_HOSTNAME: 'hostname' = 'hostname';
+export const FIELD_LOGIN: 'login' = 'login';
 
 /* ----------------------- Item-Prefixed Fields for MD Query API --------------------------- */
 const ITEM_PREFIX = 'item.';

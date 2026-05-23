@@ -28,6 +28,10 @@ import type { AvatarURLMap } from './types';
 
 import messages from './messages';
 
+interface ContentSharingUser extends User {
+    email?: string;
+}
+
 export interface ContentSharingV2Props {
     /** api - API instance */
     api: API;
@@ -68,7 +72,7 @@ function ContentSharingV2({
     const [hasError, setHasError] = React.useState<boolean>(false);
     const [sharedLink, setSharedLink] = React.useState<SharedLink | null>(null);
     const [sharingServiceProps, setSharingServiceProps] = React.useState(null);
-    const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+    const [currentUser, setCurrentUser] = React.useState<ContentSharingUser | null>(null);
     const [collaborationRoles, setCollaborationRoles] = React.useState<CollaborationRole[] | null>(null);
     const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
@@ -87,7 +91,7 @@ function ContentSharingV2({
         api,
         avatarUrlMap,
         collaborators,
-        currentUserId: currentUser?.id,
+        currentUser,
         item,
         itemId,
         itemType,
@@ -187,8 +191,8 @@ function ContentSharingV2({
                 return;
             }
 
-            const { enterprise, hostname, id } = userData;
-            setCurrentUser({ id });
+            const { enterprise, hostname, id, login } = userData;
+            setCurrentUser({ id, email: login });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
                 serverUrl: hostname ? `${hostname}v/` : '',
@@ -266,7 +270,7 @@ function ContentSharingV2({
         if (avatarUrlMap && collaboratorsData && currentUser && owner) {
             const collaboratorsWithAvatars = convertCollabsResponse(
                 collaboratorsData,
-                currentUser.id,
+                currentUser,
                 owner,
                 avatarUrlMap,
             );

@@ -70,7 +70,7 @@ const renderHookWithProps = (props = {}) => {
             api: mockApi,
             avatarUrlMap: {},
             collaborators: [],
-            currentUserId: '123',
+            currentUser: { id: '123' },
             item: mockItem,
             itemId: mockItemId,
             itemType: TYPE_FILE,
@@ -274,13 +274,13 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
     describe('handleSendInvitations', () => {
         const mockCollaborators = [{ id: 'collab-1', email: 'existing@example.com', type: 'user' }];
         const mockAvatarUrlMap = { 'user-1': 'https://example.com/avatar.jpg' };
-        const mockCurrentUserId = 'current-user-123';
+        const mockCurrentUser = { id: 'current-user-123' };
 
         test('should call useInvites with correct parameters', () => {
             renderHookWithProps({
                 collaborators: mockCollaborators,
                 avatarUrlMap: mockAvatarUrlMap,
-                currentUserId: mockCurrentUserId,
+                currentUser: mockCurrentUser,
             });
 
             expect(useInvites).toHaveBeenCalledWith(mockApi, mockItemId, TYPE_FILE, {
@@ -302,7 +302,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             renderHookWithProps({
                 collaborators: mockCollaborators,
                 avatarUrlMap: mockAvatarUrlMap,
-                currentUserId: mockCurrentUserId,
+                currentUser: mockCurrentUser,
             });
 
             // Get the handleSuccess and setCollaborators function that was passed to useInvites
@@ -313,7 +313,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
 
             expect(convertCollab).toHaveBeenCalledWith({
                 collab: mockResponse,
-                currentUserId: mockCurrentUserId,
+                currentUser: mockCurrentUser,
                 isCurrentUserOwner: false,
                 ownerEmailDomain: 'test.com',
                 avatarUrlMap: mockAvatarUrlMap,
