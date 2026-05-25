@@ -138,7 +138,6 @@ class PlainUpload extends BaseUpload {
         conflictCallback,
         // $FlowFixMe
         overwrite = true,
-        // $FlowFixMe
         enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,

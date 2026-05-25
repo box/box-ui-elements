@@ -179,7 +179,6 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
-        // $FlowFixMe
         enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
@@ -228,7 +227,6 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
-        // $FlowFixMe
         enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
@@ -457,7 +455,6 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
-        // $FlowFixMe
         enableModernizedUploads = false,
     }: {
         conflictCallback?: Function,
