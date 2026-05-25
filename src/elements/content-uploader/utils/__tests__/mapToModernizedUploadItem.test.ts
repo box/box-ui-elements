@@ -57,10 +57,7 @@ describe('mapToModernizedUploadItem()', () => {
     });
 
     test('defaults missing extension and progress', () => {
-        const result = mapToModernizedUploadItem(
-            buildLegacyItem({ extension: undefined, progress: undefined }),
-            '0',
-        );
+        const result = mapToModernizedUploadItem(buildLegacyItem({ extension: undefined, progress: undefined }), '0');
         expect(result.extension).toBe('');
         expect(result.progress).toBe(0);
     });
@@ -69,11 +66,69 @@ describe('mapToModernizedUploadItem()', () => {
 describe('mapToModernizedUploadItems()', () => {
     test('maps a list', () => {
         const result = mapToModernizedUploadItems(
-            [buildLegacyItem({ name: 'a.pdf', file: { name: 'a.pdf' } as File }), buildLegacyItem({ name: 'b.pdf', file: { name: 'b.pdf' } as File })],
+            [
+                buildLegacyItem({ name: 'a.pdf', file: { name: 'a.pdf' } as File }),
+                buildLegacyItem({ name: 'b.pdf', file: { name: 'b.pdf' } as File }),
+            ],
             '0',
         );
         expect(result).toHaveLength(2);
         expect(result[0].id).toBe('a.pdf');
         expect(result[1].id).toBe('b.pdf');
+    });
+
+    test('does not crash when item has no file (folder item)', () => {
+        const folderItem = {
+            name: 'my-folder',
+            extension: '',
+            progress: 0,
+            status: STATUS_PENDING,
+            size: 1,
+            isFolder: true,
+            api: {} as never,
+        } as never;
+
+        expect(() => mapToModernizedUploadItems([folderItem], '0')).not.toThrow();
+    });
+
+    test('produces stable id for folder item without options', () => {
+        const folderItem = {
+            name: 'my-folder',
+            extension: '',
+            progress: 0,
+            status: STATUS_PENDING,
+            size: 1,
+            isFolder: true,
+            api: {} as never,
+        } as never;
+
+        const result = mapToModernizedUploadItems([folderItem], '0');
+        expect(result[0].id).toBe('my-folder_0');
+    });
+
+    test('produces distinct ids for folder items with different folderId options', () => {
+        const folderA = {
+            name: 'shared',
+            extension: '',
+            progress: 0,
+            status: STATUS_PENDING,
+            size: 1,
+            isFolder: true,
+            options: { folderId: '111' },
+            api: {} as never,
+        } as never;
+        const folderB = {
+            name: 'shared',
+            extension: '',
+            progress: 0,
+            status: STATUS_PENDING,
+            size: 1,
+            isFolder: true,
+            options: { folderId: '222' },
+            api: {} as never,
+        } as never;
+
+        const result = mapToModernizedUploadItems([folderA, folderB], '0');
+        expect(result[0].id).not.toBe(result[1].id);
     });
 });

@@ -12,7 +12,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
-import { mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
+import { getModernizedItemId, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -1225,7 +1225,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     findItemByModernizedId = (id: string): UploadItem | undefined => {
         const { rootFolderId } = this.props;
-        return this.state.items.find(item => getFileId(item.file, rootFolderId) === id);
+        return this.state.items.find(item => getModernizedItemId(item, rootFolderId) === id);
     };
 
     handleModernizedItemAction = (id: string) => {
@@ -1357,9 +1357,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             view={view}
                         />
                     </div>
-                )
+                );
             }
- 
+
             return (
                 <div ref={measureRef} className={styleClassName} id={this.id}>
                     <ThemingStyles selector={`#${this.id}`} theme={theme} />
@@ -1384,14 +1384,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                         isDone={isDone}
                     />
                 </div>
-            )
-        }
+            );
+        };
 
         return (
             <Internationalize language={language} messages={messages}>
-                <TooltipProvider>
-                    {renderUploader()}
-                </TooltipProvider>
+                <TooltipProvider>{renderUploader()}</TooltipProvider>
             </Internationalize>
         );
     }

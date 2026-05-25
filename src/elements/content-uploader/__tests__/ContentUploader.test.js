@@ -863,6 +863,44 @@ describe('elements/content-uploader/ContentUploader', () => {
 
                 expect(onClickSpy).not.toHaveBeenCalled();
             });
+
+            test('should not crash when state contains a folder item without a file', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, rootFolderId: '0' });
+                const folderItem = {
+                    name: 'my-folder',
+                    extension: '',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    isFolder: true,
+                    api: {},
+                };
+                wrapper.setState({ items: [folderItem] });
+
+                expect(() => wrapper.find(UploadsManagerBP).prop('items')).not.toThrow();
+                const items = wrapper.find(UploadsManagerBP).prop('items');
+                expect(items).toHaveLength(1);
+                expect(items[0]).toMatchObject({ name: 'my-folder', isFolder: true });
+            });
+
+            test('should resolve folder item handler via modernized id', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, rootFolderId: '0' });
+                const folderItem = {
+                    name: 'my-folder',
+                    extension: '',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    isFolder: true,
+                    api: {},
+                };
+                wrapper.setState({ items: [folderItem] });
+                const instance = wrapper.instance();
+                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+
+                const folderId = wrapper.find(UploadsManagerBP).prop('items')[0].id;
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')(folderId);
+
+                expect(onClickSpy).toHaveBeenCalledWith(folderItem);
+            });
         });
     });
 });
