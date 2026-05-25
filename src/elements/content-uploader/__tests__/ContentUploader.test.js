@@ -7,7 +7,6 @@ import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../Cont
 import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
-import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import {
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
