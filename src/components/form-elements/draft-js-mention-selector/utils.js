@@ -163,7 +163,7 @@ function getFormattedCommentText(editorState: EditorState): { hasMention: boolea
 
     // Concatenate the array of block strings with newlines
     // (Each block represents a paragraph)
-    return { text: resultStringArr.join('\n'), hasMention };
+    return { text: resultStringArr.join('\n').trim(), hasMention };
 }
 
 export {

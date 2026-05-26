@@ -53,4 +53,8 @@
     button svg {
         pointer-events: auto;
     }
+
+    &-mentionEmpty {
+        padding: var(--bp-space-030) var(--bp-space-040);
+    }
 }
