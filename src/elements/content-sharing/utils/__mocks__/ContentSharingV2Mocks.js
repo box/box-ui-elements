@@ -40,6 +40,7 @@ export const mockAvatarUrlMap = {
 };
 
 export const mockOwnerEmail = 'aotter@example.com';
+export const mockOwnerEmailDomain = 'example.com';
 export const mockOwnerName = 'Astronaut Otter';
 export const mockOwnerId = '789';
 

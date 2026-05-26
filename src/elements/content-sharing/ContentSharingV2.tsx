@@ -11,7 +11,6 @@ import type {
     Item,
     SharedLink,
     SharingService,
-    User,
     VariantType,
 } from '@box/unified-share-modal';
 
@@ -24,13 +23,9 @@ import { convertCollabsResponse, convertItemResponse } from './utils';
 
 import type { ElementsXhrError } from '../../common/types/api';
 import type { Collaborations, ItemType } from '../../common/types/core';
-import type { AvatarURLMap } from './types';
+import type { AvatarURLMap, ContentSharingUser } from './types';
 
 import messages from './messages';
-
-interface ContentSharingUser extends User {
-    email?: string;
-}
 
 export interface ContentSharingV2Props {
     /** api - API instance */
@@ -192,7 +187,8 @@ function ContentSharingV2({
             }
 
             const { enterprise, hostname, id, login } = userData;
-            setCurrentUser({ id, email: login });
+            const emailDomain = login && /@/.test(login) ? login.split('@')[1] : undefined;
+            setCurrentUser({ id, email: login, emailDomain });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
                 serverUrl: hostname ? `${hostname}v/` : '',

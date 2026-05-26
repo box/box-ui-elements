@@ -7,12 +7,12 @@ import {
     mockAvatarUrlMap,
     mockOwnerId,
     mockOwnerEmail,
+    mockOwnerEmailDomain,
     mockOwnerName,
 } from '../__mocks__/ContentSharingV2Mocks';
 
 import type { Collaborations } from '../../../../common/types/core';
 
-const ownerEmailDomain = 'example.com';
 const ownerFromApi = {
     id: mockOwnerId,
     email: mockOwnerEmail,
@@ -21,6 +21,7 @@ const ownerFromApi = {
 const mockCurrentUser = {
     id: mockOwnerId,
     email: mockOwnerEmail,
+    emailDomain: mockOwnerEmailDomain,
 };
 const itemOwner = {
     id: mockOwnerEmail,
@@ -99,8 +100,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[1],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toEqual({
@@ -123,8 +123,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[5],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: true,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toEqual({
@@ -146,8 +145,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[3],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toEqual({
@@ -170,8 +168,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab,
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toBeNull();
@@ -182,8 +179,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[4],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toBeNull();
@@ -194,8 +190,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[6],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toBeNull();
@@ -206,8 +201,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[0],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: true,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result).toEqual({
@@ -229,11 +223,22 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: mockCollaborations[2],
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: true,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result.isExternal).toBe(true);
+        });
+
+        test('should not mark collaborator as external when currentUser has no emailDomain', () => {
+            const currentUserWithoutDomain = { id: mockOwnerId, email: mockOwnerEmail };
+            const result = convertCollab({
+                avatarUrlMap: mockAvatarUrlMap,
+                collab: mockCollaborations[2],
+                currentUser: currentUserWithoutDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
+            });
+
+            expect(result.isExternal).toBe(false);
         });
 
         test.each([null, undefined, {}, { 999: 'https://example.com/different-user-avatar.jpg' }])(
@@ -243,8 +248,7 @@ describe('convertCollaborators', () => {
                     avatarUrlMap,
                     collab: mockCollaborations[1],
                     currentUser: mockCurrentUser,
-                    isCurrentUserOwner: false,
-                    ownerEmailDomain,
+                    ownerEmailDomain: mockOwnerEmailDomain,
                 });
 
                 expect(result.avatarUrl).toBeUndefined();
@@ -262,8 +266,7 @@ describe('convertCollaborators', () => {
                 avatarUrlMap: mockAvatarUrlMap,
                 collab: collabWithoutExpiration,
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
-                ownerEmailDomain,
+                ownerEmailDomain: mockOwnerEmailDomain,
             });
 
             expect(result.expiresAt).toBeNull();

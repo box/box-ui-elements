@@ -314,7 +314,6 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
             expect(convertCollab).toHaveBeenCalledWith({
                 collab: mockResponse,
                 currentUser: mockCurrentUser,
-                isCurrentUserOwner: false,
                 ownerEmailDomain: 'test.com',
                 avatarUrlMap: mockAvatarUrlMap,
             });

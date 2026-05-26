@@ -85,7 +85,7 @@ export const useSharingService = ({
     // Create the sendInvitations callbacks using the existing memoized useInvites hook
     const handleSuccess = React.useCallback(
         response => {
-            const { id: ownerId, login: ownerEmail } = response.created_by;
+            const { login: ownerEmail } = response.created_by;
             const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
             setCollaborators(prevCollabs => {
@@ -93,7 +93,6 @@ export const useSharingService = ({
                     avatarUrlMap,
                     collab: response,
                     currentUser,
-                    isCurrentUserOwner: currentUser?.id === ownerId,
                     ownerEmailDomain,
                 });
 

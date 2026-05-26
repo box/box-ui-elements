@@ -8,13 +8,12 @@ import {
     USM_TO_API_COLLAB_ROLE_MAP,
 } from '../constants';
 
-import type { Collaboration, Collaborations, User } from '../../../common/types/core';
-import type { AvatarURLMap } from '../types';
+import type { Collaboration, Collaborations } from '../../../common/types/core';
+import type { AvatarURLMap, ContentSharingUser } from '../types';
 
 export interface ConvertCollabProps {
     collab: Collaboration;
-    currentUser: User;
-    isCurrentUserOwner: boolean;
+    currentUser: ContentSharingUser;
     ownerEmailDomain: string;
     avatarUrlMap?: AvatarURLMap;
 }
@@ -23,7 +22,6 @@ export const convertCollab = ({
     avatarUrlMap,
     collab,
     currentUser,
-    isCurrentUserOwner,
     ownerEmailDomain,
 }: ConvertCollabProps): Collaborator | null => {
     if (!collab || collab.status === STATUS_REJECTED) {
@@ -50,10 +48,8 @@ export const convertCollab = ({
 
     // External collaborator icons will only be displayed in the USM if the current user is the item owner or
     // belongs to the same enterprise as the owner, and if the collaborator's email domain differs from the owner's enterprise email domain.
-    const currentUserEmailDomain =
-        !!currentUser?.email && /@/.test(currentUser.email) ? currentUser.email.split('@')[1] : null;
     const isExternal =
-        (isCurrentUserOwner || currentUserEmailDomain === ownerEmailDomain) &&
+        currentUser?.emailDomain === ownerEmailDomain &&
         !!collabEmail &&
         !!ownerEmailDomain &&
         collabEmail.split('@')[1] !== ownerEmailDomain;
@@ -76,7 +72,7 @@ export const convertCollab = ({
 
 export const convertCollabsResponse = (
     collabsApiData: Collaborations,
-    currentUser: User,
+    currentUser: ContentSharingUser,
     owner: { id: string; email: string; name: string },
     avatarUrlMap?: AvatarURLMap,
 ): Collaborator[] => {
@@ -84,7 +80,6 @@ export const convertCollabsResponse = (
     if (!entries.length) return [];
 
     const { id: ownerId, email: ownerEmail, name: ownerName } = owner;
-    const isCurrentUserOwner = currentUser?.id === ownerId;
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
     const itemOwner = {
@@ -99,7 +94,7 @@ export const convertCollabsResponse = (
     };
 
     return [itemOwner, ...entries].flatMap(collab => {
-        const converted = convertCollab({ avatarUrlMap, collab, currentUser, isCurrentUserOwner, ownerEmailDomain });
+        const converted = convertCollab({ avatarUrlMap, collab, currentUser, ownerEmailDomain });
         return converted ? [converted] : [];
     });
 };
