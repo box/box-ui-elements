@@ -1,5 +1,5 @@
 import { DEFAULT_USER_API_RESPONSE, MOCK_ITEM } from '../../utils/__mocks__/ContentSharingV2Mocks';
-import { FIELD_ENTERPRISE, FIELD_HOSTNAME } from '../../../../constants';
+import { FIELD_ENTERPRISE, FIELD_HOSTNAME, FIELD_LOGIN } from '../../../../constants';
 import { fetchCurrentUser } from '..';
 import { createSuccessMock, createUsersApiMock } from './testUtils';
 
@@ -17,7 +17,7 @@ describe('content-sharing/apis/fetchCurrentUser', () => {
         expect(defaultApiMock.getUsersAPI).toHaveBeenCalledWith(false);
         expect(getDefaultUserMock).toHaveBeenCalledWith(MOCK_ITEM.id, expect.any(Function), expect.any(Function), {
             params: {
-                fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME].toString(),
+                fields: [FIELD_ENTERPRISE, FIELD_HOSTNAME, FIELD_LOGIN].toString(),
             },
         });
         expect(result).toEqual(DEFAULT_USER_API_RESPONSE);
