@@ -46,8 +46,8 @@ export const convertCollab = ({
         return null;
     }
 
-    // External collaborator icons will only be displayed in the USM if the current user is the item owner or
-    // belongs to the same enterprise as the owner, and if the collaborator's email domain differs from the owner's enterprise email domain.
+    // The external badge on the collaborator avatar is only visible if the current user is
+    // in the same enterprise as the item owner and the collaborator is not in the same enterprise.
     const isExternal =
         currentUser?.emailDomain === ownerEmailDomain &&
         !!collabEmail &&
