@@ -21,7 +21,6 @@ const ownerFromApi = {
 const mockCurrentUser = {
     id: mockOwnerId,
     email: mockOwnerEmail,
-    name: mockOwnerName,
 };
 const itemOwner = {
     id: mockOwnerEmail,

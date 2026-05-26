@@ -93,7 +93,7 @@ export const useSharingService = ({
                     avatarUrlMap,
                     collab: response,
                     currentUser,
-                    isCurrentUserOwner: currentUser.id === ownerId,
+                    isCurrentUserOwner: currentUser?.id === ownerId,
                     ownerEmailDomain,
                 });
 

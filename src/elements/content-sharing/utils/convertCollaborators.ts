@@ -65,7 +65,7 @@ export const convertCollab = ({
         expiresAt,
         hasCustomAvatar: !!avatarUrl,
         id: `${id}`,
-        isCurrentUser: collabId != null && collabId === currentUser.id,
+        isCurrentUser: collabId != null && collabId === currentUser?.id,
         isExternal,
         isPending: status === STATUS_PENDING,
         name: collabName || collabEmail,
@@ -84,7 +84,7 @@ export const convertCollabsResponse = (
     if (!entries.length) return [];
 
     const { id: ownerId, email: ownerEmail, name: ownerName } = owner;
-    const isCurrentUserOwner = currentUser.id === ownerId;
+    const isCurrentUserOwner = currentUser?.id === ownerId;
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
     const itemOwner = {
