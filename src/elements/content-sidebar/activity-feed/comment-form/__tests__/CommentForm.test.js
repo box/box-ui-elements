@@ -130,20 +130,32 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         expect(wrapper.find('DraftJSMentionSelector').at(0).prop('placeholder')).toEqual('Your comment goes here');
     });
 
-    test('should not focus on textbox when shouldFocusOnOpen is false', () => {
-        const mockFocusFunc = jest.fn();
-        EditorState.moveFocusToEnd = mockFocusFunc;
+    describe('moveFocusToEnd', () => {
+        let originalMoveFocusToEnd;
 
-        getWrapperRTL();
-        expect(mockFocusFunc).not.toHaveBeenCalled();
-    });
+        beforeEach(() => {
+            originalMoveFocusToEnd = EditorState.moveFocusToEnd;
+        });
 
-    test('should focus on textbox when shouldFocusOnOpen is true', () => {
-        const mockFocusFunc = jest.fn();
-        EditorState.moveFocusToEnd = mockFocusFunc;
+        afterEach(() => {
+            EditorState.moveFocusToEnd = originalMoveFocusToEnd;
+        });
 
-        getWrapperRTL({ shouldFocusOnOpen: true });
-        expect(mockFocusFunc).toHaveBeenCalled();
+        test('should not focus on textbox when shouldFocusOnOpen is false', () => {
+            const mockFocusFunc = jest.fn();
+            EditorState.moveFocusToEnd = mockFocusFunc;
+
+            getWrapperRTL();
+            expect(mockFocusFunc).not.toHaveBeenCalled();
+        });
+
+        test('should focus on textbox when shouldFocusOnOpen is true', () => {
+            const mockFocusFunc = jest.fn(state => state);
+            EditorState.moveFocusToEnd = mockFocusFunc;
+
+            getWrapperRTL({ shouldFocusOnOpen: true });
+            expect(mockFocusFunc).toHaveBeenCalled();
+        });
     });
 
     test('should enable timestamp when file is a video and timestampedComments is enabled', () => {

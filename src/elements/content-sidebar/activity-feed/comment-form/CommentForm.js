@@ -147,7 +147,7 @@ class CommentForm extends React.Component<CommentFormProps, State> {
         const allowVideoTimestamps = isVideo && istimestampedCommentsEnabled;
         const timestampLabel = allowVideoTimestamps ? formatMessage(messages.commentTimestampLabel) : undefined;
         const { commentEditorState } = this.state;
-        const isPostDisabled = !commentEditorState?.getCurrentContent().getPlainText().trim();
+        const isPostDisabled = !commentEditorState.getCurrentContent().getPlainText().trim();
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
         });
