@@ -11,21 +11,25 @@ const STATUS_MAP: Record<string, UploadItemStatus> = {
     [STATUS_ERROR]: 'error',
 };
 
-export function getModernizedItemId(item: LegacyUploadItem | FolderUploadItem, rootFolderId: string): string {
+export function getUploadItemKey(item: LegacyUploadItem | FolderUploadItem, rootFolderId: string): string {
     const fileItem = item as LegacyUploadItem;
     if (fileItem.file) {
         const fileWithOptions = fileItem.options ? { file: fileItem.file, options: fileItem.options } : fileItem.file;
         return getFileId(fileWithOptions, rootFolderId);
     }
     const folderId = item.options?.folderId ?? rootFolderId;
-    return `${item.name}_${folderId}`;
+    const { uploadInitTimestamp } = item.options ?? {};
+    if (uploadInitTimestamp === undefined) {
+        return `${item.name}_${folderId}`;
+    }
+    return `${item.name}_${folderId}_${uploadInitTimestamp}`;
 }
 
 export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadItem, rootFolderId: string): UploadItem {
     const errorMessage = item.error ? (item.error as { message?: string }).message : undefined;
 
     return {
-        id: getModernizedItemId(item, rootFolderId),
+        id: getUploadItemKey(item, rootFolderId),
         name: item.name,
         extension: item.extension ?? '',
         progress: item.progress ?? 0,

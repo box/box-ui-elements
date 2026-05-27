@@ -12,7 +12,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
-import { getModernizedItemId, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
+import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -496,7 +496,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const fileAPIOptions = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
-        const folderUploads = newItems.map(item => {
+        const dropTimestamp = Date.now();
+        const folderUploads = newItems.map((item, index) => {
             const folderUpload = this.getFolderUploadAPI(folderId);
             folderUpload.buildFolderTreeFromDataTransferItem(item);
             return {
@@ -504,7 +505,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 extension: '',
                 isFolder: true,
                 name: folderUpload.folder.name,
-                options: fileAPIOptions,
+                options: { ...fileAPIOptions, uploadInitTimestamp: dropTimestamp + index },
                 progress: 0,
                 size: 1,
                 status: STATUS_PENDING,
@@ -569,7 +570,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                     extension: '',
                     isFolder: true,
                     name: folderUpload.folder.name,
-                    options: apiOptions,
+                    options: { uploadInitTimestamp: Date.now(), ...apiOptions },
                     progress: 0,
                     size: 1,
                     status: STATUS_PENDING,
@@ -1221,24 +1222,30 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
-     * Find legacy UploadItem by the id used by the modernized uploads manager.
+     * Find legacy UploadItem by the client-side key used by the modernized uploads manager.
      */
-    findItemByModernizedId = (id: string): UploadItem | undefined => {
+    findItemByUploadKey = (key: string): UploadItem | undefined => {
         const { rootFolderId } = this.props;
-        return this.state.items.find(item => getModernizedItemId(item, rootFolderId) === id);
+        return this.state.items.find(item => getUploadItemKey(item, rootFolderId) === key);
     };
 
-    handleModernizedItemAction = (id: string) => {
-        const item = this.findItemByModernizedId(id);
+    handleModernizedItemAction = (key: string) => {
+        const item = this.findItemByUploadKey(key);
         if (item) {
             this.onClick(item);
+        } else {
+            /* eslint-disable no-console */
+            console.warn(`ContentUploader: no upload item found for key "${key}" on action.`);
+            /* eslint-enable no-console */
         }
     };
 
-    handleModernizedItemRemove = (id: string) => {
-        const item = this.findItemByModernizedId(id);
+    handleModernizedItemRemove = (key: string) => {
+        const item = this.findItemByUploadKey(key);
         if (item) {
             this.removeFileFromUploadQueue(item);
+        } else {
+            console.warn(`ContentUploader: no upload item found for key "${key}" on remove.`);
         }
     };
 

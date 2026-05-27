@@ -145,6 +145,7 @@ describe('api/uploads/FolderUploadNode', () => {
             expect(folderUploadNodeInstance.addFolderToUploadQueue).toHaveBeenCalledWith({
                 extension: '',
                 name,
+                options: expect.objectContaining({ folderId, uploadInitTimestamp: expect.any(Number) }),
                 status: STATUS_COMPLETE,
                 isFolder: true,
                 size: 1,
@@ -167,6 +168,7 @@ describe('api/uploads/FolderUploadNode', () => {
             expect(folderUploadNodeInstance.addFolderToUploadQueue).toHaveBeenCalledWith({
                 extension: '',
                 name,
+                options: expect.objectContaining({ folderId, uploadInitTimestamp: expect.any(Number) }),
                 status: STATUS_COMPLETE,
                 isFolder: true,
                 size: 1,
