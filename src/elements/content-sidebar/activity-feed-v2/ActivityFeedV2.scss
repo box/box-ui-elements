@@ -20,6 +20,11 @@
         padding-left: var(--bp-space-040);
     }
 
+    &-editor > div {
+        padding-right: var(--bp-space-040);
+        padding-left: var(--bp-space-040);
+    }
+
     // Forms: BUIE sets width, padding, border, box-shadow, border-radius on
     // contenteditable and inputs via _forms.scss inside .bcs scope.
     div[contenteditable='true'],
@@ -52,5 +57,9 @@
     a svg,
     button svg {
         pointer-events: auto;
+    }
+
+    &-mentionEmpty {
+        padding: var(--bp-space-030) var(--bp-space-040);
     }
 }
