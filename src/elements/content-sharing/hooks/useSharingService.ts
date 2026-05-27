@@ -15,7 +15,7 @@ export const useSharingService = ({
     api,
     avatarUrlMap,
     collaborators,
-    currentUserId,
+    currentUser,
     item,
     itemId,
     itemType,
@@ -85,22 +85,21 @@ export const useSharingService = ({
     // Create the sendInvitations callbacks using the existing memoized useInvites hook
     const handleSuccess = React.useCallback(
         response => {
-            const { id: ownerId, login: ownerEmail } = response.created_by;
+            const { login: ownerEmail } = response.created_by;
             const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
             setCollaborators(prevCollabs => {
                 const nextCollab = convertCollab({
                     avatarUrlMap,
                     collab: response,
-                    currentUserId,
-                    isCurrentUserOwner: currentUserId === ownerId,
+                    currentUser,
                     ownerEmailDomain,
                 });
 
                 return nextCollab ? [...prevCollabs, nextCollab] : prevCollabs;
             });
         },
-        [avatarUrlMap, currentUserId, setCollaborators],
+        [avatarUrlMap, currentUser, setCollaborators],
     );
 
     const handleSendInvitations = useInvites(api, itemId, itemType, {

@@ -99,6 +99,7 @@ type Props = {
     cache?: APICache,
     canDownload?: boolean,
     className: string,
+    clientName?: string,
     collection: Array<string | BoxItem>,
     contentAnswersProps: ContentAnswersProps,
     contentOpenWithProps: ContentOpenWithProps,
@@ -908,6 +909,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             accessPattern,
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
+            clientName,
             renderCustomPreview,
             enableThumbnailsSidebar,
             enableBoundingBoxHighlights,
@@ -963,6 +965,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const previewOptions = {
             accessPattern,
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
+            clientName,
             container: `#${this.id} .bcpr-content`,
             enableBoundingBoxHighlights,
             enableThumbnailsSidebar,

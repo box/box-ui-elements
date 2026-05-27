@@ -1,5 +1,5 @@
 // @flow
-import type { CollaborationRole, Collaborator, DateValue, Item, SharedLink } from '@box/unified-share-modal';
+import type { CollaborationRole, Collaborator, DateValue, Item, SharedLink, User } from '@box/unified-share-modal';
 
 import API from '../../api';
 
@@ -189,4 +189,9 @@ export interface SharedLinkSettings {
     isPasswordEnabled: boolean;
     password: string;
     vanityName: string;
+}
+
+export interface ContentSharingUser extends User {
+    email?: string;
+    emailDomain?: string;
 }
