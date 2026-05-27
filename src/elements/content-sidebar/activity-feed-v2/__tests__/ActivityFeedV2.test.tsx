@@ -662,14 +662,25 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     });
 
     describe('scroll to user post', () => {
-        const newComment = { ...mockComment, id: 'new-comment', tagged_message: 'fresh post' };
-        const strangerComment = { ...mockComment, id: 'stranger-comment', tagged_message: 'unrelated' };
+        const numericCurrentUser: ActivityFeedV2Props['currentUser'] = { id: '10', name: 'Current User', type: 'user' };
+        const userComment = {
+            ...mockComment,
+            created_by: { id: '10', name: 'Current User', type: 'user' },
+            id: 'new-comment',
+            tagged_message: 'fresh post',
+        };
+        const strangerComment = {
+            ...mockComment,
+            created_by: { id: '99', name: 'Stranger', type: 'user' },
+            id: 'stranger-comment',
+            tagged_message: 'unrelated',
+        };
 
-        test('should scroll to the new item once feedItems updates after a post', async () => {
+        test('should scroll to the new user item once feedItems updates after a post', async () => {
             const onCommentCreate = jest.fn();
             const { rerender } = render(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
@@ -682,8 +693,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
-                    feedItems={[mockComment, newComment] as ActivityFeedV2Props['feedItems']}
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -696,7 +707,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const onCommentCreate = jest.fn().mockRejectedValue(new Error('network error'));
             const { rerender } = render(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
@@ -706,8 +717,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             await lastEditorProps.onPost?.({ type: 'doc', content: [] });
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
-                    feedItems={[mockComment, newComment] as ActivityFeedV2Props['feedItems']}
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -720,7 +731,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         test('should not scroll to a concurrent push that arrives without a user post', async () => {
             const { rerender } = render(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
                 />,
             );
@@ -728,7 +739,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
                 />,
             );
@@ -736,11 +747,11 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockScrollTo).not.toHaveBeenCalled();
         });
 
-        test('should scroll to the user post even when a stranger post lands in the same render', async () => {
+        test('should scroll past a stranger insert and target the user-authored item only', async () => {
             const onCommentCreate = jest.fn();
             const { rerender } = render(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
@@ -750,8 +761,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             await lastEditorProps.onPost?.({ type: 'doc', content: [] });
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
-                    feedItems={[mockComment, newComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, strangerComment, userComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -760,12 +771,11 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockScrollTo).not.toHaveBeenCalledWith('stranger-comment');
         });
 
-        test('should not scroll when serializeEditorContent yields no text', async () => {
-            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: '   ' });
+        test('should not scroll when only a stranger insert lands after a user post', async () => {
             const onCommentCreate = jest.fn();
             const { rerender } = render(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
@@ -775,8 +785,32 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             await lastEditorProps.onPost?.({ type: 'doc', content: [] });
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
-                    feedItems={[mockComment, newComment] as ActivityFeedV2Props['feedItems']}
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(mockScrollTo).not.toHaveBeenCalled();
+        });
+
+        test('should not scroll when serializeEditorContent yields no text', async () => {
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: '   ' });
+            const onCommentCreate = jest.fn();
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -790,7 +824,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const onCommentCreate = jest.fn();
             const { rerender } = render(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
+                    currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
@@ -801,8 +835,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             await lastEditorProps.onPost?.({ type: 'doc', content: [] });
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
-                    feedItems={[mockComment, newComment] as ActivityFeedV2Props['feedItems']}
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -812,8 +846,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             mockScrollTo.mockReturnValue(true);
             rerender(
                 <ActivityFeedV2
-                    currentUser={mockCurrentUser}
-                    feedItems={[mockComment, newComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment, strangerComment] as ActivityFeedV2Props['feedItems']}
                     onCommentCreate={onCommentCreate}
                 />,
             );

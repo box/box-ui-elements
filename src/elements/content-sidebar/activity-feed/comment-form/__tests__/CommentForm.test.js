@@ -191,6 +191,12 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
             expect(findControls(wrapper).prop('isDisabled')).toBe(true);
         });
 
+        test('should pass isDisabled=true to the controls when the editor has only whitespace', () => {
+            const wrapper = getWrapper({ isOpen: true, tagged_message: '   \n\t   ' });
+
+            expect(findControls(wrapper).prop('isDisabled')).toBe(true);
+        });
+
         test('should pass isDisabled=false to the controls when the editor has non-whitespace content', () => {
             const wrapper = getWrapper({ isOpen: true, tagged_message: 'hello' });
 

@@ -260,17 +260,22 @@ const ActivityFeedV2 = ({
         }
     }, [activeFeedEntryId, filteredItems, scrollHandle]);
 
-    // Scroll only to items added since the post snapshot, so a concurrent push from
-    // another user doesn't hijack the viewport.
+    // Scroll only to comments/annotations the current user authored after the post
+    // snapshot, so a concurrent push from another user doesn't hijack the viewport.
     React.useEffect(() => {
         const knownIds = knownIdsBeforePostRef.current;
-        if (!knownIds || !scrollHandle) return;
-        const newItem = filteredItems.find(item => !knownIds.has(item.id));
+        if (!knownIds || !scrollHandle || !currentUserId) return;
+        const newItem = filteredItems.find(item => {
+            if (knownIds.has(item.id)) return false;
+            if (item.type !== 'comment' && item.type !== 'annotation') return false;
+            const author = item.messages[0]?.author;
+            return author ? String(author.id) === currentUserId : false;
+        });
         if (!newItem) return;
         if (scrollHandle.scrollTo(newItem.id)) {
             knownIdsBeforePostRef.current = null;
         }
-    }, [filteredItems, scrollHandle]);
+    }, [currentUserId, filteredItems, scrollHandle]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
