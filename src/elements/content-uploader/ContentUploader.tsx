@@ -819,8 +819,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { enableModernizedUploads, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
 
-        const fileId = options && options.fileId ? options.fileId : null;
-
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
         if (numItemsUploading >= UPLOAD_CONCURRENCY) {
@@ -834,8 +832,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             progressCallback: event => this.handleUploadProgress(item, event),
             successCallback: entries => this.handleUploadSuccess(item, entries),
             overwrite,
-            fileId,
-            fields: enableModernizedUploads && fileId ? UPLOAD_FIELDS_TO_FETCH : null,
+            fileId: options && options.fileId ? options.fileId : null,
+            fields: enableModernizedUploads ? UPLOAD_FIELDS_TO_FETCH : null,
         };
 
         item.status = STATUS_IN_PROGRESS;
@@ -857,8 +855,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { enableModernizedUploads, onResume, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
 
-        const fileId = options && options.fileId ? options.fileId : null;
-
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
         if (numItemsUploading >= UPLOAD_CONCURRENCY) {
@@ -873,8 +869,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             successCallback: entries => this.handleUploadSuccess(item, entries),
             overwrite,
             sessionId: api && api.sessionId ? api.sessionId : null,
-            fileId,
-            fields: enableModernizedUploads && fileId ? UPLOAD_FIELDS_TO_FETCH : null,
+            fileId: options && options.fileId ? options.fileId : null,
+            fields: enableModernizedUploads ? UPLOAD_FIELDS_TO_FETCH : null,
         };
 
         item.status = STATUS_IN_PROGRESS;
