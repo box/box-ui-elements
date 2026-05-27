@@ -40,8 +40,9 @@ export const mockAvatarUrlMap = {
 };
 
 export const mockOwnerEmail = 'aotter@example.com';
+export const mockOwnerEmailDomain = 'example.com';
 export const mockOwnerName = 'Astronaut Otter';
-export const mockOwnerId = 789;
+export const mockOwnerId = '789';
 
 export const collabUser1 = {
     id: 456,
@@ -94,6 +95,7 @@ export const EMPTY_COLLABORATIONS_RESPONSE = {
 export const DEFAULT_USER_API_RESPONSE = {
     id: '789',
     enterprise: { id: '12345', name: 'Test Enterprise' },
+    login: mockOwner.login,
 };
 
 export const FREE_USER_API_RESPONSE = {

@@ -9,12 +9,11 @@ import {
 } from '../constants';
 
 import type { Collaboration, Collaborations } from '../../../common/types/core';
-import type { AvatarURLMap } from '../types';
+import type { AvatarURLMap, ContentSharingUser } from '../types';
 
 export interface ConvertCollabProps {
     collab: Collaboration;
-    currentUserId: string;
-    isCurrentUserOwner: boolean;
+    currentUser: ContentSharingUser;
     ownerEmailDomain: string;
     avatarUrlMap?: AvatarURLMap;
 }
@@ -22,8 +21,7 @@ export interface ConvertCollabProps {
 export const convertCollab = ({
     avatarUrlMap,
     collab,
-    currentUserId,
-    isCurrentUserOwner,
+    currentUser,
     ownerEmailDomain,
 }: ConvertCollabProps): Collaborator | null => {
     if (!collab || collab.status === STATUS_REJECTED) {
@@ -48,8 +46,13 @@ export const convertCollab = ({
         return null;
     }
 
+    // The external badge on the collaborator avatar is only visible if the current user is
+    // in the same enterprise as the item owner and the collaborator is not in the same enterprise.
     const isExternal =
-        !isCurrentUserOwner && !!collabEmail && !!ownerEmailDomain && collabEmail.split('@')[1] !== ownerEmailDomain;
+        currentUser?.emailDomain === ownerEmailDomain &&
+        !!collabEmail &&
+        !!ownerEmailDomain &&
+        collabEmail.split('@')[1] !== ownerEmailDomain;
     const avatarUrl = avatarUrlMap ? avatarUrlMap[collabId] : undefined;
 
     return {
@@ -58,7 +61,7 @@ export const convertCollab = ({
         expiresAt,
         hasCustomAvatar: !!avatarUrl,
         id: `${id}`,
-        isCurrentUser: collabId != null && collabId === currentUserId,
+        isCurrentUser: collabId != null && collabId === currentUser?.id,
         isExternal,
         isPending: status === STATUS_PENDING,
         name: collabName || collabEmail,
@@ -69,7 +72,7 @@ export const convertCollab = ({
 
 export const convertCollabsResponse = (
     collabsApiData: Collaborations,
-    currentUserId: string,
+    currentUser: ContentSharingUser,
     owner: { id: string; email: string; name: string },
     avatarUrlMap?: AvatarURLMap,
 ): Collaborator[] => {
@@ -77,7 +80,6 @@ export const convertCollabsResponse = (
     if (!entries.length) return [];
 
     const { id: ownerId, email: ownerEmail, name: ownerName } = owner;
-    const isCurrentUserOwner = currentUserId === ownerId;
     const ownerEmailDomain = ownerEmail && /@/.test(ownerEmail) ? ownerEmail.split('@')[1] : null;
 
     const itemOwner = {
@@ -92,7 +94,7 @@ export const convertCollabsResponse = (
     };
 
     return [itemOwner, ...entries].flatMap(collab => {
-        const converted = convertCollab({ avatarUrlMap, collab, currentUserId, isCurrentUserOwner, ownerEmailDomain });
+        const converted = convertCollab({ avatarUrlMap, collab, currentUser, ownerEmailDomain });
         return converted ? [converted] : [];
     });
 };
