@@ -130,7 +130,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/CreateReply', () => {
     });
 
     test('reply form should be focused when opened', () => {
-        const mockFocusFunc = jest.fn();
+        const mockFocusFunc = jest.fn(editor => editor);
         EditorState.moveFocusToEnd = mockFocusFunc;
 
         getWrapper({ showReplyForm: true });

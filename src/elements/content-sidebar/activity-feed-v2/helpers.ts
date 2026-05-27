@@ -13,7 +13,8 @@ type EditorContent = Parameters<typeof serializeMentionMarkup>[0];
 
 export const serializeEditorContent = (content: unknown): ReturnType<typeof serializeMentionMarkup> | null => {
     try {
-        return serializeMentionMarkup(content as EditorContent);
+        const serialized = serializeMentionMarkup(content as EditorContent);
+        return { ...serialized, text: serialized.text.trim() };
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error('ActivityFeedV2: failed to serialize editor content', error);
