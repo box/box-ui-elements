@@ -20,6 +20,7 @@ import { withBlueprintModernization } from '../common/withBlueprintModernization
 import ThemingStyles, { Theme } from '../common/theming';
 import FolderUpload from '../../api/uploads/FolderUpload';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
+import { UPLOAD_FIELDS_TO_FETCH } from '../../utils/fields';
 import {
     getDataTransferItemId,
     getFile,
@@ -815,8 +816,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     uploadFile(item: UploadItem) {
-        const { overwrite, rootFolderId } = this.props;
+        const { enableModernizedUploads, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+
+        const fileId = options && options.fileId ? options.fileId : null;
 
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
@@ -831,7 +834,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             progressCallback: event => this.handleUploadProgress(item, event),
             successCallback: entries => this.handleUploadSuccess(item, entries),
             overwrite,
-            fileId: options && options.fileId ? options.fileId : null,
+            fileId,
+            fields: enableModernizedUploads && fileId ? UPLOAD_FIELDS_TO_FETCH : null,
         };
 
         item.status = STATUS_IN_PROGRESS;
@@ -850,8 +854,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     resumeFile(item: UploadItem) {
-        const { onResume, overwrite, rootFolderId } = this.props;
+        const { enableModernizedUploads, onResume, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+
+        const fileId = options && options.fileId ? options.fileId : null;
 
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
@@ -867,7 +873,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             successCallback: entries => this.handleUploadSuccess(item, entries),
             overwrite,
             sessionId: api && api.sessionId ? api.sessionId : null,
-            fileId: options && options.fileId ? options.fileId : null,
+            fileId,
+            fields: enableModernizedUploads && fileId ? UPLOAD_FIELDS_TO_FETCH : null,
         };
 
         item.status = STATUS_IN_PROGRESS;
@@ -1326,9 +1333,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             view={view}
                         />
                     </div>
-                )
+                );
             }
- 
+
             return (
                 <div ref={measureRef} className={styleClassName} id={this.id}>
                     <ThemingStyles selector={`#${this.id}`} theme={theme} />
@@ -1353,14 +1360,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                         isDone={isDone}
                     />
                 </div>
-            )
-        }
+            );
+        };
 
         return (
             <Internationalize language={language} messages={messages}>
-                <TooltipProvider>
-                    {renderUploader()}
-                </TooltipProvider>
+                <TooltipProvider>{renderUploader()}</TooltipProvider>
             </Internationalize>
         );
     }

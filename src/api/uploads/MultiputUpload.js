@@ -12,6 +12,7 @@ import { digest } from '../../utils/webcrypto';
 import hexToBase64 from '../../utils/base64';
 import createWorker from '../../utils/uploadsSHA1Worker';
 import Browser from '../../utils/Browser';
+import { updateQueryParameters } from '../../utils/url';
 import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
@@ -161,6 +162,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {File} options.file
      * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
      * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
+     * @param {Array<string>} options.fields
      * @param {string} options.sessionId
      * @param {Function} [options.errorCallback]
      * @param {Function} [options.progressCallback]
@@ -177,6 +179,7 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
+        fields,
     }: {
         conflictCallback?: Function,
         errorCallback?: Function,
@@ -186,6 +189,7 @@ class MultiputUpload extends BaseMultiput {
         overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
+        fields: ?Array<string>,
     }): void {
         this.file = file;
         this.fileName = this.file.name;
@@ -196,6 +200,7 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.conflictCallback = conflictCallback;
         this.fileId = fileId;
+        this.fields = fields;
     }
 
     /**
@@ -206,6 +211,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {File} options.file
      * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
      * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
+     * @param {Array<string>} options.fields
      * @param {Function} [options.errorCallback]
      * @param {Function} [options.progressCallback]
      * @param {Function} [options.successCallback]
@@ -222,6 +228,7 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
+        fields,
     }: {
         conflictCallback?: Function,
         errorCallback?: Function,
@@ -232,6 +239,7 @@ class MultiputUpload extends BaseMultiput {
         overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
+        fields: ?Array<string>,
     }): void {
         this.file = file;
         this.fileName = this.file.name;
@@ -251,6 +259,7 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.fileId = fileId;
         this.fileDescription = fileDescription;
+        this.fields = fields;
 
         this.makePreflightRequest();
     }
@@ -429,6 +438,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {File} options.file
      * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
      * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
+     * @param {Array<string>} options.fields
      * @param {string} options.sessionId
      * @param {Function} [options.errorCallback]
      * @param {Function} [options.progressCallback]
@@ -447,6 +457,7 @@ class MultiputUpload extends BaseMultiput {
         overwrite = true,
         conflictCallback,
         fileId,
+        fields,
     }: {
         conflictCallback?: Function,
         errorCallback?: Function,
@@ -457,6 +468,7 @@ class MultiputUpload extends BaseMultiput {
         progressCallback?: Function,
         sessionId: string,
         successCallback?: Function,
+        fields: ?Array<string>,
     }): void {
         this.setFileInfo({
             file,
@@ -467,6 +479,7 @@ class MultiputUpload extends BaseMultiput {
             conflictCallback,
             overwrite,
             fileId,
+            fields,
         });
         this.sessionId = sessionId;
 
@@ -571,6 +584,7 @@ class MultiputUpload extends BaseMultiput {
                 successCallback: this.successCallback,
                 overwrite: this.overwrite,
                 fileId: this.fileId,
+                fields: this.fields,
             };
             this.upload(uploadOptions);
         } else {
@@ -925,6 +939,12 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
+        let url = this.sessionEndpoints.commit;
+
+        if (this.fields) {
+            url = updateQueryParameters(url, { fields: this.fields.toString() });
+        }
+
         const stats = {
             totalPartReadTime: 0,
             totalPartDigestTime: 0,
@@ -968,7 +988,7 @@ class MultiputUpload extends BaseMultiput {
         };
 
         this.xhr
-            .post({ url: this.sessionEndpoints.commit, data, headers })
+            .post({ url, data, headers })
             .then(this.commitSessionSuccessHandler)
             .catch(this.commitSessionErrorHandler);
     };
