@@ -351,11 +351,13 @@ const ActivityFeedV2 = ({
                         </ActivityFeed.List>
                     </div>
                 )}
-                <ActivityFeed.Editor
-                    disableComponent={isDisabled || !currentUser}
-                    onPost={handleCommentPost}
-                    userSelectorProps={userSelectorProps}
-                />
+                <div className="bcs-NewActivityFeed-editor">
+                    <ActivityFeed.Editor
+                        disableComponent={isDisabled || !currentUser}
+                        onPost={handleCommentPost}
+                        userSelectorProps={userSelectorProps}
+                    />
+                </div>
             </ActivityFeed.Root>
             <TaskModal
                 editMode={editingTask ? TASK_EDIT_MODE_EDIT : undefined}
