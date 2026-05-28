@@ -1,8 +1,22 @@
 // @flow
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+    STATUS_CANCELED,
+} from '../../constants';
 import type { Token, BoxItem } from './core';
 
 // TODO: replace with `UploadItemStatus` from @box/uploads-manager once 'inprogress' is aligned to 'uploading'.
-type UploadStatus = 'pending' | 'inprogress' | 'staged' | 'complete' | 'error' | 'canceled';
+type UploadStatus =
+    | typeof STATUS_PENDING
+    | typeof STATUS_IN_PROGRESS
+    | typeof STATUS_STAGED
+    | typeof STATUS_COMPLETE
+    | typeof STATUS_ERROR
+    | typeof STATUS_CANCELED;
 
 type FileSystemFileEntry = {
     createReader: Function,

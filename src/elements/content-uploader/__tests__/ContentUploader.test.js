@@ -14,6 +14,7 @@ import {
     STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
+    STATUS_CANCELED,
     VIEW_ERROR,
     VIEW_UPLOAD_EMPTY,
     VIEW_UPLOAD_IN_PROGRESS,
@@ -881,7 +882,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
 
                 expect(cancelMock).toHaveBeenCalled();
-                expect(item.status).toBe('canceled');
+                expect(item.status).toBe(STATUS_CANCELED);
             });
 
             test('should ignore onItemCancel for already-completed items', () => {
@@ -982,10 +983,10 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const folderId = wrapper.find(UploadsManagerBP).prop('items')[0].id;
                 wrapper.find(UploadsManagerBP).prop('onItemCancel')(folderId);
 
-                expect(folderItem.status).toBe('canceled');
+                expect(folderItem.status).toBe(STATUS_CANCELED);
             });
 
-            test('handleModernizedCancelAll should cancel all in-progress and pending items', () => {
+            test('handleUploadsManagerCancelAll should cancel all in-progress and pending items', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
                 const inProgress = {
                     name: 'a.pdf',
@@ -1017,15 +1018,15 @@ describe('elements/content-uploader/ContentUploader', () => {
 
                 wrapper.find(UploadsManagerBP).prop('onCancelAll')();
 
-                expect(inProgress.status).toBe('canceled');
-                expect(pending.status).toBe('canceled');
+                expect(inProgress.status).toBe(STATUS_CANCELED);
+                expect(pending.status).toBe(STATUS_CANCELED);
                 expect(complete.status).toBe(STATUS_COMPLETE);
                 expect(inProgress.api.cancel).toHaveBeenCalled();
                 expect(pending.api.cancel).toHaveBeenCalled();
                 expect(complete.api.cancel).not.toHaveBeenCalled();
             });
 
-            test('handleModernizedRetryAll should restart errored and canceled items', () => {
+            test('handleUploadsManagerRetryAll should restart errored and canceled items', () => {
                 const onClickRetry = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onClickRetry });
                 const errored = {
@@ -1041,7 +1042,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                     name: 'b.pdf',
                     extension: 'pdf',
                     progress: 0,
-                    status: 'canceled',
+                    status: STATUS_CANCELED,
                     file: { name: 'b.pdf', size: 100 },
                     api: {},
                     isFolder: false,
@@ -1069,7 +1070,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(onClickRetry).toHaveBeenCalledWith(canceled);
             });
 
-            test('handleModernizedRetryAll should call onClickResume for resumable chunked items', () => {
+            test('handleUploadsManagerRetryAll should call onClickResume for resumable chunked items', () => {
                 const onClickResume = jest.fn();
                 const wrapper = getWrapper({
                     enableModernizedUploads: true,
@@ -1099,7 +1100,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(resumable.bytesUploadedOnLastResume).toBe(1024);
             });
 
-            test('handleModernizedRetryAll should drop name-in-use items instead of retrying', () => {
+            test('handleUploadsManagerRetryAll should drop name-in-use items instead of retrying', () => {
                 const onClickCancel = jest.fn();
                 const onCancel = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onClickCancel, onCancel });
@@ -1138,7 +1139,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(uploadFileSpy).toHaveBeenCalledWith(ok);
             });
 
-            test('handleModernizedItemRetry should fire onClickRetry for non-resumable items', () => {
+            test('handleUploadsManagerItemRetry should fire onClickRetry for non-resumable items', () => {
                 const onClickRetry = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onClickRetry });
                 const item = {
@@ -1164,7 +1165,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(onClickRetry).toHaveBeenCalledWith(item);
             });
 
-            test('handleModernizedItemRetry should drop name-in-use items instead of retrying', () => {
+            test('handleUploadsManagerItemRetry should drop name-in-use items instead of retrying', () => {
                 const onClickCancel = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onClickCancel });
                 const item = {

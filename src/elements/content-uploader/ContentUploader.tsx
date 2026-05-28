@@ -1176,10 +1176,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     markItemCanceled = (item: UploadItem) => {
         const { onClickCancel } = this.props;
-        const { api } = item;
-        if (api && typeof api.cancel === 'function') {
-            api.cancel();
-        }
+        item.api.cancel();
         item.status = STATUS_CANCELED;
         onClickCancel(item);
     };
@@ -1188,16 +1185,14 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * Cancel every pending or in-progress upload at once. Items keep their row
      * in the list with the canceled status. Only used by the modernized flow.
      */
-    handleModernizedCancelAll = () => {
+    handleUploadsManagerCancelAll = () => {
+        const { onCancel } = this.props;
         const cancelable: UploadItem[] = this.itemsRef.current.filter(
             item => item.status === STATUS_PENDING || item.status === STATUS_IN_PROGRESS,
         );
         cancelable.forEach(item => this.markItemCanceled(item));
-        if (cancelable.length > 0) {
-            const { onCancel } = this.props;
-            onCancel(cancelable);
-            this.updateViewAndCollection([...this.itemsRef.current]);
-        }
+        onCancel(cancelable);
+        this.updateViewAndCollection([...this.itemsRef.current]);
     };
 
     /**
@@ -1205,33 +1200,39 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * are resumed; everything else is restarted via resetFile + uploadFile.
      * Only used by the modernized flow.
      */
-    handleModernizedRetryAll = () => {
-        const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
+    handleUploadsManagerRetryAll = () => {
         // Snapshot since removeFileFromUploadQueue mutates itemsRef.current.
         const targets = this.itemsRef.current.filter(
             item => item.status === STATUS_ERROR || item.status === STATUS_CANCELED,
         );
-        targets.forEach(item => {
-            const { file, api, error } = item;
-            // Name-in-use cannot be resolved by retrying — drop the item like the legacy onClick path.
-            if (error?.code === ERROR_CODE_ITEM_NAME_IN_USE) {
-                this.removeFileFromUploadQueue(item);
-                onClickCancel(item);
-                return;
-            }
-            const isChunkedUpload =
-                chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
-            const isResumable = isResumableUploadsEnabled && isChunkedUpload && api?.sessionId;
-            if (isResumable) {
-                item.bytesUploadedOnLastResume = api.totalUploadedBytes;
-                this.resumeFile(item);
-                onClickResume(item);
-            } else {
-                this.resetFile(item);
-                this.uploadFile(item);
-                onClickRetry(item);
-            }
-        });
+        targets.forEach(item => this.retryUploadsManagerItem(item));
+    };
+
+    /**
+     * Retry a single errored or canceled item: drop name-in-use, resume resumable
+     * chunked uploads, otherwise restart from scratch. Shared by RetryAll and per-item retry.
+     */
+    retryUploadsManagerItem = (item: UploadItem) => {
+        const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
+        const { file, api, error } = item;
+        // Name-in-use cannot be resolved by retrying — drop the item like the legacy onClick path.
+        if (error?.code === ERROR_CODE_ITEM_NAME_IN_USE) {
+            this.removeFileFromUploadQueue(item);
+            onClickCancel(item);
+            return;
+        }
+        const isChunkedUpload =
+            chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
+        const isResumable = isResumableUploadsEnabled && isChunkedUpload && api?.sessionId;
+        if (isResumable) {
+            item.bytesUploadedOnLastResume = api.totalUploadedBytes;
+            this.resumeFile(item);
+            onClickResume(item);
+        } else {
+            this.resetFile(item);
+            this.uploadFile(item);
+            onClickRetry(item);
+        }
     };
 
     /**
@@ -1305,9 +1306,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         return this.state.items.find(item => getUploadItemKey(item, rootFolderId) === key);
     };
 
-    handleModernizedItemCancel = (key: string) => {
+    handleUploadsManagerItemCancel = (key: string) => {
         const item = this.findItemByUploadKey(key);
         if (!item) {
+            // eslint-disable-next-line no-console
+            console.warn(`ContentUploader: no upload item found for key "${key}" on cancel.`);
             return;
         }
         if (item.status === STATUS_PENDING || item.status === STATUS_IN_PROGRESS) {
@@ -1316,44 +1319,27 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         }
     };
 
-    handleModernizedItemRetry = (key: string) => {
+    handleUploadsManagerItemRetry = (key: string) => {
         const item = this.findItemByUploadKey(key);
         if (!item) {
+            // eslint-disable-next-line no-console
+            console.warn(`ContentUploader: no upload item found for key "${key}" on retry.`);
             return;
         }
-        const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
-        const { file, api, error, status } = item;
-        if (status !== STATUS_ERROR && status !== STATUS_CANCELED) {
+        if (item.status !== STATUS_ERROR && item.status !== STATUS_CANCELED) {
             return;
         }
-        // Name-in-use cannot be resolved by retrying — drop the item like the legacy onClick path.
-        if (error?.code === ERROR_CODE_ITEM_NAME_IN_USE) {
-            this.removeFileFromUploadQueue(item);
-            onClickCancel(item);
-            return;
-        }
-        const isChunkedUpload =
-            chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
-        const isResumable = isResumableUploadsEnabled && isChunkedUpload && api && api.sessionId;
-        if (isResumable) {
-            item.bytesUploadedOnLastResume = api.totalUploadedBytes;
-            this.resumeFile(item);
-            onClickResume(item);
-        } else {
-            this.resetFile(item);
-            this.uploadFile(item);
-            onClickRetry(item);
-        }
+        this.retryUploadsManagerItem(item);
     };
 
-    handleModernizedItemRemove = (key: string) => {
+    handleUploadsManagerItemRemove = (key: string) => {
         const item = this.findItemByUploadKey(key);
-        if (item) {
-            this.removeFileFromUploadQueue(item);
-        } else {
+        if (!item) {
             // eslint-disable-next-line no-console
             console.warn(`ContentUploader: no upload item found for key "${key}" on remove.`);
+            return;
         }
+        this.removeFileFromUploadQueue(item);
     };
 
     /**
@@ -1445,11 +1431,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             items={mapToModernizedUploadItems(items, rootFolderId)}
                             isExpanded={isUploadsManagerExpanded}
                             onToggle={this.toggleUploadsManager}
-                            onItemCancel={this.handleModernizedItemCancel}
-                            onItemRetry={this.handleModernizedItemRetry}
-                            onItemRemove={this.handleModernizedItemRemove}
-                            onCancelAll={this.handleModernizedCancelAll}
-                            onRetryAll={this.handleModernizedRetryAll}
+                            onItemCancel={this.handleUploadsManagerItemCancel}
+                            onItemRetry={this.handleUploadsManagerItemRetry}
+                            onItemRemove={this.handleUploadsManagerItemRemove}
+                            onCancelAll={this.handleUploadsManagerCancelAll}
+                            onRetryAll={this.handleUploadsManagerRetryAll}
                         />
                     </div>
                 );
