@@ -1234,9 +1234,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         if (item) {
             this.onClick(item);
         } else {
-            /* eslint-disable no-console */
+            // eslint-disable-next-line no-console
             console.warn(`ContentUploader: no upload item found for key "${key}" on action.`);
-            /* eslint-enable no-console */
         }
     };
 
@@ -1245,6 +1244,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         if (item) {
             this.removeFileFromUploadQueue(item);
         } else {
+            // eslint-disable-next-line no-console
             console.warn(`ContentUploader: no upload item found for key "${key}" on remove.`);
         }
     };
