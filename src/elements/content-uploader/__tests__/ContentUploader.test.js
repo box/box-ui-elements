@@ -255,6 +255,28 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(newFiles[0]).toBe(file);
         });
 
+        test('should clear dedupeKey from itemIds when canceling a folder item', () => {
+            const folderItem = {
+                api: { cancel: jest.fn() },
+                dedupeKey: 'shared',
+                isFolder: true,
+                name: 'shared',
+                status: STATUS_PENDING,
+            };
+
+            wrapper.setState({
+                items: [folderItem],
+                itemIds: { shared: true },
+            });
+            instance.itemsRef.current = [folderItem];
+            instance.itemIdsRef.current = { shared: true };
+
+            instance.removeFileFromUploadQueue(folderItem);
+
+            expect(instance.itemIdsRef.current.shared).toBeUndefined();
+            expect(wrapper.state().itemIds.shared).toBeUndefined();
+        });
+
         test.each`
             view                       | action
             ${VIEW_ERROR}              | ${'should not'}
@@ -756,6 +778,29 @@ describe('elements/content-uploader/ContentUploader', () => {
             await instance.addFolderDataTransferItemsToUploadQueue(mockFoldersList, jest.fn());
             expect(instance.addToQueue).toBeCalledTimes(1);
             expect(instance.addToQueue.mock.calls[0][0].length).toBe(mockFoldersList.length);
+        });
+
+        test('should stash dedupeKey on each folder item so it can be cleared on cancel', async () => {
+            jest.spyOn(UploaderUtils, 'getDataTransferItemId').mockImplementation(item => `key-${item}`);
+            jest.spyOn(UploaderUtils, 'getDataTransferItemAPIOptions').mockReturnValue({});
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const mockFoldersList = ['folder1', 'folder2'];
+            const mockFolderUpload = { folder: { name: 'mockFolder' } };
+            mockFolderUpload.buildFolderTreeFromDataTransferItem = jest.fn();
+
+            instance.addToQueue = jest.fn();
+            instance.getFolderUploadAPI = jest.fn().mockReturnValue(mockFolderUpload);
+            instance.getNewDataTransferItems = jest.fn().mockReturnValue(mockFoldersList);
+
+            await instance.addFolderDataTransferItemsToUploadQueue(mockFoldersList, jest.fn());
+
+            const queuedItems = instance.addToQueue.mock.calls[0][0];
+            expect(queuedItems[0].dedupeKey).toBe('key-folder1');
+            expect(queuedItems[1].dedupeKey).toBe('key-folder2');
+            expect(instance.itemIdsRef.current['key-folder1']).toBe(true);
+            expect(instance.itemIdsRef.current['key-folder2']).toBe(true);
         });
     });
 

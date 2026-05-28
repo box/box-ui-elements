@@ -486,8 +486,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         }
 
         const newItems = this.getNewDataTransferItems(dataTransferItems);
-        newItems.forEach(item => {
-            this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)] = true;
+        const dedupeKeys = newItems.map(item => getDataTransferItemId(item, rootFolderId));
+        dedupeKeys.forEach(key => {
+            this.itemIdsRef.current[key] = true;
         });
 
         if (newItems.length === 0) {
@@ -502,6 +503,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             folderUpload.buildFolderTreeFromDataTransferItem(item);
             return {
                 api: folderUpload,
+                dedupeKey: dedupeKeys[index],
                 extension: '',
                 isFolder: true,
                 name: folderUpload.folder.name,
@@ -741,7 +743,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { api } = item;
         api.cancel();
 
-        // Remove the file ID from itemIdsRef to allow re-uploading the same file
+        // Remove dedupe IDs from itemIdsRef to allow re-uploading the same item
         if (item.file) {
             const { rootFolderId } = this.props;
 
@@ -755,6 +757,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             delete this.itemIdsRef.current[simpleFileId];
             delete this.itemIdsRef.current[fullFileId];
 
+            const newItemIds = { ...this.itemIdsRef.current };
+            this.setState({ itemIds: newItemIds });
+        } else if (item.dedupeKey) {
+            // Folder items stash the dedupe key written in addFolderDataTransferItemsToUploadQueue
+            delete this.itemIdsRef.current[item.dedupeKey];
             const newItemIds = { ...this.itemIdsRef.current };
             this.setState({ itemIds: newItemIds });
         }
