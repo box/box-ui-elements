@@ -255,6 +255,28 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(newFiles[0]).toBe(file);
         });
 
+        test('should clear dedupeKey from itemIds when canceling a folder item', () => {
+            const folderItem = {
+                api: { cancel: jest.fn() },
+                dedupeKey: 'shared',
+                isFolder: true,
+                name: 'shared',
+                status: STATUS_PENDING,
+            };
+
+            wrapper.setState({
+                items: [folderItem],
+                itemIds: { shared: true },
+            });
+            instance.itemsRef.current = [folderItem];
+            instance.itemIdsRef.current = { shared: true };
+
+            instance.removeFileFromUploadQueue(folderItem);
+
+            expect(instance.itemIdsRef.current.shared).toBeUndefined();
+            expect(wrapper.state().itemIds.shared).toBeUndefined();
+        });
+
         test.each`
             view                       | action
             ${VIEW_ERROR}              | ${'should not'}
@@ -757,6 +779,29 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(instance.addToQueue).toBeCalledTimes(1);
             expect(instance.addToQueue.mock.calls[0][0].length).toBe(mockFoldersList.length);
         });
+
+        test('should stash dedupeKey on each folder item so it can be cleared on cancel', async () => {
+            jest.spyOn(UploaderUtils, 'getDataTransferItemId').mockImplementation(item => `key-${item}`);
+            jest.spyOn(UploaderUtils, 'getDataTransferItemAPIOptions').mockReturnValue({});
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const mockFoldersList = ['folder1', 'folder2'];
+            const mockFolderUpload = { folder: { name: 'mockFolder' } };
+            mockFolderUpload.buildFolderTreeFromDataTransferItem = jest.fn();
+
+            instance.addToQueue = jest.fn();
+            instance.getFolderUploadAPI = jest.fn().mockReturnValue(mockFolderUpload);
+            instance.getNewDataTransferItems = jest.fn().mockReturnValue(mockFoldersList);
+
+            await instance.addFolderDataTransferItemsToUploadQueue(mockFoldersList, jest.fn());
+
+            const queuedItems = instance.addToQueue.mock.calls[0][0];
+            expect(queuedItems[0].dedupeKey).toBe('key-folder1');
+            expect(queuedItems[1].dedupeKey).toBe('key-folder2');
+            expect(instance.itemIdsRef.current['key-folder1']).toBe(true);
+            expect(instance.itemIdsRef.current['key-folder2']).toBe(true);
+        });
     });
 
     describe('render()', () => {
@@ -775,18 +820,131 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
             });
 
-            test('should render modernized UploadsManager when enableModernizedUploads is true', () => {
+            test('should render modernized UploadsManagerBP when enableModernizedUploads is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
             });
 
-            test('should render modernized UploadsManager when enableModernizedUploads is true and useUploadsManager is true', () => {
+            test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
-                expect(wrapper.find(DroppableContent)).toHaveLength(0);
+            });
+
+            test('should map state.items to modernized item shape', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                wrapper.setState({
+                    items: [
+                        {
+                            name: 'foo.pdf',
+                            extension: 'pdf',
+                            progress: 42,
+                            status: STATUS_IN_PROGRESS,
+                            file: { name: 'foo.pdf' },
+                        },
+                    ],
+                });
+                const items = wrapper.find(UploadsManagerBP).prop('items');
+                expect(items).toHaveLength(1);
+                expect(items[0]).toMatchObject({
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 42,
+                    status: 'uploading',
+                });
+            });
+
+            test('should pass isExpanded from state', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                wrapper.setState({ isUploadsManagerExpanded: true });
+                expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+            });
+
+            test('should call onClick when onItemCancel is invoked', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const item = {
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    file: { name: 'foo.pdf' },
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
+
+                expect(onClickSpy).toHaveBeenCalledWith(item);
+            });
+
+            test('should call removeFileFromUploadQueue when onItemRemove is invoked', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const item = {
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_COMPLETE,
+                    file: { name: 'foo.pdf' },
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                const removeSpy = jest.spyOn(instance, 'removeFileFromUploadQueue').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onItemRemove')('foo.pdf');
+
+                expect(removeSpy).toHaveBeenCalledWith(item);
+            });
+
+            test('should no-op when modernized id does not match any item', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                wrapper.setState({ items: [] });
+                const instance = wrapper.instance();
+                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')('missing-id');
+
+                expect(onClickSpy).not.toHaveBeenCalled();
+            });
+
+            test('should not crash when state contains a folder item without a file', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, rootFolderId: '0' });
+                const folderItem = {
+                    name: 'my-folder',
+                    extension: '',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    isFolder: true,
+                    api: {},
+                };
+                wrapper.setState({ items: [folderItem] });
+
+                expect(() => wrapper.find(UploadsManagerBP).prop('items')).not.toThrow();
+                const items = wrapper.find(UploadsManagerBP).prop('items');
+                expect(items).toHaveLength(1);
+                expect(items[0]).toMatchObject({ name: 'my-folder', isFolder: true });
+            });
+
+            test('should resolve folder item handler via modernized id', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, rootFolderId: '0' });
+                const folderItem = {
+                    name: 'my-folder',
+                    extension: '',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    isFolder: true,
+                    api: {},
+                };
+                wrapper.setState({ items: [folderItem] });
+                const instance = wrapper.instance();
+                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+
+                const folderId = wrapper.find(UploadsManagerBP).prop('items')[0].id;
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')(folderId);
+
+                expect(onClickSpy).toHaveBeenCalledWith(folderItem);
             });
         });
     });

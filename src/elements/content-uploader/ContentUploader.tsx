@@ -12,6 +12,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
+import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -486,8 +487,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         }
 
         const newItems = this.getNewDataTransferItems(dataTransferItems);
-        newItems.forEach(item => {
-            this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)] = true;
+        const dedupeKeys = newItems.map(item => getDataTransferItemId(item, rootFolderId));
+        dedupeKeys.forEach(key => {
+            this.itemIdsRef.current[key] = true;
         });
 
         if (newItems.length === 0) {
@@ -496,15 +498,17 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const fileAPIOptions = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
-        const folderUploads = newItems.map(item => {
+        const dropTimestamp = Date.now();
+        const folderUploads = newItems.map((item, index) => {
             const folderUpload = this.getFolderUploadAPI(folderId);
             folderUpload.buildFolderTreeFromDataTransferItem(item);
             return {
                 api: folderUpload,
+                dedupeKey: dedupeKeys[index],
                 extension: '',
                 isFolder: true,
                 name: folderUpload.folder.name,
-                options: fileAPIOptions,
+                options: { ...fileAPIOptions, uploadInitTimestamp: dropTimestamp + index },
                 progress: 0,
                 size: 1,
                 status: STATUS_PENDING,
@@ -569,7 +573,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                     extension: '',
                     isFolder: true,
                     name: folderUpload.folder.name,
-                    options: apiOptions,
+                    options: { uploadInitTimestamp: Date.now(), ...apiOptions },
                     progress: 0,
                     size: 1,
                     status: STATUS_PENDING,
@@ -740,7 +744,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { api } = item;
         api.cancel();
 
-        // Remove the file ID from itemIdsRef to allow re-uploading the same file
+        // Remove dedupe IDs from itemIdsRef to allow re-uploading the same item
         if (item.file) {
             const { rootFolderId } = this.props;
 
@@ -754,6 +758,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             delete this.itemIdsRef.current[simpleFileId];
             delete this.itemIdsRef.current[fullFileId];
 
+            const newItemIds = { ...this.itemIdsRef.current };
+            this.setState({ itemIds: newItemIds });
+        } else if (item.dedupeKey) {
+            // Folder items stash the dedupe key written in addFolderDataTransferItemsToUploadQueue
+            delete this.itemIdsRef.current[item.dedupeKey];
             const newItemIds = { ...this.itemIdsRef.current };
             this.setState({ itemIds: newItemIds });
         }
@@ -1223,6 +1232,34 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Find legacy UploadItem by the client-side key used by the modernized uploads manager.
+     */
+    findItemByUploadKey = (key: string): UploadItem | undefined => {
+        const { rootFolderId } = this.props;
+        return this.state.items.find(item => getUploadItemKey(item, rootFolderId) === key);
+    };
+
+    handleModernizedItemAction = (key: string) => {
+        const item = this.findItemByUploadKey(key);
+        if (item) {
+            this.onClick(item);
+        } else {
+            // eslint-disable-next-line no-console
+            console.warn(`ContentUploader: no upload item found for key "${key}" on action.`);
+        }
+    };
+
+    handleModernizedItemRemove = (key: string) => {
+        const item = this.findItemByUploadKey(key);
+        if (item) {
+            this.removeFileFromUploadQueue(item);
+        } else {
+            // eslint-disable-next-line no-console
+            console.warn(`ContentUploader: no upload item found for key "${key}" on remove.`);
+        }
+    };
+
+    /**
      * Empties the items queue
      *
      * @return {void}
@@ -1285,6 +1322,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             messages,
             onClose,
             onUpgradeCTAClick,
+            rootFolderId,
             theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
@@ -1306,7 +1344,14 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        <UploadsManagerBP items={[]} />
+                        <UploadsManagerBP
+                            items={mapToModernizedUploadItems(items, rootFolderId)}
+                            isExpanded={isUploadsManagerExpanded}
+                            onToggle={this.toggleUploadsManager}
+                            onItemCancel={this.handleModernizedItemAction}
+                            onItemRetry={this.handleModernizedItemAction}
+                            onItemRemove={this.handleModernizedItemRemove}
+                        />
                     </div>
                 );
             }

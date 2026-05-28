@@ -57,6 +57,7 @@ type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
     bytesUploadedOnLastResume?: number,
+    dedupeKey?: string,
     error?: Object,
     extension: string,
     file: UploadFile,
