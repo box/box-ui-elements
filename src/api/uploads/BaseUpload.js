@@ -30,6 +30,8 @@ class BaseUpload extends Base {
 
     folderId: string;
 
+    fields: ?Array<string>;
+
     overwrite: boolean | 'error';
 
     conflictCallback: ?(fileName: string) => string;

@@ -106,6 +106,7 @@ export const FIELD_SIZE: 'size' = 'size';
 export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
 export const FIELD_ITEM_EXPIRATION = 'expires_at';
+export const FIELD_ITEM_STATUS = 'item_status';
 export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_PERMISSIONS_CAN_SHARE = `${FIELD_PERMISSIONS}.can_share`;
 export const FIELD_PERMISSIONS_CAN_UPLOAD = `${FIELD_PERMISSIONS}.can_upload`;
@@ -137,6 +138,7 @@ export const FIELD_MODIFIED_BY = 'modified_by';
 export const FIELD_OWNED_BY = 'owned_by';
 export const FIELD_PROMOTED_BY = 'promoted_by';
 export const FIELD_RESTORED_BY = 'restored_by';
+export const FIELD_PURGED_AT = 'purged_at';
 export const FIELD_TRASHED_BY = 'trashed_by';
 export const FIELD_DESCRIPTION = 'description';
 export const FIELD_REPRESENTATIONS = 'representations';
@@ -171,6 +173,7 @@ export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_di
 export const FIELD_CLASSIFICATION: 'classification' = 'classification';
 export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
 export const FIELD_HOSTNAME: 'hostname' = 'hostname';
+export const FIELD_LOGIN: 'login' = 'login';
 
 /* ----------------------- Item-Prefixed Fields for MD Query API --------------------------- */
 const ITEM_PREFIX = 'item.';

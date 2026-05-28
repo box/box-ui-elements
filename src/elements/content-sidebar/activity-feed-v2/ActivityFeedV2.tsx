@@ -8,14 +8,14 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
-import { serializeMentionMarkup } from '@box/threaded-annotations';
 
 import TaskModal from '../TaskModal';
 
 import FeedItemRow from './FeedItemRow';
+import { serializeEditorContent } from './helpers';
 import { transformFeedItem } from './transformers';
 
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
@@ -24,6 +24,7 @@ import type { TaskAssigneeCollection, TaskNew } from '../../../common/types/task
 import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_APPROVAL } from '../../../constants';
 
 import commonMessages from '../../common/messages';
+import draftJsMentionSelectorMessages from '../../../components/form-elements/draft-js-mention-selector/messages';
 import messages from '../messages';
 
 import './ActivityFeedV2.scss';
@@ -68,14 +69,16 @@ const ActivityFeedV2 = ({
 
     const scrolledEntryIdRef = React.useRef<string | null>(null);
     const hasScrolledToEndRef = React.useRef(false);
+    const knownIdsBeforePostRef = React.useRef<Set<string> | null>(null);
 
     const fetchUsers = React.useCallback(
         async (inputValue: string): Promise<UserContact[]> => {
-            if (!getMentionAsync) {
+            const trimmed = inputValue.trim();
+            if (!trimmed || !getMentionAsync) {
                 return [];
             }
             try {
-                const entries = await getMentionAsync(inputValue);
+                const entries = await getMentionAsync(trimmed);
                 return entries.map((c: Record<string, unknown>) => ({
                     email: (c.email as string) ?? (c.login as string) ?? '',
                     id: Number(c.id) || 0,
@@ -114,10 +117,20 @@ const ActivityFeedV2 = ({
 
     const userSelectorProps = React.useMemo(
         () => ({
+            allowEmptyQuery: true,
             ariaRoleDescription: intl.formatMessage(messages.mentionUserSelectorRoleDescription),
             fetchAvatarUrls,
             fetchUsers,
             loadingAriaLabel: intl.formatMessage(messages.mentionUserSelectorLoading),
+            renderEmpty: (value: string) => (
+                <div className="bcs-NewActivityFeed-mentionEmpty">
+                    <FormattedMessage
+                        {...(value.trim()
+                            ? draftJsMentionSelectorMessages.noUsersFound
+                            : draftJsMentionSelectorMessages.startMention)}
+                    />
+                </div>
+            ),
         }),
         [fetchAvatarUrls, fetchUsers, intl],
     );
@@ -247,19 +260,38 @@ const ActivityFeedV2 = ({
         }
     }, [activeFeedEntryId, filteredItems, scrollHandle]);
 
+    // Scroll only to comments/annotations the current user authored after the post
+    // snapshot, so a concurrent push from another user doesn't hijack the viewport.
+    React.useEffect(() => {
+        const knownIds = knownIdsBeforePostRef.current;
+        if (!knownIds || !scrollHandle || !currentUserId) return;
+        const newItem = filteredItems.find(item => {
+            if (knownIds.has(item.id)) return false;
+            if (item.type !== 'comment' && item.type !== 'annotation') return false;
+            const author = item.messages[0]?.author;
+            return author ? String(author.id) === currentUserId : false;
+        });
+        if (!newItem) return;
+        if (scrollHandle.scrollTo(newItem.id)) {
+            knownIdsBeforePostRef.current = null;
+        }
+    }, [currentUserId, filteredItems, scrollHandle]);
+
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
-            let serialized;
+            const serialized = serializeEditorContent(content);
+            if (!serialized || !serialized.text) return;
             try {
-                serialized = serializeMentionMarkup(content as Parameters<typeof serializeMentionMarkup>[0]);
-            } catch {
-                return;
+                const snapshot = new Set(filteredItems.map(item => item.id));
+                await onCommentCreate(serialized.text, serialized.hasMention);
+                knownIdsBeforePostRef.current = snapshot;
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error('ActivityFeedV2: failed to post comment', error);
             }
-            if (!serialized.text.trim()) return;
-            onCommentCreate(serialized.text, serialized.hasMention);
         },
-        [onCommentCreate],
+        [filteredItems, onCommentCreate],
     );
 
     return (
@@ -319,11 +351,13 @@ const ActivityFeedV2 = ({
                         </ActivityFeed.List>
                     </div>
                 )}
-                <ActivityFeed.Editor
-                    disableComponent={isDisabled || !currentUser}
-                    onPost={handleCommentPost}
-                    userSelectorProps={userSelectorProps}
-                />
+                <div className="bcs-NewActivityFeed-editor">
+                    <ActivityFeed.Editor
+                        disableComponent={isDisabled || !currentUser}
+                        onPost={handleCommentPost}
+                        userSelectorProps={userSelectorProps}
+                    />
+                </div>
             </ActivityFeed.Root>
             <TaskModal
                 editMode={editingTask ? TASK_EDIT_MODE_EDIT : undefined}

@@ -11,7 +11,6 @@ import type {
     Item,
     SharedLink,
     SharingService,
-    User,
     VariantType,
 } from '@box/unified-share-modal';
 
@@ -24,7 +23,7 @@ import { convertCollabsResponse, convertItemResponse } from './utils';
 
 import type { ElementsXhrError } from '../../common/types/api';
 import type { Collaborations, ItemType } from '../../common/types/core';
-import type { AvatarURLMap } from './types';
+import type { AvatarURLMap, ContentSharingUser } from './types';
 
 import messages from './messages';
 
@@ -68,7 +67,7 @@ function ContentSharingV2({
     const [hasError, setHasError] = React.useState<boolean>(false);
     const [sharedLink, setSharedLink] = React.useState<SharedLink | null>(null);
     const [sharingServiceProps, setSharingServiceProps] = React.useState(null);
-    const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+    const [currentUser, setCurrentUser] = React.useState<ContentSharingUser | null>(null);
     const [collaborationRoles, setCollaborationRoles] = React.useState<CollaborationRole[] | null>(null);
     const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
@@ -87,7 +86,7 @@ function ContentSharingV2({
         api,
         avatarUrlMap,
         collaborators,
-        currentUserId: currentUser?.id,
+        currentUser,
         item,
         itemId,
         itemType,
@@ -187,8 +186,9 @@ function ContentSharingV2({
                 return;
             }
 
-            const { enterprise, hostname, id } = userData;
-            setCurrentUser({ id });
+            const { enterprise, hostname, id, login } = userData;
+            const emailDomain = login && /@/.test(login) ? login.split('@')[1] : undefined;
+            setCurrentUser({ id, email: login, emailDomain });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
                 serverUrl: hostname ? `${hostname}v/` : '',
@@ -266,7 +266,7 @@ function ContentSharingV2({
         if (avatarUrlMap && collaboratorsData && currentUser && owner) {
             const collaboratorsWithAvatars = convertCollabsResponse(
                 collaboratorsData,
-                currentUser.id,
+                currentUser,
                 owner,
                 avatarUrlMap,
             );

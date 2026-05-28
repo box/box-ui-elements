@@ -43,6 +43,19 @@ describe('elements/content-sidebar/activity-feed-v2/helpers', () => {
             expect(mockedSerialize).toHaveBeenCalledWith(content);
         });
 
+        test.each`
+            input                       | expected
+            ${'   hello   '}            | ${'hello'}
+            ${'\n\nhello world\n\n'}    | ${'hello world'}
+            ${'\thello\t'}              | ${'hello'}
+            ${'  \t\nhello\n '}         | ${'hello'}
+            ${'   leading and inner  '} | ${'leading and inner'}
+        `('should trim leading and trailing whitespace from "$input"', ({ input, expected }) => {
+            mockedSerialize.mockReturnValue({ hasMention: true, text: input });
+
+            expect(serializeEditorContent({})).toEqual({ hasMention: true, text: expected });
+        });
+
         test('should log via console.error and return null when serialize throws', () => {
             const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
             mockedSerialize.mockImplementation(() => {
