@@ -239,13 +239,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onResolve?.('comment-1');
 
-            expect(onCommentUpdate).toHaveBeenCalledWith(
-                'comment-1',
-                'Hello world',
-                'resolved',
-                false,
-                commentPermissions,
-            );
+            expect(onCommentUpdate).toHaveBeenCalledWith('comment-1', undefined, 'resolved', false, commentPermissions);
         });
 
         test('should call onCommentUpdate with open status when onUnresolve fires', () => {
@@ -254,7 +248,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onUnresolve?.('comment-1');
 
-            expect(onCommentUpdate).toHaveBeenCalledWith('comment-1', 'Hello world', 'open', false, commentPermissions);
+            expect(onCommentUpdate).toHaveBeenCalledWith('comment-1', undefined, 'open', false, commentPermissions);
         });
 
         test('should call onReplyCreate via onPost with serialized text', async () => {
