@@ -18,7 +18,11 @@ describe('elements/content-uploader/CancelAllUploadsModal', () => {
         renderModal();
         expect(await screen.findByRole('alertdialog')).toBeInTheDocument();
         expect(screen.getByText('Cancel all uploads?')).toBeInTheDocument();
-        expect(screen.getByText(/Files that are still uploading will be canceled/)).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Files that are still uploading will be canceled. Completed uploads will not be affected.',
+            ),
+        ).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Cancel All' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Keep Uploading' })).toBeInTheDocument();
     });

@@ -9,11 +9,11 @@ import uniqueid from 'lodash/uniqueId';
 import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import CancelAllUploadsModal from './CancelAllUploadsModal';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
 import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
-import CancelAllUploadsModal from './CancelAllUploadsModal';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -1210,24 +1210,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
-     * Open the Cancel All confirmation modal. Wired as the onCancelAll prop
-     * passed to the modernized uploads manager so the action requires explicit
-     * confirmation before destroying in-progress uploads.
-     */
-    handleCancelAllRequest = () => {
-        this.setState({ isCancelAllModalOpen: true });
-    };
-
-    handleCancelAllDismiss = () => {
-        this.setState({ isCancelAllModalOpen: false });
-    };
-
-    handleCancelAllConfirm = () => {
-        this.setState({ isCancelAllModalOpen: false });
-        this.handleUploadsManagerCancelAll();
-    };
-
-    /**
      * Cancel every pending or in-progress upload at once. Items keep their row
      * in the list with the canceled status. Only used by the modernized flow.
      */
@@ -1239,6 +1221,24 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         cancelable.forEach(item => this.markItemCanceled(item));
         onCancel(cancelable);
         this.updateViewAndCollection([...this.itemsRef.current]);
+    };
+
+    /**
+     * Open the Cancel All confirmation modal. Wired as the onCancelAll prop
+     * passed to the modernized uploads manager so the action requires explicit
+     * confirmation before destroying in-progress uploads.
+     */
+    handleCancelAllClick = () => {
+        this.setState({ isCancelAllModalOpen: true });
+    };
+
+    handleCancelAllDismiss = () => {
+        this.setState({ isCancelAllModalOpen: false });
+    };
+
+    handleCancelAllConfirm = () => {
+        this.setState({ isCancelAllModalOpen: false });
+        this.handleUploadsManagerCancelAll();
     };
 
     /**
@@ -1480,7 +1480,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onItemCancel={this.handleUploadsManagerItemCancel}
                             onItemRetry={this.handleUploadsManagerItemRetry}
                             onItemRemove={this.handleUploadsManagerItemRemove}
-                            onCancelAll={this.handleCancelAllRequest}
+                            onCancelAll={this.handleCancelAllClick}
                             onRetryAll={this.handleUploadsManagerRetryAll}
                         />
                         <CancelAllUploadsModal

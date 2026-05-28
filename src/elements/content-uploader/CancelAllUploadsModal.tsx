@@ -22,15 +22,15 @@ export function CancelAllUploadsModal({ isOpen, onConfirm, onDismiss }: CancelAl
         <AlertModal
             open={isOpen}
             onOpenChange={handleOpenChange}
-            heading={formatMessage(messages.cancelAllUploadsModalHeading)}
-            textContent={formatMessage(messages.cancelAllUploadsModalContent)}
-            closeButtonAriaLabel={formatMessage(messages.cancelAllUploadsCloseLabel)}
+            heading={formatMessage(messages.heading)}
+            textContent={formatMessage(messages.body)}
+            closeButtonAriaLabel={formatMessage(messages.closeLabel)}
         >
             <AlertModal.SecondaryButton onClick={onDismiss}>
-                {formatMessage(messages.cancelAllUploadsKeepButton)}
+                {formatMessage(messages.keepUploadingButton)}
             </AlertModal.SecondaryButton>
             <AlertModal.PrimaryButton variant="destructive" onClick={onConfirm}>
-                {formatMessage(messages.cancelAllUploadsConfirmButton)}
+                {formatMessage(messages.confirmButton)}
             </AlertModal.PrimaryButton>
         </AlertModal>
     );

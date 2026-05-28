@@ -1,28 +1,28 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    cancelAllUploadsModalHeading: {
-        id: 'be.contentUploader.cancelAllUploadsModalHeading',
+    heading: {
+        id: 'be.contentUploader.cancelAllUploads.heading',
         defaultMessage: 'Cancel all uploads?',
         description: 'Heading for the cancel all uploads confirmation modal',
     },
-    cancelAllUploadsModalContent: {
-        id: 'be.contentUploader.cancelAllUploadsModalContent',
+    body: {
+        id: 'be.contentUploader.cancelAllUploads.body',
         defaultMessage: 'Files that are still uploading will be canceled. Completed uploads will not be affected.',
         description: 'Body content for the cancel all uploads confirmation modal',
     },
-    cancelAllUploadsConfirmButton: {
-        id: 'be.contentUploader.cancelAllUploadsConfirmButton',
+    confirmButton: {
+        id: 'be.contentUploader.cancelAllUploads.confirmButton',
         defaultMessage: 'Cancel All',
         description: 'Confirm button for the cancel all uploads modal',
     },
-    cancelAllUploadsKeepButton: {
-        id: 'be.contentUploader.cancelAllUploadsKeepButton',
+    keepUploadingButton: {
+        id: 'be.contentUploader.cancelAllUploads.keepUploadingButton',
         defaultMessage: 'Keep Uploading',
         description: 'Dismiss button for the cancel all uploads modal',
     },
-    cancelAllUploadsCloseLabel: {
-        id: 'be.contentUploader.cancelAllUploadsCloseLabel',
+    closeLabel: {
+        id: 'be.contentUploader.cancelAllUploads.closeLabel',
         defaultMessage: 'Close cancel uploads dialog',
         description: 'Aria label for the close button on the cancel all uploads modal',
     },
