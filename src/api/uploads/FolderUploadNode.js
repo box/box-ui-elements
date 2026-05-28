@@ -180,6 +180,11 @@ class FolderUploadNode {
         const folderObject: FolderUploadItem = {
             extension: '',
             name: this.name,
+            options: {
+                ...this.fileAPIOptions,
+                folderId: this.folderId,
+                uploadInitTimestamp: Date.now(),
+            },
             status: STATUS_COMPLETE,
             isFolder: true,
             size: 1,
