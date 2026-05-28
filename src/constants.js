@@ -250,6 +250,7 @@ export const CLIENT_VERSION = __VERSION__;
 
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_ACCEPTED: 'accepted' = 'accepted';
+export const STATUS_CANCELED: 'canceled' = 'canceled';
 export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 export const STATUS_INACTIVE: 'inactive' = 'inactive';

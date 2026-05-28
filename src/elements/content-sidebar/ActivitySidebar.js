@@ -440,14 +440,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }): void => {
-        const { api, file, hasReplies, onCommentDelete } = this.props;
+        const { api, features, file, hasReplies, onCommentDelete } = this.props;
+        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
 
         const successCallback = (comment: Comment) => {
             this.feedSuccessCallback();
             onCommentDelete(comment);
         };
 
-        if (hasReplies) {
+        if (hasReplies || isThreadedRepliesV2Enabled) {
             api.getFeedAPI(false).deleteThreadedComment(file, id, permissions, successCallback, this.feedErrorCallback);
         } else {
             api.getFeedAPI(false).deleteComment(file, id, permissions, successCallback, this.feedErrorCallback);
@@ -669,7 +670,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { api, currentUser, file, hasReplies, onCommentCreate } = this.props;
+        const { api, currentUser, features, file, hasReplies, onCommentCreate } = this.props;
+        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
 
         if (!currentUser) {
             throw getBadUserError();
@@ -680,7 +682,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             this.feedSuccessCallback();
         };
 
-        if (hasReplies) {
+        if (hasReplies || isThreadedRepliesV2Enabled) {
             api.getFeedAPI(false).createThreadedComment(
                 file,
                 currentUser,
