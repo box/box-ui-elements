@@ -15,6 +15,7 @@ import Browser from '../../utils/Browser';
 import { updateQueryParameters } from '../../utils/url';
 import {
     DEFAULT_RETRY_DELAY_MS,
+    ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     HTTP_STATUS_CODE_FORBIDDEN,
     MS_IN_S,
@@ -341,7 +342,7 @@ class MultiputUpload extends BaseMultiput {
                     errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
                     errorData.code === ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED) ||
                 (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
-                    errorData.code === 'access_denied_insufficient_permissions')
+                    errorData.code === ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS)
             ) {
                 this.errorCallback(errorData);
                 return;
