@@ -4,6 +4,7 @@ import {
     STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
+    STATUS_CANCELED,
 } from '../../../../constants';
 import { mapToModernizedUploadItem, mapToModernizedUploadItems } from '../mapToModernizedUploadItem';
 
@@ -38,6 +39,7 @@ describe('mapToModernizedUploadItem()', () => {
         [STATUS_STAGED, 'staged'],
         [STATUS_COMPLETE, 'complete'],
         [STATUS_ERROR, 'error'],
+        [STATUS_CANCELED, 'canceled'],
     ])('maps legacy status %s to modernized %s', (legacy, modernized) => {
         const result = mapToModernizedUploadItem(buildLegacyItem({ status: legacy }), '0');
         expect(result.status).toBe(modernized);

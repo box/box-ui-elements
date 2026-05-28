@@ -1,5 +1,12 @@
 import type { UploadItem, UploadItemStatus } from '@box/uploads-manager';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_STAGED, STATUS_COMPLETE, STATUS_ERROR } from '../../../constants';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+    STATUS_CANCELED,
+} from '../../../constants';
 import { getFileId } from '../../../utils/uploads';
 import { UploadItem as LegacyUploadItem, FolderUploadItem } from '../../../common/types/upload';
 
@@ -9,6 +16,7 @@ const STATUS_MAP: Record<string, UploadItemStatus> = {
     [STATUS_STAGED]: 'staged',
     [STATUS_COMPLETE]: 'complete',
     [STATUS_ERROR]: 'error',
+    [STATUS_CANCELED]: 'canceled',
 };
 
 export function getUploadItemKey(item: LegacyUploadItem | FolderUploadItem, rootFolderId: string): string {

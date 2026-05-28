@@ -8,6 +8,7 @@ import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
 import {
+    ERROR_CODE_ITEM_NAME_IN_USE,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
     STATUS_STAGED,
@@ -862,22 +863,46 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
             });
 
-            test('should call onClick when onItemCancel is invoked', () => {
+            test('should mark in-progress item as canceled when onItemCancel is invoked', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
+                const cancelMock = jest.fn();
                 const item = {
                     name: 'foo.pdf',
                     extension: 'pdf',
-                    progress: 0,
-                    status: STATUS_PENDING,
+                    progress: 50,
+                    status: STATUS_IN_PROGRESS,
                     file: { name: 'foo.pdf' },
+                    api: { cancel: cancelMock },
                 };
                 wrapper.setState({ items: [item] });
                 const instance = wrapper.instance();
-                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+                instance.itemsRef.current = [item];
 
                 wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
 
-                expect(onClickSpy).toHaveBeenCalledWith(item);
+                expect(cancelMock).toHaveBeenCalled();
+                expect(item.status).toBe('canceled');
+            });
+
+            test('should ignore onItemCancel for already-completed items', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const cancelMock = jest.fn();
+                const item = {
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 100,
+                    status: STATUS_COMPLETE,
+                    file: { name: 'foo.pdf' },
+                    api: { cancel: cancelMock },
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [item];
+
+                wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
+
+                expect(cancelMock).not.toHaveBeenCalled();
+                expect(item.status).toBe(STATUS_COMPLETE);
             });
 
             test('should call removeFileFromUploadQueue when onItemRemove is invoked', () => {
@@ -899,14 +924,27 @@ describe('elements/content-uploader/ContentUploader', () => {
             });
 
             test('should no-op when modernized id does not match any item', () => {
-                const wrapper = getWrapper({ enableModernizedUploads: true });
-                wrapper.setState({ items: [] });
+                const onClickCancel = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onClickCancel });
+                const item = {
+                    name: 'foo.pdf',
+                    extension: 'pdf',
+                    progress: 50,
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'foo.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                wrapper.setState({ items: [item] });
                 const instance = wrapper.instance();
-                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+                instance.itemsRef.current = [item];
+                const markSpy = jest.spyOn(instance, 'markItemCanceled');
 
                 wrapper.find(UploadsManagerBP).prop('onItemCancel')('missing-id');
 
-                expect(onClickSpy).not.toHaveBeenCalled();
+                expect(markSpy).not.toHaveBeenCalled();
+                expect(item.api.cancel).not.toHaveBeenCalled();
+                expect(onClickCancel).not.toHaveBeenCalled();
+                expect(item.status).toBe(STATUS_IN_PROGRESS);
             });
 
             test('should not crash when state contains a folder item without a file', () => {
@@ -935,16 +973,224 @@ describe('elements/content-uploader/ContentUploader', () => {
                     progress: 0,
                     status: STATUS_PENDING,
                     isFolder: true,
-                    api: {},
+                    api: { cancel: jest.fn() },
                 };
                 wrapper.setState({ items: [folderItem] });
                 const instance = wrapper.instance();
-                const onClickSpy = jest.spyOn(instance, 'onClick').mockImplementation(() => {});
+                instance.itemsRef.current = [folderItem];
 
                 const folderId = wrapper.find(UploadsManagerBP).prop('items')[0].id;
                 wrapper.find(UploadsManagerBP).prop('onItemCancel')(folderId);
 
-                expect(onClickSpy).toHaveBeenCalledWith(folderItem);
+                expect(folderItem.status).toBe('canceled');
+            });
+
+            test('handleModernizedCancelAll should cancel all in-progress and pending items', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const inProgress = {
+                    name: 'a.pdf',
+                    extension: 'pdf',
+                    progress: 25,
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'a.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                const pending = {
+                    name: 'b.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_PENDING,
+                    file: { name: 'b.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                const complete = {
+                    name: 'c.pdf',
+                    extension: 'pdf',
+                    progress: 100,
+                    status: STATUS_COMPLETE,
+                    file: { name: 'c.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                wrapper.setState({ items: [inProgress, pending, complete] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [inProgress, pending, complete];
+
+                wrapper.find(UploadsManagerBP).prop('onCancelAll')();
+
+                expect(inProgress.status).toBe('canceled');
+                expect(pending.status).toBe('canceled');
+                expect(complete.status).toBe(STATUS_COMPLETE);
+                expect(inProgress.api.cancel).toHaveBeenCalled();
+                expect(pending.api.cancel).toHaveBeenCalled();
+                expect(complete.api.cancel).not.toHaveBeenCalled();
+            });
+
+            test('handleModernizedRetryAll should restart errored and canceled items', () => {
+                const onClickRetry = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onClickRetry });
+                const errored = {
+                    name: 'a.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_ERROR,
+                    file: { name: 'a.pdf', size: 100 },
+                    api: {},
+                    isFolder: false,
+                };
+                const canceled = {
+                    name: 'b.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: 'canceled',
+                    file: { name: 'b.pdf', size: 100 },
+                    api: {},
+                    isFolder: false,
+                };
+                const complete = {
+                    name: 'c.pdf',
+                    extension: 'pdf',
+                    progress: 100,
+                    status: STATUS_COMPLETE,
+                    file: { name: 'c.pdf', size: 100 },
+                    api: {},
+                };
+                wrapper.setState({ items: [errored, canceled, complete] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [errored, canceled, complete];
+                const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
+                const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onRetryAll')();
+
+                expect(resetSpy).toHaveBeenCalledTimes(2);
+                expect(uploadFileSpy).toHaveBeenCalledTimes(2);
+                expect(onClickRetry).toHaveBeenCalledTimes(2);
+                expect(onClickRetry).toHaveBeenCalledWith(errored);
+                expect(onClickRetry).toHaveBeenCalledWith(canceled);
+            });
+
+            test('handleModernizedRetryAll should call onClickResume for resumable chunked items', () => {
+                const onClickResume = jest.fn();
+                const wrapper = getWrapper({
+                    enableModernizedUploads: true,
+                    chunked: true,
+                    isResumableUploadsEnabled: true,
+                    onClickResume,
+                });
+                const resumable = {
+                    name: 'big.bin',
+                    extension: 'bin',
+                    progress: 25,
+                    status: STATUS_ERROR,
+                    file: { name: 'big.bin', size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                    api: { sessionId: 'sess-1', totalUploadedBytes: 1024 },
+                    isFolder: false,
+                };
+                wrapper.setState({ items: [resumable] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [resumable];
+                jest.spyOn(UploaderUtils, 'isMultiputSupported').mockReturnValue(true);
+                const resumeSpy = jest.spyOn(instance, 'resumeFile').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onRetryAll')();
+
+                expect(resumeSpy).toHaveBeenCalledWith(resumable);
+                expect(onClickResume).toHaveBeenCalledWith(resumable);
+                expect(resumable.bytesUploadedOnLastResume).toBe(1024);
+            });
+
+            test('handleModernizedRetryAll should drop name-in-use items instead of retrying', () => {
+                const onClickCancel = jest.fn();
+                const onCancel = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onClickCancel, onCancel });
+                const conflict = {
+                    name: 'dup.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_ERROR,
+                    error: { code: ERROR_CODE_ITEM_NAME_IN_USE },
+                    file: { name: 'dup.pdf', size: 100 },
+                    api: { cancel: jest.fn() },
+                    isFolder: false,
+                };
+                const ok = {
+                    name: 'ok.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_ERROR,
+                    file: { name: 'ok.pdf', size: 100 },
+                    api: {},
+                    isFolder: false,
+                };
+                wrapper.setState({ items: [conflict, ok] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [conflict, ok];
+                const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
+                const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
+
+                wrapper.find(UploadsManagerBP).prop('onRetryAll')();
+
+                expect(onClickCancel).toHaveBeenCalledWith(conflict);
+                expect(conflict.api.cancel).toHaveBeenCalled();
+                expect(instance.itemsRef.current).not.toContain(conflict);
+                expect(resetSpy).toHaveBeenCalledTimes(1);
+                expect(resetSpy).toHaveBeenCalledWith(ok);
+                expect(uploadFileSpy).toHaveBeenCalledWith(ok);
+            });
+
+            test('handleModernizedItemRetry should fire onClickRetry for non-resumable items', () => {
+                const onClickRetry = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onClickRetry });
+                const item = {
+                    name: 'a.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_ERROR,
+                    file: { name: 'a.pdf', size: 100 },
+                    api: {},
+                    isFolder: false,
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [item];
+                const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
+                const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
+
+                const { id } = wrapper.find(UploadsManagerBP).prop('items')[0];
+                wrapper.find(UploadsManagerBP).prop('onItemRetry')(id);
+
+                expect(resetSpy).toHaveBeenCalledWith(item);
+                expect(uploadFileSpy).toHaveBeenCalledWith(item);
+                expect(onClickRetry).toHaveBeenCalledWith(item);
+            });
+
+            test('handleModernizedItemRetry should drop name-in-use items instead of retrying', () => {
+                const onClickCancel = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onClickCancel });
+                const item = {
+                    name: 'dup.pdf',
+                    extension: 'pdf',
+                    progress: 0,
+                    status: STATUS_ERROR,
+                    error: { code: ERROR_CODE_ITEM_NAME_IN_USE },
+                    file: { name: 'dup.pdf', size: 100 },
+                    api: { cancel: jest.fn() },
+                    isFolder: false,
+                };
+                wrapper.setState({ items: [item] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [item];
+                const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
+                const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
+
+                const { id } = wrapper.find(UploadsManagerBP).prop('items')[0];
+                wrapper.find(UploadsManagerBP).prop('onItemRetry')(id);
+
+                expect(onClickCancel).toHaveBeenCalledWith(item);
+                expect(item.api.cancel).toHaveBeenCalled();
+                expect(instance.itemsRef.current).not.toContain(item);
+                expect(resetSpy).not.toHaveBeenCalled();
+                expect(uploadFileSpy).not.toHaveBeenCalled();
             });
         });
     });
