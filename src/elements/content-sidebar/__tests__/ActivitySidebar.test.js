@@ -275,6 +275,31 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });
+
+        test('should call the deleteThreadedComment API when threadedRepliesV2 is enabled even if hasReplies is false', () => {
+            const wrapper = getWrapper({
+                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
+                hasReplies: false,
+            });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+
+            const id = '1';
+            const permissions = {
+                can_edit: false,
+                can_delete: true,
+            };
+            instance.deleteComment({ id, permissions });
+            expect(feedAPI.deleteThreadedComment).toBeCalledWith(
+                file,
+                id,
+                permissions,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(feedAPI.deleteComment).not.toBeCalled();
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
     });
 
     describe('deleteReply()', () => {
@@ -456,6 +481,28 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
                 expect.any(Function),
             );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+
+        test('should call the createThreadedComment API when threadedRepliesV2 is enabled even if hasReplies is false', () => {
+            const wrapper = getWrapper({
+                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
+                hasReplies: false,
+            });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            const message = 'foo';
+            const hasMention = true;
+
+            instance.createComment(message, hasMention);
+            expect(feedAPI.createThreadedComment).toBeCalledWith(
+                file,
+                currentUser,
+                message,
+                expect.any(Function),
+                expect.any(Function),
+            );
+            expect(feedAPI.createComment).not.toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });
