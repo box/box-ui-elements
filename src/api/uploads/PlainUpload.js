@@ -7,6 +7,7 @@
 import noop from 'lodash/noop';
 import { digest } from '../../utils/webcrypto';
 import { getFileLastModifiedAsISONoMSIfPossible } from '../../utils/uploads';
+import { updateQueryParameters } from '../../utils/url';
 import BaseUpload from './BaseUpload';
 import type { BoxItem } from '../../common/types/core';
 
@@ -72,6 +73,10 @@ class PlainUpload extends BaseUpload {
             if (this.fileId) {
                 uploadUrl = uploadUrl.replace('content', `${this.fileId}/content`);
             }
+
+            if (this.fields) {
+                uploadUrl = updateQueryParameters(uploadUrl, { fields: this.fields.toString() });
+            }
         }
 
         const attributes = JSON.stringify({
@@ -112,6 +117,7 @@ class PlainUpload extends BaseUpload {
      * @param {string} options.folderId - untyped folder id
      * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
      * @param {File} options.file - File blob object
+     * @param {Array<string>} options.fields
      * @param {Function} [options.successCallback] - Function to call with response
      * @param {Function} [options.errorCallback] - Function to call with errors
      * @param {Function} [options.progressCallback] - Function to call with progress
@@ -130,6 +136,7 @@ class PlainUpload extends BaseUpload {
         conflictCallback,
         // $FlowFixMe
         overwrite = true,
+        fields,
     }: {
         conflictCallback?: Function,
         errorCallback: Function,
@@ -140,6 +147,7 @@ class PlainUpload extends BaseUpload {
         overwrite: boolean | 'error',
         progressCallback: Function,
         successCallback: Function,
+        fields: ?Array<string>,
     }): void {
         if (this.isDestroyed()) {
             return;
@@ -156,6 +164,7 @@ class PlainUpload extends BaseUpload {
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
         this.conflictCallback = conflictCallback;
+        this.fields = fields;
 
         this.makePreflightRequest();
     }
