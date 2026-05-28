@@ -1005,6 +1005,13 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         );
         const uploadItemsStatus = isResumableUploadsEnabled ? areAllItemsFinished : noFileIsPendingOrInProgress;
 
+        // In the modernized flow, suppress the completion notification when
+        // no item actually finished successfully (e.g. user canceled every
+        // upload). This prevents a misleading "upload complete" toast/callback
+        // from any of the onComplete call sites below.
+        const hasCompletedItem = items.some(uploadItem => uploadItem.status === STATUS_COMPLETE);
+        const shouldFireOnComplete = !enableModernizedUploads || hasCompletedItem;
+
         let view = '';
         if ((items && items.length === 0) || allItemsArePending) {
             view = VIEW_UPLOAD_EMPTY;
@@ -1013,7 +1020,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             view = VIEW_UPLOAD_SUCCESS;
 
             if (!useUploadsManager) {
-                onComplete(cloneDeep(filesToBeUploaded.map(item => item.boxFile)));
+                if (shouldFireOnComplete) {
+                    onComplete(cloneDeep(filesToBeUploaded.map(item => item.boxFile)));
+                }
                 // Reset item collection after successful upload
                 items = [];
             }
@@ -1025,7 +1034,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             view = VIEW_UPLOAD_SUCCESS;
 
             if (!useUploadsManager) {
-                onComplete(cloneDeep(items.map(item => item.boxFile)));
+                if (shouldFireOnComplete) {
+                    onComplete(cloneDeep(items.map(item => item.boxFile)));
+                }
                 // Reset item collection after successful upload
                 items = [];
             }
@@ -1035,11 +1046,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             if (this.isAutoExpanded) {
                 this.resetUploadManagerExpandState();
             } // Else manually expanded so don't close
-            // In the modernized flow, suppress the completion notification
-            // when no item actually finished successfully (e.g. user canceled
-            // every upload). This prevents a misleading "upload complete" toast.
-            const hasCompletedItem = items.some(uploadItem => uploadItem.status === STATUS_COMPLETE);
-            if (!enableModernizedUploads || hasCompletedItem) {
+            if (shouldFireOnComplete) {
                 onComplete(items);
             }
         }
