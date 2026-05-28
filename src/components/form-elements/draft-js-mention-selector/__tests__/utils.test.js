@@ -236,5 +236,19 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
 
             expect(getFormattedCommentText(dummyEditorState)).toEqual(expected);
         });
+
+        test.each`
+            input                | expected
+            ${'   hello   '}     | ${'hello'}
+            ${'\n\nhello\n\n'}   | ${'hello'}
+            ${'\thello\t'}       | ${'hello'}
+            ${'  \t\nhello\n '}  | ${'hello'}
+            ${'hello world'}     | ${'hello world'}
+            ${'  hello  world '} | ${'hello  world'}
+        `('should trim leading and trailing whitespace from "$input"', ({ input, expected }) => {
+            const dummyEditorState = EditorState.createWithContent(ContentState.createFromText(input));
+
+            expect(getFormattedCommentText(dummyEditorState)).toEqual({ text: expected, hasMention: false });
+        });
     });
 });

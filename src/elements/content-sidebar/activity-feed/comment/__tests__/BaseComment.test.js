@@ -405,7 +405,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
     });
 
     test('should focus on the edit CommentForm when it is opened', () => {
-        const mockFocusFunc = jest.fn();
+        const mockFocusFunc = jest.fn(editor => editor);
         EditorState.moveFocusToEnd = mockFocusFunc;
 
         getWrapper({ canEdit: true });

@@ -1,8 +1,14 @@
 import * as React from 'react';
 
+import { ActivityFeed } from '@box/activity-feed';
+
 import { act, render, screen } from '../../../../test-utils/testing-library';
 import ActivityFeedV2 from '..';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
+
+type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor>;
+
+const mockSerializeMentionMarkup = jest.fn((doc: unknown) => ({ hasMention: false, text: JSON.stringify(doc) }));
 
 jest.mock('@box/threaded-annotations', () => ({
     AnnotationBadgeType: {
@@ -12,7 +18,7 @@ jest.mock('@box/threaded-annotations', () => ({
         Point: 'point',
         Region: 'region',
     },
-    serializeMentionMarkup: (doc: unknown) => ({ hasMention: false, text: JSON.stringify(doc) }),
+    serializeMentionMarkup: (doc: unknown) => mockSerializeMentionMarkup(doc),
 }));
 
 const mockScrollTo = jest.fn<boolean, [string]>(() => true);
@@ -20,6 +26,7 @@ const mockScrollTo = jest.fn<boolean, [string]>(() => true);
 type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
+let lastEditorProps: Partial<EditorProps> = {};
 
 jest.mock('@box/activity-feed', () => {
     const actual = jest.requireActual('@box/activity-feed');
@@ -37,7 +44,10 @@ jest.mock('@box/activity-feed', () => {
         <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>
     );
     ActivityFeedList.Version = (props: { id: string }) => <div data-testid={`version-${props.id}`}>Version</div>;
-    const ActivityFeedEditor = () => <div data-testid="activity-feed-editor">Editor</div>;
+    const ActivityFeedEditor = (props: Partial<EditorProps>) => {
+        lastEditorProps = props;
+        return <div data-testid="activity-feed-editor">Editor</div>;
+    };
     const ActivityFeedHeader = ({ children }: { children: React.ReactNode }) => (
         <div data-testid="activity-feed-header">{children}</div>
     );
@@ -153,6 +163,11 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         mockScrollTo.mockReturnValue(true);
         lastShowResolvedOptionProps = {};
         lastMentionMeOptionProps = {};
+        lastEditorProps = {};
+        mockSerializeMentionMarkup.mockImplementation((doc: unknown) => ({
+            hasMention: false,
+            text: JSON.stringify(doc),
+        }));
     });
 
     afterEach(() => {
@@ -321,6 +336,129 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             />,
         );
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
+    });
+
+    describe('mention popover behavior', () => {
+        test('should pass allowEmptyQuery=true so the popover opens on @ before any character is typed', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+
+            expect(lastEditorProps.userSelectorProps?.allowEmptyQuery).toBe(true);
+        });
+
+        test('should skip the API call when fetchUsers is invoked with an empty query', async () => {
+            const getMentionAsync = jest.fn().mockResolvedValue([{ id: '1', name: 'foo' }]);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            const result = await lastEditorProps.userSelectorProps?.fetchUsers?.('');
+
+            expect(getMentionAsync).not.toHaveBeenCalled();
+            expect(result).toEqual([]);
+        });
+
+        test('should skip the API call when fetchUsers is invoked with a whitespace-only query', async () => {
+            const getMentionAsync = jest.fn().mockResolvedValue([{ id: '1', name: 'foo' }]);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            const result = await lastEditorProps.userSelectorProps?.fetchUsers?.('   ');
+
+            expect(getMentionAsync).not.toHaveBeenCalled();
+            expect(result).toEqual([]);
+        });
+
+        test('should call getMentionAsync with the trimmed value and shape results for a non-empty query', async () => {
+            const getMentionAsync = jest.fn().mockResolvedValue([
+                { email: 'a@b.com', id: '7', name: 'Alice' },
+                { id: '8', login: 'bob@b.com', name: 'Bob' },
+            ]);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            const result = await lastEditorProps.userSelectorProps?.fetchUsers?.('  al  ');
+
+            expect(getMentionAsync).toHaveBeenCalledWith('al');
+            expect(result).toEqual([
+                { email: 'a@b.com', id: 7, name: 'Alice', value: '7' },
+                { email: 'bob@b.com', id: 8, name: 'Bob', value: '8' },
+            ]);
+        });
+
+        test('should render the V1-style start prompt via renderEmpty when value is empty', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+
+            const empty = lastEditorProps.userSelectorProps?.renderEmpty?.('');
+            render(<>{empty}</>);
+
+            expect(screen.getByText('Mention someone to notify them')).toBeVisible();
+        });
+
+        test('should render the V1-style start prompt via renderEmpty when value is whitespace-only', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+
+            const empty = lastEditorProps.userSelectorProps?.renderEmpty?.('   ');
+            render(<>{empty}</>);
+
+            expect(screen.getByText('Mention someone to notify them')).toBeVisible();
+        });
+
+        test('should render the no-users-found message via renderEmpty when value is non-empty', () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+
+            const empty = lastEditorProps.userSelectorProps?.renderEmpty?.('xyz');
+            render(<>{empty}</>);
+
+            expect(screen.getByText('No users found')).toBeVisible();
+        });
+    });
+
+    describe('comment posting', () => {
+        test('should call onCommentCreate with trimmed text when the editor posts content', async () => {
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: true, text: '   hello world   ' });
+            const onCommentCreate = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+
+            expect(onCommentCreate).toHaveBeenCalledWith('hello world', true);
+        });
+
+        test('should skip onCommentCreate when the trimmed text is empty', async () => {
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: '   \n\t   ' });
+            const onCommentCreate = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+
+            expect(onCommentCreate).not.toHaveBeenCalled();
+        });
     });
 
     describe('filter controls', () => {
@@ -520,6 +658,201 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockScrollTo).toHaveBeenCalledTimes(1);
             rerender(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[mockComment]} />);
             expect(mockScrollTo).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('scroll to user post', () => {
+        const numericCurrentUser: ActivityFeedV2Props['currentUser'] = { id: '10', name: 'Current User', type: 'user' };
+        const userComment = {
+            ...mockComment,
+            created_by: { id: '10', name: 'Current User', type: 'user' },
+            id: 'new-comment',
+            tagged_message: 'fresh post',
+        };
+        const strangerComment = {
+            ...mockComment,
+            created_by: { id: '99', name: 'Stranger', type: 'user' },
+            id: 'stranger-comment',
+            tagged_message: 'unrelated',
+        };
+
+        test('should scroll to the new user item once feedItems updates after a post', async () => {
+            const onCommentCreate = jest.fn();
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            expect(onCommentCreate).toHaveBeenCalled();
+            expect(mockScrollTo).not.toHaveBeenCalled();
+
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(mockScrollTo).toHaveBeenLastCalledWith('new-comment');
+        });
+
+        test('should not scroll when onCommentCreate rejects (post failed)', async () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            const onCommentCreate = jest.fn().mockRejectedValue(new Error('network error'));
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(consoleError).toHaveBeenCalledWith('ActivityFeedV2: failed to post comment', expect.any(Error));
+            expect(mockScrollTo).not.toHaveBeenCalled();
+            consoleError.mockRestore();
+        });
+
+        test('should not scroll to a concurrent push that arrives without a user post', async () => {
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+
+            expect(mockScrollTo).not.toHaveBeenCalled();
+        });
+
+        test('should scroll past a stranger insert and target the user-authored item only', async () => {
+            const onCommentCreate = jest.fn();
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, strangerComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(mockScrollTo).toHaveBeenCalledWith('new-comment');
+            expect(mockScrollTo).not.toHaveBeenCalledWith('stranger-comment');
+        });
+
+        test('should not scroll when only a stranger insert lands after a user post', async () => {
+            const onCommentCreate = jest.fn();
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(mockScrollTo).not.toHaveBeenCalled();
+        });
+
+        test('should not scroll when serializeEditorContent yields no text', async () => {
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: '   ' });
+            const onCommentCreate = jest.fn();
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(onCommentCreate).not.toHaveBeenCalled();
+            expect(mockScrollTo).not.toHaveBeenCalled();
+        });
+
+        test('should retry the scroll on the next feedItems change when scrollTo returns false', async () => {
+            mockScrollTo.mockReturnValue(false);
+            const onCommentCreate = jest.fn();
+            const { rerender } = render(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            mockScrollTo.mockClear();
+            mockScrollTo.mockReturnValue(false);
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+            expect(mockScrollTo).toHaveBeenLastCalledWith('new-comment');
+
+            mockScrollTo.mockClear();
+            mockScrollTo.mockReturnValue(true);
+            rerender(
+                <ActivityFeedV2
+                    currentUser={numericCurrentUser}
+                    feedItems={[mockComment, userComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            expect(mockScrollTo).toHaveBeenLastCalledWith('new-comment');
         });
     });
 });

@@ -13,15 +13,16 @@ import messages from './messages';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 type Props = {
+    isDisabled?: boolean,
     onCancel: Function,
 };
 
-const CommentInputControls = ({ onCancel }: Props): React.Node => (
+const CommentInputControls = ({ isDisabled, onCancel }: Props): React.Node => (
     <div className="bcs-CommentFormControls">
         <Button data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL} onClick={onCancel} type="button">
             <FormattedMessage {...messages.commentCancel} />
         </Button>
-        <PrimaryButton data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}>
+        <PrimaryButton data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST} isDisabled={isDisabled}>
             <FormattedMessage {...messages.commentPost} />
         </PrimaryButton>
     </div>
