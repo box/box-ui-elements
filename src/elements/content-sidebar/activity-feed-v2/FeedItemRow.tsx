@@ -104,7 +104,7 @@ const FeedItemRow = ({
             };
             const handleStatusChange = (status: FeedItemStatus) => (id: string) => {
                 if (isDisabled) return;
-                onCommentUpdate?.(id, item.originalText, status, false, permissions);
+                onCommentUpdate?.(id, undefined, status, false, permissions);
             };
             const handleEdit = (id: string, content: unknown) => {
                 if (isDisabled) return;
