@@ -467,6 +467,12 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformVersionToProps(version as unknown as BoxItemVersion);
             expect(result.actionType).toBe('upload');
         });
+
+        test('should fall back to version_end when version_number is missing', () => {
+            const version = { ...mockVersion, version_end: 7, version_number: undefined, version_start: 1 };
+            const result = transformVersionToProps(version as unknown as BoxItemVersion);
+            expect(result.versionNumber).toBe(7);
+        });
     });
 
     describe('transformAppActivityToProps()', () => {

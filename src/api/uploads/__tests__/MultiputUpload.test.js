@@ -9,7 +9,10 @@ import MultiputPart, {
     PART_STATE_NOT_STARTED,
 } from '../MultiputPart';
 
-import { ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED } from '../../../constants';
+import {
+    ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
+    ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
+} from '../../../constants';
 
 const config = {
     a: 1,
@@ -410,7 +413,7 @@ describe('api/uploads/MultiputUpload', () => {
         test.each`
             data
             ${{ code: ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED, status: 403 }}
-            ${{ code: 'access_denied_insufficient_permissions', status: 403 }}
+            ${{ code: ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS, status: 403 }}
         `('should invoke errorCallback but not sessionErrorHandler on expected failure', async ({ data }) => {
             // Setup
             const error = {

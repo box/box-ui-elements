@@ -276,6 +276,7 @@ export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
 export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload';
+export const ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS = 'access_denied_insufficient_permissions';
 export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded';
 export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_exceeded';
 export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
