@@ -250,7 +250,7 @@ export const transformVersionToProps = (version: BoxItemVersion): VersionItemPro
         avatarUrl: user?.avatar_url,
         createdAt: toUnixMs(version.created_at),
         id: version.id,
-        versionNumber: parseInt(version.version_number, 10) || 0,
+        versionNumber: parseInt(version.version_number, 10) || version.version_end || 0,
     };
 };
 
