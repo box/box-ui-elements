@@ -747,6 +747,11 @@ const messages = defineMessages({
         description: 'Error message shown when account storage limit has been reached',
         defaultMessage: 'Account storage limit reached',
     },
+    uploadsInsufficientPermissionsErrorMessage: {
+        id: 'be.uploadsInsufficientPermissionsErrorMessage',
+        description: 'Error message shown when the user lacks permission to upload to the destination folder',
+        defaultMessage: "You don't have permission to upload to this folder",
+    },
     uploadsPendingFolderSizeLimitErrorMessage: {
         id: 'be.uploadsPendingFolderSizeLimitErrorMessage',
         description: 'Error message shown when pending app folder size exceeds the limit',

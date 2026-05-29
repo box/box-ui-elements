@@ -16,6 +16,7 @@ import {
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     ERROR_CODE_UPLOAD_FAILED_PACKAGE,
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
+    ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
     ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
 } from '../../../constants';
@@ -97,6 +98,12 @@ describe('elements/content-uploader/CellRenderer', () => {
             const rowData = { status: STATUS_ERROR, error: { code: ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED } };
             renderComponent(rowData);
             expect(screen.getByText('Account storage limit reached')).toBeInTheDocument();
+        });
+
+        test('renders distinct error message for insufficient permissions (403)', () => {
+            const rowData = { status: STATUS_ERROR, error: { code: ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS } };
+            renderComponent(rowData);
+            expect(screen.getByText("You don't have permission to upload to this folder")).toBeInTheDocument();
         });
 
         test('renders error message for pending app folder size limit', () => {

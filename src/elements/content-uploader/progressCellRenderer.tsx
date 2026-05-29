@@ -9,6 +9,7 @@ import {
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
     ERROR_CODE_ITEM_NAME_IN_USE,
     ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
     ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
@@ -48,6 +49,8 @@ const getErrorMessage = (
             );
         case ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED:
             return <FormattedMessage {...messages.uploadsStorageLimitErrorMessage} />;
+        case ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS:
+            return <FormattedMessage {...messages.uploadsInsufficientPermissionsErrorMessage} />;
         case ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT:
             return <FormattedMessage {...messages.uploadsPendingFolderSizeLimitErrorMessage} />;
         case ERROR_CODE_UPLOAD_FAILED_PACKAGE:
