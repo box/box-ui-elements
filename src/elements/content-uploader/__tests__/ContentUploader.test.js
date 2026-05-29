@@ -986,7 +986,28 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(folderItem.status).toBe(STATUS_CANCELED);
             });
 
-            test('handleUploadsManagerCancelAll should cancel all in-progress and pending items', () => {
+            test('onCancelAll should open the confirmation modal instead of canceling directly', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const inProgress = {
+                    name: 'a.pdf',
+                    extension: 'pdf',
+                    progress: 25,
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'a.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                wrapper.setState({ items: [inProgress] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [inProgress];
+
+                wrapper.find(UploadsManagerBP).prop('onCancelAll')();
+
+                expect(wrapper.state('isCancelAllModalOpen')).toBe(true);
+                expect(inProgress.status).toBe(STATUS_IN_PROGRESS);
+                expect(inProgress.api.cancel).not.toHaveBeenCalled();
+            });
+
+            test('handleCancelAllConfirm should cancel all in-progress and pending items and close modal', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
                 const inProgress = {
                     name: 'a.pdf',
@@ -1012,18 +1033,38 @@ describe('elements/content-uploader/ContentUploader', () => {
                     file: { name: 'c.pdf' },
                     api: { cancel: jest.fn() },
                 };
-                wrapper.setState({ items: [inProgress, pending, complete] });
+                wrapper.setState({ items: [inProgress, pending, complete], isCancelAllModalOpen: true });
                 const instance = wrapper.instance();
                 instance.itemsRef.current = [inProgress, pending, complete];
 
-                wrapper.find(UploadsManagerBP).prop('onCancelAll')();
+                instance.handleCancelAllConfirm();
 
+                expect(wrapper.state('isCancelAllModalOpen')).toBe(false);
                 expect(inProgress.status).toBe(STATUS_CANCELED);
                 expect(pending.status).toBe(STATUS_CANCELED);
                 expect(complete.status).toBe(STATUS_COMPLETE);
                 expect(inProgress.api.cancel).toHaveBeenCalled();
                 expect(pending.api.cancel).toHaveBeenCalled();
                 expect(complete.api.cancel).not.toHaveBeenCalled();
+            });
+
+            test('handleCancelAllDismiss should close the modal without canceling uploads', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const inProgress = {
+                    name: 'a.pdf',
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'a.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                wrapper.setState({ items: [inProgress], isCancelAllModalOpen: true });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [inProgress];
+
+                instance.handleCancelAllDismiss();
+
+                expect(wrapper.state('isCancelAllModalOpen')).toBe(false);
+                expect(inProgress.status).toBe(STATUS_IN_PROGRESS);
+                expect(inProgress.api.cancel).not.toHaveBeenCalled();
             });
 
             describe('updateViewAndCollection with canceled items', () => {
