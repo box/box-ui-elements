@@ -5,7 +5,7 @@ import type { AnnotationBadgeTargetType, ThreadedAnnotationsPropsV2 } from '@box
 
 import { render, screen } from '../../../../test-utils/testing-library';
 import FeedItemRow from '../FeedItemRow';
-import { dispatchReplyEdit, logEditError, serializeEditorContent } from '../helpers';
+import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from '../helpers';
 import { annotationTargetToBadge } from '../transformers';
 
 import type { TaskNew } from '../../../../common/types/tasks';
@@ -41,6 +41,7 @@ jest.mock('@box/activity-feed', () => {
 });
 
 jest.mock('../helpers', () => ({
+    dispatchReplyDelete: jest.fn(),
     dispatchReplyEdit: jest.fn(),
     logEditError: jest.fn(),
     serializeEditorContent: jest.fn(),
@@ -52,6 +53,7 @@ jest.mock('../transformers', () => ({
 }));
 
 const mockedSerializeEditorContent = jest.mocked(serializeEditorContent);
+const mockedDispatchReplyDelete = jest.mocked(dispatchReplyDelete);
 const mockedDispatchReplyEdit = jest.mocked(dispatchReplyEdit);
 const mockedAnnotationTargetToBadge = jest.mocked(annotationTargetToBadge);
 
@@ -233,6 +235,29 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(onCommentDelete).toHaveBeenCalledWith({ id: 'comment-1', permissions: commentPermissions });
         });
 
+        test('should delegate onDelete of a reply id to dispatchReplyDelete with messages and parent id', () => {
+            const onCommentDelete = jest.fn();
+            const onReplyDelete = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockComment}
+                    onCommentDelete={onCommentDelete}
+                    onReplyDelete={onReplyDelete}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onDelete?.('reply-1');
+
+            expect(mockedDispatchReplyDelete).toHaveBeenCalledWith({
+                id: 'reply-1',
+                messages: mockComment.messages,
+                onReplyDelete,
+                parentId: 'comment-1',
+            });
+            expect(onCommentDelete).not.toHaveBeenCalled();
+        });
+
         test('should call onCommentUpdate with resolved status when onResolve fires', () => {
             const onCommentUpdate = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
@@ -401,6 +426,29 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             lastThreadedAnnotationProps.onThreadDelete?.();
 
             expect(onAnnotationDelete).toHaveBeenCalledWith({ id: 'annotation-1', permissions: annotationPermissions });
+        });
+
+        test('should delegate onDelete of a reply id to dispatchReplyDelete with messages and parent id', () => {
+            const onAnnotationDelete = jest.fn();
+            const onReplyDelete = jest.fn();
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={mockAnnotation}
+                    onAnnotationDelete={onAnnotationDelete}
+                    onReplyDelete={onReplyDelete}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onDelete?.('annotation-reply-1');
+
+            expect(mockedDispatchReplyDelete).toHaveBeenCalledWith({
+                id: 'annotation-reply-1',
+                messages: mockAnnotation.messages,
+                onReplyDelete,
+                parentId: 'annotation-1',
+            });
+            expect(onAnnotationDelete).not.toHaveBeenCalled();
         });
 
         test('should call onAnnotationStatusChange with resolved when onResolve fires', () => {

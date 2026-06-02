@@ -12,10 +12,10 @@ import type { Annotation, AnnotationPermission } from '../../../common/types/ann
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 
-import { dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
+import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
 
-import type { OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
+import type { OnReplyDelete, OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
 
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -51,6 +51,7 @@ type FeedItemRowProps = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyDelete?: OnReplyDelete;
     onReplyUpdate?: OnReplyUpdate;
     onTaskAssignmentUpdate?: (taskId: string, taskAssignmentId: string, status: TaskCollabStatus) => void;
     onTaskDelete?: (task: TaskNew) => void;
@@ -87,6 +88,7 @@ const FeedItemRow = ({
     onCommentDelete,
     onCommentUpdate,
     onReplyCreate,
+    onReplyDelete,
     onReplyUpdate,
     onTaskAssignmentUpdate,
     onTaskDelete,
@@ -100,7 +102,11 @@ const FeedItemRow = ({
             const { permissions } = item;
             const handleDelete = (id: string) => {
                 if (isDisabled) return;
-                onCommentDelete?.({ id, permissions });
+                if (id === item.id) {
+                    onCommentDelete?.({ id, permissions });
+                    return;
+                }
+                dispatchReplyDelete({ id, messages: item.messages, onReplyDelete, parentId: item.id });
             };
             const handleStatusChange = (status: FeedItemStatus) => (id: string) => {
                 if (isDisabled) return;
@@ -150,7 +156,11 @@ const FeedItemRow = ({
             const fileVersionId = item.annotation.file_version?.id;
             const handleDelete = (id: string) => {
                 if (isDisabled) return;
-                onAnnotationDelete?.({ id, permissions });
+                if (id === item.id) {
+                    onAnnotationDelete?.({ id, permissions });
+                    return;
+                }
+                dispatchReplyDelete({ id, messages: item.messages, onReplyDelete, parentId: item.id });
             };
             const handleStatusChange = (status: FeedItemStatus) => (id: string) => {
                 if (isDisabled) return;

@@ -28,6 +28,8 @@ export type UserSelectorProps = {
     loadingAriaLabel: string;
 };
 
+export type OnReplyDelete = (params: { id: string; parentId: string; permissions: BoxCommentPermission }) => void;
+
 export type OnReplyUpdate = (params: {
     id: string;
     onError?: () => void;
@@ -102,6 +104,7 @@ export type ActivityFeedV2Props = {
         onError?: (() => void) | null,
     ) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyDelete?: OnReplyDelete;
     onReplyUpdate?: OnReplyUpdate;
     onShowOnlyMentionsMeChange?: (checked: boolean) => void;
     onShowResolvedChange?: (checked: boolean) => void;

@@ -7,7 +7,7 @@ import { serializeMentionMarkup } from '@box/threaded-annotations';
 
 import type { BoxCommentPermission } from '../../../common/types/feed';
 
-import type { OnReplyUpdate, TransformedCommentItem } from './types';
+import type { OnReplyDelete, OnReplyUpdate, TransformedCommentItem } from './types';
 
 type EditorContent = Parameters<typeof serializeMentionMarkup>[0];
 
@@ -63,4 +63,24 @@ export const dispatchReplyEdit = ({
         return;
     }
     onReplyUpdate?.({ id, parentId, permissions, text });
+};
+
+export const dispatchReplyDelete = ({
+    id,
+    messages,
+    onReplyDelete,
+    parentId,
+}: {
+    id: string;
+    messages: TransformedCommentItem['messages'];
+    onReplyDelete?: OnReplyDelete;
+    parentId: string;
+}) => {
+    const permissions = findMessagePermissions(messages, id);
+    if (!permissions) {
+        // eslint-disable-next-line no-console
+        console.error(`ActivityFeedV2: no permissions found for reply "${id}" in thread "${parentId}"`);
+        return;
+    }
+    onReplyDelete?.({ id, parentId, permissions });
 };
