@@ -51,6 +51,7 @@ const ActivityFeedV2 = ({
     onCommentDelete,
     onCommentUpdate,
     onReplyCreate,
+    onReplyDelete,
     onReplyUpdate,
     onShowOnlyMentionsMeChange,
     onShowResolvedChange,
@@ -339,6 +340,7 @@ const ActivityFeedV2 = ({
                                     onCommentDelete={onCommentDelete}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
+                                    onReplyDelete={onReplyDelete}
                                     onReplyUpdate={onReplyUpdate}
                                     onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                     onTaskDelete={onTaskDelete}

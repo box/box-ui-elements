@@ -1,6 +1,12 @@
 import { serializeMentionMarkup } from '@box/threaded-annotations';
 
-import { dispatchReplyEdit, findMessagePermissions, logEditError, serializeEditorContent } from '../helpers';
+import {
+    dispatchReplyDelete,
+    dispatchReplyEdit,
+    findMessagePermissions,
+    logEditError,
+    serializeEditorContent,
+} from '../helpers';
 
 import type { TransformedCommentItem } from '../types';
 
@@ -127,6 +133,36 @@ describe('elements/content-sidebar/activity-feed-v2/helpers', () => {
             expect(() =>
                 dispatchReplyEdit({ id: 'reply-1', messages, parentId: 'root', text: 'edited' }),
             ).not.toThrow();
+        });
+    });
+
+    describe('dispatchReplyDelete()', () => {
+        test('should call onReplyDelete with parentId and snake_case reply permissions', () => {
+            const onReplyDelete = jest.fn();
+            dispatchReplyDelete({ id: 'reply-1', messages, onReplyDelete, parentId: 'root' });
+
+            expect(onReplyDelete).toHaveBeenCalledWith({
+                id: 'reply-1',
+                parentId: 'root',
+                permissions: { can_delete: true, can_edit: true, can_reply: false, can_resolve: false },
+            });
+        });
+
+        test('should log and skip the dispatch when reply permissions cannot be resolved', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            const onReplyDelete = jest.fn();
+
+            dispatchReplyDelete({ id: 'orphan-id', messages, onReplyDelete, parentId: 'root' });
+
+            expect(onReplyDelete).not.toHaveBeenCalled();
+            expect(consoleError).toHaveBeenCalledWith(
+                'ActivityFeedV2: no permissions found for reply "orphan-id" in thread "root"',
+            );
+            consoleError.mockRestore();
+        });
+
+        test('should not throw when onReplyDelete is not provided', () => {
+            expect(() => dispatchReplyDelete({ id: 'reply-1', messages, parentId: 'root' })).not.toThrow();
         });
     });
 });
