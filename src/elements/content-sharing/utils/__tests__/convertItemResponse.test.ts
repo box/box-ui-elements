@@ -136,7 +136,7 @@ describe('convertItemResponse', () => {
                 allowed_invitee_roles: ['viewer'],
                 shared_link: {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
-                    access: 'collaborators',
+                    effective_access: 'collaborators',
                 },
                 shared_link_features: { download_url: false, password: false, vanity_name: false },
                 permissions: {
