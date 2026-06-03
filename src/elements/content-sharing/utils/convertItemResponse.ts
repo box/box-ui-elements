@@ -52,8 +52,8 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
     let sharedLink;
     if (shared_link) {
         const {
-            access,
             download_url: downloadUrl,
+            effective_access: access,
             effective_permission: permission,
             is_password_enabled: isPasswordEnabled,
             unshared_at: expirationTimestamp,
