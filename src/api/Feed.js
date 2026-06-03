@@ -164,6 +164,7 @@ export const getParsedFileActivitiesResponse = (
                     if (taskItem.task_type) {
                         taskItem.task_type = taskItem.task_type.toUpperCase();
                     }
+                    // $FlowFixMe File Activities only returns a created_by user, Flow type fix is needed
                     taskItem.created_by = { target: taskItem.created_by };
 
                     return taskItem;
@@ -174,6 +175,9 @@ export const getParsedFileActivitiesResponse = (
                         item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_COMMENT
                             ? source[FILE_ACTIVITY_TYPE_ENHANCED_COMMENT]
                             : source[FILE_ACTIVITY_TYPE_COMMENT];
+                    if (!rawCommentItem) {
+                        return null;
+                    }
                     const commentItem = { ...rawCommentItem };
 
                     if (commentItem.replies && commentItem.replies.length) {
@@ -183,7 +187,8 @@ export const getParsedFileActivitiesResponse = (
                     }
 
                     commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
-                    commentItem.type = FILE_ACTIVITY_TYPE_COMMENT;
+                    // enhanced_comment is a wire-only variant; downstream consumers see the legacy type
+                    commentItem.type = FEED_ITEM_TYPE_COMMENT;
 
                     return commentItem;
                 }
@@ -193,6 +198,9 @@ export const getParsedFileActivitiesResponse = (
                         item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION
                             ? source[FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION]
                             : source[FILE_ACTIVITY_TYPE_ANNOTATION];
+                    if (!rawAnnotationItem) {
+                        return null;
+                    }
                     const annotationItem = { ...rawAnnotationItem };
 
                     if (annotationItem.replies && annotationItem.replies.length) {
@@ -201,7 +209,8 @@ export const getParsedFileActivitiesResponse = (
                         annotationItem.replies = replies;
                     }
 
-                    annotationItem.type = FILE_ACTIVITY_TYPE_ANNOTATION;
+                    // enhanced_annotation is a wire-only variant; downstream consumers see the legacy type
+                    annotationItem.type = FEED_ITEM_TYPE_ANNOTATION;
 
                     return annotationItem;
                 }

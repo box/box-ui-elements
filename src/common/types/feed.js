@@ -176,6 +176,7 @@ type ActivityFilterItemType =
     | typeof COMMENT_STATUS_RESOLVED
     | typeof FEED_ITEM_TYPE_TASK;
 
+// FILE_ACTIVITY_TYPE_ENHANCED_* are wire-only; the parser remaps them to the legacy variants
 type FileActivityTypes =
     | typeof FILE_ACTIVITY_TYPE_ANNOTATION
     | typeof FILE_ACTIVITY_TYPE_APP_ACTIVITY
