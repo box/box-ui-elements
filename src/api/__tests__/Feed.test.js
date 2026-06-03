@@ -12,6 +12,8 @@ import {
     FILE_ACTIVITY_TYPE_ANNOTATION,
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
     IS_ERROR_DISPLAYED,
@@ -630,6 +632,32 @@ describe('api/Feed', () => {
                     true,
                 );
                 expect(feed.fetchThreadedComments).toBeCalled();
+                done();
+            });
+        });
+
+        test('should request enhanced_annotation and enhanced_comment when useEnhancedActivities is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowReplies: true,
+                shouldShowTasks: true,
+                shouldShowVersions: true,
+                shouldUseUAA: true,
+                useEnhancedActivities: true,
+            });
+            setImmediate(() => {
+                expect(feed.fetchFileActivities).toBeCalledWith(
+                    file.permissions,
+                    [
+                        FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+                        FILE_ACTIVITY_TYPE_TASK,
+                        FILE_ACTIVITY_TYPE_VERSION,
+                    ],
+                    true,
+                );
                 done();
             });
         });
@@ -2352,6 +2380,53 @@ describe('api/Feed', () => {
                     collaborators: { 42: mockUser },
                 },
             ]);
+        });
+
+        test('should remap enhanced_comment and enhanced_annotation activity types to the legacy type', () => {
+            const enhancedComment = {
+                ...threadedCommentsFormatted[0],
+                id: 'enh-comment-1',
+                message: 'enh',
+                type: FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+            };
+            const enhancedAnnotation = {
+                ...mockFormattedAnnotations[0],
+                id: 'enh-annotation-1',
+                type: FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+            };
+            const enhancedActivities = {
+                entries: [
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+                        source: { [FILE_ACTIVITY_TYPE_ENHANCED_COMMENT]: enhancedComment },
+                    },
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+                        source: { [FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION]: enhancedAnnotation },
+                    },
+                ],
+            };
+            const parsed = getParsedFileActivitiesResponse(enhancedActivities);
+            expect(parsed).toHaveLength(2);
+            const byId = Object.fromEntries(parsed.map(item => [item.id, item]));
+            expect(byId['enh-comment-1'].type).toBe(FEED_ITEM_TYPE_COMMENT);
+            expect(byId['enh-annotation-1'].type).toBe(FEED_ITEM_TYPE_ANNOTATION);
+        });
+
+        test('should drop entries whose activity_type does not match a populated source key', () => {
+            const response = {
+                entries: [
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+                        source: { [FILE_ACTIVITY_TYPE_COMMENT]: { ...threadedCommentsFormatted[0], id: 'mismatch-1' } },
+                    },
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+                        source: {},
+                    },
+                ],
+            };
+            expect(getParsedFileActivitiesResponse(response)).toEqual([]);
         });
 
         test('should return a parsed entries array when response is valid', () => {

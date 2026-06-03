@@ -537,6 +537,8 @@ export const ACTION_TYPE_TRASHED: 'trashed' = 'trashed';
 export const FILE_ACTIVITY_TYPE_ANNOTATION: 'annotation' = 'annotation';
 export const FILE_ACTIVITY_TYPE_APP_ACTIVITY: 'app_activity' = 'app_activity';
 export const FILE_ACTIVITY_TYPE_COMMENT: 'comment' = 'comment';
+export const FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION: 'enhanced_annotation' = 'enhanced_annotation';
+export const FILE_ACTIVITY_TYPE_ENHANCED_COMMENT: 'enhanced_comment' = 'enhanced_comment';
 export const FILE_ACTIVITY_TYPE_TASK: 'task' = 'task';
 export const FILE_ACTIVITY_TYPE_VERSION: 'versions' = 'versions';
 

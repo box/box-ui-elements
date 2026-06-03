@@ -15,6 +15,8 @@ import {
     FILE_ACTIVITY_TYPE_ANNOTATION,
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
 } from '../../constants';
@@ -174,10 +176,13 @@ type ActivityFilterItemType =
     | typeof COMMENT_STATUS_RESOLVED
     | typeof FEED_ITEM_TYPE_TASK;
 
+// FILE_ACTIVITY_TYPE_ENHANCED_* are wire-only; the parser remaps them to the legacy variants
 type FileActivityTypes =
     | typeof FILE_ACTIVITY_TYPE_ANNOTATION
     | typeof FILE_ACTIVITY_TYPE_APP_ACTIVITY
     | typeof FILE_ACTIVITY_TYPE_COMMENT
+    | typeof FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION
+    | typeof FILE_ACTIVITY_TYPE_ENHANCED_COMMENT
     | typeof FILE_ACTIVITY_TYPE_TASK
     | typeof FILE_ACTIVITY_TYPE_VERSION;
 
@@ -190,6 +195,12 @@ type FileActivitySource =
       }
     | {
           comment: Comment,
+      }
+    | {
+          enhanced_annotation: Annotation,
+      }
+    | {
+          enhanced_comment: Comment,
       }
     | {
           task: TaskNew,
