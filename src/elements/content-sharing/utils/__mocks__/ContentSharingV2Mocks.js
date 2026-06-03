@@ -25,7 +25,7 @@ export const MOCK_ITEM = {
 };
 
 export const MOCK_SHARED_LINK = {
-    access: 'open',
+    effective_access: 'open',
     download_url: 'https://example.com/shared_link=abc123',
     effective_permission: 'can_download',
     is_password_enabled: true,
