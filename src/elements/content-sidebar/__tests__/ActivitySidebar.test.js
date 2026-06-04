@@ -804,8 +804,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowReplies: expectedReplies,
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
+                        shouldUseEnhancedActivities: false,
                         shouldUseUAA: expectedUseUAA,
-                        useEnhancedActivities: false,
                     },
                     expectedUseUAA ? instance.logAPIParity : undefined,
                 );
@@ -839,14 +839,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowReplies: true,
                     shouldShowTasks: true,
                     shouldShowVersions: true,
+                    shouldUseEnhancedActivities: false,
                     shouldUseUAA: false,
-                    useEnhancedActivities: false,
                 },
                 undefined,
             );
         });
 
-        test('should set shouldShowReplies and useEnhancedActivities to true when threadedRepliesV2 is enabled even if hasReplies is false', () => {
+        test('should set shouldShowReplies and shouldUseEnhancedActivities to true when threadedRepliesV2 is enabled even if hasReplies is false', () => {
             wrapper = getWrapper({
                 features: {
                     activityFeed: {
@@ -868,12 +868,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsSuccessCallback,
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
-                expect.objectContaining({ shouldShowReplies: true, useEnhancedActivities: true }),
+                expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
                 undefined,
             );
         });
 
-        test('should set shouldShowReplies and useEnhancedActivities to true when both hasReplies and threadedRepliesV2 are enabled', () => {
+        test('should set shouldShowReplies and shouldUseEnhancedActivities to true when both hasReplies and threadedRepliesV2 are enabled', () => {
             wrapper = getWrapper({
                 features: {
                     activityFeed: {
@@ -895,7 +895,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsSuccessCallback,
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
-                expect.objectContaining({ shouldShowReplies: true, useEnhancedActivities: true }),
+                expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
                 undefined,
             );
         });

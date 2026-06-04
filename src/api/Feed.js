@@ -141,7 +141,11 @@ export const getParsedFileActivitiesResponse = (
 
             switch (item.activity_type) {
                 case FILE_ACTIVITY_TYPE_TASK: {
-                    const taskItem = { ...source[FILE_ACTIVITY_TYPE_TASK] };
+                    const rawTaskItem = source[FILE_ACTIVITY_TYPE_TASK];
+                    if (!rawTaskItem) {
+                        return null;
+                    }
+                    const taskItem = { ...rawTaskItem };
                     // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
                     if (taskItem.assigned_to?.entries) {
                         const assignedToEntries = taskItem.assigned_to.entries.map(entry => {
@@ -576,16 +580,16 @@ class Feed extends Base {
             shouldShowReplies = false,
             shouldShowTasks = true,
             shouldShowVersions = true,
+            shouldUseEnhancedActivities = false,
             shouldUseUAA = false,
-            useEnhancedActivities = false,
         }: {
             shouldShowAnnotations?: boolean,
             shouldShowAppActivity?: boolean,
             shouldShowReplies?: boolean,
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
+            shouldUseEnhancedActivities?: boolean,
             shouldUseUAA?: boolean,
-            useEnhancedActivities?: boolean,
         } = {},
         logAPIParity?: Function,
     ): void {
@@ -622,13 +626,13 @@ class Feed extends Base {
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
-                ? [useEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION : FILE_ACTIVITY_TYPE_ANNOTATION]
+                ? [shouldUseEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION : FILE_ACTIVITY_TYPE_ANNOTATION]
                 : [];
         const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
         const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
         const commentActivityType = permissions[PERMISSION_CAN_COMMENT]
-            ? [useEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT : FILE_ACTIVITY_TYPE_COMMENT]
+            ? [shouldUseEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT : FILE_ACTIVITY_TYPE_COMMENT]
             : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
