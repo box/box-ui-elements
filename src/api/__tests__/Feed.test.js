@@ -630,6 +630,7 @@ describe('api/Feed', () => {
                         FILE_ACTIVITY_TYPE_VERSION,
                     ],
                     true,
+                    false,
                 );
                 expect(feed.fetchThreadedComments).toBeCalled();
                 done();
@@ -656,6 +657,7 @@ describe('api/Feed', () => {
                         FILE_ACTIVITY_TYPE_TASK,
                         FILE_ACTIVITY_TYPE_VERSION,
                     ],
+                    true,
                     true,
                 );
                 done();
@@ -903,6 +905,7 @@ describe('api/Feed', () => {
                     fileID: feed.file.id,
                     permissions,
                     shouldShowReplies: false,
+                    shouldUseEnhancedActivities: false,
                     successCallback: expect.any(Function),
                 });
                 expect(fileActivityItems).resolves.toEqual({ entries: mockFileActivities });

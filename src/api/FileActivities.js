@@ -16,18 +16,20 @@ import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
 import type { FileActivity, FileActivityTypes } from '../common/types/feed';
 
-// We only show the latest reply in the UI
-const REPLY_LIMIT = 1;
+const V1_REPLY_LIMIT = 1;
+const V2_REPLY_LIMIT = 1000;
 
 const getFileActivityQueryParams = (
     fileID: string,
     activityTypes?: FileActivityTypes[] = [],
     shouldShowReplies?: boolean = false,
+    shouldUseEnhancedActivities?: boolean = false,
 ) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
     const enableReplies = shouldShowReplies ? 'true' : 'false';
-    const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${REPLY_LIMIT}`;
+    const replyLimit = shouldUseEnhancedActivities ? V2_REPLY_LIMIT : V1_REPLY_LIMIT;
+    const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${replyLimit}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
 
     return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
@@ -42,8 +44,13 @@ class FileActivities extends Base {
      * @param {boolean} shouldShowReplies - optional. Specify if replies should be included in the response
      * @return {string} base url for files
      */
-    getFilteredUrl(id: string, activityTypes?: FileActivityTypes[], shouldShowReplies?: boolean): string {
-        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes, shouldShowReplies)}`;
+    getFilteredUrl(
+        id: string,
+        activityTypes?: FileActivityTypes[],
+        shouldShowReplies?: boolean,
+        shouldUseEnhancedActivities?: boolean,
+    ): string {
+        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes, shouldShowReplies, shouldUseEnhancedActivities)}`;
     }
 
     /**
@@ -65,6 +72,7 @@ class FileActivities extends Base {
         permissions,
         repliesCount,
         shouldShowReplies,
+        shouldUseEnhancedActivities,
         successCallback,
     }: {
         activityTypes: FileActivityTypes[],
@@ -73,6 +81,7 @@ class FileActivities extends Base {
         permissions: BoxItemPermission,
         repliesCount?: number,
         shouldShowReplies?: boolean,
+        shouldUseEnhancedActivities?: boolean,
         successCallback: (activity: FileActivity) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_ACTIVITY;
@@ -99,7 +108,7 @@ class FileActivities extends Base {
             requestData: {
                 ...(repliesCount ? { replies_count: repliesCount } : null),
             },
-            url: this.getFilteredUrl(fileID, activityTypes, shouldShowReplies),
+            url: this.getFilteredUrl(fileID, activityTypes, shouldShowReplies, shouldUseEnhancedActivities),
         });
     }
 }
