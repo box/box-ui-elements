@@ -23,7 +23,9 @@ jest.mock('@box/threaded-annotations', () => ({
 
 const mockScrollTo = jest.fn<boolean, [string]>(() => true);
 
+type FilterMenuProps = { children?: React.ReactNode; hasActiveFilters?: boolean };
 type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
+let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
 let lastEditorProps: Partial<EditorProps> = {};
@@ -52,7 +54,10 @@ jest.mock('@box/activity-feed', () => {
         <div data-testid="activity-feed-header">{children}</div>
     );
     ActivityFeedHeader.Actions = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-    ActivityFeedHeader.FilterMenu = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+    ActivityFeedHeader.FilterMenu = (props: FilterMenuProps) => {
+        lastFilterMenuProps = props;
+        return <div data-testid="filter-menu">{props.children}</div>;
+    };
     ActivityFeedHeader.ShowResolvedOption = (props: FilterOptionProps) => {
         lastShowResolvedOptionProps = props;
         return <div data-testid="show-resolved-option">{String(props.checked)}</div>;
@@ -161,6 +166,7 @@ const feedItems = [
 describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     beforeEach(() => {
         mockScrollTo.mockReturnValue(true);
+        lastFilterMenuProps = {};
         lastShowResolvedOptionProps = {};
         lastMentionMeOptionProps = {};
         lastEditorProps = {};
@@ -466,7 +472,28 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
             expect(lastShowResolvedOptionProps.checked).toBe(false);
             expect(lastMentionMeOptionProps.checked).toBe(false);
+            expect(lastFilterMenuProps.hasActiveFilters).toBe(false);
         });
+
+        test.each`
+            showOnlyMentionsMe | showResolved | expected
+            ${true}            | ${false}     | ${true}
+            ${false}           | ${true}      | ${true}
+            ${true}            | ${true}      | ${true}
+        `(
+            'should set hasActiveFilters=$expected when showOnlyMentionsMe=$showOnlyMentionsMe and showResolved=$showResolved',
+            ({ showOnlyMentionsMe, showResolved, expected }) => {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        showOnlyMentionsMe={showOnlyMentionsMe}
+                        showResolved={showResolved}
+                    />,
+                );
+                expect(lastFilterMenuProps.hasActiveFilters).toBe(expected);
+            },
+        );
 
         test('should reflect the controlled showResolved prop in the filter menu', () => {
             render(
