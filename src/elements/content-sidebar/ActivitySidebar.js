@@ -1412,7 +1412,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             return (
                 <div
                     aria-labelledby={label}
-                    className="bcs-content"
+                    className="bcs-content bcs-NewActivityFeedContent"
                     data-testid="bcs-content"
                     id={`${label}-content`}
                     role="tabpanel"

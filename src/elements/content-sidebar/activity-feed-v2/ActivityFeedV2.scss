@@ -63,3 +63,8 @@
         padding: var(--bp-space-030) var(--bp-space-040);
     }
 }
+
+// Lets inner ellipsis truncation resolve against the sidebar width.
+.bcs-NewActivityFeedContent {
+    min-width: 0;
+}
