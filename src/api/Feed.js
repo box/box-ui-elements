@@ -645,7 +645,12 @@ class Feed extends Base {
         const fileActivitiesPromise =
             // Only fetch when activity types are explicitly stated
             shouldUseUAA && filteredActivityTypes.length
-                ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
+                ? this.fetchFileActivities(
+                      permissions,
+                      filteredActivityTypes,
+                      shouldShowReplies,
+                      shouldUseEnhancedActivities,
+                  )
                 : Promise.resolve();
 
         const handleFeedItems = (feedItems: FeedItems) => {
@@ -816,6 +821,7 @@ class Feed extends Base {
         permissions: BoxItemPermission,
         activityTypes: FileActivityTypes[],
         shouldShowReplies?: boolean = false,
+        shouldUseEnhancedActivities?: boolean = false,
     ): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
@@ -826,6 +832,7 @@ class Feed extends Base {
                 successCallback: resolve,
                 activityTypes,
                 shouldShowReplies,
+                shouldUseEnhancedActivities,
             });
         });
     }

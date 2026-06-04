@@ -13,6 +13,8 @@
 /src/api/box-edit/                          @box/ui-elements @box/partners
 /src/api/Feed.js                            @box/ui-elements @box/preview
 /src/api/__tests__/Feed.test.js             @box/ui-elements @box/preview
+/src/api/FileActivities.js                  @box/ui-elements @box/preview
+/src/api/__tests__/FileActivities.test.js   @box/ui-elements @box/preview
 /src/api/uploads/                           @box/ui-elements @box/create-communicate
 /src/components/                            @box/ui-elements
 /src/elements/                              @box/ui-elements
