@@ -804,8 +804,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowReplies,
                 shouldShowTasks,
                 shouldShowVersions,
+                shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
                 shouldUseUAA,
-                useEnhancedActivities: isThreadedRepliesV2Enabled,
             },
             shouldUseUAA ? this.logAPIParity : undefined,
         );

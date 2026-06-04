@@ -300,7 +300,7 @@ const ActivityFeedV2 = ({
             <ActivityFeed.Root mentionContext={mentionContext} scrollTo={scrollHandle}>
                 <ActivityFeed.Header title={headerTitle}>
                     <ActivityFeed.Header.Actions>
-                        <ActivityFeed.Header.FilterMenu>
+                        <ActivityFeed.Header.FilterMenu hasActiveFilters={showOnlyMentionsMe || showResolved}>
                             <ActivityFeed.Header.ShowResolvedOption
                                 checked={showResolved}
                                 onCheckedChange={handleShowResolvedChange}

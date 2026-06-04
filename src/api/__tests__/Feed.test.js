@@ -636,15 +636,15 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should request enhanced_annotation and enhanced_comment when useEnhancedActivities is true', done => {
+        test('should request enhanced_annotation and enhanced_comment when shouldUseEnhancedActivities is true', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, {
                 shouldShowAnnotations: true,
                 shouldShowAppActivity: true,
                 shouldShowReplies: true,
                 shouldShowTasks: true,
                 shouldShowVersions: true,
+                shouldUseEnhancedActivities: true,
                 shouldUseUAA: true,
-                useEnhancedActivities: true,
             });
             setImmediate(() => {
                 expect(feed.fetchFileActivities).toBeCalledWith(
@@ -2422,6 +2422,10 @@ describe('api/Feed', () => {
                     },
                     {
                         activity_type: FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+                        source: {},
+                    },
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_TASK,
                         source: {},
                     },
                 ],
