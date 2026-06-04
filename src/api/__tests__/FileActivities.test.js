@@ -44,6 +44,18 @@ describe('api/FileActivities', () => {
                 );
             },
         );
+
+        test('should use reply_limit=1000 when shouldUseEnhancedActivities is true (V2)', () => {
+            expect(fileActivities.getFilteredUrl('1', ['comment'], true, true)).toBe(
+                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1000',
+            );
+        });
+
+        test('should use reply_limit=1 when shouldUseEnhancedActivities is false (V1)', () => {
+            expect(fileActivities.getFilteredUrl('1', ['comment'], true, false)).toBe(
+                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1',
+            );
+        });
     });
 
     describe('getActivities()', () => {
@@ -69,8 +81,31 @@ describe('api/FileActivities', () => {
                 errorCallback,
                 requestData: {},
                 successCallback,
-                url:
-                    'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1',
+                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1',
+            });
+        });
+
+        test('should use reply_limit=1000 when shouldUseEnhancedActivities is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            fileActivities.getActivities({
+                fileID: '123',
+                activityTypes: ['comment', 'task'],
+                permissions,
+                successCallback,
+                errorCallback,
+                shouldShowReplies: true,
+                shouldUseEnhancedActivities: true,
+            });
+
+            expect(fileActivities.get).toBeCalledWith({
+                id: '123',
+                errorCallback,
+                requestData: {},
+                successCallback,
+                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1000',
             });
         });
 
