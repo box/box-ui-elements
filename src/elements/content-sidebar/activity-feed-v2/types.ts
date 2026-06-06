@@ -4,7 +4,7 @@
  */
 
 import type { AppActivityItemProps, TaskItemProps, VersionItemProps } from '@box/activity-feed';
-import type { TextMessageTypeV2 as TextMessageType } from '@box/threaded-annotations';
+import type { AnnotationBadgeTargetType, TextMessageTypeV2 as TextMessageType } from '@box/threaded-annotations';
 
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItems, FeedItemStatus } from '../../../common/types/feed';
@@ -46,6 +46,7 @@ type ResolvedInfo = {
 };
 
 export type TransformedCommentItem = {
+    annotationTarget?: AnnotationBadgeTargetType;
     id: string;
     messages: TextMessageType[];
     originalText: string;

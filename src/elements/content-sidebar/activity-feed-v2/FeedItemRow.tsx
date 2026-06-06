@@ -131,6 +131,7 @@ const FeedItemRow = ({
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
+                    annotationTarget={item.annotationTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}

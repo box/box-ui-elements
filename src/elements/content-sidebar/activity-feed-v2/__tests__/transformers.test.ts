@@ -5,6 +5,7 @@ import type { TaskNew } from '../../../../common/types/tasks';
 
 import {
     annotationTargetToBadge,
+    extractTimestampMarkup,
     textToDocumentNode,
     transformAnnotationToMessages,
     transformAppActivityToProps,
@@ -671,6 +672,108 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 expect(result!.isResolved).toBe(true);
                 expect(result!.resolvedBy).toBe('Resolver');
                 expect(result!.resolvedAt).toBe(new Date('2024-01-03T00:00:00Z').getTime());
+            }
+        });
+    });
+
+    describe('extractTimestampMarkup()', () => {
+        test('should return text unchanged when no timestamp markup is present', () => {
+            expect(extractTimestampMarkup('regular comment')).toEqual({ cleanText: 'regular comment' });
+        });
+
+        test('should return empty input unchanged', () => {
+            expect(extractTimestampMarkup('')).toEqual({ cleanText: '' });
+        });
+
+        test('should extract timestamp markup with versionId and return a frame badge target', () => {
+            const result = extractTimestampMarkup('#[timestamp:8055,versionId:2390295731268]  wowo');
+            expect(result.cleanText).toBe('wowo');
+            expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
+        });
+
+        test('should extract timestamp markup without versionId', () => {
+            const result = extractTimestampMarkup('#[timestamp:65000] hello');
+            expect(result.cleanText).toBe('hello');
+            expect(result.target).toEqual({ timestamp: '1:05', type: 'frame' });
+        });
+
+        test('should leave timestamp markup that does not anchor at the start of the message untouched', () => {
+            const result = extractTimestampMarkup('see #[timestamp:8055,versionId:1] this');
+            expect(result.cleanText).toBe('see #[timestamp:8055,versionId:1] this');
+            expect(result.target).toBeUndefined();
+        });
+
+        test('should return empty cleanText when the message is only timestamp markup', () => {
+            const result = extractTimestampMarkup('#[timestamp:8055,versionId:1]');
+            expect(result.cleanText).toBe('');
+            expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
+        });
+
+        test('should leave malformed timestamp markup untouched', () => {
+            const result = extractTimestampMarkup('#[timestamp:abc] hello');
+            expect(result.cleanText).toBe('#[timestamp:abc] hello');
+            expect(result.target).toBeUndefined();
+        });
+
+        test('should drop the badge when the timestamp value exceeds Number.MAX_SAFE_INTEGER', () => {
+            const result = extractTimestampMarkup('#[timestamp:99999999999999999999] hello');
+            expect(result.cleanText).toBe('hello');
+            expect(result.target).toBeUndefined();
+        });
+    });
+
+    describe('transformCommentToMessages() with timestamp markup', () => {
+        test('should strip #[timestamp:...] markup from rendered message text', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'User', type: 'user' },
+                id: 'c1',
+                message: '#[timestamp:8055,versionId:2390295731268]  wowo',
+                modified_at: '2024-01-01T00:00:00Z',
+                permissions: { can_delete: true, can_edit: true, can_reply: true, can_resolve: true },
+                tagged_message: '',
+                type: 'comment',
+            };
+            const messages = transformCommentToMessages(comment as unknown as Comment);
+            expect(messages[0].message.content[0].content).toEqual([{ type: 'text', text: 'wowo' }]);
+        });
+    });
+
+    describe('transformFeedItem() with enhanced_comment timestamp markup', () => {
+        test('should populate annotationTarget with frame badge for a comment containing timestamp markup', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'User', type: 'user' },
+                id: 'c1',
+                message: '#[timestamp:8055,versionId:2390295731268]  wowo',
+                modified_at: '2024-01-01T00:00:00Z',
+                permissions: {},
+                status: 'open',
+                tagged_message: '',
+                type: 'comment',
+            };
+            const result = transformFeedItem(comment as unknown as FeedItem);
+            expect(result!.type).toBe('comment');
+            if (result!.type === 'comment') {
+                expect(result.annotationTarget).toEqual({ timestamp: '0:08', type: 'frame' });
+            }
+        });
+
+        test('should leave annotationTarget undefined for a regular comment without timestamp markup', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'User', type: 'user' },
+                id: 'c1',
+                message: 'regular comment',
+                modified_at: '2024-01-01T00:00:00Z',
+                permissions: {},
+                status: 'open',
+                tagged_message: '',
+                type: 'comment',
+            };
+            const result = transformFeedItem(comment as unknown as FeedItem);
+            if (result!.type === 'comment') {
+                expect(result.annotationTarget).toBeUndefined();
             }
         });
     });
