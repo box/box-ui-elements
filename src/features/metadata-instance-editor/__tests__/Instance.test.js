@@ -5,10 +5,14 @@ import { render, screen, within } from '../../../test-utils/testing-library';
 import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from '../constants';
 import { InstanceBase as Instance } from '../Instance';
 import { isValidValue } from '../../metadata-instance-fields/validateMetadataField';
+import messages from '../messages';
 
 // Add RTL imports
 
 jest.mock('../../metadata-instance-fields/validateMetadataField');
+
+const EXTRACT_MANAGED_NOTICE = messages.customExtractAgentNoticeDescription.defaultMessage;
+const MANAGE_AGENT_BUTTON = messages.customExtractAgentManageButton.defaultMessage;
 
 const data = {
     stringfield: 'some string',
@@ -800,9 +804,7 @@ describe('Instance Component - React Testing Library', () => {
 
             // ai_extract instances are managed by the agent: the editable form is replaced
             // by a read-only notice, so the template fields are no longer rendered.
-            expect(
-                screen.getByText('This policy is managed by an agent. Manage the agent to change the configuration.'),
-            ).toBeInTheDocument();
+            expect(screen.getByText(EXTRACT_MANAGED_NOTICE)).toBeInTheDocument();
             expect(
                 screen.queryByRole('textbox', { name: 'String Field example of a string field' }),
             ).not.toBeInTheDocument();
@@ -914,9 +916,6 @@ describe('Instance Component - React Testing Library', () => {
     });
 
     describe('source-based routing (extract-managed vs editable)', () => {
-        const EXTRACT_MANAGED_NOTICE =
-            'This policy is managed by an agent. Manage the agent to change the configuration.';
-
         const getAiExtractProps = (props = {}) =>
             getBaseProps({
                 cascadePolicy: {
@@ -947,7 +946,7 @@ describe('Instance Component - React Testing Library', () => {
             renderAiExtract({ onManageExtractAgent });
 
             await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
-            await userEvent.click(screen.getByRole('button', { name: 'Manage agent' }));
+            await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
 
             expect(onManageExtractAgent).toHaveBeenCalledWith('1234567890');
         });
@@ -957,7 +956,7 @@ describe('Instance Component - React Testing Library', () => {
 
             await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
 
-            expect(screen.queryByRole('button', { name: 'Manage agent' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: MANAGE_AGENT_BUTTON })).not.toBeInTheDocument();
         });
 
         test('renders the editable body with cascade controls for a non-ai_extract source', async () => {

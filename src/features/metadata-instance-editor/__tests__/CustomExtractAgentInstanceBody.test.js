@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 
 import CustomExtractAgentInstanceBody from '../CustomExtractAgentInstanceBody';
+import messages from '../messages';
 import { makeTemplate, makePropertiesTemplate } from './__fixtures__/metadataInstances';
 
 jest.mock('../TemplatedInstance', () => ({
@@ -15,9 +16,9 @@ jest.mock('../CustomInstance', () => ({
     default: ({ canEdit }) => <div data-testid="custom-instance" data-can-edit={String(canEdit)} />,
 }));
 
-const NOTICE_DESCRIPTION = 'This policy is managed by an agent. Manage the agent to change the configuration.';
-const CASCADE_NOTICE =
-    'This template and its values are being cascaded to all items in this folder and its subfolders.';
+const NOTICE_DESCRIPTION = messages.customExtractAgentNoticeDescription.defaultMessage;
+const CASCADE_NOTICE = messages.metadataCascadePolicyEnabledInfo.defaultMessage;
+const MANAGE_AGENT_BUTTON = messages.customExtractAgentManageButton.defaultMessage;
 
 const getProps = (props = {}) => ({
     agentConfiguration: 'extract_agent_1234567890',
@@ -54,7 +55,7 @@ describe('features/metadata-instance-editor/CustomExtractAgentInstanceBody', () 
                 onManageExtractAgent,
             });
 
-            await userEvent.click(screen.getByRole('button', { name: 'Manage agent' }));
+            await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
 
             expect(onManageExtractAgent).toHaveBeenCalledWith('1234567890');
         });
@@ -63,7 +64,7 @@ describe('features/metadata-instance-editor/CustomExtractAgentInstanceBody', () 
             const onManageExtractAgent = jest.fn();
             renderComponent({ isEditing: true, agentConfiguration: 'extract_agent_123abc', onManageExtractAgent });
 
-            await userEvent.click(screen.getByRole('button', { name: 'Manage agent' }));
+            await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
 
             expect(onManageExtractAgent).toHaveBeenCalledWith('123');
         });
@@ -71,19 +72,19 @@ describe('features/metadata-instance-editor/CustomExtractAgentInstanceBody', () 
         test('does not render the manage-agent button when agentConfiguration is missing', () => {
             renderComponent({ isEditing: true, agentConfiguration: undefined });
 
-            expect(screen.queryByRole('button', { name: 'Manage agent' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: MANAGE_AGENT_BUTTON })).not.toBeInTheDocument();
         });
 
         test('does not render the manage-agent button when the configuration has no numeric id', () => {
             renderComponent({ isEditing: true, agentConfiguration: 'extract_agent_abc' });
 
-            expect(screen.queryByRole('button', { name: 'Manage agent' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: MANAGE_AGENT_BUTTON })).not.toBeInTheDocument();
         });
 
         test('does not render the manage-agent button when onManageExtractAgent is missing', () => {
             renderComponent({ isEditing: true, onManageExtractAgent: undefined });
 
-            expect(screen.queryByRole('button', { name: 'Manage agent' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: MANAGE_AGENT_BUTTON })).not.toBeInTheDocument();
         });
     });
 

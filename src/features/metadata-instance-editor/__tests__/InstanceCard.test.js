@@ -2,6 +2,7 @@ import * as React from 'react';
 import { render, screen } from '../../../test-utils/testing-library';
 
 import InstanceCard from '../InstanceCard';
+import messages from '../messages';
 import { makeAiExtractCascadePolicy, makeTemplate, makePropertiesTemplate } from './__fixtures__/metadataInstances';
 
 jest.mock('../../../components/collapsible/Collapsible', () => ({
@@ -85,7 +86,7 @@ describe('features/metadata-instance-editor/InstanceCard', () => {
         test('shows the custom metadata title for the properties template', () => {
             renderComponent({ template: makePropertiesTemplate() });
 
-            expect(screen.getByText('Custom Metadata')).toBeInTheDocument();
+            expect(screen.getByText(messages.customTitle.defaultMessage)).toBeInTheDocument();
         });
     });
 

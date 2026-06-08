@@ -4,7 +4,11 @@ import { render, screen } from '../../../test-utils/testing-library';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
+import messages from '../messages';
 import { makeAiExtractEditor } from './__fixtures__/metadataInstances';
+
+const EXTRACT_MANAGED_NOTICE = messages.customExtractAgentNoticeDescription.defaultMessage;
+const MANAGE_AGENT_BUTTON = messages.customExtractAgentManageButton.defaultMessage;
 
 // Templates
 
@@ -593,11 +597,9 @@ describe('MetadataInstanceEditor extract-managed source', () => {
 
         await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
 
-        expect(
-            screen.getByText('This policy is managed by an agent. Manage the agent to change the configuration.'),
-        ).toBeInTheDocument();
+        expect(screen.getByText(EXTRACT_MANAGED_NOTICE)).toBeInTheDocument();
 
-        await userEvent.click(screen.getByRole('button', { name: 'Manage agent' }));
+        await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
 
         expect(onManageExtractAgent).toHaveBeenCalledWith('1234567890');
     });
