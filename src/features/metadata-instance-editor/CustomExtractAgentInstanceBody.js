@@ -21,7 +21,7 @@ import './CustomExtractAgentInstanceBody.scss';
 
 type Props = {
     // Raw agent configuration value from the cascade policy (e.g. `extract_agent_<id>`).
-    // The navigable numeric id is resolved from this here.
+    // The navigable numeric id is extracted from this value via getCustomExtractAgentId.
     agentConfiguration?: string,
     data: MetadataFields,
     isEditing: boolean,
@@ -31,9 +31,9 @@ type Props = {
 
 /**
  * Presentational interior for a metadata instance managed by a custom Box AI
- * extract agent. When collapsed it shows read-only field values; when the user
- * enters edit mode it replaces the form with an informational notice and a button
- * to manage the agent (instead of allowing inline edits).
+ * extract agent. In read-only (view) mode it shows the field values without edit
+ * controls; when the user enters edit mode it replaces the form with an informational
+ * notice and a button to manage the agent (instead of allowing inline edits).
  *
  * The "manage agent" button is only shown when a navigable numeric agent id can be
  * resolved from the configuration; otherwise the notice is shown without an action.

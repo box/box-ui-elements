@@ -87,7 +87,7 @@ describe('features/metadata-instance-editor/CustomExtractAgentInstanceBody', () 
         });
     });
 
-    describe('collapsed (read-only) mode', () => {
+    describe('read-only (view) mode', () => {
         test('renders the cascade notice and read-only templated fields for a user template', () => {
             renderComponent({ isEditing: false, template: makeTemplate() });
 

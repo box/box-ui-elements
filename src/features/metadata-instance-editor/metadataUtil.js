@@ -15,9 +15,9 @@ const isHidden = (obj: MetadataTemplate | MetadataTemplateField): boolean => {
  * returning the resulting numeric id. An empty string means there is no navigable
  * agent id (the value did not carry the prefix, or nothing numeric remained).
  *
- * Callers should already know the configuration carries the custom prefix (see
- * `isCustomExtractAgentPolicy`); this only extracts the id and decides whether a
- * "manage agent" navigation target exists.
+ * In practice, callers typically check `isCustomExtractAgentPolicy` first; however,
+ * this function handles configurations without the custom prefix gracefully
+ * (returning '').
  *
  * @example
  * getCustomExtractAgentId('extract_agent_1234567890'); // '1234567890'
