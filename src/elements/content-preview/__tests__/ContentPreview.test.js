@@ -52,6 +52,29 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('metadataApiHost prop', () => {
+        // When the host app passes a regional metadataApiHost,
+        // ContentPreview forwards it both into its API client and down to
+        // the sidebar, so the metadata API client constructed there can
+        // route instance endpoints through the regional host.
+        test('should forward metadataApiHost to the API client constructed in ContentPreview', () => {
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                apiHost: 'https://api.box.com',
+                metadataApiHost: 'https://api-jp.box.com',
+            });
+            const instance = wrapper.instance();
+            expect(instance.api.options.metadataApiHost).toBe('https://api-jp.box.com');
+        });
+
+        test('should leave metadataApiHost unset on API client when prop is omitted', () => {
+            const wrapper = getWrapper({ token: 'token', fileId: '123' });
+            const instance = wrapper.instance();
+            expect(instance.api.options.metadataApiHost).toBeUndefined();
+        });
+    });
+
     describe('componentDidUpdate()', () => {
         test('should not reload preview if component updates but we should not load preview', async () => {
             file = { id: '123' };

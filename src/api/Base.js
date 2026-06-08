@@ -43,6 +43,24 @@ class Base {
     apiHost: string;
 
     /**
+     * Optional regional metadata host.
+     *
+     * When set and distinct from `apiHost`, subclasses (currently `Metadata`)
+     * route metadata *instance* endpoints to this host while keeping
+     * templates, taxonomies, suggestions, options, and queries on `apiHost`.
+     * Empty values, or values equal to `apiHost`, are treated as "not set"
+     * and resolve to the same URLs as `apiHost` alone.
+     *
+     * Transitional: this field exists to support the `metadataApiHost`
+     * option while the global `apiHost` is not yet regionalized end-to-end.
+     * It is expected to be retired in a future major version. Tagged
+     * "In-Region Metadata (Phase 1)" wherever related code appears.
+     *
+     * @property {?string}
+     */
+    metadataApiHost: ?string;
+
+    /**
      * @property {string}
      */
     uploadHost: string;
@@ -90,15 +108,26 @@ class Base {
      * @param {string} [options.sharedLink] - Shared link
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.apiHost] - Api host
+     * @param {string} [options.metadataApiHost] - Regional metadata API host
+     *   used for metadata *instance* endpoints. Templates, taxonomies,
+     *   suggestions, options, and queries continue to use `apiHost`. Falls
+     *   back to `apiHost` when undefined, empty, or equal to `apiHost`.
      * @param {string} [options.uploadHost] - Upload host name
      * @return {Base} Base instance
      */
     constructor(options: APIOptions) {
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
+        this.metadataApiHost = options.metadataApiHost;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
         // @TODO: avoid keeping another copy of data in this.options
-        this.options = { ...options, apiHost: this.apiHost, uploadHost: this.uploadHost, cache: this.cache };
+        this.options = {
+            ...options,
+            apiHost: this.apiHost,
+            metadataApiHost: this.metadataApiHost,
+            uploadHost: this.uploadHost,
+            cache: this.cache,
+        };
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
         this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
@@ -145,13 +174,28 @@ class Base {
     }
 
     /**
+     * Builds an API base URL for an arbitrary host, appending the API
+     * version suffix (`/2.0`) and tolerating a trailing slash on the host.
+     *
+     * Shared helper used by `getBaseApiUrl()` and by subclasses that need
+     * to derive a `/2.0` URL from a host other than `this.apiHost` (e.g.
+     * `Metadata` when `metadataApiHost` is configured).
+     *
+     * @param {string} host - api host (e.g. "https://api.box.com")
+     * @return {string} base api url with `/2.0` suffix
+     */
+    buildApiUrl(host: string): string {
+        const suffix: string = host.endsWith('/') ? '2.0' : '/2.0';
+        return `${host}${suffix}`;
+    }
+
+    /**
      * Base URL for api
      *
      * @return {string} base url
      */
     getBaseApiUrl(): string {
-        const suffix: string = this.apiHost.endsWith('/') ? '2.0' : '/2.0';
-        return `${this.apiHost}${suffix}`;
+        return this.buildApiUrl(this.apiHost);
     }
 
     /**

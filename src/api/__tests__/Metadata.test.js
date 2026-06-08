@@ -73,11 +73,54 @@ describe('api/Metadata', () => {
                 'https://api.box.com/2.0/files/foo/metadata/scope/template',
             );
         });
+        test('should route through metadataApiHost when distinct from apiHost', () => {
+            const regional = new Metadata({ metadataApiHost: 'https://api-jp.box.com' });
+            expect(regional.getMetadataUrl('foo')).toBe('https://api-jp.box.com/2.0/files/foo/metadata');
+            expect(regional.getMetadataUrl('foo', 'enterprise_123', 'template')).toBe(
+                'https://api-jp.box.com/2.0/files/foo/metadata/enterprise_123/template',
+            );
+        });
+        test('should fall back to apiHost when metadataApiHost is empty', () => {
+            const empty = new Metadata({ metadataApiHost: '' });
+            expect(empty.getMetadataUrl('foo')).toBe('https://api.box.com/2.0/files/foo/metadata');
+        });
+        test('should fall back to apiHost when metadataApiHost equals apiHost', () => {
+            const equal = new Metadata({
+                apiHost: 'https://api.box.com',
+                metadataApiHost: 'https://api.box.com',
+            });
+            expect(equal.getMetadataUrl('foo')).toBe('https://api.box.com/2.0/files/foo/metadata');
+        });
+        test('should normalize a trailing slash on metadataApiHost', () => {
+            const trailing = new Metadata({ metadataApiHost: 'https://api-jp.box.com/' });
+            expect(trailing.getMetadataUrl('foo')).toBe('https://api-jp.box.com/2.0/files/foo/metadata');
+        });
+    });
+
+    describe('getMetadataUrlForFolder()', () => {
+        test('should return base api url for folder when no template or scope', () => {
+            expect(metadata.getMetadataUrlForFolder('123')).toBe('https://api.box.com/2.0/folders/123/metadata');
+        });
+        test('should return correct api url for folder with scope and template', () => {
+            expect(metadata.getMetadataUrlForFolder('123', 'scope', 'template')).toBe(
+                'https://api.box.com/2.0/folders/123/metadata/scope/template',
+            );
+        });
+        test('should route through metadataApiHost when distinct from apiHost', () => {
+            const regional = new Metadata({ metadataApiHost: 'https://api-jp.box.com' });
+            expect(regional.getMetadataUrlForFolder('123', 'scope', 'template')).toBe(
+                'https://api-jp.box.com/2.0/folders/123/metadata/scope/template',
+            );
+        });
     });
 
     describe('getMetadataTemplateUrl()', () => {
         test('should return correct base api url', () => {
             expect(metadata.getMetadataTemplateUrl('scope')).toBe('https://api.box.com/2.0/metadata_templates');
+        });
+        test('should keep using apiHost even when metadataApiHost is set', () => {
+            const regional = new Metadata({ metadataApiHost: 'https://api-jp.box.com' });
+            expect(regional.getMetadataTemplateUrl()).toBe('https://api.box.com/2.0/metadata_templates');
         });
     });
 
@@ -4200,6 +4243,67 @@ describe('api/Metadata', () => {
             }
 
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE);
+        });
+    });
+
+    describe('metadataApiHost routing', () => {
+        // Verifies that a regional metadataApiHost affects ONLY metadata
+        // *instance* endpoints (file/folder /metadata/...). Templates,
+        // taxonomies, suggestions, and options always continue to use
+        // apiHost.
+        const apiHost = 'https://api.box.com';
+        const metadataApiHost = 'https://api-jp.box.com';
+
+        test('routes file instance endpoints to regional host', () => {
+            const api = new Metadata({ apiHost, metadataApiHost });
+            expect(api.getMetadataUrl('1', 'enterprise_1', 'tpl')).toBe(
+                'https://api-jp.box.com/2.0/files/1/metadata/enterprise_1/tpl',
+            );
+        });
+
+        test('routes folder instance endpoints to regional host', () => {
+            const api = new Metadata({ apiHost, metadataApiHost });
+            expect(api.getMetadataUrlForFolder('99', 'enterprise_1', 'tpl')).toBe(
+                'https://api-jp.box.com/2.0/folders/99/metadata/enterprise_1/tpl',
+            );
+        });
+
+        test('keeps templates / suggestions / options / taxonomy on apiHost', () => {
+            const api = new Metadata({ apiHost, metadataApiHost });
+            expect(api.getMetadataTemplateUrl()).toBe('https://api.box.com/2.0/metadata_templates');
+            expect(api.getMetadataTemplateUrlForScope('enterprise')).toBe(
+                'https://api.box.com/2.0/metadata_templates/enterprise',
+            );
+            expect(api.getMetadataTemplateSchemaUrl('tpl')).toBe(
+                'https://api.box.com/2.0/metadata_templates/enterprise/tpl/schema',
+            );
+            expect(api.getMetadataSuggestionsUrl()).toBe('https://api.box.com/2.0/metadata_instances/suggestions');
+            expect(api.getMetadataOptionsUrl('enterprise', 'tpl', 'field')).toBe(
+                'https://api.box.com/2.0/metadata_templates/enterprise/tpl/fields/field/options',
+            );
+            expect(api.getMetadataTaxonomyUrl('enterprise', 'taxKey')).toBe(
+                'https://api.box.com/2.0/metadata_taxonomies/enterprise/taxKey',
+            );
+            expect(api.getMetadataTaxonomyNodeUrl('enterprise', 'taxKey', 'node')).toBe(
+                'https://api.box.com/2.0/metadata_taxonomies/enterprise/taxKey/nodes/node',
+            );
+            expect(api.getTaxonomyLevelsForTemplatesUrl('metadata_taxonomies/ns/key')).toBe(
+                'https://api.box.com/2.0/metadata_taxonomies/ns/key',
+            );
+        });
+
+        test('full fallback when metadataApiHost is undefined (byte-identical URLs)', () => {
+            const fallback = new Metadata({ apiHost });
+            const baseline = new Metadata({});
+            // Fallback construction must produce URLs identical to the baseline (no metadataApiHost).
+            expect(fallback.getMetadataUrl('1', 'enterprise_1', 'tpl')).toBe(
+                baseline.getMetadataUrl('1', 'enterprise_1', 'tpl'),
+            );
+            expect(fallback.getMetadataUrlForFolder('1', 'enterprise_1', 'tpl')).toBe(
+                baseline.getMetadataUrlForFolder('1', 'enterprise_1', 'tpl'),
+            );
+            expect(fallback.getMetadataTemplateUrl()).toBe(baseline.getMetadataTemplateUrl());
+            expect(fallback.getMetadataSuggestionsUrl()).toBe(baseline.getMetadataSuggestionsUrl());
         });
     });
 });

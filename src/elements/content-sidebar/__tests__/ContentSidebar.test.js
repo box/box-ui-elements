@@ -276,6 +276,35 @@ describe('elements/content-sidebar/ContentSidebar', () => {
         });
     });
 
+    describe('metadataApiHost prop', () => {
+        // Forwarded into the API client so the underlying Metadata API can
+        // route file/folder *instance* endpoints to the regional metadata
+        // host.
+        test('should accept metadataApiHost as a prop without errors', () => {
+            const wrapper = getWrapper({
+                fileId: file.id,
+                metadataApiHost: 'https://api-jp.box.com',
+            });
+            expect(wrapper.instance().props.metadataApiHost).toBe('https://api-jp.box.com');
+        });
+
+        test('should forward metadataApiHost to the underlying API client options', () => {
+            const wrapper = getWrapper({
+                fileId: file.id,
+                apiHost: 'https://api.box.com',
+                metadataApiHost: 'https://api-jp.box.com',
+            });
+            const instance = wrapper.instance();
+            expect(instance.api.options.metadataApiHost).toBe('https://api-jp.box.com');
+        });
+
+        test('should leave metadataApiHost undefined when prop is omitted (back-compat)', () => {
+            const wrapper = getWrapper({ fileId: file.id });
+            const instance = wrapper.instance();
+            expect(instance.api.options.metadataApiHost).toBeUndefined();
+        });
+    });
+
     describe('refresh()', () => {
         let wrapper;
         let instance;

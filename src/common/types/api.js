@@ -81,6 +81,24 @@ type APIOptions = {
     consoleLog?: boolean,
     id?: string,
     language?: string,
+    /**
+     * Optional regional metadata API host (e.g. "https://api-jp.box.com").
+     *
+     * Affects ONLY metadata *instance* endpoints (file/folder
+     * `/metadata/...`). Templates, taxonomies, suggestions, options, and
+     * metadata queries always use `apiHost` regardless of this value.
+     *
+     * Forward-compatible by design: when undefined, empty, or equal to
+     * `apiHost`, the resulting URLs are identical to those produced when
+     * the option is not set. Dropping the option later is therefore a
+     * no-op for any consumer.
+     *
+     * Transitional: this option lets host applications pin metadata-
+     * instance traffic to a regional Box gateway while the global API host
+     * is not yet regionalized end-to-end. It is expected to be retired in
+     * a future major version. In-Region Metadata (Phase 1).
+     */
+    metadataApiHost?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     retryableStatusCodes?: Array<number>,

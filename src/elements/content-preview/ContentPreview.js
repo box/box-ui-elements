@@ -93,6 +93,26 @@ type Props = {
         userId: number,
     },
     apiHost: string,
+    /**
+     * Optional regional metadata API host (e.g. "https://api-jp.box.com")
+     * forwarded to the metadata API client and to the embedded
+     * ContentSidebar.
+     *
+     * Affects ONLY metadata *instance* endpoints (file/folder
+     * `/metadata/...`). Templates, taxonomies, suggestions, options, and
+     * metadata queries always use `apiHost` regardless of this value.
+     *
+     * Forward-compatible by design: when undefined, empty, or equal to
+     * `apiHost`, the resulting URLs are identical to those produced when
+     * the prop is not set. Dropping the prop later is therefore a no-op
+     * for any consumer.
+     *
+     * Transitional: this prop lets host applications pin metadata-instance
+     * traffic to a regional Box gateway while the global API host is not
+     * yet regionalized end-to-end. It is expected to be retired in a
+     * future major version. In-Region Metadata (Phase 1).
+     */
+    metadataApiHost?: string,
     appHost: string,
     autoFocus: boolean,
     boxAnnotations?: Object,
@@ -352,6 +372,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileId,
             language,
             loadingIndicatorDelayMs,
+            metadataApiHost,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -366,6 +387,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             cache,
             clientName: CLIENT_NAME_CONTENT_PREVIEW,
             language,
+            metadataApiHost,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -1549,6 +1571,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             token,
             language,
             messages,
+            metadataApiHost,
             className,
             contentAnswersProps,
             contentOpenWithProps,
@@ -1692,6 +1715,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         <LoadableSidebar
                                             {...mergedContentSidebarProps}
                                             apiHost={apiHost}
+                                            metadataApiHost={metadataApiHost}
                                             token={token}
                                             cache={this.api.getCache()}
                                             fileId={currentFileId}
