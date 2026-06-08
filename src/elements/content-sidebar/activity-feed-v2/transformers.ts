@@ -42,6 +42,24 @@ import {
 } from '../../../constants';
 
 const MENTION_REGEX = /@\[(\d+):([^\]]+)\]/g;
+const TIMESTAMP_MARKUP_REGEX = /^#\[timestamp:(\d+)(?:,versionId:\d+)?\]\s*/;
+
+export const extractTimestampMarkup = (text: string): { cleanText: string; target?: AnnotationBadgeTargetType } => {
+    if (!text) return { cleanText: '' };
+    const match = text.match(TIMESTAMP_MARKUP_REGEX);
+    if (!match) return { cleanText: text };
+
+    const [fullMatch, timestampMs] = match;
+    const cleanText = text.slice(fullMatch.length);
+    const ms = Number(timestampMs);
+    if (!Number.isSafeInteger(ms) || ms < 0) return { cleanText };
+
+    const target: AnnotationBadgeTargetType = {
+        timestamp: convertMillisecondsToTimestamp(ms),
+        type: AnnotationBadgeType.Frame,
+    };
+    return { cleanText, target };
+};
 
 const parseLine = (line: string, authorId: string): (MentionNode | TextNode)[] => {
     const nodes: (MentionNode | TextNode)[] = [];
@@ -123,14 +141,18 @@ const toPermissions = (
     canResolve: permissions?.can_resolve ?? false,
 });
 
-const commentToTextMessage = (comment: Comment): TextMessageType => ({
-    author: toUserAuthor(comment.created_by),
-    createdAt: toUnixMs(comment.created_at) ?? 0,
-    id: comment.id,
-    message: textToDocumentNode(comment.tagged_message || comment.message || '', comment.created_by?.id ?? ''),
-    permissions: toPermissions(comment.permissions),
-    updatedAt: toUpdatedAt(comment.created_at, comment.modified_at),
-});
+const commentToTextMessage = (comment: Comment, prebuiltCleanText?: string): TextMessageType => {
+    const cleanText =
+        prebuiltCleanText ?? extractTimestampMarkup(comment.tagged_message || comment.message || '').cleanText;
+    return {
+        author: toUserAuthor(comment.created_by),
+        createdAt: toUnixMs(comment.created_at) ?? 0,
+        id: comment.id,
+        message: textToDocumentNode(cleanText, comment.created_by?.id ?? ''),
+        permissions: toPermissions(comment.permissions),
+        updatedAt: toUpdatedAt(comment.created_at, comment.modified_at),
+    };
+};
 
 export const transformCommentToMessages = (comment: Comment): TextMessageType[] => {
     const root = commentToTextMessage(comment);
@@ -267,11 +289,16 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
         case FEED_ITEM_TYPE_COMMENT: {
             const comment = item as unknown as Comment;
             const commentIsResolved = comment.status === 'resolved';
+            const rawText = comment.tagged_message || comment.message || '';
+            const { cleanText, target: annotationTarget } = extractTimestampMarkup(rawText);
+            const root = commentToTextMessage(comment, cleanText);
+            const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply));
             return {
+                annotationTarget,
                 id: comment.id,
                 isResolved: commentIsResolved,
-                messages: transformCommentToMessages(comment),
-                originalText: comment.tagged_message || comment.message || '',
+                messages: [root, ...replies],
+                originalText: rawText,
                 permissions: comment.permissions ?? {},
                 resolvedAt: commentIsResolved ? toUnixMs(comment.resolution?.resolved_at) : undefined,
                 resolvedBy: commentIsResolved ? comment.resolution?.resolved_by?.name : undefined,
