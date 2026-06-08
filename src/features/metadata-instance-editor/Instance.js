@@ -7,14 +7,27 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { IconButton, Tooltip } from '@box/blueprint-web';
 import { Pencil } from '@box/blueprint-web-assets/icons/Medium';
-
 import type { AgentType } from '@box/box-ai-agent-selector';
-import { scrollIntoView } from '../../utils/dom';
 
 import InstanceCard from './InstanceCard';
 import EditableInstanceBody from './EditableInstanceBody';
 import CustomExtractAgentInstanceBody from './CustomExtractAgentInstanceBody';
-import messages from './messages';
+
+import { scrollIntoView } from '../../utils/dom';
+import { isValidValue } from '../metadata-instance-fields/validateMetadataField';
+import { isCustomExtractAgentPolicy, isHidden } from './metadataUtil';
+
+import type {
+    MetadataFields,
+    MetadataTemplate,
+    MetadataCascadePolicy,
+    MetadataCascadePolicyConfiguration,
+    MetadataCascadingPolicyData,
+    MetadataTemplateField,
+    MetadataFieldValue,
+} from '../../common/types/metadata';
+import type { JSONPatchOperations } from '../../common/types/api';
+
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
 import {
     CASCADE_POLICY_TYPE_AI_EXTRACT,
@@ -28,18 +41,9 @@ import {
     JSON_PATCH_OP_REPLACE,
     JSON_PATCH_OP_TEST,
 } from '../../common/constants';
-import { isValidValue } from '../metadata-instance-fields/validateMetadataField';
-import { isCustomExtractAgentPolicy, isHidden } from './metadataUtil';
-import type {
-    MetadataFields,
-    MetadataTemplate,
-    MetadataCascadePolicy,
-    MetadataCascadePolicyConfiguration,
-    MetadataCascadingPolicyData,
-    MetadataTemplateField,
-    MetadataFieldValue,
-} from '../../common/types/metadata';
-import type { JSONPatchOperations } from '../../common/types/api';
+
+import messages from './messages';
+
 import './Instance.scss';
 
 type Props = {

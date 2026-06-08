@@ -1,16 +1,22 @@
 // @flow
 import * as React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+
 import { ActionableInlineNotice } from '@box/blueprint-web';
 // $FlowFixMe - blueprint-web-assets icons not typed for Flow
 import { Lock } from '@box/blueprint-web-assets/icons/Line';
 
 import TemplatedInstance from './TemplatedInstance';
 import CustomInstance from './CustomInstance';
-import messages from './messages';
-import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+
 import { getCustomExtractAgentId } from './metadataUtil';
+
 import type { MetadataFields, MetadataTemplate } from '../../common/types/metadata';
+
+import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+
+import messages from './messages';
+
 import './CustomExtractAgentInstanceBody.scss';
 
 type Props = {

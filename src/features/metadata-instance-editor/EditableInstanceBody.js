@@ -3,14 +3,15 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 
 import type { AgentType } from '@box/box-ai-agent-selector';
+
 import Form from '../../components/form-elements/form/Form';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
-
 import CascadePolicy from './CascadePolicy';
 import TemplatedInstance from './TemplatedInstance';
 import CustomInstance from './CustomInstance';
 import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
+
 import type {
     MetadataCascadePolicy,
     MetadataFields,

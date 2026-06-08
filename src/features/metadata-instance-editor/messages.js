@@ -267,7 +267,7 @@ const messages = defineMessages({
         id: 'boxui.metadataInstanceEditor.customExtractAgentManageButton',
     },
     customExtractAgentNoticeIconAriaLabel: {
-        defaultMessage: 'Extract agent managed information',
+        defaultMessage: 'Locked',
         description: 'Aria label for the info icon on the custom extract agent notice',
         id: 'boxui.metadataInstanceEditor.customExtractAgentNoticeIconAriaLabel',
     },

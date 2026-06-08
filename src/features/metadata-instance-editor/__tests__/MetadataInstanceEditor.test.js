@@ -593,7 +593,9 @@ describe('MetadataInstanceEditor extract-managed source', () => {
 
         await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
 
-        expect(screen.getByText("This Metadata can't be edited here.")).toBeInTheDocument();
+        expect(
+            screen.getByText('This policy is managed by an agent. Manage the agent to change the configuration.'),
+        ).toBeInTheDocument();
 
         await userEvent.click(screen.getByRole('button', { name: 'Manage agent' }));
 

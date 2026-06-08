@@ -2,13 +2,15 @@
 import * as React from 'react';
 
 import ScrollWrapper from '../../components/scroll-wrapper';
-
 import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
+
+import MetadataInstanceEditorContext from './MetadataInstanceEditorContext';
+
 import type { MetadataEditor, MetadataTemplate, MetadataCascadingPolicyData } from '../../common/types/metadata';
 import type { JSONPatchOperations } from '../../common/types/api';
-import MetadataInstanceEditorContext from './MetadataInstanceEditorContext';
+
 import './MetadataInstanceEditor.scss';
 
 type Props = {

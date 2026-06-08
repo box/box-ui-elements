@@ -6,12 +6,14 @@ import classNames from 'classnames';
 import Collapsible from '../../components/collapsible/Collapsible';
 import IconMetadataColored from '../../icons/general/IconMetadataColored';
 import IconAlertCircle from '../../icons/general/IconAlertCircle';
+
+import type { MetadataCascadePolicy, MetadataTemplate } from '../../common/types/metadata';
+
+import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+import { RESIN_TAG_TARGET } from '../../common/variables';
 import { bdlWatermelonRed } from '../../styles/variables';
 
 import messages from './messages';
-import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
-import { RESIN_TAG_TARGET } from '../../common/variables';
-import type { MetadataCascadePolicy, MetadataTemplate } from '../../common/types/metadata';
 
 type Props = {
     cascadePolicy?: MetadataCascadePolicy,
