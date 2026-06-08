@@ -89,10 +89,12 @@ const getProps = (props = {}) => ({
     ...props,
 });
 
+const renderComponent = (props = {}) => render(<EditableInstanceBody {...getProps(props)} />);
+
 describe('features/metadata-instance-editor/EditableInstanceBody', () => {
     describe('confirm-remove dialog', () => {
         test('renders the confirm dialog instead of the form when shouldConfirmRemove is true', () => {
-            render(<EditableInstanceBody {...getProps({ shouldConfirmRemove: true })} />);
+            renderComponent({ shouldConfirmRemove: true });
 
             expect(screen.getByTestId('confirm-dialog')).toBeInTheDocument();
             expect(screen.getByText('Remove this template?')).toBeInTheDocument();
@@ -102,7 +104,7 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
 
         test('confirming the dialog calls onRemove', async () => {
             const onRemove = jest.fn();
-            render(<EditableInstanceBody {...getProps({ shouldConfirmRemove: true, onRemove })} />);
+            renderComponent({ shouldConfirmRemove: true, onRemove });
 
             await userEvent.click(screen.getByRole('button', { name: 'dialog-confirm' }));
 
@@ -111,7 +113,7 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
 
         test('cancelling the dialog calls onConfirmCancel', async () => {
             const onConfirmCancel = jest.fn();
-            render(<EditableInstanceBody {...getProps({ shouldConfirmRemove: true, onConfirmCancel })} />);
+            renderComponent({ shouldConfirmRemove: true, onConfirmCancel });
 
             await userEvent.click(screen.getByRole('button', { name: 'dialog-cancel' }));
 
@@ -121,13 +123,13 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
 
     describe('cascade policy rendering', () => {
         test('renders CascadePolicy when isCascadingPolicyApplicable is true', () => {
-            render(<EditableInstanceBody {...getProps({ isCascadingPolicyApplicable: true })} />);
+            renderComponent({ isCascadingPolicyApplicable: true });
 
             expect(screen.getByTestId('cascade-policy')).toBeInTheDocument();
         });
 
         test('does not render CascadePolicy when isCascadingPolicyApplicable is false', () => {
-            render(<EditableInstanceBody {...getProps({ isCascadingPolicyApplicable: false })} />);
+            renderComponent({ isCascadingPolicyApplicable: false });
 
             expect(screen.queryByTestId('cascade-policy')).not.toBeInTheDocument();
         });
@@ -135,27 +137,27 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
 
     describe('custom vs templated fields', () => {
         test('renders CustomInstance for the properties template', () => {
-            render(<EditableInstanceBody {...getProps({ isProperties: true })} />);
+            renderComponent({ isProperties: true });
 
             expect(screen.getByTestId('custom-instance')).toBeInTheDocument();
             expect(screen.queryByTestId('templated-instance')).not.toBeInTheDocument();
         });
 
         test('renders TemplatedInstance for a user template', () => {
-            render(<EditableInstanceBody {...getProps({ isProperties: false })} />);
+            renderComponent({ isProperties: false });
 
             expect(screen.getByTestId('templated-instance')).toBeInTheDocument();
             expect(screen.queryByTestId('custom-instance')).not.toBeInTheDocument();
         });
 
         test('disables templated fields when AI folder extraction is enabled', () => {
-            render(<EditableInstanceBody {...getProps({ isAIFolderExtractionEnabled: true })} />);
+            renderComponent({ isAIFolderExtractionEnabled: true });
 
             expect(screen.getByTestId('templated-instance')).toHaveAttribute('data-is-disabled', 'true');
         });
 
         test('does not disable templated fields when AI folder extraction is disabled', () => {
-            render(<EditableInstanceBody {...getProps({ isAIFolderExtractionEnabled: false })} />);
+            renderComponent({ isAIFolderExtractionEnabled: false });
 
             expect(screen.getByTestId('templated-instance')).toHaveAttribute('data-is-disabled', 'false');
         });
@@ -163,19 +165,19 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
 
     describe('footer', () => {
         test('renders the footer when editing', () => {
-            render(<EditableInstanceBody {...getProps({ isEditing: true })} />);
+            renderComponent({ isEditing: true });
 
             expect(screen.getByTestId('footer')).toBeInTheDocument();
         });
 
         test('does not render the footer when not editing', () => {
-            render(<EditableInstanceBody {...getProps({ isEditing: false })} />);
+            renderComponent({ isEditing: false });
 
             expect(screen.queryByTestId('footer')).not.toBeInTheDocument();
         });
 
         test('shows the save button only when the form is dirty', () => {
-            const { rerender } = render(<EditableInstanceBody {...getProps({ isDirty: true })} />);
+            const { rerender } = renderComponent({ isDirty: true });
             expect(screen.getByTestId('footer')).toHaveAttribute('data-show-save', 'true');
 
             rerender(<EditableInstanceBody {...getProps({ isDirty: false })} />);
@@ -185,7 +187,7 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
         test('footer remove triggers onConfirmRemove and cancel triggers onCancel', async () => {
             const onConfirmRemove = jest.fn();
             const onCancel = jest.fn();
-            render(<EditableInstanceBody {...getProps({ onConfirmRemove, onCancel })} />);
+            renderComponent({ onConfirmRemove, onCancel });
 
             await userEvent.click(screen.getByRole('button', { name: 'footer-remove' }));
             expect(onConfirmRemove).toHaveBeenCalledTimes(1);
@@ -198,7 +200,7 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
     describe('form submission', () => {
         test('calls onSave on submit when the form is dirty', () => {
             const onSave = jest.fn();
-            const { container } = render(<EditableInstanceBody {...getProps({ isDirty: true, onSave })} />);
+            const { container } = renderComponent({ isDirty: true, onSave });
 
             fireEvent.submit(container.querySelector('form'));
 
@@ -207,7 +209,7 @@ describe('features/metadata-instance-editor/EditableInstanceBody', () => {
 
         test('does not call onSave on submit when the form is not dirty', () => {
             const onSave = jest.fn();
-            const { container } = render(<EditableInstanceBody {...getProps({ isDirty: false, onSave })} />);
+            const { container } = renderComponent({ isDirty: false, onSave });
 
             fireEvent.submit(container.querySelector('form'));
 

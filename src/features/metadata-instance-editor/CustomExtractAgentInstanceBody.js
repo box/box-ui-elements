@@ -50,7 +50,6 @@ const CustomExtractAgentInstanceBody = ({
                     icon={Lock}
                     iconAriaLabel={formatMessage(messages.customExtractAgentNoticeIconAriaLabel)}
                     text={formatMessage(messages.customExtractAgentNoticeDescription)}
-                    title={formatMessage(messages.customExtractAgentNoticeTitle)}
                 >
                     {!!customExtractAgentId && onManageExtractAgent && (
                         <ActionableInlineNotice.PrimaryAction

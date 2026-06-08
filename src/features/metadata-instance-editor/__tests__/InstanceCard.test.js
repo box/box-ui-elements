@@ -36,22 +36,24 @@ const getProps = (props = {}) => ({
     ...props,
 });
 
+const renderComponent = (props = {}) => render(<InstanceCard {...getProps(props)} />);
+
 describe('features/metadata-instance-editor/InstanceCard', () => {
     describe('icon type', () => {
         test('uses the cascade icon when cascading is applicable and the policy has an id', () => {
-            render(<InstanceCard {...getProps({ isCascadingPolicyApplicable: true })} />);
+            renderComponent({ isCascadingPolicyApplicable: true });
 
             expect(screen.getByTestId('metadata-icon')).toHaveAttribute('data-type', 'cascade');
         });
 
         test('uses the default icon when cascading is not applicable', () => {
-            render(<InstanceCard {...getProps({ isCascadingPolicyApplicable: false })} />);
+            renderComponent({ isCascadingPolicyApplicable: false });
 
             expect(screen.getByTestId('metadata-icon')).toHaveAttribute('data-type', 'default');
         });
 
         test('uses the default icon when the policy has no id', () => {
-            render(<InstanceCard {...getProps({ cascadePolicy: {} })} />);
+            renderComponent({ cascadePolicy: {} });
 
             expect(screen.getByTestId('metadata-icon')).toHaveAttribute('data-type', 'default');
         });
@@ -59,14 +61,14 @@ describe('features/metadata-instance-editor/InstanceCard', () => {
 
     describe('error state', () => {
         test('renders the alert icon and error class when hasError is true', () => {
-            const { container } = render(<InstanceCard {...getProps({ hasError: true })} />);
+            const { container } = renderComponent({ hasError: true });
 
             expect(screen.getByTestId('alert-icon')).toBeInTheDocument();
             expect(container.querySelector('.metadata-instance-editor-instance-has-error')).toBeInTheDocument();
         });
 
         test('does not render the alert icon when hasError is false', () => {
-            const { container } = render(<InstanceCard {...getProps({ hasError: false })} />);
+            const { container } = renderComponent({ hasError: false });
 
             expect(screen.queryByTestId('alert-icon')).not.toBeInTheDocument();
             expect(container.querySelector('.metadata-instance-editor-instance-has-error')).not.toBeInTheDocument();
@@ -75,13 +77,13 @@ describe('features/metadata-instance-editor/InstanceCard', () => {
 
     describe('title', () => {
         test('shows the template display name for a user template', () => {
-            render(<InstanceCard {...getProps({ template: makeTemplate({ displayName: 'My Template' }) })} />);
+            renderComponent({ template: makeTemplate({ displayName: 'My Template' }) });
 
             expect(screen.getByText('My Template')).toBeInTheDocument();
         });
 
         test('shows the custom metadata title for the properties template', () => {
-            render(<InstanceCard {...getProps({ template: makePropertiesTemplate() })} />);
+            renderComponent({ template: makePropertiesTemplate() });
 
             expect(screen.getByText('Custom Metadata')).toBeInTheDocument();
         });
@@ -89,7 +91,7 @@ describe('features/metadata-instance-editor/InstanceCard', () => {
 
     describe('content forwarding', () => {
         test('renders children and header action items', () => {
-            render(<InstanceCard {...getProps()} />);
+            renderComponent();
 
             expect(screen.getByTestId('card-child')).toBeInTheDocument();
             expect(screen.getByRole('button', { name: 'edit-action' })).toBeInTheDocument();
