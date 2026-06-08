@@ -9,6 +9,7 @@ type Props = {
     canUseAIFolderExtraction?: boolean,
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
+    onManageExtractAgent?: (agentId: string) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
     onSave?: (
@@ -24,6 +25,7 @@ const Instances = ({
     canUseAIFolderExtraction = false,
     isCascadingPolicyApplicable = false,
     editors = [],
+    onManageExtractAgent,
     onModification,
     onRemove,
     onSave,
@@ -45,6 +47,7 @@ const Instances = ({
                     isDirty={isDirty}
                     isOpen={isOpen}
                     key={`${instance.id}-${templateKey}`}
+                    onManageExtractAgent={onManageExtractAgent}
                     onModification={onModification}
                     onSave={onSave}
                     onRemove={onRemove}

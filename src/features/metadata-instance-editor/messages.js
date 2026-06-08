@@ -256,6 +256,27 @@ const messages = defineMessages({
         description: 'Name of the enhanced AI agent',
         id: 'boxui.metadataInstanceEditor.enhancedAgentName',
     },
+    customExtractAgentNoticeTitle: {
+        defaultMessage: "This Metadata can't be edited here.",
+        description:
+            'Bold title of the notice shown when a metadata instance is managed by a custom Box AI extract agent',
+        id: 'boxui.metadataInstanceEditor.customExtractAgentNoticeTitle',
+    },
+    customExtractAgentNoticeDescription: {
+        defaultMessage: 'This policy is managed by an agent. Manage the agent to change the configuration.',
+        description: 'Body of the notice shown when a metadata instance is managed by a custom Box AI extract agent',
+        id: 'boxui.metadataInstanceEditor.customExtractAgentNoticeDescription',
+    },
+    customExtractAgentManageButton: {
+        defaultMessage: 'Manage agent',
+        description: 'Label for the button that navigates the user to manage the custom Box AI extract agent',
+        id: 'boxui.metadataInstanceEditor.customExtractAgentManageButton',
+    },
+    customExtractAgentNoticeIconAriaLabel: {
+        defaultMessage: 'Extract agent managed information',
+        description: 'Aria label for the info icon on the custom extract agent notice',
+        id: 'boxui.metadataInstanceEditor.customExtractAgentNoticeIconAriaLabel',
+    },
 });
 
 export default messages;

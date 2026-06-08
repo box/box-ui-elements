@@ -19,6 +19,7 @@ type Props = {
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
     onAdd?: (template: MetadataTemplate) => void,
+    onManageExtractAgent?: (agentId: string) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
     onSave?: (
@@ -40,6 +41,7 @@ const MetadataInstanceEditor = ({
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
     editors = [],
+    onManageExtractAgent,
     onModification,
     onRemove,
     onAdd,
@@ -66,6 +68,7 @@ const MetadataInstanceEditor = ({
                         canUseAIFolderExtraction={canUseAIFolderExtraction}
                         editors={editors}
                         isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                        onManageExtractAgent={onManageExtractAgent}
                         onModification={onModification}
                         onRemove={onRemove}
                         onSave={onSave}

@@ -4,25 +4,16 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
-import noop from 'lodash/noop';
 
 import { IconButton, Tooltip } from '@box/blueprint-web';
 import { Pencil } from '@box/blueprint-web-assets/icons/Medium';
 
 import type { AgentType } from '@box/box-ai-agent-selector';
-import Collapsible from '../../components/collapsible/Collapsible';
-import Form from '../../components/form-elements/form/Form';
-import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
-import IconMetadataColored from '../../icons/general/IconMetadataColored';
-import IconAlertCircle from '../../icons/general/IconAlertCircle';
-import { bdlWatermelonRed } from '../../styles/variables';
 import { scrollIntoView } from '../../utils/dom';
 
-import CascadePolicy from './CascadePolicy';
-import TemplatedInstance from './TemplatedInstance';
-import CustomInstance from './CustomInstance';
-import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
-import Footer from './Footer';
+import InstanceCard from './InstanceCard';
+import EditableInstanceBody from './EditableInstanceBody';
+import CustomExtractAgentInstanceBody from './CustomExtractAgentInstanceBody';
 import messages from './messages';
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
 import {
@@ -38,8 +29,7 @@ import {
     JSON_PATCH_OP_TEST,
 } from '../../common/constants';
 import { isValidValue } from '../metadata-instance-fields/validateMetadataField';
-import { isHidden } from './metadataUtil';
-import { RESIN_TAG_TARGET } from '../../common/variables';
+import { isCustomExtractAgentPolicy, isHidden } from './metadataUtil';
 import type {
     MetadataFields,
     MetadataTemplate,
@@ -63,6 +53,7 @@ type Props = {
     isCascadingPolicyApplicable?: boolean,
     isDirty: boolean,
     isOpen: boolean,
+    onManageExtractAgent?: (agentId: string) => void,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
     onRemove?: (id: string) => void,
     onSave?: (
@@ -392,32 +383,6 @@ class Instance extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Returns the card title with possible error mark
-     *
-     * @return {Object} - react title element
-     */
-    getTitle(): React.Node {
-        const { cascadePolicy = {}, hasError, isCascadingPolicyApplicable, template }: Props = this.props;
-        const isProperties = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-
-        const type = isCascadingPolicyApplicable && cascadePolicy.id ? 'cascade' : 'default';
-
-        return (
-            <span className="metadata-instance-editor-instance-title">
-                <IconMetadataColored type={type} />
-                <span
-                    className={classNames('metadata-instance-editor-instance-title-text', {
-                        'metadata-instance-editor-instance-has-error': hasError,
-                    })}
-                >
-                    {isProperties ? <FormattedMessage {...messages.customTitle} /> : template.displayName}
-                </span>
-                {hasError && <IconAlertCircle color={bdlWatermelonRed} />}
-            </span>
-        );
-    }
-
-    /**
      * Render the correct delete message to show based on custom metadata and file/folder metadata
      */
     renderDeleteMessage = (isFile: boolean, template: Object) => {
@@ -641,12 +606,13 @@ class Instance extends React.PureComponent<Props, State> {
         const {
             canUseAIFolderExtraction = false,
             cascadePolicy = {},
+            hasError,
             isDirty,
             isCascadingPolicyApplicable,
             isOpen,
+            onManageExtractAgent,
             template,
         }: Props = this.props;
-        const { fields = [] } = template;
         const {
             data,
             errors,
@@ -664,84 +630,60 @@ class Instance extends React.PureComponent<Props, State> {
             return null;
         }
 
-        // Animate short and tall cards at consistent speeds.
-        const animationDuration = (fields.length + 1) * 50;
-
         const isExistingCascadePolicy = this.isCascadingEnabledThroughProps(this.props);
+        const isCustomExtractAgentInstance = isCustomExtractAgentPolicy(cascadePolicy);
 
         return (
             <div ref={this.collapsibleRef}>
-                <Collapsible
-                    animationDuration={animationDuration}
-                    buttonProps={{
-                        [RESIN_TAG_TARGET]: 'metadata-card',
-                    }}
-                    hasStickyHeader
+                <InstanceCard
+                    cascadePolicy={cascadePolicy}
+                    hasError={hasError}
                     headerActionItems={this.renderEditButton()}
-                    isBordered
+                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                     isOpen={isOpen}
-                    title={this.getTitle()}
+                    template={template}
                 >
-                    {shouldConfirmRemove && (
-                        <LoadingIndicatorWrapper isLoading={isBusy}>
-                            <MetadataInstanceConfirmDialog
-                                confirmationMessage={this.getConfirmationMessage()}
-                                onCancel={this.onConfirmCancel}
-                                onConfirm={this.onRemove}
-                            />
-                        </LoadingIndicatorWrapper>
+                    {isCustomExtractAgentInstance ? (
+                        <CustomExtractAgentInstanceBody
+                            agentConfiguration={cascadePolicy?.cascadePolicyConfiguration?.agent}
+                            data={data}
+                            isEditing={isEditing}
+                            onManageExtractAgent={onManageExtractAgent}
+                            template={template}
+                        />
+                    ) : (
+                        <EditableInstanceBody
+                            canUseAIFolderExtraction={canUseAIFolderExtraction}
+                            cascadePolicy={cascadePolicy}
+                            confirmationMessage={this.getConfirmationMessage()}
+                            data={data}
+                            errors={errors}
+                            isAIFolderExtractionEnabled={isAIFolderExtractionEnabled}
+                            isBusy={isBusy}
+                            isCascadingEnabled={isCascadingEnabled}
+                            isCascadingOverwritten={isCascadingOverwritten}
+                            isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                            isDirty={isDirty}
+                            isEditing={isEditing}
+                            isExistingCascadePolicy={isExistingCascadePolicy}
+                            isProperties={isProperties}
+                            onAIAgentSelect={this.onAIAgentSelect}
+                            onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
+                            onCancel={this.onCancel}
+                            onCascadeModeChange={this.onCascadeModeChange}
+                            onCascadeToggle={this.onCascadeToggle}
+                            onConfirmCancel={this.onConfirmCancel}
+                            onConfirmRemove={this.onConfirmRemove}
+                            onFieldChange={this.onFieldChange}
+                            onFieldRemove={this.onFieldRemove}
+                            onRemove={this.onRemove}
+                            onSave={this.onSave}
+                            shouldConfirmRemove={shouldConfirmRemove}
+                            shouldShowCascadeOptions={shouldShowCascadeOptions}
+                            template={template}
+                        />
                     )}
-                    {!shouldConfirmRemove && (
-                        <LoadingIndicatorWrapper isLoading={isBusy}>
-                            <Form onValidSubmit={isDirty ? this.onSave : noop}>
-                                <div className="metadata-instance-editor-instance">
-                                    {isCascadingPolicyApplicable && (
-                                        <CascadePolicy
-                                            cascadePolicyConfiguration={cascadePolicy?.cascadePolicyConfiguration}
-                                            canEdit={isEditing && !!cascadePolicy.canEdit}
-                                            canUseAIFolderExtraction={canUseAIFolderExtraction}
-                                            isAIFolderExtractionEnabled={isAIFolderExtractionEnabled}
-                                            isCascadingEnabled={isCascadingEnabled}
-                                            isCascadingOverwritten={isCascadingOverwritten}
-                                            isCustomMetadata={isProperties}
-                                            isExistingCascadePolicy={isExistingCascadePolicy}
-                                            onAIAgentSelect={this.onAIAgentSelect}
-                                            onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
-                                            onCascadeModeChange={this.onCascadeModeChange}
-                                            onCascadeToggle={this.onCascadeToggle}
-                                            shouldShowCascadeOptions={shouldShowCascadeOptions}
-                                        />
-                                    )}
-                                    {isProperties ? (
-                                        <CustomInstance
-                                            canEdit={isEditing}
-                                            data={data}
-                                            onFieldChange={this.onFieldChange}
-                                            onFieldRemove={this.onFieldRemove}
-                                        />
-                                    ) : (
-                                        <TemplatedInstance
-                                            canEdit={isEditing}
-                                            data={data}
-                                            errors={errors}
-                                            isDisabled={isAIFolderExtractionEnabled}
-                                            onFieldChange={this.onFieldChange}
-                                            onFieldRemove={this.onFieldRemove}
-                                            template={template}
-                                        />
-                                    )}
-                                </div>
-                                {isEditing && (
-                                    <Footer
-                                        onCancel={this.onCancel}
-                                        onRemove={this.onConfirmRemove}
-                                        showSave={isDirty}
-                                    />
-                                )}
-                            </Form>
-                        </LoadingIndicatorWrapper>
-                    )}
-                </Collapsible>
+                </InstanceCard>
             </div>
         );
     }
