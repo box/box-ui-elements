@@ -108,14 +108,43 @@ class Metadata extends File {
     }
 
     /**
-     * API URL for metadata
+     * Base URL used for metadata *instance* endpoints (file/folder
+     * `/metadata/...`).
+     *
+     * Routes through the regional metadata host when `metadataApiHost` is
+     * set and distinct from `apiHost`; otherwise returns the same value as
+     * `getBaseApiUrl()`, so callers without `metadataApiHost` configured
+     * resolve to the global API host.
+     *
+     * Other metadata endpoints (templates, taxonomies, suggestions, options,
+     * queries) intentionally use `getBaseApiUrl()` instead and are not
+     * affected by `metadataApiHost`.
+     *
+     * @return {string} base url for metadata instance endpoints
+     */
+    getMetadataInstanceBaseUrl(): string {
+        const { metadataApiHost, apiHost } = this;
+        if (!metadataApiHost || metadataApiHost === apiHost) {
+            return this.getBaseApiUrl();
+        }
+        return this.buildApiUrl(metadataApiHost);
+    }
+
+    /**
+     * API URL for a file's metadata *instance* endpoints.
+     *
+     * Routes through the regional metadata host (`metadataApiHost`) when set
+     * and distinct from `apiHost`; otherwise routes through `apiHost`.
+     * Templates, taxonomies, suggestions, options, and queries are not
+     * affected by this builder and continue to use `apiHost`.
      *
      * @param {string} id - a Box file id
-     * @param {string} field - metadata field
-     * @return {string} base url for files
+     * @param {string} [scope] - metadata scope (e.g. enterprise_xxx)
+     * @param {string} [template] - metadata template key
+     * @return {string} URL for the file's metadata instance endpoint
      */
     getMetadataUrl(id: string, scope?: string, template?: string): string {
-        const baseUrl = `${this.getUrl(id)}/metadata`;
+        const baseUrl = `${this.getMetadataInstanceBaseUrl()}/files/${id}/metadata`;
         if (scope && template) {
             return `${baseUrl}/${scope}/${template}`;
         }
@@ -123,14 +152,18 @@ class Metadata extends File {
     }
 
     /**
-     * API URL for metadata
+     * API URL for a folder's metadata *instance* endpoints.
+     *
+     * Routes through the regional metadata host (`metadataApiHost`) when set
+     * and distinct from `apiHost`; otherwise routes through `apiHost`.
      *
      * @param {string} id - a Box folder id
-     * @param {string} field - metadata field
-     * @return {string} base url for files
+     * @param {string} [scope] - metadata scope
+     * @param {string} [template] - metadata template key
+     * @return {string} URL for the folder's metadata instance endpoint
      */
     getMetadataUrlForFolder(id: string, scope?: string, template?: string): string {
-        const baseUrl = `${this.getBaseApiUrl()}/folders/${id}/metadata`;
+        const baseUrl = `${this.getMetadataInstanceBaseUrl()}/folders/${id}/metadata`;
         if (scope && template) {
             return `${baseUrl}/${scope}/${template}`;
         }

@@ -61,6 +61,25 @@ type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
     apiHost: string,
+    /**
+     * Optional regional metadata API host (e.g. "https://api-jp.box.com")
+     * forwarded to the metadata API client.
+     *
+     * Affects ONLY metadata *instance* endpoints (file/folder
+     * `/metadata/...`). Templates, taxonomies, suggestions, options, and
+     * metadata queries always use `apiHost` regardless of this value.
+     *
+     * Forward-compatible by design: when undefined, empty, or equal to
+     * `apiHost`, the resulting URLs are identical to those produced when
+     * the prop is not set. Dropping the prop later is therefore a no-op
+     * for any consumer.
+     *
+     * Transitional: this prop lets host applications pin metadata-instance
+     * traffic to a regional Box gateway while the global API host is not
+     * yet regionalized end-to-end. It is expected to be retired in a
+     * future major version.
+     */
+    metadataApiHost?: string,
     boxAISidebarProps: BoxAISidebarProps,
     cache?: APICache,
     className: string,
@@ -158,6 +177,7 @@ class ContentSidebar extends React.Component<Props, State> {
             cache,
             clientName,
             language,
+            metadataApiHost,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -170,6 +190,7 @@ class ContentSidebar extends React.Component<Props, State> {
             cache,
             clientName,
             language,
+            metadataApiHost,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
