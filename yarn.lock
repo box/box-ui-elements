@@ -1067,10 +1067,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/activity-feed@^1.22.16":
-  version "1.22.16"
-  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-1.22.16.tgz#a0fdbcaeea80e80f55d1f28783de4b97180af15e"
-  integrity sha512-kRUOLC+90RDmLoepXWd1wr/HKkS5UWXN0kbX2sMQ3ZuDTJ8GjjyRQry5jdEDcFr1IhD8Og9wpg3FmYb8o5+04A==
+"@box/activity-feed@^1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-1.23.0.tgz#64980efe5758e9266f689af7c70a2a987ef4d9fc"
+  integrity sha512-eyhPp5G+R1uN0VwIwcPbbzxa402nROuTO3ZBFXrLWQVsw/nG3TdNliOJNW09rn6lZ+hddQoSm624vPzy1iITRg==
 
 "@box/blueprint-web-assets@^4.123.2":
   version "4.123.2"

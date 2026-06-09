@@ -124,7 +124,7 @@
         "@babel/preset-typescript": "^7.24.7",
         "@babel/template": "^7.24.7",
         "@babel/types": "^7.24.7",
-        "@box/activity-feed": "^1.22.16",
+        "@box/activity-feed": "^1.23.0",
         "@box/blueprint-web": "^15.6.0",
         "@box/blueprint-web-assets": "^4.123.2",
         "@box/box-ai-agent-selector": "^1.39.21",
@@ -293,7 +293,7 @@
         "webpack-dev-server": "^5.2.4"
     },
     "peerDependencies": {
-        "@box/activity-feed": "^1.22.16",
+        "@box/activity-feed": "^1.23.0",
         "@box/blueprint-web": "^15.6.0",
         "@box/blueprint-web-assets": "^4.123.2",
         "@box/box-ai-agent-selector": "^1.39.21",
