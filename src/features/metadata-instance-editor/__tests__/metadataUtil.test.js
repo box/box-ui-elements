@@ -1,5 +1,44 @@
 // @flow
-import { isHidden, normalizeTemplateFilters, normalizeTemplates } from '../metadataUtil';
+import {
+    getCustomExtractAgentId,
+    isCustomExtractAgentPolicy,
+    isHidden,
+    normalizeTemplateFilters,
+    normalizeTemplates,
+} from '../metadataUtil';
+
+describe('getCustomExtractAgentId()', () => {
+    test.each`
+        agentConfiguration            | expected        | description
+        ${'extract_agent_1234567890'} | ${'1234567890'} | ${'returns the numeric id for a custom extract agent configuration'}
+        ${'enhanced_extract_agent'}   | ${''}           | ${'returns empty string for the enhanced marker'}
+        ${'extract_agent_'}           | ${''}           | ${'returns empty string for a bare prefix with no id'}
+        ${'extract_agent_abc'}        | ${''}           | ${'returns empty string for a non-numeric remainder'}
+        ${'extract_agent_123abc'}     | ${'123'}        | ${'strips non-numeric characters from a partially-numeric remainder'}
+        ${'extract_agent_9-87-65'}    | ${'98765'}      | ${'strips separators and keeps the digits'}
+        ${undefined}                  | ${''}           | ${'returns empty string for undefined'}
+        ${null}                       | ${''}           | ${'returns empty string for null'}
+        ${''}                         | ${''}           | ${'returns empty string for an empty string'}
+    `('$description', ({ agentConfiguration, expected }) => {
+        expect(getCustomExtractAgentId(agentConfiguration)).toBe(expected);
+    });
+});
+
+describe('isCustomExtractAgentPolicy()', () => {
+    test.each`
+        cascadePolicy                                                                                             | expected | description
+        ${{ cascadePolicyType: 'ai_extract', cascadePolicyConfiguration: { agent: 'extract_agent_1234567890' } }} | ${true}  | ${'true for an ai_extract policy with a custom extract agent configuration'}
+        ${{ cascadePolicyType: 'ai_extract', cascadePolicyConfiguration: { agent: 'extract_agent_abc' } }}        | ${true}  | ${'true when the agent config has the custom prefix even if the id is non-numeric'}
+        ${{ cascadePolicyType: 'ai_extract', cascadePolicyConfiguration: { agent: 'enhanced_extract_agent' } }}   | ${false} | ${'false for an ai_extract policy with the enhanced marker'}
+        ${{ cascadePolicyType: 'ai_extract' }}                                                                    | ${false} | ${'false for an ai_extract policy with no agent configuration (standard mode)'}
+        ${{ cascadePolicyType: 'standard', cascadePolicyConfiguration: { agent: 'extract_agent_1234567890' } }}   | ${false} | ${'false when the policy type is not ai_extract'}
+        ${{}}                                                                                                     | ${false} | ${'false for an empty cascade policy'}
+        ${undefined}                                                                                              | ${false} | ${'false for undefined'}
+        ${null}                                                                                                   | ${false} | ${'false for null'}
+    `('$description', ({ cascadePolicy, expected }) => {
+        expect(isCustomExtractAgentPolicy(cascadePolicy)).toBe(expected);
+    });
+});
 
 describe('isHidden()', () => {
     [

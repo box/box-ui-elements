@@ -5,10 +5,14 @@ import { render, screen, within } from '../../../test-utils/testing-library';
 import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from '../constants';
 import { InstanceBase as Instance } from '../Instance';
 import { isValidValue } from '../../metadata-instance-fields/validateMetadataField';
+import messages from '../messages';
 
 // Add RTL imports
 
 jest.mock('../../metadata-instance-fields/validateMetadataField');
+
+const EXTRACT_MANAGED_NOTICE = messages.customExtractAgentNoticeDescription.defaultMessage;
+const MANAGE_AGENT_BUTTON = messages.customExtractAgentManageButton.defaultMessage;
 
 const data = {
     stringfield: 'some string',
@@ -774,6 +778,8 @@ const getBaseProps = (props = {}) => ({
     ...props,
 });
 
+const renderComponent = (props = {}) => render(<Instance {...getBaseProps(props)} />);
+
 describe('Instance Component - React Testing Library', () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -781,35 +787,34 @@ describe('Instance Component - React Testing Library', () => {
     });
 
     describe('Initialization based on cascadePolicy.cascadePolicyType', () => {
-        test('should initialize with AI folder extraction enabled and fields disabled if cascadePolicyType is "ai_extract"', async () => {
-            render(
-                <Instance
-                    {...getBaseProps({
-                        cascadePolicy: {
-                            id: 'policy-ai',
-                            canEdit: true,
-                            isEnabled: true,
-                            scope: 'enterprise_123',
-                            cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
-                        },
-                    })}
-                />,
-            );
+        test('should render the extract-managed notice instead of editable fields for a custom extract agent ai_extract policy', async () => {
+            renderComponent({
+                cascadePolicy: {
+                    id: 'policy-ai',
+                    canEdit: true,
+                    isEnabled: true,
+                    scope: 'enterprise_123',
+                    cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
+                    cascadePolicyConfiguration: { agent: 'extract_agent_1234567890' },
+                },
+            });
 
             // Click Edit button to enable editing
-            const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
-            await userEvent.click(editButton);
+            await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
 
-            // Fields should be disabled because AI extraction is on by default from policy
-            // Input fields are part of TemplatedInstance, which is only rendered if Collapsible is open.
-            // Default state has isOpen true if not specified or based on single field length.
-            // Let's assume it's open.
-            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).toBeDisabled();
-            expect(screen.getByRole('textbox', { name: 'Float Field example of a float field' })).toBeDisabled();
+            // ai_extract instances are managed by the agent: the editable form is replaced
+            // by a read-only notice, so the template fields are no longer rendered.
+            expect(screen.getByText(EXTRACT_MANAGED_NOTICE)).toBeInTheDocument();
+            expect(
+                screen.queryByRole('textbox', { name: 'String Field example of a string field' }),
+            ).not.toBeInTheDocument();
+            expect(
+                screen.queryByRole('textbox', { name: 'Float Field example of a float field' }),
+            ).not.toBeInTheDocument();
         });
 
         test('should initialize with AI folder extraction disabled and fields enabled if cascadePolicyType is not "ai_extract"', async () => {
-            render(<Instance {...getBaseProps()} />); // default policy is not 'ai_extract'
+            renderComponent(); // default policy is not 'ai_extract'
 
             // Click Edit button to enable editing
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
@@ -820,7 +825,7 @@ describe('Instance Component - React Testing Library', () => {
         });
 
         test('should initialize with AI folder extraction disabled if cascadePolicy is undefined', async () => {
-            render(<Instance {...getBaseProps({ cascadePolicy: undefined, isCascadingPolicyApplicable: false })} />);
+            renderComponent({ cascadePolicy: undefined, isCascadingPolicyApplicable: false });
 
             // Click Edit button to enable editing
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
@@ -833,7 +838,7 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('AI Folder Extraction Toggle Interaction', () => {
         test('should toggle AI folder extraction, disable/enable fields', async () => {
-            render(<Instance {...getBaseProps({ cascadePolicy: { canEdit: true } })} />);
+            renderComponent({ cascadePolicy: { canEdit: true } });
 
             // Click Edit button to enable editing
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
@@ -862,7 +867,7 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('Props passed to CascadePolicy', () => {
         test('should disable CascadePolicy options when a cascade already exists', async () => {
-            render(<Instance {...getBaseProps()} />);
+            renderComponent();
 
             // Enter edit mode
             const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
@@ -883,7 +888,7 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('Props passed to TemplatedInstance', () => {
         test('should pass isDisabled=true to TemplatedInstance when AI folder extraction is enabled', async () => {
-            render(<Instance {...getBaseProps({ cascadePolicy: { canEdit: true } })} />);
+            renderComponent({ cascadePolicy: { canEdit: true } });
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
             await userEvent.click(editButton);
 
@@ -900,13 +905,81 @@ describe('Instance Component - React Testing Library', () => {
         });
 
         test('should pass isDisabled=false to TemplatedInstance when AI folder extraction is disabled', async () => {
-            render(<Instance {...getBaseProps()} />);
+            renderComponent();
             const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
             // If instance starts in non-edit mode, fields might not be interactive until edit is clicked
             if (editButton) await userEvent.click(editButton);
 
             // AI is off by default
             expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
+        });
+    });
+
+    describe('source-based routing (extract-managed vs editable)', () => {
+        const getAiExtractProps = (props = {}) =>
+            getBaseProps({
+                cascadePolicy: {
+                    id: 'policy-ai',
+                    canEdit: true,
+                    isEnabled: true,
+                    scope: 'enterprise_123',
+                    cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
+                    cascadePolicyConfiguration: { agent: 'extract_agent_1234567890' },
+                },
+                ...props,
+            });
+
+        const renderAiExtract = (props = {}) => render(<Instance {...getAiExtractProps(props)} />);
+
+        test('renders the extract-managed body for an ai_extract source', async () => {
+            renderAiExtract();
+
+            await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+
+            expect(screen.getByText(EXTRACT_MANAGED_NOTICE)).toBeInTheDocument();
+            // The editable cascade controls must not be present for a managed instance.
+            expect(screen.queryByRole('switch', { name: 'Enable Cascade Policy' })).not.toBeInTheDocument();
+        });
+
+        test('forwards onManageExtractAgent and fires it with the numeric agent id', async () => {
+            const onManageExtractAgent = jest.fn();
+            renderAiExtract({ onManageExtractAgent });
+
+            await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+            await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
+
+            expect(onManageExtractAgent).toHaveBeenCalledWith('1234567890');
+        });
+
+        test('does not render the manage-agent button when onManageExtractAgent is not provided', async () => {
+            renderAiExtract();
+
+            await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+
+            expect(screen.queryByRole('button', { name: MANAGE_AGENT_BUTTON })).not.toBeInTheDocument();
+        });
+
+        test('renders the editable body with cascade controls for a non-ai_extract source', async () => {
+            renderComponent();
+
+            await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+
+            expect(screen.getByRole('switch', { name: 'Enable Cascade Policy' })).toBeInTheDocument();
+            expect(screen.queryByText(EXTRACT_MANAGED_NOTICE)).not.toBeInTheDocument();
+        });
+
+        test('renders the editable body for an enhanced ai_extract policy (not a custom agent)', async () => {
+            renderAiExtract({
+                cascadePolicy: {
+                    ...getAiExtractProps().cascadePolicy,
+                    cascadePolicyConfiguration: { agent: 'enhanced_extract_agent' },
+                },
+            });
+
+            await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+
+            expect(screen.getByRole('switch', { name: 'Enable Cascade Policy' })).toBeInTheDocument();
+            expect(screen.queryByText(EXTRACT_MANAGED_NOTICE)).not.toBeInTheDocument();
         });
     });
 });

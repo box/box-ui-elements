@@ -3,7 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 
 import Instances from '../Instances';
-import { CASCADE_POLICY_TYPE_AI_EXTRACT } from '../constants';
+import messages from '../messages';
+import { makeAiExtractEditor } from './__fixtures__/metadataInstances';
+
+const EXTRACT_MANAGED_NOTICE = messages.customExtractAgentNoticeDescription.defaultMessage;
+const MANAGE_AGENT_BUTTON = messages.customExtractAgentManageButton.defaultMessage;
 
 // Templates
 
@@ -256,16 +260,20 @@ describe('features/metadata-editor-editor/Instances', () => {
 describe('Instances component -  AI agent selector', () => {
     test('should show AI agent selector when canUseAIFolderExtraction is true', async () => {
         const props = getInstancesBaseProps();
-        props.editors[0].instance.cascadePolicy.cascadePolicyType = CASCADE_POLICY_TYPE_AI_EXTRACT;
+        // A brand-new cascade policy (no id, not yet AI managed) so the user can enable
+        // cascading + AI autofill and reach the agent selector.
+        props.editors[0].instance.cascadePolicy = { canEdit: true };
         render(<Instances {...props} />);
 
         const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
         await userEvent.click(editButton);
 
         const cascadeToggle = screen.getByRole('switch', { name: 'Enable Cascade Policy' });
+        await userEvent.click(cascadeToggle);
         expect(cascadeToggle).toBeChecked();
 
         const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+        await userEvent.click(aiToggle);
         expect(aiToggle).toBeChecked();
 
         expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
@@ -295,5 +303,30 @@ describe('Instances component -  AI agent selector', () => {
         await userEvent.click(editButton);
 
         expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
+    });
+});
+
+describe('Instances component - extract-managed source', () => {
+    test('renders the managed notice and bubbles onManageExtractAgent for an ai_extract editor', async () => {
+        const onManageExtractAgent = jest.fn();
+        render(
+            <Instances
+                canUseAIFolderExtraction
+                editors={[makeAiExtractEditor()]}
+                isCascadingPolicyApplicable
+                onManageExtractAgent={onManageExtractAgent}
+                onModification={jest.fn()}
+                onRemove={jest.fn()}
+                onSave={jest.fn()}
+            />,
+        );
+
+        await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+
+        expect(screen.getByText(EXTRACT_MANAGED_NOTICE)).toBeInTheDocument();
+
+        await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
+
+        expect(onManageExtractAgent).toHaveBeenCalledWith('1234567890');
     });
 });
