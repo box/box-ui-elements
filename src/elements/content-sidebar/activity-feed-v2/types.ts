@@ -71,12 +71,19 @@ export type TransformedFeedItem =
     | { type: 'version'; id: string; props: VersionItemProps }
     | { type: 'app_activity'; id: string; props: AppActivityItemProps };
 
+export type ActivityFeedV2File = {
+    extension?: string;
+    file_version?: { id: string };
+};
+
 export type ActivityFeedV2Props = {
     activeFeedEntryId?: string;
     approverSelectorContacts?: Array<Record<string, unknown>>;
     createTask?: (...args: Array<unknown>) => void;
     currentUser?: User;
     feedItems?: FeedItems;
+    file?: ActivityFeedV2File;
+    isTimestampedCommentsEnabled?: boolean;
     getApproverWithQuery?: (searchStr: string) => void;
     getAvatarUrl?: (userId: string) => Promise<string | null | undefined>;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;

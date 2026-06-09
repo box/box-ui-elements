@@ -26,7 +26,7 @@ import { mark } from '../../utils/performance';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
-import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
+import { withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
@@ -1409,6 +1409,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         if (isThreadedRepliesV2Enabled) {
             const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
+            const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
+            const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
+            // eslint-disable-next-line no-console
+            console.log('[BUIE-LOCAL] ActivitySidebar -> ActivityFeedV2', {
+                fileExtension: file?.extension,
+                fileVersionId: file?.file_version?.id,
+                isTimestampedCommentsEnabled,
+                isThreadedRepliesV2Enabled,
+                timestampedCommentsConfig,
+            });
             return (
                 <div
                     aria-labelledby={label}
@@ -1423,12 +1433,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         createTask={this.createTask}
                         currentUser={currentUser}
                         feedItems={this.getFilteredFeedItems()}
+                        file={file}
                         getApproverWithQuery={this.getApprover}
                         getAvatarUrl={this.getAvatarUrl}
                         getMentionAsync={this.getMentionAsync}
                         getTaskCollaborators={this.getTaskCollaborators}
                         hasTasks={this.props.hasTasks}
                         isDisabled={isDisabled}
+                        isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
                         onAnnotationCopyLink={onAnnotationCopyLink}
                         onAnnotationDelete={this.handleAnnotationDelete}
                         onAnnotationEdit={this.handleAnnotationEdit}

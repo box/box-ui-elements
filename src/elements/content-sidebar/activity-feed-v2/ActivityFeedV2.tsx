@@ -17,10 +17,12 @@ import TaskModal from '../TaskModal';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { transformFeedItem } from './transformers';
+import { useVideoTimestamp } from './useVideoTimestamp';
 
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
 import type { TaskAssigneeCollection, TaskNew } from '../../../common/types/tasks';
 
+import { FILE_EXTENSIONS } from '../../common/item/constants';
 import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_APPROVAL } from '../../../constants';
 
 import commonMessages from '../../common/messages';
@@ -35,12 +37,14 @@ const ActivityFeedV2 = ({
     createTask,
     currentUser,
     feedItems,
+    file,
     getApproverWithQuery,
     getAvatarUrl,
     getMentionAsync,
     getTaskCollaborators,
     hasTasks = true,
     isDisabled = false,
+    isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
     onAnnotationEdit,
@@ -278,21 +282,47 @@ const ActivityFeedV2 = ({
         }
     }, [currentUserId, filteredItems, scrollHandle]);
 
+    const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
+    const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled;
+    const fileVersionId = file?.file_version?.id;
+
+    // eslint-disable-next-line no-console
+    console.log('[BUIE-LOCAL] ActivityFeedV2 render', {
+        allowVideoTimestamps,
+        extension: file?.extension,
+        fileVersionId,
+        isTimestampedCommentsEnabled,
+        isVideo,
+    });
+
+    const videoTimestamp = useVideoTimestamp(allowVideoTimestamps);
+    const { formattedTimestamp, getTimestampMs, isPressed: isTimestampPressed, onPressedChange } = videoTimestamp;
+
+    const editorVideoTimestamp = React.useMemo(
+        () =>
+            allowVideoTimestamps ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange } : undefined,
+        [allowVideoTimestamps, formattedTimestamp, isTimestampPressed, onPressedChange],
+    );
+
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
             const serialized = serializeEditorContent(content);
             if (!serialized || !serialized.text) return;
+            const text =
+                allowVideoTimestamps && isTimestampPressed && fileVersionId
+                    ? `#[timestamp:${getTimestampMs()},versionId:${fileVersionId}] ${serialized.text}`
+                    : serialized.text;
             try {
                 const snapshot = new Set(filteredItems.map(item => item.id));
-                await onCommentCreate(serialized.text, serialized.hasMention);
+                await onCommentCreate(text, serialized.hasMention);
                 knownIdsBeforePostRef.current = snapshot;
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [filteredItems, onCommentCreate],
+        [allowVideoTimestamps, filteredItems, fileVersionId, getTimestampMs, isTimestampPressed, onCommentCreate],
     );
 
     return (
@@ -358,6 +388,7 @@ const ActivityFeedV2 = ({
                         disableComponent={isDisabled || !currentUser}
                         onPost={handleCommentPost}
                         userSelectorProps={userSelectorProps}
+                        videoTimestamp={editorVideoTimestamp}
                     />
                 </div>
             </ActivityFeed.Root>
