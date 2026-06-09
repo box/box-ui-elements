@@ -53,8 +53,7 @@ class Base {
      *
      * Transitional: this field exists to support the `metadataApiHost`
      * option while the global `apiHost` is not yet regionalized end-to-end.
-     * It is expected to be retired in a future major version. Tagged
-     * "In-Region Metadata (Phase 1)" wherever related code appears.
+     * It is expected to be retired in a future major version.
      *
      * @property {?string}
      */

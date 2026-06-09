@@ -120,10 +120,6 @@ class Metadata extends File {
      * queries) intentionally use `getBaseApiUrl()` instead and are not
      * affected by `metadataApiHost`.
      *
-     * In-Region Metadata (Phase 1) transitional helper. Lives on `Metadata`
-     * (rather than the foundational `Base`) so it can be removed alongside
-     * the rest of the Phase 1 routing without touching the base API layer.
-     *
      * @return {string} base url for metadata instance endpoints
      */
     getMetadataInstanceBaseUrl(): string {
@@ -141,8 +137,6 @@ class Metadata extends File {
      * and distinct from `apiHost`; otherwise routes through `apiHost`.
      * Templates, taxonomies, suggestions, options, and queries are not
      * affected by this builder and continue to use `apiHost`.
-     *
-     * In-Region Metadata (Phase 1).
      *
      * @param {string} id - a Box file id
      * @param {string} [scope] - metadata scope (e.g. enterprise_xxx)
@@ -162,8 +156,6 @@ class Metadata extends File {
      *
      * Routes through the regional metadata host (`metadataApiHost`) when set
      * and distinct from `apiHost`; otherwise routes through `apiHost`.
-     *
-     * In-Region Metadata (Phase 1).
      *
      * @param {string} id - a Box folder id
      * @param {string} [scope] - metadata scope

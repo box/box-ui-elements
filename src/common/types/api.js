@@ -96,7 +96,7 @@ type APIOptions = {
      * Transitional: this option lets host applications pin metadata-
      * instance traffic to a regional Box gateway while the global API host
      * is not yet regionalized end-to-end. It is expected to be retired in
-     * a future major version. In-Region Metadata (Phase 1).
+     * a future major version.
      */
     metadataApiHost?: string,
     requestInterceptor?: Function,
