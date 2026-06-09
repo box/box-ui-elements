@@ -2,13 +2,15 @@
 import * as React from 'react';
 
 import ScrollWrapper from '../../components/scroll-wrapper';
-
 import Header from './Header';
 import Instances from './Instances';
 import EmptyContent from './EmptyContent';
+
+import MetadataInstanceEditorContext from './MetadataInstanceEditorContext';
+
 import type { MetadataEditor, MetadataTemplate, MetadataCascadingPolicyData } from '../../common/types/metadata';
 import type { JSONPatchOperations } from '../../common/types/api';
-import MetadataInstanceEditorContext from './MetadataInstanceEditorContext';
+
 import './MetadataInstanceEditor.scss';
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
     onAdd?: (template: MetadataTemplate) => void,
+    onManageExtractAgent?: (agentId: string) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
     onSave?: (
@@ -40,6 +43,7 @@ const MetadataInstanceEditor = ({
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
     editors = [],
+    onManageExtractAgent,
     onModification,
     onRemove,
     onAdd,
@@ -66,6 +70,7 @@ const MetadataInstanceEditor = ({
                         canUseAIFolderExtraction={canUseAIFolderExtraction}
                         editors={editors}
                         isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                        onManageExtractAgent={onManageExtractAgent}
                         onModification={onModification}
                         onRemove={onRemove}
                         onSave={onSave}

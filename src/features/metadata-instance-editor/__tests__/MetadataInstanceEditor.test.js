@@ -4,6 +4,11 @@ import { render, screen } from '../../../test-utils/testing-library';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
+import messages from '../messages';
+import { makeAiExtractEditor } from './__fixtures__/metadataInstances';
+
+const EXTRACT_MANAGED_NOTICE = messages.customExtractAgentNoticeDescription.defaultMessage;
+const MANAGE_AGENT_BUTTON = messages.customExtractAgentManageButton.defaultMessage;
 
 // Templates
 
@@ -539,8 +544,10 @@ describe('MetadataInstanceEditor agent selector', () => {
         const props = getMetadataEditorBaseProps({
             canUseAIFolderExtraction: true,
         });
-        props.editors[0].instance.cascadePolicy.cascadePolicyType = 'ai_extract';
-        props.editors[0].instance.cascadePolicy.id = null;
+        // A brand-new cascade policy (no id, not AI managed) so the user can enable
+        // cascading + AI autofill and select an agent. ai_extract is now a server-managed
+        // source that renders a read-only notice rather than the agent selector.
+        props.editors[0].instance.cascadePolicy = { canEdit: true };
 
         render(<MetadataInstanceEditor {...props} />);
 
@@ -552,6 +559,11 @@ describe('MetadataInstanceEditor agent selector', () => {
         expect(cascadeToggle).not.toBeChecked();
         await userEvent.click(cascadeToggle);
         expect(cascadeToggle).toBeChecked();
+
+        // Enable Box AI Autofill so the agent selector is rendered
+        const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+        await userEvent.click(aiToggle);
+        expect(aiToggle).toBeChecked();
 
         // Find the combobox and open it
         const comboBox = screen.getByRole('combobox', { name: 'Standard' });
@@ -571,4 +583,24 @@ describe('MetadataInstanceEditor agent selector', () => {
         // The combobox should now show 'Enhanced'
         expect(screen.getByRole('combobox', { name: 'Enhanced' })).toBeInTheDocument();
     }, 15000); // Increase timeout to 15 seconds
+});
+
+describe('MetadataInstanceEditor extract-managed source', () => {
+    test('renders the managed notice and bubbles onManageExtractAgent end-to-end for an ai_extract editor', async () => {
+        const onManageExtractAgent = jest.fn();
+        const props = getMetadataEditorBaseProps({
+            editors: [makeAiExtractEditor()],
+            onManageExtractAgent,
+        });
+
+        render(<MetadataInstanceEditor {...props} />);
+
+        await userEvent.click(screen.getByRole('button', { name: 'Edit Metadata' }));
+
+        expect(screen.getByText(EXTRACT_MANAGED_NOTICE)).toBeInTheDocument();
+
+        await userEvent.click(screen.getByRole('button', { name: MANAGE_AGENT_BUTTON }));
+
+        expect(onManageExtractAgent).toHaveBeenCalledWith('1234567890');
+    });
 });
