@@ -110,6 +110,7 @@ export interface ContentUploaderProps {
     uploadHost: string;
     useUploadsManager?: boolean;
     enableModernizedUploads?: boolean;
+    setClearItemsCallback?: (callback: () => void) => void;
 }
 
 type State = {
@@ -213,6 +214,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     componentDidMount() {
+        const { setClearItemsCallback } = this.props;
         this.rootElement = document.getElementById(this.id);
         this.appElement = this.rootElement;
         const { files, isPrepopulateFilesEnabled } = this.props;
@@ -220,6 +222,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         if (isPrepopulateFilesEnabled && files && files.length > 0) {
             this.addFilesToUploadQueue(files, this.upload);
         }
+        setClearItemsCallback?.(this.resetUploadsManagerItemsWhenUploadsComplete);
     }
 
     /**
@@ -1323,6 +1326,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     checkClearUploadItems = () => {
+        const { enableModernizedUploads } = this.props;
+        if (enableModernizedUploads) {
+            return;
+        }
+
         this.resetItemsTimeout = setTimeout(
             this.resetUploadsManagerItemsWhenUploadsComplete,
             HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT,
@@ -1394,12 +1402,15 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
-        const { onCancel, useUploadsManager } = this.props;
+        const { onCancel, useUploadsManager, enableModernizedUploads } = this.props;
         const { isUploadsManagerExpanded, view } = this.state;
 
-        // Do not reset items when upload manger is expanded or there're uploads in progress
+        // Do not reset items when upload manger is expanded (for non-modernized uploader) or there're uploads in progress
         if (
-            (isUploadsManagerExpanded && useUploadsManager && !!this.itemsRef.current.length) ||
+            (isUploadsManagerExpanded &&
+                useUploadsManager &&
+                !!this.itemsRef.current.length &&
+                !enableModernizedUploads) ||
             view === VIEW_UPLOAD_IN_PROGRESS
         ) {
             return;
