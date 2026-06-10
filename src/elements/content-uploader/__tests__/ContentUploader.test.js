@@ -728,6 +728,175 @@ describe('elements/content-uploader/ContentUploader', () => {
             // Assert that addFilesToUploadQueue is not called when isPrepopulateFilesEnabled is false
             expect(instance.addFilesToUploadQueue).not.toHaveBeenCalled();
         });
+
+        test('calls setClearItemsCallback with the reset method when prop is provided', () => {
+            const setClearItemsCallback = jest.fn();
+            const wrapper = getWrapper({ setClearItemsCallback });
+            const instance = wrapper.instance();
+
+            instance.componentDidMount();
+
+            expect(setClearItemsCallback).toHaveBeenCalledWith(instance.resetUploadsManagerItemsWhenUploadsComplete);
+        });
+    });
+
+    describe('checkClearUploadItems()', () => {
+        const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
+        let setTimeoutSpy;
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+            setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+        });
+
+        afterEach(() => {
+            setTimeoutSpy.mockRestore();
+            jest.useRealTimers();
+        });
+
+        test('does not schedule reset when enableModernizedUploads is true', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+
+            instance.checkClearUploadItems();
+
+            expect(setTimeoutSpy).not.toHaveBeenCalled();
+            expect(instance.resetItemsTimeout).toBeUndefined();
+        });
+
+        test('schedules reset via setTimeout when enableModernizedUploads is false', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: false });
+            const instance = wrapper.instance();
+            const resetSpy = jest.spyOn(instance, 'resetUploadsManagerItemsWhenUploadsComplete');
+
+            instance.checkClearUploadItems();
+
+            expect(instance.resetItemsTimeout).toBeDefined();
+            expect(setTimeoutSpy).toHaveBeenCalledWith(
+                instance.resetUploadsManagerItemsWhenUploadsComplete,
+                HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT,
+            );
+
+            jest.runAllTimers();
+
+            expect(resetSpy).toHaveBeenCalled();
+        });
+
+        test('schedules reset via setTimeout when enableModernizedUploads is undefined', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.checkClearUploadItems();
+
+            expect(instance.resetItemsTimeout).toBeDefined();
+            expect(setTimeoutSpy).toHaveBeenCalledWith(
+                instance.resetUploadsManagerItemsWhenUploadsComplete,
+                HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT,
+            );
+        });
+    });
+
+    describe('resetUploadsManagerItemsWhenUploadsComplete()', () => {
+        const createUploadItem = () => ({
+            api: {},
+            extension: '',
+            file: new File(['contents'], 'upload_file.txt', { type: 'text/plain' }),
+            name: 'upload_file.txt',
+            progress: 100,
+            size: 1000,
+            status: STATUS_COMPLETE,
+        });
+
+        const setupResetTest = ({
+            props = {},
+            isUploadsManagerExpanded = false,
+            view = VIEW_UPLOAD_SUCCESS,
+            items = [createUploadItem()],
+        } = {}) => {
+            const onCancel = jest.fn();
+            const wrapper = getWrapper({ onCancel, ...props });
+            const instance = wrapper.instance();
+
+            instance.itemsRef.current = items;
+            instance.itemIdsRef.current = { 'upload_file.txt': true };
+            wrapper.setState({ isUploadsManagerExpanded, view, items, itemIds: { 'upload_file.txt': true } });
+
+            return { wrapper, instance, onCancel, items };
+        };
+
+        test('clears items when manager is expanded with items present and enableModernizedUploads is true', () => {
+            const { wrapper, instance, onCancel, items } = setupResetTest({
+                props: { useUploadsManager: true, enableModernizedUploads: true },
+                isUploadsManagerExpanded: true,
+            });
+
+            instance.resetUploadsManagerItemsWhenUploadsComplete();
+
+            expect(onCancel).toHaveBeenCalledWith(items);
+            expect(instance.itemsRef.current).toEqual([]);
+            expect(instance.itemIdsRef.current).toEqual({});
+            expect(wrapper.state().items).toEqual([]);
+            expect(wrapper.state().itemIds).toEqual({});
+        });
+
+        test('does not clear items when manager is expanded with items present and enableModernizedUploads is false', () => {
+            const { wrapper, instance, onCancel, items } = setupResetTest({
+                props: { useUploadsManager: true, enableModernizedUploads: false },
+                isUploadsManagerExpanded: true,
+            });
+
+            instance.resetUploadsManagerItemsWhenUploadsComplete();
+
+            expect(onCancel).not.toHaveBeenCalled();
+            expect(instance.itemsRef.current).toEqual(items);
+            expect(wrapper.state().items).toEqual(items);
+        });
+
+        test.each([true, false])(
+            'does not clear items when view is VIEW_UPLOAD_IN_PROGRESS and enableModernizedUploads is %s',
+            enableModernizedUploads => {
+                const { wrapper, instance, onCancel, items } = setupResetTest({
+                    props: { useUploadsManager: true, enableModernizedUploads },
+                    isUploadsManagerExpanded: true,
+                    view: VIEW_UPLOAD_IN_PROGRESS,
+                });
+
+                instance.resetUploadsManagerItemsWhenUploadsComplete();
+
+                expect(onCancel).not.toHaveBeenCalled();
+                expect(instance.itemsRef.current).toEqual(items);
+                expect(wrapper.state().items).toEqual(items);
+            },
+        );
+
+        test.each([true, false])(
+            'clears items when manager is not expanded and enableModernizedUploads is %s',
+            enableModernizedUploads => {
+                const { wrapper, instance, onCancel, items } = setupResetTest({
+                    props: { useUploadsManager: true, enableModernizedUploads },
+                    isUploadsManagerExpanded: false,
+                });
+
+                instance.resetUploadsManagerItemsWhenUploadsComplete();
+
+                expect(onCancel).toHaveBeenCalledWith(items);
+                expect(instance.itemsRef.current).toEqual([]);
+                expect(wrapper.state().items).toEqual([]);
+            },
+        );
+
+        test('clears items when useUploadsManager is false even if manager is expanded', () => {
+            const { wrapper, instance, onCancel, items } = setupResetTest({
+                props: { useUploadsManager: false, enableModernizedUploads: false },
+                isUploadsManagerExpanded: true,
+            });
+
+            instance.resetUploadsManagerItemsWhenUploadsComplete();
+
+            expect(onCancel).toHaveBeenCalledWith(items);
+            expect(instance.itemsRef.current).toEqual([]);
+            expect(wrapper.state().items).toEqual([]);
+        });
     });
 
     describe('addFileDataTransferItemsToUploadQueue()', () => {
