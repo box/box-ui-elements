@@ -19,6 +19,13 @@ const captureCurrentMs = (video: HTMLVideoElement | null): number => {
     return Math.floor(video.currentTime * 1000);
 };
 
+export const seekVideoToMs = (ms: number): void => {
+    const video = findVideoElement();
+    if (!video) return;
+    video.currentTime = ms / 1000;
+    video.pause();
+};
+
 export interface UseVideoTimestampResult {
     /** Defaults to "0:00" until the first capture. */
     formattedTimestamp: string;
@@ -41,14 +48,11 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
     const isPressedRef = React.useRef(isPressed);
     const isLoadingRef = React.useRef(false);
 
-    React.useEffect(() => {
-        isPressedRef.current = isPressed;
-    }, [isPressed]);
-
     // Reset state when disabled (e.g. switching from a video to a non-video file)
     // so a re-enable does not leak the previous file's pressed state or captured ms.
     React.useEffect(() => {
         if (!enabled) {
+            isPressedRef.current = false;
             setIsPressed(false);
             setTimestampMs(0);
             isLoadingRef.current = false;
@@ -61,6 +65,7 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
                 return;
             }
             if (!pressed) {
+                isPressedRef.current = false;
                 setIsPressed(false);
                 return;
             }
@@ -71,6 +76,7 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
             if (!video.paused) {
                 video.pause();
             }
+            isPressedRef.current = true;
             setIsPressed(true);
             setTimestampMs(captureCurrentMs(video));
         },

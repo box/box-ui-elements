@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 
-import { useVideoTimestamp } from '../useVideoTimestamp';
+import { seekVideoToMs, useVideoTimestamp } from '../useVideoTimestamp';
 
 const createVideoElement = (currentTime: number = 0): HTMLVideoElement => {
     const video = document.createElement('video');
@@ -261,5 +261,55 @@ describe('useVideoTimestamp', () => {
         } finally {
             cleanup();
         }
+    });
+
+    test('should not capture from a pause/seek that fires after onPressedChange(false) in the same tick', () => {
+        const video = createVideoElement(0);
+        const cleanup = mountVideoInDom(video);
+        try {
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            Object.defineProperty(video, 'currentTime', { configurable: true, value: 10, writable: true });
+            act(() => {
+                video.dispatchEvent(new Event('pause'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:10');
+
+            // Unpress and synchronously dispatch a pause event before any
+            // useEffect would run. The captured value must not change.
+            act(() => {
+                screen.getByText('unpress').click();
+                Object.defineProperty(video, 'currentTime', { configurable: true, value: 50, writable: true });
+                video.dispatchEvent(new Event('pause'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:10');
+        } finally {
+            cleanup();
+        }
+    });
+});
+
+describe('seekVideoToMs', () => {
+    afterEach(() => {
+        document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
+    });
+
+    test('should set currentTime in seconds and pause when a video is present', () => {
+        const video = createVideoElement(0);
+        Object.defineProperty(video, 'paused', { configurable: true, value: false, writable: true });
+        const cleanup = mountVideoInDom(video);
+        try {
+            seekVideoToMs(8055);
+            expect(video.currentTime).toBe(8.055);
+            expect(video.pause).toHaveBeenCalled();
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should be a no-op when no video element is present', () => {
+        expect(() => seekVideoToMs(1000)).not.toThrow();
     });
 });

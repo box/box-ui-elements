@@ -47,6 +47,7 @@ type ResolvedInfo = {
 
 export type TransformedCommentItem = {
     annotationTarget?: AnnotationBadgeTargetType;
+    annotationTimestampMs?: number;
     id: string;
     messages: TextMessageType[];
     originalText: string;
