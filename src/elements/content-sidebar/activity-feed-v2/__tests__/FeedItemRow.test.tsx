@@ -7,6 +7,7 @@ import { render, screen } from '../../../../test-utils/testing-library';
 import FeedItemRow from '../FeedItemRow';
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from '../helpers';
 import { annotationTargetToBadge } from '../transformers';
+import { seekVideoToMs } from '../useVideoTimestamp';
 
 import type { TaskNew } from '../../../../common/types/tasks';
 import type {
@@ -52,10 +53,15 @@ jest.mock('../transformers', () => ({
     annotationTargetToBadge: jest.fn(),
 }));
 
+jest.mock('../useVideoTimestamp', () => ({
+    seekVideoToMs: jest.fn(),
+}));
+
 const mockedSerializeEditorContent = jest.mocked(serializeEditorContent);
 const mockedDispatchReplyDelete = jest.mocked(dispatchReplyDelete);
 const mockedDispatchReplyEdit = jest.mocked(dispatchReplyEdit);
 const mockedAnnotationTargetToBadge = jest.mocked(annotationTargetToBadge);
+const mockedSeekVideoToMs = jest.mocked(seekVideoToMs);
 
 const userSelectorProps: UserSelectorProps = {
     ariaRoleDescription: 'user selector',
@@ -392,6 +398,24 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         test('should wire onEditError to the logEditError helper', () => {
             render(<FeedItemRow {...defaultProps} item={mockComment} />);
             expect(lastThreadedAnnotationProps.onEditError).toBe(logEditError);
+        });
+
+        test('should not pass onAnnotationBadgeClick when the comment has no timestamp markup', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+            expect(lastThreadedAnnotationProps.onAnnotationBadgeClick).toBeUndefined();
+        });
+
+        test('should seek the video on badge click when the comment carries a timestamp', () => {
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={timestampedComment} />);
+
+            lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
+
+            expect(mockedSeekVideoToMs).toHaveBeenCalledWith(8055);
         });
     });
 

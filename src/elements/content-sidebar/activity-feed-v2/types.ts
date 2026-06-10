@@ -47,6 +47,7 @@ type ResolvedInfo = {
 
 export type TransformedCommentItem = {
     annotationTarget?: AnnotationBadgeTargetType;
+    annotationTimestampMs?: number;
     id: string;
     messages: TextMessageType[];
     originalText: string;
@@ -71,18 +72,25 @@ export type TransformedFeedItem =
     | { type: 'version'; id: string; props: VersionItemProps }
     | { type: 'app_activity'; id: string; props: AppActivityItemProps };
 
+export type ActivityFeedV2File = {
+    extension?: string;
+    file_version?: { id: string };
+};
+
 export type ActivityFeedV2Props = {
     activeFeedEntryId?: string;
     approverSelectorContacts?: Array<Record<string, unknown>>;
     createTask?: (...args: Array<unknown>) => void;
     currentUser?: User;
     feedItems?: FeedItems;
+    file?: ActivityFeedV2File;
     getApproverWithQuery?: (searchStr: string) => void;
     getAvatarUrl?: (userId: string) => Promise<string | null | undefined>;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     hasTasks?: boolean;
     isDisabled?: boolean;
+    isTimestampedCommentsEnabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
     onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;

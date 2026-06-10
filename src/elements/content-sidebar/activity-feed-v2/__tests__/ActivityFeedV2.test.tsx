@@ -467,6 +467,145 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
+    describe('video timestamp', () => {
+        const mountVideo = (currentTime: number = 0) => {
+            const container = document.createElement('div');
+            container.className = 'bp-media-container';
+            const video = document.createElement('video');
+            Object.defineProperty(video, 'currentTime', {
+                configurable: true,
+                value: currentTime,
+                writable: true,
+            });
+            Object.defineProperty(video, 'paused', { configurable: true, value: true, writable: true });
+            video.pause = jest.fn();
+            container.appendChild(video);
+            document.body.appendChild(container);
+            return { cleanup: () => container.remove(), video };
+        };
+
+        test('should not pass videoTimestamp when file is not a video', () => {
+            const { cleanup } = mountVideo();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'pdf', file_version: { id: '1' } }}
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not pass videoTimestamp when isTimestampedCommentsEnabled is false', () => {
+            const { cleanup } = mountVideo();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4', file_version: { id: '1' } }}
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should pass videoTimestamp with default 0:00 for videos when enabled', () => {
+            const { cleanup } = mountVideo();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4', file_version: { id: '1' } }}
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toEqual({
+                    formattedTimestamp: '0:00',
+                    isPressed: false,
+                    onPressedChange: expect.any(Function),
+                });
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should prepend timestamp markup to posted text when toggle is pressed', async () => {
+            const { cleanup, video } = mountVideo();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great frame' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4', file_version: { id: '99' } }}
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(video, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great frame', false);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should post the original text when the toggle is not pressed', async () => {
+            const { cleanup } = mountVideo();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'plain comment' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4', file_version: { id: '99' } }}
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+                expect(onCommentCreate).toHaveBeenCalledWith('plain comment', false);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not pass videoTimestamp when fileVersionId is missing', () => {
+            const { cleanup } = mountVideo();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4' }}
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+    });
+
     describe('filter controls', () => {
         test('should default showResolved and showOnlyMentionsMe to false in the filter menu', () => {
             render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);

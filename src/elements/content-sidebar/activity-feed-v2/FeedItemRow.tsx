@@ -14,6 +14,7 @@ import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
+import { seekVideoToMs } from './useVideoTimestamp';
 
 import type { OnReplyDelete, OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
 
@@ -128,6 +129,8 @@ const FeedItemRow = ({
                     text: serialized.text,
                 });
             };
+            const timestampMs = item.annotationTimestampMs;
+            const handleBadgeClick = timestampMs !== undefined ? () => seekVideoToMs(timestampMs) : undefined;
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
@@ -136,6 +139,7 @@ const FeedItemRow = ({
                     isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
                     messages={item.messages}
+                    onAnnotationBadgeClick={handleBadgeClick}
                     onAvatarClick={noop}
                     onCopyLink={onCommentCopyLink ? (id: string) => onCommentCopyLink({ id }) : undefined}
                     onDelete={handleDelete}
