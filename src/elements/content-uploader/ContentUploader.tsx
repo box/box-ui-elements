@@ -233,6 +233,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     componentWillUnmount() {
+        const { setClearItemsCallback } = this.props;
+        setClearItemsCallback?.(noop);
         this.cancel();
     }
 
