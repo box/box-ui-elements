@@ -1411,14 +1411,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
             const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
             const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
-            // eslint-disable-next-line no-console
-            console.log('[BUIE-LOCAL] ActivitySidebar -> ActivityFeedV2', {
-                fileExtension: file?.extension,
-                fileVersionId: file?.file_version?.id,
-                isTimestampedCommentsEnabled,
-                isThreadedRepliesV2Enabled,
-                timestampedCommentsConfig,
-            });
             return (
                 <div
                     aria-labelledby={label}

@@ -283,26 +283,19 @@ const ActivityFeedV2 = ({
     }, [currentUserId, filteredItems, scrollHandle]);
 
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
-    const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled;
     const fileVersionId = file?.file_version?.id;
+    const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
 
-    // eslint-disable-next-line no-console
-    console.log('[BUIE-LOCAL] ActivityFeedV2 render', {
-        allowVideoTimestamps,
-        extension: file?.extension,
-        fileVersionId,
-        isTimestampedCommentsEnabled,
-        isVideo,
-    });
+    const {
+        formattedTimestamp,
+        isPressed: isTimestampPressed,
+        onPressedChange,
+        timestampMs,
+    } = useVideoTimestamp(allowVideoTimestamps);
 
-    const videoTimestamp = useVideoTimestamp(allowVideoTimestamps);
-    const { formattedTimestamp, getTimestampMs, isPressed: isTimestampPressed, onPressedChange } = videoTimestamp;
-
-    const editorVideoTimestamp = React.useMemo(
-        () =>
-            allowVideoTimestamps ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange } : undefined,
-        [allowVideoTimestamps, formattedTimestamp, isTimestampPressed, onPressedChange],
-    );
+    const editorVideoTimestamp = allowVideoTimestamps
+        ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
+        : undefined;
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -311,7 +304,7 @@ const ActivityFeedV2 = ({
             if (!serialized || !serialized.text) return;
             const text =
                 allowVideoTimestamps && isTimestampPressed && fileVersionId
-                    ? `#[timestamp:${getTimestampMs()},versionId:${fileVersionId}] ${serialized.text}`
+                    ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
                     : serialized.text;
             try {
                 const snapshot = new Set(filteredItems.map(item => item.id));
@@ -322,7 +315,7 @@ const ActivityFeedV2 = ({
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [allowVideoTimestamps, filteredItems, fileVersionId, getTimestampMs, isTimestampPressed, onCommentCreate],
+        [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
     );
 
     return (

@@ -587,6 +587,23 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 cleanup();
             }
         });
+
+        test('should not pass videoTimestamp when fileVersionId is missing', () => {
+            const { cleanup } = mountVideo();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4' }}
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
     });
 
     describe('filter controls', () => {

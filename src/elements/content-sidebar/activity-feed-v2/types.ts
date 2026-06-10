@@ -83,13 +83,13 @@ export type ActivityFeedV2Props = {
     currentUser?: User;
     feedItems?: FeedItems;
     file?: ActivityFeedV2File;
-    isTimestampedCommentsEnabled?: boolean;
     getApproverWithQuery?: (searchStr: string) => void;
     getAvatarUrl?: (userId: string) => Promise<string | null | undefined>;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     hasTasks?: boolean;
     isDisabled?: boolean;
+    isTimestampedCommentsEnabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
     onAnnotationEdit?: (params: { id: string; permissions: AnnotationPermission; text: string }) => void;

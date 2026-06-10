@@ -32,11 +32,11 @@ const mountVideoInDom = (video: HTMLVideoElement) => {
 };
 
 const TestHarness = ({ enabled }: { enabled: boolean }) => {
-    const { formattedTimestamp, getTimestampMs, isPressed, onPressedChange } = useVideoTimestamp(enabled);
+    const { formattedTimestamp, isPressed, onPressedChange, timestampMs } = useVideoTimestamp(enabled);
     return (
         <div>
             <span data-testid="timestamp">{formattedTimestamp}</span>
-            <span data-testid="ms">{String(getTimestampMs())}</span>
+            <span data-testid="ms">{String(timestampMs)}</span>
             <span data-testid="pressed">{String(isPressed)}</span>
             <button onClick={() => onPressedChange(true)} type="button">
                 press
@@ -60,6 +60,23 @@ describe('useVideoTimestamp', () => {
         expect(screen.getByTestId('pressed').textContent).toBe('false');
     });
 
+    test('should ignore press attempts when disabled', () => {
+        const video = createVideoElement(15);
+        Object.defineProperty(video, 'paused', { configurable: true, value: false, writable: true });
+        const cleanup = mountVideoInDom(video);
+        try {
+            render(<TestHarness enabled={false} />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            expect(video.pause).not.toHaveBeenCalled();
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:00');
+        } finally {
+            cleanup();
+        }
+    });
+
     test('should capture current time and pause the video when toggled on while playing', () => {
         const video = createVideoElement(43.5);
         Object.defineProperty(video, 'paused', { configurable: true, value: false, writable: true });
@@ -78,7 +95,7 @@ describe('useVideoTimestamp', () => {
         }
     });
 
-    test('should not change captured value when pressed and the video is playing', () => {
+    test('should keep the captured value frozen while playing (no pause/seek listeners apart from those)', () => {
         const video = createVideoElement(0);
         const cleanup = mountVideoInDom(video);
         try {
@@ -86,12 +103,14 @@ describe('useVideoTimestamp', () => {
             act(() => {
                 screen.getByText('press').click();
             });
-            // simulate playback advancing then a play event (no pause/seek yet)
+            // currentTime advances during playback but no pause/seek fires.
             Object.defineProperty(video, 'currentTime', { configurable: true, value: 30, writable: true });
+            // Sanity: a non-subscribed event must not trigger a capture.
             act(() => {
-                video.dispatchEvent(new Event('playing'));
+                video.dispatchEvent(new Event('timeupdate'));
             });
             expect(screen.getByTestId('timestamp').textContent).toBe('0:00');
+            expect(screen.getByTestId('ms').textContent).toBe('0');
         } finally {
             cleanup();
         }
@@ -142,13 +161,11 @@ describe('useVideoTimestamp', () => {
             act(() => {
                 screen.getByText('press').click();
             });
-            // capture an initial value
             Object.defineProperty(video, 'currentTime', { configurable: true, value: 5, writable: true });
             act(() => {
                 video.dispatchEvent(new Event('pause'));
             });
             expect(screen.getByTestId('timestamp').textContent).toBe('0:05');
-            // unpress and continue playback past it
             act(() => {
                 screen.getByText('unpress').click();
             });
@@ -180,6 +197,67 @@ describe('useVideoTimestamp', () => {
             });
             expect(screen.getByTestId('timestamp').textContent).toBe('0:00');
             expect(screen.getByTestId('pressed').textContent).toBe('true');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should ignore pause/seek captures while loadstart -> loadeddata is in progress', () => {
+        const video = createVideoElement(0);
+        const cleanup = mountVideoInDom(video);
+        try {
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            Object.defineProperty(video, 'currentTime', { configurable: true, value: 25, writable: true });
+            act(() => {
+                video.dispatchEvent(new Event('pause'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:25');
+
+            act(() => {
+                video.dispatchEvent(new Event('loadstart'));
+            });
+            // Mid-load currentTime jitter must not get captured.
+            Object.defineProperty(video, 'currentTime', { configurable: true, value: 99, writable: true });
+            act(() => {
+                video.dispatchEvent(new Event('seeked'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:00');
+
+            act(() => {
+                video.dispatchEvent(new Event('loadeddata'));
+            });
+            Object.defineProperty(video, 'currentTime', { configurable: true, value: 4, writable: true });
+            act(() => {
+                video.dispatchEvent(new Event('seeked'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:04');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should reset state when transitioning from enabled to disabled', () => {
+        const video = createVideoElement(0);
+        const cleanup = mountVideoInDom(video);
+        try {
+            const { rerender } = render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            Object.defineProperty(video, 'currentTime', { configurable: true, value: 33, writable: true });
+            act(() => {
+                video.dispatchEvent(new Event('pause'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:33');
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
+
+            rerender(<TestHarness enabled={false} />);
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:00');
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(screen.getByTestId('ms').textContent).toBe('0');
         } finally {
             cleanup();
         }

@@ -1,8 +1,3 @@
-/**
- * @file Hook that tracks video playback time for the timestamped-comment toggle.
- * @author Box
- */
-
 import * as React from 'react';
 
 import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
@@ -25,54 +20,62 @@ const captureCurrentMs = (video: HTMLVideoElement | null): number => {
 };
 
 export interface UseVideoTimestampResult {
-    /** Display string (e.g. "0:43"). "0:00" until first capture. */
+    /** Defaults to "0:00" until the first capture. */
     formattedTimestamp: string;
-    /** Toggle pressed state. */
     isPressed: boolean;
-    /** Read the current captured ms - used when posting. */
-    getTimestampMs: () => number;
-    /** Pressed-state setter passed to the editor toggle. */
     onPressedChange: (pressed: boolean) => void;
+    timestampMs: number;
 }
 
 /**
- * Tracks video playback time for the editor timestamp toggle.
- *
  * Behavior:
- * - Pressed off: captured value never updates (last selected value preserved).
+ * - Pressed off: captured value never updates.
  * - Pressed on while video is playing: captured value frozen until pause/seek.
  * - Pressed on while video is paused: captured value updates on pause/seek.
  * - Toggle off->on: captures current time and pauses the video if it was playing.
  * - New video src: captured value resets to 0; pressed state persists.
- *
- * `enabled` should be true only for video files where timestamped comments are
- * allowed; the hook returns inert defaults otherwise.
  */
 export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => {
     const [isPressed, setIsPressed] = React.useState(false);
     const [timestampMs, setTimestampMs] = React.useState(0);
     const isPressedRef = React.useRef(isPressed);
+    const isLoadingRef = React.useRef(false);
 
     React.useEffect(() => {
         isPressedRef.current = isPressed;
     }, [isPressed]);
 
-    const getTimestampMs = React.useCallback(() => timestampMs, [timestampMs]);
+    // Reset state when disabled (e.g. switching from a video to a non-video file)
+    // so a re-enable does not leak the previous file's pressed state or captured ms.
+    React.useEffect(() => {
+        if (!enabled) {
+            setIsPressed(false);
+            setTimestampMs(0);
+            isLoadingRef.current = false;
+        }
+    }, [enabled]);
 
-    const onPressedChange = React.useCallback((pressed: boolean) => {
-        setIsPressed(pressed);
-        if (!pressed) {
-            return;
-        }
-        const video = findVideoElement();
-        if (!video) {
-            return;
-        }
-        if (!video.paused) {
-            video.pause();
-        }
-        setTimestampMs(captureCurrentMs(video));
-    }, []);
+    const onPressedChange = React.useCallback(
+        (pressed: boolean) => {
+            if (!enabled) {
+                return;
+            }
+            if (!pressed) {
+                setIsPressed(false);
+                return;
+            }
+            const video = findVideoElement();
+            if (!video) {
+                return;
+            }
+            if (!video.paused) {
+                video.pause();
+            }
+            setIsPressed(true);
+            setTimestampMs(captureCurrentMs(video));
+        },
+        [enabled],
+    );
 
     React.useEffect(() => {
         if (!enabled || typeof document === 'undefined') {
@@ -83,13 +86,23 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
         let attached: HTMLVideoElement | null = null;
 
         const handlePauseOrSeek = () => {
+            // Skip captures during a fresh-src load: currentTime is mid-reset and
+            // would clobber the value handleLoadStart already set to 0.
+            if (isLoadingRef.current) {
+                return;
+            }
             if (isPressedRef.current && attached) {
                 setTimestampMs(captureCurrentMs(attached));
             }
         };
 
         const handleLoadStart = () => {
+            isLoadingRef.current = true;
             setTimestampMs(0);
+        };
+
+        const handleLoadedData = () => {
+            isLoadingRef.current = false;
         };
 
         const detach = () => {
@@ -97,28 +110,40 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
             attached.removeEventListener('pause', handlePauseOrSeek);
             attached.removeEventListener('seeked', handlePauseOrSeek);
             attached.removeEventListener('loadstart', handleLoadStart);
+            attached.removeEventListener('loadeddata', handleLoadedData);
             attached = null;
         };
 
-        const tryAttach = () => {
+        const tryAttach = (): boolean => {
             const video = findVideoElement();
-            if (!video || video === attached) {
-                return Boolean(attached);
+            if (!video) {
+                return false;
+            }
+            if (video === attached) {
+                return true;
             }
             detach();
             video.addEventListener('pause', handlePauseOrSeek);
             video.addEventListener('seeked', handlePauseOrSeek);
             video.addEventListener('loadstart', handleLoadStart);
+            video.addEventListener('loadeddata', handleLoadedData);
             attached = video;
             return true;
         };
 
-        if (!tryAttach() && typeof MutationObserver !== 'undefined') {
+        // Keep observing so listeners migrate when preview replaces the <video>
+        // element (different file). Element-replacement is invisible to loadstart,
+        // which only fires for src changes on the same element.
+        if (typeof MutationObserver !== 'undefined') {
             observer = new MutationObserver(() => {
-                tryAttach();
+                if (findVideoElement() !== attached) {
+                    tryAttach();
+                }
             });
             observer.observe(document.body, { childList: true, subtree: true });
         }
+
+        tryAttach();
 
         return () => {
             observer?.disconnect();
@@ -128,8 +153,8 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
 
     return {
         formattedTimestamp: convertMillisecondsToTimestamp(timestampMs),
-        getTimestampMs,
         isPressed,
         onPressedChange,
+        timestampMs,
     };
 };
