@@ -214,7 +214,7 @@ const ActivityFeedV2 = ({
     }, [currentUserId, feedItems]);
 
     const filteredItems = React.useMemo(() => {
-        return transformedItems.filter(item => {
+        const filtered = transformedItems.filter(item => {
             if ((item.type === 'comment' || item.type === 'annotation') && item.isResolved && !showResolved) {
                 return false;
             }
@@ -240,6 +240,11 @@ const ActivityFeedV2 = ({
             }
             return true;
         });
+        const filtersDroppedItems = filtered.length < transformedItems.length;
+        if (!filtersDroppedItems && filtered.every(item => item.type === 'version')) {
+            return [];
+        }
+        return filtered;
     }, [currentUserId, showOnlyMentionsMe, showResolved, transformedItems]);
 
     React.useEffect(() => {

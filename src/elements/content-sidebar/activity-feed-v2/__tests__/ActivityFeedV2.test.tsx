@@ -223,7 +223,18 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         expect(screen.getByTestId('task-task-1')).toBeVisible();
     });
 
-    test('should render version feed items', () => {
+    test('should render version feed items alongside other items', () => {
+        render(
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[mockComment, mockVersion] as ActivityFeedV2Props['feedItems']}
+            />,
+        );
+
+        expect(screen.getByTestId('version-version-1')).toBeVisible();
+    });
+
+    test('should suppress version-only feeds so the empty state can render', () => {
         render(
             <ActivityFeedV2
                 currentUser={mockCurrentUser}
@@ -231,6 +242,20 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             />,
         );
 
+        expect(screen.queryByTestId('version-version-1')).not.toBeInTheDocument();
+        expect(screen.getByTestId('activity-feed-list').children).toHaveLength(0);
+    });
+
+    test('should keep version rows when filters dropped other items', () => {
+        const resolvedComment = { ...mockComment, id: 'resolved-1', status: 'resolved' };
+        render(
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[resolvedComment, mockVersion] as ActivityFeedV2Props['feedItems']}
+            />,
+        );
+
+        expect(screen.queryByTestId('threaded-annotation-resolved-1')).not.toBeInTheDocument();
         expect(screen.getByTestId('version-version-1')).toBeVisible();
     });
 
