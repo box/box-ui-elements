@@ -30,6 +30,7 @@ describe('mapToModernizedUploadItem()', () => {
             status: 'uploading',
             isFolder: undefined,
             errorMessage: undefined,
+            versionNumber: undefined,
         });
     });
 
@@ -62,6 +63,22 @@ describe('mapToModernizedUploadItem()', () => {
         const result = mapToModernizedUploadItem(buildLegacyItem({ extension: undefined, progress: undefined }), '0');
         expect(result.extension).toBe('');
         expect(result.progress).toBe(0);
+    });
+
+    test('forwards versionNumber from item.boxFile.version_number', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({
+                status: STATUS_COMPLETE,
+                boxFile: { version_number: '2' },
+            }),
+            '0',
+        );
+        expect(result.versionNumber).toBe('2');
+    });
+
+    test('leaves versionNumber undefined when boxFile is missing', () => {
+        const result = mapToModernizedUploadItem(buildLegacyItem({ status: STATUS_IN_PROGRESS }), '0');
+        expect(result.versionNumber).toBeUndefined();
     });
 });
 
