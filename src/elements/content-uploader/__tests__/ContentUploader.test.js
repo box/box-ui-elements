@@ -1300,6 +1300,28 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(resetSpy).not.toHaveBeenCalled();
                 expect(uploadFileSpy).not.toHaveBeenCalled();
             });
+
+            test('should pass onItemShare prop to UploadsManagerBP', () => {
+                const onItemShare = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onItemShare });
+                expect(wrapper.find(UploadsManagerBP).prop('onItemShare')).toBe(onItemShare);
+            });
+
+            test('should pass onItemOpen prop to UploadsManagerBP', () => {
+                const onItemOpen = jest.fn();
+                const wrapper = getWrapper({ enableModernizedUploads: true, onItemOpen });
+                expect(wrapper.find(UploadsManagerBP).prop('onItemOpen')).toBe(onItemOpen);
+            });
+
+            test('should default onItemShare to noop when not provided', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                expect(() => wrapper.find(UploadsManagerBP).prop('onItemShare')('item-id')).not.toThrow();
+            });
+
+            test('should default onItemOpen to noop when not provided', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                expect(() => wrapper.find(UploadsManagerBP).prop('onItemOpen')('item-id')).not.toThrow();
+            });
         });
     });
 });
