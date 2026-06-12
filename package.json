@@ -98,7 +98,11 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
+        "development": [
+            "last 1 Chrome versions",
+            "last 1 Firefox versions",
+            "last 1 Safari versions"
+        ]
     },
     "husky": {
         "hooks": {
@@ -147,7 +151,7 @@
         "@box/types": "^2.1.8",
         "@box/unified-share-modal": "^2.15.16",
         "@box/user-selector": "^1.78.5",
-        "@box/uploads-manager": "^1.15.0",
+        "@box/uploads-manager": "^1.17.2",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^4.0.1",
         "@commitlint/cli": "^19.8.0",
@@ -314,7 +318,7 @@
         "@box/types": "^2.1.8",
         "@box/unified-share-modal": "^2.15.16",
         "@box/user-selector": "^1.78.5",
-        "@box/uploads-manager": "^1.15.0",
+        "@box/uploads-manager": "^1.17.2",
         "@hapi/address": "^2.1.4",
         "@tanstack/react-virtual": "^3.13.12",
         "axios": "^0.32.0",
@@ -368,6 +372,8 @@
         "tar": "^7.5.11"
     },
     "msw": {
-        "workerDirectory": [".storybook/public"]
+        "workerDirectory": [
+            ".storybook/public"
+        ]
     }
 }
