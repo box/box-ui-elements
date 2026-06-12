@@ -62,4 +62,8 @@
 // Lets inner ellipsis truncation resolve against the sidebar width.
 .bcs-NewActivityFeedContent {
     min-width: 0;
+
+    &.bcs-content {
+        border-left-color: transparent;
+    }
 }
