@@ -15,11 +15,6 @@
         display: contents;
     }
 
-    &-editor > div {
-        padding-right: var(--bp-space-040);
-        padding-left: var(--bp-space-040);
-    }
-
     // Forms: BUIE sets width, padding, border, box-shadow, border-radius on
     // contenteditable and inputs via _forms.scss inside .bcs scope.
     div[contenteditable='true'],
@@ -62,4 +57,8 @@
 // Lets inner ellipsis truncation resolve against the sidebar width.
 .bcs-NewActivityFeedContent {
     min-width: 0;
+
+    &.bcs-content {
+        border-left-color: transparent;
+    }
 }
