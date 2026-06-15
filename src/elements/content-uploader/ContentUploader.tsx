@@ -97,8 +97,8 @@ export interface ContentUploaderProps {
     onMinimize?: () => void;
     onProgress: (item: UploadItem) => void;
     onResume: (item: UploadItem) => void;
-    onItemShare: (itemId: string) => void;
-    onItemOpen: (itemId: string) => void;
+    onItemShare?: (itemId: string) => void;
+    onItemOpen?: (itemId: string) => void;
     onUpgradeCTAClick?: () => void;
     onUpload: (item?: UploadItem | BoxItem) => void;
     overwrite: boolean | 'error';
