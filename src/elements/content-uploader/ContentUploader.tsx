@@ -14,6 +14,7 @@ import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
 import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
+import './ModernizedUploadsManagerPanel.scss';
 import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
@@ -116,18 +117,22 @@ export interface ContentUploaderProps {
     onToggle?: (isExpanded: boolean) => void;
 }
 
+type ModernizedPanelState = 'hidden' | 'shown' | 'dismissing';
+
 type State = {
     errorCode?: string;
     isCancelAllModalOpen: boolean;
     isUploadsManagerExpanded: boolean;
     itemIds: Object;
     items: UploadItem[];
+    modernizedPanelState: ModernizedPanelState;
     view: View;
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
+const SLIDE_OUT_ANIMATION_NAME = 'bcu-modernized-slideOut';
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 const UPLOAD_CONCURRENCY = 6;
 
@@ -145,6 +150,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     resetItemsTimeout: ReturnType<typeof setTimeout>;
 
     isAutoExpanded: boolean = false;
+
+    modernizedDismissTimer: ReturnType<typeof setTimeout> | null = null;
+
+    isPanelHovered: boolean = false;
+
+    isPanelFocused: boolean = false;
 
     itemsRef: React.MutableRefObject<UploadItem[]>;
 
@@ -199,6 +210,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             itemIds: {},
             isCancelAllModalOpen: false,
             isUploadsManagerExpanded: false,
+            modernizedPanelState: 'hidden',
         };
         this.id = uniqueid('bcu_');
 
@@ -235,6 +247,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     componentWillUnmount() {
         this.cancel();
+        this.clearModernizedDismissTimer();
     }
 
     /**
@@ -243,18 +256,40 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     componentDidUpdate() {
-        const { files, dataTransferItems, useUploadsManager } = this.props;
+        const { files, dataTransferItems, useUploadsManager, enableModernizedUploads } = this.props;
+        const { items, modernizedPanelState } = this.state;
 
         const hasFiles = Array.isArray(files) && files.length > 0;
         const hasItems = Array.isArray(dataTransferItems) && dataTransferItems.length > 0;
         const hasUploads = hasFiles || hasItems;
 
-        if (!useUploadsManager || !hasUploads) {
+        if (useUploadsManager && hasUploads) {
+            // TODO: this gets called unnecessarily (upon each render regardless of the queue not changing)
+            this.addFilesWithOptionsToUploadQueueAndStartUpload(files, dataTransferItems);
+        }
+
+        if (!enableModernizedUploads) {
             return;
         }
 
-        // TODO: this gets called unnecessarily (upon each render regardless of the queue not changing)
-        this.addFilesWithOptionsToUploadQueueAndStartUpload(files, dataTransferItems);
+        const hasItemsInUploadQueue = items.length > 0;
+        const isUploadsBatchSuccessfullyComplete = items.every(
+            item => item.status === STATUS_COMPLETE || item.status === STATUS_CANCELED,
+        );
+
+        if (hasItemsInUploadQueue && modernizedPanelState === 'hidden') {
+            this.showModernizedPanel();
+        }
+
+        if (!isUploadsBatchSuccessfullyComplete) {
+            this.clearModernizedDismissTimer();
+
+            if (modernizedPanelState === 'dismissing') {
+                this.showModernizedPanel();
+            }
+        } else if (modernizedPanelState === 'shown') {
+            this.startModernizedDismissTimer();
+        }
     }
 
     /**
@@ -1360,6 +1395,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     checkClearUploadItems = () => {
+        const { enableModernizedUploads } = this.props;
+        if (enableModernizedUploads) {
+            return;
+        }
+
         this.resetItemsTimeout = setTimeout(
             this.resetUploadsManagerItemsWhenUploadsComplete,
             HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT,
@@ -1435,13 +1475,16 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
-        const { onCancel, useUploadsManager } = this.props;
+        const { onCancel, useUploadsManager, enableModernizedUploads } = this.props;
         const { view } = this.state;
         const isUploadsManagerExpanded = this.getIsExpanded();
 
         // Do not reset items when upload manger is expanded or there're uploads in progress
         if (
-            (isUploadsManagerExpanded && useUploadsManager && !!this.itemsRef.current.length) ||
+            (isUploadsManagerExpanded &&
+                useUploadsManager &&
+                !!this.itemsRef.current.length &&
+                !enableModernizedUploads) ||
             view === VIEW_UPLOAD_IN_PROGRESS
         ) {
             return;
@@ -1456,6 +1499,92 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             items: [],
             itemIds: {},
         });
+    };
+
+    clearModernizedDismissTimer = (): void => {
+        if (this.modernizedDismissTimer !== null) {
+            clearTimeout(this.modernizedDismissTimer);
+            this.modernizedDismissTimer = null;
+        }
+    };
+
+    showModernizedPanel = (): void => {
+        this.setState({ modernizedPanelState: 'shown' });
+    };
+
+    startModernizedDismissTimer = (): void => {
+        this.clearModernizedDismissTimer();
+
+        const { modernizedPanelState, items } = this.state;
+        const isUploadsBatchSuccessfullyComplete = items.every(
+            item => item.status === STATUS_COMPLETE || item.status === STATUS_CANCELED,
+        );
+
+        if (
+            !isUploadsBatchSuccessfullyComplete ||
+            modernizedPanelState !== 'shown' ||
+            this.isPanelHovered ||
+            this.isPanelFocused
+        ) {
+            return;
+        }
+
+        this.modernizedDismissTimer = setTimeout(() => {
+            this.setState({ modernizedPanelState: 'dismissing' });
+            this.modernizedDismissTimer = null;
+        }, HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT);
+    };
+
+    finalizeModernizedDismiss = (): void => {
+        this.clearModernizedDismissTimer();
+        this.resetUploadsManagerItemsWhenUploadsComplete();
+        this.setState({ modernizedPanelState: 'hidden' });
+    };
+
+    handleModernizedMouseEnter = (): void => {
+        this.isPanelHovered = true;
+        this.clearModernizedDismissTimer();
+
+        if (this.state.modernizedPanelState === 'dismissing') {
+            this.showModernizedPanel();
+        }
+    };
+
+    handleModernizedMouseLeave = (): void => {
+        this.isPanelHovered = false;
+        this.startModernizedDismissTimer();
+    };
+
+    handleModernizedFocus = (event): void => {
+        // Ensures that we don't block uploads closing timer because of implicit focus (e.g. on button click)
+        if (!(event.target as HTMLElement).matches(':focus-visible')) {
+            return;
+        }
+        this.isPanelFocused = true;
+        this.clearModernizedDismissTimer();
+
+        if (this.state.modernizedPanelState === 'dismissing') {
+            this.showModernizedPanel();
+        }
+    };
+
+    handleModernizedBlur = (event: React.FocusEvent<HTMLDivElement>): void => {
+        const relatedTarget = event.relatedTarget as Node | null;
+
+        if (relatedTarget && event.currentTarget.contains(relatedTarget)) {
+            return;
+        }
+
+        this.isPanelFocused = false;
+        this.startModernizedDismissTimer();
+    };
+
+    handleModernizedAnimationEnd = (event: React.AnimationEvent<HTMLDivElement>): void => {
+        if (event.animationName !== SLIDE_OUT_ANIMATION_NAME) {
+            return;
+        }
+
+        this.finalizeModernizedDismiss();
     };
 
     /**
@@ -1499,7 +1628,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
-        const { view, items, errorCode, isCancelAllModalOpen }: State = this.state;
+        const { view, items, errorCode, isCancelAllModalOpen, modernizedPanelState }: State = this.state;
         const isUploadsManagerExpanded = this.getIsExpanded();
         const isEmpty = items.length === 0;
         const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
@@ -1518,23 +1647,37 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        <UploadsManagerBP
-                            items={mapToModernizedUploadItems(items, rootFolderId)}
-                            isExpanded={isUploadsManagerExpanded}
-                            onToggle={this.toggleUploadsManager}
-                            onItemCancel={this.handleUploadsManagerItemCancel}
-                            onItemRetry={this.handleUploadsManagerItemRetry}
-                            onItemRemove={this.handleUploadsManagerItemRemove}
-                            onItemShare={onItemShare}
-                            onItemOpen={onItemOpen}
-                            onCancelAll={this.handleCancelAllClick}
-                            onRetryAll={this.handleUploadsManagerRetryAll}
-                        />
-                        <CancelAllUploadsModal
-                            isOpen={isCancelAllModalOpen}
-                            onConfirm={this.handleCancelAllConfirm}
-                            onDismiss={this.handleCancelAllDismiss}
-                        />
+                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+                        <div
+                            className={classNames('bcu-modernized-panel', {
+                                visible: modernizedPanelState === 'shown',
+                                dismissing: modernizedPanelState === 'dismissing',
+                                hidden: modernizedPanelState === 'hidden',
+                            })}
+                            onAnimationEnd={this.handleModernizedAnimationEnd}
+                            onBlur={this.handleModernizedBlur}
+                            onFocus={this.handleModernizedFocus}
+                            onMouseEnter={this.handleModernizedMouseEnter}
+                            onMouseLeave={this.handleModernizedMouseLeave}
+                        >
+                            <UploadsManagerBP
+                                items={mapToModernizedUploadItems(items, rootFolderId)}
+                                isExpanded={isUploadsManagerExpanded}
+                                onToggle={this.toggleUploadsManager}
+                                onItemCancel={this.handleUploadsManagerItemCancel}
+                                onItemRetry={this.handleUploadsManagerItemRetry}
+                                onItemRemove={this.handleUploadsManagerItemRemove}
+                                onItemShare={onItemShare}
+                                onItemOpen={onItemOpen}
+                                onCancelAll={this.handleCancelAllClick}
+                                onRetryAll={this.handleUploadsManagerRetryAll}
+                            />
+                            <CancelAllUploadsModal
+                                isOpen={isCancelAllModalOpen}
+                                onConfirm={this.handleCancelAllConfirm}
+                                onDismiss={this.handleCancelAllDismiss}
+                            />
+                        </div>
                     </div>
                 );
             }
