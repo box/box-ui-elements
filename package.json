@@ -362,6 +362,7 @@
     },
     "resolutions": {
         "draft-js/immutable": "^3.8.3",
+        "esbuild": "^0.28.1",
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
         "qs": "^6.15.2",
         "serialize-javascript": "^7.0.5",
