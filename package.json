@@ -304,7 +304,7 @@
         "@box/combobox-with-api": "^1.42.22",
         "@box/content-field": "^1.40.23",
         "@box/copy-input": "^1.42.16",
-        "@box/item-icon": "^2.32.14",
+        "@box/item-icon": "^2.37.5",
         "@box/metadata-editor": "^1.69.6",
         "@box/metadata-filter": "^1.80.23",
         "@box/metadata-view": "^1.53.26",
