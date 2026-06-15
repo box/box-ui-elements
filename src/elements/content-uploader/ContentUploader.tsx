@@ -288,7 +288,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 this.showModernizedPanel();
             }
         } else if (modernizedPanelState === 'shown') {
-            this.startModernizedDismissTimer();
+            if (this.modernizedDismissTimer === null) {
+                this.startModernizedDismissTimer();
+            }
         }
     }
 
