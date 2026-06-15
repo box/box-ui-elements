@@ -98,11 +98,7 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": [
-            "last 1 Chrome versions",
-            "last 1 Firefox versions",
-            "last 1 Safari versions"
-        ]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "husky": {
         "hooks": {
@@ -140,7 +136,7 @@
         "@box/content-field": "^1.40.23",
         "@box/copy-input": "^1.42.16",
         "@box/frontend": "^11.0.1",
-        "@box/item-icon": "^2.32.14",
+        "@box/item-icon": "^2.37.5",
         "@box/languages": "^1.0.0",
         "@box/metadata-editor": "^1.69.6",
         "@box/metadata-filter": "^1.80.23",
@@ -372,8 +368,6 @@
         "tar": "^7.5.11"
     },
     "msw": {
-        "workerDirectory": [
-            ".storybook/public"
-        ]
+        "workerDirectory": [".storybook/public"]
     }
 }

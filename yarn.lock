@@ -1169,10 +1169,10 @@
     rimraf "^3.0.0"
     semver "^7.4.0"
 
-"@box/item-icon@^2.32.14":
-  version "2.32.14"
-  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-2.32.14.tgz#e9aa6b5297e34a310814e7f12adfcd14f2528adf"
-  integrity sha512-+VYA+gqiWWmdd4cEHyE6TMmuBUSGQLROoz0b/+TkG7dwMMXMfHylnVuI0Fqy5E955TvNTVxOLN1t+ejtlpmHhw==
+"@box/item-icon@^2.37.1":
+  version "2.37.5"
+  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-2.37.5.tgz#887b58a66dee13f494d38709d7d6c0f7bdcc995f"
+  integrity sha512-GNcFK2Ehq0RFHxq8lbZD4J9UZZyxf/Y9l4PdoLQsfQWi/phWw27+v5dQBdfTBNHZGmfs4hNe+M2mUxqnOlG+Ng==
 
 "@box/languages@^1.0.0":
   version "1.1.2"
