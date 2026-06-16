@@ -73,10 +73,10 @@ class PlainUpload extends BaseUpload {
             if (this.fileId) {
                 uploadUrl = uploadUrl.replace('content', `${this.fileId}/content`);
             }
+        }
 
-            if (this.fields) {
-                uploadUrl = updateQueryParameters(uploadUrl, { fields: this.fields.toString() });
-            }
+        if (this.fields) {
+            uploadUrl = updateQueryParameters(uploadUrl, { fields: this.fields.toString() });
         }
 
         const attributes = JSON.stringify({

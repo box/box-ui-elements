@@ -174,6 +174,27 @@ describe('api/uploads/PlainUpload', () => {
             });
         });
 
+        test('should append fields query parameter to upload URL when fields are provided', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
+            upload.file = {
+                name: 'warlock',
+            };
+            upload.folderId = '123';
+            upload.fields = ['content_created_at', 'version_number'];
+            upload.xhr = {
+                uploadFile: jest.fn(),
+            };
+
+            return upload.preflightSuccessHandler({ data: {} }).then(() => {
+                expect(upload.xhr.uploadFile).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        url: `${upload.uploadHost}/api/2.0/files/content?fields=content_created_at%2Cversion_number`,
+                    }),
+                );
+            });
+        });
+
         test('should upload with no Content-MD5 hash if hashing fails', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve(''));
