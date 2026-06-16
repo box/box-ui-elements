@@ -93,6 +93,8 @@ export interface ContentUploaderProps {
     onClickRetry: (item: UploadItem) => void;
     onClose: () => void;
     onComplete: (items: UploadItem[]) => void;
+    onItemShare?: (itemId: string) => void;
+    onItemOpen?: (itemId: string) => void;
     onError: Function;
     onMinimize?: () => void;
     onProgress: (item: UploadItem) => void;
@@ -1491,6 +1493,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             messages,
             onClose,
             onUpgradeCTAClick,
+            onItemShare,
+            onItemOpen,
             rootFolderId,
             theme,
             useUploadsManager,
@@ -1521,6 +1525,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onItemCancel={this.handleUploadsManagerItemCancel}
                             onItemRetry={this.handleUploadsManagerItemRetry}
                             onItemRemove={this.handleUploadsManagerItemRemove}
+                            onItemShare={onItemShare}
+                            onItemOpen={onItemOpen}
                             onCancelAll={this.handleCancelAllClick}
                             onRetryAll={this.handleUploadsManagerRetryAll}
                         />
