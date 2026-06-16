@@ -174,8 +174,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         onProgress: noop,
         onResume: noop,
         onUpload: noop,
-        onItemShare: undefined,
-        onItemOpen: undefined,
         overwrite: true,
         rootFolderId: DEFAULT_ROOT,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
