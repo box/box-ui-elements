@@ -112,6 +112,8 @@ export interface ContentUploaderProps {
     uploadHost: string;
     useUploadsManager?: boolean;
     enableModernizedUploads?: boolean;
+    isExpanded?: boolean;
+    onToggle?: (isExpanded: boolean) => void;
 }
 
 type State = {
@@ -655,7 +657,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
         const { fileLimit, useUploadsManager } = this.props;
-        const { isUploadsManagerExpanded } = this.state;
+        const isUploadsManagerExpanded = this.getIsExpanded();
 
         let updatedItems = [];
         const prevItemsNum = this.itemsRef.current.length;
@@ -965,8 +967,35 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         });
     };
 
+    /**
+     * Whether the component is in controlled-expand mode.
+     *
+     * @return {boolean}
+     */
+    isExpandControlled = (): boolean => this.props.isExpanded !== undefined;
+
+    /**
+     * Returns the resolved expanded state. When `isExpanded` prop is provided
+     * the component is in controlled mode and the prop wins; otherwise the
+     * internal state is used (uncontrolled mode).
+     *
+     * @return {boolean}
+     */
+    getIsExpanded = (): boolean => {
+        if (this.isExpandControlled()) {
+            return this.props.isExpanded;
+        }
+
+        return this.state.isUploadsManagerExpanded;
+    };
+
     resetUploadManagerExpandState = () => {
         this.isAutoExpanded = false;
+        // In controlled mode the consumer owns the expanded state. Auto-collapse
+        // (post-completion timeout, cancel-all) must not mutate that preference.
+        if (this.isExpandControlled()) {
+            return;
+        }
         this.setState({
             isUploadsManagerExpanded: false,
         });
@@ -1297,6 +1326,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         clearTimeout(this.resetItemsTimeout);
 
+        // In controlled mode the consumer owns the expanded state. Auto-expand
+        // (file-count threshold) must not mutate that preference.
+        if (this.isExpandControlled()) {
+            return;
+        }
+
         this.setState({ isUploadsManagerExpanded: true });
     };
 
@@ -1337,13 +1372,17 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     toggleUploadsManager = (): void => {
-        const { isUploadsManagerExpanded } = this.state;
+        const { onToggle } = this.props;
+        const isExpanded = this.getIsExpanded();
+        const nextExpanded = !isExpanded;
 
-        if (isUploadsManagerExpanded) {
+        if (isExpanded) {
             this.minimizeUploadsManager();
-        } else {
+        } else if (!this.isExpandControlled()) {
             this.expandUploadsManager();
         }
+
+        onToggle?.(nextExpanded);
     };
 
     /**
@@ -1397,7 +1436,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
         const { onCancel, useUploadsManager } = this.props;
-        const { isUploadsManagerExpanded, view } = this.state;
+        const { view } = this.state;
+        const isUploadsManagerExpanded = this.getIsExpanded();
 
         // Do not reset items when upload manger is expanded or there're uploads in progress
         if (
@@ -1459,7 +1499,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
-        const { view, items, errorCode, isCancelAllModalOpen, isUploadsManagerExpanded }: State = this.state;
+        const { view, items, errorCode, isCancelAllModalOpen }: State = this.state;
+        const isUploadsManagerExpanded = this.getIsExpanded();
         const isEmpty = items.length === 0;
         const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
 

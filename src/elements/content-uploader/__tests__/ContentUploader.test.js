@@ -680,6 +680,123 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('controlled isExpanded / onToggle', () => {
+        test('uses isExpanded prop value when in controlled mode', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true, isExpanded: true, onToggle: jest.fn() });
+            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+
+            wrapper.setProps({ isExpanded: false });
+            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(false);
+        });
+
+        test('falls back to internal state when isExpanded prop is not provided', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(false);
+
+            wrapper.setState({ isUploadsManagerExpanded: true });
+            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+        });
+
+        test('toggleUploadsManager calls onToggle with next value in controlled mode and does not mutate internal state', () => {
+            const onToggle = jest.fn();
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                useUploadsManager: true,
+                isExpanded: false,
+                onToggle,
+            });
+
+            wrapper.instance().toggleUploadsManager();
+
+            expect(onToggle).toHaveBeenCalledTimes(1);
+            expect(onToggle).toHaveBeenCalledWith(true);
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(false);
+        });
+
+        test('toggleUploadsManager flips internal state in uncontrolled mode and fires onToggle', () => {
+            const onToggle = jest.fn();
+            const wrapper = getWrapper({ useUploadsManager: true, onToggle });
+
+            wrapper.instance().toggleUploadsManager();
+
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(true);
+            expect(onToggle).toHaveBeenCalledTimes(1);
+            expect(onToggle).toHaveBeenCalledWith(true);
+        });
+
+        test('toggleUploadsManager does not require onToggle in uncontrolled mode', () => {
+            const wrapper = getWrapper({ useUploadsManager: true });
+
+            expect(() => wrapper.instance().toggleUploadsManager()).not.toThrow();
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(true);
+        });
+
+        test('auto-expand on file-count threshold does not mutate state in controlled mode', () => {
+            const onToggle = jest.fn();
+            const wrapper = getWrapper({
+                useUploadsManager: true,
+                isExpanded: false,
+                onToggle,
+            });
+            const instance = wrapper.instance();
+            const mockAPI = { upload: () => {} };
+            instance.createAPIFactory = jest.fn().mockReturnValue({
+                getPlainUploadAPI: () => mockAPI,
+                getChunkedUploadAPI: () => mockAPI,
+            });
+
+            const files = createMockFiles(EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD + 1);
+            wrapper.setProps({ files });
+
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(false);
+            // Auto-expand must not leak into the persisted preference via onToggle.
+            expect(onToggle).not.toHaveBeenCalled();
+        });
+
+        test('controlled-mode collapse runs minimizeUploadsManager side effects (onMinimize, cleanup timer, isAutoExpanded reset)', () => {
+            jest.useFakeTimers();
+            const onToggle = jest.fn();
+            const onMinimize = jest.fn();
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                useUploadsManager: true,
+                isExpanded: true,
+                onToggle,
+                onMinimize,
+            });
+            const instance = wrapper.instance();
+            instance.isAutoExpanded = true;
+            instance.checkClearUploadItems = jest.fn();
+
+            instance.toggleUploadsManager();
+
+            expect(onToggle).toHaveBeenCalledWith(false);
+            expect(onMinimize).toHaveBeenCalledTimes(1);
+            expect(instance.isAutoExpanded).toBe(false);
+            expect(instance.checkClearUploadItems).toHaveBeenCalledTimes(1);
+            // Internal state still owned by consumer — untouched.
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(false);
+            jest.useRealTimers();
+        });
+
+        test('auto-collapse via resetUploadManagerExpandState is a no-op in controlled mode', () => {
+            const onToggle = jest.fn();
+            const wrapper = getWrapper({
+                useUploadsManager: true,
+                isExpanded: true,
+                onToggle,
+            });
+            const instance = wrapper.instance();
+            instance.isAutoExpanded = true;
+
+            instance.resetUploadManagerExpandState();
+
+            expect(instance.isAutoExpanded).toBe(false);
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(false); // initial default
+            expect(onToggle).not.toHaveBeenCalled();
+        });
+    });
+
     describe('componentDidMount()', () => {
         test('adds files to upload queue if isPrepopulateFilesEnabled is true and files are provided', () => {
             const files = createMockFiles(3);
