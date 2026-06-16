@@ -1313,14 +1313,14 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManagerBP).prop('onItemOpen')).toBe(onItemOpen);
             });
 
-            test('should default onItemShare to noop when not provided', () => {
+            test('should default onItemShare to undefined when not provided', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                expect(() => wrapper.find(UploadsManagerBP).prop('onItemShare')('item-id')).not.toThrow();
+                expect(wrapper.find(UploadsManagerBP).prop('onItemShare')).toBeUndefined();
             });
 
-            test('should default onItemOpen to noop when not provided', () => {
+            test('should default onItemOpen to undefined when not provided', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                expect(() => wrapper.find(UploadsManagerBP).prop('onItemOpen')('item-id')).not.toThrow();
+                expect(wrapper.find(UploadsManagerBP).prop('onItemOpen')).toBeUndefined();
             });
         });
     });
