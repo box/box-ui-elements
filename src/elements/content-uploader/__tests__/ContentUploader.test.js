@@ -713,14 +713,22 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state().isUploadsManagerExpanded).toBe(false);
         });
 
-        test('toggleUploadsManager flips internal state in uncontrolled mode and does not call onToggle', () => {
+        test('toggleUploadsManager flips internal state in uncontrolled mode and fires onToggle', () => {
             const onToggle = jest.fn();
             const wrapper = getWrapper({ useUploadsManager: true, onToggle });
 
             wrapper.instance().toggleUploadsManager();
 
             expect(wrapper.state().isUploadsManagerExpanded).toBe(true);
-            expect(onToggle).not.toHaveBeenCalled();
+            expect(onToggle).toHaveBeenCalledTimes(1);
+            expect(onToggle).toHaveBeenCalledWith(true);
+        });
+
+        test('toggleUploadsManager does not require onToggle in uncontrolled mode', () => {
+            const wrapper = getWrapper({ useUploadsManager: true });
+
+            expect(() => wrapper.instance().toggleUploadsManager()).not.toThrow();
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(true);
         });
 
         test('auto-expand on file-count threshold does not mutate state in controlled mode', () => {

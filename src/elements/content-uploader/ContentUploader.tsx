@@ -970,7 +970,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      *
      * @return {boolean}
      */
-    isExpandControlled = (): boolean => typeof this.props.isExpanded === 'boolean';
+    isExpandControlled = (): boolean => this.props.isExpanded !== undefined;
 
     /**
      * Returns the resolved expanded state. When `isExpanded` prop is provided
@@ -1372,19 +1372,17 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     toggleUploadsManager = (): void => {
         const { onToggle } = this.props;
         const isExpanded = this.getIsExpanded();
+        const nextExpanded = !isExpanded;
 
-        if (this.isExpandControlled()) {
-            if (onToggle) {
-                onToggle(!isExpanded);
+        if (!this.isExpandControlled()) {
+            if (isExpanded) {
+                this.minimizeUploadsManager();
+            } else {
+                this.expandUploadsManager();
             }
-            return;
         }
 
-        if (isExpanded) {
-            this.minimizeUploadsManager();
-        } else {
-            this.expandUploadsManager();
-        }
+        onToggle?.(nextExpanded);
     };
 
     /**
