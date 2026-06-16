@@ -44,6 +44,7 @@ export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadI
         status: STATUS_MAP[item.status] ?? 'pending',
         isFolder: item.isFolder,
         errorMessage,
+        versionNumber: item.boxFile?.version_number,
     };
 }
 
