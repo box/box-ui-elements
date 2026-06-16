@@ -17,10 +17,12 @@ import TaskModal from '../TaskModal';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { transformFeedItem } from './transformers';
+import { useVideoTimestamp } from './useVideoTimestamp';
 
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
 import type { TaskAssigneeCollection, TaskNew } from '../../../common/types/tasks';
 
+import { FILE_EXTENSIONS } from '../../common/item/constants';
 import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_APPROVAL } from '../../../constants';
 
 import commonMessages from '../../common/messages';
@@ -35,12 +37,14 @@ const ActivityFeedV2 = ({
     createTask,
     currentUser,
     feedItems,
+    file,
     getApproverWithQuery,
     getAvatarUrl,
     getMentionAsync,
     getTaskCollaborators,
     hasTasks = true,
     isDisabled = false,
+    isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
     onAnnotationEdit,
@@ -210,7 +214,7 @@ const ActivityFeedV2 = ({
     }, [currentUserId, feedItems]);
 
     const filteredItems = React.useMemo(() => {
-        return transformedItems.filter(item => {
+        const filtered = transformedItems.filter(item => {
             if ((item.type === 'comment' || item.type === 'annotation') && item.isResolved && !showResolved) {
                 return false;
             }
@@ -236,6 +240,11 @@ const ActivityFeedV2 = ({
             }
             return true;
         });
+        const filtersDroppedItems = filtered.length < transformedItems.length;
+        if (!filtersDroppedItems && filtered.every(item => item.type === 'version')) {
+            return [];
+        }
+        return filtered;
     }, [currentUserId, showOnlyMentionsMe, showResolved, transformedItems]);
 
     React.useEffect(() => {
@@ -278,21 +287,40 @@ const ActivityFeedV2 = ({
         }
     }, [currentUserId, filteredItems, scrollHandle]);
 
+    const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
+    const fileVersionId = file?.file_version?.id;
+    const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+
+    const {
+        formattedTimestamp,
+        isPressed: isTimestampPressed,
+        onPressedChange,
+        timestampMs,
+    } = useVideoTimestamp(allowVideoTimestamps);
+
+    const editorVideoTimestamp = allowVideoTimestamps
+        ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
+        : undefined;
+
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
             const serialized = serializeEditorContent(content);
             if (!serialized || !serialized.text) return;
+            const text =
+                allowVideoTimestamps && isTimestampPressed && fileVersionId
+                    ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
+                    : serialized.text;
             try {
                 const snapshot = new Set(filteredItems.map(item => item.id));
-                await onCommentCreate(serialized.text, serialized.hasMention);
+                await onCommentCreate(text, serialized.hasMention);
                 knownIdsBeforePostRef.current = snapshot;
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [filteredItems, onCommentCreate],
+        [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
     );
 
     return (
@@ -358,6 +386,7 @@ const ActivityFeedV2 = ({
                         disableComponent={isDisabled || !currentUser}
                         onPost={handleCommentPost}
                         userSelectorProps={userSelectorProps}
+                        videoTimestamp={editorVideoTimestamp}
                     />
                 </div>
             </ActivityFeed.Root>
