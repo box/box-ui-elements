@@ -1374,12 +1374,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const isExpanded = this.getIsExpanded();
         const nextExpanded = !isExpanded;
 
-        if (!this.isExpandControlled()) {
-            if (isExpanded) {
-                this.minimizeUploadsManager();
-            } else {
-                this.expandUploadsManager();
-            }
+        if (isExpanded) {
+            this.minimizeUploadsManager();
+        } else if (!this.isExpandControlled()) {
+            this.expandUploadsManager();
         }
 
         onToggle?.(nextExpanded);
