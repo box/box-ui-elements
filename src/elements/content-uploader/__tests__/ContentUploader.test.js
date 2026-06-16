@@ -753,6 +753,32 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(onToggle).not.toHaveBeenCalled();
         });
 
+        test('controlled-mode collapse runs minimizeUploadsManager side effects (onMinimize, cleanup timer, isAutoExpanded reset)', () => {
+            jest.useFakeTimers();
+            const onToggle = jest.fn();
+            const onMinimize = jest.fn();
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                useUploadsManager: true,
+                isExpanded: true,
+                onToggle,
+                onMinimize,
+            });
+            const instance = wrapper.instance();
+            instance.isAutoExpanded = true;
+            instance.checkClearUploadItems = jest.fn();
+
+            instance.toggleUploadsManager();
+
+            expect(onToggle).toHaveBeenCalledWith(false);
+            expect(onMinimize).toHaveBeenCalledTimes(1);
+            expect(instance.isAutoExpanded).toBe(false);
+            expect(instance.checkClearUploadItems).toHaveBeenCalledTimes(1);
+            // Internal state still owned by consumer — untouched.
+            expect(wrapper.state().isUploadsManagerExpanded).toBe(false);
+            jest.useRealTimers();
+        });
+
         test('auto-collapse via resetUploadManagerExpandState is a no-op in controlled mode', () => {
             const onToggle = jest.fn();
             const wrapper = getWrapper({
