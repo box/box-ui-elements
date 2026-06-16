@@ -88,7 +88,8 @@
         "test": "NODE_ENV=test BABEL_ENV=test yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start cy:open",
-        "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
+        "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false",
+        "prepare": "husky"
     },
     "browserslist": {
         "production": [
@@ -99,13 +100,6 @@
             "last 2 iOS versions"
         ],
         "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged -c scripts/lint-staged.config.js",
-            "pre-push": "scripts/prepush.sh",
-            "commit-msg": "commitlint -e"
-        }
     },
     "devDependencies": {
         "@babel/cli": "^7.24.7",
@@ -223,7 +217,7 @@
         "form-serialize": "^0.7.2",
         "formik": "^2.4.9",
         "highlight.js": "^11.10.0",
-        "husky": "^4.0.10",
+        "husky": "^9.1.7",
         "ilib-tree-node": "^1.2.0",
         "immutable": "^3.8.3",
         "intl": "^1.2.5",
@@ -233,7 +227,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "js-sha1": "^0.7.0",
         "jsuri": "^1.3.1",
-        "lint-staged": "^9.5.0",
+        "lint-staged": "^16.4.0",
         "lodash": "^4.18.1",
         "message-accumulator": "^2.1.1",
         "mini-css-extract-plugin": "^2.10.1",
