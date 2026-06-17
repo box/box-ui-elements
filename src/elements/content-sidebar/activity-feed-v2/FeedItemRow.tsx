@@ -118,7 +118,10 @@ const FeedItemRow = ({
                 const serialized = serializeEditorContent(content);
                 if (!serialized || !serialized.text.trim()) return;
                 if (id === item.id) {
-                    onCommentUpdate?.(id, serialized.text, undefined, serialized.hasMention, permissions);
+                    const text = item.annotationTimestampMarkup
+                        ? `${item.annotationTimestampMarkup} ${serialized.text}`
+                        : serialized.text;
+                    onCommentUpdate?.(id, text, undefined, serialized.hasMention, permissions);
                     return;
                 }
                 dispatchReplyEdit({

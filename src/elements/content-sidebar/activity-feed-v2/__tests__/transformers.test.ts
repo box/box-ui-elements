@@ -689,6 +689,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = extractTimestampMarkup('#[timestamp:8055,versionId:2390295731268]  wowo');
             expect(result.cleanText).toBe('wowo');
             expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
+            expect(result.timestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
             expect(result.timestampMs).toBe(8055);
         });
 
@@ -696,6 +697,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = extractTimestampMarkup('#[timestamp:65000] hello');
             expect(result.cleanText).toBe('hello');
             expect(result.target).toEqual({ timestamp: '1:05', type: 'frame' });
+            expect(result.timestampMarkup).toBe('#[timestamp:65000]');
             expect(result.timestampMs).toBe(65000);
         });
 
@@ -759,6 +761,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result!.type).toBe('comment');
             if (result!.type === 'comment') {
                 expect(result.annotationTarget).toEqual({ timestamp: '0:08', type: 'frame' });
+                expect(result.annotationTimestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
                 expect(result.annotationTimestampMs).toBe(8055);
             }
         });
@@ -778,6 +781,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformFeedItem(comment as unknown as FeedItem);
             if (result!.type === 'comment') {
                 expect(result.annotationTarget).toBeUndefined();
+                expect(result.annotationTimestampMarkup).toBeUndefined();
                 expect(result.annotationTimestampMs).toBeUndefined();
             }
         });

@@ -417,6 +417,44 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             expect(mockedSeekVideoToMs).toHaveBeenCalledWith(8055);
         });
+
+        test('should re-prepend timestamp markup when editing a video comment so the badge survives the update', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMarkup: '#[timestamp:8055,versionId:2390295731268]',
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={timestampedComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                '#[timestamp:8055,versionId:2390295731268] edited-text',
+                undefined,
+                false,
+                commentPermissions,
+            );
+        });
+
+        test('should not modify edit text for a regular comment without timestamp markup', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                'edited-text',
+                undefined,
+                false,
+                commentPermissions,
+            );
+        });
     });
 
     describe('annotation rendering', () => {
