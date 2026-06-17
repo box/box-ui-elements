@@ -46,7 +46,12 @@ const TIMESTAMP_MARKUP_REGEX = /^#\[timestamp:(\d+)(?:,versionId:\d+)?\]\s*/;
 
 export const extractTimestampMarkup = (
     text: string,
-): { cleanText: string; target?: AnnotationBadgeTargetType; timestampMs?: number } => {
+): {
+    cleanText: string;
+    target?: AnnotationBadgeTargetType;
+    timestampMarkup?: string;
+    timestampMs?: number;
+} => {
     if (!text) return { cleanText: '' };
     const match = text.match(TIMESTAMP_MARKUP_REGEX);
     if (!match) return { cleanText: text };
@@ -60,7 +65,7 @@ export const extractTimestampMarkup = (
         timestamp: convertMillisecondsToTimestamp(ms),
         type: AnnotationBadgeType.Frame,
     };
-    return { cleanText, target, timestampMs: ms };
+    return { cleanText, target, timestampMarkup: fullMatch.trimEnd(), timestampMs: ms };
 };
 
 const parseLine = (line: string, authorId: string): (MentionNode | TextNode)[] => {
@@ -292,11 +297,17 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
             const comment = item as unknown as Comment;
             const commentIsResolved = comment.status === 'resolved';
             const rawText = comment.tagged_message || comment.message || '';
-            const { cleanText, target: annotationTarget, timestampMs } = extractTimestampMarkup(rawText);
+            const {
+                cleanText,
+                target: annotationTarget,
+                timestampMarkup,
+                timestampMs,
+            } = extractTimestampMarkup(rawText);
             const root = commentToTextMessage(comment, cleanText);
             const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply));
             return {
                 annotationTarget,
+                annotationTimestampMarkup: timestampMarkup,
                 annotationTimestampMs: timestampMs,
                 id: comment.id,
                 isResolved: commentIsResolved,
