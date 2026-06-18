@@ -241,14 +241,14 @@ function useSidebarMetadataFetcher(
             // when either the confidence-score coupling or the new bounding-box flag is on.
             // TODO: drop the isBoundingBoxOrConfidenceScoreReviewEnabled fallback so
             // fetching bounding boxes depends solely on `isBoundingBoxEnabled`.
-            const boundindBoxParams = isBoundingBoxOrConfidenceScoreReviewEnabled ? { include_reference: true } : {};
+            const boundingBoxParams = isBoundingBoxOrConfidenceScoreReviewEnabled ? { include_reference: true } : {};
 
             const requestBody: AiExtractStructured = {
                 items: [{ id: file.id, type: file.type }],
                 metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 ...customAiAgent,
                 ...confidenceScoreParams,
-                ...boundindBoxParams,
+                ...boundingBoxParams,
             };
 
             try {
