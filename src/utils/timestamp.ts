@@ -2,8 +2,8 @@
  * @file Utility functions for timestamp formatting and conversion
  */
 
-// @ts-ignore: ONE_HOUR_MS is a constant from a non ts file
-import { ONE_HOUR_MS } from '../constants';
+// @ts-ignore: constants from a non ts file
+import { ONE_HOUR_MS, DEFAULT_VIDEO_FPS } from '../constants';
 
 /**
  * Converts a timestamp representation to seconds
@@ -67,13 +67,15 @@ const convertMillisecondsToTimestamp = (timestampInMilliseconds: number): string
 
 const convertMillisecondsToTimecode = (timestampInMilliseconds: number, fps: number): string => {
     const seconds = timestampInMilliseconds && timestampInMilliseconds > 0 ? timestampInMilliseconds / 1000 : 0;
-    const val = Number.isFinite(seconds) ? seconds : 0;
-    const totalFrames = Math.floor(val * fps);
+    const validSeconds = Number.isFinite(seconds) ? seconds : 0;
+    const validFps = Number.isFinite(fps) && fps > 0 ? fps : DEFAULT_VIDEO_FPS;
+    const totalFrames = Math.floor(validSeconds * validFps);
+    const frameBase = Math.round(validFps);
 
-    const hours = Math.floor(totalFrames / (fps * 3600));
-    const minutes = Math.floor((totalFrames % (fps * 3600)) / (fps * 60));
-    const secs = Math.floor((totalFrames % (fps * 60)) / fps);
-    const frames = totalFrames % Math.round(fps);
+    const hours = Math.floor(totalFrames / (frameBase * 3600));
+    const minutes = Math.floor((totalFrames % (frameBase * 3600)) / (frameBase * 60));
+    const secs = Math.floor((totalFrames % (frameBase * 60)) / frameBase);
+    const frames = totalFrames % frameBase;
 
     const hh = hours.toString().padStart(2, '0');
     const mm = minutes.toString().padStart(2, '0');
@@ -87,7 +89,8 @@ const convertMillisecondsToFrames = (timestampInMilliseconds: number, fps: numbe
     if (!timestampInMilliseconds || timestampInMilliseconds < 0) {
         return 0;
     }
-    return Math.floor((timestampInMilliseconds / 1000) * fps);
+    const validFps = Number.isFinite(fps) && fps > 0 ? fps : DEFAULT_VIDEO_FPS;
+    return Math.floor((timestampInMilliseconds / 1000) * validFps);
 };
 
 export {

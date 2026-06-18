@@ -120,9 +120,16 @@ describe('utils/timestamp', () => {
             expect(convertMillisecondsToTimecode(61500, 30)).toBe('00:01:01:15');
         });
 
-        test('should handle invalid input', () => {
+        test('should handle invalid milliseconds input', () => {
             expect(convertMillisecondsToTimecode(-1, 24)).toBe('00:00:00:00');
             expect(convertMillisecondsToTimecode(NaN, 24)).toBe('00:00:00:00');
+        });
+
+        test('should fall back to 24fps when fps is invalid', () => {
+            expect(convertMillisecondsToTimecode(1000, 0)).toBe('00:00:01:00');
+            expect(convertMillisecondsToTimecode(1000, -1)).toBe('00:00:01:00');
+            expect(convertMillisecondsToTimecode(1000, NaN)).toBe('00:00:01:00');
+            expect(convertMillisecondsToTimecode(1000, Infinity)).toBe('00:00:01:00');
         });
     });
 
@@ -147,10 +154,17 @@ describe('utils/timestamp', () => {
             expect(convertMillisecondsToFrames(100, 24)).toBe(2);
         });
 
-        test('should handle invalid input', () => {
+        test('should handle invalid milliseconds input', () => {
             expect(convertMillisecondsToFrames(-1, 24)).toBe(0);
             expect(convertMillisecondsToFrames(NaN, 24)).toBe(0);
             expect(convertMillisecondsToFrames(0, 24)).toBe(0);
+        });
+
+        test('should fall back to 24fps when fps is invalid', () => {
+            expect(convertMillisecondsToFrames(1000, 0)).toBe(24);
+            expect(convertMillisecondsToFrames(1000, -1)).toBe(24);
+            expect(convertMillisecondsToFrames(1000, NaN)).toBe(24);
+            expect(convertMillisecondsToFrames(1000, Infinity)).toBe(24);
         });
     });
 
