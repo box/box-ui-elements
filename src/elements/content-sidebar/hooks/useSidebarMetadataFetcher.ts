@@ -71,7 +71,7 @@ function useSidebarMetadataFetcher(
     onSuccess: SuccessContextProps['onSuccess'],
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
     isConfidenceScoreEnabled: boolean = false,
-    isBoundindBoxEnabled: boolean = false,
+    isBoundingBoxEnabled: boolean = false,
 ): DataFetcher {
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
@@ -80,7 +80,7 @@ function useSidebarMetadataFetcher(
     const [templateInstances, setTemplateInstances] = React.useState<Array<MetadataTemplateInstance>>([]);
     const [extractErrorCode, setExtractErrorCode] = React.useState<string | null>(null);
 
-    const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundindBoxEnabled || isConfidenceScoreEnabled;
+    const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreEnabled;
 
     const onApiError = React.useCallback(
         (error: ElementsXhrError, code: string, message: MessageDescriptor) => {
