@@ -71,6 +71,7 @@ function useSidebarMetadataFetcher(
     onSuccess: SuccessContextProps['onSuccess'],
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
     isConfidenceScoreEnabled: boolean = false,
+    isBoundingBoxEnabled: boolean = false,
 ): DataFetcher {
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
@@ -78,6 +79,8 @@ function useSidebarMetadataFetcher(
     const [errorMessage, setErrorMessage] = React.useState<MessageDescriptor | null>(null);
     const [templateInstances, setTemplateInstances] = React.useState<Array<MetadataTemplateInstance>>([]);
     const [extractErrorCode, setExtractErrorCode] = React.useState<string | null>(null);
+
+    const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreEnabled;
 
     const onApiError = React.useCallback(
         (error: ElementsXhrError, code: string, message: MessageDescriptor) => {
@@ -127,10 +130,16 @@ function useSidebarMetadataFetcher(
                 isFeatureEnabled,
                 { refreshCache: true },
                 true,
-                isConfidenceScoreEnabled,
+                isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
-        [api, fetchMetadataErrorCallback, fetchMetadataSuccessCallback, isFeatureEnabled, isConfidenceScoreEnabled],
+        [
+            api,
+            fetchMetadataErrorCallback,
+            fetchMetadataSuccessCallback,
+            isFeatureEnabled,
+            isBoundingBoxOrConfidenceScoreReviewEnabled,
+        ],
     );
 
     const fetchFileSuccessCallback = React.useCallback(
@@ -190,10 +199,10 @@ function useSidebarMetadataFetcher(
                 },
                 (error: ElementsXhrError, code: string) =>
                     onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
-                isConfidenceScoreEnabled,
+                isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
-        [api, file, onApiError, onSuccess, isConfidenceScoreEnabled],
+        [api, file, onApiError, onSuccess, isBoundingBoxOrConfidenceScoreReviewEnabled],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(
@@ -225,14 +234,21 @@ function useSidebarMetadataFetcher(
             setExtractErrorCode(null);
             let response = null;
             const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
-            const confidenceScoreParams = isConfidenceScoreEnabled
-                ? { include_confidence_score: true, include_reference: true }
-                : {};
+
+            const confidenceScoreParams = isConfidenceScoreEnabled ? { include_confidence_score: true } : {};
+
+            // Additive gating during the metadata_bounding_box rollout: fetch bounding boxes from AI extract API when
+            // when either the confidence-score coupling or the new bounding-box flag is on.
+            // TODO: drop the isBoundingBoxOrConfidenceScoreReviewEnabled fallback so
+            // fetching bounding boxes depends solely on `isBoundingBoxEnabled`.
+            const boundingBoxParams = isBoundingBoxOrConfidenceScoreReviewEnabled ? { include_reference: true } : {};
+
             const requestBody: AiExtractStructured = {
                 items: [{ id: file.id, type: file.type }],
                 metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 ...customAiAgent,
                 ...confidenceScoreParams,
+                ...boundingBoxParams,
             };
 
             try {
@@ -304,7 +320,7 @@ function useSidebarMetadataFetcher(
                 return result;
             });
         },
-        [api, file, isConfidenceScoreEnabled, onError, templates],
+        [api, file, isConfidenceScoreEnabled, isBoundingBoxOrConfidenceScoreReviewEnabled, onError, templates],
     );
 
     React.useEffect(() => {

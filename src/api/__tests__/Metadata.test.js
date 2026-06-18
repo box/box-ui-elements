@@ -425,6 +425,88 @@ describe('api/Metadata', () => {
             ]);
         });
 
+        test('should set isExtracted when process is AI_EXTRACTED and isBoundingBoxOrConfidenceScoreReviewEnabled is true', () => {
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        process: 'AI_EXTRACTED',
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    { description: 'Test', displayName: 'Test field', id: '1', key: 'testStringField', type: 'string' },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, true);
+
+            expect(result.fields[0].value).toBe('California');
+            expect(result.fields[0].isExtracted).toBe(true);
+        });
+
+        test('should not set isExtracted when process is not AI_EXTRACTED', () => {
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        process: 'AI_ACCEPTED',
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    { description: 'Test', displayName: 'Test field', id: '1', key: 'testStringField', type: 'string' },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, true);
+
+            expect(result.fields[0].isExtracted).toBeUndefined();
+        });
+
+        test('should not set isExtracted when isBoundingBoxOrConfidenceScoreReviewEnabled is false', () => {
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        process: 'AI_EXTRACTED',
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    { description: 'Test', displayName: 'Test field', id: '1', key: 'testStringField', type: 'string' },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, false);
+
+            expect(result.fields[0].isExtracted).toBeUndefined();
+        });
+
         test('should extract values from detailed field in custom metadata (properties template)', () => {
             const instance = {
                 $canEdit: true,
@@ -3502,6 +3584,164 @@ describe('api/Metadata', () => {
                         invoiceDate: {
                             confidenceScore: 1,
                             confidenceLevel: 'HIGH',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should include process as AI_EXTRACTED in $details when field has isExtracted', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                        isExtracted: true,
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    invoiceDate: '2024-01-15',
+                    $details: {
+                        invoiceDate: {
+                            process: 'AI_EXTRACTED',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should prefer AI_ACCEPTED over AI_EXTRACTED when field is both extracted and accepted', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'invoiceDate',
+                        type: 'string',
+                        value: '2024-01-15',
+                        isExtracted: true,
+                        confidenceScore: { value: 0.9, level: 'HIGH', isAccepted: true },
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    invoiceDate: '2024-01-15',
+                    $details: {
+                        invoiceDate: {
+                            confidenceScore: 0.9,
+                            confidenceLevel: 'HIGH',
+                            process: 'AI_ACCEPTED',
+                        },
+                    },
+                },
+            });
+        });
+
+        test('should include targetLocation in $details when field has targetLocation but no confidenceScore', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const targetLocation = [
+                {
+                    itemId: '999',
+                    page: 3,
+                    text: 'Some text',
+                    boundingBox: { left: 0.2, top: 0.3, right: 0.4, bottom: 0.5 },
+                },
+            ];
+            const template = {
+                scope: 'scope',
+                templateKey: 'templateKey',
+                fields: [
+                    {
+                        key: 'state',
+                        type: 'string',
+                        value: 'California',
+                        targetLocation,
+                    },
+                ],
+            };
+
+            cache.set('metadata_id', { templateInstances: [] });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: { $type: 'type' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error, true);
+
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {
+                    state: 'California',
+                    $details: {
+                        state: {
+                            targetLocation: JSON.stringify(targetLocation),
                         },
                     },
                 },

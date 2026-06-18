@@ -171,6 +171,14 @@ describe('MetadataInstanceEditor', () => {
         expect(templateHeader).toBeInTheDocument();
     });
 
+    test('should render MetadataInstanceForm with isBoundingBoxEnabled prop', () => {
+        const props = { ...defaultProps, isBoundingBoxEnabled: true };
+        renderWithAutofill(<MetadataInstanceEditor {...props} />);
+
+        const templateHeader = screen.getByText(mockMetadataTemplateInstance.displayName);
+        expect(templateHeader).toBeInTheDocument();
+    });
+
     test('should render without onToggleReviewFilter prop (optional)', () => {
         const props = { ...defaultProps, onToggleReviewFilter: undefined };
         expect(() => renderWithAutofill(<MetadataInstanceEditor {...props} />)).not.toThrow();
