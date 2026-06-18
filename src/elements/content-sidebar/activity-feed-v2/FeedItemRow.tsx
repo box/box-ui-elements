@@ -11,10 +11,11 @@ import { ActivityFeed } from '@box/activity-feed';
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
+import type { TimeFormat } from './useTimeFormat';
 
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
-import { formatByTimeFormat, useTimeFormat } from './useTimeFormat';
+import { formatByTimeFormat } from './useTimeFormat';
 import { seekVideoToMs } from './useVideoTimestamp';
 
 import type { OnReplyDelete, OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
@@ -30,8 +31,8 @@ import {
 
 type FeedItemRowProps = {
     currentUserId?: string;
+    fps: number;
     isDisabled: boolean;
-    isVideo?: boolean;
     item: TransformedFeedItem;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
@@ -61,6 +62,7 @@ type FeedItemRowProps = {
     onTaskEdit?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
+    timeFormat: TimeFormat;
     userSelectorProps: UserSelectorProps;
 };
 
@@ -80,9 +82,9 @@ const buildReplyPost =
 
 const FeedItemRow = ({
     currentUserId,
+    fps,
     isDisabled,
     item,
-    isVideo = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
     onAnnotationEdit,
@@ -99,9 +101,9 @@ const FeedItemRow = ({
     onTaskEdit,
     onTaskView,
     onVersionHistoryClick,
+    timeFormat,
     userSelectorProps,
 }: FeedItemRowProps) => {
-    const { timeFormat, fps } = useTimeFormat(isVideo);
     switch (item.type) {
         case 'comment': {
             const { permissions } = item;

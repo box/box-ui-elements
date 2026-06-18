@@ -5,9 +5,9 @@ import {
     convertMillisecondsToTimecode,
     convertMillisecondsToTimestamp,
 } from '../../../utils/timestamp';
+import { DEFAULT_VIDEO_FPS } from '../../../constants';
 
-const VIDEO_CONTAINER_SELECTOR = '.bp-media-container';
-const DEFAULT_FPS = 24;
+export const VIDEO_CONTAINER_SELECTOR = '.bp-media-container';
 
 export type TimeFormat = 'standard' | 'timecode' | 'frames';
 
@@ -30,12 +30,12 @@ export interface UseTimeFormatResult {
 
 export const useTimeFormat = (enabled: boolean): UseTimeFormatResult => {
     const [timeFormat, setTimeFormat] = React.useState<TimeFormat>('standard');
-    const [fps, setFps] = React.useState(DEFAULT_FPS);
+    const [fps, setFps] = React.useState(DEFAULT_VIDEO_FPS);
 
     React.useEffect(() => {
         if (!enabled) {
             setTimeFormat('standard');
-            setFps(DEFAULT_FPS);
+            setFps(DEFAULT_VIDEO_FPS);
             return undefined;
         }
 
@@ -51,7 +51,7 @@ export const useTimeFormat = (enabled: boolean): UseTimeFormatResult => {
             const format = (container.getAttribute('data-time-format') as TimeFormat) || 'standard';
             const fpsAttr = Number(container.getAttribute('data-fps'));
             setTimeFormat(format);
-            setFps(fpsAttr > 0 ? fpsAttr : DEFAULT_FPS);
+            setFps(fpsAttr > 0 ? fpsAttr : DEFAULT_VIDEO_FPS);
         };
 
         const observeContainer = (container: Element): void => {

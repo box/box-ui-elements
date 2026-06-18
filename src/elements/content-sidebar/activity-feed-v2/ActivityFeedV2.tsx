@@ -17,6 +17,7 @@ import TaskModal from '../TaskModal';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { transformFeedItem } from './transformers';
+import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
 
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
@@ -290,13 +291,14 @@ const ActivityFeedV2 = ({
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
     const fileVersionId = file?.file_version?.id;
     const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+    const { timeFormat, fps } = useTimeFormat(isVideo);
 
     const {
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
         timestampMs,
-    } = useVideoTimestamp(allowVideoTimestamps);
+    } = useVideoTimestamp(allowVideoTimestamps, timeFormat, fps);
 
     const editorVideoTimestamp = allowVideoTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
@@ -357,8 +359,8 @@ const ActivityFeedV2 = ({
                                 <FeedItemRow
                                     key={item.id}
                                     currentUserId={currentUserId}
+                                    fps={fps}
                                     isDisabled={isDisabled}
-                                    isVideo={isVideo}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}
@@ -376,6 +378,7 @@ const ActivityFeedV2 = ({
                                     onTaskEdit={onTaskUpdate ? handleTaskEdit : undefined}
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}
+                                    timeFormat={timeFormat}
                                     userSelectorProps={userSelectorProps}
                                 />
                             ))}

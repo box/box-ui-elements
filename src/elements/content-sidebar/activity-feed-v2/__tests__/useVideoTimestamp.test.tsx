@@ -2,6 +2,7 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 
 import { seekVideoToMs, useVideoTimestamp } from '../useVideoTimestamp';
+import type { TimeFormat } from '../useTimeFormat';
 
 const createVideoElement = (currentTime: number = 0): HTMLVideoElement => {
     const video = document.createElement('video');
@@ -31,8 +32,16 @@ const mountVideoInDom = (video: HTMLVideoElement) => {
     return () => container.remove();
 };
 
-const TestHarness = ({ enabled }: { enabled: boolean }) => {
-    const { formattedTimestamp, isPressed, onPressedChange, timestampMs } = useVideoTimestamp(enabled);
+const TestHarness = ({
+    enabled,
+    fps = 24,
+    timeFormat = 'standard',
+}: {
+    enabled: boolean;
+    fps?: number;
+    timeFormat?: TimeFormat;
+}) => {
+    const { formattedTimestamp, isPressed, onPressedChange, timestampMs } = useVideoTimestamp(enabled, timeFormat, fps);
     return (
         <div>
             <span data-testid="timestamp">{formattedTimestamp}</span>
@@ -296,15 +305,11 @@ describe('useVideoTimestamp time format integration', () => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
     });
 
-    test('should format timestamp as timecode when data-time-format is timecode', async () => {
+    test('should format timestamp as timecode when timeFormat is timecode', () => {
         const video = createVideoElement(8.055);
         const cleanup = mountVideoInDom(video);
         try {
-            const container = document.querySelector('.bp-media-container')!;
-            container.setAttribute('data-time-format', 'timecode');
-            container.setAttribute('data-fps', '24');
-
-            render(<TestHarness enabled />);
+            render(<TestHarness enabled timeFormat="timecode" fps={24} />);
             act(() => {
                 screen.getByText('press').click();
             });
@@ -315,15 +320,11 @@ describe('useVideoTimestamp time format integration', () => {
         }
     });
 
-    test('should format timestamp as frame number when data-time-format is frames', async () => {
+    test('should format timestamp as frame number when timeFormat is frames', () => {
         const video = createVideoElement(10);
         const cleanup = mountVideoInDom(video);
         try {
-            const container = document.querySelector('.bp-media-container')!;
-            container.setAttribute('data-time-format', 'frames');
-            container.setAttribute('data-fps', '24');
-
-            render(<TestHarness enabled />);
+            render(<TestHarness enabled timeFormat="frames" fps={24} />);
             act(() => {
                 screen.getByText('press').click();
             });
@@ -334,30 +335,24 @@ describe('useVideoTimestamp time format integration', () => {
         }
     });
 
-    test('should update formatted timestamp when time format changes after capture', async () => {
+    test('should update formatted timestamp when timeFormat prop changes after capture', () => {
         const video = createVideoElement(10);
         const cleanup = mountVideoInDom(video);
         try {
-            const container = document.querySelector('.bp-media-container')!;
-            container.setAttribute('data-time-format', 'standard');
-            container.setAttribute('data-fps', '24');
-
-            render(<TestHarness enabled />);
+            const { rerender } = render(<TestHarness enabled timeFormat="standard" fps={24} />);
             act(() => {
                 screen.getByText('press').click();
             });
             expect(screen.getByTestId('timestamp').textContent).toBe('0:10');
 
-            await act(async () => {
-                container.setAttribute('data-time-format', 'frames');
-            });
+            rerender(<TestHarness enabled timeFormat="frames" fps={24} />);
             expect(screen.getByTestId('timestamp').textContent).toBe('240');
         } finally {
             cleanup();
         }
     });
 
-    test('should default to standard format when no data attribute is set', () => {
+    test('should default to standard format', () => {
         const video = createVideoElement(43.5);
         const cleanup = mountVideoInDom(video);
         try {
