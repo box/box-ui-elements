@@ -564,3 +564,4 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+export const DEFAULT_VIDEO_FPS = 24;
