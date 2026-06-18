@@ -38,6 +38,7 @@ export interface MetadataInstanceEditorProps {
     onSelectMetadataField?: (field: MetadataTemplateField | null) => void;
     selectedMetadataFieldId?: string | null;
     trackEvent?: (eventName: string, data?: Record<string, unknown>) => void;
+    isBoundingBoxEnabled?: boolean;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -61,6 +62,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     template,
     isAdvancedExtractAgentEnabled = false,
     isConfidenceScoreReviewEnabled = false,
+    isBoundingBoxEnabled = false,
     onSelectMetadataField,
     selectedMetadataFieldId,
     trackEvent,
@@ -91,6 +93,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+            isBoundingBoxEnabled={isBoundingBoxEnabled}
             onSelectMetadataField={onSelectMetadataField}
             selectedMetadataFieldId={selectedMetadataFieldId}
             customRef={customRef}

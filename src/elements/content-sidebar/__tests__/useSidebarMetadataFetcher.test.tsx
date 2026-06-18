@@ -166,7 +166,7 @@ describe('useSidebarMetadataFetcher', () => {
     const onSuccessMock = jest.fn();
     const isFeatureEnabledMock = true;
 
-    const setupHook = (fileId = '123', isConfidenceScoreEnabled = false) =>
+    const setupHook = (fileId = '123', isConfidenceScoreEnabled = false, isBoundingBoxEnabled = false) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
                 api,
@@ -175,6 +175,7 @@ describe('useSidebarMetadataFetcher', () => {
                 onSuccessMock,
                 isFeatureEnabledMock,
                 isConfidenceScoreEnabled,
+                isBoundingBoxEnabled,
             ),
         );
 
@@ -419,6 +420,22 @@ describe('useSidebarMetadataFetcher', () => {
         );
     });
 
+    test('should pass true to getMetadata when only isBoundingBoxEnabled is true', async () => {
+        const { result } = setupHook('123', false, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            true,
+        );
+    });
+
     describe('extractSuggestions', () => {
         test('should extract suggestions successfully', async () => {
             mockAPI.extractStructured.mockResolvedValue({
@@ -637,6 +654,29 @@ describe('useSidebarMetadataFetcher', () => {
                 expect.not.objectContaining({
                     include_confidence_score: expect.anything(),
                     include_reference: expect.anything(),
+                }),
+            );
+        });
+
+        test('should include only include_reference when only isBoundingBoxEnabled is true', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', false, true);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+                include_reference: true,
+            });
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_confidence_score: expect.anything(),
                 }),
             );
         });

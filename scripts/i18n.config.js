@@ -10,6 +10,7 @@ module.exports = {
         '@box/item-icon',
         '@box/metadata-editor',
         '@box/metadata-filter',
+        '@box/metadata-template-browser',
         '@box/metadata-view',
         '@box/unified-share-modal',
         '@box/user-selector',

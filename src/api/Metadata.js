@@ -17,6 +17,7 @@ import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId, getTypedFolderId } from '../utils/file';
 import {
+    checkIsExtractedProcessFieldValue,
     extractDetailedFieldValue,
     formatMetadataFieldValue,
     handleOnAbort,
@@ -27,6 +28,7 @@ import {
 import File from './File';
 import {
     AI_ACCEPTED_PROCESS,
+    AI_EXTRACTED_PROCESS,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -459,20 +461,20 @@ class Metadata extends File {
      *
      * @param {string} id - file id
      * @param {boolean} isMetadataRedesign - feature flag
-     * @param {boolean} isConfidenceScoreEnabled - whether to fetch detailed view with confidence scores
+     * @param {boolean} isBoundingBoxOrConfidenceScoreReviewEnabled - whether to fetch detailed view
      * @return {Object} array of metadata instances
      */
     async getInstances(
         id: string,
         isMetadataRedesign: boolean = false,
-        isConfidenceScoreEnabled: boolean = false,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): Promise<Array<MetadataInstanceV2>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
 
         const baseUrl = this.getMetadataUrl(id);
         const requestId = getTypedFileId(id);
 
-        if (isMetadataRedesign && isConfidenceScoreEnabled) {
+        if (isMetadataRedesign && isBoundingBoxOrConfidenceScoreReviewEnabled) {
             return this.getDetailedInstancesWithHydratedTaxonomy(baseUrl, requestId);
         }
 
@@ -616,7 +618,7 @@ class Metadata extends File {
         template: MetadataTemplate,
         canEdit: boolean,
         isExternallyOwned: boolean = false,
-        isConfidenceScoreEnabled: boolean = false,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): MetadataTemplateInstance {
         const fields: MetadataTemplateInstanceField[] = [];
 
@@ -635,7 +637,7 @@ class Metadata extends File {
                     value,
                 };
 
-                if (isConfidenceScoreEnabled) {
+                if (isBoundingBoxOrConfidenceScoreReviewEnabled) {
                     const confidenceScore = mapDetailedFieldToConfidenceScore(rawValue);
                     if (confidenceScore) {
                         fieldEntry.confidenceScore = confidenceScore;
@@ -644,6 +646,10 @@ class Metadata extends File {
                     const targetLocation = parseTargetLocation(rawValue);
                     if (targetLocation) {
                         fieldEntry.targetLocation = targetLocation;
+                    }
+
+                    if (checkIsExtractedProcessFieldValue(rawValue)) {
+                        fieldEntry.isExtracted = true;
                     }
                 }
 
@@ -693,7 +699,7 @@ class Metadata extends File {
         enterpriseTemplates: Array<MetadataTemplate>,
         globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
-        isConfidenceScoreEnabled: boolean = false,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): Promise<Array<MetadataTemplateInstance>> {
         // Get all usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -714,7 +720,7 @@ class Metadata extends File {
                             result.template,
                             canEdit,
                             result.isExternallyOwned,
-                            isConfidenceScoreEnabled,
+                            isBoundingBoxOrConfidenceScoreReviewEnabled,
                         ),
                     );
                 }
@@ -733,6 +739,7 @@ class Metadata extends File {
      * @param {boolean} hasMetadataFeature - metadata feature check
      * @param {Object} options - fetch options
      * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
+     * @param {boolean} isBoundingBoxOrConfidenceScoreReviewEnabled - whether to include bounding box or confidence score details in the payload
      * @return {Promise}
      */
     async getMetadata(
@@ -746,7 +753,7 @@ class Metadata extends File {
         hasMetadataFeature: boolean,
         options: RequestOptions = {},
         isMetadataRedesign: boolean = false,
-        isConfidenceScoreEnabled: boolean = false,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
         this.errorCode = ERROR_CODE_FETCH_METADATA;
@@ -779,7 +786,7 @@ class Metadata extends File {
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
             const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
-                this.getInstances(id, isMetadataRedesign, isConfidenceScoreEnabled),
+                this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
                 this.getTemplates(id, METADATA_SCOPE_GLOBAL),
                 hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
             ]);
@@ -795,7 +802,7 @@ class Metadata extends File {
                       enterpriseTemplates,
                       globalTemplates,
                       !!permissions.can_upload,
-                      isConfidenceScoreEnabled,
+                      isBoundingBoxOrConfidenceScoreReviewEnabled,
                   )
                 : [];
             const editors = !isMetadataRedesign
@@ -1190,7 +1197,7 @@ class Metadata extends File {
      * @param {Object} template - Metadata Redesign template
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {boolean} isConfidenceScoreEnabled - whether to include confidence score details in the payload
+     * @param {boolean} isBoundingBoxOrConfidenceScoreReviewEnabled - whether to include bounding box or confidence score details in the payload
      * @return {Promise}
      */
     async createMetadataRedesign(
@@ -1198,7 +1205,7 @@ class Metadata extends File {
         template: MetadataTemplateInstance,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        isConfidenceScoreEnabled: boolean = false,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_CREATE_METADATA;
         if (!file || !template) {
@@ -1248,26 +1255,37 @@ class Metadata extends File {
                 return acc;
             }, {});
 
-            if (isConfidenceScoreEnabled) {
+            if (isBoundingBoxOrConfidenceScoreReviewEnabled) {
                 const details = template.fields.reduce((acc, field) => {
-                    if (field.confidenceScore) {
-                        const entry: {
-                            confidenceScore: number,
-                            confidenceLevel: string,
-                            process?: string,
-                            targetLocation?: string,
-                        } = {
-                            confidenceScore: field.confidenceScore.value,
-                            confidenceLevel: field.confidenceScore.level,
-                        };
-                        if (field.confidenceScore.isAccepted) {
+                    const entry: {
+                        confidenceScore?: number,
+                        confidenceLevel?: string,
+                        process?: string,
+                        targetLocation?: string,
+                    } = {};
+
+                    if (field.isExtracted) {
+                        entry.process = AI_EXTRACTED_PROCESS;
+                    }
+
+                    const { confidenceScore } = field;
+                    if (confidenceScore) {
+                        entry.confidenceScore = confidenceScore.value;
+                        entry.confidenceLevel = confidenceScore.level;
+
+                        if (confidenceScore.isAccepted) {
                             entry.process = AI_ACCEPTED_PROCESS;
                         }
-                        if (field.targetLocation) {
-                            entry.targetLocation = JSON.stringify(field.targetLocation);
-                        }
+                    }
+
+                    if (field.targetLocation) {
+                        entry.targetLocation = JSON.stringify(field.targetLocation);
+                    }
+
+                    if (Object.keys(entry).length > 0) {
                         acc[field.key] = entry;
                     }
+
                     return acc;
                 }, {});
 

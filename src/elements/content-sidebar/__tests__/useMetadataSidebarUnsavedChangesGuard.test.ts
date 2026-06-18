@@ -33,7 +33,7 @@ const defaultProps: Params = {
     editingTemplate: null,
     fileId: 'file-1',
     history: mockHistory,
-    isConfidenceScoreReviewEnabled: true,
+    isBoundingBoxOrConfidenceScoreReviewEnabled: true,
     onEditingStateChange: mockOnEditingStateChange,
     setEditingTemplate: mockSetEditingTemplate,
     setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
@@ -88,7 +88,7 @@ describe('useMetadataSidebarUnsavedChangesGuard', () => {
             const { rerender } = setup();
             jest.clearAllMocks();
 
-            rerender({ isConfidenceScoreReviewEnabled: false });
+            rerender({ isBoundingBoxOrConfidenceScoreReviewEnabled: false });
 
             expect(mockSetEditingTemplate).not.toHaveBeenCalled();
         });
@@ -130,8 +130,8 @@ describe('useMetadataSidebarUnsavedChangesGuard', () => {
             expect(mockBlock).not.toHaveBeenCalled();
         });
 
-        test('should NOT call history.block when isConfidenceScoreReviewEnabled is false', () => {
-            setup({ editingTemplate: mockTemplate, isConfidenceScoreReviewEnabled: false });
+        test('should NOT call history.block when isBoundingBoxOrConfidenceScoreReviewEnabled is false', () => {
+            setup({ editingTemplate: mockTemplate, isBoundingBoxOrConfidenceScoreReviewEnabled: false });
             expect(mockBlock).not.toHaveBeenCalled();
         });
 
@@ -228,7 +228,7 @@ describe('useMetadataSidebarUnsavedChangesGuard', () => {
         test('should NOT call history.replace when feature flag is off', () => {
             const { result } = setup({
                 editingTemplate: mockTemplate,
-                isConfidenceScoreReviewEnabled: false,
+                isBoundingBoxOrConfidenceScoreReviewEnabled: false,
             });
 
             act(() => {
