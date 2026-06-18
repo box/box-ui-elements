@@ -1,6 +1,7 @@
 import Xhr from '../../utils/Xhr';
 import { getAbortError } from '../../utils/error';
 import {
+    checkIsExtractedProcessFieldValue,
     extractDetailedFieldValue,
     formatComment,
     formatMetadataFieldValue,
@@ -222,6 +223,44 @@ describe('api/utils', () => {
         test('should return an empty array when targetLocation is an empty array', () => {
             const fieldValue = { values: 'California', details: { targetLocation: '[]' } };
             expect(parseTargetLocation(fieldValue)).toEqual([]);
+        });
+    });
+
+    describe('checkIsExtractedProcessFieldValue()', () => {
+        test('should return true when process is AI_EXTRACTED', () => {
+            const fieldValue = {
+                values: 'California',
+                details: { process: 'AI_EXTRACTED' },
+            };
+            expect(checkIsExtractedProcessFieldValue(fieldValue)).toBe(true);
+        });
+
+        test('should return false when process is not AI_EXTRACTED', () => {
+            const fieldValue = {
+                values: 'California',
+                details: { process: 'AI_ACCEPTED' },
+            };
+            expect(checkIsExtractedProcessFieldValue(fieldValue)).toBe(false);
+        });
+
+        test('should return false when process is missing', () => {
+            const fieldValue = {
+                values: 'California',
+                details: { confidenceScore: 0.9 },
+            };
+            expect(checkIsExtractedProcessFieldValue(fieldValue)).toBe(false);
+        });
+
+        test('should return false when details is missing', () => {
+            expect(checkIsExtractedProcessFieldValue({ values: 'California' })).toBe(false);
+        });
+
+        test('should return false when fieldValue is not a detailed field value', () => {
+            expect(checkIsExtractedProcessFieldValue('California')).toBe(false);
+        });
+
+        test('should return false for null', () => {
+            expect(checkIsExtractedProcessFieldValue(null)).toBe(false);
         });
     });
 

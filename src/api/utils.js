@@ -17,6 +17,8 @@ import type {
 } from '../common/types/metadata';
 import { FIELD_TYPE_TAXONOMY } from '../features/metadata-instance-fields/constants';
 
+import { AI_EXTRACTED_PROCESS, AI_ACCEPTED_PROCESS } from '../constants';
+
 /**
  * Formats comment data (including replies) for use in components.
  *
@@ -70,7 +72,7 @@ const mapDetailedFieldToConfidenceScore = (fieldValue: any): ?MetadataConfidence
     return {
         value: details.confidenceScore,
         level: details.confidenceLevel,
-        isAccepted: details.process === 'AI_ACCEPTED',
+        isAccepted: details.process === AI_ACCEPTED_PROCESS,
     };
 };
 
@@ -93,6 +95,16 @@ const parseTargetLocation = (fieldValue: any): ?Array<MetadataTargetLocationEntr
     } catch {
         return undefined;
     }
+};
+
+const checkIsExtractedProcessFieldValue = (fieldValue: any): boolean => {
+    if (!isDetailedFieldValue(fieldValue)) {
+        return false;
+    }
+
+    const { details } = ((fieldValue: any): MetadataDetailedFieldValue);
+
+    return details != null && typeof details.process === 'string' && details.process === AI_EXTRACTED_PROCESS;
 };
 
 const mergeDetailedAndHydratedInstances = (
@@ -135,6 +147,7 @@ const handleOnAbort = (xhr: Xhr) => {
 };
 
 export {
+    checkIsExtractedProcessFieldValue,
     extractDetailedFieldValue,
     formatComment,
     formatMetadataFieldValue,

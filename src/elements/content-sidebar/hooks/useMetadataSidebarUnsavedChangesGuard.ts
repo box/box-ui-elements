@@ -7,7 +7,7 @@ interface Params {
     editingTemplate: MetadataTemplateInstance | null;
     fileId: string;
     history: History;
-    isConfidenceScoreReviewEnabled: boolean;
+    isBoundingBoxOrConfidenceScoreReviewEnabled: boolean;
     onEditingStateChange?: (isEditing: boolean) => void;
     setEditingTemplate: (t: MetadataTemplateInstance | null) => void;
     setIsUnsavedChangesModalOpen: (open: boolean) => void;
@@ -27,7 +27,7 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     editingTemplate,
     fileId,
     history,
-    isConfidenceScoreReviewEnabled,
+    isBoundingBoxOrConfidenceScoreReviewEnabled,
     onEditingStateChange,
     setEditingTemplate,
     setIsUnsavedChangesModalOpen,
@@ -64,7 +64,7 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     const handleUnsavedChangesModalOpen = useCallback(
         (isOpen: boolean) => {
             setIsUnsavedChangesModalOpen(isOpen);
-            if (isOpen || !isConfidenceScoreReviewEnabled) {
+            if (isOpen || !isBoundingBoxOrConfidenceScoreReviewEnabled) {
                 return;
             }
 
@@ -78,7 +78,7 @@ export default function useMetadataSidebarUnsavedChangesGuard({
         },
         [
             setIsUnsavedChangesModalOpen,
-            isConfidenceScoreReviewEnabled,
+            isBoundingBoxOrConfidenceScoreReviewEnabled,
             pendingNavLocation,
             history,
             onWarningModalClose,
@@ -94,14 +94,14 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     }, [registerOpenWarningModalCallback, handleUnsavedChangesModalOpen]);
 
     useEffect(() => {
-        if (!editingTemplate || !isConfidenceScoreReviewEnabled) {
+        if (!editingTemplate || !isBoundingBoxOrConfidenceScoreReviewEnabled) {
             return undefined;
         }
 
         blockRouterHistory();
 
         return () => unblockRouterHistory();
-    }, [editingTemplate, isConfidenceScoreReviewEnabled, blockRouterHistory, unblockRouterHistory]);
+    }, [editingTemplate, isBoundingBoxOrConfidenceScoreReviewEnabled, blockRouterHistory, unblockRouterHistory]);
 
     return {
         handleUnsavedChangesModalOpen,

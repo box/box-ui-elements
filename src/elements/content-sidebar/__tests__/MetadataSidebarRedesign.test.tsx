@@ -526,6 +526,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // onSuccess
             expect.anything(), // isFeatureEnabled
             true, // isConfidenceScoreReviewEnabled
+            false, // isBoundingBoxEnabled
         );
     });
 
@@ -538,6 +539,35 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             expect.anything(),
             expect.anything(),
+            false,
+            false,
+        );
+    });
+
+    test('should pass isBoundingBoxEnabled to useSidebarMetadataFetcher', () => {
+        renderComponent({}, { 'metadata.boundingBox.enabled': true });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            false, // isConfidenceScoreReviewEnabled
+            true, // isBoundingBoxEnabled
+        );
+    });
+
+    test('should pass isBoundingBoxEnabled=false when feature flag is off', () => {
+        renderComponent({}, { 'metadata.boundingBox.enabled': false });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            false,
             false,
         );
     });
