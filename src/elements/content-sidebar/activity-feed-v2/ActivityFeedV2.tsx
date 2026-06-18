@@ -358,6 +358,7 @@ const ActivityFeedV2 = ({
                                     key={item.id}
                                     currentUserId={currentUserId}
                                     isDisabled={isDisabled}
+                                    isVideo={isVideo}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}

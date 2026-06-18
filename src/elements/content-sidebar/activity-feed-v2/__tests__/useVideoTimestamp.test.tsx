@@ -291,6 +291,87 @@ describe('useVideoTimestamp', () => {
     });
 });
 
+describe('useVideoTimestamp time format integration', () => {
+    afterEach(() => {
+        document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
+    });
+
+    test('should format timestamp as timecode when data-time-format is timecode', async () => {
+        const video = createVideoElement(8.055);
+        const cleanup = mountVideoInDom(video);
+        try {
+            const container = document.querySelector('.bp-media-container')!;
+            container.setAttribute('data-time-format', 'timecode');
+            container.setAttribute('data-fps', '24');
+
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+
+            expect(screen.getByTestId('timestamp').textContent).toBe('00:00:08:01');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should format timestamp as frame number when data-time-format is frames', async () => {
+        const video = createVideoElement(10);
+        const cleanup = mountVideoInDom(video);
+        try {
+            const container = document.querySelector('.bp-media-container')!;
+            container.setAttribute('data-time-format', 'frames');
+            container.setAttribute('data-fps', '24');
+
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+
+            expect(screen.getByTestId('timestamp').textContent).toBe('240');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should update formatted timestamp when time format changes after capture', async () => {
+        const video = createVideoElement(10);
+        const cleanup = mountVideoInDom(video);
+        try {
+            const container = document.querySelector('.bp-media-container')!;
+            container.setAttribute('data-time-format', 'standard');
+            container.setAttribute('data-fps', '24');
+
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:10');
+
+            await act(async () => {
+                container.setAttribute('data-time-format', 'frames');
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('240');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should default to standard format when no data attribute is set', () => {
+        const video = createVideoElement(43.5);
+        const cleanup = mountVideoInDom(video);
+        try {
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:43');
+        } finally {
+            cleanup();
+        }
+    });
+});
+
 describe('seekVideoToMs', () => {
     afterEach(() => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());

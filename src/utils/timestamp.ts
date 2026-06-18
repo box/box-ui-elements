@@ -65,4 +65,36 @@ const convertMillisecondsToTimestamp = (timestampInMilliseconds: number): string
     return `${hours.toString()}:${minutes.toString().padStart(2, '0')}:${paddedSeconds}`;
 };
 
-export { convertMillisecondsToHMMSS, convertMillisecondsToTimestamp, convertSecondsToHMMSS, convertTimestampToSeconds };
+const convertMillisecondsToTimecode = (timestampInMilliseconds: number, fps: number): string => {
+    const seconds = timestampInMilliseconds && timestampInMilliseconds > 0 ? timestampInMilliseconds / 1000 : 0;
+    const val = Number.isFinite(seconds) ? seconds : 0;
+    const totalFrames = Math.floor(val * fps);
+
+    const hours = Math.floor(totalFrames / (fps * 3600));
+    const minutes = Math.floor((totalFrames % (fps * 3600)) / (fps * 60));
+    const secs = Math.floor((totalFrames % (fps * 60)) / fps);
+    const frames = totalFrames % Math.round(fps);
+
+    const hh = hours.toString().padStart(2, '0');
+    const mm = minutes.toString().padStart(2, '0');
+    const ss = secs.toString().padStart(2, '0');
+    const ff = frames.toString().padStart(2, '0');
+
+    return `${hh}:${mm}:${ss}:${ff}`;
+};
+
+const convertMillisecondsToFrames = (timestampInMilliseconds: number, fps: number): number => {
+    if (!timestampInMilliseconds || timestampInMilliseconds < 0) {
+        return 0;
+    }
+    return Math.floor((timestampInMilliseconds / 1000) * fps);
+};
+
+export {
+    convertMillisecondsToFrames,
+    convertMillisecondsToHMMSS,
+    convertMillisecondsToTimecode,
+    convertMillisecondsToTimestamp,
+    convertSecondsToHMMSS,
+    convertTimestampToSeconds,
+};

@@ -14,6 +14,7 @@ import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
+import { formatByTimeFormat, useTimeFormat } from './useTimeFormat';
 import { seekVideoToMs } from './useVideoTimestamp';
 
 import type { OnReplyDelete, OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
@@ -30,6 +31,7 @@ import {
 type FeedItemRowProps = {
     currentUserId?: string;
     isDisabled: boolean;
+    isVideo?: boolean;
     item: TransformedFeedItem;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
@@ -80,6 +82,7 @@ const FeedItemRow = ({
     currentUserId,
     isDisabled,
     item,
+    isVideo = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
     onAnnotationEdit,
@@ -98,6 +101,7 @@ const FeedItemRow = ({
     onVersionHistoryClick,
     userSelectorProps,
 }: FeedItemRowProps) => {
+    const { timeFormat, fps } = useTimeFormat(isVideo);
     switch (item.type) {
         case 'comment': {
             const { permissions } = item;
@@ -134,10 +138,14 @@ const FeedItemRow = ({
             };
             const timestampMs = item.annotationTimestampMs;
             const handleBadgeClick = timestampMs !== undefined ? () => seekVideoToMs(timestampMs) : undefined;
+            const commentAnnotationTarget =
+                item.annotationTarget && timestampMs !== undefined
+                    ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
+                    : item.annotationTarget;
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
-                    annotationTarget={item.annotationTarget}
+                    annotationTarget={commentAnnotationTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
@@ -190,10 +198,18 @@ const FeedItemRow = ({
                     text: serialized.text,
                 });
             };
+            const badgeTarget = annotationTargetToBadge(item.annotation.target);
+            const annotationBadgeTarget =
+                badgeTarget && 'timestamp' in badgeTarget && item.annotation.target?.location?.type === 'frame'
+                    ? {
+                          ...badgeTarget,
+                          timestamp: formatByTimeFormat(item.annotation.target.location.value ?? 0, timeFormat, fps),
+                      }
+                    : badgeTarget;
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
-                    annotationTarget={annotationTargetToBadge(item.annotation.target)}
+                    annotationTarget={annotationBadgeTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}

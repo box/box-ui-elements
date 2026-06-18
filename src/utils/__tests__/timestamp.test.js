@@ -1,5 +1,7 @@
 import {
+    convertMillisecondsToFrames,
     convertMillisecondsToHMMSS,
+    convertMillisecondsToTimecode,
     convertMillisecondsToTimestamp,
     convertSecondsToHMMSS,
     convertTimestampToSeconds,
@@ -85,6 +87,70 @@ describe('utils/timestamp', () => {
         test('should handle invalid input', () => {
             expect(convertMillisecondsToTimestamp(NaN)).toBe('0:00');
             expect(convertMillisecondsToTimestamp(-1)).toBe('0:00');
+        });
+    });
+
+    describe('convertMillisecondsToTimecode', () => {
+        test('should format zero as 00:00:00:00', () => {
+            expect(convertMillisecondsToTimecode(0, 24)).toBe('00:00:00:00');
+        });
+
+        test('should format milliseconds into HH:MM:SS:FF at 24fps', () => {
+            expect(convertMillisecondsToTimecode(1000, 24)).toBe('00:00:01:00');
+            expect(convertMillisecondsToTimecode(60000, 24)).toBe('00:01:00:00');
+            expect(convertMillisecondsToTimecode(3600000, 24)).toBe('01:00:00:00');
+        });
+
+        test('should calculate frame remainder correctly', () => {
+            // 1500ms at 24fps = 36 frames total → 1 sec + 12 frames
+            expect(convertMillisecondsToTimecode(1500, 24)).toBe('00:00:01:12');
+            // 41.666ms per frame at 24fps, so 42ms ≈ 1 frame
+            expect(convertMillisecondsToTimecode(42, 24)).toBe('00:00:00:01');
+        });
+
+        test('should work with different fps values', () => {
+            // 1000ms at 30fps = 30 frames → exactly 1 second
+            expect(convertMillisecondsToTimecode(1000, 30)).toBe('00:00:01:00');
+            // 500ms at 30fps = 15 frames
+            expect(convertMillisecondsToTimecode(500, 30)).toBe('00:00:00:15');
+        });
+
+        test('should handle complex values', () => {
+            // 61500ms at 30fps = 1845 frames → 1min 1sec 15frames
+            expect(convertMillisecondsToTimecode(61500, 30)).toBe('00:01:01:15');
+        });
+
+        test('should handle invalid input', () => {
+            expect(convertMillisecondsToTimecode(-1, 24)).toBe('00:00:00:00');
+            expect(convertMillisecondsToTimecode(NaN, 24)).toBe('00:00:00:00');
+        });
+    });
+
+    describe('convertMillisecondsToFrames', () => {
+        test('should return 0 for zero milliseconds', () => {
+            expect(convertMillisecondsToFrames(0, 24)).toBe(0);
+        });
+
+        test('should convert milliseconds to frame count at 24fps', () => {
+            expect(convertMillisecondsToFrames(1000, 24)).toBe(24);
+            expect(convertMillisecondsToFrames(2000, 24)).toBe(48);
+            expect(convertMillisecondsToFrames(10000, 24)).toBe(240);
+        });
+
+        test('should convert milliseconds to frame count at 30fps', () => {
+            expect(convertMillisecondsToFrames(1000, 30)).toBe(30);
+            expect(convertMillisecondsToFrames(500, 30)).toBe(15);
+        });
+
+        test('should floor partial frames', () => {
+            // 100ms at 24fps = 2.4 frames → floor to 2
+            expect(convertMillisecondsToFrames(100, 24)).toBe(2);
+        });
+
+        test('should handle invalid input', () => {
+            expect(convertMillisecondsToFrames(-1, 24)).toBe(0);
+            expect(convertMillisecondsToFrames(NaN, 24)).toBe(0);
+            expect(convertMillisecondsToFrames(0, 24)).toBe(0);
         });
     });
 

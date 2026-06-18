@@ -57,6 +57,12 @@ jest.mock('../useVideoTimestamp', () => ({
     seekVideoToMs: jest.fn(),
 }));
 
+const mockTimeFormat: { timeFormat: string; fps: number } = { timeFormat: 'standard', fps: 24 };
+jest.mock('../useTimeFormat', () => ({
+    ...jest.requireActual('../useTimeFormat'),
+    useTimeFormat: () => mockTimeFormat,
+}));
+
 const mockedSerializeEditorContent = jest.mocked(serializeEditorContent);
 const mockedDispatchReplyDelete = jest.mocked(dispatchReplyDelete);
 const mockedDispatchReplyEdit = jest.mocked(dispatchReplyEdit);
@@ -950,6 +956,103 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(() =>
                 lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] }),
             ).not.toThrow();
+        });
+    });
+
+    describe('time format-aware badge rendering', () => {
+        test('should format comment badge timestamp using the current time format', () => {
+            mockTimeFormat.timeFormat = 'timecode';
+            mockTimeFormat.fps = 24;
+
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} isVideo item={timestampedComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '00:00:08:01',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should format comment badge timestamp as frame number', () => {
+            mockTimeFormat.timeFormat = 'frames';
+            mockTimeFormat.fps = 24;
+
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:10', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 10000,
+            };
+            render(<FeedItemRow {...defaultProps} isVideo item={timestampedComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '240',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should not modify comment badge when annotationTimestampMs is undefined', () => {
+            mockTimeFormat.timeFormat = 'timecode';
+            mockTimeFormat.fps = 24;
+
+            render(<FeedItemRow {...defaultProps} isVideo item={mockComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toBeUndefined();
+        });
+
+        test('should format annotation badge timestamp for frame-type annotations', () => {
+            mockTimeFormat.timeFormat = 'frames';
+            mockTimeFormat.fps = 30;
+
+            const frameAnnotation: TransformedAnnotationItem = {
+                ...mockAnnotation,
+                annotation: {
+                    ...mockAnnotation.annotation,
+                    target: { location: { type: 'frame', value: 5000 }, type: 'region', x: 0, y: 0 },
+                } as TransformedAnnotationItem['annotation'],
+            };
+
+            const badge: AnnotationBadgeTargetType = { timestamp: '0:05', type: AnnotationBadgeType.Frame };
+            mockedAnnotationTargetToBadge.mockReturnValue(badge);
+
+            render(<FeedItemRow {...defaultProps} isVideo item={frameAnnotation} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '150',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should not modify annotation badge for non-frame targets', () => {
+            mockTimeFormat.timeFormat = 'timecode';
+            mockTimeFormat.fps = 24;
+
+            const badge: AnnotationBadgeTargetType = { page: 3, type: AnnotationBadgeType.Point };
+            mockedAnnotationTargetToBadge.mockReturnValue(badge);
+
+            render(<FeedItemRow {...defaultProps} isVideo item={mockAnnotation} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toBe(badge);
+        });
+
+        test('should use standard format when isVideo is false', () => {
+            mockTimeFormat.timeFormat = 'standard';
+            mockTimeFormat.fps = 24;
+
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={timestampedComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '0:08',
+                type: AnnotationBadgeType.Frame,
+            });
         });
     });
 });
