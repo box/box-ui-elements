@@ -1067,24 +1067,24 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/activity-feed@^1.25.0":
-  version "1.25.0"
-  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-1.25.0.tgz#6d1a258640b73c2532b7f638e11601f863f92648"
-  integrity sha512-SKABc+nrHnLhxAi6i95Czxv8ays89wTbjoSzmCBfrl61R5iFA4bPvXp2LN0zUP8EyBAnos3rmfzddFrWUpVx1g==
+"@box/activity-feed@^1.25.10":
+  version "1.25.10"
+  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-1.25.10.tgz#f19eea15130406a663d0781afeaa36959b02ed5d"
+  integrity sha512-s4fCVyVjI2vC2//UwGyvqpWnNI2TQtfXcGijR7mEkX5dEMmAyU+N2Km0s8qgYDJlo4STdceGdxQ/diYChL3YJA==
 
-"@box/blueprint-web-assets@^4.125.1":
-  version "4.125.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.125.1.tgz#c8ff644fa7780b61c2d11037a5dd3d9e4ed78bfd"
-  integrity sha512-w0pqraVherUVRc+3yvdKCPQ1MRcaa3EJAyCXIXW8YnPg6EqLosnkaps1w9GtAytRhwuDypjYwFIQLFWuSUkMNQ==
+"@box/blueprint-web-assets@^4.131.1":
+  version "4.131.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.131.1.tgz#5c7dba2bbced20a02039128b9eda9c0937e99baf"
+  integrity sha512-YQES2rtdTigocynZQuMgWDoCcSlK7CPTJ9akBPC+My2hKPe7gOu8f6sfEG/XeZ9xKhr0FcCtP2esnJlB1NLp0Q==
 
-"@box/blueprint-web@^15.9.0":
-  version "15.9.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-15.9.0.tgz#070dbfa1b09ed107f0f8c4d83d788c9bfa6963cf"
-  integrity sha512-BoNm1A7k0Vgv7KTyIU11yp52pCVXx+qFz1Fb7RmA5M9sNgJTjVCT1Vmf4kENuW/00n0/KIbWMjA1iNAFq97CWg==
+"@box/blueprint-web@^15.10.0":
+  version "15.10.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-15.10.0.tgz#b8df5a5fb902707a9b2b7974ea69c1549346acbd"
+  integrity sha512-kh+Ejw5StUiM1r8yaSgthX1A1eMQAtZwkcoFY0TrRmlXS2tF3AG/p2rm+tELlL/VFcCKUO8ch3280N6t36Sjjw==
   dependencies:
     "@ariakit/react" "0.4.21"
     "@ariakit/react-core" "0.4.21"
-    "@box/blueprint-web-assets" "^4.125.1"
+    "@box/blueprint-web-assets" "^4.131.1"
     "@internationalized/date" "^3.12.0"
     "@radix-ui/primitive" "1.0.1"
     "@radix-ui/react-accordion" "1.1.2"
@@ -1137,10 +1137,10 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/collaboration-popover@^1.64.5":
-  version "1.64.5"
-  resolved "https://registry.yarnpkg.com/@box/collaboration-popover/-/collaboration-popover-1.64.5.tgz#a0d610788ad551aea83c7b8ab71d176568b9a43d"
-  integrity sha512-W41mmnLSArFBLuJwScLEb1dLYabccIukaS2OhUa7/YJewIcC43hOlcYrb2crKNSQiL3B+NIAeuM5U9ZoKyrpmQ==
+"@box/collaboration-popover@^1.64.13":
+  version "1.64.13"
+  resolved "https://registry.yarnpkg.com/@box/collaboration-popover/-/collaboration-popover-1.64.13.tgz#4fb4ce0bfed130fde61ecfde1e448646a644c7e4"
+  integrity sha512-7O6WYyRx+2iRLm1hWf6pUaFndT6PvMHzBQuJSNEjTIte93rdNXh8KgOIFIXtwLZqMZ33GFCVvxbqMjINtNl0yA==
 
 "@box/combobox-with-api@^1.42.22":
   version "1.46.5"
@@ -1206,15 +1206,15 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/readable-time@^1.43.5":
-  version "1.43.5"
-  resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-1.43.5.tgz#a83e554f459f2dfae1774bebc6cac5077e6ecc15"
-  integrity sha512-FOmeLR/aG+bwYA+nxq9kZd7cA7QW/UPf2l6LlhHjAtDhthODQZj51cuN+LCZO/ikA8sGc5fDV8hDGhraUwl5hg==
+"@box/readable-time@^1.43.13":
+  version "1.43.13"
+  resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-1.43.13.tgz#e598cb5fd4646de473d69ef043fda288e5294dd0"
+  integrity sha512-MjNCby69xhtqXkSpOAdVHTkAmJOHQkUmk3fQjsO+AQ0BNkLZN03CMcWmePO6J6gZ1TLkb0a8zgloH5Ws/3rNSQ==
 
-"@box/threaded-annotations@^1.97.6":
-  version "1.97.6"
-  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-1.97.6.tgz#a9b3de9b4214242c9c959c0f9b80242ee3dceb08"
-  integrity sha512-OrvI4TjuSKXWwfj5+4s+InGA01ssAXx1GV/jVOUfiKw0w0RpO0fVW5kWdL+Lp5XINNLExcrztNFXfUzabkr5iw==
+"@box/threaded-annotations@^1.97.16":
+  version "1.97.16"
+  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-1.97.16.tgz#c014e55e042837705d90c463d67c5f01c39ffa24"
+  integrity sha512-4RXmw17eJrLn6K3hxkgc0lfEK12i2mPnpePuBXG3LphLAPX8TT/vzCW0OQIPoWHtDaOsQX6jA7s9NB7r0ePwLQ==
   dependencies:
     "@tanstack/react-virtual" "^3.10.8"
     "@tiptap/core" "2.0.2"
@@ -1248,10 +1248,10 @@
   resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-1.17.2.tgz#e7640ca60c0b1eac6fda1ab6dc5d8269a124eb69"
   integrity sha512-pVXoPDFmAYx/ErD8+kP3yi4/EOG331tWl4yiO7cEDE1ia5X6mmKGp3va5twJfiqmTmnxBJJZAFEBa4QYb5yV5Q==
 
-"@box/user-selector@^1.78.5":
-  version "1.78.5"
-  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-1.78.5.tgz#58df9fc699ca7ea4079ddccacca5f44a8b71fac6"
-  integrity sha512-9IR0px5/RYuC/tjeoB0xHelnZ6AmdY0aFSQbWirgUHBnuutEmNpGyfvnrQXte22PzUdO9QQXe9ULnERtOuE+Jg==
+"@box/user-selector@^1.78.13":
+  version "1.78.13"
+  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-1.78.13.tgz#b854a0559900312e64e28237fd4ae7d0cfe1479e"
+  integrity sha512-BqCNE7ffoTfqfyZNB/hfsHfyCtBY0v0TiVYsVQ2nEyEwpMZuNFTZyPKNjGebPZnAPqsMeQEQ0T5Vc5J+NpneGA==
 
 "@bundled-es-modules/cookie@^2.0.1":
   version "2.0.1"
@@ -10821,14 +10821,7 @@ hashery@^1.4.0, hashery@^1.5.0:
   dependencies:
     hookified "^1.15.0"
 
-hasown@^2.0.0, hasown@^2.0.2, hasown@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/hasown/-/hasown-2.0.3.tgz#5e5c2b15b60370a4c7930c383dfb76bf17bc403c"
-  integrity sha512-ej4AhfhfL2Q2zpMmLo7U1Uv9+PyhIZpgQLGT1F9miIGmiCJIoCgSmczFdrc97mWT4kVY72KA+WnnhJ5pghSvSg==
-  dependencies:
-    function-bind "^1.1.2"
-
-hasown@^2.0.4:
+hasown@^2.0.0, hasown@^2.0.2, hasown@^2.0.3, hasown@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/hasown/-/hasown-2.0.4.tgz#8c62d8cb90beb2aad5d0a5b67581ad9854c3f003"
   integrity sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==
