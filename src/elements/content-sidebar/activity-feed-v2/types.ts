@@ -14,6 +14,11 @@ import type { TaskAssigneeCollection, TaskCollabStatus, TaskNew, TaskUpdatePaylo
 export type { AppActivityItemProps, TaskItemProps, VersionItemProps } from '@box/activity-feed';
 export type { AnnotationBadgeTargetType } from '@box/threaded-annotations';
 
+// Keyed by Box user id. Populated asynchronously by useAvatarUrls.
+export type AvatarUrlMap = Readonly<Record<string, string>>;
+
+export type GetAvatarUrl = (userId: string) => Promise<string | null | undefined>;
+
 export type UserContact = {
     email: string;
     id: number;
@@ -86,7 +91,7 @@ export type ActivityFeedV2Props = {
     feedItems?: FeedItems;
     file?: ActivityFeedV2File;
     getApproverWithQuery?: (searchStr: string) => void;
-    getAvatarUrl?: (userId: string) => Promise<string | null | undefined>;
+    getAvatarUrl?: GetAvatarUrl;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     hasTasks?: boolean;

@@ -17,6 +17,7 @@ import TaskModal from '../TaskModal';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { transformFeedItem } from './transformers';
+import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
 
@@ -203,16 +204,18 @@ const ActivityFeedV2 = ({
         [getTaskCollaborators],
     );
 
+    const avatarUrls = useAvatarUrls(feedItems, getAvatarUrl);
+
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
         return feedItems.reduce<TransformedFeedItem[]>((acc, item) => {
-            const transformed = transformFeedItem(item, currentUserId);
+            const transformed = transformFeedItem(item, currentUserId, avatarUrls);
             if (transformed) {
                 acc.push(transformed);
             }
             return acc;
         }, []);
-    }, [currentUserId, feedItems]);
+    }, [avatarUrls, currentUserId, feedItems]);
 
     const filteredItems = React.useMemo(() => {
         const filtered = transformedItems.filter(item => {
