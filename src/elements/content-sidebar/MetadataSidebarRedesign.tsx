@@ -120,6 +120,9 @@ function MetadataSidebarRedesign({
         'metadata.deleteConfirmationModalCheckbox.enabled',
     );
     const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
+    const isBoundingBoxEnabled = useFeatureEnabled('metadata.boundingBox.enabled');
+
+    const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
 
     const {
         clearExtractError,
@@ -133,7 +136,15 @@ function MetadataSidebarRedesign({
         errorMessage,
         status,
         templateInstances,
-    } = useSidebarMetadataFetcher(api, fileId, onError, onSuccess, isFeatureEnabled, isConfidenceScoreReviewEnabled);
+    } = useSidebarMetadataFetcher(
+        api,
+        fileId,
+        onError,
+        onSuccess,
+        isFeatureEnabled,
+        isConfidenceScoreReviewEnabled,
+        isBoundingBoxEnabled,
+    );
     const isSessionInitiated = useRef(false);
 
     const [isLargeFile, setIsLargeFile] = useState<boolean>(false);
@@ -151,7 +162,7 @@ function MetadataSidebarRedesign({
             editingTemplate,
             fileId,
             history,
-            isConfidenceScoreReviewEnabled,
+            isBoundingBoxOrConfidenceScoreReviewEnabled,
             onWarningModalClose,
             onEditingStateChange,
             setEditingTemplate,
@@ -221,7 +232,7 @@ function MetadataSidebarRedesign({
     };
 
     const handleDiscardUnsavedChanges = () => {
-        if (pendingNavLocation && isConfidenceScoreReviewEnabled) {
+        if (pendingNavLocation && isBoundingBoxOrConfidenceScoreReviewEnabled) {
             unblockRouterHistory();
             setEditingTemplate(null);
             history.push(pendingNavLocation);
@@ -368,6 +379,7 @@ function MetadataSidebarRedesign({
                             template={editingTemplate}
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                            isBoundingBoxEnabled={isBoundingBoxEnabled}
                             onSelectMetadataField={handleSelectMetadataField}
                             selectedMetadataFieldId={selectedMetadataFieldId}
                             trackEvent={trackEvent}
@@ -389,6 +401,7 @@ function MetadataSidebarRedesign({
                             templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                            isBoundingBoxEnabled={isBoundingBoxEnabled}
                             trackEvent={trackEvent}
                         />
                     )}

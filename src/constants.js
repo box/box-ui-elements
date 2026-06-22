@@ -451,6 +451,7 @@ export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 export const SIDEBAR_VIEW_VERSIONS: 'versions' = 'versions';
 export const SIDEBAR_VIEW_DOCGEN: 'docgen' = 'docgen';
 export const AI_ACCEPTED_PROCESS: 'AI_ACCEPTED' = 'AI_ACCEPTED';
+export const AI_EXTRACTED_PROCESS: 'AI_EXTRACTED' = 'AI_EXTRACTED';
 
 /* ------------------ HTTP Requests ---------------------- */
 export const HTTP_GET: 'GET' = 'GET';
@@ -564,3 +565,4 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+export const DEFAULT_VIDEO_FPS = 24;

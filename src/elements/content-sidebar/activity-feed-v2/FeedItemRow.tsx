@@ -11,9 +11,11 @@ import { ActivityFeed } from '@box/activity-feed';
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '../../../common/types/feed';
 import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
+import type { TimeFormat } from './useTimeFormat';
 
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
+import { formatByTimeFormat } from './useTimeFormat';
 import { seekVideoToMs } from './useVideoTimestamp';
 
 import type { OnReplyDelete, OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
@@ -29,6 +31,7 @@ import {
 
 type FeedItemRowProps = {
     currentUserId?: string;
+    fps: number;
     isDisabled: boolean;
     item: TransformedFeedItem;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
@@ -59,6 +62,7 @@ type FeedItemRowProps = {
     onTaskEdit?: (task: TaskNew) => void;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
+    timeFormat: TimeFormat;
     userSelectorProps: UserSelectorProps;
 };
 
@@ -78,6 +82,7 @@ const buildReplyPost =
 
 const FeedItemRow = ({
     currentUserId,
+    fps,
     isDisabled,
     item,
     onAnnotationCopyLink,
@@ -96,6 +101,7 @@ const FeedItemRow = ({
     onTaskEdit,
     onTaskView,
     onVersionHistoryClick,
+    timeFormat,
     userSelectorProps,
 }: FeedItemRowProps) => {
     switch (item.type) {
@@ -118,7 +124,10 @@ const FeedItemRow = ({
                 const serialized = serializeEditorContent(content);
                 if (!serialized || !serialized.text.trim()) return;
                 if (id === item.id) {
-                    onCommentUpdate?.(id, serialized.text, undefined, serialized.hasMention, permissions);
+                    const text = item.annotationTimestampMarkup
+                        ? `${item.annotationTimestampMarkup} ${serialized.text}`
+                        : serialized.text;
+                    onCommentUpdate?.(id, text, undefined, serialized.hasMention, permissions);
                     return;
                 }
                 dispatchReplyEdit({
@@ -131,10 +140,14 @@ const FeedItemRow = ({
             };
             const timestampMs = item.annotationTimestampMs;
             const handleBadgeClick = timestampMs !== undefined ? () => seekVideoToMs(timestampMs) : undefined;
+            const commentAnnotationTarget =
+                item.annotationTarget && timestampMs !== undefined
+                    ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
+                    : item.annotationTarget;
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
-                    annotationTarget={item.annotationTarget}
+                    annotationTarget={commentAnnotationTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}
@@ -187,10 +200,18 @@ const FeedItemRow = ({
                     text: serialized.text,
                 });
             };
+            const badgeTarget = annotationTargetToBadge(item.annotation.target);
+            const annotationBadgeTarget =
+                badgeTarget && 'timestamp' in badgeTarget && item.annotation.target?.location?.type === 'frame'
+                    ? {
+                          ...badgeTarget,
+                          timestamp: formatByTimeFormat(item.annotation.target.location.value ?? 0, timeFormat, fps),
+                      }
+                    : badgeTarget;
             return (
                 <ActivityFeed.List.ThreadedAnnotation
                     key={item.id}
-                    annotationTarget={annotationTargetToBadge(item.annotation.target)}
+                    annotationTarget={annotationBadgeTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
                     isResolved={item.isResolved}

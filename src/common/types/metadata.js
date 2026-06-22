@@ -194,6 +194,7 @@ type MetadataDetailedFieldValue = {
 
 type MetadataTemplateInstanceField = {
     confidenceScore?: MetadataConfidenceScoreData,
+    isExtracted?: boolean,
     description?: string,
     displayName?: string,
     hidden?: boolean,

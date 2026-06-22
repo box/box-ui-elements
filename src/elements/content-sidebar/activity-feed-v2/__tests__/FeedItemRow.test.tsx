@@ -199,7 +199,9 @@ const mockAppActivity: TransformedFeedItem = {
 };
 
 const defaultProps = {
+    fps: 24,
     isDisabled: false,
+    timeFormat: 'standard' as const,
     userSelectorProps,
 };
 
@@ -416,6 +418,44 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
 
             expect(mockedSeekVideoToMs).toHaveBeenCalledWith(8055);
+        });
+
+        test('should re-prepend timestamp markup when editing a video comment so the badge survives the update', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMarkup: '#[timestamp:8055,versionId:2390295731268]',
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={timestampedComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                '#[timestamp:8055,versionId:2390295731268] edited-text',
+                undefined,
+                false,
+                commentPermissions,
+            );
+        });
+
+        test('should not modify edit text for a regular comment without timestamp markup', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            render(<FeedItemRow {...defaultProps} item={mockComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                'edited-text',
+                undefined,
+                false,
+                commentPermissions,
+            );
         });
     });
 
@@ -912,6 +952,85 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(() =>
                 lastThreadedAnnotationProps.onEdit?.('annotation-reply-1', { type: 'doc', content: [] }),
             ).not.toThrow();
+        });
+    });
+
+    describe('time format-aware badge rendering', () => {
+        test('should format comment badge timestamp using the current time format', () => {
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} fps={24} timeFormat="timecode" item={timestampedComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '00:00:08:01',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should format comment badge timestamp as frame number', () => {
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:10', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 10000,
+            };
+            render(<FeedItemRow {...defaultProps} fps={24} timeFormat="frames" item={timestampedComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '240',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should not modify comment badge when annotationTimestampMs is undefined', () => {
+            render(<FeedItemRow {...defaultProps} timeFormat="timecode" item={mockComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toBeUndefined();
+        });
+
+        test('should format annotation badge timestamp for frame-type annotations', () => {
+            const frameAnnotation: TransformedAnnotationItem = {
+                ...mockAnnotation,
+                annotation: {
+                    ...mockAnnotation.annotation,
+                    target: { location: { type: 'frame', value: 5000 }, type: 'region', x: 0, y: 0 },
+                } as TransformedAnnotationItem['annotation'],
+            };
+
+            const badge: AnnotationBadgeTargetType = { timestamp: '0:05', type: AnnotationBadgeType.Frame };
+            mockedAnnotationTargetToBadge.mockReturnValue(badge);
+
+            render(<FeedItemRow {...defaultProps} fps={30} timeFormat="frames" item={frameAnnotation} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '150',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should not modify annotation badge for non-frame targets', () => {
+            const badge: AnnotationBadgeTargetType = { page: 3, type: AnnotationBadgeType.Point };
+            mockedAnnotationTargetToBadge.mockReturnValue(badge);
+
+            render(<FeedItemRow {...defaultProps} timeFormat="timecode" item={mockAnnotation} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toBe(badge);
+        });
+
+        test('should use standard format when timeFormat is standard', () => {
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} timeFormat="standard" item={timestampedComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '0:08',
+                type: AnnotationBadgeType.Frame,
+            });
         });
     });
 });

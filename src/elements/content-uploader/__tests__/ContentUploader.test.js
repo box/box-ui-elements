@@ -1441,4 +1441,260 @@ describe('elements/content-uploader/ContentUploader', () => {
             });
         });
     });
+
+    describe('modernized panel open/close lifecycle', () => {
+        const HIDE_DELAY_MS = 8000;
+
+        const makeItem = (name, status) => {
+            let progress = 0;
+            if (status === STATUS_COMPLETE) {
+                progress = 100;
+            } else if (status === STATUS_IN_PROGRESS) {
+                progress = 50;
+            }
+            return { name, extension: 'pdf', progress, status, file: { name } };
+        };
+
+        const armDismissTimer = wrapper => {
+            const instance = wrapper.instance();
+            wrapper.setState({
+                modernizedPanelState: 'shown',
+                items: [makeItem('a.pdf', STATUS_IN_PROGRESS)],
+            });
+            wrapper.setState({
+                items: [makeItem('a.pdf', STATUS_COMPLETE)],
+            });
+            return instance;
+        };
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('starts dismiss timer when batch transitions to all-complete and panel is shown', () => {
+            const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+            expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), HIDE_DELAY_MS);
+            setTimeoutSpy.mockRestore();
+        });
+
+        test('transitions to dismissing only after the full delay', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            armDismissTimer(wrapper);
+
+            jest.advanceTimersByTime(HIDE_DELAY_MS - 1);
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+
+            jest.advanceTimersByTime(1);
+            expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
+        });
+
+        test('clears timer when a new in-progress item is added mid-wait', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            jest.advanceTimersByTime(4000);
+
+            wrapper.setState({
+                items: [makeItem('a.pdf', STATUS_COMPLETE), makeItem('b.pdf', STATUS_IN_PROGRESS)],
+            });
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+
+            jest.advanceTimersByTime(HIDE_DELAY_MS);
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+        });
+
+        test('clears timer when an item flips to STATUS_ERROR mid-wait', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            jest.advanceTimersByTime(4000);
+
+            wrapper.setState({
+                items: [makeItem('a.pdf', STATUS_COMPLETE), makeItem('b.pdf', STATUS_ERROR)],
+            });
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+        });
+
+        test('hover cancels the timer and mouse-leave re-arms it', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            instance.handleModernizedMouseEnter();
+
+            expect(instance.isPanelHovered).toBe(true);
+            expect(instance.modernizedDismissTimer).toBeNull();
+
+            instance.handleModernizedMouseLeave();
+
+            expect(instance.isPanelHovered).toBe(false);
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+
+            jest.advanceTimersByTime(HIDE_DELAY_MS);
+            expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
+        });
+
+        test('keyboard focus cancels the timer and blur re-arms it', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            instance.handleModernizedFocus({
+                target: { matches: () => true },
+            });
+
+            expect(instance.isPanelFocused).toBe(true);
+            expect(instance.modernizedDismissTimer).toBeNull();
+
+            instance.handleModernizedBlur({
+                relatedTarget: null,
+                currentTarget: { contains: () => false },
+            });
+
+            expect(instance.isPanelFocused).toBe(false);
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+
+            jest.advanceTimersByTime(HIDE_DELAY_MS);
+            expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
+        });
+
+        test('mouse-induced focus does not cancel the timer', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            instance.handleModernizedFocus({
+                target: { matches: () => false },
+            });
+
+            expect(instance.isPanelFocused).toBe(false);
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+        });
+
+        test('blur to a child element does not re-arm the timer', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            instance.handleModernizedFocus({
+                target: { matches: () => true },
+            });
+            expect(instance.modernizedDismissTimer).toBeNull();
+
+            const childNode = {};
+            instance.handleModernizedBlur({
+                relatedTarget: childNode,
+                currentTarget: { contains: target => target === childNode },
+            });
+
+            expect(instance.isPanelFocused).toBe(true);
+            expect(instance.modernizedDismissTimer).toBeNull();
+        });
+
+        test('handleModernizedAnimationEnd finalizes dismiss only for the slide-out animation', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const resetSpy = jest
+                .spyOn(instance, 'resetUploadsManagerItemsWhenUploadsComplete')
+                .mockImplementation(() => {});
+
+            wrapper.setState({ modernizedPanelState: 'dismissing' });
+
+            instance.handleModernizedAnimationEnd({ animationName: 'something-else' });
+            expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
+            expect(resetSpy).not.toHaveBeenCalled();
+
+            instance.handleModernizedAnimationEnd({ animationName: 'bcu-modernized-slideOut' });
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+            expect(resetSpy).toHaveBeenCalled();
+        });
+
+        test('dismisses only after the latest batch completes when multiple rapid batches occur', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            jest.advanceTimersByTime(3000);
+
+            wrapper.setState({
+                items: [
+                    makeItem('a.pdf', STATUS_COMPLETE),
+                    makeItem('b.pdf', STATUS_COMPLETE),
+                    makeItem('c.pdf', STATUS_IN_PROGRESS),
+                ],
+            });
+            expect(instance.modernizedDismissTimer).toBeNull();
+
+            wrapper.setState({
+                items: [
+                    makeItem('a.pdf', STATUS_COMPLETE),
+                    makeItem('b.pdf', STATUS_COMPLETE),
+                    makeItem('c.pdf', STATUS_COMPLETE),
+                ],
+            });
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+
+            jest.advanceTimersByTime(3000);
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+
+            jest.advanceTimersByTime(5000);
+            expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
+        });
+
+        test('returns panel to shown when a new in-progress item arrives while dismissing', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            wrapper.setState({
+                modernizedPanelState: 'dismissing',
+                items: [makeItem('a.pdf', STATUS_COMPLETE)],
+            });
+
+            wrapper.setState({
+                items: [makeItem('a.pdf', STATUS_COMPLETE), makeItem('b.pdf', STATUS_IN_PROGRESS)],
+            });
+
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+        });
+
+        test('componentWillUnmount clears the dismiss timer', () => {
+            const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+            const timerId = instance.modernizedDismissTimer;
+
+            wrapper.unmount();
+
+            expect(clearTimeoutSpy).toHaveBeenCalledWith(timerId);
+            clearTimeoutSpy.mockRestore();
+        });
+
+        test('shows panel when items appear from hidden state', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+
+            wrapper.setState({
+                items: [makeItem('a.pdf', STATUS_IN_PROGRESS)],
+            });
+
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+        });
+
+        test('does not change modernized panel state when enableModernizedUploads is false', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: false });
+            const instance = wrapper.instance();
+
+            wrapper.setState({
+                items: [makeItem('a.pdf', STATUS_COMPLETE)],
+            });
+
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+            expect(instance.modernizedDismissTimer).toBeNull();
+        });
+    });
 });

@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
-
-const VIDEO_CONTAINER_SELECTOR = '.bp-media-container';
+import { formatByTimeFormat, VIDEO_CONTAINER_SELECTOR } from './useTimeFormat';
+import type { TimeFormat } from './useTimeFormat';
 
 const findVideoElement = (): HTMLVideoElement | null => {
     if (typeof document === 'undefined') {
@@ -42,7 +41,7 @@ export interface UseVideoTimestampResult {
  * - Toggle off->on: captures current time and pauses the video if it was playing.
  * - New video src: captured value resets to 0; pressed state persists.
  */
-export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => {
+export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps: number): UseVideoTimestampResult => {
     const [isPressed, setIsPressed] = React.useState(false);
     const [timestampMs, setTimestampMs] = React.useState(0);
     const isPressedRef = React.useRef(isPressed);
@@ -158,7 +157,7 @@ export const useVideoTimestamp = (enabled: boolean): UseVideoTimestampResult => 
     }, [enabled]);
 
     return {
-        formattedTimestamp: convertMillisecondsToTimestamp(timestampMs),
+        formattedTimestamp: formatByTimeFormat(timestampMs, timeFormat, fps),
         isPressed,
         onPressedChange,
         timestampMs,
