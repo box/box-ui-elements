@@ -1,4 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
+import noop from 'lodash/noop';
 
 import { useAvatarUrls } from '../useAvatarUrls';
 
@@ -11,52 +12,52 @@ import {
 
 import type { FeedItem } from '../../../../common/types/feed';
 
-const commentItem = (id: string, authorId: string, replyAuthorIds: string[] = []): FeedItem =>
+const commentItem = (itemId: string, authorId: string, replyAuthorIds: string[] = []): FeedItem =>
     ({
         created_at: '2024-01-01T00:00:00Z',
-        created_by: { id: authorId, name: 'A', type: 'user' },
-        id,
-        replies: replyAuthorIds.map(rid => ({
+        created_by: { id: authorId, name: 'Author', type: 'user' },
+        id: itemId,
+        replies: replyAuthorIds.map(replyAuthorId => ({
             created_at: '2024-01-01T00:00:00Z',
-            created_by: { id: rid, name: 'R', type: 'user' },
-            id: `${id}-r-${rid}`,
+            created_by: { id: replyAuthorId, name: 'Reply Author', type: 'user' },
+            id: `${itemId}-reply-${replyAuthorId}`,
             type: 'comment',
         })),
         type: FEED_ITEM_TYPE_COMMENT,
     }) as unknown as FeedItem;
 
-const annotationItem = (id: string, authorId: string): FeedItem =>
+const annotationItem = (itemId: string, authorId: string): FeedItem =>
     ({
         created_at: '2024-01-01T00:00:00Z',
-        created_by: { id: authorId, name: 'A', type: 'user' },
-        id,
+        created_by: { id: authorId, name: 'Author', type: 'user' },
+        id: itemId,
         type: FEED_ITEM_TYPE_ANNOTATION,
     }) as unknown as FeedItem;
 
-const taskItem = (id: string, creatorId: string, assigneeIds: string[]): FeedItem =>
+const taskItem = (itemId: string, creatorId: string, assigneeIds: string[]): FeedItem =>
     ({
         assigned_to: {
-            entries: assigneeIds.map(aid => ({
-                id: `${id}-tc-${aid}`,
-                target: { id: aid, name: 'Assignee', type: 'user' },
+            entries: assigneeIds.map(assigneeId => ({
+                id: `${itemId}-collaborator-${assigneeId}`,
+                target: { id: assigneeId, name: 'Assignee', type: 'user' },
                 type: 'task_collaborator',
             })),
         },
         created_by: { target: { id: creatorId, name: 'Creator', type: 'user' } },
-        id,
+        id: itemId,
         type: FEED_ITEM_TYPE_TASK,
     }) as unknown as FeedItem;
 
-const versionItem = (id: string, modifierId: string): FeedItem =>
+const versionItem = (itemId: string, modifierId: string): FeedItem =>
     ({
-        id,
+        id: itemId,
         modified_by: { id: modifierId, name: 'Modifier', type: 'user' },
         type: FEED_ITEM_TYPE_VERSION,
     }) as unknown as FeedItem;
 
 describe('elements/content-sidebar/activity-feed-v2/useAvatarUrls', () => {
     test('returns empty map when getAvatarUrl is not provided', () => {
-        const { result } = renderHook(() => useAvatarUrls([commentItem('c1', '1')]));
+        const { result } = renderHook(() => useAvatarUrls([commentItem('comment-1', '1')]));
         expect(result.current).toEqual({});
     });
 
@@ -70,10 +71,10 @@ describe('elements/content-sidebar/activity-feed-v2/useAvatarUrls', () => {
     test('resolves avatar URLs for unique authors across feed item types', async () => {
         const getAvatarUrl = jest.fn(async (id: string) => `url-for-${id}`);
         const items: FeedItem[] = [
-            commentItem('c1', '1', ['2']),
-            annotationItem('a1', '3'),
-            taskItem('t1', '4', ['5', '6']),
-            versionItem('v1', '7'),
+            commentItem('comment-1', '1', ['2']),
+            annotationItem('annotation-1', '3'),
+            taskItem('task-1', '4', ['5', '6']),
+            versionItem('version-1', '7'),
         ];
         const { result } = renderHook(() => useAvatarUrls(items, getAvatarUrl));
         await waitFor(() => expect(Object.keys(result.current)).toHaveLength(7));
@@ -91,7 +92,11 @@ describe('elements/content-sidebar/activity-feed-v2/useAvatarUrls', () => {
 
     test('deduplicates identical user ids across items', async () => {
         const getAvatarUrl = jest.fn(async (id: string) => `url-${id}`);
-        const items: FeedItem[] = [commentItem('c1', '1', ['1']), commentItem('c2', '1'), taskItem('t1', '1', ['1'])];
+        const items: FeedItem[] = [
+            commentItem('comment-1', '1', ['1']),
+            commentItem('comment-2', '1'),
+            taskItem('task-1', '1', ['1']),
+        ];
         const { result } = renderHook(() => useAvatarUrls(items, getAvatarUrl));
         await waitFor(() => expect(result.current['1']).toBe('url-1'));
         expect(getAvatarUrl).toHaveBeenCalledTimes(1);
@@ -99,17 +104,17 @@ describe('elements/content-sidebar/activity-feed-v2/useAvatarUrls', () => {
 
     test('does not refetch ids already resolved on subsequent renders', async () => {
         const getAvatarUrl = jest.fn(async (id: string) => `url-${id}`);
-        const initialItems: FeedItem[] = [commentItem('c1', '1')];
+        const initialItems: FeedItem[] = [commentItem('comment-1', '1')];
         const { result, rerender } = renderHook(({ items }) => useAvatarUrls(items, getAvatarUrl), {
             initialProps: { items: initialItems },
         });
         await waitFor(() => expect(result.current['1']).toBe('url-1'));
         expect(getAvatarUrl).toHaveBeenCalledTimes(1);
 
-        rerender({ items: [commentItem('c1', '1'), commentItem('c2', '2')] });
+        rerender({ items: [commentItem('comment-1', '1'), commentItem('comment-2', '2')] });
         await waitFor(() => expect(result.current['2']).toBe('url-2'));
         expect(getAvatarUrl).toHaveBeenCalledTimes(2);
-        expect(getAvatarUrl.mock.calls.filter(([id]) => id === '1')).toHaveLength(1);
+        expect(getAvatarUrl.mock.calls.filter(([userId]) => userId === '1')).toHaveLength(1);
     });
 
     test('omits ids whose fetch fails or returns nullish', async () => {
@@ -118,7 +123,7 @@ describe('elements/content-sidebar/activity-feed-v2/useAvatarUrls', () => {
             if (id === '2') return null;
             return `url-${id}`;
         });
-        const { result } = renderHook(() => useAvatarUrls([commentItem('c', '1', ['2', '3'])], getAvatarUrl));
+        const { result } = renderHook(() => useAvatarUrls([commentItem('comment-1', '1', ['2', '3'])], getAvatarUrl));
         await waitFor(() => expect(result.current['3']).toBe('url-3'));
         expect(result.current['1']).toBeUndefined();
         expect(result.current['2']).toBeUndefined();
@@ -131,16 +136,41 @@ describe('elements/content-sidebar/activity-feed-v2/useAvatarUrls', () => {
             if (id === '1' && attempts === 1) throw new Error('transient');
             return `url-${id}`;
         });
-        const items = [commentItem('c', '1')];
+        const items = [commentItem('comment-1', '1')];
         const { result, rerender } = renderHook(({ extra }) => useAvatarUrls([...items, ...extra], getAvatarUrl), {
             initialProps: { extra: [] as FeedItem[] },
         });
         await waitFor(() => expect(getAvatarUrl).toHaveBeenCalledTimes(1));
         expect(result.current['1']).toBeUndefined();
 
-        rerender({ extra: [commentItem('c2', '2')] });
+        rerender({ extra: [commentItem('comment-2', '2')] });
         await waitFor(() => expect(result.current['1']).toBe('url-1'));
         expect(result.current['2']).toBe('url-2');
+    });
+
+    test('refetches in-flight ids after deps change mid-fetch', async () => {
+        let resolveFirstCall: (value: string) => void = noop;
+        const firstCallPromise = new Promise<string>(resolve => {
+            resolveFirstCall = resolve;
+        });
+        const getAvatarUrl = jest.fn(async (userId: string) => {
+            if (userId === '1' && getAvatarUrl.mock.calls.length === 1) return firstCallPromise;
+            return `url-${userId}`;
+        });
+        const initialItems: FeedItem[] = [commentItem('comment-1', '1')];
+        const { result, rerender } = renderHook(({ items }) => useAvatarUrls(items, getAvatarUrl), {
+            initialProps: { items: initialItems },
+        });
+        await waitFor(() => expect(getAvatarUrl).toHaveBeenCalledTimes(1));
+
+        // Dependency change while id '1' is still in flight cancels the original
+        // promise; the next effect run should reissue the fetch for '1'.
+        rerender({ items: [commentItem('comment-1', '1'), commentItem('comment-2', '2')] });
+        await waitFor(() => expect(result.current['2']).toBe('url-2'));
+
+        resolveFirstCall('stale');
+        await waitFor(() => expect(getAvatarUrl.mock.calls.filter(([userId]) => userId === '1')).toHaveLength(2));
+        expect(result.current['1']).toBe('url-1');
     });
 
     test('returns stable result when feedItems is null or undefined', () => {

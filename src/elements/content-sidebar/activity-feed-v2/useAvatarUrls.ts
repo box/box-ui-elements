@@ -16,47 +16,47 @@ import {
     FEED_ITEM_TYPE_VERSION,
 } from '../../../constants';
 
-const collectUserIdsFromComment = (comment: Comment, sink: Set<string>) => {
-    if (comment.created_by?.id) sink.add(comment.created_by.id);
+const collectUserIdsFromComment = (comment: Comment, userIds: Set<string>) => {
+    if (comment.created_by?.id) userIds.add(comment.created_by.id);
     (comment.replies ?? []).forEach(reply => {
-        if (reply.created_by?.id) sink.add(reply.created_by.id);
+        if (reply.created_by?.id) userIds.add(reply.created_by.id);
     });
 };
 
 const collectUserIds = (feedItems?: FeedItem[] | null): string[] => {
-    const ids = new Set<string>();
+    const userIds = new Set<string>();
     (feedItems ?? []).forEach(item => {
         switch (item.type) {
             case FEED_ITEM_TYPE_COMMENT:
-                collectUserIdsFromComment(item as unknown as Comment, ids);
+                collectUserIdsFromComment(item as unknown as Comment, userIds);
                 break;
             case FEED_ITEM_TYPE_ANNOTATION: {
                 const annotation = item as unknown as Annotation;
-                if (annotation.created_by?.id) ids.add(annotation.created_by.id);
+                if (annotation.created_by?.id) userIds.add(annotation.created_by.id);
                 (annotation.replies ?? []).forEach(reply => {
-                    if (reply.created_by?.id) ids.add(reply.created_by.id);
+                    if (reply.created_by?.id) userIds.add(reply.created_by.id);
                 });
                 break;
             }
             case FEED_ITEM_TYPE_TASK: {
                 const task = item as unknown as TaskNew;
                 const authorId = task.created_by?.target?.id;
-                if (authorId) ids.add(authorId);
+                if (authorId) userIds.add(authorId);
                 (task.assigned_to?.entries ?? []).forEach(entry => {
-                    if (entry.target?.id) ids.add(entry.target.id);
+                    if (entry.target?.id) userIds.add(entry.target.id);
                 });
                 break;
             }
             case FEED_ITEM_TYPE_VERSION: {
                 const actor = getVersionUser(item as unknown as BoxItemVersion);
-                if (actor?.id) ids.add(actor.id);
+                if (actor?.id) userIds.add(actor.id);
                 break;
             }
             default:
                 break;
         }
     });
-    return Array.from(ids);
+    return Array.from(userIds);
 };
 
 export const useAvatarUrls = (feedItems?: FeedItem[] | null, getAvatarUrl?: GetAvatarUrl): AvatarUrlMap => {
@@ -66,12 +66,14 @@ export const useAvatarUrls = (feedItems?: FeedItem[] | null, getAvatarUrl?: GetA
 
     React.useEffect(() => {
         if (!getAvatarUrl) return undefined;
+        const inFlightIds = inFlightIdsRef.current;
+        const resolvedIds = resolvedIdsRef.current;
         const userIds = collectUserIds(feedItems);
-        const pendingIds = userIds.filter(id => !resolvedIdsRef.current.has(id) && !inFlightIdsRef.current.has(id));
+        const pendingIds = userIds.filter(id => !resolvedIds.has(id) && !inFlightIds.has(id));
         if (pendingIds.length === 0) return undefined;
 
         let cancelled = false;
-        pendingIds.forEach(id => inFlightIdsRef.current.add(id));
+        pendingIds.forEach(id => inFlightIds.add(id));
 
         Promise.all(
             pendingIds.map(async id => {
@@ -83,16 +85,16 @@ export const useAvatarUrls = (feedItems?: FeedItem[] | null, getAvatarUrl?: GetA
                 }
             }),
         ).then(entries => {
-            // Only successful resolutions move to resolvedIdsRef, so transient
-            // failures stay eligible for retry on the next render.
-            pendingIds.forEach(id => inFlightIdsRef.current.delete(id));
             if (cancelled) return;
 
+            // Only successful resolutions move to resolvedIds, so transient
+            // failures stay eligible for retry on the next render.
             const resolved: Record<string, string> = {};
             entries.forEach(([id, url]) => {
+                inFlightIds.delete(id);
                 if (url) {
                     resolved[id] = url;
-                    resolvedIdsRef.current.add(id);
+                    resolvedIds.add(id);
                 }
             });
             if (Object.keys(resolved).length === 0) return;
@@ -101,6 +103,7 @@ export const useAvatarUrls = (feedItems?: FeedItem[] | null, getAvatarUrl?: GetA
 
         return () => {
             cancelled = true;
+            pendingIds.forEach(id => inFlightIds.delete(id));
         };
     }, [feedItems, getAvatarUrl]);
 
