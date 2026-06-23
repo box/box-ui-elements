@@ -57,9 +57,4 @@
 // Lets inner ellipsis truncation resolve against the sidebar width.
 .bcs-NewActivityFeedContent {
     min-width: 0;
-
-    // Hide the divider between the nav tabs and the v2 feed
-    &.bcs-content {
-        border-left-color: transparent;
-    }
 }
