@@ -20,6 +20,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         onAnnotator: jest.fn(),
         onError: jest.fn(),
         onPreviewDestroy: jest.fn(),
+        onViewer: jest.fn(),
     };
     const MockComponent = (props: ComponentProps) => <div {...props} />;
     const WrappedComponent = withAnnotations(MockComponent);

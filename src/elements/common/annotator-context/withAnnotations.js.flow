@@ -16,7 +16,9 @@ import {
     AnnotatorState,
     GetMatchPath,
     MatchParams,
-    Status
+    Status,
+    TimelineMarker,
+    TimelineMarkerClickHandler
 } from "./types";
 import { SidebarNavigation } from '../types/SidebarNavigation';
 import { type FeatureConfig } from '../feature-checking';
@@ -29,6 +31,7 @@ export type ActiveChangeEvent = {
 };
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 export type ComponentWithAnnotations = {
+    addTimelineMarkerClickListener: (handler: TimelineMarkerClickHandler) => () => void,
     emitActiveAnnotationChangeEvent: (id: string | null) => void,
     emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void,
     emitAnnotationReplyCreateEvent: (
@@ -71,6 +74,7 @@ export type ComponentWithAnnotations = {
     handleAnnotationUpdate: (eventData: AnnotationActionEvent) => void,
     handleAnnotator: (annotator: Annotator) => void,
     handlePreviewDestroy: (shouldReset?: boolean) => void,
+    setTimelineMarkers: (markers: TimelineMarker[]) => void,
     ...
 };
 export type WithAnnotationsProps = {

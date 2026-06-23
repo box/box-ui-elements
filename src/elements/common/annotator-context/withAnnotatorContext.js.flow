@@ -6,9 +6,10 @@
 
 import * as React from "react";
 import AnnotatorContext from "./AnnotatorContext";
-import { AnnotatorState, GetMatchPath } from "./types";
+import { AnnotatorState, GetMatchPath, TimelineMarker, TimelineMarkerClickHandler } from "./types";
 
 export interface WithAnnotatorContextProps {
+    addTimelineMarkerClickListener?: (handler: TimelineMarkerClickHandler) => () => void;
     annotatorState?: AnnotatorState;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
@@ -37,6 +38,7 @@ export interface WithAnnotatorContextProps {
         fileVersionId?: string,
         annotationId?: string
     ) => string;
+    setTimelineMarkers?: (markers: TimelineMarker[]) => void;
 }
 declare export default function withAnnotatorContext<P: { ... }>(
     WrappedComponent: React.ComponentType<P>
