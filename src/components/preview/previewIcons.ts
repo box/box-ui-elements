@@ -3,6 +3,9 @@
  * file-specific loading icons for file types that can be previewed. Unsupported files show a default
  * icon, even if they have a relevant thumbnail/icon that is displayed within the item list, for example.
  */
+import { itemIconTable } from '@box/item-icon';
+import type { ComponentType } from 'react';
+
 import * as vars from '../../styles/variables';
 import IconFileAudio from '../../icon/content/FileAudio32';
 import IconFileBoxCanvas from '../../icon/content/FileCanvas32';
@@ -33,11 +36,10 @@ import IconFileWord from '../../icon/content/FileWord32';
 import IconFileXbd from '../../icon/content/FileXbd32';
 import IconFileXdw from '../../icon/content/FileXdw32';
 import IconFileZip from '../../icon/content/FileZip32';
-import { SVGProps } from '../accessible-svg/AccessibleSVG';
 
 type Config = { color: string; icon: Icon };
 type Configs = { [key: string]: Config }; // { docx: { color: '#333', icon: IconFileWord }
-type Icon = (props: SVGProps) => JSX.Element;
+type Icon = ComponentType<{ className?: string }>;
 
 const configs: Configs = {};
 const register = (icon: Icon, color: string, extensions: string[]): void => {
@@ -88,7 +90,6 @@ register(IconFileCode, '#E33D55', [
     'less',
     'm',
     'make',
-    'md',
     'ml',
     'mm',
     'php',
@@ -142,6 +143,7 @@ register(IconFileImage, '#3FB87F', [
 ]);
 register(IconFileIndesign, '#FF57A1', ['idml', 'indd', 'indt', 'inx']);
 register(IconFileKeynote, '#007AFF', ['key']);
+register(itemIconTable.markdown, vars.bdlBoxBlue, ['md', 'markdown', 'mdown']);
 register(IconFileNumbers, '#00A650', ['numbers']);
 register(IconFilePDF, '#D0021B', ['pdf']);
 register(IconFilePages, '#FF9500', ['pages']);
