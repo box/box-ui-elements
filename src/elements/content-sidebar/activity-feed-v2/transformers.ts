@@ -28,6 +28,7 @@ import type { TaskNew } from '../../../common/types/tasks';
 import type {
     AnnotationBadgeTargetType,
     AppActivityItemProps,
+    AvatarUrlMap,
     TaskItemProps,
     TransformedFeedItem,
     VersionItemProps,
@@ -132,8 +133,11 @@ const toUpdatedAt = (createdAt: string, modifiedAt: string): number | undefined 
     return toUnixMs(modifiedAt);
 };
 
-const toUserAuthor = (user?: User | null): TextMessageAuthorType => ({
-    avatarUrl: user?.avatar_url,
+const resolveAvatarUrl = (userId: string | undefined, avatarUrls?: AvatarUrlMap): string | undefined =>
+    userId ? avatarUrls?.[userId] : undefined;
+
+const toUserAuthor = (user?: User | null, avatarUrls?: AvatarUrlMap): TextMessageAuthorType => ({
+    avatarUrl: resolveAvatarUrl(user?.id, avatarUrls),
     email: user?.email ?? user?.login ?? '',
     id: Number(user?.id) || 0,
     name: user?.name ?? '',
@@ -148,11 +152,15 @@ const toPermissions = (
     canResolve: permissions?.can_resolve ?? false,
 });
 
-const commentToTextMessage = (comment: Comment, prebuiltCleanText?: string): TextMessageType => {
+const commentToTextMessage = (
+    comment: Comment,
+    prebuiltCleanText?: string,
+    avatarUrls?: AvatarUrlMap,
+): TextMessageType => {
     const cleanText =
         prebuiltCleanText ?? extractTimestampMarkup(comment.tagged_message || comment.message || '').cleanText;
     return {
-        author: toUserAuthor(comment.created_by),
+        author: toUserAuthor(comment.created_by, avatarUrls),
         createdAt: toUnixMs(comment.created_at) ?? 0,
         id: comment.id,
         message: textToDocumentNode(cleanText, comment.created_by?.id ?? ''),
@@ -161,9 +169,9 @@ const commentToTextMessage = (comment: Comment, prebuiltCleanText?: string): Tex
     };
 };
 
-export const transformCommentToMessages = (comment: Comment): TextMessageType[] => {
-    const root = commentToTextMessage(comment);
-    const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply));
+export const transformCommentToMessages = (comment: Comment, avatarUrls?: AvatarUrlMap): TextMessageType[] => {
+    const root = commentToTextMessage(comment, undefined, avatarUrls);
+    const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply, undefined, avatarUrls));
     return [root, ...replies];
 };
 
@@ -193,23 +201,27 @@ export const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetT
     }
 };
 
-export const transformAnnotationToMessages = (annotation: Annotation): TextMessageType[] => {
+export const transformAnnotationToMessages = (annotation: Annotation, avatarUrls?: AvatarUrlMap): TextMessageType[] => {
     const messageText = annotation.description?.message ?? '';
     const root: TextMessageType = {
-        author: toUserAuthor(annotation.created_by),
+        author: toUserAuthor(annotation.created_by, avatarUrls),
         createdAt: toUnixMs(annotation.created_at) ?? 0,
         id: annotation.id,
         message: textToDocumentNode(messageText, annotation.created_by?.id ?? ''),
         permissions: toPermissions(annotation.permissions),
         updatedAt: toUpdatedAt(annotation.created_at, annotation.modified_at),
     };
-    const replies = (annotation.replies ?? []).map(reply => commentToTextMessage(reply));
+    const replies = (annotation.replies ?? []).map(reply => commentToTextMessage(reply, undefined, avatarUrls));
     return [root, ...replies];
 };
 
-export const transformTaskToProps = (task: TaskNew, currentUserId?: string): TaskItemProps => ({
+export const transformTaskToProps = (
+    task: TaskNew,
+    currentUserId?: string,
+    avatarUrls?: AvatarUrlMap,
+): TaskItemProps => ({
     assignees: (task.assigned_to?.entries ?? []).map(entry => ({
-        avatarUrl: entry.target?.avatar_url,
+        avatarUrl: resolveAvatarUrl(entry.target?.id, avatarUrls),
         completedAt: toUnixMs(entry.completed_at),
         id: entry.target?.id ?? entry.id,
         name: entry.target?.name ?? '',
@@ -219,7 +231,7 @@ export const transformTaskToProps = (task: TaskNew, currentUserId?: string): Tas
         status: entry.status as TaskItemProps['assignees'][number]['status'],
     })),
     author: {
-        avatarUrl: task.created_by?.target?.avatar_url,
+        avatarUrl: resolveAvatarUrl(task.created_by?.target?.id, avatarUrls),
         id: task.created_by?.target?.id ?? '',
         name: task.created_by?.target?.name ?? '',
     },
@@ -268,15 +280,15 @@ const getVersionAction = (version: BoxItemVersion): VersionItemProps['actionType
     return mapActionTypeString(version.action_type) ?? 'upload';
 };
 
-const getVersionUser = (version: BoxItemVersion): User | undefined =>
+export const getVersionUser = (version: BoxItemVersion): User | undefined =>
     version.restored_by || version.trashed_by || version.promoted_by || version.modified_by || undefined;
 
-export const transformVersionToProps = (version: BoxItemVersion): VersionItemProps => {
+export const transformVersionToProps = (version: BoxItemVersion, avatarUrls?: AvatarUrlMap): VersionItemProps => {
     const user = getVersionUser(version);
     return {
         actionType: getVersionAction(version),
         authorName: user?.name ?? version.uploader_display_name,
-        avatarUrl: user?.avatar_url,
+        avatarUrl: resolveAvatarUrl(user?.id, avatarUrls),
         createdAt: toUnixMs(version.created_at),
         id: version.id,
         versionNumber: parseInt(version.version_number, 10) || version.version_end || 0,
@@ -291,7 +303,11 @@ export const transformAppActivityToProps = (item: BUIEAppActivityItem): AppActiv
     renderedText: item.rendered_text ?? '',
 });
 
-export const transformFeedItem = (item: FeedItem, currentUserId?: string): TransformedFeedItem | null => {
+export const transformFeedItem = (
+    item: FeedItem,
+    currentUserId?: string,
+    avatarUrls?: AvatarUrlMap,
+): TransformedFeedItem | null => {
     switch (item.type) {
         case FEED_ITEM_TYPE_COMMENT: {
             const comment = item as unknown as Comment;
@@ -303,8 +319,8 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 timestampMarkup,
                 timestampMs,
             } = extractTimestampMarkup(rawText);
-            const root = commentToTextMessage(comment, cleanText);
-            const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply));
+            const root = commentToTextMessage(comment, cleanText, avatarUrls);
+            const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply, undefined, avatarUrls));
             return {
                 annotationTarget,
                 annotationTimestampMarkup: timestampMarkup,
@@ -327,7 +343,7 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
                 annotation,
                 id: annotation.id,
                 isResolved: annotationIsResolved,
-                messages: transformAnnotationToMessages(annotation),
+                messages: transformAnnotationToMessages(annotation, avatarUrls),
                 permissions: annotation.permissions ?? {},
                 resolvedAt: annotationIsResolved ? toUnixMs(annotation.resolution?.resolved_at) : undefined,
                 resolvedBy: annotationIsResolved ? annotation.resolution?.resolved_by?.name : undefined,
@@ -340,14 +356,14 @@ export const transformFeedItem = (item: FeedItem, currentUserId?: string): Trans
             return {
                 id: item.id,
                 originalTask: task,
-                props: transformTaskToProps(task, currentUserId),
+                props: transformTaskToProps(task, currentUserId, avatarUrls),
                 type: 'task',
             };
         }
         case FEED_ITEM_TYPE_VERSION:
             return {
                 id: item.id,
-                props: transformVersionToProps(item as unknown as BoxItemVersion),
+                props: transformVersionToProps(item as unknown as BoxItemVersion, avatarUrls),
                 type: 'version',
             };
         case FEED_ITEM_TYPE_APP_ACTIVITY:
