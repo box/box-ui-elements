@@ -330,7 +330,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformTaskToProps(mockTask as unknown as TaskNew);
             expect(result.assignees).toHaveLength(1);
             expect(result.assignees[0]).toEqual({
-                avatarUrl: 'https://example.com/assignee.png',
+                avatarUrl: undefined,
                 completedAt: undefined,
                 id: '100',
                 name: 'Assignee One',
@@ -342,7 +342,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         test('should transform task author from created_by.target', () => {
             const result = transformTaskToProps(mockTask as unknown as TaskNew);
             expect(result.author).toEqual({
-                avatarUrl: 'https://example.com/creator.png',
+                avatarUrl: undefined,
                 id: '200',
                 name: 'Creator',
             });
@@ -405,7 +405,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result.versionNumber).toBe(5);
             expect(result.actionType).toBe('upload');
             expect(result.authorName).toBe('Uploader');
-            expect(result.avatarUrl).toBe('https://example.com/uploader.png');
+            expect(result.avatarUrl).toBeUndefined();
             expect(result.createdAt).toBe(new Date('2024-04-01T00:00:00Z').getTime());
         });
 
@@ -877,6 +877,114 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 timestamp: '0:00',
                 type: 'frame',
             });
+        });
+    });
+
+    describe('avatarUrls', () => {
+        const commentWithoutAvatar = {
+            created_at: '2024-01-01T00:00:00Z',
+            created_by: { email: 'u@example.com', id: '42', name: 'No-Avatar User', type: 'user' },
+            id: 'comment-x',
+            message: 'hi',
+            modified_at: '2024-01-01T00:00:00Z',
+            permissions: { can_delete: false, can_edit: false, can_reply: false, can_resolve: false },
+            tagged_message: 'hi',
+            type: 'comment',
+        };
+
+        test('transformCommentToMessages resolves author avatar from the map', () => {
+            const [message] = transformCommentToMessages(commentWithoutAvatar as unknown as Comment, {
+                '42': 'fetched://avatar',
+            });
+            expect(message.author.avatarUrl).toBe('fetched://avatar');
+        });
+
+        test('transformCommentToMessages leaves avatar undefined when id not in map', () => {
+            const [message] = transformCommentToMessages(commentWithoutAvatar as unknown as Comment, {
+                '999': 'other://avatar',
+            });
+            expect(message.author.avatarUrl).toBeUndefined();
+        });
+
+        test('transformAnnotationToMessages resolves both root and reply authors from the map', () => {
+            const annotation = {
+                created_at: '2024-02-01T00:00:00Z',
+                created_by: { id: '1', name: 'A', type: 'user' },
+                description: { message: 'text' },
+                id: 'a-1',
+                modified_at: '2024-02-01T00:00:00Z',
+                permissions: { can_delete: true, can_edit: true, can_reply: true, can_resolve: true },
+                replies: [
+                    {
+                        created_at: '2024-02-02T00:00:00Z',
+                        created_by: { id: '2', name: 'B', type: 'user' },
+                        id: 'r-1',
+                        message: 'reply',
+                        modified_at: '2024-02-02T00:00:00Z',
+                        permissions: { can_delete: false, can_edit: false, can_reply: false, can_resolve: false },
+                        tagged_message: 'reply',
+                        type: 'comment',
+                    },
+                ],
+                type: 'annotation',
+            };
+            const [root, reply] = transformAnnotationToMessages(annotation as unknown as Annotation, {
+                '1': 'a://1',
+                '2': 'a://2',
+            });
+            expect(root.author.avatarUrl).toBe('a://1');
+            expect(reply.author.avatarUrl).toBe('a://2');
+        });
+
+        test('transformTaskToProps resolves author and assignee avatars from the map', () => {
+            const task = {
+                assigned_to: {
+                    entries: [
+                        {
+                            id: 'tc-1',
+                            permissions: { can_delete: false, can_update: true },
+                            role: 'ASSIGNEE',
+                            status: 'NOT_STARTED',
+                            target: { id: '100', name: 'Assignee', type: 'user' },
+                            type: 'task_collaborator',
+                        },
+                    ],
+                    next_marker: null,
+                },
+                completion_rule: 'ANY_ASSIGNEE',
+                created_at: '2024-03-01T00:00:00Z',
+                created_by: {
+                    id: 'tc-c',
+                    role: 'CREATOR',
+                    status: 'NOT_STARTED',
+                    target: { id: '200', name: 'Creator', type: 'user' },
+                    type: 'task_collaborator',
+                },
+                id: 'task-x',
+                permissions: { can_delete: false, can_update: false },
+                status: 'NOT_STARTED',
+                task_type: 'GENERAL',
+                type: 'task',
+            };
+            const result = transformTaskToProps(task as unknown as TaskNew, undefined, {
+                '100': 'a://100',
+                '200': 'a://200',
+            });
+            expect(result.author.avatarUrl).toBe('a://200');
+            expect(result.assignees[0].avatarUrl).toBe('a://100');
+        });
+
+        test('transformVersionToProps resolves the actor avatar from the map', () => {
+            const version = {
+                action_type: 'created',
+                created_at: '2024-04-01T00:00:00Z',
+                id: 'v-1',
+                modified_by: { id: '300', name: 'Uploader', type: 'user' },
+                type: 'file_version',
+                version_number: '1',
+            };
+            const result = transformVersionToProps(version as unknown as BoxItemVersion, { '300': 'a://300' });
+            expect(result.avatarUrl).toBe('a://300');
         });
     });
 });
