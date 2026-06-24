@@ -16,7 +16,7 @@ export type OversizeFile = {
 export interface LargeFileWarningModalProps {
     eligibleCount: number;
     isOpen: boolean;
-    maxFileSize: number;
+    maxFileSize?: number;
     onCancel: () => void;
     onConfirm: () => void;
     onUpgradeCTAClick?: () => void;
@@ -34,7 +34,7 @@ const LargeFileWarningModal = ({
 }: LargeFileWarningModalProps) => {
     const intl = useIntl();
     const oversizeCount = oversizeFiles.length;
-    const maxFileSizeLabel = getFileSize(maxFileSize, intl.locale);
+    const maxFileSizeLabel = maxFileSize ? getFileSize(maxFileSize, intl.locale) : null;
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const rowVirtualizer = useVirtualizer({
         count: oversizeFiles.length,
