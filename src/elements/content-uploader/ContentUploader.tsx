@@ -10,6 +10,7 @@ import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import CancelAllUploadsModal from './CancelAllUploadsModal';
+import LargeFileWarningModal from './LargeFileWarningModal';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
@@ -115,6 +116,7 @@ export interface ContentUploaderProps {
     enableModernizedUploads?: boolean;
     isExpanded?: boolean;
     onToggle?: (isExpanded: boolean) => void;
+    maxFileSize?: number;
 }
 
 type ModernizedPanelState = 'hidden' | 'shown' | 'dismissing';
@@ -122,6 +124,7 @@ type ModernizedPanelState = 'hidden' | 'shown' | 'dismissing';
 type State = {
     errorCode?: string;
     isCancelAllModalOpen: boolean;
+    isLargeFileWarningModalOpen: boolean;
     isUploadsManagerExpanded: boolean;
     itemIds: Object;
     items: UploadItem[];
@@ -209,6 +212,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             errorCode: '',
             itemIds: {},
             isCancelAllModalOpen: false,
+            isLargeFileWarningModalOpen: false,
             isUploadsManagerExpanded: false,
             modernizedPanelState: 'hidden',
         };
@@ -234,7 +238,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { files, isPrepopulateFilesEnabled } = this.props;
         // isPrepopulateFilesEnabled is a prop used to pre-populate files without clicking upload button.
         if (isPrepopulateFilesEnabled && files && files.length > 0) {
-            this.addFilesToUploadQueue(files, this.upload);
+            this.addFilesToUploadQueue(files, this.maybeUpload);
         }
     }
 
@@ -276,6 +280,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const isUploadsBatchSuccessfullyComplete = items.every(
             item => item.status === STATUS_COMPLETE || item.status === STATUS_CANCELED,
         );
+
+        if (!hasItemsInUploadQueue && modernizedPanelState === 'shown') {
+            this.setState({ modernizedPanelState: 'hidden' });
+        }
 
         if (hasItemsInUploadQueue && modernizedPanelState === 'hidden') {
             this.showModernizedPanel();
@@ -730,7 +738,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             const { view } = this.state;
             // Automatically start upload if other files are being uploaded
             if (view === VIEW_UPLOAD_IN_PROGRESS) {
-                this.upload();
+                this.maybeUpload();
             }
         });
     };
@@ -1590,6 +1598,103 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Returns pending upload items that exceed the configured max file size.
+     *
+     * @private
+     * @return {UploadItem[]}
+     */
+    getOversizePendingItems = (): UploadItem[] => {
+        const { maxFileSize } = this.props;
+
+        if (!maxFileSize) {
+            return [];
+        }
+
+        return this.itemsRef.current.filter(
+            item => item.status === STATUS_PENDING && item.file && item.file.size > maxFileSize,
+        );
+    };
+
+    /**
+     * Returns the number of pending upload items that are eligible to upload.
+     *
+     * @private
+     * @return {number}
+     */
+    getEligiblePendingCount = (): number => {
+        const { maxFileSize } = this.props;
+
+        return this.itemsRef.current.filter(item => {
+            if (item.status !== STATUS_PENDING) {
+                return false;
+            }
+
+            if (!item.file || !maxFileSize) {
+                return true;
+            }
+
+            return item.file.size <= maxFileSize;
+        }).length;
+    };
+
+    /**
+     * Starts upload immediately when no oversize files are present; otherwise opens
+     * the large file warning modal and waits for user confirmation.
+     *
+     * @private
+     * @return {void}
+     */
+    maybeUpload = (): void => {
+        const { maxFileSize, enableModernizedUploads } = this.props;
+
+        if (!maxFileSize || !enableModernizedUploads) {
+            this.upload();
+            return;
+        }
+
+        const oversizeItems = this.getOversizePendingItems();
+
+        if (oversizeItems.length === 0) {
+            this.upload();
+            return;
+        }
+
+        if (!this.state.isLargeFileWarningModalOpen) {
+            this.setState({ isLargeFileWarningModalOpen: true });
+        }
+    };
+
+    /**
+     * Removes oversize pending items and starts uploading the remaining eligible items.
+     *
+     * @private
+     * @return {void}
+     */
+    handleLargeFileWarningUploadRest = (): void => {
+        const oversizeItems = this.getOversizePendingItems();
+
+        oversizeItems.forEach(item => this.removeFileFromUploadQueue(item));
+
+        this.setState({ isLargeFileWarningModalOpen: false }, () => {
+            this.upload();
+        });
+    };
+
+    /**
+     * Cancels the upload attempt by removing all pending items from the queue.
+     *
+     * @private
+     * @return {void}
+     */
+    handleLargeFileWarningCancel = (): void => {
+        const pendingItems = this.itemsRef.current.filter(item => item.status === STATUS_PENDING);
+
+        pendingItems.forEach(item => this.removeFileFromUploadQueue(item));
+
+        this.setState({ isLargeFileWarningModalOpen: false });
+    };
+
+    /**
      * Adds file to the upload queue and starts upload immediately
      *
      * @param {Array<UploadFileWithAPIOptions | File>} files
@@ -1600,8 +1705,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         files?: Array<UploadFileWithAPIOptions | File>,
         dataTransferItems?: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     ): void => {
-        this.addFilesToUploadQueue(files, this.upload);
-        this.addDataTransferItemsToUploadQueue(dataTransferItems, this.upload);
+        this.addFilesToUploadQueue(files, this.maybeUpload);
+        this.addDataTransferItemsToUploadQueue(dataTransferItems, this.maybeUpload);
     };
 
     /**
@@ -1629,8 +1734,16 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             rootFolderId,
             theme,
             useUploadsManager,
+            maxFileSize,
         }: ContentUploaderProps = this.props;
-        const { view, items, errorCode, isCancelAllModalOpen, modernizedPanelState }: State = this.state;
+        const {
+            view,
+            items,
+            errorCode,
+            isCancelAllModalOpen,
+            isLargeFileWarningModalOpen,
+            modernizedPanelState,
+        }: State = this.state;
         const isUploadsManagerExpanded = this.getIsExpanded();
         const isEmpty = items.length === 0;
         const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
@@ -1638,6 +1751,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
         const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
+        const oversizePendingItems = this.getOversizePendingItems();
+        const oversizeFiles = oversizePendingItems.map(item => ({
+            name: item.name,
+            size: item.file?.size ?? 0,
+        }));
+        const eligiblePendingCount = this.getEligiblePendingCount();
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
@@ -1678,6 +1797,15 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                                 isOpen={isCancelAllModalOpen}
                                 onConfirm={this.handleCancelAllConfirm}
                                 onDismiss={this.handleCancelAllDismiss}
+                            />
+                            <LargeFileWarningModal
+                                eligibleCount={eligiblePendingCount}
+                                isOpen={isLargeFileWarningModalOpen}
+                                maxFileSize={maxFileSize}
+                                onCancel={this.handleLargeFileWarningCancel}
+                                onConfirm={this.handleLargeFileWarningUploadRest}
+                                onUpgradeCTAClick={onUpgradeCTAClick}
+                                oversizeFiles={oversizeFiles}
                             />
                         </div>
                     </div>

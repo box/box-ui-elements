@@ -1,0 +1,69 @@
+.bcu-large-file-warning-modal {
+    &-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    &-description {
+        margin: 0;
+    }
+
+    &-upgradeLink {
+        background: none;
+        border: 0;
+        color: var(--text-cta-link);
+        cursor: pointer;
+        font: inherit;
+        font-weight: var(--font-weights-bold);
+        padding: 0;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: var(--text-cta-link-hover);
+            text-decoration: underline;
+        }
+    }
+
+    &-fileListContainer {
+        border: var(--border-1) solid var(--border-card-border);
+        border-radius: var(--radius-4);
+        max-height: 140px;
+        overflow-y: auto;
+        padding: var(--space-5);
+        display: flex;
+    }
+
+    &-fileListInner {
+        position: relative;
+        width: 100%;
+    }
+
+    &-fileListRow {
+        align-items: center;
+        column-gap: var(--space-3);
+        display: flex;
+        justify-content: space-between;
+        left: 0;
+        min-height: 20px;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    &-fileName {
+        flex: 1 1 auto;
+        font-weight: var(--font-weights-semibold);
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &-fileSize {
+        color: var(--text-text-on-light-secondary);
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+}
