@@ -329,7 +329,7 @@ const ActivityFeedV2 = ({
     );
 
     return (
-        <div className="bcs-NewActivityFeed">
+        <div className="bcs-NewActivityFeed" data-resin-feature="activityfeedv2">
             <ActivityFeed.Root mentionContext={mentionContext} scrollTo={scrollHandle}>
                 <ActivityFeed.Header title={headerTitle}>
                     <ActivityFeed.Header.Actions>
