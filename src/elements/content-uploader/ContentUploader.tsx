@@ -789,7 +789,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @param {UploadItem} item - Item to remove
      * @return {void}
      */
-    removeFileFromUploadQueue = (item: UploadItem) => {
+    removeFileFromUploadQueue = (item: UploadItem, skipAutoUpload: boolean = false) => {
         const { onCancel, useUploadsManager } = this.props;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
@@ -833,7 +833,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             }
 
             const { view } = this.state;
-            if (view === VIEW_UPLOAD_IN_PROGRESS) {
+            if (view === VIEW_UPLOAD_IN_PROGRESS && !skipAutoUpload) {
                 this.upload();
             }
         });
@@ -1673,7 +1673,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     handleLargeFileWarningUploadRest = (): void => {
         const oversizeItems = this.getOversizePendingItems();
 
-        oversizeItems.forEach(item => this.removeFileFromUploadQueue(item));
+        oversizeItems.forEach(item => this.removeFileFromUploadQueue(item, true));
 
         this.setState({ isLargeFileWarningModalOpen: false }, () => {
             this.upload();
@@ -1689,7 +1689,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     handleLargeFileWarningCancel = (): void => {
         const pendingItems = this.itemsRef.current.filter(item => item.status === STATUS_PENDING);
 
-        pendingItems.forEach(item => this.removeFileFromUploadQueue(item));
+        pendingItems.forEach(item => this.removeFileFromUploadQueue(item, true));
 
         this.setState({ isLargeFileWarningModalOpen: false });
     };
