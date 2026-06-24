@@ -417,6 +417,7 @@ const ActivityFeedV2 = ({
                             {filteredItems.map(item => (
                                 <FeedItemRow
                                     key={item.id}
+                                    activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
                                     isDisabled={isDisabled}

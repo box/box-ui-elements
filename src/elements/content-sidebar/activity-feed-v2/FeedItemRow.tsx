@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 import noop from 'lodash/noop';
 
 import { ActivityFeed } from '@box/activity-feed';
@@ -30,6 +31,7 @@ import {
 } from '../../../constants';
 
 type FeedItemRowProps = {
+    activeFeedEntryId?: string;
     currentUserId?: string;
     fps: number;
     isDisabled: boolean;
@@ -81,6 +83,7 @@ const buildReplyPost =
     };
 
 const FeedItemRow = ({
+    activeFeedEntryId,
     currentUserId,
     fps,
     isDisabled,
@@ -104,6 +107,10 @@ const FeedItemRow = ({
     timeFormat,
     userSelectorProps,
 }: FeedItemRowProps) => {
+    const threadRowClassName = classNames('bcs-NewActivityFeed-threadRow', {
+        'is-focused': item.id === activeFeedEntryId,
+    });
+
     switch (item.type) {
         case 'comment': {
             const { permissions } = item;
@@ -145,27 +152,28 @@ const FeedItemRow = ({
                     ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
                     : item.annotationTarget;
             return (
-                <ActivityFeed.List.ThreadedAnnotation
-                    key={item.id}
-                    annotationTarget={commentAnnotationTarget}
-                    isAnnotations={false}
-                    isEditDisabled={isDisabled || item.isResolved}
-                    isResolved={item.isResolved}
-                    messages={item.messages}
-                    onAnnotationBadgeClick={handleBadgeClick}
-                    onAvatarClick={noop}
-                    onCopyLink={onCommentCopyLink ? (id: string) => onCommentCopyLink({ id }) : undefined}
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
-                    onEditError={logEditError}
-                    onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, isDisabled, onReplyCreate)}
-                    onResolve={handleStatusChange('resolved')}
-                    onThreadDelete={() => handleDelete(item.id)}
-                    onUnresolve={handleStatusChange('open')}
-                    resolvedAt={item.resolvedAt}
-                    resolvedBy={item.resolvedBy}
-                    userSelectorProps={userSelectorProps}
-                />
+                <div key={item.id} className={threadRowClassName}>
+                    <ActivityFeed.List.ThreadedAnnotation
+                        annotationTarget={commentAnnotationTarget}
+                        isAnnotations={false}
+                        isEditDisabled={isDisabled || item.isResolved}
+                        isResolved={item.isResolved}
+                        messages={item.messages}
+                        onAnnotationBadgeClick={handleBadgeClick}
+                        onAvatarClick={noop}
+                        onCopyLink={onCommentCopyLink ? (id: string) => onCommentCopyLink({ id }) : undefined}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                        onEditError={logEditError}
+                        onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, isDisabled, onReplyCreate)}
+                        onResolve={handleStatusChange('resolved')}
+                        onThreadDelete={() => handleDelete(item.id)}
+                        onUnresolve={handleStatusChange('open')}
+                        resolvedAt={item.resolvedAt}
+                        resolvedBy={item.resolvedBy}
+                        userSelectorProps={userSelectorProps}
+                    />
+                </div>
             );
         }
 
@@ -209,31 +217,32 @@ const FeedItemRow = ({
                       }
                     : badgeTarget;
             return (
-                <ActivityFeed.List.ThreadedAnnotation
-                    key={item.id}
-                    annotationTarget={annotationBadgeTarget}
-                    isAnnotations={false}
-                    isEditDisabled={isDisabled || item.isResolved}
-                    isResolved={item.isResolved}
-                    messages={item.messages}
-                    onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
-                    onAvatarClick={noop}
-                    onCopyLink={
-                        onAnnotationCopyLink && fileVersionId
-                            ? () => onAnnotationCopyLink({ annotationId: item.id, fileVersionId })
-                            : undefined
-                    }
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
-                    onEditError={logEditError}
-                    onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, isDisabled, onReplyCreate)}
-                    onResolve={handleStatusChange('resolved')}
-                    onThreadDelete={() => handleDelete(item.id)}
-                    onUnresolve={handleStatusChange('open')}
-                    resolvedAt={item.resolvedAt}
-                    resolvedBy={item.resolvedBy}
-                    userSelectorProps={userSelectorProps}
-                />
+                <div key={item.id} className={threadRowClassName}>
+                    <ActivityFeed.List.ThreadedAnnotation
+                        annotationTarget={annotationBadgeTarget}
+                        isAnnotations={false}
+                        isEditDisabled={isDisabled || item.isResolved}
+                        isResolved={item.isResolved}
+                        messages={item.messages}
+                        onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
+                        onAvatarClick={noop}
+                        onCopyLink={
+                            onAnnotationCopyLink && fileVersionId
+                                ? () => onAnnotationCopyLink({ annotationId: item.id, fileVersionId })
+                                : undefined
+                        }
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                        onEditError={logEditError}
+                        onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, isDisabled, onReplyCreate)}
+                        onResolve={handleStatusChange('resolved')}
+                        onThreadDelete={() => handleDelete(item.id)}
+                        onUnresolve={handleStatusChange('open')}
+                        resolvedAt={item.resolvedAt}
+                        resolvedBy={item.resolvedBy}
+                        userSelectorProps={userSelectorProps}
+                    />
+                </div>
             );
         }
 
