@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { itemIconTable } from '@box/item-icon';
 import { shallow } from 'enzyme';
 import { PreviewLoading, PreviewLoadingRing, getIcon } from '..';
+import IconFileCode from '../../../icon/content/FileCode32';
 import { bdlBoxBlue } from '../../../styles/variables';
 
 const getWrapper = (props = {}) => shallow(<PreviewLoading {...props} />);
@@ -13,6 +15,20 @@ describe('components/preview/PreviewLoading', () => {
 
             expect(wrapper.children().type()).toEqual(PDFIcon);
             expect(wrapper.find(PreviewLoadingRing).prop('color')).toEqual('#D0021B');
+        });
+
+        test.each(['md', 'markdown', 'mdown'])('should use the Markdown icon for %s files', extension => {
+            const wrapper = getWrapper({ extension });
+
+            expect(getIcon(extension)).toEqual(itemIconTable.markdown);
+            expect(wrapper.children().type()).toEqual(itemIconTable.markdown);
+        });
+
+        test('should keep using the code icon for HTML files', () => {
+            const wrapper = getWrapper({ extension: 'html' });
+
+            expect(getIcon('html')).toEqual(IconFileCode);
+            expect(wrapper.children().type()).toEqual(IconFileCode);
         });
 
         test('should get a default color and icon if no extension is provided', () => {
