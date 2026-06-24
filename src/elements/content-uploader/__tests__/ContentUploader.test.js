@@ -1824,8 +1824,8 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             instance.handleLargeFileWarningUploadRest();
 
-            expect(instance.removeFileFromUploadQueue).toHaveBeenCalledWith(oversizeItem);
-            expect(instance.removeFileFromUploadQueue).not.toHaveBeenCalledWith(eligibleItem);
+            expect(instance.removeFileFromUploadQueue).toHaveBeenCalledWith(oversizeItem, true);
+            expect(instance.removeFileFromUploadQueue).not.toHaveBeenCalledWith(eligibleItem, true);
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
             expect(instance.upload).toHaveBeenCalledTimes(1);
         });
@@ -1860,8 +1860,8 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             instance.handleLargeFileWarningCancel();
 
-            expect(instance.removeFileFromUploadQueue).toHaveBeenCalledWith(oversizeItem);
-            expect(instance.removeFileFromUploadQueue).toHaveBeenCalledWith(eligibleItem);
+            expect(instance.removeFileFromUploadQueue).toHaveBeenCalledWith(oversizeItem, true);
+            expect(instance.removeFileFromUploadQueue).toHaveBeenCalledWith(eligibleItem, true);
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
         });
     });
