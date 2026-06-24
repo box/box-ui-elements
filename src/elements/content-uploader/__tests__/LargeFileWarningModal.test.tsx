@@ -91,11 +91,13 @@ describe('elements/content-uploader/LargeFileWarningModal', () => {
         expect(props.onCancel).toHaveBeenCalledTimes(1);
     });
 
-    test('calls onUpgradeCTAClick when upgrade link is clicked', async () => {
+    test('calls onUpgradeCTAClick and onCancel when upgrade link is clicked', async () => {
         const onUpgradeCTAClick = jest.fn();
-        renderModal({ onUpgradeCTAClick });
+        const onCancel = jest.fn();
+        renderModal({ onUpgradeCTAClick, onCancel });
         const user = userEvent();
         await user.click(await screen.findByRole('button', { name: 'Upgrade your plan' }));
         expect(onUpgradeCTAClick).toHaveBeenCalledTimes(1);
+        expect(onCancel).toHaveBeenCalledTimes(1);
     });
 });

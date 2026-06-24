@@ -50,6 +50,12 @@ const LargeFileWarningModal = ({
         }
     };
 
+    const handleUpgradeCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        onUpgradeCTAClick?.();
+        onCancel();
+    };
+
     const renderFileList = () => {
         return (
             <div
@@ -107,10 +113,7 @@ const LargeFileWarningModal = ({
                                             onUpgradeCTAClick ? (
                                                 <button
                                                     className="bcu-large-file-warning-modal-upgradeLink"
-                                                    onClick={event => {
-                                                        event.preventDefault();
-                                                        onUpgradeCTAClick();
-                                                    }}
+                                                    onClick={handleUpgradeCTAClick}
                                                     type="button"
                                                 >
                                                     {chunks}
