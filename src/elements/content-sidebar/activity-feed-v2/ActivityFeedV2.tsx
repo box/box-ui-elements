@@ -44,6 +44,7 @@ const ActivityFeedV2 = ({
     getAvatarUrl,
     getMentionAsync,
     getTaskCollaborators,
+    getViewer,
     hasTasks = true,
     isDisabled = false,
     isTimestampedCommentsEnabled = false,
@@ -306,6 +307,59 @@ const ActivityFeedV2 = ({
     const editorVideoTimestamp = allowVideoTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
+
+    React.useEffect(() => {
+        if (!getViewer || !isVideo) return undefined;
+        const viewer = getViewer();
+        if (!viewer) return undefined;
+
+        const markers: Array<{
+            avatarUrl?: string;
+            colorIndex?: number;
+            id: string;
+            initial?: string;
+            time: number;
+            type: 'annotation' | 'comment';
+        }> = [];
+        for (const item of filteredItems) {
+            if (item.type === 'comment' && item.annotationTimestampMs != null) {
+                const author = item.messages[0]?.author;
+                markers.push({
+                    avatarUrl: author?.avatarUrl ?? undefined,
+                    colorIndex: author?.id ?? 0,
+                    id: item.id,
+                    initial: author?.name?.[0] ?? undefined,
+                    time: item.annotationTimestampMs / 1000,
+                    type: 'comment',
+                });
+            } else if (item.type === 'annotation') {
+                const loc = item.annotation?.target?.location;
+                if (loc?.type === 'frame' && loc.value != null) {
+                    const author = item.messages[0]?.author;
+                    markers.push({
+                        avatarUrl: author?.avatarUrl ?? undefined,
+                        colorIndex: author?.id ?? 0,
+                        id: item.id,
+                        initial: author?.name?.[0] ?? undefined,
+                        time: loc.value / 1000,
+                        type: 'annotation',
+                    });
+                }
+            }
+        }
+        viewer.emit('commentmarkers', markers);
+
+        const handleMarkerSelect = ({ id }: { id: string }) => {
+            const el = document.querySelector(`[data-activity-id="${CSS.escape(id)}"]`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+        viewer.addListener('commentmarkerselect', handleMarkerSelect);
+        return () => {
+            viewer.removeListener('commentmarkerselect', handleMarkerSelect);
+        };
+    }, [filteredItems, getViewer, isVideo]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {

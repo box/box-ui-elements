@@ -94,6 +94,8 @@ export type ActivityFeedV2Props = {
     getAvatarUrl?: GetAvatarUrl;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getViewer?: () => any;
     hasTasks?: boolean;
     isDisabled?: boolean;
     isTimestampedCommentsEnabled?: boolean;
