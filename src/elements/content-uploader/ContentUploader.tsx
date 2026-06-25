@@ -791,7 +791,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @param {UploadItem} item - Item to remove
      * @return {void}
      */
-    removeFileFromUploadQueue = (item: UploadItem, skipAutoUpload: boolean = false) => {
+    removeFileFromUploadQueue = (item: UploadItem) => {
         const { onCancel, useUploadsManager } = this.props;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
@@ -835,10 +835,49 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             }
 
             const { view } = this.state;
-            if (view === VIEW_UPLOAD_IN_PROGRESS && !skipAutoUpload) {
+            if (view === VIEW_UPLOAD_IN_PROGRESS) {
                 this.upload();
             }
         });
+    };
+
+    /**
+     * Removes multiple items from the upload queue in a single batch update.
+     *
+     * @param {UploadItem[]} itemsToRemove - Items to remove
+     * @return {void}
+     */
+    removeItemsFromUploadQueue = (itemsToRemove: UploadItem[]): void => {
+        if (itemsToRemove.length === 0) {
+            return;
+        }
+
+        const { onCancel, rootFolderId } = this.props;
+
+        itemsToRemove.forEach(item => {
+            item.api.cancel();
+
+            if (item.file) {
+                const simpleFileId = item.file.name;
+                const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
+                const fullFileId = getFileId(fileWithOptions, rootFolderId);
+
+                delete this.itemIdsRef.current[simpleFileId];
+                delete this.itemIdsRef.current[fullFileId];
+            } else if (item.dedupeKey) {
+                delete this.itemIdsRef.current[item.dedupeKey];
+            }
+        });
+
+        const preservedItems = this.itemsRef.current.filter(item => !itemsToRemove.includes(item));
+
+        onCancel(itemsToRemove);
+
+        this.setState({
+            errorCode: '',
+            itemIds: { ...this.itemIdsRef.current },
+        });
+        this.updateViewAndCollection(preservedItems);
     };
 
     /**
@@ -1660,9 +1699,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     handleLargeFileWarningUploadRest = (): void => {
-        const oversizeItems = this.getOversizePendingItems();
-
-        oversizeItems.forEach(item => this.removeFileFromUploadQueue(item, true));
+        this.removeItemsFromUploadQueue(this.getOversizePendingItems());
 
         this.setState({ isLargeFileWarningModalOpen: false }, () => {
             this.upload();
@@ -1678,7 +1715,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     handleLargeFileWarningCancel = (): void => {
         const pendingItems = this.itemsRef.current.filter(item => item.status === STATUS_PENDING);
 
-        pendingItems.forEach(item => this.removeFileFromUploadQueue(item, true));
+        this.removeItemsFromUploadQueue(pendingItems);
 
         this.setState({ isLargeFileWarningModalOpen: false });
     };
