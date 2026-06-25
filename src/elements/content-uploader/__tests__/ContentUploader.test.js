@@ -1698,7 +1698,7 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
-    describe('maybeUpload()', () => {
+    describe('upload() large-file gate', () => {
         const makeFileWithSize = (name, size) => new File([new Uint8Array(size)], name, { type: 'text/plain' });
 
         const makePendingFileItem = (name, size) => ({
@@ -1714,36 +1714,36 @@ describe('elements/content-uploader/ContentUploader', () => {
         test('should upload immediately when maxFileSize is not configured', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            instance.upload = jest.fn();
+            instance.uploadFile = jest.fn();
             instance.itemsRef.current = [makePendingFileItem('large.txt', 200)];
 
-            instance.maybeUpload();
+            instance.upload();
 
-            expect(instance.upload).toHaveBeenCalledTimes(1);
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
         });
 
         test('should upload immediately when all pending files are within maxFileSize', () => {
             const wrapper = getWrapper({ maxFileSize: 100 });
             const instance = wrapper.instance();
-            instance.upload = jest.fn();
+            instance.uploadFile = jest.fn();
             instance.itemsRef.current = [makePendingFileItem('small.txt', 50)];
 
-            instance.maybeUpload();
+            instance.upload();
 
-            expect(instance.upload).toHaveBeenCalledTimes(1);
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
         });
 
         test('should open the large file warning modal when any pending file exceeds maxFileSize', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true, maxFileSize: 100 });
             const instance = wrapper.instance();
-            instance.upload = jest.fn();
+            instance.uploadFile = jest.fn();
             instance.itemsRef.current = [makePendingFileItem('small.txt', 50), makePendingFileItem('large.txt', 200)];
 
-            instance.maybeUpload();
+            instance.upload();
 
-            expect(instance.upload).not.toHaveBeenCalled();
+            expect(instance.uploadFile).not.toHaveBeenCalled();
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
         });
     });
@@ -1784,12 +1784,12 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             instance.itemsRef.current = [inProgressItem];
             wrapper.setState({ view: VIEW_UPLOAD_IN_PROGRESS });
-            instance.upload = jest.fn();
+            instance.uploadFile = jest.fn();
 
-            instance.addToQueue([oversizeItem, eligibleItem], instance.maybeUpload);
+            instance.addToQueue([oversizeItem, eligibleItem], instance.upload);
 
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
-            expect(instance.upload).not.toHaveBeenCalled();
+            expect(instance.uploadFile).not.toHaveBeenCalled();
             expect(eligibleItem.status).toBe(STATUS_PENDING);
         });
     });

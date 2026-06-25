@@ -238,7 +238,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { files, isPrepopulateFilesEnabled } = this.props;
         // isPrepopulateFilesEnabled is a prop used to pre-populate files without clicking upload button.
         if (isPrepopulateFilesEnabled && files && files.length > 0) {
-            this.addFilesToUploadQueue(files, this.maybeUpload);
+            this.addFilesToUploadQueue(files, this.upload);
         }
     }
 
@@ -738,7 +738,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             const { view } = this.state;
             // Automatically start upload if other files are being uploaded
             if (view === VIEW_UPLOAD_IN_PROGRESS) {
-                this.maybeUpload();
+                this.upload();
             }
         });
     };
@@ -864,6 +864,15 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     upload = () => {
+        const { maxFileSize, enableModernizedUploads } = this.props;
+
+        if (maxFileSize && enableModernizedUploads && this.getOversizePendingItems().length > 0) {
+            if (!this.state.isLargeFileWarningModalOpen) {
+                this.setState({ isLargeFileWarningModalOpen: true });
+            }
+            return;
+        }
+
         this.itemsRef.current.forEach(uploadItem => {
             if (uploadItem.status === STATUS_PENDING) {
                 this.uploadFile(uploadItem);
@@ -1638,33 +1647,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
-     * Starts upload immediately when no oversize files are present; otherwise opens
-     * the large file warning modal and waits for user confirmation.
-     *
-     * @private
-     * @return {void}
-     */
-    maybeUpload = (): void => {
-        const { maxFileSize, enableModernizedUploads } = this.props;
-
-        if (!maxFileSize || !enableModernizedUploads) {
-            this.upload();
-            return;
-        }
-
-        const oversizeItems = this.getOversizePendingItems();
-
-        if (oversizeItems.length === 0) {
-            this.upload();
-            return;
-        }
-
-        if (!this.state.isLargeFileWarningModalOpen) {
-            this.setState({ isLargeFileWarningModalOpen: true });
-        }
-    };
-
-    /**
      * Removes oversize pending items and starts uploading the remaining eligible items.
      *
      * @private
@@ -1705,8 +1687,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         files?: Array<UploadFileWithAPIOptions | File>,
         dataTransferItems?: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     ): void => {
-        this.addFilesToUploadQueue(files, this.maybeUpload);
-        this.addDataTransferItemsToUploadQueue(dataTransferItems, this.maybeUpload);
+        this.addFilesToUploadQueue(files, this.upload);
+        this.addDataTransferItemsToUploadQueue(dataTransferItems, this.upload);
     };
 
     /**
