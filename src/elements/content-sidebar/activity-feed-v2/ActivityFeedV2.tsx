@@ -73,6 +73,8 @@ const ActivityFeedV2 = ({
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
+    const scrollHandleRef = React.useRef<typeof scrollHandle | null>(null);
+    scrollHandleRef.current = scrollHandle;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
     const scrolledEntryIdRef = React.useRef<string | null>(null);
@@ -308,8 +310,11 @@ const ActivityFeedV2 = ({
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
-    const commentMarkers = React.useMemo(() => {
-        if (!isVideo) return [];
+    React.useEffect(() => {
+        if (!getViewer || !isVideo) return undefined;
+        const viewer = getViewer();
+        if (!viewer) return undefined;
+
         const markers: Array<{
             avatarUrl?: string;
             colorIndex?: number;
@@ -344,35 +349,19 @@ const ActivityFeedV2 = ({
                 }
             }
         }
-        return markers;
-    }, [filteredItems, isVideo]);
-
-    React.useEffect(() => {
-        if (!getViewer || !isVideo) return;
-        const viewer = getViewer();
-        if (!viewer) return;
-        viewer.emit('comment_markers', commentMarkers);
-    }, [commentMarkers, getViewer, isVideo]);
-
-    React.useEffect(() => {
-        if (!getViewer || !isVideo) return undefined;
-        const viewer = getViewer();
-        if (!viewer) return undefined;
+        viewer.emit('comment_markers', markers);
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
             requestAnimationFrame(() => {
-                const el = document.querySelector(`[data-activity-id="${CSS.escape(id)}"]`);
-                if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                scrollHandleRef.current?.scrollTo(id);
             });
         };
         viewer.addListener('comment_marker_select', handleMarkerSelect);
         return () => {
-            viewer.emit('comment_markers', []);
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
+            viewer.emit('comment_markers', []);
         };
-    }, [getViewer, isVideo]);
+    }, [filteredItems, getViewer, isVideo]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
