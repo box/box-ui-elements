@@ -1639,10 +1639,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
         const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
 
-        // The modernized uploads manager surfaces the most recently added item on top, while the
-        // internal queue stays in FIFO order so upload sequencing, fileLimit, and dedupe are
-        // unaffected. slice() avoids mutating state.items. The legacy UI keeps the original order.
-        const managerItems = enableModernizedUploads ? items.slice().reverse() : items;
+        const uploadsManagerItems = enableModernizedUploads ? items.slice().reverse() : items;
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
@@ -1668,7 +1665,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onMouseLeave={this.handleModernizedMouseLeave}
                         >
                             <UploadsManagerBP
-                                items={mapToModernizedUploadItems(managerItems, rootFolderId)}
+                                items={mapToModernizedUploadItems(uploadsManagerItems, rootFolderId)}
                                 isExpanded={isUploadsManagerExpanded}
                                 onToggle={this.toggleUploadsManager}
                                 onItemCancel={this.handleUploadsManagerItemCancel}
@@ -1698,7 +1695,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             isExpanded={isUploadsManagerExpanded}
                             isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
-                            items={managerItems}
+                            items={uploadsManagerItems}
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
                             onUpgradeCTAClick={onUpgradeCTAClick}
