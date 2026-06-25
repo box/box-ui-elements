@@ -72,8 +72,6 @@ const ActivityFeedV2 = ({
 }: ActivityFeedV2Props) => {
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
-    const scrollHandleRef = React.useRef(scrollHandle);
-    scrollHandleRef.current = scrollHandle;
     const currentUserId = currentUser?.id;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
@@ -353,7 +351,7 @@ const ActivityFeedV2 = ({
         if (!getViewer || !isVideo) return;
         const viewer = getViewer();
         if (!viewer) return;
-        viewer.emit('commentmarkers', commentMarkers);
+        viewer.emit('comment_markers', commentMarkers);
     }, [commentMarkers, getViewer, isVideo]);
 
     React.useEffect(() => {
@@ -363,13 +361,16 @@ const ActivityFeedV2 = ({
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
             requestAnimationFrame(() => {
-                scrollHandleRef.current?.scrollTo(id);
+                const el = document.querySelector(`[data-activity-id="${CSS.escape(id)}"]`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
         };
-        viewer.addListener('commentmarkerselect', handleMarkerSelect);
+        viewer.addListener('comment_marker_select', handleMarkerSelect);
         return () => {
-            viewer.emit('commentmarkers', []);
-            viewer.removeListener('commentmarkerselect', handleMarkerSelect);
+            viewer.emit('comment_markers', []);
+            viewer.removeListener('comment_marker_select', handleMarkerSelect);
         };
     }, [getViewer, isVideo]);
 
