@@ -1140,7 +1140,9 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should remove commentmarkerselect listener on unmount', () => {
             const { unmount } = renderComponentWithMarkers();
+            mockViewer.emit.mockClear();
             unmount();
+            expect(mockViewer.emit).toHaveBeenCalledWith('commentmarkers', []);
             expect(mockViewer.removeListener).toHaveBeenCalledWith('commentmarkerselect', expect.any(Function));
         });
 
