@@ -1736,7 +1736,11 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
 
         test('should open the large file warning modal when any pending file exceeds maxFileSize', () => {
-            const wrapper = getWrapper({ enableModernizedUploads: true, maxFileSize: 100 });
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: true,
+                maxFileSize: 100,
+            });
             const instance = wrapper.instance();
             instance.uploadFile = jest.fn();
             instance.itemsRef.current = [makePendingFileItem('small.txt', 50), makePendingFileItem('large.txt', 200)];
@@ -1746,13 +1750,33 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(instance.uploadFile).not.toHaveBeenCalled();
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
         });
+
+        test('should NOT open the modal when isUpgradeModalEnabled is false even with oversize files', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: false,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
     });
 
     describe('addToQueue()', () => {
         const makeFileWithSize = (name, size) => new File([new Uint8Array(size)], name, { type: 'text/plain' });
 
         test('should not auto-upload pending items when adding a batch with oversize files during an in-progress upload', () => {
-            const wrapper = getWrapper({ enableModernizedUploads: true, maxFileSize: 100 });
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: true,
+                maxFileSize: 100,
+            });
             const instance = wrapper.instance();
             const inProgressItem = {
                 api: {},

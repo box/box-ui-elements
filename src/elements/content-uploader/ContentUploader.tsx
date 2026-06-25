@@ -114,6 +114,7 @@ export interface ContentUploaderProps {
     uploadHost: string;
     useUploadsManager?: boolean;
     enableModernizedUploads?: boolean;
+    isUpgradeModalEnabled?: boolean;
     isExpanded?: boolean;
     onToggle?: (isExpanded: boolean) => void;
     maxFileSize?: number;
@@ -195,6 +196,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         useUploadsManager: false,
         enableModernizedUploads: false,
+        isUpgradeModalEnabled: false,
     };
 
     /**
@@ -864,9 +866,14 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     upload = () => {
-        const { maxFileSize, enableModernizedUploads } = this.props;
+        const { enableModernizedUploads, isUpgradeModalEnabled, maxFileSize } = this.props;
 
-        if (maxFileSize && enableModernizedUploads && this.getOversizePendingItems().length > 0) {
+        if (
+            maxFileSize &&
+            enableModernizedUploads &&
+            isUpgradeModalEnabled &&
+            this.getOversizePendingItems().length > 0
+        ) {
             if (!this.state.isLargeFileWarningModalOpen) {
                 this.setState({ isLargeFileWarningModalOpen: true });
             }
