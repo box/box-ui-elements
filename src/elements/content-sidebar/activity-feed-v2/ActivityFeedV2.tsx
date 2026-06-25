@@ -350,10 +350,12 @@ const ActivityFeedV2 = ({
         viewer.emit('commentmarkers', markers);
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
-            const el = document.querySelector(`[data-activity-id="${CSS.escape(id)}"]`);
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            requestAnimationFrame(() => {
+                const el = document.querySelector(`[data-activity-id="${CSS.escape(id)}"]`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         };
         viewer.addListener('commentmarkerselect', handleMarkerSelect);
         return () => {
