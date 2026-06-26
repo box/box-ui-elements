@@ -83,6 +83,12 @@ export type ActivityFeedV2File = {
     file_version?: { id: string };
 };
 
+export type ViewerHandle = {
+    addListener: (event: string, handler: (payload: unknown) => void) => void;
+    emit: (event: string, payload: unknown) => void;
+    removeListener: (event: string, handler: (payload: unknown) => void) => void;
+};
+
 export type ActivityFeedV2Props = {
     activeFeedEntryId?: string;
     approverSelectorContacts?: Array<Record<string, unknown>>;
@@ -94,6 +100,7 @@ export type ActivityFeedV2Props = {
     getAvatarUrl?: GetAvatarUrl;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
+    getViewer?: () => ViewerHandle | null;
     hasTasks?: boolean;
     isDisabled?: boolean;
     isTimestampedCommentsEnabled?: boolean;

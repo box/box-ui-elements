@@ -116,6 +116,7 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
+    getViewer?: Function,
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
@@ -1425,6 +1426,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         createTask={this.createTask}
                         currentUser={currentUser}
                         feedItems={this.getFilteredFeedItems()}
+                        getViewer={this.props.getViewer}
                         file={file}
                         getApproverWithQuery={this.getApprover}
                         getAvatarUrl={this.getAvatarUrl}
