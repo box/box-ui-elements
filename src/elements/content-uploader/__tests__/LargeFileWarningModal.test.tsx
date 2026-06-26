@@ -2,42 +2,20 @@ import * as React from 'react';
 import { render, screen, userEvent } from '../../../test-utils/testing-library';
 import LargeFileWarningModal, { type LargeFileWarningModalProps } from '../LargeFileWarningModal';
 
-const FILE_LIST_CONTAINER_CLASS = 'bcu-large-file-warning-modal-fileListContainer';
-const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
-const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth');
-
-beforeAll(() => {
-    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
-        configurable: true,
-        get(this: HTMLElement) {
-            if (this.classList?.contains(FILE_LIST_CONTAINER_CLASS)) {
-                return 140;
-            }
-
-            return originalOffsetHeight?.get?.call(this) ?? 0;
-        },
-    });
-    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-        configurable: true,
-        get(this: HTMLElement) {
-            if (this.classList?.contains(FILE_LIST_CONTAINER_CLASS)) {
-                return 300;
-            }
-
-            return originalOffsetWidth?.get?.call(this) ?? 0;
-        },
-    });
-});
-
-afterAll(() => {
-    if (originalOffsetHeight) {
-        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight);
-    }
-
-    if (originalOffsetWidth) {
-        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth);
-    }
-});
+jest.mock('@tanstack/react-virtual', () => ({
+    useVirtualizer: ({ count }: { count: number }) => ({
+        getTotalSize: () => count * 20,
+        getVirtualItems: () =>
+            Array.from({ length: count }, (_, index) => ({
+                index,
+                key: index,
+                start: index * 20,
+                end: (index + 1) * 20,
+                size: 20,
+                lane: 0,
+            })),
+    }),
+}));
 
 const renderModal = (props: Partial<LargeFileWarningModalProps> = {}) => {
     const defaultProps: LargeFileWarningModalProps = {
