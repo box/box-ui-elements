@@ -3,7 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { RouteComponentProps } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
-import { FIELD_PERMISSIONS_CAN_UPLOAD, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
+import { ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
 import { screen, render, waitFor, within } from '../../../test-utils/testing-library';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
@@ -101,7 +101,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     const mockFile = {
         id: '123',
-        permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
+        permissions: { can_upload: true },
     };
 
     const renderComponent = (props = {}, features = {}) => {
@@ -194,6 +194,66 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent();
 
         expect(screen.getByRole('button', { name: 'Add template' })).toBeInTheDocument();
+    });
+
+    test('should render "Add template" button when user has can_upload permission', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: { id: '123', permissions: { can_upload: true } },
+            extractErrorCode: null,
+        });
+
+        renderComponent();
+
+        expect(screen.getByRole('button', { name: 'Add template' })).toBeInTheDocument();
+    });
+
+    test('should not render "Add template" button when user lacks can_upload permission', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: { id: '123', permissions: { can_upload: false } },
+            extractErrorCode: null,
+        });
+
+        renderComponent();
+
+        expect(screen.queryByRole('button', { name: 'Add template' })).not.toBeInTheDocument();
+    });
+
+    test('should not render "Add template" button when file has no permissions', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: { id: '123' },
+            extractErrorCode: null,
+        });
+
+        renderComponent();
+
+        expect(screen.queryByRole('button', { name: 'Add template' })).not.toBeInTheDocument();
     });
 
     test('should have selectable "Custom Metadata" template in dropdown', async () => {
