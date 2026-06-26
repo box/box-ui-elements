@@ -155,6 +155,9 @@ type Props = {
     },
     previewLibraryVersion: string,
     previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
+    // npm path only: URL of the pdfjs worker file, resolved by the consumer's bundler.
+    // Passed to box-content-preview in the show() options as `pdfjs.workerSrc`.
+    pdfjsWorkerSrc?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,
@@ -275,6 +278,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     state: State;
 
     preview: any;
+
+    // Cached module reference once box-content-preview is dynamically imported
+    // under the npm-load path (useNpmBoxContentPreview feature flag).
+    npmPreviewModule: ?{ Preview: any };
 
     api: API;
 
@@ -467,10 +474,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        // Always load Box.Preview library assets
+        // Always load preview library assets (npm module or CDN script)
         // Even when children are provided, we need assets ready for transitions
-        this.loadStylesheet();
-        this.loadScript();
+        if (this.shouldUseNpmPreview()) {
+            this.loadNpmPreview();
+        } else {
+            this.loadStylesheet();
+            this.loadScript();
+        }
 
         const { currentFileId } = this.state;
         const { loadingIndicatorDelayMs } = this.props;
@@ -485,6 +496,77 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         this.fetchFile(currentFileId);
         this.focusPreview();
+    }
+
+    /**
+     * Whether to load Preview from the npm package (box-content-preview)
+     * instead of injecting the CDN script tag. Driven by the
+     * `useNpmBoxContentPreview` feature flag.
+     */
+    shouldUseNpmPreview(): boolean {
+        return isFeatureEnabled(this.props.features, 'useNpmBoxContentPreview');
+    }
+
+    /**
+     * Asynchronously loads the npm-published box-content-preview package
+     * (and its CSS) via bundler-resolved dynamic imports. Stashes the module
+     * so loadPreview() can read the Preview constructor synchronously.
+     */
+    loadNpmPreview = async (): Promise<void> => {
+        if (this.npmPreviewModule) {
+            return;
+        }
+
+        let previewModule;
+        try {
+            [previewModule] = await Promise.all([
+                import(/* webpackChunkName: "box-content-preview" */ 'box-content-preview'),
+                import(/* webpackChunkName: "box-content-preview" */ 'box-content-preview/styles.css'),
+            ]);
+        } catch (error) {
+            this.onNpmPreviewLoadError(
+                `Failed to load the box-content-preview module: ${error?.message || String(error)}`,
+            );
+            return;
+        }
+
+        if (!previewModule.Preview) {
+            this.onNpmPreviewLoadError('box-content-preview module has no Preview export');
+            return;
+        }
+
+        this.npmPreviewModule = previewModule;
+        this.loadPreview();
+    };
+
+    /**
+     * Builds the `location` option for the npm-loaded Preview library, which
+     * cannot self-derive it from a CDN script tag.
+     */
+    getNpmPreviewLocation(): { locale: string, staticBaseURI: string, version: string } {
+        const { language, previewLibraryVersion, staticHost, staticPath } = this.props;
+        const trailingSlash = staticHost.endsWith('/') ? '' : '/';
+        return {
+            locale: language,
+            staticBaseURI: `${staticHost}${trailingSlash}${staticPath}/`,
+            version: previewLibraryVersion,
+        };
+    }
+
+    /**
+     * Surfaces a failure to load the npm box-content-preview package through
+     * the standard error path so the host gets an onError callback and the
+     * loading mask is replaced with an error state.
+     */
+    onNpmPreviewLoadError(message: string): void {
+        const { onError } = this.props;
+        const error = {
+            code: ERROR_CODE_UNKNOWN,
+            message,
+        };
+        this.endLoadingSession();
+        this.setState({ error });
+        onError(error, ERROR_CODE_UNKNOWN, { error }, ORIGIN_PREVIEW);
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
@@ -621,6 +703,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {boolean} true if preview is loaded
      */
     isPreviewLibraryLoaded(): boolean {
+        if (this.npmPreviewModule) {
+            return true;
+        }
         return !!global.Box && !!global.Box.Preview;
     }
 
@@ -1006,8 +1091,17 @@ class ContentPreview extends React.PureComponent<Props, State> {
             showProgress: false,
             skipServerUpdate: true,
             useHotkeys: false,
+            // npm path: forward the pdfjs worker URL the consumer's bundler emitted.
+            ...(this.npmPreviewModule && this.props.pdfjsWorkerSrc
+                ? { pdfjs: { workerSrc: this.props.pdfjsWorkerSrc } }
+                : {}),
+            // npm path: forward location data to box-content-preview's `this.location`.
+            // Without this, viewer code that builds asset URLs from staticBaseURI (e.g., the
+            // video viewer's Shaka loader) gets `undefined` and fails silently.
+            ...(this.npmPreviewModule ? { location: this.getNpmPreviewLocation() } : {}),
         };
-        const { Preview } = global.Box;
+
+        const Preview = this.npmPreviewModule ? this.npmPreviewModule.Preview : global.Box.Preview;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preload', this.endLoadingSession);

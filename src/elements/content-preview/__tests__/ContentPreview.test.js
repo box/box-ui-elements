@@ -9,6 +9,18 @@ import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 
+// Mock the real Preview class: it cannot boot in jsdom.
+jest.mock('box-content-preview', () => ({
+    Preview: function Preview() {
+        this.addListener = jest.fn();
+        this.destroy = jest.fn();
+        this.removeAllListeners = jest.fn();
+        this.show = jest.fn();
+        this.updateFileCache = jest.fn();
+    },
+}));
+jest.mock('box-content-preview/styles.css', () => ({}));
+
 describe('elements/content-preview/ContentPreview', () => {
     const getWrapper = (props = {}) =>
         shallow(<ContentPreview logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }} {...props} />);
@@ -2511,6 +2523,149 @@ describe('elements/content-preview/ContentPreview', () => {
 
             bodyDiv = wrapper.find('.bcpr-body');
             expect(bodyDiv.children().length).toBe(2);
+        });
+    });
+
+    describe('npm preview load path (useNpmBoxContentPreview)', () => {
+        const npmProps = {
+            features: { useNpmBoxContentPreview: true },
+            fileId: '123',
+            token: 'token',
+        };
+
+        beforeEach(() => {
+            file = { id: '123' };
+        });
+
+        describe('componentDidMount()', () => {
+            test('should inject stylesheet and script and not import the npm module when the flag is off', () => {
+                const loadStylesheetSpy = jest.spyOn(ContentPreview.prototype, 'loadStylesheet');
+                const loadScriptSpy = jest.spyOn(ContentPreview.prototype, 'loadScript');
+                const wrapper = getWrapper({ fileId: '123', token: 'token' });
+                expect(loadStylesheetSpy).toHaveBeenCalled();
+                expect(loadScriptSpy).toHaveBeenCalled();
+                expect(wrapper.instance().npmPreviewModule).toBeUndefined();
+            });
+
+            test('should import the npm module and not inject stylesheet or script when the flag is on', async () => {
+                const loadStylesheetSpy = jest.spyOn(ContentPreview.prototype, 'loadStylesheet');
+                const loadScriptSpy = jest.spyOn(ContentPreview.prototype, 'loadScript');
+                const wrapper = getWrapper(npmProps);
+                const instance = wrapper.instance();
+                await instance.loadNpmPreview();
+                expect(loadStylesheetSpy).not.toHaveBeenCalled();
+                expect(loadScriptSpy).not.toHaveBeenCalled();
+                expect(instance.npmPreviewModule.Preview).toBeDefined();
+                expect(instance.isPreviewLibraryLoaded()).toBe(true);
+            });
+        });
+
+        describe('loadPreview()', () => {
+            test('should use the npm Preview export and forward pdfjs.workerSrc and location without the CDN global', async () => {
+                delete global.Box;
+                const wrapper = getWrapper({
+                    ...npmProps,
+                    language: 'ja-JP',
+                    pdfjsWorkerSrc: 'https://consumer.example.com/pdf.worker.min.mjs',
+                    previewLibraryVersion: '3.61.0',
+                });
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+                await instance.loadNpmPreview();
+                expect(instance.preview.show).toHaveBeenCalledWith(
+                    file.id,
+                    expect.any(Function),
+                    expect.objectContaining({
+                        location: {
+                            locale: 'ja-JP',
+                            staticBaseURI: 'https://cdn01.boxcdn.net/platform/preview/',
+                            version: '3.61.0',
+                        },
+                        pdfjs: { workerSrc: 'https://consumer.example.com/pdf.worker.min.mjs' },
+                    }),
+                );
+            });
+
+            test('should not add a trailing slash to staticBaseURI when staticHost already ends with one', async () => {
+                const wrapper = getWrapper({
+                    ...npmProps,
+                    staticHost: 'https://static.example.com/',
+                    staticPath: 'preview-assets',
+                });
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+                await instance.loadNpmPreview();
+                const options = instance.preview.show.mock.calls[0][2];
+                expect(options.location.staticBaseURI).toBe('https://static.example.com/preview-assets/');
+            });
+
+            test('should omit pdfjs from preview options when pdfjsWorkerSrc is not provided', async () => {
+                const wrapper = getWrapper(npmProps);
+                wrapper.setState({ file });
+                const instance = wrapper.instance();
+                await instance.loadNpmPreview();
+                const options = instance.preview.show.mock.calls[0][2];
+                expect(options.pdfjs).toBeUndefined();
+            });
+        });
+
+        describe('loadNpmPreview() error handling', () => {
+            // Mounts with the flag off so componentDidMount does not import the healthy
+            // module before jest.doMock swaps in the broken one.
+            afterEach(() => {
+                jest.dontMock('box-content-preview');
+                jest.resetModules();
+            });
+
+            test('should set error state and call onError when the module has no Preview export', async () => {
+                const onError = jest.fn();
+                const wrapper = getWrapper({ fileId: '123', onError, token: 'token' });
+                const instance = wrapper.instance();
+
+                jest.resetModules();
+                jest.doMock('box-content-preview', () => ({}));
+                await instance.loadNpmPreview();
+
+                const expectedError = {
+                    code: 'unknown_error',
+                    message: 'box-content-preview module has no Preview export',
+                };
+                expect(instance.npmPreviewModule).toBeUndefined();
+                expect(wrapper.state('error')).toEqual(expectedError);
+                expect(wrapper.state('isLoading')).toBe(false);
+                expect(onError).toHaveBeenCalledWith(
+                    expectedError,
+                    'unknown_error',
+                    { error: expectedError },
+                    'preview',
+                );
+            });
+
+            test('should set error state and call onError when the dynamic import fails', async () => {
+                const onError = jest.fn();
+                const wrapper = getWrapper({ fileId: '123', onError, token: 'token' });
+                const instance = wrapper.instance();
+
+                jest.resetModules();
+                jest.doMock('box-content-preview', () => {
+                    throw new Error('chunk load failed');
+                });
+                await instance.loadNpmPreview();
+
+                const expectedError = {
+                    code: 'unknown_error',
+                    message: 'Failed to load the box-content-preview module: chunk load failed',
+                };
+                expect(instance.npmPreviewModule).toBeUndefined();
+                expect(wrapper.state('error')).toEqual(expectedError);
+                expect(wrapper.state('isLoading')).toBe(false);
+                expect(onError).toHaveBeenCalledWith(
+                    expectedError,
+                    'unknown_error',
+                    { error: expectedError },
+                    'preview',
+                );
+            });
         });
     });
 });
