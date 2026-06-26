@@ -315,7 +315,7 @@ function useSidebarMetadataFetcher(
                 return result;
             });
         },
-        [api, file, isConfidenceScoreEnabled, isBoundingBoxOrConfidenceScoreReviewEnabled, onError, templates],
+        [api, file, isConfidenceScoreEnabled, isBoundingBoxEnabled, onError, templates],
     );
 
     React.useEffect(() => {
