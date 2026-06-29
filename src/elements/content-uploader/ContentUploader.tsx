@@ -284,7 +284,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         );
 
         if (!hasItemsInUploadQueue && modernizedPanelState === 'shown') {
+            this.clearModernizedDismissTimer();
             this.setState({ modernizedPanelState: 'hidden' });
+            return;
         }
 
         if (hasItemsInUploadQueue && modernizedPanelState === 'hidden') {
@@ -799,25 +801,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { api } = item;
         api.cancel();
 
-        // Remove dedupe IDs from itemIdsRef to allow re-uploading the same item
-        if (item.file) {
-            const { rootFolderId } = this.props;
+        this.deleteDedupeIds(item);
 
-            // Delete both IDs that were added:
-            // 1. Simple filename (added in addFilesToUploadQueue)
-            const simpleFileId = item.file.name;
-            // 2. Full ID with timestamp (added in addFilesWithoutRelativePathToQueue)
-            const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
-            const fullFileId = getFileId(fileWithOptions, rootFolderId);
-
-            delete this.itemIdsRef.current[simpleFileId];
-            delete this.itemIdsRef.current[fullFileId];
-
-            const newItemIds = { ...this.itemIdsRef.current };
-            this.setState({ itemIds: newItemIds });
-        } else if (item.dedupeKey) {
-            // Folder items stash the dedupe key written in addFolderDataTransferItemsToUploadQueue
-            delete this.itemIdsRef.current[item.dedupeKey];
+        if (item.file || item.dedupeKey) {
             const newItemIds = { ...this.itemIdsRef.current };
             this.setState({ itemIds: newItemIds });
         }
@@ -852,24 +838,15 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             return;
         }
 
-        const { onCancel, rootFolderId } = this.props;
+        const { onCancel } = this.props;
 
         itemsToRemove.forEach(item => {
             item.api.cancel();
-
-            if (item.file) {
-                const simpleFileId = item.file.name;
-                const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
-                const fullFileId = getFileId(fileWithOptions, rootFolderId);
-
-                delete this.itemIdsRef.current[simpleFileId];
-                delete this.itemIdsRef.current[fullFileId];
-            } else if (item.dedupeKey) {
-                delete this.itemIdsRef.current[item.dedupeKey];
-            }
+            this.deleteDedupeIds(item);
         });
 
-        const preservedItems = this.itemsRef.current.filter(item => !itemsToRemove.includes(item));
+        const removalSet = new Set(itemsToRemove);
+        const preservedItems = this.itemsRef.current.filter(item => !removalSet.has(item));
 
         onCancel(itemsToRemove);
 
@@ -1653,21 +1630,51 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Removes dedupe IDs from itemIdsRef to allow re-uploading the same item.
+     *
+     * @private
+     * @param {UploadItem} item
+     * @return {void}
+     */
+    deleteDedupeIds = (item: UploadItem): void => {
+        if (item.file) {
+            const { rootFolderId } = this.props;
+            // Delete both IDs that were added:
+            // 1. Simple filename (added in addFilesToUploadQueue)
+            const simpleFileId = item.file.name;
+            // 2. Full ID with timestamp (added in addFilesWithoutRelativePathToQueue)
+            const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
+            const fullFileId = getFileId(fileWithOptions, rootFolderId);
+
+            delete this.itemIdsRef.current[simpleFileId];
+            delete this.itemIdsRef.current[fullFileId];
+        } else if (item.dedupeKey) {
+            // Folder items stash the dedupe key written in addFolderDataTransferItemsToUploadQueue
+            delete this.itemIdsRef.current[item.dedupeKey];
+        }
+    };
+
+    /**
+     * Returns whether an upload item exceeds the configured max file size.
+     *
+     * @private
+     * @param {UploadItem} item
+     * @return {boolean}
+     */
+    isOversize = (item: UploadItem): boolean => {
+        const { maxFileSize } = this.props;
+
+        return !!maxFileSize && !!item.file && item.file.size > maxFileSize;
+    };
+
+    /**
      * Returns pending upload items that exceed the configured max file size.
      *
      * @private
      * @return {UploadItem[]}
      */
     getOversizePendingItems = (): UploadItem[] => {
-        const { maxFileSize } = this.props;
-
-        if (!maxFileSize) {
-            return [];
-        }
-
-        return this.itemsRef.current.filter(
-            item => item.status === STATUS_PENDING && item.file && item.file.size > maxFileSize,
-        );
+        return this.itemsRef.current.filter(item => item.status === STATUS_PENDING && this.isOversize(item));
     };
 
     /**
@@ -1677,19 +1684,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {number}
      */
     getEligiblePendingCount = (): number => {
-        const { maxFileSize } = this.props;
+        const pending = this.itemsRef.current.filter(i => i.status === STATUS_PENDING);
 
-        return this.itemsRef.current.filter(item => {
-            if (item.status !== STATUS_PENDING) {
-                return false;
-            }
-
-            if (!item.file || !maxFileSize) {
-                return true;
-            }
-
-            return item.file.size <= maxFileSize;
-        }).length;
+        return pending.length - pending.filter(this.isOversize).length;
     };
 
     /**
@@ -1777,12 +1774,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
         const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
-        const oversizePendingItems = this.getOversizePendingItems();
-        const oversizeFiles = oversizePendingItems.map(item => ({
-            name: item.name,
-            size: item.file?.size ?? 0,
-        }));
-        const eligiblePendingCount = this.getEligiblePendingCount();
 
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
@@ -1791,6 +1782,13 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const renderUploader = () => {
             if (enableModernizedUploads) {
+                const oversizePendingItems = this.getOversizePendingItems();
+                const oversizeFiles = oversizePendingItems.map(item => ({
+                    name: item.name,
+                    size: item.file?.size ?? 0,
+                }));
+                const eligiblePendingCount = this.getEligiblePendingCount();
+
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />

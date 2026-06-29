@@ -1696,6 +1696,49 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state('modernizedPanelState')).toBe('hidden');
             expect(instance.modernizedDismissTimer).toBeNull();
         });
+
+        test('clears dismiss timer and hides panel when queue empties while shown', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+
+            wrapper.setState({
+                items: [],
+            });
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+        });
+
+        test('clears dismiss timer and hides panel when cancel empties the queue', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            const pendingItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            wrapper.setState({
+                items: [pendingItem],
+                modernizedPanelState: 'shown',
+                isLargeFileWarningModalOpen: true,
+            });
+            instance.itemsRef.current = [pendingItem];
+
+            instance.handleLargeFileWarningCancel();
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+        });
     });
 
     describe('upload() large-file gate', () => {
@@ -1810,7 +1853,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             wrapper.setState({ view: VIEW_UPLOAD_IN_PROGRESS });
             instance.uploadFile = jest.fn();
 
-            instance.addToQueue([oversizeItem, eligibleItem], instance.upload);
+            instance.addToQueue([oversizeItem, eligibleItem], null);
 
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
             expect(instance.uploadFile).not.toHaveBeenCalled();

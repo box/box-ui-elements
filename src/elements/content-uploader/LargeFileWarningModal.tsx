@@ -73,7 +73,7 @@ const LargeFileWarningModal = ({
 
                         return (
                             <div
-                                key={`${file.name}-${file.size}`}
+                                key={`${file.name}-${file.size}-${item.index}`}
                                 ref={rowVirtualizer.measureElement}
                                 className="bcu-large-file-warning-modal-fileListRow"
                                 data-index={item.index}
