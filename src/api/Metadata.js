@@ -173,13 +173,33 @@ class Metadata extends File {
     }
 
     /**
+     * Base URL used for metadata template endpoints (`/metadata_templates/...`).
+     *
+     * Routes through the regional metadata host when `metadataApiHost` is
+     * set and distinct from `apiHost`; otherwise returns the same value as
+     * `getBaseApiUrl()`.
+     *
+     * Taxonomy endpoints intentionally use `getBaseApiUrl()` instead and are
+     * not affected by `metadataApiHost`.
+     *
+     * @return {string} base url for metadata template endpoints
+     */
+    getMetadataTemplateBaseUrl(): string {
+        const { metadataApiHost, apiHost } = this;
+        if (!metadataApiHost || metadataApiHost === apiHost) {
+            return this.getBaseApiUrl();
+        }
+        return this.buildApiUrl(metadataApiHost);
+    }
+
+    /**
      * API URL for metadata templates for a scope
      *
      * @param {string} scope - metadata scope
      * @return {string} base url for files
      */
     getMetadataTemplateUrl(): string {
-        return `${this.getBaseApiUrl()}/metadata_templates`;
+        return `${this.getMetadataTemplateBaseUrl()}/metadata_templates`;
     }
 
     /**
@@ -1464,7 +1484,7 @@ class Metadata extends File {
      * @returns {`${string}/metadata_templates/${string}/${string}/fields/${string}/options`}
      */
     getMetadataOptionsUrl(scope: string, templateKey: string, fieldKey: string): string {
-        return `${this.getBaseApiUrl()}/metadata_templates/${scope}/${templateKey}/fields/${fieldKey}/options`;
+        return `${this.getMetadataTemplateBaseUrl()}/metadata_templates/${scope}/${templateKey}/fields/${fieldKey}/options`;
     }
 
     /**

@@ -118,9 +118,17 @@ describe('api/Metadata', () => {
         test('should return correct base api url', () => {
             expect(metadata.getMetadataTemplateUrl('scope')).toBe('https://api.box.com/2.0/metadata_templates');
         });
-        test('should keep using apiHost even when metadataApiHost is set', () => {
+        test('should route through metadataApiHost when distinct from apiHost', () => {
             const regional = new Metadata({ metadataApiHost: 'https://api-jp.box.com' });
-            expect(regional.getMetadataTemplateUrl()).toBe('https://api.box.com/2.0/metadata_templates');
+            expect(regional.getMetadataTemplateUrl()).toBe('https://api-jp.box.com/2.0/metadata_templates');
+        });
+        test('should fall back to apiHost when metadataApiHost equals apiHost', () => {
+            const equal = new Metadata({ apiHost: 'https://api.box.com', metadataApiHost: 'https://api.box.com' });
+            expect(equal.getMetadataTemplateUrl()).toBe('https://api.box.com/2.0/metadata_templates');
+        });
+        test('should normalize a trailing slash on metadataApiHost', () => {
+            const trailing = new Metadata({ metadataApiHost: 'https://api-jp.box.com/' });
+            expect(trailing.getMetadataTemplateUrl()).toBe('https://api-jp.box.com/2.0/metadata_templates');
         });
     });
 
@@ -4487,10 +4495,10 @@ describe('api/Metadata', () => {
     });
 
     describe('metadataApiHost routing', () => {
-        // Verifies that a regional metadataApiHost affects ONLY metadata
-        // *instance* endpoints (file/folder /metadata/...). Templates,
-        // taxonomies, suggestions, and options always continue to use
-        // apiHost.
+        // Verifies that a regional metadataApiHost affects metadata *instance*
+        // endpoints (file/folder /metadata/...) AND metadata template endpoints
+        // (/metadata_templates/...), but NOT taxonomy endpoints
+        // (/metadata_taxonomies/...) or suggestions.
         const apiHost = 'https://api.box.com';
         const metadataApiHost = 'https://api-jp.box.com';
 
@@ -4508,19 +4516,26 @@ describe('api/Metadata', () => {
             );
         });
 
-        test('keeps templates / suggestions / options / taxonomy on apiHost', () => {
+        test('routes template endpoints to regional host', () => {
             const api = new Metadata({ apiHost, metadataApiHost });
-            expect(api.getMetadataTemplateUrl()).toBe('https://api.box.com/2.0/metadata_templates');
+            expect(api.getMetadataTemplateUrl()).toBe('https://api-jp.box.com/2.0/metadata_templates');
             expect(api.getMetadataTemplateUrlForScope('enterprise')).toBe(
-                'https://api.box.com/2.0/metadata_templates/enterprise',
+                'https://api-jp.box.com/2.0/metadata_templates/enterprise',
             );
             expect(api.getMetadataTemplateSchemaUrl('tpl')).toBe(
-                'https://api.box.com/2.0/metadata_templates/enterprise/tpl/schema',
+                'https://api-jp.box.com/2.0/metadata_templates/enterprise/tpl/schema',
             );
-            expect(api.getMetadataSuggestionsUrl()).toBe('https://api.box.com/2.0/metadata_instances/suggestions');
+            expect(api.getMetadataTemplateUrlForInstance('inst_id')).toBe(
+                'https://api-jp.box.com/2.0/metadata_templates?metadata_instance_id=inst_id',
+            );
             expect(api.getMetadataOptionsUrl('enterprise', 'tpl', 'field')).toBe(
-                'https://api.box.com/2.0/metadata_templates/enterprise/tpl/fields/field/options',
+                'https://api-jp.box.com/2.0/metadata_templates/enterprise/tpl/fields/field/options',
             );
+        });
+
+        test('keeps taxonomy and suggestions on apiHost', () => {
+            const api = new Metadata({ apiHost, metadataApiHost });
+            expect(api.getMetadataSuggestionsUrl()).toBe('https://api.box.com/2.0/metadata_instances/suggestions');
             expect(api.getMetadataTaxonomyUrl('enterprise', 'taxKey')).toBe(
                 'https://api.box.com/2.0/metadata_taxonomies/enterprise/taxKey',
             );
@@ -4535,7 +4550,6 @@ describe('api/Metadata', () => {
         test('full fallback when metadataApiHost is undefined (byte-identical URLs)', () => {
             const fallback = new Metadata({ apiHost });
             const baseline = new Metadata({});
-            // Fallback construction must produce URLs identical to the baseline (no metadataApiHost).
             expect(fallback.getMetadataUrl('1', 'enterprise_1', 'tpl')).toBe(
                 baseline.getMetadataUrl('1', 'enterprise_1', 'tpl'),
             );
@@ -4543,6 +4557,9 @@ describe('api/Metadata', () => {
                 baseline.getMetadataUrlForFolder('1', 'enterprise_1', 'tpl'),
             );
             expect(fallback.getMetadataTemplateUrl()).toBe(baseline.getMetadataTemplateUrl());
+            expect(fallback.getMetadataOptionsUrl('enterprise', 'tpl', 'field')).toBe(
+                baseline.getMetadataOptionsUrl('enterprise', 'tpl', 'field'),
+            );
             expect(fallback.getMetadataSuggestionsUrl()).toBe(baseline.getMetadataSuggestionsUrl());
         });
     });
