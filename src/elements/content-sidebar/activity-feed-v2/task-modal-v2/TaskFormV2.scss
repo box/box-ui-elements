@@ -1,0 +1,11 @@
+.bcs-NewTaskForm {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bp-space-040);
+
+    // Allow direct children to shrink below their content's intrinsic width so
+    // the user-selector chips wrap inside the modal instead of widening it.
+    > * {
+        min-width: 0;
+    }
+}
