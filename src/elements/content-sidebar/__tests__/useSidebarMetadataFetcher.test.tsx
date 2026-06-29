@@ -621,7 +621,7 @@ describe('useSidebarMetadataFetcher', () => {
             );
         });
 
-        test('should include include_confidence_score and include_reference when isConfidenceScoreEnabled is true', async () => {
+        test('should include only include_confidence_score when only isConfidenceScoreEnabled is true', async () => {
             mockAPI.extractStructured.mockResolvedValue({
                 answer: { field1: 'value1' },
                 created_at: '2026-03-27T08:10:14.106-07:00',
@@ -629,6 +629,29 @@ describe('useSidebarMetadataFetcher', () => {
             });
 
             const { result } = setupHook('123', true);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+                include_confidence_score: true,
+            });
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_reference: expect.anything(),
+                }),
+            );
+        });
+
+        test('should include include_confidence_score and include_reference when both flags are true', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true, true);
 
             await result.current.extractSuggestions('templateKey', 'global');
 
