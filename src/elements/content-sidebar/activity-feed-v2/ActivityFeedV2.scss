@@ -1,8 +1,6 @@
 // Resets BUIE .bcs global styles that leak into Blueprint and
 // @box/threaded-annotations components.
 
-@import '../../common/variables';
-
 .bcs-NewActivityFeed {
     position: absolute;
     inset: 0;
@@ -46,17 +44,13 @@
         padding: var(--bp-space-030) var(--bp-space-040);
     }
 
-    // Wrapper is transparent to layout; serves only as a DOM hook for the
-    // focused descendant selector below. The visible focus chrome (border,
-    // background) is painted directly onto the vendor's threaded-annotation
-    // card so its own border-radius, padding, and position are reused.
-    // Class name is CSS-modules-hashed; substring match survives bumps.
+    // Layout-transparent hook that paints focus chrome onto the vendor card (CSS-modules-hashed, so match a substring).
     &-threadRow {
         display: contents;
 
         &.is-focused [class*='threadedAnnotations'] {
-            border-color: $bdl-box-blue-80;
-            background-color: rgba($bdl-box-blue, 0.04);
+            border-color: var(--bp-box-blue-80);
+            background-color: var(--bp-box-blue-opacity-04);
         }
     }
 }

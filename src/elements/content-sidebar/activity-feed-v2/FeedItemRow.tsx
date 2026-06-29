@@ -152,7 +152,7 @@ const FeedItemRow = ({
                     ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
                     : item.annotationTarget;
             return (
-                <div key={item.id} className={threadRowClassName}>
+                <div className={threadRowClassName}>
                     <ActivityFeed.List.ThreadedAnnotation
                         annotationTarget={commentAnnotationTarget}
                         isAnnotations={false}
@@ -217,7 +217,7 @@ const FeedItemRow = ({
                       }
                     : badgeTarget;
             return (
-                <div key={item.id} className={threadRowClassName}>
+                <div className={threadRowClassName}>
                     <ActivityFeed.List.ThreadedAnnotation
                         annotationTarget={annotationBadgeTarget}
                         isAnnotations={false}

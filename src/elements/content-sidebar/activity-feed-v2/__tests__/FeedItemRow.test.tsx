@@ -1033,4 +1033,40 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             });
         });
     });
+
+    describe('focus state', () => {
+        const getThreadRow = () => screen.getByRole('article', { name: 'threaded annotation' }).parentElement;
+
+        test('should wrap a comment thread in a threadRow div without breaking rendering', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+
+            expect(screen.getByRole('article', { name: 'threaded annotation' })).toBeVisible();
+            expect(getThreadRow()).toHaveClass('bcs-NewActivityFeed-threadRow');
+        });
+
+        test('should mark the comment row focused when activeFeedEntryId matches the item id', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />);
+            expect(getThreadRow()).toHaveClass('is-focused');
+        });
+
+        test('should not mark the comment row focused when activeFeedEntryId does not match', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-2" item={mockComment} />);
+            expect(getThreadRow()).not.toHaveClass('is-focused');
+        });
+
+        test('should not mark the comment row focused when activeFeedEntryId is undefined', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+            expect(getThreadRow()).not.toHaveClass('is-focused');
+        });
+
+        test('should mark the annotation row focused when activeFeedEntryId matches the item id', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-1" item={mockAnnotation} />);
+            expect(getThreadRow()).toHaveClass('bcs-NewActivityFeed-threadRow', 'is-focused');
+        });
+
+        test('should not mark the annotation row focused when activeFeedEntryId does not match', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-2" item={mockAnnotation} />);
+            expect(getThreadRow()).not.toHaveClass('is-focused');
+        });
+    });
 });
