@@ -1639,6 +1639,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
         const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
 
+        const uploadsManagerItems = enableModernizedUploads ? items.slice().reverse() : items;
+
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
             be: !useUploadsManager,
@@ -1663,7 +1665,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onMouseLeave={this.handleModernizedMouseLeave}
                         >
                             <UploadsManagerBP
-                                items={mapToModernizedUploadItems(items, rootFolderId)}
+                                items={mapToModernizedUploadItems(uploadsManagerItems, rootFolderId)}
                                 isExpanded={isUploadsManagerExpanded}
                                 onToggle={this.toggleUploadsManager}
                                 onItemCancel={this.handleUploadsManagerItemCancel}
@@ -1693,7 +1695,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             isExpanded={isUploadsManagerExpanded}
                             isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
-                            items={items}
+                            items={uploadsManagerItems}
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
                             onUpgradeCTAClick={onUpgradeCTAClick}

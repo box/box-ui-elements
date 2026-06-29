@@ -1179,20 +1179,25 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^1.73.4":
-  version "1.73.11"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-1.73.11.tgz#ab80b67d3b6257bf7019a5711d803eb277993796"
-  integrity sha512-eiP+im6cDvDsYqQClUpt8Xc25yweJ0P6779YC7U/i4fsl21w6+FqddjtoXBtinfVqwXgo2Jelbl4wqgK/r8CYA==
+"@box/metadata-editor@^2.2.11":
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.2.11.tgz#6a4875e0c1f3ba3593887ad6694e2b74162853d8"
+  integrity sha512-ouF4cPC2kzqgVJ9hnMOqtOy+SDd7MMec/igg0EqzGXXGpo8vuIsl3M2zk4qXHS9kTXXDbK+Xq0wb7WMfCj+ccA==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
 
-"@box/metadata-template-browser@^1.24.11":
-  version "1.24.13"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-1.24.13.tgz#95f5490bf746a3c0e1629e8ba253c60295378764"
-  integrity sha512-P7Njbhom5dt2tLL1LCZ3jpCK76oG0mXVn3tECCpfcw2cAthZjprzPl1tgKcyWEA1mAwuiNGKl1AcQMiIXwLJ1A==
+"@box/metadata-taxonomy-picker@^3.1.8":
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.1.8.tgz#d72f6df53c69b75f9e3fddbdaaca39858d43aade"
+  integrity sha512-ahlkefldWk1OlMtbD3i8b7yrPgHDkP2IBXvcFC3R+ckSsBjxa2amo63C0lViOHUc9vjZWrutY7EqeKUtTJ7OGw==
+
+"@box/metadata-template-browser@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-2.1.7.tgz#f31de745e40004805a230cd624912e1c5cf9547f"
+  integrity sha512-MzuFyzVInAR0ZqT4g3wro47DmirT39YaYIsxRborZtL1TpaQpgxZoqCWQ+/pgtuGoGHyoP+kpueO8APeC+XCGg==
 
 "@box/metadata-view@^1.53.26":
   version "1.53.26"
