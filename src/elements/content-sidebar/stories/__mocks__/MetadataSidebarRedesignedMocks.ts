@@ -42,7 +42,7 @@ export const mockFileRequestWithoutMetadata = {
         permissions: {
             can_download: true,
             can_preview: true,
-            can_upload: false,
+            can_upload: true,
             can_comment: true,
             can_rename: false,
             can_delete: false,

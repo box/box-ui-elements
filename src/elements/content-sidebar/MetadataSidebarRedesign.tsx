@@ -290,7 +290,9 @@ function MetadataSidebarRedesign({
 
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
-    const metadataDropdown = isSuccess && templates && (
+    const canEdit = !!file?.permissions?.can_upload;
+
+    const metadataDropdown = canEdit && isSuccess && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
