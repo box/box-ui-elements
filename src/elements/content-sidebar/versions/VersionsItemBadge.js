@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import classNames from 'classnames';
+import { useFeatureEnabled } from '../../common/feature-checking';
 import messages from './messages';
 import './VersionsItemBadge.scss';
 
@@ -17,6 +18,7 @@ type Props = {
 
 const VersionsItemBadge = ({ intl, isCurrent, versionNumber }: Props) => {
     const intlValues = { versionNumber };
+    const isLowercase = useFeatureEnabled('versions.versionNumberBadge.lowercase.enabled');
 
     return (
         <div
@@ -25,7 +27,10 @@ const VersionsItemBadge = ({ intl, isCurrent, versionNumber }: Props) => {
                 'bcs-VersionsItemBadge--current': isCurrent,
             })}
         >
-            <FormattedMessage {...messages.versionNumberBadge} values={intlValues} />
+            <FormattedMessage
+                {...(isLowercase ? messages.versionNumberBadgeLowercase : messages.versionNumberBadge)}
+                values={intlValues}
+            />
         </div>
     );
 };
