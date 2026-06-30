@@ -1,5 +1,21 @@
-.bcs-NewTaskModal {
+// Doubled class raises specificity above Blueprint Modal.Content size="medium" max-width default.
+.bcs-NewTaskModal.bcs-NewTaskModal {
     display: flex;
     flex-direction: column;
+    max-width: 480px;
     gap: var(--bp-space-040);
+}
+
+// Override Blueprint Modal.Body padding-top via doubled-class specificity.
+.bcs-NewTaskModal-body.bcs-NewTaskModal-body {
+    position: relative;
+    padding-top: 0;
+
+    // Pins the body to the modal's max-width so chip overflow inside the
+    // user-selector cannot widen Modal.Content past its 'medium' clamp.
+    &::before {
+        display: block;
+        width: 100vw;
+        content: '';
+    }
 }
