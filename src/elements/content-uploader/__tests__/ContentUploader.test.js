@@ -1144,25 +1144,62 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(folderItem.status).toBe(STATUS_CANCELED);
             });
 
-            test('onCancelAll should open the confirmation modal instead of canceling directly', () => {
+            test('onCancelAll should open the modal and freeze uploads without finalizing the cancel', () => {
+                jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                const inProgress = {
+                const chunked = {
+                    name: 'big.mov',
+                    extension: 'mov',
+                    progress: 40,
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'big.mov', size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                    api: { cancel: jest.fn(), pause: jest.fn(), unpause: jest.fn() },
+                };
+                const plain = {
                     name: 'a.pdf',
                     extension: 'pdf',
                     progress: 25,
                     status: STATUS_IN_PROGRESS,
-                    file: { name: 'a.pdf' },
+                    file: { name: 'a.pdf', size: 1000 },
                     api: { cancel: jest.fn() },
                 };
-                wrapper.setState({ items: [inProgress] });
+                wrapper.setState({ items: [chunked, plain] });
                 const instance = wrapper.instance();
-                instance.itemsRef.current = [inProgress];
+                instance.itemsRef.current = [chunked, plain];
 
                 wrapper.find(UploadsManagerBP).prop('onCancelAll')();
 
                 expect(wrapper.state('isCancelAllModalOpen')).toBe(true);
-                expect(inProgress.status).toBe(STATUS_IN_PROGRESS);
-                expect(inProgress.api.cancel).not.toHaveBeenCalled();
+                expect(instance.isCancelAllPaused).toBe(true);
+                // Chunked uploads are paused (resumable); plain uploads are cancelled in the background.
+                expect(chunked.api.pause).toHaveBeenCalled();
+                expect(chunked.api.cancel).not.toHaveBeenCalled();
+                expect(plain.api.cancel).toHaveBeenCalled();
+                // Status and progress stay frozen so the rows do not change while the modal is open.
+                expect(chunked.status).toBe(STATUS_IN_PROGRESS);
+                expect(chunked.progress).toBe(40);
+                expect(plain.status).toBe(STATUS_IN_PROGRESS);
+                expect(plain.progress).toBe(25);
+            });
+
+            test('onCancelAll should not pause folder container items', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, rootFolderId: '0' });
+                const folder = {
+                    name: 'my-folder',
+                    extension: '',
+                    progress: 30,
+                    status: STATUS_IN_PROGRESS,
+                    isFolder: true,
+                    api: { cancel: jest.fn() },
+                };
+                wrapper.setState({ items: [folder] });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [folder];
+
+                instance.handleCancelAllClick();
+
+                expect(folder.api.cancel).not.toHaveBeenCalled();
+                expect(folder.status).toBe(STATUS_IN_PROGRESS);
             });
 
             test('handleCancelAllConfirm should cancel all in-progress and pending items and close modal', () => {
@@ -1206,23 +1243,79 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(complete.api.cancel).not.toHaveBeenCalled();
             });
 
-            test('handleCancelAllDismiss should close the modal without canceling uploads', () => {
+            test('handleCancelAllDismiss should close the modal and resume frozen uploads', () => {
+                jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                const inProgress = {
+                const chunked = {
+                    name: 'big.mov',
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'big.mov', size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                    api: { cancel: jest.fn(), pause: jest.fn(), unpause: jest.fn() },
+                };
+                const plain = {
                     name: 'a.pdf',
                     status: STATUS_IN_PROGRESS,
-                    file: { name: 'a.pdf' },
+                    file: { name: 'a.pdf', size: 1000 },
                     api: { cancel: jest.fn() },
                 };
-                wrapper.setState({ items: [inProgress], isCancelAllModalOpen: true });
+                wrapper.setState({ items: [chunked, plain], isCancelAllModalOpen: true });
                 const instance = wrapper.instance();
-                instance.itemsRef.current = [inProgress];
+                instance.itemsRef.current = [chunked, plain];
+                instance.isCancelAllPaused = true;
+                instance.resetFile = jest.fn();
+                instance.uploadFile = jest.fn();
 
                 instance.handleCancelAllDismiss();
 
                 expect(wrapper.state('isCancelAllModalOpen')).toBe(false);
-                expect(inProgress.status).toBe(STATUS_IN_PROGRESS);
-                expect(inProgress.api.cancel).not.toHaveBeenCalled();
+                expect(instance.isCancelAllPaused).toBe(false);
+                // Chunked uploads continue from their session; plain uploads restart from scratch.
+                expect(chunked.api.unpause).toHaveBeenCalled();
+                expect(instance.resetFile).toHaveBeenCalledWith(plain);
+                expect(instance.uploadFile).toHaveBeenCalledWith(plain);
+                // Items were never marked canceled.
+                expect(chunked.status).toBe(STATUS_IN_PROGRESS);
+                expect(plain.status).toBe(STATUS_IN_PROGRESS);
+            });
+
+            test('handleCancelAllConfirm should finalize the cancel even after pausing', () => {
+                jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const chunked = {
+                    name: 'big.mov',
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'big.mov', size: CHUNKED_UPLOAD_MIN_SIZE_BYTES + 1 },
+                    api: { cancel: jest.fn(), pause: jest.fn(), unpause: jest.fn() },
+                };
+                wrapper.setState({ items: [chunked], isCancelAllModalOpen: true });
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [chunked];
+                instance.handleCancelAllClick();
+
+                instance.handleCancelAllConfirm();
+
+                expect(instance.isCancelAllPaused).toBe(false);
+                expect(wrapper.state('isCancelAllModalOpen')).toBe(false);
+                expect(chunked.status).toBe(STATUS_CANCELED);
+                expect(chunked.api.cancel).toHaveBeenCalled();
+            });
+
+            test('upload() should not start pending items while paused for cancel-all', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+                const pending = {
+                    name: 'a.pdf',
+                    status: STATUS_PENDING,
+                    file: { name: 'a.pdf' },
+                    api: { cancel: jest.fn() },
+                };
+                const instance = wrapper.instance();
+                instance.itemsRef.current = [pending];
+                instance.uploadFile = jest.fn();
+                instance.isCancelAllPaused = true;
+
+                instance.upload();
+
+                expect(instance.uploadFile).not.toHaveBeenCalled();
             });
 
             describe('updateViewAndCollection with canceled items', () => {
