@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { act } from 'react';
 import type { UserContactType } from '@box/user-selector';
 
 import { render, screen, userEvent } from '../../../../../test-utils/testing-library';
@@ -292,5 +293,31 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskFormV2', (
         expect(payload.dueDate?.getHours()).toBe(9);
         expect(payload.dueDate?.getMinutes()).toBe(30);
         expect(payload.dueDate?.getSeconds()).toBe(15);
+    });
+
+    test('tags the form root with resin component, taskid, tasktype, and isediting', () => {
+        renderForm({ editMode: TASK_EDIT_MODE_EDIT, taskId: 'task-42', taskType: TASK_TYPE_GENERAL });
+        const form = document.getElementById(TASK_FORM_V2_ID);
+        expect(form).toHaveAttribute('data-resin-component', 'taskformv2');
+        expect(form).toHaveAttribute('data-resin-taskid', 'task-42');
+        expect(form).toHaveAttribute('data-resin-tasktype', TASK_TYPE_GENERAL);
+        expect(form).toHaveAttribute('data-resin-isediting', 'true');
+    });
+
+    test('reflects assignee diff counts in resin attributes', () => {
+        renderForm({
+            editMode: TASK_EDIT_MODE_EDIT,
+            initialAssignees: [buildUserAssignee('1', 'Alice'), buildUserAssignee('2', 'Bob')],
+        });
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'alice@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+                { email: '', id: 99, name: 'Engineering', type: 'group', value: '99' },
+            ]);
+        });
+        const form = document.getElementById(TASK_FORM_V2_ID);
+        expect(form).toHaveAttribute('data-resin-numassigneesadded', '0');
+        expect(form).toHaveAttribute('data-resin-numgroupsadded', '1');
+        expect(form).toHaveAttribute('data-resin-numassigneesremoved', '1');
     });
 });
