@@ -127,6 +127,11 @@ const messages = defineMessages({
         defaultMessage: 'V{versionNumber}',
         description: 'Text to display in the version badge.',
     },
+    versionNumberBadgeLowercase: {
+        id: 'be.sidebarVersions.versionNumberBadgeLowercase',
+        defaultMessage: 'v{versionNumber}',
+        description: 'Text to display in the version badge, lowercase variant.',
+    },
     versionNumberLabel: {
         id: 'be.sidebarVersions.versionNumberLabel',
         defaultMessage: 'Version number {versionNumber}',

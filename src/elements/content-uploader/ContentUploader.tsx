@@ -10,6 +10,7 @@ import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import CancelAllUploadsModal from './CancelAllUploadsModal';
+import LargeFileWarningModal from './LargeFileWarningModal';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
@@ -113,8 +114,10 @@ export interface ContentUploaderProps {
     uploadHost: string;
     useUploadsManager?: boolean;
     enableModernizedUploads?: boolean;
+    isUpgradeModalEnabled?: boolean;
     isExpanded?: boolean;
     onToggle?: (isExpanded: boolean) => void;
+    maxFileSize?: number;
 }
 
 type ModernizedPanelState = 'hidden' | 'shown' | 'dismissing';
@@ -122,6 +125,7 @@ type ModernizedPanelState = 'hidden' | 'shown' | 'dismissing';
 type State = {
     errorCode?: string;
     isCancelAllModalOpen: boolean;
+    isLargeFileWarningModalOpen: boolean;
     isUploadsManagerExpanded: boolean;
     itemIds: Object;
     items: UploadItem[];
@@ -192,6 +196,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         useUploadsManager: false,
         enableModernizedUploads: false,
+        isUpgradeModalEnabled: false,
     };
 
     /**
@@ -209,6 +214,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             errorCode: '',
             itemIds: {},
             isCancelAllModalOpen: false,
+            isLargeFileWarningModalOpen: false,
             isUploadsManagerExpanded: false,
             modernizedPanelState: 'hidden',
         };
@@ -276,6 +282,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const isUploadsBatchSuccessfullyComplete = items.every(
             item => item.status === STATUS_COMPLETE || item.status === STATUS_CANCELED,
         );
+
+        if (!hasItemsInUploadQueue && modernizedPanelState === 'shown') {
+            this.clearModernizedDismissTimer();
+            this.setState({ modernizedPanelState: 'hidden' });
+            return;
+        }
 
         if (hasItemsInUploadQueue && modernizedPanelState === 'hidden') {
             this.showModernizedPanel();
@@ -789,25 +801,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { api } = item;
         api.cancel();
 
-        // Remove dedupe IDs from itemIdsRef to allow re-uploading the same item
-        if (item.file) {
-            const { rootFolderId } = this.props;
+        this.deleteDedupeIds(item);
 
-            // Delete both IDs that were added:
-            // 1. Simple filename (added in addFilesToUploadQueue)
-            const simpleFileId = item.file.name;
-            // 2. Full ID with timestamp (added in addFilesWithoutRelativePathToQueue)
-            const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
-            const fullFileId = getFileId(fileWithOptions, rootFolderId);
-
-            delete this.itemIdsRef.current[simpleFileId];
-            delete this.itemIdsRef.current[fullFileId];
-
-            const newItemIds = { ...this.itemIdsRef.current };
-            this.setState({ itemIds: newItemIds });
-        } else if (item.dedupeKey) {
-            // Folder items stash the dedupe key written in addFolderDataTransferItemsToUploadQueue
-            delete this.itemIdsRef.current[item.dedupeKey];
+        if (item.file || item.dedupeKey) {
             const newItemIds = { ...this.itemIdsRef.current };
             this.setState({ itemIds: newItemIds });
         }
@@ -829,6 +825,36 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 this.upload();
             }
         });
+    };
+
+    /**
+     * Removes multiple items from the upload queue in a single batch update.
+     *
+     * @param {UploadItem[]} itemsToRemove - Items to remove
+     * @return {void}
+     */
+    removeItemsFromUploadQueue = (itemsToRemove: UploadItem[]): void => {
+        if (itemsToRemove.length === 0) {
+            return;
+        }
+
+        const { onCancel } = this.props;
+
+        itemsToRemove.forEach(item => {
+            item.api.cancel();
+            this.deleteDedupeIds(item);
+        });
+
+        const removalSet = new Set(itemsToRemove);
+        const preservedItems = this.itemsRef.current.filter(item => !removalSet.has(item));
+
+        onCancel(itemsToRemove);
+
+        this.setState({
+            errorCode: '',
+            itemIds: { ...this.itemIdsRef.current },
+        });
+        this.updateViewAndCollection(preservedItems);
     };
 
     /**
@@ -856,6 +882,20 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     upload = () => {
+        const { enableModernizedUploads, isUpgradeModalEnabled, maxFileSize } = this.props;
+
+        if (
+            maxFileSize &&
+            enableModernizedUploads &&
+            isUpgradeModalEnabled &&
+            this.getOversizePendingItems().length > 0
+        ) {
+            if (!this.state.isLargeFileWarningModalOpen) {
+                this.setState({ isLargeFileWarningModalOpen: true });
+            }
+            return;
+        }
+
         this.itemsRef.current.forEach(uploadItem => {
             if (uploadItem.status === STATUS_PENDING) {
                 this.uploadFile(uploadItem);
@@ -1590,6 +1630,94 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Removes dedupe IDs from itemIdsRef to allow re-uploading the same item.
+     *
+     * @private
+     * @param {UploadItem} item
+     * @return {void}
+     */
+    deleteDedupeIds = (item: UploadItem): void => {
+        if (item.file) {
+            const { rootFolderId } = this.props;
+            // Delete both IDs that were added:
+            // 1. Simple filename (added in addFilesToUploadQueue)
+            const simpleFileId = item.file.name;
+            // 2. Full ID with timestamp (added in addFilesWithoutRelativePathToQueue)
+            const fileWithOptions = item.options ? { file: item.file, options: item.options } : item.file;
+            const fullFileId = getFileId(fileWithOptions, rootFolderId);
+
+            delete this.itemIdsRef.current[simpleFileId];
+            delete this.itemIdsRef.current[fullFileId];
+        } else if (item.dedupeKey) {
+            // Folder items stash the dedupe key written in addFolderDataTransferItemsToUploadQueue
+            delete this.itemIdsRef.current[item.dedupeKey];
+        }
+    };
+
+    /**
+     * Returns whether an upload item exceeds the configured max file size.
+     *
+     * @private
+     * @param {UploadItem} item
+     * @return {boolean}
+     */
+    isOversize = (item: UploadItem): boolean => {
+        const { maxFileSize } = this.props;
+
+        return !!maxFileSize && !!item.file && item.file.size > maxFileSize;
+    };
+
+    /**
+     * Returns pending upload items that exceed the configured max file size.
+     *
+     * @private
+     * @return {UploadItem[]}
+     */
+    getOversizePendingItems = (): UploadItem[] => {
+        return this.itemsRef.current.filter(item => item.status === STATUS_PENDING && this.isOversize(item));
+    };
+
+    /**
+     * Returns the number of pending upload items that are eligible to upload.
+     *
+     * @private
+     * @return {number}
+     */
+    getEligiblePendingCount = (): number => {
+        const pending = this.itemsRef.current.filter(i => i.status === STATUS_PENDING);
+
+        return pending.length - pending.filter(this.isOversize).length;
+    };
+
+    /**
+     * Removes oversize pending items and starts uploading the remaining eligible items.
+     *
+     * @private
+     * @return {void}
+     */
+    handleLargeFileWarningUploadRest = (): void => {
+        this.removeItemsFromUploadQueue(this.getOversizePendingItems());
+
+        this.setState({ isLargeFileWarningModalOpen: false }, () => {
+            this.upload();
+        });
+    };
+
+    /**
+     * Cancels the upload attempt by removing all pending items from the queue.
+     *
+     * @private
+     * @return {void}
+     */
+    handleLargeFileWarningCancel = (): void => {
+        const pendingItems = this.itemsRef.current.filter(item => item.status === STATUS_PENDING);
+
+        this.removeItemsFromUploadQueue(pendingItems);
+
+        this.setState({ isLargeFileWarningModalOpen: false });
+    };
+
+    /**
      * Adds file to the upload queue and starts upload immediately
      *
      * @param {Array<UploadFileWithAPIOptions | File>} files
@@ -1629,8 +1757,16 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             rootFolderId,
             theme,
             useUploadsManager,
+            maxFileSize,
         }: ContentUploaderProps = this.props;
-        const { view, items, errorCode, isCancelAllModalOpen, modernizedPanelState }: State = this.state;
+        const {
+            view,
+            items,
+            errorCode,
+            isCancelAllModalOpen,
+            isLargeFileWarningModalOpen,
+            modernizedPanelState,
+        }: State = this.state;
         const isUploadsManagerExpanded = this.getIsExpanded();
         const isEmpty = items.length === 0;
         const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
@@ -1648,6 +1784,13 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const renderUploader = () => {
             if (enableModernizedUploads) {
+                const oversizePendingItems = this.getOversizePendingItems();
+                const oversizeFiles = oversizePendingItems.map(item => ({
+                    name: item.name,
+                    size: item.file?.size ?? 0,
+                }));
+                const eligiblePendingCount = this.getEligiblePendingCount();
+
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
@@ -1680,6 +1823,15 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                                 isOpen={isCancelAllModalOpen}
                                 onConfirm={this.handleCancelAllConfirm}
                                 onDismiss={this.handleCancelAllDismiss}
+                            />
+                            <LargeFileWarningModal
+                                eligibleCount={eligiblePendingCount}
+                                isOpen={isLargeFileWarningModalOpen}
+                                maxFileSize={maxFileSize}
+                                onCancel={this.handleLargeFileWarningCancel}
+                                onConfirm={this.handleLargeFileWarningUploadRest}
+                                onUpgradeCTAClick={onUpgradeCTAClick}
+                                oversizeFiles={oversizeFiles}
                             />
                         </div>
                     </div>
