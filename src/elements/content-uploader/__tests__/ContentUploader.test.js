@@ -1737,5 +1737,252 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state('modernizedPanelState')).toBe('hidden');
             expect(instance.modernizedDismissTimer).toBeNull();
         });
+
+        test('clears dismiss timer and hides panel when queue empties while shown', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+
+            wrapper.setState({
+                items: [],
+            });
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+        });
+
+        test('clears dismiss timer and hides panel when cancel empties the queue', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            const pendingItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            wrapper.setState({
+                items: [pendingItem],
+                modernizedPanelState: 'shown',
+                isLargeFileWarningModalOpen: true,
+            });
+            instance.itemsRef.current = [pendingItem];
+
+            instance.handleLargeFileWarningCancel();
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+        });
+    });
+
+    describe('upload() large-file gate', () => {
+        const makeFileWithSize = (name, size) => new File([new Uint8Array(size)], name, { type: 'text/plain' });
+
+        const makePendingFileItem = (name, size) => ({
+            api: {},
+            extension: 'txt',
+            file: makeFileWithSize(name, size),
+            name,
+            progress: 0,
+            size,
+            status: STATUS_PENDING,
+        });
+
+        test('should upload immediately when maxFileSize is not configured', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+
+        test('should upload immediately when all pending files are within maxFileSize', () => {
+            const wrapper = getWrapper({ maxFileSize: 100 });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('small.txt', 50)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+
+        test('should open the large file warning modal when any pending file exceeds maxFileSize', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('small.txt', 50), makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).not.toHaveBeenCalled();
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
+        });
+
+        test('should NOT open the modal when isUpgradeModalEnabled is false even with oversize files', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: false,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+    });
+
+    describe('addToQueue()', () => {
+        const makeFileWithSize = (name, size) => new File([new Uint8Array(size)], name, { type: 'text/plain' });
+
+        test('should not auto-upload pending items when adding a batch with oversize files during an in-progress upload', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            const inProgressItem = {
+                api: {},
+                extension: 'txt',
+                file: makeFileWithSize('uploading.txt', 50),
+                name: 'uploading.txt',
+                progress: 50,
+                size: 50,
+                status: STATUS_IN_PROGRESS,
+            };
+            const oversizeItem = {
+                api: {},
+                extension: 'txt',
+                file: makeFileWithSize('large.txt', 200),
+                name: 'large.txt',
+                progress: 0,
+                size: 200,
+                status: STATUS_PENDING,
+            };
+            const eligibleItem = {
+                api: {},
+                extension: 'txt',
+                file: makeFileWithSize('small.txt', 50),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            instance.itemsRef.current = [inProgressItem];
+            wrapper.setState({ view: VIEW_UPLOAD_IN_PROGRESS });
+            instance.uploadFile = jest.fn();
+
+            instance.addToQueue([oversizeItem, eligibleItem], null);
+
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
+            expect(instance.uploadFile).not.toHaveBeenCalled();
+            expect(eligibleItem.status).toBe(STATUS_PENDING);
+        });
+    });
+
+    describe('handleLargeFileWarningUploadRest()', () => {
+        test('should remove oversize pending items and start upload', () => {
+            const wrapper = getWrapper({ maxFileSize: 100 });
+            const instance = wrapper.instance();
+            const oversizeItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(200)], 'large.txt', { type: 'text/plain' }),
+                name: 'large.txt',
+                progress: 0,
+                size: 200,
+                status: STATUS_PENDING,
+            };
+            const eligibleItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            instance.itemsRef.current = [oversizeItem, eligibleItem];
+            instance.upload = jest.fn();
+            wrapper.setState({
+                isLargeFileWarningModalOpen: true,
+                items: [oversizeItem, eligibleItem],
+            });
+
+            instance.handleLargeFileWarningUploadRest();
+
+            expect(oversizeItem.api.cancel).toHaveBeenCalledTimes(1);
+            expect(eligibleItem.api.cancel).not.toHaveBeenCalled();
+            expect(wrapper.state('items')).toEqual([eligibleItem]);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+            expect(instance.upload).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('handleLargeFileWarningCancel()', () => {
+        test('should remove all pending items and close the modal', () => {
+            const onCancel = jest.fn();
+            const wrapper = getWrapper({ maxFileSize: 100, onCancel, rootFolderId: '0' });
+            const instance = wrapper.instance();
+            const oversizeItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(200)], 'large.txt', { type: 'text/plain' }),
+                name: 'large.txt',
+                progress: 0,
+                size: 200,
+                status: STATUS_PENDING,
+            };
+            const eligibleItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            instance.itemsRef.current = [oversizeItem, eligibleItem];
+            instance.itemIdsRef.current = { 'large.txt': true, 'small.txt': true };
+            wrapper.setState({
+                isLargeFileWarningModalOpen: true,
+                items: [oversizeItem, eligibleItem],
+            });
+
+            instance.handleLargeFileWarningCancel();
+
+            expect(oversizeItem.api.cancel).toHaveBeenCalledTimes(1);
+            expect(eligibleItem.api.cancel).toHaveBeenCalledTimes(1);
+            expect(onCancel).toHaveBeenCalledTimes(1);
+            expect(onCancel).toHaveBeenCalledWith([oversizeItem, eligibleItem]);
+            expect(instance.itemIdsRef.current['large.txt']).toBeUndefined();
+            expect(instance.itemIdsRef.current['small.txt']).toBeUndefined();
+            expect(wrapper.state('items')).toEqual([]);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
     });
 });
