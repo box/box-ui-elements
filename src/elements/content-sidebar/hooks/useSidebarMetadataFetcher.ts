@@ -236,12 +236,7 @@ function useSidebarMetadataFetcher(
             const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
 
             const confidenceScoreParams = isConfidenceScoreEnabled ? { include_confidence_score: true } : {};
-
-            // Additive gating during the metadata_bounding_box rollout: fetch bounding boxes from AI extract API when
-            // when either the confidence-score coupling or the new bounding-box flag is on.
-            // TODO: drop the isBoundingBoxOrConfidenceScoreReviewEnabled fallback so
-            // fetching bounding boxes depends solely on `isBoundingBoxEnabled`.
-            const boundingBoxParams = isBoundingBoxOrConfidenceScoreReviewEnabled ? { include_reference: true } : {};
+            const boundingBoxParams = isBoundingBoxEnabled ? { include_reference: true } : {};
 
             const requestBody: AiExtractStructured = {
                 items: [{ id: file.id, type: file.type }],
@@ -320,7 +315,7 @@ function useSidebarMetadataFetcher(
                 return result;
             });
         },
-        [api, file, isConfidenceScoreEnabled, isBoundingBoxOrConfidenceScoreReviewEnabled, onError, templates],
+        [api, file, isConfidenceScoreEnabled, isBoundingBoxEnabled, onError, templates],
     );
 
     React.useEffect(() => {

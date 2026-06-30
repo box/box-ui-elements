@@ -1,22 +1,17 @@
-// CSS isolation layer for ActivityFeedV2.
-// BUIE global styles (.bcs scope from base.scss) apply broad rules to native
-// elements (inputs, contenteditable, buttons, links, textareas). These leak
-// into Blueprint and @box/threaded-annotations components, breaking their
-// styling. This file resets those rules within the v2 adapter boundary.
+// Resets BUIE .bcs global styles that leak into Blueprint and
+// @box/threaded-annotations components.
 
 .bcs-NewActivityFeed {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
     overflow: hidden;
 
-    // `display: contents` keeps the wrapper transparent to the vendor's flex layout.
     &-list {
         display: contents;
     }
 
-    // Forms: BUIE sets width, padding, border, box-shadow, border-radius on
-    // contenteditable and inputs via _forms.scss inside .bcs scope.
     div[contenteditable='true'],
     div[contenteditable='true']:hover,
     div[contenteditable='true']:focus {
@@ -31,8 +26,6 @@
         transition: none;
     }
 
-    // Links: BUIE forces color and text-decoration on all <a> elements
-    // via _links.scss.
     a {
         color: inherit;
         text-decoration: inherit;
@@ -42,8 +35,6 @@
         text-decoration: inherit;
     }
 
-    // BUIE sets pointer-events: none on <svg> inside <a> and <button>,
-    // which breaks Blueprint icon buttons.
     a svg,
     button svg {
         pointer-events: auto;
@@ -54,7 +45,10 @@
     }
 }
 
-// Lets inner ellipsis truncation resolve against the sidebar width.
+// Containing block for the absolutely positioned .bcs-NewActivityFeed child,
+// so the feed fills the sidebar even when ancestors lack a definite height
+// (e.g., shared-link pages).
 .bcs-NewActivityFeedContent {
+    position: relative;
     min-width: 0;
 }

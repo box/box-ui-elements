@@ -1,99 +1,105 @@
-import set from 'lodash/set';
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
-import ItemProperties from '../../../features/item-details/ItemProperties';
-import InlineError from '../../../components/inline-error/InlineError';
+import { render, screen } from '../../../test-utils/testing-library';
+
 import SidebarFileProperties, { SidebarFilePropertiesComponent } from '../SidebarFileProperties';
 import { PLACEHOLDER_USER } from '../../../constants';
 
 describe('elements/content-sidebar/SidebarFileProperties', () => {
-    const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
-    const getMountWrapper = props => mount(<SidebarFilePropertiesComponent {...props} />);
-    const props = {
-        file: {
-            content_created_at: '2018-04-18T16:56:05.352Z',
-            content_modified_at: '2018-04-18T16:56:05.352Z',
-            description: 'foo',
-            owned_by: {
-                name: 'foo',
+    const baseFile = {
+        content_created_at: '2018-04-18T16:56:05.352Z',
+        content_modified_at: '2018-04-18T16:56:05.352Z',
+        created_by: { name: 'foo' },
+        description: 'foo',
+        metadata: {
+            global: {
+                archivedItemTemplate: { archiveDate: '1726832355000' },
             },
-            created_by: {
-                name: 'foo',
-            },
-            metadata: {
-                global: {
-                    archivedItemTemplate: {
-                        archiveDate: '1726832355000',
-                    },
-                },
-            },
-            size: '1',
-            permissions: {
-                can_rename: true,
-            },
-            uploader_display_name: 'File Request',
         },
+        owned_by: { name: 'foo' },
+        permissions: { can_rename: true },
+        size: '1',
+        uploader_display_name: 'File Request',
+    };
+
+    const baseProps = {
+        file: baseFile,
+        intl: { locale: 'en' },
         onDescriptionChange: jest.fn(),
-        intl: {
-            locale: 'en',
-        },
     };
 
-    const retentionPolicyProps = {
-        file: {
-            size: '1',
-        },
-        hasRetentionPolicy: true,
-        onRetentionPolicyExtendClick: jest.fn(),
-        retentionPolicy: {
-            dispositionTime: 1556317461,
-            policyName: 'test policy',
-            policyType: 'finite',
-            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion',
-        },
-        intl: {
-            locale: 'en',
-        },
-    };
+    test('should render ItemProperties with file details', () => {
+        render(<SidebarFilePropertiesComponent {...baseProps} />);
 
-    describe('render()', () => {
-        test('should render ItemProperties', () => {
-            const wrapper = getWrapper(props);
+        expect(screen.getByTestId('item-properties')).toBeVisible();
+        expect(screen.getByText('Owner')).toBeVisible();
+        expect(screen.getByText('Uploader')).toBeVisible();
+        expect(screen.getByText('Created')).toBeVisible();
+        expect(screen.getByText('Modified')).toBeVisible();
+        expect(screen.getByText('Archived')).toBeVisible();
+        expect(screen.getByText('Size')).toBeVisible();
+        expect(screen.getAllByText('foo').length).toBeGreaterThan(0);
+        expect(screen.getByText('1 B')).toBeVisible();
 
-            expect(wrapper.find(ItemProperties)).toHaveLength(1);
-            expect(wrapper).toMatchSnapshot();
-        });
+        const description = screen.getByDisplayValue('foo');
+        expect(description).toHaveAttribute('data-resin-target', 'description');
+    });
 
-        test('should render ItemProperties for anonymous uploaders', () => {
-            const propsHere = set({ ...props }, 'file.created_by.id', PLACEHOLDER_USER.id);
-            const wrapper = getWrapper(propsHere);
+    test('should use uploader_display_name when uploader is anonymous', () => {
+        const props = {
+            ...baseProps,
+            file: {
+                ...baseFile,
+                created_by: { ...baseFile.created_by, id: PLACEHOLDER_USER.id },
+            },
+        };
 
-            expect(wrapper.find(ItemProperties)).toHaveLength(1);
-            expect(wrapper).toMatchSnapshot();
-        });
+        render(<SidebarFilePropertiesComponent {...props} />);
 
-        test('should render an error', () => {
-            const fakeError = {
-                id: 'foo',
-                description: 'bar',
-                defaultMessage: 'baz',
-            };
+        expect(screen.getByText('Uploader')).toBeVisible();
+        expect(screen.getByText('File Request')).toBeVisible();
+    });
 
-            const errorProps = {
-                inlineError: {
-                    title: fakeError,
-                    content: fakeError,
-                },
-            };
-            const wrapper = shallow(<SidebarFileProperties {...errorProps} />).dive();
+    test('should render an inline error along with the wrapped component', () => {
+        const fakeError = {
+            defaultMessage: 'baz',
+            description: 'bar',
+            id: 'foo',
+        };
 
-            expect(wrapper.find(InlineError)).toHaveLength(1);
-            expect(wrapper).toMatchSnapshot();
-        });
+        render(
+            <SidebarFileProperties
+                file={baseFile}
+                inlineError={{ content: fakeError, title: fakeError }}
+                onDescriptionChange={jest.fn()}
+            />,
+        );
 
-        test('should render retention policy information when given proper props and callback', () => {
-            const wrapper = getMountWrapper(retentionPolicyProps);
-            expect(wrapper).toMatchSnapshot();
-        });
+        const errorTitles = screen.getAllByText('baz');
+        expect(errorTitles.length).toBeGreaterThan(0);
+        expect(screen.getByTestId('item-properties')).toBeVisible();
+    });
+
+    test('should render retention policy information when hasRetentionPolicy is set', () => {
+        const onRetentionPolicyExtendClick = jest.fn();
+
+        render(
+            <SidebarFilePropertiesComponent
+                file={{ size: '1' }}
+                hasRetentionPolicy
+                intl={{ locale: 'en' }}
+                onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
+                retentionPolicy={{
+                    dispositionTime: 1556317461,
+                    policyName: 'test policy',
+                    policyType: 'finite',
+                    retentionPolicyDescription: 'test policy (1 year retention & auto-deletion',
+                }}
+            />,
+        );
+
+        expect(screen.getByText('Policy')).toBeVisible();
+        expect(screen.getByText('test policy (1 year retention & auto-deletion')).toBeVisible();
+        expect(screen.getByText('Policy Expiration')).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Extend' })).toBeVisible();
     });
 });

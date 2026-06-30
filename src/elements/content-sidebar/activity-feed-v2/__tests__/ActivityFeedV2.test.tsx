@@ -1046,4 +1046,114 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockScrollTo).toHaveBeenLastCalledWith('new-comment');
         });
     });
+
+    describe('comment markers', () => {
+        const mockViewer = {
+            addListener: jest.fn(),
+            emit: jest.fn(),
+            removeListener: jest.fn(),
+        };
+        const mockGetViewer = jest.fn(() => mockViewer);
+
+        const timestampedComment = {
+            ...mockComment,
+            id: 'ts-comment-1',
+            tagged_message: '#[timestamp:5000,versionId:123] Hello',
+        };
+
+        const frameAnnotation = {
+            ...mockAnnotation,
+            id: 'frame-ann-1',
+            target: { location: { type: 'frame', value: 10000 }, type: 'region' },
+        };
+
+        const renderComponentWithMarkers = (props: Partial<ActivityFeedV2Props> = {}) =>
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                    {...props}
+                />,
+            );
+
+        beforeEach(() => {
+            mockViewer.addListener.mockClear();
+            mockViewer.emit.mockClear();
+            mockViewer.removeListener.mockClear();
+            mockGetViewer.mockClear();
+        });
+
+        test('should not emit comment_markers when getViewer is not provided', () => {
+            renderComponentWithMarkers({ getViewer: undefined });
+            expect(mockViewer.emit).not.toHaveBeenCalled();
+        });
+
+        test('should not emit comment_markers when file is not a video', () => {
+            renderComponentWithMarkers({ file: { extension: 'pdf', file_version: { id: '1' } } });
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
+        });
+
+        test('should not emit comment_markers when getViewer returns null', () => {
+            renderComponentWithMarkers({ getViewer: jest.fn(() => null) });
+            expect(mockViewer.emit).not.toHaveBeenCalled();
+        });
+
+        test('should emit comment_markers with timestamped comment data', () => {
+            renderComponentWithMarkers();
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
+        });
+
+        test('should emit comment_markers with frame annotation data', () => {
+            renderComponentWithMarkers({ feedItems: [frameAnnotation] as ActivityFeedV2Props['feedItems'] });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'frame-ann-1',
+                    time: 10,
+                    type: 'annotation',
+                }),
+            ]);
+        });
+
+        test('should include author avatar and initial in markers', () => {
+            renderComponentWithMarkers();
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    initial: 'C',
+                    colorIndex: 2,
+                }),
+            ]);
+        });
+
+        test('should register comment_marker_select listener on viewer', () => {
+            renderComponentWithMarkers();
+            expect(mockViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+        });
+
+        test('should remove comment_marker_select listener on unmount', () => {
+            const { unmount } = renderComponentWithMarkers();
+            mockViewer.emit.mockClear();
+            unmount();
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+        });
+
+        test('should not include non-timestamped comments in markers', () => {
+            renderComponentWithMarkers({ feedItems: [mockComment] as ActivityFeedV2Props['feedItems'] });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);
+        });
+
+        test('should not include page-based annotations in markers', () => {
+            renderComponentWithMarkers({ feedItems: [mockAnnotation] as ActivityFeedV2Props['feedItems'] });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);
+        });
+    });
 });

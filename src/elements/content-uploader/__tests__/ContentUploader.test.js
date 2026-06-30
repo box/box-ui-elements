@@ -680,6 +680,47 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('uploads manager display order (newest on top)', () => {
+        const orderedItems = [
+            { name: 'first.txt', status: STATUS_COMPLETE },
+            { name: 'second.txt', status: STATUS_IN_PROGRESS },
+            { name: 'third.txt', status: STATUS_PENDING },
+        ];
+
+        test('modernized manager renders the most recently added item on top', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+            wrapper.setState({ items: orderedItems });
+
+            const renderedNames = wrapper
+                .find(UploadsManagerBP)
+                .prop('items')
+                .map(item => item.name);
+
+            expect(renderedNames).toEqual(['third.txt', 'second.txt', 'first.txt']);
+        });
+
+        test('legacy manager preserves the original upload order', () => {
+            const wrapper = getWrapper({ useUploadsManager: true });
+            wrapper.setState({ items: orderedItems });
+
+            const renderedNames = wrapper
+                .find(UploadsManager)
+                .prop('items')
+                .map(item => item.name);
+
+            expect(renderedNames).toEqual(['first.txt', 'second.txt', 'third.txt']);
+        });
+
+        test('display reversal does not mutate the internal items collection (upload order preserved)', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+            wrapper.setState({ items: orderedItems });
+
+            wrapper.find(UploadsManagerBP);
+
+            expect(wrapper.state().items.map(item => item.name)).toEqual(['first.txt', 'second.txt', 'third.txt']);
+        });
+    });
+
     describe('controlled isExpanded / onToggle', () => {
         test('uses isExpanded prop value when in controlled mode', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true, isExpanded: true, onToggle: jest.fn() });
