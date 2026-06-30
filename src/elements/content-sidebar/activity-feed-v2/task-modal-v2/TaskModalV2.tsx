@@ -2,56 +2,27 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import type { MessageDescriptor } from 'react-intl';
 
-import { InlineNotice, Modal } from '@box/blueprint-web';
+import { Modal } from '@box/blueprint-web';
 import type { FetchedAvatarUrls, UserContactType } from '@box/user-selector';
 
-import {
-    ERROR_CODE_GROUP_EXCEEDS_LIMIT,
-    TASK_COMPLETION_RULE_ALL,
-    TASK_EDIT_MODE_EDIT,
-    TASK_MAX_GROUP_ASSIGNEES,
-    TASK_TYPE_GENERAL,
-} from '../../../../constants';
+import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_GENERAL } from '../../../../constants';
 
 import type { ElementsXhrError } from '../../../../common/types/api';
-import type {
-    TaskCollabAssignee,
-    TaskCompletionRule,
-    TaskEditMode,
-    TaskNew,
-    TaskType,
-    TaskUpdatePayload,
-} from '../../../../common/types/tasks';
+import type { TaskCollabAssignee, TaskEditMode, TaskNew, TaskType } from '../../../../common/types/tasks';
 import type { GroupMini, SelectorItem, UserMini } from '../../../../common/types/core';
 
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 
+import TaskErrorNotice from './TaskErrorNotice';
 import TaskFormV2, { TASK_FORM_V2_ID } from './TaskFormV2';
-import type { TaskFormV2SubmitPayload } from './TaskFormV2';
-import { type RuntimeAssignee } from './utils/contactMapping';
+import type { CreateTaskCallback, EditTaskCallback, TaskAssignee, TaskFormV2SubmitPayload } from './types';
 
 import messages from './messages';
 
 import './TaskModalV2.scss';
 
-type CreateTaskCallback = (
-    text: string,
-    approvers: SelectorItem<UserMini | GroupMini>[],
-    taskType: TaskType,
-    dueDate: string | null,
-    completionRule: TaskCompletionRule,
-    onSuccess: () => void,
-    onError: (error: ElementsXhrError) => void,
-) => void;
-
-type EditTaskCallback = (
-    payload: TaskUpdatePayload,
-    onSuccess: () => void,
-    onError: (error: ElementsXhrError) => void,
-) => void;
-
 type EditModeProps = {
-    editingAssignees: RuntimeAssignee[];
+    editingAssignees: TaskAssignee[];
     editingTask: TaskNew;
     editTask: EditTaskCallback;
     mode: 'edit';
@@ -86,29 +57,7 @@ const getTitleMessage = (taskType: TaskType, editMode: TaskEditMode): MessageDes
     return isEdit ? messages.editApprovalTaskTitle : messages.createApprovalTaskTitle;
 };
 
-const getErrorStatus = (error: ElementsXhrError | undefined): number | undefined => {
-    if (!error) {
-        return undefined;
-    }
-    if ('status' in error && typeof error.status === 'number') {
-        return error.status;
-    }
-    const { response } = error as { response?: { status?: number } };
-    return response?.status;
-};
-
-const getErrorCode = (error: ElementsXhrError | undefined): string | undefined => {
-    if (!error) {
-        return undefined;
-    }
-    if ('code' in error && typeof error.code === 'string') {
-        return error.code;
-    }
-    const { response } = error as { response?: { data?: { code?: string } } };
-    return response?.data?.code;
-};
-
-const assigneeToSelectorItem = (assignee: RuntimeAssignee): SelectorItem<UserMini | GroupMini> => ({
+const assigneeToSelectorItem = (assignee: TaskAssignee): SelectorItem<UserMini | GroupMini> => ({
     id: assignee.target.id,
     item: assignee.target,
     name: assignee.target.name,
@@ -116,9 +65,9 @@ const assigneeToSelectorItem = (assignee: RuntimeAssignee): SelectorItem<UserMin
 });
 
 const diffAssignees = (
-    next: RuntimeAssignee[],
-    previous: RuntimeAssignee[],
-): { added: RuntimeAssignee[]; removed: RuntimeAssignee[] } => {
+    next: TaskAssignee[],
+    previous: TaskAssignee[],
+): { added: TaskAssignee[]; removed: TaskAssignee[] } => {
     const previousIds = new Set(previous.map(a => a.target.id));
     const nextIds = new Set(next.map(a => a.target.id));
     return {
@@ -135,23 +84,23 @@ const parseInitialDueDate = (raw: string | null | undefined): Date | null => {
     return Number.isFinite(parsed.getTime()) ? parsed : null;
 };
 
-const TaskModalV2 = (props: TaskModalV2Props) => {
-    const {
-        createTask,
-        error,
-        fetchAvatarUrls,
-        fetchUsers,
-        isOpen,
-        onClose,
-        onSubmitError,
-        onSubmitSuccess,
-        taskType,
-    } = props;
-    const isEditMode = props.mode === 'edit';
+const TaskModalV2 = ({
+    createTask,
+    error,
+    fetchAvatarUrls,
+    fetchUsers,
+    isOpen,
+    onClose,
+    onSubmitError,
+    onSubmitSuccess,
+    taskType,
+    ...editProps
+}: TaskModalV2Props) => {
+    const isEditMode = editProps.mode === 'edit';
     const editMode: TaskEditMode = isEditMode ? 'EDIT' : 'CREATE';
-    const editingTask = isEditMode ? props.editingTask : undefined;
-    const editingAssignees = isEditMode ? props.editingAssignees : undefined;
-    const editTask = isEditMode ? props.editTask : undefined;
+    const editingTask = isEditMode ? editProps.editingTask : undefined;
+    const editingAssignees = isEditMode ? editProps.editingAssignees : undefined;
+    const editTask = isEditMode ? editProps.editTask : undefined;
 
     const { formatMessage } = useIntl();
     const titleMessage = getTitleMessage(taskType, editMode);
@@ -218,54 +167,6 @@ const TaskModalV2 = (props: TaskModalV2Props) => {
         }
     };
 
-    const errorNotice = React.useMemo(() => {
-        if (!error) {
-            return null;
-        }
-        const status = getErrorStatus(error);
-        const code = getErrorCode(error);
-        const isForbiddenEdit = isEditMode && status === 403;
-        const isGroupLimit = code === ERROR_CODE_GROUP_EXCEEDS_LIMIT;
-
-        if (isForbiddenEdit) {
-            const forbiddenMessage =
-                taskType === TASK_TYPE_GENERAL
-                    ? messages.editGeneralTaskForbiddenMessage
-                    : messages.editApprovalTaskForbiddenMessage;
-            return (
-                <InlineNotice
-                    title={formatMessage(messages.editForbiddenTitle)}
-                    variant="warning"
-                    variantIconAriaLabel={formatMessage(messages.inlineNoticeWarningAriaLabel)}
-                >
-                    {formatMessage(forbiddenMessage)}
-                </InlineNotice>
-            );
-        }
-
-        if (isGroupLimit) {
-            return (
-                <InlineNotice
-                    title={formatMessage(messages.groupExceedsLimitWarningTitle)}
-                    variant="warning"
-                    variantIconAriaLabel={formatMessage(messages.inlineNoticeWarningAriaLabel)}
-                >
-                    {formatMessage(messages.groupExceedsLimitWarningMessage, { max: TASK_MAX_GROUP_ASSIGNEES })}
-                </InlineNotice>
-            );
-        }
-
-        return (
-            <InlineNotice
-                title={formatMessage(messages.createTaskErrorTitle)}
-                variant="error"
-                variantIconAriaLabel={formatMessage(messages.inlineNoticeErrorAriaLabel)}
-            >
-                {formatMessage(isEditMode ? messages.updateTaskErrorMessage : messages.createTaskErrorMessage)}
-            </InlineNotice>
-        );
-    }, [error, formatMessage, isEditMode, taskType]);
-
     const submitLabel = formatMessage(isEditMode ? messages.updateButtonLabel : messages.createButtonLabel);
 
     return (
@@ -278,8 +179,9 @@ const TaskModalV2 = (props: TaskModalV2Props) => {
             >
                 <Modal.Header>{formatMessage(titleMessage)}</Modal.Header>
                 <Modal.Body className="bcs-NewTaskModal-body">
-                    {errorNotice}
+                    <TaskErrorNotice error={error} isEditMode={isEditMode} taskType={taskType} />
                     <TaskFormV2
+                        key={isEditMode ? `edit-${editingTask.id}` : 'create'}
                         editMode={editMode}
                         fetchAvatarUrls={fetchAvatarUrls}
                         fetchUsers={fetchUsers}

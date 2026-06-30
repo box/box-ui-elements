@@ -1,12 +1,8 @@
 import type { UserContactType } from '@box/user-selector';
 
 import type { GroupMini, SelectorItem, UserMini } from '../../../../../common/types/core';
-import type { TaskCollabAssignee } from '../../../../../common/types/tasks';
 
-type AssigneeTarget = UserMini | GroupMini;
-
-// Widens TaskCollab.target to admit groups, which the collaborators endpoint returns at runtime.
-export type RuntimeAssignee = Omit<TaskCollabAssignee, 'target'> & { target: AssigneeTarget };
+import type { AssigneeTarget, TaskAssignee } from '../types';
 
 // Non-numeric ids collapse to 0; the raw string is preserved in UserContactType.value.
 const toDisplayId = (rawId: string): number => {
@@ -33,7 +29,7 @@ export const mapCollaboratorToUserContact = (collab: SelectorItem<UserMini | Gro
     };
 };
 
-export const mapUserContactToAssignee = (contact: UserContactType): RuntimeAssignee => {
+export const mapUserContactToAssignee = (contact: UserContactType): TaskAssignee => {
     const target: AssigneeTarget =
         contact.type === 'group'
             ? { id: contact.value, name: contact.name, type: 'group' }
@@ -49,7 +45,7 @@ export const mapUserContactToAssignee = (contact: UserContactType): RuntimeAssig
     };
 };
 
-export const mapAssigneeToUserContact = (assignee: RuntimeAssignee): UserContactType => {
+export const mapAssigneeToUserContact = (assignee: TaskAssignee): UserContactType => {
     const { target } = assignee;
     const email = target.type === 'user' ? target.email ?? '' : '';
 

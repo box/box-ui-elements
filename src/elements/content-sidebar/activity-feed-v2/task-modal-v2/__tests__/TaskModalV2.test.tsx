@@ -1,17 +1,12 @@
 import * as React from 'react';
 import type { UserContactType } from '@box/user-selector';
 
-import { render, screen, userEvent } from '../../../../../test-utils/testing-library';
-import {
-    ERROR_CODE_GROUP_EXCEEDS_LIMIT,
-    TASK_COMPLETION_RULE_ALL,
-    TASK_TYPE_APPROVAL,
-    TASK_TYPE_GENERAL,
-} from '../../../../../constants';
+import { act, render, screen, userEvent } from '../../../../../test-utils/testing-library';
+import { TASK_COMPLETION_RULE_ALL, TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../../constants';
 import type { ElementsXhrError } from '../../../../../common/types/api';
 import type { TaskNew } from '../../../../../common/types/tasks';
 import TaskModalV2 from '../TaskModalV2';
-import type { RuntimeAssignee } from '../utils/contactMapping';
+import type { TaskAssignee } from '../types';
 
 type UserSelectorMockProps = {
     disabled?: boolean;
@@ -59,7 +54,7 @@ jest.mock('@box/blueprint-web', () => {
     };
 });
 
-const buildUserAssignee = (id: string, name: string): RuntimeAssignee => ({
+const buildUserAssignee = (id: string, name: string): TaskAssignee => ({
     id: '',
     permissions: { can_delete: false, can_update: false },
     role: 'ASSIGNEE',
@@ -98,43 +93,32 @@ const buildEditingTask = (overrides: Partial<TaskNew> = {}): TaskNew => ({
 type RenderModalOptions = {
     createTask?: jest.Mock;
     editTask?: jest.Mock;
-    editingAssignees?: RuntimeAssignee[];
+    editingAssignees?: TaskAssignee[];
     editingTask?: TaskNew | null;
     error?: ElementsXhrError;
     isOpen?: boolean;
-    onClose?: jest.Mock;
-    onSubmitError?: jest.Mock;
-    onSubmitSuccess?: jest.Mock;
     taskType?: TaskNew['task_type'];
 };
 
-const renderModal = (options: RenderModalOptions = {}) => {
-    const createTask = options.createTask ?? jest.fn();
-    const editTask = options.editTask ?? jest.fn();
-    const fetchUsers = jest.fn().mockResolvedValue([]);
-    const fetchAvatarUrls = jest.fn().mockResolvedValue({});
-    const onClose = options.onClose ?? jest.fn();
-    const onSubmitError = options.onSubmitError ?? jest.fn();
-    const onSubmitSuccess = options.onSubmitSuccess ?? jest.fn();
-    const taskType = options.taskType ?? TASK_TYPE_APPROVAL;
-    const isOpen = options.isOpen ?? true;
+const buildDefaultSharedProps = () => ({
+    createTask: jest.fn(),
+    fetchAvatarUrls: jest.fn().mockResolvedValue({}),
+    fetchUsers: jest.fn().mockResolvedValue([]),
+    isOpen: true,
+    onClose: jest.fn(),
+    onSubmitError: jest.fn(),
+    onSubmitSuccess: jest.fn(),
+    taskType: TASK_TYPE_APPROVAL,
+});
 
-    const editingTask = options.editingTask ?? null;
-    const shared = {
-        createTask,
-        error: options.error,
-        fetchAvatarUrls,
-        fetchUsers,
-        isOpen,
-        onClose,
-        onSubmitError,
-        onSubmitSuccess,
-        taskType,
-    };
+const renderModal = (options: RenderModalOptions = {}) => {
+    const { editTask: editTaskOverride, editingAssignees, editingTask, ...sharedOverrides } = options;
+    const shared = { ...buildDefaultSharedProps(), ...sharedOverrides };
+    const editTask = editTaskOverride ?? jest.fn();
     const modal = editingTask ? (
         <TaskModalV2
             {...shared}
-            editingAssignees={options.editingAssignees ?? []}
+            editingAssignees={editingAssignees ?? []}
             editingTask={editingTask}
             editTask={editTask}
             mode="edit"
@@ -144,7 +128,7 @@ const renderModal = (options: RenderModalOptions = {}) => {
     );
 
     const utils = render(modal);
-    return { ...utils, createTask, editTask, fetchAvatarUrls, fetchUsers, onClose, onSubmitError, onSubmitSuccess };
+    return { ...utils, ...shared, editTask };
 };
 
 beforeEach(() => {
@@ -215,9 +199,11 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
     test('calls createTask with form values on submit in create mode', async () => {
         const user = userEvent();
         const { createTask } = renderModal();
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: 'alice@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'alice@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+            ]);
+        });
         await user.type(screen.getByRole('textbox', { name: /message/i }), 'Please review');
         await user.click(screen.getByRole('button', { name: /create/i }));
 
@@ -239,10 +225,12 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
             editingAssignees: [alice, bob],
             editingTask: buildEditingTask({ description: 'Edit me' }),
         });
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: 'alice@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
-            { email: 'charlie@example.com', id: 3, name: 'Charlie', type: 'user', value: '3' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'alice@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+                { email: 'charlie@example.com', id: 3, name: 'Charlie', type: 'user', value: '3' },
+            ]);
+        });
         await user.click(screen.getByRole('button', { name: /update/i }));
 
         expect(editTask).toHaveBeenCalledTimes(1);
@@ -259,9 +247,11 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
         const user = userEvent();
         const createTask = jest.fn((_text, _approvers, _type, _due, _rule, onSuccess) => onSuccess());
         const { onSubmitSuccess } = renderModal({ createTask });
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+            ]);
+        });
         await user.type(screen.getByRole('textbox', { name: /message/i }), 'msg');
         await user.click(screen.getByRole('button', { name: /create/i }));
 
@@ -273,50 +263,30 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
         const apiError: ElementsXhrError = { status: 500 } as ElementsXhrError;
         const createTask = jest.fn((_text, _approvers, _type, _due, _rule, _ok, onError) => onError(apiError));
         const { onSubmitError } = renderModal({ createTask });
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+            ]);
+        });
         await user.type(screen.getByRole('textbox', { name: /message/i }), 'msg');
         await user.click(screen.getByRole('button', { name: /create/i }));
 
         expect(onSubmitError).toHaveBeenCalledWith(apiError);
     });
 
-    test('renders a generic error notice when error has a non-forbidden status', () => {
+    test('renders TaskErrorNotice in the body when error is set', () => {
         renderModal({ error: { status: 500 } as ElementsXhrError });
         expect(screen.getByText(/An error occurred while creating this task/i)).toBeVisible();
-    });
-
-    test('renders a forbidden-edit warning notice for 403 on edit (approval task)', () => {
-        renderModal({
-            editingTask: buildEditingTask({ task_type: TASK_TYPE_APPROVAL }),
-            error: { status: 403 } as ElementsXhrError,
-            taskType: TASK_TYPE_APPROVAL,
-        });
-        expect(screen.getByText(/Unable to remove assignee\(s\) because the task is now approved\./i)).toBeVisible();
-    });
-
-    test('renders a forbidden-edit warning notice for 403 on edit (general task)', () => {
-        renderModal({
-            editingTask: buildEditingTask({ task_type: TASK_TYPE_GENERAL }),
-            error: { status: 403 } as ElementsXhrError,
-            taskType: TASK_TYPE_GENERAL,
-        });
-        expect(screen.getByText(/Unable to remove assignee\(s\) because the task is now completed\./i)).toBeVisible();
-    });
-
-    test('renders a warning notice for group-exceeds-limit errors', () => {
-        renderModal({ error: { code: ERROR_CODE_GROUP_EXCEEDS_LIMIT } as ElementsXhrError });
-        expect(screen.getByText(/Exceeded max assignees per group/i)).toBeVisible();
-        expect(screen.getByText(/cannot exceed the limit of 250 assignees per group/i)).toBeVisible();
     });
 
     test('forwards group selections to createTask', async () => {
         const user = userEvent();
         const { createTask } = renderModal();
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: '', id: 99, name: 'Engineering', type: 'group', value: '99' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: '', id: 99, name: 'Engineering', type: 'group', value: '99' },
+            ]);
+        });
         await user.type(screen.getByRole('textbox', { name: /message/i }), 'Group task');
         await user.click(screen.getByRole('button', { name: /create/i }));
 
@@ -328,9 +298,11 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
         const user = userEvent();
         const createTask = jest.fn();
         renderModal({ createTask });
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+            ]);
+        });
         await user.type(screen.getByRole('textbox', { name: /message/i }), 'msg');
         await user.click(screen.getByRole('button', { name: /create/i }));
 
@@ -359,9 +331,11 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
             throw thrown;
         });
         const { onSubmitError } = renderModal({ createTask });
-        lastUserSelectorProps.onSelectedUsersChange?.([
-            { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
-        ]);
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'a@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+            ]);
+        });
         await user.type(screen.getByRole('textbox', { name: /message/i }), 'msg');
         await user.click(screen.getByRole('button', { name: /create/i }));
 
@@ -374,23 +348,5 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
             editingTask: buildEditingTask({ due_at: 'not-a-real-date' }),
         });
         expect(screen.getByTestId('date-picker-value')).toHaveTextContent('empty');
-    });
-
-    test('renders a forbidden-edit warning for an Axios-shaped error with response.status=403', () => {
-        const axiosLikeError = { response: { status: 403 } } as unknown as ElementsXhrError;
-        renderModal({
-            editingTask: buildEditingTask({ task_type: TASK_TYPE_GENERAL }),
-            error: axiosLikeError,
-            taskType: TASK_TYPE_GENERAL,
-        });
-        expect(screen.getByText(/Unable to remove assignee\(s\) because the task is now completed\./i)).toBeVisible();
-    });
-
-    test('renders a group-exceeds notice for an Axios-shaped error with response.data.code', () => {
-        const axiosLikeError = {
-            response: { data: { code: ERROR_CODE_GROUP_EXCEEDS_LIMIT } },
-        } as unknown as ElementsXhrError;
-        renderModal({ error: axiosLikeError });
-        expect(screen.getByText(/Exceeded max assignees per group/i)).toBeVisible();
     });
 });

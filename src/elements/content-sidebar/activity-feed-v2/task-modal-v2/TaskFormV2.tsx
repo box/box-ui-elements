@@ -11,7 +11,8 @@ import { TASK_COMPLETION_RULE_ALL, TASK_COMPLETION_RULE_ANY, TASK_EDIT_MODE_EDIT
 
 import type { TaskCompletionRule, TaskEditMode, TaskType } from '../../../../common/types/tasks';
 
-import { mapAssigneeToUserContact, mapUserContactToAssignee, type RuntimeAssignee } from './utils/contactMapping';
+import { mapAssigneeToUserContact, mapUserContactToAssignee } from './utils/contactMapping';
+import type { TaskAssignee, TaskFormV2SubmitPayload } from './types';
 
 import messages from './messages';
 
@@ -19,18 +20,11 @@ import './TaskFormV2.scss';
 
 export const TASK_FORM_V2_ID = 'task-form-v2';
 
-export type TaskFormV2SubmitPayload = {
-    assignees: RuntimeAssignee[];
-    completionRule: TaskCompletionRule;
-    dueDate: Date | null;
-    message: string;
-};
-
 export type TaskFormV2Props = {
     editMode?: TaskEditMode;
     fetchAvatarUrls: (contacts: UserContactType[]) => Promise<FetchedAvatarUrls>;
     fetchUsers: (query: string) => Promise<UserContactType[]>;
-    initialAssignees?: RuntimeAssignee[];
+    initialAssignees?: TaskAssignee[];
     initialCompletionRule?: TaskCompletionRule;
     initialDueDate?: Date | null;
     initialMessage?: string;

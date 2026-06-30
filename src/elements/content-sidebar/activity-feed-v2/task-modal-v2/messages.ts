@@ -51,8 +51,8 @@ const messages = defineMessages({
         defaultMessage: 'An error occurred while creating this task. Please try again.',
         description: 'Body text of the error notice when creating a task fails',
     },
-    createTaskErrorTitle: {
-        id: 'be.taskModalV2.createTaskErrorTitle',
+    taskErrorTitle: {
+        id: 'be.taskModalV2.taskErrorTitle',
         defaultMessage: 'Error',
         description: 'Title of the error notice when creating or updating a task fails',
     },

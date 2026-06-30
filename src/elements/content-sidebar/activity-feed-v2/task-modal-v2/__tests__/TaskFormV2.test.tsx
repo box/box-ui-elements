@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { act } from 'react';
 import type { UserContactType } from '@box/user-selector';
 
-import { render, screen, userEvent } from '../../../../../test-utils/testing-library';
+import { act, render, screen, userEvent } from '../../../../../test-utils/testing-library';
 import {
     TASK_COMPLETION_RULE_ALL,
     TASK_COMPLETION_RULE_ANY,
@@ -12,8 +11,8 @@ import {
     TASK_TYPE_GENERAL,
 } from '../../../../../constants';
 import TaskFormV2, { TASK_FORM_V2_ID } from '../TaskFormV2';
-import type { TaskFormV2Props, TaskFormV2SubmitPayload } from '../TaskFormV2';
-import type { RuntimeAssignee } from '../utils/contactMapping';
+import type { TaskFormV2Props } from '../TaskFormV2';
+import type { TaskAssignee, TaskFormV2SubmitPayload } from '../types';
 
 type UserSelectorMockProps = {
     disabled?: boolean;
@@ -67,7 +66,7 @@ jest.mock('@box/blueprint-web', () => {
     };
 });
 
-const buildUserAssignee = (id: string, name: string): RuntimeAssignee => ({
+const buildUserAssignee = (id: string, name: string): TaskAssignee => ({
     id: '',
     permissions: { can_delete: false, can_update: false },
     role: 'ASSIGNEE',
@@ -76,7 +75,7 @@ const buildUserAssignee = (id: string, name: string): RuntimeAssignee => ({
     type: 'task_collaborator',
 });
 
-const buildGroupAssignee = (id: string, name: string): RuntimeAssignee => ({
+const buildGroupAssignee = (id: string, name: string): TaskAssignee => ({
     id: '',
     permissions: { can_delete: false, can_update: false },
     role: 'ASSIGNEE',

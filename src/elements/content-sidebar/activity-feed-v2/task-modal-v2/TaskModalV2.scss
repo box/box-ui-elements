@@ -1,4 +1,4 @@
-// Doubled class beats Blueprint Modal.Content size="medium" max-width.
+// Override Blueprint Modal.Content max-width; doubled selector raises specificity.
 .bcs-NewTaskModal.bcs-NewTaskModal {
     max-width: 480px;
 }
