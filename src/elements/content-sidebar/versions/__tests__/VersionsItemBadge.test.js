@@ -18,6 +18,14 @@ describe('elements/content-sidebar/versions/VersionsItemBadge', () => {
             expect(screen.getByLabelText('Version number 5')).toBeInTheDocument();
         });
 
+        test('should render lowercase version number badge when feature is enabled', () => {
+            render(<VersionsItemBadge versionNumber="7" />, {
+                wrapperProps: { features: { versions: { versionNumberBadge: { lowercase: { enabled: true } } } } },
+            });
+
+            expect(screen.getByText('v7')).toBeInTheDocument();
+        });
+
         test.each`
             isCurrent    | shouldHaveCurrentClass
             ${true}      | ${true}
