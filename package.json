@@ -365,6 +365,7 @@
         "uuid": "^8.3.2"
     },
     "resolutions": {
+        "@sigstore/core": "3.2.1",
         "draft-js/immutable": "^3.8.3",
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
         "js-yaml": "^4.2.0",
