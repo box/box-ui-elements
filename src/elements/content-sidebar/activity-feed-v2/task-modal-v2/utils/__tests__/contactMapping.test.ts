@@ -1,11 +1,7 @@
 import type { GroupMini, SelectorItem, UserMini } from '../../../../../../common/types/core';
 
-import {
-    mapAssigneeToUserContact,
-    mapCollaboratorToUserContact,
-    mapUserContactToAssignee,
-    type RuntimeAssignee,
-} from '../contactMapping';
+import { mapAssigneeToUserContact, mapCollaboratorToUserContact, mapUserContactToAssignee } from '../contactMapping';
+import type { TaskAssignee } from '../../types';
 
 const userItem: UserMini = {
     email: 'alice@example.com',
@@ -32,7 +28,7 @@ const groupCollaborator: SelectorItem<UserMini | GroupMini> = {
     name: 'Engineering',
 };
 
-const makeAssignee = (target: UserMini | GroupMini): RuntimeAssignee => ({
+const makeAssignee = (target: UserMini | GroupMini): TaskAssignee => ({
     id: 'task_collab_1',
     permissions: { can_delete: true, can_update: true },
     role: 'ASSIGNEE',
