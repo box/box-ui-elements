@@ -314,7 +314,7 @@ class Sidebar extends React.Component<Props, State> {
 
     isActivityDeepLinkPath(): boolean {
         const { location } = this.props;
-        return matchPath(location.pathname, { exact: true, path: ACTIVITY_DEEP_LINK_PATHS }) !== null;
+        return ACTIVITY_DEEP_LINK_PATHS.some(path => matchPath(location.pathname, { exact: true, path }) !== null);
     }
 
     getDefaultPanel(): string | typeof undefined {
