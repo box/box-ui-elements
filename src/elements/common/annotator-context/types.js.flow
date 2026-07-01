@@ -34,6 +34,17 @@ export interface Annotator {
         listener: (...args: any[]) => void
     ) => void;
 }
+export interface TimelineMarker {
+    id: string;
+    timestampMs: number;
+    type: "comment" | "annotation";
+}
+export interface TimelineMarkerClickPayload {
+    id: string;
+    timestampMs?: number;
+    type?: string;
+}
+export type TimelineMarkerClickHandler = (payload: TimelineMarkerClickPayload) => void;
 export interface AnnotatorState {
     activeAnnotationFileVersionId?: string | null;
     activeAnnotationId?: string | null;
@@ -52,6 +63,7 @@ export interface AnnotatorState {
 }
 export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 export interface AnnotatorContext {
+    addTimelineMarkerClickListener?: (handler: TimelineMarkerClickHandler) => () => void;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationReplyCreateEvent?: (
@@ -76,6 +88,7 @@ export interface AnnotatorContext {
     ) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
+    setTimelineMarkers?: (markers: TimelineMarker[]) => void;
     state: AnnotatorState;
 }
 declare export var Status: {|

@@ -28,6 +28,20 @@ export interface Annotator {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+export interface TimelineMarker {
+    id: string;
+    timestampMs: number;
+    type: 'comment' | 'annotation';
+}
+
+export interface TimelineMarkerClickPayload {
+    id: string;
+    timestampMs?: number;
+    type?: string;
+}
+
+export type TimelineMarkerClickHandler = (payload: TimelineMarkerClickPayload) => void;
+
 export interface AnnotatorState {
     activeAnnotationFileVersionId?: string | null;
     activeAnnotationId?: string | null;
@@ -41,7 +55,14 @@ export interface AnnotatorState {
 
 export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
 
+// Bridges the imperative box-annotations Annotator into the React tree below.
+// Also exposes timeline-marker hooks (setTimelineMarkers /
+// addTimelineMarkerClickListener) which talk to the box-content-preview viewer
+// through window-level CustomEvents — no direct viewer reference is held by
+// the host. Both surfaces share this single provider since they share
+// ContentPreview's lifecycle.
 export interface AnnotatorContext {
+    addTimelineMarkerClickListener?: (handler: TimelineMarkerClickHandler) => () => void;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationReplyCreateEvent?: (
@@ -55,6 +76,7 @@ export interface AnnotatorContext {
     emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
+    setTimelineMarkers?: (markers: TimelineMarker[]) => void;
     state: AnnotatorState;
 }
 

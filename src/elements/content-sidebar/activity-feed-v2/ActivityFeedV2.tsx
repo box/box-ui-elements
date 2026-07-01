@@ -14,6 +14,7 @@ import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
 
 import TaskModal from '../TaskModal';
 
+import { AnnotatorContext } from '../../common/annotator-context';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { transformFeedItem } from './transformers';
@@ -22,6 +23,7 @@ import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
 
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
+import type { TimelineMarker } from '../../common/annotator-context';
 import type { TaskAssigneeCollection, TaskNew } from '../../../common/types/tasks';
 
 import { FILE_EXTENSIONS } from '../../common/item/constants';
@@ -253,6 +255,31 @@ const ActivityFeedV2 = ({
         }
         return filtered;
     }, [currentUserId, showOnlyMentionsMe, showResolved, transformedItems]);
+
+    const timelineMarkers = React.useMemo<TimelineMarker[]>(() => {
+        const markers: TimelineMarker[] = [];
+        filteredItems.forEach(item => {
+            if (item.type === 'comment' && typeof item.annotationTimestampMs === 'number') {
+                markers.push({ id: item.id, timestampMs: item.annotationTimestampMs, type: 'comment' });
+                return;
+            }
+            if (item.type === 'annotation') {
+                const location = item.annotation?.target?.location;
+                if (location?.type === 'frame' && typeof location.value === 'number') {
+                    markers.push({ id: item.id, timestampMs: location.value, type: 'annotation' });
+                }
+            }
+        });
+        return markers;
+    }, [filteredItems]);
+
+    const { setTimelineMarkers } = React.useContext(AnnotatorContext);
+
+    React.useEffect(() => {
+        if (setTimelineMarkers) {
+            setTimelineMarkers(timelineMarkers);
+        }
+    }, [setTimelineMarkers, timelineMarkers]);
 
     React.useEffect(() => {
         const alreadyScrolledToThisEntry = scrolledEntryIdRef.current === activeFeedEntryId;

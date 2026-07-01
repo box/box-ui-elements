@@ -4,7 +4,17 @@ import { generatePath, match as matchType, matchPath } from 'react-router-dom';
 import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
 import { isFeatureEnabled, type FeatureConfig } from '../feature-checking';
-import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
+import {
+    Action,
+    Annotator,
+    AnnotationActionEvent,
+    AnnotatorState,
+    GetMatchPath,
+    MatchParams,
+    Status,
+    TimelineMarker,
+    TimelineMarkerClickHandler,
+} from './types';
 import { FeedEntryType, SidebarNavigation } from '../types/SidebarNavigation';
 
 export type ActiveChangeEvent = {
@@ -15,6 +25,7 @@ export type ActiveChangeEvent = {
 export type ActiveChangeEventHandler = (event: ActiveChangeEvent) => void;
 
 export type ComponentWithAnnotations = {
+    addTimelineMarkerClickListener: (handler: TimelineMarkerClickHandler) => () => void;
     emitActiveAnnotationChangeEvent: (id: string | null) => void;
     emitAnnotationRemoveEvent: (id: string, isStartEvent?: boolean) => void;
     emitAnnotationReplyCreateEvent: (
@@ -40,6 +51,7 @@ export type ComponentWithAnnotations = {
     handleAnnotationUpdate: (eventData: AnnotationActionEvent) => void;
     handleAnnotator: (annotator: Annotator) => void;
     handlePreviewDestroy: (shouldReset?: boolean) => void;
+    setTimelineMarkers: (markers: TimelineMarker[]) => void;
 };
 
 export type WithAnnotationsProps = {
@@ -73,6 +85,12 @@ export default function withAnnotations<P extends object>(
 
         annotator: Annotator | null = null;
 
+        // Cached so we can replay markers onto a viewer that arrives after the
+        // feed has rendered (e.g. file navigation while sidebar stays mounted).
+        // The SDK dispatches `bp:timeline_markers_ready` when its listener is in
+        // place; we re-emit the cached list in response.
+        lastTimelineMarkers: TimelineMarker[] | null = null;
+
         constructor(props: P & WithAnnotationsProps) {
             super(props);
 
@@ -100,6 +118,27 @@ export default function withAnnotations<P extends object>(
             // Seed the initial state with the activeAnnotationId if any from the location path
             this.state = { ...defaultState, activeAnnotationId };
         }
+
+        componentDidMount(): void {
+            if (typeof window !== 'undefined') {
+                window.addEventListener('bp:timeline_markers_ready', this.handleTimelineMarkersReady);
+            }
+        }
+
+        componentWillUnmount(): void {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('bp:timeline_markers_ready', this.handleTimelineMarkersReady);
+            }
+        }
+
+        handleTimelineMarkersReady = (): void => {
+            // The viewer just attached its listener; replay whatever the host
+            // last pushed so the scrubber is correct without the host having to
+            // re-derive on the next feed mutation.
+            if (this.lastTimelineMarkers) {
+                this.setTimelineMarkers(this.lastTimelineMarkers);
+            }
+        };
 
         emitActiveAnnotationChangeEvent = (id: string | null) => {
             const { annotator } = this;
@@ -338,6 +377,36 @@ export default function withAnnotations<P extends object>(
             }
 
             this.annotator = null;
+            this.lastTimelineMarkers = null;
+        };
+
+        // Pushes markers into the SDK via a window-level CustomEvent. The viewer
+        // listens on `bp:timeline_markers_update`; we never hold a reference to
+        // the viewer instance. Cached so the ready handler can replay onto a
+        // viewer that mounts after the first push.
+        setTimelineMarkers = (markers: TimelineMarker[]): void => {
+            this.lastTimelineMarkers = markers;
+            if (typeof window !== 'undefined' && typeof window.CustomEvent === 'function') {
+                window.dispatchEvent(new window.CustomEvent('bp:timeline_markers_update', { detail: markers }));
+            }
+        };
+
+        // Subscribes the host to viewer-emitted marker clicks. The SDK dispatches
+        // `bp:timeline_marker_click` on the window; we wrap the handler to unbox
+        // the CustomEvent's detail so consumers see a plain payload object.
+        addTimelineMarkerClickListener = (handler: TimelineMarkerClickHandler): (() => void) => {
+            const noopUnsubscribe = (): void => undefined;
+            if (typeof window === 'undefined') {
+                return noopUnsubscribe;
+            }
+            const wrapped = (event: Event): void => {
+                const { detail } = event as CustomEvent;
+                if (detail && typeof detail.id === 'string') {
+                    handler(detail);
+                }
+            };
+            window.addEventListener('bp:timeline_marker_click', wrapped);
+            return () => window.removeEventListener('bp:timeline_marker_click', wrapped);
         };
 
         render(): JSX.Element {
@@ -352,12 +421,14 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
+                        addTimelineMarkerClickListener: this.addTimelineMarkerClickListener,
                         emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
                         emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
                         emitAnnotationReplyCreateEvent: this.emitAnnotationReplyCreateEvent,
                         emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
                         emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
                         emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
+                        setTimelineMarkers: this.setTimelineMarkers,
                         ...annotationsRouterProps,
                         state: this.state,
                     }}

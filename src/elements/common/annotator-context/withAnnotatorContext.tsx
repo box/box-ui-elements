@@ -1,9 +1,10 @@
 import * as React from 'react';
 import AnnotatorContext from './AnnotatorContext';
 import { isFeatureEnabled, type FeatureConfig } from '../feature-checking';
-import { AnnotatorState, GetMatchPath } from './types';
+import { AnnotatorState, GetMatchPath, TimelineMarker, TimelineMarkerClickHandler } from './types';
 
 export interface WithAnnotatorContextProps {
+    addTimelineMarkerClickListener?: (handler: TimelineMarkerClickHandler) => () => void;
     annotatorState?: AnnotatorState;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
     emitAnnotationRemoveEvent?: (id: string, isStartEvent?: boolean) => void;
@@ -18,6 +19,7 @@ export interface WithAnnotatorContextProps {
     emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
+    setTimelineMarkers?: (markers: TimelineMarker[]) => void;
 }
 
 export default function withAnnotatorContext<P extends {}>(WrappedComponent: React.ComponentType<P>) {
@@ -27,17 +29,20 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                 return (
                     <AnnotatorContext.Consumer>
                         {({
+                            addTimelineMarkerClickListener,
                             emitActiveAnnotationChangeEvent,
                             emitAnnotationRemoveEvent,
                             emitAnnotationReplyCreateEvent,
                             emitAnnotationReplyDeleteEvent,
                             emitAnnotationReplyUpdateEvent,
                             emitAnnotationUpdateEvent,
+                            setTimelineMarkers,
                             state,
                         }) => (
                             <WrappedComponent
                                 ref={ref}
                                 {...props}
+                                addTimelineMarkerClickListener={addTimelineMarkerClickListener}
                                 annotatorState={state}
                                 emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
                                 emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
@@ -45,6 +50,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                                 emitAnnotationReplyDeleteEvent={emitAnnotationReplyDeleteEvent}
                                 emitAnnotationReplyUpdateEvent={emitAnnotationReplyUpdateEvent}
                                 emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
+                                setTimelineMarkers={setTimelineMarkers}
                             />
                         )}
                     </AnnotatorContext.Consumer>
@@ -53,6 +59,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
             return (
                 <AnnotatorContext.Consumer>
                     {({
+                        addTimelineMarkerClickListener,
                         emitActiveAnnotationChangeEvent,
                         emitAnnotationRemoveEvent,
                         emitAnnotationReplyCreateEvent,
@@ -61,11 +68,13 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                         emitAnnotationUpdateEvent,
                         getAnnotationsMatchPath,
                         getAnnotationsPath,
+                        setTimelineMarkers,
                         state,
                     }) => (
                         <WrappedComponent
                             ref={ref}
                             {...props}
+                            addTimelineMarkerClickListener={addTimelineMarkerClickListener}
                             annotatorState={state}
                             emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
                             emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
@@ -75,6 +84,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                             emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
                             getAnnotationsMatchPath={getAnnotationsMatchPath}
                             getAnnotationsPath={getAnnotationsPath}
+                            setTimelineMarkers={setTimelineMarkers}
                         />
                     )}
                 </AnnotatorContext.Consumer>

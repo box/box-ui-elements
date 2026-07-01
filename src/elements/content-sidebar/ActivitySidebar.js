@@ -16,6 +16,7 @@ import { generatePath, type ContextRouter } from 'react-router-dom';
 import ActivityFeed from './activity-feed';
 // $FlowFixMe
 import ActivityFeedV2 from './activity-feed-v2';
+import { seekVideoToMs } from './activity-feed-v2/useVideoTimestamp';
 import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
@@ -164,6 +165,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitAnnotationReplyDeleteEvent: noop,
         emitAnnotationReplyUpdateEvent: noop,
         emitAnnotationUpdateEvent: noop,
+        addTimelineMarkerClickListener: undefined,
+        setTimelineMarkers: undefined,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
         hasReplies: false,
@@ -197,9 +200,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        const { shouldFetchSidebarData = true } = this.props;
+        const { addTimelineMarkerClickListener, shouldFetchSidebarData = true } = this.props;
         if (shouldFetchSidebarData) {
             this.fetchFeedItems(true);
+        }
+        if (addTimelineMarkerClickListener) {
+            this.timelineMarkerUnsubscribe = addTimelineMarkerClickListener(this.handleTimelineMarkerClick);
         }
     }
 
@@ -227,7 +233,56 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
         this.pendingMentionResolve = null;
         this.pendingMentionReject = null;
+        if (this.timelineMarkerUnsubscribe) {
+            this.timelineMarkerUnsubscribe();
+            this.timelineMarkerUnsubscribe = null;
+        }
     }
+
+    timelineMarkerUnsubscribe: ?() => void = null;
+
+    handleTimelineMarkerClick = ({
+        id,
+        timestampMs,
+        type,
+    }: {
+        id: string,
+        timestampMs?: number,
+        type?: string,
+    }): void => {
+        if (!id) return;
+
+        if (type === 'annotation') {
+            const { feedItems } = this.state;
+            const annotationItem = feedItems
+                ? feedItems.find(item => item.id === id && item.type === FEED_ITEM_TYPE_ANNOTATION)
+                : null;
+            if (annotationItem) {
+                // Reuse the badge-click flow so the annotator's active-annotation
+                // state, URL push, overlay rendering, and seek all stay consistent.
+                this.handleAnnotationSelect(annotationItem);
+                return;
+            }
+        }
+
+        // Comment markers carry a timestamp directly; seek immediately so the
+        // playhead moves before the sidebar scroll catches up.
+        if (typeof timestampMs === 'number') {
+            seekVideoToMs(timestampMs);
+        }
+
+        const { history, internalSidebarNavigationHandler, routerDisabled } = this.props;
+
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler({
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryId: id,
+                activeFeedEntryType: FeedEntryType.COMMENTS,
+            });
+        } else {
+            history.push(this.getActiveCommentPath(id));
+        }
+    };
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
         const { api, emitAnnotationRemoveEvent, file } = this.props;
@@ -1242,6 +1297,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         } else {
             const match = getAnnotationsMatchPath(location);
             selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+        }
+
+        // Seek the video first when the annotation is on the current version so the
+        // playhead moves before the sidebar scroll and overlay render. Cross-version
+        // annotations rely on the existing setState({ startAt }) flow below.
+        const annotationLocation = annotation?.target?.location;
+        const isFrameAnnotation = annotationLocation?.type === 'frame';
+        const isSameVersion = !annotationFileVersionId || annotationFileVersionId === selectedFileVersionId;
+        if (isFrameAnnotation && isSameVersion && typeof annotationLocation.value === 'number') {
+            seekVideoToMs(annotationLocation.value);
         }
 
         emitActiveAnnotationChangeEvent(nextActiveAnnotationId);
