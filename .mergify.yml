@@ -40,3 +40,14 @@ queue_rules:
       - "#changes-requested-reviews-by = 0"
       - "#review-threads-unresolved = 0"
     merge_method: squash
+
+  - name: Automatic ui-elements merge
+    queue_conditions:
+      - author @box/ui-elements
+      - title ~= ^(build|ci|chore|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?:\s.+$
+      - label = ready-to-merge
+      - status-success = lint_test_build
+      - branch-protection-review-decision = APPROVED
+      - "#changes-requested-reviews-by = 0"
+      - "#review-threads-unresolved = 0"
+    merge_method: squash
