@@ -118,9 +118,10 @@ class Metadata extends File {
      * `getBaseApiUrl()`, so callers without `metadataApiHost` configured
      * resolve to the global API host.
      *
-     * Other metadata endpoints (templates, taxonomies, suggestions, options,
-     * queries) intentionally use `getBaseApiUrl()` instead and are not
-     * affected by `metadataApiHost`.
+     * Template endpoints use `getMetadataTemplateBaseUrl()` instead and are
+     * also routed through `metadataApiHost`. Options, taxonomy, suggestion, and
+     * query endpoints intentionally use `getBaseApiUrl()` and are not affected
+     * by `metadataApiHost`.
      *
      * @return {string} base url for metadata instance endpoints
      */
@@ -193,10 +194,9 @@ class Metadata extends File {
     }
 
     /**
-     * API URL for metadata templates for a scope
+     * API URL for metadata templates
      *
-     * @param {string} scope - metadata scope
-     * @return {string} base url for files
+     * @return {string} base url for metadata templates
      */
     getMetadataTemplateUrl(): string {
         return `${this.getMetadataTemplateBaseUrl()}/metadata_templates`;
@@ -1484,7 +1484,7 @@ class Metadata extends File {
      * @returns {`${string}/metadata_templates/${string}/${string}/fields/${string}/options`}
      */
     getMetadataOptionsUrl(scope: string, templateKey: string, fieldKey: string): string {
-        return `${this.getMetadataTemplateBaseUrl()}/metadata_templates/${scope}/${templateKey}/fields/${fieldKey}/options`;
+        return `${this.getBaseApiUrl()}/metadata_templates/${scope}/${templateKey}/fields/${fieldKey}/options`;
     }
 
     /**
