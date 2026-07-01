@@ -4528,14 +4528,14 @@ describe('api/Metadata', () => {
             expect(api.getMetadataTemplateUrlForInstance('inst_id')).toBe(
                 'https://api-jp.box.com/2.0/metadata_templates?metadata_instance_id=inst_id',
             );
-            expect(api.getMetadataOptionsUrl('enterprise', 'tpl', 'field')).toBe(
-                'https://api-jp.box.com/2.0/metadata_templates/enterprise/tpl/fields/field/options',
-            );
         });
 
-        test('keeps taxonomy and suggestions on apiHost', () => {
+        test('keeps taxonomy, suggestions and options on apiHost', () => {
             const api = new Metadata({ apiHost, metadataApiHost });
             expect(api.getMetadataSuggestionsUrl()).toBe('https://api.box.com/2.0/metadata_instances/suggestions');
+            expect(api.getMetadataOptionsUrl('enterprise', 'tpl', 'field')).toBe(
+                'https://api.box.com/2.0/metadata_templates/enterprise/tpl/fields/field/options',
+            );
             expect(api.getMetadataTaxonomyUrl('enterprise', 'taxKey')).toBe(
                 'https://api.box.com/2.0/metadata_taxonomies/enterprise/taxKey',
             );
