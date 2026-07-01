@@ -458,6 +458,55 @@ describe('elements/content-sidebar/Sidebar', () => {
                     );
                 },
             );
+
+            test.each`
+                pathname                             | savedDefaultPanel
+                ${'/activity/comments/1'}            | ${'details'}
+                ${'/activity/tasks/2'}               | ${'boxai'}
+                ${'/activity/annotations/3/4'}       | ${null}
+                ${'/activity/comments'}              | ${'details'}
+                ${'/activity/tasks'}                 | ${'details'}
+                ${'/activity/annotations/version-1'} | ${'details'}
+            `(
+                'should force defaultPanel = "activity" when location.pathname = $pathname (saved panel = $savedDefaultPanel)',
+                ({ pathname, savedDefaultPanel }) => {
+                    mockGetItem.mockReturnValue(savedDefaultPanel);
+                    render(
+                        getSidebar({
+                            features: { panelSelectionPreservation: true },
+                            location: { pathname },
+                        }),
+                    );
+                    expect(MockSidebarPanels).toHaveBeenCalledWith(
+                        expect.objectContaining({ defaultPanel: 'activity' }),
+                        {},
+                    );
+                },
+            );
+
+            test.each`
+                pathname                            | savedDefaultPanel | expected
+                ${'/activity/reactions/1'}          | ${'details'}      | ${'details'}
+                ${'/activity/comments/1/replies/2'} | ${'details'}      | ${'details'}
+                ${'/activity/annotations'}          | ${'details'}      | ${'details'}
+                ${'/activity-log/1'}                | ${'details'}      | ${'details'}
+                ${'/activity/reactions/1'}          | ${null}           | ${undefined}
+            `(
+                'should fall through to persisted panel for unmatched pathname = $pathname (saved = $savedDefaultPanel, expected = $expected)',
+                ({ pathname, savedDefaultPanel, expected }) => {
+                    mockGetItem.mockReturnValue(savedDefaultPanel);
+                    render(
+                        getSidebar({
+                            features: { panelSelectionPreservation: true },
+                            location: { pathname },
+                        }),
+                    );
+                    expect(MockSidebarPanels).toHaveBeenCalledWith(
+                        expect.objectContaining({ defaultPanel: expected }),
+                        {},
+                    );
+                },
+            );
         });
     });
 
