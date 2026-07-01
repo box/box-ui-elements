@@ -1265,6 +1265,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     };
 
+    handleCommentSelect = (commentId: string): void => {
+        const { history, internalSidebarNavigationHandler, routerDisabled } = this.props;
+
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler({
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryId: commentId,
+                activeFeedEntryType: FeedEntryType.COMMENTS,
+            });
+        } else {
+            history.push(this.getActiveCommentPath(commentId));
+        }
+    };
+
     handleItemsFiltered = (status?: ActivityFilterItemType) => {
         const { onFilterChange } = this.props;
 
@@ -1443,6 +1457,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         onCommentCopyLink={onCommentCopyLink}
                         onCommentCreate={this.createComment}
                         onCommentDelete={this.deleteComment}
+                        onCommentSelect={this.handleCommentSelect}
                         onCommentUpdate={this.updateComment}
                         onReplyCreate={this.createReply}
                         onReplyDelete={this.deleteReply}
