@@ -314,7 +314,7 @@
         "@box/metadata-view": "^1.53.26",
         "@box/react-virtualized": "^9.22.3-rc-box.10",
         "@box/readable-time": "^2.1.4",
-        "@box/threaded-annotations": "^2.1.7",
+        "@box/threaded-annotations": "^3.1.1",
         "@box/types": "^2.1.8",
         "@box/unified-share-modal": "^2.15.16",
         "@box/uploads-manager": "^1.17.2",

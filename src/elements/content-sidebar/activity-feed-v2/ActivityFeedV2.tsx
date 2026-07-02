@@ -358,7 +358,7 @@ const ActivityFeedV2 = ({
         viewer.emit('comment_markers', markers);
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
-            const item = filteredItems.find(fi => fi.id === id);
+            const item = filteredItems.find(filteredItem => filteredItem.id === id);
             // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
             if (item?.type === 'comment' && onCommentSelect) {
                 onCommentSelect(id);
