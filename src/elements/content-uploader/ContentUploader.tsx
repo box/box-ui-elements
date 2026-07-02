@@ -1801,13 +1801,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                         <ModernizedUploadsManagerDropZone
                             addDataTransferItemsToUploadQueue={droppedItems =>
                                 this.addDroppedItemsToUploadQueue(droppedItems, this.upload)
                             }
                             allowedTypes={['Files']}
-                            canDrop={canDropOnUploadsManager}
+                            isDropEnabled={canDropOnUploadsManager}
                             className={classNames('bcu-modernized-panel', {
                                 visible: modernizedPanelState === 'shown',
                                 dismissing: modernizedPanelState === 'dismissing',

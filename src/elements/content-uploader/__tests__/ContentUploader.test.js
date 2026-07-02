@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import * as UploaderUtils from '../../../utils/uploads';
 import Browser from '../../../utils/Browser';
+import { fireEvent, render, screen } from '../../../test-utils/testing-library';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
@@ -986,6 +987,19 @@ describe('elements/content-uploader/ContentUploader', () => {
     });
 
     describe('ModernizedUploadsManagerDropZone', () => {
+        const renderModernizedUploadsManagerDropZone = props =>
+            render(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={jest.fn()}
+                    allowedTypes={['Files']}
+                    className="bcu-modernized-panel"
+                    data-testid="bcu-modernized-panel"
+                    {...props}
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
         test('prevents browser navigation and queues files dropped on the modernized panel', () => {
             const addDataTransferItemsToUploadQueue = jest.fn();
             const dataTransfer = {
@@ -1018,7 +1032,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(addDataTransferItemsToUploadQueue).toHaveBeenCalledWith(dataTransfer);
         });
 
-        test('prevents browser navigation without queueing when drop is disabled', () => {
+        test('prevents browser navigation without queueing when isDropEnabled is false', () => {
             const addDataTransferItemsToUploadQueue = jest.fn();
             const dataTransfer = {
                 items: ['file-item'],
@@ -1036,7 +1050,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 <ModernizedUploadsManagerDropZone
                     addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
                     allowedTypes={['Files']}
-                    canDrop={false}
+                    isDropEnabled={false}
                     className="bcu-modernized-panel"
                 >
                     <div />
@@ -1048,6 +1062,46 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
             expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
+        });
+
+        test('does not forward droppable state props to the modernized panel DOM element', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            let consoleErrors = '';
+
+            try {
+                renderModernizedUploadsManagerDropZone();
+
+                fireEvent.dragEnter(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
+
+                consoleErrors = consoleError.mock.calls.flat().join('\n');
+            } finally {
+                consoleError.mockRestore();
+            }
+
+            expect(consoleErrors).not.toContain('isDragging');
+            expect(consoleErrors).not.toContain('isOver');
+        });
+
+        test('does not queue files dropped on the modernized panel when isDropEnabled is false', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+
+            renderModernizedUploadsManagerDropZone({
+                addDataTransferItemsToUploadQueue,
+                isDropEnabled: false,
+            });
+
+            fireEvent.dragEnter(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
+            fireEvent.drop(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
+
             expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
         });
     });

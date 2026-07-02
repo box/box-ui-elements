@@ -1,4 +1,5 @@
 import * as React from 'react';
+import omit from 'lodash/omit';
 
 import makeDroppable from '../common/droppable';
 import type { DOMStringList } from '../../common/types/core';
@@ -6,17 +7,23 @@ import type { DOMStringList } from '../../common/types/core';
 export interface ModernizedUploadsManagerDropZoneProps extends React.HTMLAttributes<HTMLDivElement> {
     addDataTransferItemsToUploadQueue: (droppedItems: DataTransfer) => void;
     allowedTypes: Array<string>;
-    canDrop?: boolean;
     children: React.ReactNode;
     className: string;
+    isDropEnabled?: boolean;
+}
+
+interface DroppableStateProps {
+    canDrop?: boolean;
+    isDragging?: boolean;
+    isOver?: boolean;
 }
 
 const dropDefinition = {
     dropValidator: (
-        { allowedTypes, canDrop = true }: ModernizedUploadsManagerDropZoneProps,
+        { allowedTypes, isDropEnabled = true }: ModernizedUploadsManagerDropZoneProps,
         { types }: { types: Array<string> | DOMStringList },
     ) => {
-        if (!canDrop) {
+        if (!isDropEnabled) {
             return false;
         }
 
@@ -41,14 +48,18 @@ const dropDefinition = {
 
 const ModernizedUploadsManagerDropZoneComponent = React.forwardRef<
     HTMLDivElement,
-    ModernizedUploadsManagerDropZoneProps
+    ModernizedUploadsManagerDropZoneProps & DroppableStateProps
 >((props, ref) => {
     const { children } = props;
-    const htmlProps: Partial<ModernizedUploadsManagerDropZoneProps> = { ...props };
-    delete htmlProps.addDataTransferItemsToUploadQueue;
-    delete htmlProps.allowedTypes;
-    delete htmlProps.canDrop;
-    delete htmlProps.children;
+    const htmlProps: React.HTMLAttributes<HTMLDivElement> = omit(props, [
+        'addDataTransferItemsToUploadQueue',
+        'allowedTypes',
+        'canDrop',
+        'children',
+        'isDragging',
+        'isDropEnabled',
+        'isOver',
+    ]);
 
     return (
         <div ref={ref} {...htmlProps}>
