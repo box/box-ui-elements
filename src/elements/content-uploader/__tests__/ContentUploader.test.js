@@ -1130,6 +1130,12 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(ModernizedUploadsManagerDropZone)).toHaveLength(1);
             });
 
+            test('should disable dropping on the modernized panel when modernized drop props are omitted', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+
+                expect(wrapper.find(ModernizedUploadsManagerDropZone).prop('isDropEnabled')).toBe(false);
+            });
+
             test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);

@@ -174,7 +174,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         clientName: CLIENT_NAME_CONTENT_UPLOADER,
         dataTransferItems: [],
         files: [],
-        canDropOnUploadsManager: true,
+        canDropOnUploadsManager: false,
         fileLimit: FILE_LIMIT_DEFAULT,
         isDraggingItemsToUploadsManager: false,
         isFolderUploadEnabled: false,
