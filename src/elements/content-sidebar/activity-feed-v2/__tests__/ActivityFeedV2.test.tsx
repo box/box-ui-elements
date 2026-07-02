@@ -5,6 +5,8 @@ import { ActivityFeed } from '@box/activity-feed';
 import { act, render, screen } from '../../../../test-utils/testing-library';
 import ActivityFeedV2 from '..';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
+import type { TaskModalV2Props } from '../task-modal-v2';
+import type { CreateTaskCallback } from '../task-modal-v2/types';
 
 type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor>;
 
@@ -29,6 +31,15 @@ let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
 let lastEditorProps: Partial<EditorProps> = {};
+let lastTaskModalProps: Partial<TaskModalV2Props> = {};
+
+jest.mock('../task-modal-v2', () => ({
+    __esModule: true,
+    default: (props: Partial<TaskModalV2Props>) => {
+        lastTaskModalProps = props;
+        return props.isOpen ? <div data-testid="task-modal-v2" /> : null;
+    },
+}));
 
 jest.mock('@box/activity-feed', () => {
     const actual = jest.requireActual('@box/activity-feed');
@@ -170,6 +181,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         lastShowResolvedOptionProps = {};
         lastMentionMeOptionProps = {};
         lastEditorProps = {};
+        lastTaskModalProps = {};
         mockSerializeMentionMarkup.mockImplementation((doc: unknown) => ({
             hasMention: false,
             text: JSON.stringify(doc),
@@ -1154,6 +1166,160 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         test('should not include page-based annotations in markers', () => {
             renderComponentWithMarkers({ feedItems: [mockAnnotation] as ActivityFeedV2Props['feedItems'] });
             expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);
+        });
+    });
+
+    describe('task modal wiring', () => {
+        type CreateTaskParams = Parameters<CreateTaskCallback>;
+        type OnSubmitErrorParam = Parameters<NonNullable<TaskModalV2Props['onSubmitError']>>[0];
+
+        const currentUser: ActivityFeedV2Props['currentUser'] = { id: 'user-1', name: 'Me', type: 'user' };
+        const submitTaskModalArgs: [
+            CreateTaskParams[0],
+            CreateTaskParams[1],
+            CreateTaskParams[2],
+            CreateTaskParams[3],
+            CreateTaskParams[4],
+        ] = ['msg', [], 'APPROVAL', null, 'ALL_ASSIGNEES'];
+
+        const buildTaskAuthoredBy = (userId: string, id: string) => ({
+            ...mockTask,
+            created_by: {
+                ...mockTask.created_by,
+                target: { ...mockTask.created_by.target, id: userId },
+            },
+            id,
+        });
+
+        const createTaskThatSucceeds = () =>
+            jest.fn<ReturnType<CreateTaskCallback>, CreateTaskParams>(
+                (_text, _approvers, _type, _due, _rule, onSuccess) => onSuccess(),
+            );
+
+        const renderFeed = (props: Partial<ActivityFeedV2Props> = {}) =>
+            render(
+                <ActivityFeedV2
+                    currentUser={currentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    {...props}
+                />,
+            );
+
+        const submitTaskModal = (onSuccess = jest.fn(), onError = jest.fn()) => {
+            act(() => {
+                lastTaskModalProps.createTask?.(...submitTaskModalArgs, onSuccess, onError);
+            });
+            return { onError, onSuccess };
+        };
+
+        test('should forward create-mode props to TaskModalV2', () => {
+            renderFeed({ createTask: jest.fn(), onTaskUpdate: jest.fn() });
+            expect(lastTaskModalProps.mode).toBeUndefined();
+            expect(lastTaskModalProps.editingTask).toBeUndefined();
+            expect(lastTaskModalProps.taskType).toBe('APPROVAL');
+            expect(lastTaskModalProps.isOpen).toBe(false);
+        });
+
+        test('should forward createTask arguments and callbacks from the modal to the parent', () => {
+            const createTask = jest.fn();
+            renderFeed({ createTask });
+            const { onError } = submitTaskModal();
+
+            expect(createTask).toHaveBeenCalledTimes(1);
+            const [text, approvers, type, dueDate, rule, onSuccessArg, onErrorArg] = createTask.mock.calls[0];
+            expect(text).toBe('msg');
+            expect(approvers).toEqual([]);
+            expect(type).toBe('APPROVAL');
+            expect(dueDate).toBeNull();
+            expect(rule).toBe('ALL_ASSIGNEES');
+            expect(typeof onSuccessArg).toBe('function');
+            expect(onErrorArg).toBe(onError);
+        });
+
+        test('should invoke onError when createTask is not wired', () => {
+            renderFeed();
+            const { onSuccess, onError } = submitTaskModal();
+            expect(onSuccess).not.toHaveBeenCalled();
+            expect(onError).toHaveBeenCalledWith(
+                expect.objectContaining({ code: 'create_task_unavailable', status: 0 }),
+            );
+        });
+
+        test('should surface onSubmitError value on the modal error prop', () => {
+            renderFeed({ createTask: jest.fn() });
+            expect(lastTaskModalProps.error).toBeUndefined();
+            const apiError: OnSubmitErrorParam = {
+                code: 'server_error',
+                context_info: {},
+                help_url: '',
+                message: 'kaboom',
+                request_id: 'req-1',
+                status: 500,
+                type: 'error',
+            };
+            act(() => {
+                lastTaskModalProps.onSubmitError?.(apiError);
+            });
+            expect(lastTaskModalProps.error).toEqual(apiError);
+        });
+
+        test('should scroll to a newly created task authored by the current user', () => {
+            const createTask = createTaskThatSucceeds();
+            const newUserTask = buildTaskAuthoredBy('user-1', 'new-task');
+            const { rerender } = renderFeed({ createTask });
+            mockScrollTo.mockClear();
+
+            submitTaskModal();
+            expect(mockScrollTo).not.toHaveBeenCalled();
+
+            rerender(
+                <ActivityFeedV2
+                    createTask={createTask}
+                    currentUser={currentUser}
+                    feedItems={[mockComment, newUserTask] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+            expect(mockScrollTo).toHaveBeenLastCalledWith('new-task');
+        });
+
+        test('should not scroll to a task authored by another user after create', () => {
+            const createTask = createTaskThatSucceeds();
+            const strangerTask = buildTaskAuthoredBy('stranger', 'stranger-task');
+            const { rerender } = renderFeed({ createTask });
+            mockScrollTo.mockClear();
+
+            submitTaskModal();
+            rerender(
+                <ActivityFeedV2
+                    createTask={createTask}
+                    currentUser={currentUser}
+                    feedItems={[mockComment, strangerTask] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+            expect(mockScrollTo).not.toHaveBeenCalled();
+        });
+
+        test('should not throw when a task item is missing created_by.target', () => {
+            const createTask = createTaskThatSucceeds();
+            const brokenTask = {
+                ...mockTask,
+                created_by: { ...mockTask.created_by, target: undefined },
+                id: 'broken-task',
+            };
+            const { rerender } = renderFeed({ createTask });
+            mockScrollTo.mockClear();
+
+            submitTaskModal();
+            expect(() =>
+                rerender(
+                    <ActivityFeedV2
+                        createTask={createTask}
+                        currentUser={currentUser}
+                        feedItems={[mockComment, brokenTask] as ActivityFeedV2Props['feedItems']}
+                    />,
+                ),
+            ).not.toThrow();
+            expect(mockScrollTo).not.toHaveBeenCalled();
         });
     });
 });
