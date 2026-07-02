@@ -8,6 +8,9 @@ import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../../constants';
 const meta: Meta<typeof InteractiveTaskModal> = {
     title: 'Elements/ContentSidebar/TaskModalV2/tests/visual-regression-tests',
     component: InteractiveTaskModal,
+    parameters: {
+        docs: { story: { iframeHeight: 640, inline: false } },
+    },
 };
 
 export default meta;
@@ -132,8 +135,19 @@ export const EditApprovalTaskPrefill: StoryObj<typeof InteractiveTaskModal> = {
         expect(await screen.findByRole('textbox', { name: /message/i })).toHaveValue(
             'Review the updated launch checklist',
         );
-        expect(screen.getAllByText('Alice Wong').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Engineering Team').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('Alice Wong')[0]).toBeVisible();
+        expect(screen.getAllByText('Engineering Team')[0]).toBeVisible();
+
+        expect(screen.getByRole('spinbutton', { name: /month/i })).toHaveAttribute('aria-valuenow', '7');
+        expect(screen.getByRole('spinbutton', { name: /day/i })).toHaveAttribute('aria-valuenow', '15');
+        expect(screen.getByRole('spinbutton', { name: /year/i })).toHaveAttribute('aria-valuenow', '2026');
+
+        const completionRuleCheckbox = screen.getByRole('checkbox', {
+            name: 'Only one assignee is required to complete this task',
+        });
+        expect(completionRuleCheckbox).toBeEnabled();
+        expect(completionRuleCheckbox).not.toBeChecked();
+
         expect(screen.getByRole('button', { name: 'Update' })).toBeVisible();
     },
 };
@@ -168,6 +182,8 @@ export const RequiredFieldValidationErrors: StoryObj<typeof InteractiveTaskModal
         // Both the assignee and message fields are required
         const requiredFieldErrors = await screen.findAllByText('Required Field');
         expect(requiredFieldErrors.length).toBeGreaterThanOrEqual(2);
+        expect(screen.getByRole('textbox', { name: /message/i })).toBeInvalid();
+        expect(await findAssigneeCombobox()).toBeInvalid();
 
         // The modal stays open so the user can correct the form
         expect(screen.getByRole('dialog', { name: 'Create Approval Task' })).toBeVisible();

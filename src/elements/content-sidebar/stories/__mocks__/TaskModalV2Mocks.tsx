@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BlueprintModernizationProvider, TooltipProvider } from '@box/blueprint-web';
+import { BlueprintModernizationProvider, Button, TooltipProvider } from '@box/blueprint-web';
 import type { FetchedAvatarUrls, UserContactType } from '@box/user-selector';
 
 import TaskModalV2 from '../../activity-feed-v2/task-modal-v2';
@@ -42,6 +42,8 @@ const buildGroupAssignee = (collaboratorId: string, id: string, name: string): T
     type: 'task_collaborator',
 });
 
+export const mockSubmitError: ElementsXhrError = { status: 500 } as ElementsXhrError;
+
 export const mockEditingAssignees: TaskAssignee[] = [
     buildUserAssignee('collab-1', '1', 'Alice Wong', 'awong@example.com'),
     buildGroupAssignee('collab-2', '101', 'Engineering Team'),
@@ -59,7 +61,8 @@ export const mockEditingTask: TaskNew = {
         type: 'task_collaborator',
     },
     description: 'Review the updated launch checklist',
-    due_at: '2026-07-15T23:59:59Z',
+    // Midday UTC so the local calendar date stays July 15 in any test timezone
+    due_at: '2026-07-15T12:00:00Z',
     id: 'task-1',
     modified_at: '2026-06-30T12:00:00Z',
     permissions: {
@@ -77,6 +80,7 @@ export const mockEditingTask: TaskNew = {
 export type InteractiveTaskModalProps = {
     editingAssignees?: TaskAssignee[];
     editingTask?: TaskNew;
+    initialError?: ElementsXhrError;
     shouldFailSubmit?: boolean;
     taskType: TaskType;
 };
@@ -84,10 +88,11 @@ export type InteractiveTaskModalProps = {
 export const InteractiveTaskModal = ({
     editingAssignees = [],
     editingTask,
+    initialError,
     shouldFailSubmit = false,
     taskType,
 }: InteractiveTaskModalProps) => {
-    const [error, setError] = React.useState<ElementsXhrError | undefined>();
+    const [error, setError] = React.useState<ElementsXhrError | undefined>(initialError);
     const [isOpen, setIsOpen] = React.useState(true);
 
     const handleClose = () => {
@@ -98,7 +103,7 @@ export const InteractiveTaskModal = ({
     const finishSubmit = (onSuccess: () => void, onError: (submitError: ElementsXhrError) => void) => {
         setTimeout(() => {
             if (shouldFailSubmit) {
-                onError({ status: 500 } as ElementsXhrError);
+                onError(mockSubmitError);
                 return;
             }
             onSuccess();
@@ -125,9 +130,9 @@ export const InteractiveTaskModal = ({
     return (
         <BlueprintModernizationProvider enableModernizedComponents>
             <TooltipProvider>
-                <button onClick={() => setIsOpen(true)} type="button">
+                <Button onClick={() => setIsOpen(true)} variant="secondary">
                     Reopen task modal
-                </button>
+                </Button>
                 {editingTask ? (
                     <TaskModalV2
                         {...sharedProps}

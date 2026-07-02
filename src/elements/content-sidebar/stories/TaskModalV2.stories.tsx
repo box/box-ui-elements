@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { InteractiveTaskModal, mockEditingAssignees, mockEditingTask } from './__mocks__/TaskModalV2Mocks';
+import {
+    InteractiveTaskModal,
+    mockEditingAssignees,
+    mockEditingTask,
+    mockSubmitError,
+} from './__mocks__/TaskModalV2Mocks';
 
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../../constants';
 
@@ -37,6 +42,7 @@ export const EditApprovalTask: StoryObj<typeof InteractiveTaskModal> = {
 
 export const SubmitError: StoryObj<typeof InteractiveTaskModal> = {
     args: {
+        initialError: mockSubmitError,
         shouldFailSubmit: true,
         taskType: TASK_TYPE_APPROVAL,
     },
