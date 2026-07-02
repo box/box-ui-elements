@@ -7,6 +7,7 @@ import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../Cont
 import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
+import ModernizedUploadsManagerDropZone from '../ModernizedUploadsManagerDropZone';
 import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     STATUS_PENDING,
@@ -157,6 +158,26 @@ describe('elements/content-uploader/ContentUploader', () => {
             const expected = { abcd: true, yoyo: true, yoyo_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
             expect(instance.itemIdsRef.current).toEqual(expected);
+        });
+
+        test('should add rootFolderId to raw file upload options for the modernized uploads manager', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                rootFolderId: '12345',
+                useUploadsManager: true,
+            });
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            expect(wrapper.state().items[0].options.folderId).toBe('12345');
+        });
+
+        test('should not add rootFolderId to raw file upload options outside the modernized uploads manager', () => {
+            const wrapper = getWrapper({ rootFolderId: '12345' });
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            expect(wrapper.state().items[0].options.folderId).toBeUndefined();
         });
 
         test('should handle accepting package "files" separate from folders', () => {
@@ -964,6 +985,73 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('ModernizedUploadsManagerDropZone', () => {
+        test('prevents browser navigation and queues files dropped on the modernized panel', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            const dragEnterEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const dropEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
+                    allowedTypes={['Files']}
+                    className="bcu-modernized-panel"
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+            wrapper.instance().handleDragEnter(dragEnterEvent);
+            wrapper.instance().handleDrop(dropEvent);
+
+            expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
+            expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).toHaveBeenCalledWith(dataTransfer);
+        });
+
+        test('prevents browser navigation without queueing when drop is disabled', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            const dragEnterEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const dropEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
+                    allowedTypes={['Files']}
+                    canDrop={false}
+                    className="bcu-modernized-panel"
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+            wrapper.instance().handleDragEnter(dragEnterEvent);
+            wrapper.instance().handleDrop(dropEvent);
+
+            expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
+            expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
+        });
+    });
+
     describe('render()', () => {
         describe('enableModernizedUploads', () => {
             test('should render legacy UploadsManager when enableModernizedUploads is false and useUploadsManager is true', () => {
@@ -985,6 +1073,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
+                expect(wrapper.find(ModernizedUploadsManagerDropZone)).toHaveLength(1);
             });
 
             test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
