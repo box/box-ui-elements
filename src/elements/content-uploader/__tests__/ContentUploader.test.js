@@ -162,21 +162,28 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
 
         test('should add rootFolderId to raw file upload options for the modernized uploads manager', () => {
+            const files = [{ name: 'yoyo', size: 1000 }];
             const wrapper = getWrapper({
                 enableModernizedUploads: true,
                 rootFolderId: '12345',
                 useUploadsManager: true,
             });
+            wrapper.instance().upload = jest.fn();
 
-            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+            wrapper.setProps({ files });
 
             expect(wrapper.state().items[0].options.folderId).toBe('12345');
         });
 
         test('should not add rootFolderId to raw file upload options outside the modernized uploads manager', () => {
-            const wrapper = getWrapper({ rootFolderId: '12345' });
+            const files = [{ name: 'yoyo', size: 1000 }];
+            const wrapper = getWrapper({
+                rootFolderId: '12345',
+                useUploadsManager: true,
+            });
+            wrapper.instance().upload = jest.fn();
 
-            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+            wrapper.setProps({ files });
 
             expect(wrapper.state().items[0].options.folderId).toBeUndefined();
         });
@@ -1099,8 +1106,9 @@ describe('elements/content-uploader/ContentUploader', () => {
                 isDropEnabled: false,
             });
 
-            fireEvent.dragEnter(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
-            fireEvent.drop(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
+            const modernizedPanel = screen.getByTestId('bcu-modernized-panel');
+            fireEvent.dragEnter(modernizedPanel, { dataTransfer });
+            fireEvent.drop(modernizedPanel, { dataTransfer });
 
             expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
         });
