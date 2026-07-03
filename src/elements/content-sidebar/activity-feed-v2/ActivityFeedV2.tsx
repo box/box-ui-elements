@@ -57,6 +57,7 @@ const ActivityFeedV2 = ({
     onCommentCopyLink,
     onCommentCreate,
     onCommentDelete,
+    onCommentSelect,
     onCommentUpdate,
     onReplyCreate,
     onReplyDelete,
@@ -74,8 +75,6 @@ const ActivityFeedV2 = ({
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
-    const scrollHandleRef = React.useRef<typeof scrollHandle | null>(null);
-    scrollHandleRef.current = scrollHandle;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
     const scrolledEntryIdRef = React.useRef<string | null>(null);
@@ -359,16 +358,18 @@ const ActivityFeedV2 = ({
         viewer.emit('comment_markers', markers);
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
-            requestAnimationFrame(() => {
-                scrollHandleRef.current?.scrollTo(id);
-            });
+            const item = filteredItems.find(filteredItem => filteredItem.id === id);
+            // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
+            if (item?.type === 'comment' && onCommentSelect) {
+                onCommentSelect(id);
+            }
         };
         viewer.addListener('comment_marker_select', handleMarkerSelect);
         return () => {
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
             viewer.emit('comment_markers', []);
         };
-    }, [filteredItems, getViewer, isVideo]);
+    }, [filteredItems, getViewer, isVideo, onCommentSelect]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -466,6 +467,7 @@ const ActivityFeedV2 = ({
                             {filteredItems.map(item => (
                                 <FeedItemRow
                                     key={item.id}
+                                    activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
                                     isDisabled={isDisabled}
