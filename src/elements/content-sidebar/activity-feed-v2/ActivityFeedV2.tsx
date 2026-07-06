@@ -12,7 +12,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
 
-import TaskModal from '../TaskModal';
+import TaskModalV2 from './task-modal-v2';
 
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
@@ -21,11 +21,14 @@ import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
 
+import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
 import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
-import type { TaskAssigneeCollection, TaskNew } from '../../../common/types/tasks';
+import type { ElementsXhrError } from '../../../common/types/api';
+import type { GroupMini, SelectorItem, UserMini } from '../../../common/types/core';
+import type { TaskAssigneeCollection, TaskNew, TaskType, TaskUpdatePayload } from '../../../common/types/tasks';
 
 import { FILE_EXTENSIONS } from '../../common/item/constants';
-import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_APPROVAL } from '../../../constants';
+import { TASK_TYPE_APPROVAL } from '../../../constants';
 
 import commonMessages from '../../common/messages';
 import draftJsMentionSelectorMessages from '../../../components/form-elements/draft-js-mention-selector/messages';
@@ -35,12 +38,10 @@ import './ActivityFeedV2.scss';
 
 const ActivityFeedV2 = ({
     activeFeedEntryId,
-    approverSelectorContacts = [],
     createTask,
     currentUser,
     feedItems,
     file,
-    getApproverWithQuery,
     getAvatarUrl,
     getMentionAsync,
     getTaskCollaborators,
@@ -56,6 +57,7 @@ const ActivityFeedV2 = ({
     onCommentCopyLink,
     onCommentCreate,
     onCommentDelete,
+    onCommentSelect,
     onCommentUpdate,
     onReplyCreate,
     onReplyDelete,
@@ -73,8 +75,6 @@ const ActivityFeedV2 = ({
     const intl = useIntl();
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
-    const scrollHandleRef = React.useRef<typeof scrollHandle | null>(null);
-    scrollHandleRef.current = scrollHandle;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
 
     const scrolledEntryIdRef = React.useRef<string | null>(null);
@@ -176,14 +176,14 @@ const ActivityFeedV2 = ({
     };
 
     const [isTaskFormOpen, setIsTaskFormOpen] = React.useState(false);
-    const [taskType, setTaskType] = React.useState<string>(TASK_TYPE_APPROVAL);
-    const [taskError, setTaskError] = React.useState<Error | null>(null);
+    const [taskType, setTaskType] = React.useState<TaskType>(TASK_TYPE_APPROVAL);
+    const [taskError, setTaskError] = React.useState<ElementsXhrError | undefined>(undefined);
     const [editingTask, setEditingTask] = React.useState<TaskNew | null>(null);
     const [editingAssignees, setEditingAssignees] = React.useState<TaskAssigneeCollection | null>(null);
 
     const handleTaskModalClose = React.useCallback(() => {
         setIsTaskFormOpen(false);
-        setTaskError(null);
+        setTaskError(undefined);
         setEditingTask(null);
         setEditingAssignees(null);
     }, []);
@@ -277,16 +277,22 @@ const ActivityFeedV2 = ({
         }
     }, [activeFeedEntryId, filteredItems, scrollHandle]);
 
-    // Scroll only to comments/annotations the current user authored after the post
+    // Scroll only to comments/annotations/tasks the current user authored after the post
     // snapshot, so a concurrent push from another user doesn't hijack the viewport.
     React.useEffect(() => {
         const knownIds = knownIdsBeforePostRef.current;
         if (!knownIds || !scrollHandle || !currentUserId) return;
         const newItem = filteredItems.find(item => {
             if (knownIds.has(item.id)) return false;
-            if (item.type !== 'comment' && item.type !== 'annotation') return false;
-            const author = item.messages[0]?.author;
-            return author ? String(author.id) === currentUserId : false;
+            if (item.type === 'comment' || item.type === 'annotation') {
+                const author = item.messages[0]?.author;
+                return author ? String(author.id) === currentUserId : false;
+            }
+            if (item.type === 'task') {
+                const authorId = item.originalTask?.created_by?.target?.id;
+                return authorId != null && String(authorId) === currentUserId;
+            }
+            return false;
         });
         if (!newItem) return;
         if (scrollHandle.scrollTo(newItem.id)) {
@@ -352,16 +358,18 @@ const ActivityFeedV2 = ({
         viewer.emit('comment_markers', markers);
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
-            requestAnimationFrame(() => {
-                scrollHandleRef.current?.scrollTo(id);
-            });
+            const item = filteredItems.find(filteredItem => filteredItem.id === id);
+            // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
+            if (item?.type === 'comment' && onCommentSelect) {
+                onCommentSelect(id);
+            }
         };
         viewer.addListener('comment_marker_select', handleMarkerSelect);
         return () => {
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
             viewer.emit('comment_markers', []);
         };
-    }, [filteredItems, getViewer, isVideo]);
+    }, [filteredItems, getViewer, isVideo, onCommentSelect]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -382,6 +390,48 @@ const ActivityFeedV2 = ({
             }
         },
         [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
+    );
+
+    const handleCreateTask = React.useCallback(
+        (
+            text: string,
+            approvers: SelectorItem<UserMini | GroupMini>[],
+            type: TaskType,
+            dueDate: string | null,
+            completionRule: TaskFormV2SubmitPayload['completionRule'],
+            onSuccess: () => void,
+            onError: (error: ElementsXhrError) => void,
+        ) => {
+            if (!createTask) {
+                onError({ status: 0, code: 'create_task_unavailable' } as ElementsXhrError);
+                return;
+            }
+            const snapshot = new Set(filteredItems.map(item => item.id));
+            createTask(
+                text,
+                approvers,
+                type,
+                dueDate,
+                completionRule,
+                () => {
+                    knownIdsBeforePostRef.current = snapshot;
+                    onSuccess();
+                },
+                onError,
+            );
+        },
+        [createTask, filteredItems],
+    );
+
+    const handleEditTask = React.useCallback(
+        (payload: TaskUpdatePayload, onSuccess: () => void, onError: (error: ElementsXhrError) => void) => {
+            if (!onTaskUpdate) {
+                onError({ status: 0, code: 'edit_task_unavailable' } as ElementsXhrError);
+                return;
+            }
+            onTaskUpdate(payload, onSuccess, onError);
+        },
+        [onTaskUpdate],
     );
 
     return (
@@ -417,6 +467,7 @@ const ActivityFeedV2 = ({
                             {filteredItems.map(item => (
                                 <FeedItemRow
                                     key={item.id}
+                                    activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
                                     isDisabled={isDisabled}
@@ -453,40 +504,35 @@ const ActivityFeedV2 = ({
                     />
                 </div>
             </ActivityFeed.Root>
-            <TaskModal
-                editMode={editingTask ? TASK_EDIT_MODE_EDIT : undefined}
-                error={taskError}
-                isTaskFormOpen={isTaskFormOpen}
-                onModalClose={handleTaskModalClose}
-                onSubmitError={setTaskError}
-                onSubmitSuccess={handleTaskModalClose}
-                taskFormProps={
-                    editingTask
-                        ? {
-                              approvers: editingAssignees?.entries ?? [],
-                              approverSelectorContacts,
-                              completionRule: editingTask.completion_rule,
-                              createTask: noop,
-                              dueDate: editingTask.due_at,
-                              editTask: onTaskUpdate,
-                              getApproverWithQuery,
-                              getAvatarUrl,
-                              id: editingTask.id,
-                              message: editingTask.description,
-                          }
-                        : {
-                              approvers: [],
-                              approverSelectorContacts,
-                              completionRule: TASK_COMPLETION_RULE_ALL,
-                              createTask,
-                              getApproverWithQuery,
-                              getAvatarUrl,
-                              id: '',
-                              message: '',
-                          }
-                }
-                taskType={taskType}
-            />
+            {editingTask ? (
+                <TaskModalV2
+                    createTask={handleCreateTask}
+                    editingAssignees={editingAssignees?.entries ?? []}
+                    editingTask={editingTask}
+                    editTask={handleEditTask}
+                    error={taskError}
+                    fetchAvatarUrls={fetchAvatarUrls}
+                    fetchUsers={fetchUsers}
+                    isOpen={isTaskFormOpen}
+                    mode="edit"
+                    onClose={handleTaskModalClose}
+                    onSubmitError={setTaskError}
+                    onSubmitSuccess={handleTaskModalClose}
+                    taskType={taskType}
+                />
+            ) : (
+                <TaskModalV2
+                    createTask={handleCreateTask}
+                    error={taskError}
+                    fetchAvatarUrls={fetchAvatarUrls}
+                    fetchUsers={fetchUsers}
+                    isOpen={isTaskFormOpen}
+                    onClose={handleTaskModalClose}
+                    onSubmitError={setTaskError}
+                    onSubmitSuccess={handleTaskModalClose}
+                    taskType={taskType}
+                />
+            )}
         </div>
     );
 };

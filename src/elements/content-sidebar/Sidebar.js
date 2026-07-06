@@ -10,7 +10,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import { withRouter } from 'react-router-dom';
+import { matchPath, withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
@@ -38,7 +38,7 @@ import type { SignSidebarProps } from './SidebarNavSign';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
-import { SIDEBAR_VIEW_DOCGEN, SIDEBAR_VIEW_BOXAI } from '../../constants';
+import { SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_BOXAI, SIDEBAR_VIEW_DOCGEN } from '../../constants';
 import API from '../../api';
 
 type Props = {
@@ -100,6 +100,13 @@ const SIDEBAR_DEFAULT_WIDTH = 400;
 const SIDEBAR_DEFAULT_WIDTH_WIDER = 440;
 // Cap dragged width at this fraction of the current viewport width.
 const SIDEBAR_MAX_WIDTH_RATIO = 0.5;
+
+// Mirror the deep-link patterns declared by SidebarPanels' Activity Route.
+// Keep in sync with `src/elements/content-sidebar/SidebarPanels.js`.
+const ACTIVITY_DEEP_LINK_PATHS = [
+    `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(annotations)/:fileVersionId/:activeFeedEntryId?`,
+    `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
+];
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
@@ -305,8 +312,18 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
+    isActivityDeepLinkPath(): boolean {
+        const { location } = this.props;
+        return ACTIVITY_DEEP_LINK_PATHS.some(path => matchPath(location.pathname, { exact: true, path }) !== null);
+    }
+
     getDefaultPanel(): string | typeof undefined {
         const { features } = this.props;
+
+        // Deep links override persisted selection and default-panel fallback order.
+        if (this.isActivityDeepLinkPath()) {
+            return SIDEBAR_VIEW_ACTIVITY;
+        }
 
         if (!isFeatureEnabled(features, 'panelSelectionPreservation')) {
             return undefined;

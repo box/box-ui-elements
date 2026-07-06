@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { UserContactType } from '@box/user-selector';
 
-import { render, screen, userEvent } from '../../../../../test-utils/testing-library';
+import { act, render, screen, userEvent } from '../../../../../test-utils/testing-library';
 import {
     TASK_COMPLETION_RULE_ALL,
     TASK_COMPLETION_RULE_ANY,
@@ -11,8 +11,8 @@ import {
     TASK_TYPE_GENERAL,
 } from '../../../../../constants';
 import TaskFormV2, { TASK_FORM_V2_ID } from '../TaskFormV2';
-import type { TaskFormV2Props, TaskFormV2SubmitPayload } from '../TaskFormV2';
-import type { RuntimeAssignee } from '../utils/contactMapping';
+import type { TaskFormV2Props } from '../TaskFormV2';
+import type { TaskAssignee, TaskFormV2SubmitPayload } from '../types';
 
 type UserSelectorMockProps = {
     disabled?: boolean;
@@ -66,7 +66,7 @@ jest.mock('@box/blueprint-web', () => {
     };
 });
 
-const buildUserAssignee = (id: string, name: string): RuntimeAssignee => ({
+const buildUserAssignee = (id: string, name: string): TaskAssignee => ({
     id: '',
     permissions: { can_delete: false, can_update: false },
     role: 'ASSIGNEE',
@@ -75,7 +75,7 @@ const buildUserAssignee = (id: string, name: string): RuntimeAssignee => ({
     type: 'task_collaborator',
 });
 
-const buildGroupAssignee = (id: string, name: string): RuntimeAssignee => ({
+const buildGroupAssignee = (id: string, name: string): TaskAssignee => ({
     id: '',
     permissions: { can_delete: false, can_update: false },
     role: 'ASSIGNEE',
@@ -292,5 +292,31 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskFormV2', (
         expect(payload.dueDate?.getHours()).toBe(9);
         expect(payload.dueDate?.getMinutes()).toBe(30);
         expect(payload.dueDate?.getSeconds()).toBe(15);
+    });
+
+    test('tags the form root with resin component, taskid, tasktype, and isediting', () => {
+        renderForm({ editMode: TASK_EDIT_MODE_EDIT, taskId: 'task-42', taskType: TASK_TYPE_GENERAL });
+        const form = document.getElementById(TASK_FORM_V2_ID);
+        expect(form).toHaveAttribute('data-resin-component', 'taskformv2');
+        expect(form).toHaveAttribute('data-resin-taskid', 'task-42');
+        expect(form).toHaveAttribute('data-resin-tasktype', TASK_TYPE_GENERAL);
+        expect(form).toHaveAttribute('data-resin-isediting', 'true');
+    });
+
+    test('reflects assignee diff counts in resin attributes', () => {
+        renderForm({
+            editMode: TASK_EDIT_MODE_EDIT,
+            initialAssignees: [buildUserAssignee('1', 'Alice'), buildUserAssignee('2', 'Bob')],
+        });
+        act(() => {
+            lastUserSelectorProps.onSelectedUsersChange?.([
+                { email: 'alice@example.com', id: 1, name: 'Alice', type: 'user', value: '1' },
+                { email: '', id: 99, name: 'Engineering', type: 'group', value: '99' },
+            ]);
+        });
+        const form = document.getElementById(TASK_FORM_V2_ID);
+        expect(form).toHaveAttribute('data-resin-numassigneesadded', '0');
+        expect(form).toHaveAttribute('data-resin-numgroupsadded', '1');
+        expect(form).toHaveAttribute('data-resin-numassigneesremoved', '1');
     });
 });
