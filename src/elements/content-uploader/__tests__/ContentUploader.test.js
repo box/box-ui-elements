@@ -3,10 +3,12 @@ import { shallow } from 'enzyme';
 import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import * as UploaderUtils from '../../../utils/uploads';
 import Browser from '../../../utils/Browser';
+import { fireEvent, render, screen } from '../../../test-utils/testing-library';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
+import ModernizedUploadsManagerDropZone from '../ModernizedUploadsManagerDropZone';
 import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     STATUS_PENDING,
@@ -157,6 +159,33 @@ describe('elements/content-uploader/ContentUploader', () => {
             const expected = { abcd: true, yoyo: true, yoyo_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
             expect(instance.itemIdsRef.current).toEqual(expected);
+        });
+
+        test('should add rootFolderId to raw file upload options for the modernized uploads manager', () => {
+            const files = [{ name: 'yoyo', size: 1000 }];
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                rootFolderId: '12345',
+                useUploadsManager: true,
+            });
+            wrapper.instance().upload = jest.fn();
+
+            wrapper.setProps({ files });
+
+            expect(wrapper.state().items[0].options.folderId).toBe('12345');
+        });
+
+        test('should not add rootFolderId to raw file upload options outside the modernized uploads manager', () => {
+            const files = [{ name: 'yoyo', size: 1000 }];
+            const wrapper = getWrapper({
+                rootFolderId: '12345',
+                useUploadsManager: true,
+            });
+            wrapper.instance().upload = jest.fn();
+
+            wrapper.setProps({ files });
+
+            expect(wrapper.state().items[0].options.folderId).toBeUndefined();
         });
 
         test('should handle accepting package "files" separate from folders', () => {
@@ -964,6 +993,127 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('ModernizedUploadsManagerDropZone', () => {
+        const renderModernizedUploadsManagerDropZone = props =>
+            render(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={jest.fn()}
+                    allowedTypes={['Files']}
+                    className="bcu-modernized-panel"
+                    data-testid="bcu-modernized-panel"
+                    {...props}
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+        test('prevents browser navigation and queues files dropped on the modernized panel', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            const dragEnterEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const dropEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
+                    allowedTypes={['Files']}
+                    className="bcu-modernized-panel"
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+            wrapper.instance().handleDragEnter(dragEnterEvent);
+            wrapper.instance().handleDrop(dropEvent);
+
+            expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
+            expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).toHaveBeenCalledWith(dataTransfer);
+        });
+
+        test('prevents browser navigation without queueing when isDropEnabled is false', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            const dragEnterEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const dropEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
+                    allowedTypes={['Files']}
+                    isDropEnabled={false}
+                    className="bcu-modernized-panel"
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+            wrapper.instance().handleDragEnter(dragEnterEvent);
+            wrapper.instance().handleDrop(dropEvent);
+
+            expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
+            expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
+        });
+
+        test('does not forward droppable state props to the modernized panel DOM element', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            let consoleErrors = '';
+
+            try {
+                renderModernizedUploadsManagerDropZone();
+
+                fireEvent.dragEnter(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
+
+                consoleErrors = consoleError.mock.calls.flat().join('\n');
+            } finally {
+                consoleError.mockRestore();
+            }
+
+            expect(consoleErrors).not.toContain('isDragging');
+            expect(consoleErrors).not.toContain('isOver');
+        });
+
+        test('does not queue files dropped on the modernized panel when isDropEnabled is false', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+
+            renderModernizedUploadsManagerDropZone({
+                addDataTransferItemsToUploadQueue,
+                isDropEnabled: false,
+            });
+
+            const modernizedPanel = screen.getByTestId('bcu-modernized-panel');
+            fireEvent.dragEnter(modernizedPanel, { dataTransfer });
+            fireEvent.drop(modernizedPanel, { dataTransfer });
+
+            expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
+        });
+    });
+
     describe('render()', () => {
         describe('enableModernizedUploads', () => {
             test('should render legacy UploadsManager when enableModernizedUploads is false and useUploadsManager is true', () => {
@@ -985,6 +1135,13 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
+                expect(wrapper.find(ModernizedUploadsManagerDropZone)).toHaveLength(1);
+            });
+
+            test('should disable dropping on the modernized panel when modernized drop props are omitted', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+
+                expect(wrapper.find(ModernizedUploadsManagerDropZone).prop('isDropEnabled')).toBe(false);
             });
 
             test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
