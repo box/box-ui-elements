@@ -225,6 +225,16 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.isAnnotations).toBe(false);
         });
 
+        test('should pass isHighlighted=true when activeFeedEntryId matches the comment id', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+        });
+
+        test('should pass isHighlighted=false when activeFeedEntryId does not match', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="other-id" item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+        });
+
         test('should call onCommentDelete with id and permissions when onDelete fires', () => {
             const onCommentDelete = jest.fn();
             render(<FeedItemRow {...defaultProps} item={mockComment} onCommentDelete={onCommentDelete} />);
@@ -463,6 +473,16 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         test('should render an annotation as ThreadedAnnotation', () => {
             render(<FeedItemRow {...defaultProps} item={mockAnnotation} />);
             expect(screen.getByRole('article', { name: 'threaded annotation' })).toBeVisible();
+        });
+
+        test('should pass isHighlighted=true when activeFeedEntryId matches the annotation id', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-1" item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+        });
+
+        test('should pass isHighlighted=false when activeFeedEntryId does not match', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="other-id" item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
         });
 
         test('should call onAnnotationSelect when onAnnotationBadgeClick fires', () => {
