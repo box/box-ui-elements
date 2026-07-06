@@ -30,6 +30,7 @@ import {
 } from '../../../constants';
 
 type FeedItemRowProps = {
+    activeFeedEntryId?: string;
     currentUserId?: string;
     fps: number;
     isDisabled: boolean;
@@ -81,6 +82,7 @@ const buildReplyPost =
     };
 
 const FeedItemRow = ({
+    activeFeedEntryId,
     currentUserId,
     fps,
     isDisabled,
@@ -104,6 +106,8 @@ const FeedItemRow = ({
     timeFormat,
     userSelectorProps,
 }: FeedItemRowProps) => {
+    const isHighlighted = activeFeedEntryId === item.id;
+
     switch (item.type) {
         case 'comment': {
             const { permissions } = item;
@@ -150,6 +154,7 @@ const FeedItemRow = ({
                     annotationTarget={commentAnnotationTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
+                    isHighlighted={isHighlighted}
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAnnotationBadgeClick={handleBadgeClick}
@@ -214,6 +219,7 @@ const FeedItemRow = ({
                     annotationTarget={annotationBadgeTarget}
                     isAnnotations={false}
                     isEditDisabled={isDisabled || item.isResolved}
+                    isHighlighted={isHighlighted}
                     isResolved={item.isResolved}
                     messages={item.messages}
                     onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}

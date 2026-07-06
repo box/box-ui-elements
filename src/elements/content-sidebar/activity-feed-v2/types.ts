@@ -116,6 +116,7 @@ export type ActivityFeedV2Props = {
     onCommentCopyLink?: (params: { id: string }) => void;
     onCommentCreate?: (text: string, hasMention: boolean) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
+    onCommentSelect?: (commentId: string) => void;
     onCommentUpdate?: (
         id: string,
         text: string | undefined,

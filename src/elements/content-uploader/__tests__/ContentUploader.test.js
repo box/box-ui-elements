@@ -3,10 +3,12 @@ import { shallow } from 'enzyme';
 import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import * as UploaderUtils from '../../../utils/uploads';
 import Browser from '../../../utils/Browser';
+import { fireEvent, render, screen } from '../../../test-utils/testing-library';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
+import ModernizedUploadsManagerDropZone from '../ModernizedUploadsManagerDropZone';
 import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     STATUS_PENDING,
@@ -157,6 +159,33 @@ describe('elements/content-uploader/ContentUploader', () => {
             const expected = { abcd: true, yoyo: true, yoyo_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
             expect(instance.itemIdsRef.current).toEqual(expected);
+        });
+
+        test('should add rootFolderId to raw file upload options for the modernized uploads manager', () => {
+            const files = [{ name: 'yoyo', size: 1000 }];
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                rootFolderId: '12345',
+                useUploadsManager: true,
+            });
+            wrapper.instance().upload = jest.fn();
+
+            wrapper.setProps({ files });
+
+            expect(wrapper.state().items[0].options.folderId).toBe('12345');
+        });
+
+        test('should not add rootFolderId to raw file upload options outside the modernized uploads manager', () => {
+            const files = [{ name: 'yoyo', size: 1000 }];
+            const wrapper = getWrapper({
+                rootFolderId: '12345',
+                useUploadsManager: true,
+            });
+            wrapper.instance().upload = jest.fn();
+
+            wrapper.setProps({ files });
+
+            expect(wrapper.state().items[0].options.folderId).toBeUndefined();
         });
 
         test('should handle accepting package "files" separate from folders', () => {
@@ -680,6 +709,47 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('uploads manager display order (newest on top)', () => {
+        const orderedItems = [
+            { name: 'first.txt', status: STATUS_COMPLETE },
+            { name: 'second.txt', status: STATUS_IN_PROGRESS },
+            { name: 'third.txt', status: STATUS_PENDING },
+        ];
+
+        test('modernized manager renders the most recently added item on top', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+            wrapper.setState({ items: orderedItems });
+
+            const renderedNames = wrapper
+                .find(UploadsManagerBP)
+                .prop('items')
+                .map(item => item.name);
+
+            expect(renderedNames).toEqual(['third.txt', 'second.txt', 'first.txt']);
+        });
+
+        test('legacy manager preserves the original upload order', () => {
+            const wrapper = getWrapper({ useUploadsManager: true });
+            wrapper.setState({ items: orderedItems });
+
+            const renderedNames = wrapper
+                .find(UploadsManager)
+                .prop('items')
+                .map(item => item.name);
+
+            expect(renderedNames).toEqual(['first.txt', 'second.txt', 'third.txt']);
+        });
+
+        test('display reversal does not mutate the internal items collection (upload order preserved)', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
+            wrapper.setState({ items: orderedItems });
+
+            wrapper.find(UploadsManagerBP);
+
+            expect(wrapper.state().items.map(item => item.name)).toEqual(['first.txt', 'second.txt', 'third.txt']);
+        });
+    });
+
     describe('controlled isExpanded / onToggle', () => {
         test('uses isExpanded prop value when in controlled mode', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true, isExpanded: true, onToggle: jest.fn() });
@@ -923,6 +993,127 @@ describe('elements/content-uploader/ContentUploader', () => {
         });
     });
 
+    describe('ModernizedUploadsManagerDropZone', () => {
+        const renderModernizedUploadsManagerDropZone = props =>
+            render(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={jest.fn()}
+                    allowedTypes={['Files']}
+                    className="bcu-modernized-panel"
+                    data-testid="bcu-modernized-panel"
+                    {...props}
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+        test('prevents browser navigation and queues files dropped on the modernized panel', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            const dragEnterEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const dropEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
+                    allowedTypes={['Files']}
+                    className="bcu-modernized-panel"
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+            wrapper.instance().handleDragEnter(dragEnterEvent);
+            wrapper.instance().handleDrop(dropEvent);
+
+            expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
+            expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).toHaveBeenCalledWith(dataTransfer);
+        });
+
+        test('prevents browser navigation without queueing when isDropEnabled is false', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            const dragEnterEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const dropEvent = {
+                dataTransfer,
+                preventDefault: jest.fn(),
+            };
+            const wrapper = shallow(
+                <ModernizedUploadsManagerDropZone
+                    addDataTransferItemsToUploadQueue={addDataTransferItemsToUploadQueue}
+                    allowedTypes={['Files']}
+                    isDropEnabled={false}
+                    className="bcu-modernized-panel"
+                >
+                    <div />
+                </ModernizedUploadsManagerDropZone>,
+            );
+
+            wrapper.instance().handleDragEnter(dragEnterEvent);
+            wrapper.instance().handleDrop(dropEvent);
+
+            expect(dragEnterEvent.preventDefault).toHaveBeenCalled();
+            expect(dropEvent.preventDefault).toHaveBeenCalled();
+            expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
+        });
+
+        test('does not forward droppable state props to the modernized panel DOM element', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+            let consoleErrors = '';
+
+            try {
+                renderModernizedUploadsManagerDropZone();
+
+                fireEvent.dragEnter(screen.getByTestId('bcu-modernized-panel'), { dataTransfer });
+
+                consoleErrors = consoleError.mock.calls.flat().join('\n');
+            } finally {
+                consoleError.mockRestore();
+            }
+
+            expect(consoleErrors).not.toContain('isDragging');
+            expect(consoleErrors).not.toContain('isOver');
+        });
+
+        test('does not queue files dropped on the modernized panel when isDropEnabled is false', () => {
+            const addDataTransferItemsToUploadQueue = jest.fn();
+            const dataTransfer = {
+                items: ['file-item'],
+                types: ['Files'],
+            };
+
+            renderModernizedUploadsManagerDropZone({
+                addDataTransferItemsToUploadQueue,
+                isDropEnabled: false,
+            });
+
+            const modernizedPanel = screen.getByTestId('bcu-modernized-panel');
+            fireEvent.dragEnter(modernizedPanel, { dataTransfer });
+            fireEvent.drop(modernizedPanel, { dataTransfer });
+
+            expect(addDataTransferItemsToUploadQueue).not.toHaveBeenCalled();
+        });
+    });
+
     describe('render()', () => {
         describe('enableModernizedUploads', () => {
             test('should render legacy UploadsManager when enableModernizedUploads is false and useUploadsManager is true', () => {
@@ -944,6 +1135,13 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
+                expect(wrapper.find(ModernizedUploadsManagerDropZone)).toHaveLength(1);
+            });
+
+            test('should disable dropping on the modernized panel when modernized drop props are omitted', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true });
+
+                expect(wrapper.find(ModernizedUploadsManagerDropZone).prop('isDropEnabled')).toBe(false);
             });
 
             test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
@@ -1695,6 +1893,253 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             expect(wrapper.state('modernizedPanelState')).toBe('hidden');
             expect(instance.modernizedDismissTimer).toBeNull();
+        });
+
+        test('clears dismiss timer and hides panel when queue empties while shown', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = armDismissTimer(wrapper);
+
+            expect(instance.modernizedDismissTimer).not.toBeNull();
+
+            wrapper.setState({
+                items: [],
+            });
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+        });
+
+        test('clears dismiss timer and hides panel when cancel empties the queue', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            const pendingItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            wrapper.setState({
+                items: [pendingItem],
+                modernizedPanelState: 'shown',
+                isLargeFileWarningModalOpen: true,
+            });
+            instance.itemsRef.current = [pendingItem];
+
+            instance.handleLargeFileWarningCancel();
+
+            expect(instance.modernizedDismissTimer).toBeNull();
+            expect(wrapper.state('modernizedPanelState')).toBe('hidden');
+        });
+    });
+
+    describe('upload() large-file gate', () => {
+        const makeFileWithSize = (name, size) => new File([new Uint8Array(size)], name, { type: 'text/plain' });
+
+        const makePendingFileItem = (name, size) => ({
+            api: {},
+            extension: 'txt',
+            file: makeFileWithSize(name, size),
+            name,
+            progress: 0,
+            size,
+            status: STATUS_PENDING,
+        });
+
+        test('should upload immediately when maxFileSize is not configured', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+
+        test('should upload immediately when all pending files are within maxFileSize', () => {
+            const wrapper = getWrapper({ maxFileSize: 100 });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('small.txt', 50)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+
+        test('should open the large file warning modal when any pending file exceeds maxFileSize', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('small.txt', 50), makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).not.toHaveBeenCalled();
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
+        });
+
+        test('should NOT open the modal when isUpgradeModalEnabled is false even with oversize files', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: false,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            instance.uploadFile = jest.fn();
+            instance.itemsRef.current = [makePendingFileItem('large.txt', 200)];
+
+            instance.upload();
+
+            expect(instance.uploadFile).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+    });
+
+    describe('addToQueue()', () => {
+        const makeFileWithSize = (name, size) => new File([new Uint8Array(size)], name, { type: 'text/plain' });
+
+        test('should not auto-upload pending items when adding a batch with oversize files during an in-progress upload', () => {
+            const wrapper = getWrapper({
+                enableModernizedUploads: true,
+                isUpgradeModalEnabled: true,
+                maxFileSize: 100,
+            });
+            const instance = wrapper.instance();
+            const inProgressItem = {
+                api: {},
+                extension: 'txt',
+                file: makeFileWithSize('uploading.txt', 50),
+                name: 'uploading.txt',
+                progress: 50,
+                size: 50,
+                status: STATUS_IN_PROGRESS,
+            };
+            const oversizeItem = {
+                api: {},
+                extension: 'txt',
+                file: makeFileWithSize('large.txt', 200),
+                name: 'large.txt',
+                progress: 0,
+                size: 200,
+                status: STATUS_PENDING,
+            };
+            const eligibleItem = {
+                api: {},
+                extension: 'txt',
+                file: makeFileWithSize('small.txt', 50),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            instance.itemsRef.current = [inProgressItem];
+            wrapper.setState({ view: VIEW_UPLOAD_IN_PROGRESS });
+            instance.uploadFile = jest.fn();
+
+            instance.addToQueue([oversizeItem, eligibleItem], null);
+
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(true);
+            expect(instance.uploadFile).not.toHaveBeenCalled();
+            expect(eligibleItem.status).toBe(STATUS_PENDING);
+        });
+    });
+
+    describe('handleLargeFileWarningUploadRest()', () => {
+        test('should remove oversize pending items and start upload', () => {
+            const wrapper = getWrapper({ maxFileSize: 100 });
+            const instance = wrapper.instance();
+            const oversizeItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(200)], 'large.txt', { type: 'text/plain' }),
+                name: 'large.txt',
+                progress: 0,
+                size: 200,
+                status: STATUS_PENDING,
+            };
+            const eligibleItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            instance.itemsRef.current = [oversizeItem, eligibleItem];
+            instance.upload = jest.fn();
+            wrapper.setState({
+                isLargeFileWarningModalOpen: true,
+                items: [oversizeItem, eligibleItem],
+            });
+
+            instance.handleLargeFileWarningUploadRest();
+
+            expect(oversizeItem.api.cancel).toHaveBeenCalledTimes(1);
+            expect(eligibleItem.api.cancel).not.toHaveBeenCalled();
+            expect(wrapper.state('items')).toEqual([eligibleItem]);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+            expect(instance.upload).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('handleLargeFileWarningCancel()', () => {
+        test('should remove all pending items and close the modal', () => {
+            const onCancel = jest.fn();
+            const wrapper = getWrapper({ maxFileSize: 100, onCancel, rootFolderId: '0' });
+            const instance = wrapper.instance();
+            const oversizeItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(200)], 'large.txt', { type: 'text/plain' }),
+                name: 'large.txt',
+                progress: 0,
+                size: 200,
+                status: STATUS_PENDING,
+            };
+            const eligibleItem = {
+                api: { cancel: jest.fn() },
+                extension: 'txt',
+                file: new File([new Uint8Array(50)], 'small.txt', { type: 'text/plain' }),
+                name: 'small.txt',
+                progress: 0,
+                size: 50,
+                status: STATUS_PENDING,
+            };
+
+            instance.itemsRef.current = [oversizeItem, eligibleItem];
+            instance.itemIdsRef.current = { 'large.txt': true, 'small.txt': true };
+            wrapper.setState({
+                isLargeFileWarningModalOpen: true,
+                items: [oversizeItem, eligibleItem],
+            });
+
+            instance.handleLargeFileWarningCancel();
+
+            expect(oversizeItem.api.cancel).toHaveBeenCalledTimes(1);
+            expect(eligibleItem.api.cancel).toHaveBeenCalledTimes(1);
+            expect(onCancel).toHaveBeenCalledTimes(1);
+            expect(onCancel).toHaveBeenCalledWith([oversizeItem, eligibleItem]);
+            expect(instance.itemIdsRef.current['large.txt']).toBeUndefined();
+            expect(instance.itemIdsRef.current['small.txt']).toBeUndefined();
+            expect(wrapper.state('items')).toEqual([]);
+            expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
         });
     });
 });
