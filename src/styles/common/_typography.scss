@@ -19,12 +19,9 @@ body {
     @include common-typography;
 }
 
-body.is-deja-blue {
-    @include bdl-commonTypography--dejaBlue;
-}
-
+body.is-deja-blue,
 body.is-inter-font {
-    @include bdl-commonTypography--inter;
+    @include bdl-commonTypography;
 }
 
 p {
@@ -117,10 +114,6 @@ textarea {
     @include font-family;
 
     font-size: 99%;
-
-    :where(body.is-inter-font) & {
-        @include bdl-fontFamily--inter;
-    }
 }
 
 .txt-small {

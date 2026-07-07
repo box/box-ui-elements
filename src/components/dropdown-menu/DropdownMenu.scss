@@ -13,7 +13,7 @@
 // menu needs to manually inherit few of the body styles to look correct.
 .dropdown-menu-element {
     @include box-sizing;
-    @include bdl-commonTypography--dejaBlue;
+    @include bdl-commonTypography;
 
     z-index: $menu-z-index;
     margin-top: 5px;
