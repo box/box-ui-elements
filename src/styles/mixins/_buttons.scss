@@ -18,6 +18,6 @@
  */
 @mixin bdl-Button--large {
     padding: 0 $bdl-btn-padding-horizontal;
-    font-size: $bdl-fontSize--dejaBlue;
+    font-size: $bdl-fontSize;
     line-height: $bdl-btn-height-large - 2 * $bdl-btn-border-width;
 }

@@ -13,7 +13,7 @@ $tooltip-offset: 4px; /* amount of space between target and tooltip arrow */
     max-width: 200px;
     padding: $bdl-grid-unit * 2 $horizontal-offset;
     color: $white;
-    font-size: $bdl-fontSize;
+    font-size: $bdl-fontSize--legacy;
     line-height: 1.4;
     word-wrap: break-word;
     background-color: $bdl-gray-80;

@@ -1,7 +1,7 @@
 @import '../common/variables';
 
 .be.bcow {
-    font-family: $font;
+    @include font-family;
 
     .btn {
         padding: 3px 13px 3px 10px;

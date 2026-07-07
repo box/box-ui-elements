@@ -19,8 +19,9 @@ body {
     @include common-typography;
 }
 
-body.is-deja-blue {
-    @include bdl-commonTypography-dejaBlue;
+body.is-deja-blue,
+body.is-inter-font {
+    @include bdl-commonTypography;
 }
 
 p {

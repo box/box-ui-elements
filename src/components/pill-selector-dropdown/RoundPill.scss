@@ -21,7 +21,7 @@
     margin: 0 $bdl-grid-unit * 2 !important;
     padding-top: 1px; // offset for aligning "average" string that doesn't have descender chars
     overflow: hidden;
-    line-height: $bdl-fontSize + $bdl-grid-unit; // for vertical centering using flex;
+    line-height: $bdl-fontSize--legacy + $bdl-grid-unit; // for vertical centering using flex;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
