@@ -1220,6 +1220,40 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(lastTaskModalProps.isOpen).toBe(false);
         });
 
+        test('should fetch assignees through getApproverAsync and preserve group entries', async () => {
+            const getApproverAsync = jest.fn().mockResolvedValue([
+                {
+                    id: '7',
+                    item: { email: 'a@b.com', id: '7', login: 'a@b.com', name: 'Alice', type: 'user' },
+                    name: 'Alice',
+                },
+                { id: '9', item: { id: '9', name: 'Designers', type: 'group' }, name: 'Designers' },
+            ]);
+            const getMentionAsync = jest.fn();
+            renderFeed({ createTask: jest.fn(), getApproverAsync, getMentionAsync });
+
+            const result = await lastTaskModalProps.fetchUsers?.('  des  ');
+
+            expect(getApproverAsync).toHaveBeenCalledWith('des');
+            expect(getMentionAsync).not.toHaveBeenCalled();
+            expect(result).toEqual([
+                { email: 'a@b.com', id: 7, name: 'Alice', type: 'user', value: '7' },
+                { email: '', id: 9, name: 'Designers', type: 'group', value: '9' },
+            ]);
+        });
+
+        test('should return empty assignee results when the query is empty, getApproverAsync is missing, or it rejects', async () => {
+            const getApproverAsync = jest.fn().mockRejectedValue(new Error('API error'));
+            renderFeed({ createTask: jest.fn(), getApproverAsync });
+            expect(await lastTaskModalProps.fetchUsers?.('   ')).toEqual([]);
+            expect(getApproverAsync).not.toHaveBeenCalled();
+            expect(await lastTaskModalProps.fetchUsers?.('query')).toEqual([]);
+            expect(getApproverAsync).toHaveBeenCalledWith('query');
+
+            renderFeed({ createTask: jest.fn() });
+            expect(await lastTaskModalProps.fetchUsers?.('query')).toEqual([]);
+        });
+
         test('should forward createTask arguments and callbacks from the modal to the parent', () => {
             const createTask = jest.fn();
             renderFeed({ createTask });

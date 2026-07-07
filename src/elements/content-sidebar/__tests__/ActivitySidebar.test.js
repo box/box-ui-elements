@@ -1133,6 +1133,56 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('getApproverAsync()', () => {
+        test('should get collaborators with groups and respect hidden collaborators and resolve with the entries', async () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            fileCollaboratorsAPI.getCollaboratorsWithQuery.mockImplementation((id, successCallback) => {
+                successCallback(collaborators);
+            });
+
+            const search = 'Santa Claus';
+            const result = await instance.getApproverAsync(search);
+
+            expect(fileCollaboratorsAPI.getCollaboratorsWithQuery).toHaveBeenCalledTimes(1);
+            const [fileId, , , searchArg, options] = fileCollaboratorsAPI.getCollaboratorsWithQuery.mock.calls[0];
+            expect(fileId).toBe(file.id);
+            expect(searchArg).toBe(search);
+            expect(options).toEqual({
+                includeGroups: true,
+                respectHiddenCollabs: true,
+            });
+            expect(result).toEqual(collaborators.entries);
+        });
+
+        test('should resolve a superseded call with an empty result', async () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const successCallbacks = [];
+            fileCollaboratorsAPI.getCollaboratorsWithQuery.mockImplementation((id, successCallback) => {
+                successCallbacks.push(successCallback);
+            });
+
+            const firstPromise = instance.getApproverAsync('first');
+            const secondPromise = instance.getApproverAsync('second');
+            successCallbacks.forEach(successCallback => successCallback(collaborators));
+
+            expect(await firstPromise).toEqual([]);
+            expect(await secondPromise).toEqual(collaborators.entries);
+        });
+
+        test('should reject when the fetch errors', async () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const error = new Error('fetch failed');
+            fileCollaboratorsAPI.getCollaboratorsWithQuery.mockImplementation((id, successCallback, errorCallback) => {
+                errorCallback(error, 'error_code', {});
+            });
+
+            await expect(instance.getApproverAsync('query')).rejects.toEqual(error);
+        });
+    });
+
     describe('getApproverContactsSuccessCallback()', () => {
         let instance;
         let wrapper;
