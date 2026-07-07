@@ -214,19 +214,27 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
-        // Cancel pending debounces and bump the generation so any in-flight
+        // Cancel pending debounces and bump the generations so any in-flight
         // response from getCollaboratorsWithQuery is ignored after unmount.
-        [this.getMention, this.debouncedFetchMentionCollaborators].forEach(fn => {
-            if (typeof fn?.cancel === 'function') fn.cancel();
-        });
+        [this.getMention, this.debouncedFetchMentionCollaborators, this.debouncedFetchApproverCollaborators].forEach(
+            fn => {
+                if (typeof fn?.cancel === 'function') fn.cancel();
+            },
+        );
         this.mentionGeneration += 1;
-        // Resolve any pending getMentionAsync promise with an empty result so
-        // awaiters (e.g. ActivityFeedV2's fetchUsers) don't hang forever.
+        this.approverGeneration += 1;
+        // Resolve any pending promises with an empty result so awaiters
+        // (e.g. ActivityFeedV2's fetchUsers) don't hang forever.
         if (this.pendingMentionResolve) {
             this.pendingMentionResolve([]);
         }
         this.pendingMentionResolve = null;
         this.pendingMentionReject = null;
+        if (this.pendingApproverResolve) {
+            this.pendingApproverResolve([]);
+        }
+        this.pendingApproverResolve = null;
+        this.pendingApproverReject = null;
     }
 
     handleAnnotationDelete = ({ id, permissions }: { id: string, permissions: AnnotationPermission }) => {
@@ -1078,6 +1086,58 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         });
     };
 
+    pendingApproverResolve: ?(entries: SelectorItems<>) => void = null;
+
+    pendingApproverReject: ?(error: ElementsXhrError) => void = null;
+
+    approverGeneration: number = 0;
+
+    // Debounced inner fetch. The generation arg guards against in-flight
+    // responses from superseded requests resolving/rejecting the current
+    // promise with stale data.
+    debouncedFetchApproverCollaborators = debounce((searchStr: string, generation: number) => {
+        const { api, file } = this.props;
+        api.getFileCollaboratorsAPI(false).getCollaboratorsWithQuery(
+            file.id,
+            (collaborators: { entries: SelectorItems<> }) => {
+                if (generation === this.approverGeneration && this.pendingApproverResolve) {
+                    this.pendingApproverResolve(collaborators.entries);
+                    this.pendingApproverResolve = null;
+                    this.pendingApproverReject = null;
+                }
+            },
+            (error, code, contextInfo) => {
+                if (generation !== this.approverGeneration) {
+                    return;
+                }
+                this.errorCallback(error, code, contextInfo);
+                if (this.pendingApproverReject) {
+                    this.pendingApproverReject(error);
+                    this.pendingApproverResolve = null;
+                    this.pendingApproverReject = null;
+                }
+            },
+            searchStr,
+            {
+                includeGroups: true,
+                respectHiddenCollabs: true,
+            },
+        );
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    getApproverAsync = (searchStr: string): Promise<SelectorItems<>> => {
+        if (this.pendingApproverResolve) {
+            this.pendingApproverResolve([]);
+        }
+        this.approverGeneration += 1;
+        const generation = this.approverGeneration;
+        return new Promise((resolve, reject) => {
+            this.pendingApproverResolve = resolve;
+            this.pendingApproverReject = reject;
+            this.debouncedFetchApproverCollaborators(searchStr, generation);
+        });
+    };
+
     /**
      * Returns feed item based on the item id
      *
@@ -1436,13 +1496,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 >
                     <ActivityFeedV2
                         activeFeedEntryId={activeFeedEntryId}
-                        approverSelectorContacts={approverSelectorContacts}
                         createTask={this.createTask}
                         currentUser={currentUser}
                         feedItems={this.getFilteredFeedItems()}
                         getViewer={this.props.getViewer}
                         file={file}
-                        getApproverWithQuery={this.getApprover}
+                        getApproverAsync={this.getApproverAsync}
                         getAvatarUrl={this.getAvatarUrl}
                         getMentionAsync={this.getMentionAsync}
                         getTaskCollaborators={this.getTaskCollaborators}
