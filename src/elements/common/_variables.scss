@@ -28,6 +28,10 @@ $sidebarTabResponsiveSize: 48px;
     /* stylelint-enable declaration-no-important */
     font-family: $font;
 
+    :where(body.is-inter-font) & {
+        @include bdl-fonts--inter;
+    }
+
     * {
         @include rendering;
 
@@ -54,4 +58,8 @@ $sidebarTabResponsiveSize: 48px;
     // Firefox sets opacity for placeholder to less than 100%
     // See https://developer.mozilla.org/en-US/docs/Web/CSS/::placeholder#opaque_text
     opacity: 1;
+
+    :where(body.is-inter-font) & {
+        @include bdl-fonts--inter;
+    }
 }
