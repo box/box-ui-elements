@@ -1,7 +1,6 @@
 @import '../../styles/variables';
 @import '../../styles/inputs';
 
-$font: lato, 'Helvetica Neue', helvetica, arial, sans-serif;
 $minimumWidth: 300px;
 $sidebarHeaderHeight: 60px;
 $sidebarSubHeaderHeight: 56px;
@@ -13,27 +12,15 @@ $sidebarActivityFeedSpacingVertical: 20px;
 $sidebarActivityFeedSelectedItemSpacing: 10px;
 $sidebarTabResponsiveSize: 48px;
 
-@mixin rendering {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizelegibility;
-}
-
 @mixin reset {
-    @include rendering;
+    @include bdl-fonts;
 
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
-    font-size: 13px;
     /* stylelint-enable declaration-no-important */
-    font-family: $font;
-
-    :where(body.is-inter-font) & {
-        @include bdl-fonts--inter;
-    }
 
     * {
-        @include rendering;
+        @include font-aliasing;
 
         /* stylelint-disable declaration-no-important */
         box-sizing: border-box !important;
@@ -51,15 +38,11 @@ $sidebarTabResponsiveSize: 48px;
 }
 
 @mixin placeholder {
+    @include bdl-fonts;
+
     color: $bdl-gray-65;
-    font-weight: normal;
-    font-family: $font;
 
     // Firefox sets opacity for placeholder to less than 100%
     // See https://developer.mozilla.org/en-US/docs/Web/CSS/::placeholder#opaque_text
     opacity: 1;
-
-    :where(body.is-inter-font) & {
-        @include bdl-fonts--inter;
-    }
 }

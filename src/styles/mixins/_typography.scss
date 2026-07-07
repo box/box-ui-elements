@@ -4,7 +4,7 @@
 @mixin font-family {
     font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-    @at-root :global(:where(body.is-inter-font)) & {
+    @at-root :where(body.is-inter-font) & {
         font-family: InterVariable, 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 }
@@ -28,9 +28,9 @@
     @include font-aliasing;
 
     font-weight: normal;
-    font-size: $bdl-fontSize--legacy;
+    font-size: $bdl-fontSize;
 
-    @at-root :global(:where(body.is-inter-font)) & {
+    @at-root :where(body.is-inter-font) & {
         font-weight: 450;
     }
 }
@@ -50,7 +50,7 @@
     line-height: $bdl-line-height;
     letter-spacing: 0.3px;
 
-    @at-root :global(:where(body.is-inter-font)) & {
+    @at-root :where(body.is-inter-font) & {
         letter-spacing: 0;
     }
 }
