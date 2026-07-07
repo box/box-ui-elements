@@ -2,7 +2,8 @@
 
 .be-item-name {
     overflow: hidden;
-    line-height: 15px;
+    font-size: $bdl-fontSize--legacy;
+    line-height: 16px;
     white-space: normal;
     text-align: left;
     text-overflow: ellipsis;
