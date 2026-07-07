@@ -4,8 +4,11 @@
 @mixin font-family {
     font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-    @at-root :where(body.is-inter-font) & {
-        font-family: InterVariable, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    @at-root {
+        &:where(body.is-inter-font),
+        :where(body.is-inter-font) & {
+            font-family: InterVariable, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
     }
 }
 
@@ -30,8 +33,11 @@
     font-weight: normal;
     font-size: $bdl-fontSize;
 
-    @at-root :where(body.is-inter-font) & {
-        font-weight: 450;
+    @at-root {
+        &:where(body.is-inter-font),
+        :where(body.is-inter-font) & {
+            font-weight: 450;
+        }
     }
 }
 
@@ -50,8 +56,11 @@
     line-height: $bdl-line-height;
     letter-spacing: 0.3px;
 
-    @at-root :where(body.is-inter-font) & {
-        letter-spacing: 0;
+    @at-root {
+        &:where(body.is-inter-font),
+        :where(body.is-inter-font) & {
+            letter-spacing: 0;
+        }
     }
 }
 
