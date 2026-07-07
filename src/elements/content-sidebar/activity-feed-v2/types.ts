@@ -8,7 +8,7 @@ import type { AnnotationBadgeTargetType, TextMessageTypeV2 as TextMessageType } 
 
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItems, FeedItemStatus } from '../../../common/types/feed';
-import type { User } from '../../../common/types/core';
+import type { GroupMini, SelectorItem, User, UserMini } from '../../../common/types/core';
 import type { TaskAssigneeCollection, TaskCollabStatus, TaskNew, TaskUpdatePayload } from '../../../common/types/tasks';
 
 export type { AppActivityItemProps, TaskItemProps, VersionItemProps } from '@box/activity-feed';
@@ -91,12 +91,11 @@ export type ViewerHandle = {
 
 export type ActivityFeedV2Props = {
     activeFeedEntryId?: string;
-    approverSelectorContacts?: Array<Record<string, unknown>>;
     createTask?: (...args: Array<unknown>) => void;
     currentUser?: User;
     feedItems?: FeedItems;
     file?: ActivityFeedV2File;
-    getApproverWithQuery?: (searchStr: string) => void;
+    getApproverAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getAvatarUrl?: GetAvatarUrl;
     getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
