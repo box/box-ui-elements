@@ -13,6 +13,7 @@ const SECURITY_CONTROLS_FORMAT: {
 
 const ACCESS_POLICY_RESTRICTION: {
     APP: 'app',
+    APP_PREVIEW: 'appPreview',
     BOX_SIGN_REQUEST: 'boxSignRequest',
     DOWNLOAD: 'download',
     EXTERNAL_COLLAB: 'externalCollab',
@@ -22,6 +23,7 @@ const ACCESS_POLICY_RESTRICTION: {
     WATERMARK: 'watermark',
 } = {
     APP: 'app',
+    APP_PREVIEW: 'appPreview',
     BOX_SIGN_REQUEST: 'boxSignRequest',
     DOWNLOAD: 'download',
     EXTERNAL_COLLAB: 'externalCollab',
@@ -50,6 +52,14 @@ const LIST_ACCESS_LEVEL: {
 } = {
     BLACKLIST: 'blacklist',
     BLOCK: 'block',
+    WHITELIST: 'whitelist',
+};
+
+const PREVIEW_ACCESS_LEVEL: {
+    BLACKLIST: 'blacklist',
+    WHITELIST: 'whitelist',
+} = {
+    BLACKLIST: 'blacklist',
     WHITELIST: 'whitelist',
 };
 
@@ -106,4 +116,5 @@ export {
     MANAGED_USERS_ACCESS_LEVEL,
     SECURITY_CONTROLS_FORMAT,
     SHARED_LINK_ACCESS_LEVEL,
+    PREVIEW_ACCESS_LEVEL,
 };
