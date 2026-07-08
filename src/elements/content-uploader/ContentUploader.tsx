@@ -138,6 +138,7 @@ type State = {
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
+const HIDE_MODERNIZED_UPLOAD_MANAGER_DELAY_MS = 5000;
 const SLIDE_OUT_ANIMATION_NAME = 'bcu-modernized-slideOut';
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 const UPLOAD_CONCURRENCY = 6;
@@ -1580,7 +1581,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         this.modernizedDismissTimer = setTimeout(() => {
             this.setState({ modernizedPanelState: 'dismissing' });
             this.modernizedDismissTimer = null;
-        }, HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT);
+        }, HIDE_MODERNIZED_UPLOAD_MANAGER_DELAY_MS);
     };
 
     finalizeModernizedDismiss = (): void => {
