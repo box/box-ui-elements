@@ -3,6 +3,13 @@
 
 @mixin font-family {
     font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    @at-root {
+        &:where(body.is-inter-font),
+        :where(body.is-inter-font) & {
+            font-family: InterVariable, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+    }
 }
 
 @mixin font-aliasing {
@@ -16,15 +23,22 @@
     @include font-aliasing;
 
     font-weight: normal;
-    font-size: $bdl-fontSize;
+    font-size: $bdl-fontSize--legacy;
 }
 
-@mixin bdl-fonts-dejaBlue {
+@mixin bdl-fonts {
     @include font-family;
     @include font-aliasing;
 
     font-weight: normal;
-    font-size: $bdl-fontSize--dejaBlue;
+    font-size: $bdl-fontSize;
+
+    @at-root {
+        &:where(body.is-inter-font),
+        :where(body.is-inter-font) & {
+            font-weight: 450;
+        }
+    }
 }
 
 @mixin common-typography {
@@ -35,12 +49,19 @@
     letter-spacing: 0.3px;
 }
 
-@mixin bdl-commonTypography-dejaBlue {
-    @include bdl-fonts-dejaBlue;
+@mixin bdl-commonTypography {
+    @include bdl-fonts;
 
     color: $bdl-gray;
     line-height: $bdl-line-height;
     letter-spacing: 0.3px;
+
+    @at-root {
+        &:where(body.is-inter-font),
+        :where(body.is-inter-font) & {
+            letter-spacing: 0;
+        }
+    }
 }
 
 @mixin bdl-targetIE11 {

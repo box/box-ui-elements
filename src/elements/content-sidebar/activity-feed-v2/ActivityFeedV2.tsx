@@ -11,11 +11,13 @@ import noop from 'lodash/noop';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
+import type { UserContactType } from '@box/user-selector';
 
 import TaskModalV2 from './task-modal-v2';
 
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
+import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
 import { transformFeedItem } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
@@ -42,6 +44,7 @@ const ActivityFeedV2 = ({
     currentUser,
     feedItems,
     file,
+    getApproverAsync,
     getAvatarUrl,
     getMentionAsync,
     getTaskCollaborators,
@@ -100,6 +103,22 @@ const ActivityFeedV2 = ({
             }
         },
         [getMentionAsync],
+    );
+
+    const fetchApprovers = React.useCallback(
+        async (inputValue: string): Promise<UserContactType[]> => {
+            const trimmed = inputValue.trim();
+            if (!trimmed || !getApproverAsync) {
+                return [];
+            }
+            try {
+                const entries = await getApproverAsync(trimmed);
+                return entries.map(mapCollaboratorToUserContact);
+            } catch {
+                return [];
+            }
+        },
+        [getApproverAsync],
     );
 
     const fetchAvatarUrls = React.useCallback(
@@ -512,7 +531,7 @@ const ActivityFeedV2 = ({
                     editTask={handleEditTask}
                     error={taskError}
                     fetchAvatarUrls={fetchAvatarUrls}
-                    fetchUsers={fetchUsers}
+                    fetchUsers={fetchApprovers}
                     isOpen={isTaskFormOpen}
                     mode="edit"
                     onClose={handleTaskModalClose}
@@ -525,7 +544,7 @@ const ActivityFeedV2 = ({
                     createTask={handleCreateTask}
                     error={taskError}
                     fetchAvatarUrls={fetchAvatarUrls}
-                    fetchUsers={fetchUsers}
+                    fetchUsers={fetchApprovers}
                     isOpen={isTaskFormOpen}
                     onClose={handleTaskModalClose}
                     onSubmitError={setTaskError}

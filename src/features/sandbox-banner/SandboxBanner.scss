@@ -24,7 +24,7 @@ $sandboxbanner-max-width: 584px;
     width: 100%;
     overflow: hidden;
     color: $white;
-    font-size: $bdl-fontSize;
+    font-size: $bdl-fontSize--legacy;
     white-space: nowrap;
     text-overflow: ellipsis;
 }

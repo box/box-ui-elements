@@ -13,6 +13,7 @@ import CancelAllUploadsModal from './CancelAllUploadsModal';
 import LargeFileWarningModal from './LargeFileWarningModal';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
+import ModernizedUploadsManagerDropZone from './ModernizedUploadsManagerDropZone';
 import UploadsManager from './UploadsManager';
 import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
 import './ModernizedUploadsManagerPanel.scss';
@@ -76,6 +77,7 @@ export interface ContentUploaderProps {
     dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>;
     fileLimit: number;
     files?: Array<UploadFileWithAPIOptions | File>;
+    canDropOnUploadsManager?: boolean;
     isDraggingItemsToUploadsManager?: boolean;
     isFolderUploadEnabled: boolean;
     isLarge: boolean;
@@ -174,6 +176,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         clientName: CLIENT_NAME_CONTENT_UPLOADER,
         dataTransferItems: [],
         files: [],
+        canDropOnUploadsManager: false,
         fileLimit: FILE_LIMIT_DEFAULT,
         isDraggingItemsToUploadsManager: false,
         isFolderUploadEnabled: false,
@@ -654,7 +657,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         files: Array<UploadFileWithAPIOptions | File>,
         itemUpdateCallback: Function,
     ) => {
-        const { rootFolderId } = this.props;
+        const { enableModernizedUploads, rootFolderId, useUploadsManager } = this.props;
+        const shouldAddRootFolderIdToUploadOptions = enableModernizedUploads && useUploadsManager;
 
         // Convert files from the file API to upload items
         const newItems = files.map(file => {
@@ -680,7 +684,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             };
 
             if (uploadAPIOptions) {
-                uploadItem.options = uploadAPIOptions;
+                uploadItem.options = shouldAddRootFolderIdToUploadOptions
+                    ? { folderId: rootFolderId, ...uploadAPIOptions }
+                    : uploadAPIOptions;
             }
 
             this.itemIdsRef.current[getFileId(uploadItem, rootFolderId)] = true;
@@ -1814,6 +1820,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     render() {
         const {
             className,
+            canDropOnUploadsManager,
             enableModernizedUploads,
             fileLimit,
             isDraggingItemsToUploadsManager = false,
@@ -1867,8 +1874,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 return (
                     <div ref={measureRef} className={styleClassName} id={this.id}>
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
-                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-                        <div
+                        <ModernizedUploadsManagerDropZone
+                            addDataTransferItemsToUploadQueue={droppedItems =>
+                                this.addDroppedItemsToUploadQueue(droppedItems, this.upload)
+                            }
+                            allowedTypes={['Files']}
+                            isDropEnabled={canDropOnUploadsManager}
                             className={classNames('bcu-modernized-panel', {
                                 visible: modernizedPanelState === 'shown',
                                 dismissing: modernizedPanelState === 'dismissing',
@@ -1906,7 +1917,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                                 onUpgradeCTAClick={onUpgradeCTAClick}
                                 oversizeFiles={oversizeFiles}
                             />
-                        </div>
+                        </ModernizedUploadsManagerDropZone>
                     </div>
                 );
             }
