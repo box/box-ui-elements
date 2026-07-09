@@ -1734,7 +1734,7 @@ describe('elements/content-uploader/ContentUploader', () => {
     });
 
     describe('modernized panel open/close lifecycle', () => {
-        const HIDE_DELAY_MS = 8000;
+        const HIDE_DELAY_MS = 5000;
 
         const makeItem = (name, status) => {
             let progress = 0;
@@ -1931,10 +1931,10 @@ describe('elements/content-uploader/ContentUploader', () => {
             });
             expect(instance.modernizedDismissTimer).not.toBeNull();
 
-            jest.advanceTimersByTime(3000);
+            jest.advanceTimersByTime(HIDE_DELAY_MS - 1);
             expect(wrapper.state('modernizedPanelState')).toBe('shown');
 
-            jest.advanceTimersByTime(5000);
+            jest.advanceTimersByTime(1);
             expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
         });
 
