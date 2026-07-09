@@ -11,6 +11,8 @@ import { TASK_COMPLETION_RULE_ALL, TASK_COMPLETION_RULE_ANY, TASK_EDIT_MODE_EDIT
 
 import type { TaskCompletionRule, TaskEditMode, TaskType } from '../../../../common/types/tasks';
 
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+
 import { mapAssigneeToUserContact, mapUserContactToAssignee } from './utils/contactMapping';
 import type { TaskAssignee, TaskFormV2SubmitPayload } from './types';
 
@@ -198,6 +200,7 @@ const TaskFormV2 = ({
             <DatePicker
                 calendarAriaLabel={formatMessage(messages.datePickerCalendarAriaLabel)}
                 clearDatePickerAriaLabel={formatMessage(messages.datePickerClearAriaLabel)}
+                data-resin-target={ACTIVITY_TARGETS.TASK_DATE_PICKER}
                 dataTargetId="TaskFormV2-dueDateInput"
                 isDisabled={isDisabled}
                 label={formatMessage(messages.dueDateLabel)}

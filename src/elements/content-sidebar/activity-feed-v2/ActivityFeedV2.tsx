@@ -454,7 +454,7 @@ const ActivityFeedV2 = ({
     );
 
     return (
-        <div className="bcs-NewActivityFeed" data-resin-feature="activityfeedv2">
+        <div className="bcs-NewActivityFeed" data-resin-feature="activityfeedv2" data-resin-fileid={file?.id}>
             <ActivityFeed.Root mentionContext={mentionContext} scrollTo={scrollHandle}>
                 <ActivityFeed.Header title={headerTitle}>
                     <ActivityFeed.Header.Actions>
@@ -532,6 +532,7 @@ const ActivityFeedV2 = ({
                     error={taskError}
                     fetchAvatarUrls={fetchAvatarUrls}
                     fetchUsers={fetchApprovers}
+                    fileId={file?.id}
                     isOpen={isTaskFormOpen}
                     mode="edit"
                     onClose={handleTaskModalClose}
@@ -545,6 +546,7 @@ const ActivityFeedV2 = ({
                     error={taskError}
                     fetchAvatarUrls={fetchAvatarUrls}
                     fetchUsers={fetchApprovers}
+                    fileId={file?.id}
                     isOpen={isTaskFormOpen}
                     onClose={handleTaskModalClose}
                     onSubmitError={setTaskError}
