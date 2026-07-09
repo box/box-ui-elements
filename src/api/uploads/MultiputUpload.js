@@ -65,6 +65,8 @@ class MultiputUpload extends BaseMultiput {
 
     isResumableUploadsEnabled: boolean;
 
+    isPaused: boolean;
+
     successCallback: Function;
 
     progressCallback: Function;
@@ -134,6 +136,7 @@ class MultiputUpload extends BaseMultiput {
         this.clientId = null;
         this.isResumableUploadsEnabled = false;
         this.numResumeRetries = 0;
+        this.isPaused = false;
     }
 
     /**
@@ -758,6 +761,7 @@ class MultiputUpload extends BaseMultiput {
     shouldComputeDigestForNextPart(): boolean {
         return (
             !this.isDestroyed() &&
+            !this.isPaused &&
             this.numPartsDigestComputing === 0 &&
             this.numPartsNotStarted > 0 &&
             this.numPartsDigestReady < this.config.digestReadahead
@@ -1126,7 +1130,12 @@ class MultiputUpload extends BaseMultiput {
      * @return {boolean}
      */
     canStartMorePartUploads(): boolean {
-        return !this.isDestroyed() && this.numPartsUploading < this.config.parallelism && this.numPartsDigestReady > 0;
+        return (
+            !this.isDestroyed() &&
+            !this.isPaused &&
+            this.numPartsUploading < this.config.parallelism &&
+            this.numPartsDigestReady > 0
+        );
     }
 
     /**
@@ -1257,6 +1266,47 @@ class MultiputUpload extends BaseMultiput {
         clearTimeout(this.commitSessionTimeout);
         this.abortSession();
         this.destroy();
+    }
+
+    /**
+     * Pauses an upload in progress without destroying the session. In-flight parts
+     * are reset and paused so the upload can be resumed later via unpause(). The
+     * reported progress is intentionally left untouched so it stays frozen in the UI.
+     *
+     * @return {void}
+     */
+    pause(): void {
+        if (this.isDestroyed() || this.isPaused) {
+            return;
+        }
+
+        this.isPaused = true;
+
+        let nextUploadIndex = this.firstUnuploadedPartIndex;
+        while (this.numPartsUploading > 0) {
+            const part = this.parts[nextUploadIndex];
+            if (part && part.state === PART_STATE_UPLOADING) {
+                part.reset();
+                part.pause();
+                this.numPartsUploading -= 1;
+                this.numPartsDigestReady += 1;
+            }
+            nextUploadIndex += 1;
+        }
+    }
+
+    /**
+     * Resumes a previously paused upload, continuing from where it left off.
+     *
+     * @return {void}
+     */
+    unpause(): void {
+        if (this.isDestroyed() || !this.isPaused) {
+            return;
+        }
+
+        this.isPaused = false;
+        this.processNextParts();
     }
 
     /**
