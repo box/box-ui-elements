@@ -157,6 +157,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
     isAutoExpanded: boolean = false;
 
+    isCancelAllPaused: boolean = false;
+
     modernizedDismissTimer: ReturnType<typeof setTimeout> | null = null;
 
     isPanelHovered: boolean = false;
@@ -890,6 +892,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     upload = () => {
         const { enableModernizedUploads, isUpgradeModalEnabled, maxFileSize } = this.props;
 
+        if (this.isCancelAllPaused) { 
+            return;
+        }
+
         if (
             maxFileSize &&
             enableModernizedUploads &&
@@ -899,6 +905,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             if (!this.state.isLargeFileWarningModalOpen) {
                 this.setState({ isLargeFileWarningModalOpen: true });
             }
+
             return;
         }
 
@@ -918,6 +925,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     uploadFile(item: UploadItem) {
         const { enableModernizedUploads, overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
+
+        if (this.isCancelAllPaused) {
+            return;
+        }
 
         const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
@@ -1256,6 +1267,23 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Whether an item uploads through the chunked (multiput) API rather than the
+     * plain oneshot API. This is the same decision getUploadAPI makes when picking
+     * the API instance, and it determines which items can be paused/resumed in place
+     * versus cancelled and restarted from scratch.
+     *
+     * @param {UploadItem} item - The upload item
+     * @return {boolean}
+     */
+    getIsChunkedUpload = (item: UploadItem): boolean => {
+        const { chunked } = this.props;
+        const { file, isFolder } = item;
+        return Boolean(
+            chunked && !isFolder && file && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported(),
+        );
+    };
+
+    /**
      * Updates item based on its status.
      *
      * @private
@@ -1263,11 +1291,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     onClick = (item: UploadItem) => {
-        const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
-        const { file, status, error } = item;
-        const isChunkedUpload =
-            chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
-        const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
+        const { isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
+        const { status, error } = item;
+        const isResumable = isResumableUploadsEnabled && this.getIsChunkedUpload(item) && item.api.sessionId;
 
         switch (status) {
             case STATUS_IN_PROGRESS:
@@ -1338,19 +1364,68 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
-     * Open the Cancel All confirmation modal. Wired as the onCancelAll prop
-     * passed to the modernized uploads manager so the action requires explicit
-     * confirmation before destroying in-progress uploads.
+     * Freeze in-progress uploads while the Cancel All confirmation modal is open.
+     * Chunked uploads are paused so they can resume from the same session; plain
+     * uploads have no partial server state, so they are cancelled in the background
+     * and restarted from scratch if the user chooses to keep uploading. Item status
+     * and progress are intentionally left untouched so the rows stay frozen in place.
+     */
+    pauseUploadsForCancelAll = () => {
+        this.itemsRef.current.forEach(item => {
+            // Folder containers have no partial state and their child files are
+            // tracked as separate queue items handled by this same loop.
+            if (item.status !== STATUS_IN_PROGRESS || item.isFolder) {
+                return;
+            }
+            const { api } = item;
+            if (this.getIsChunkedUpload(item)) {
+                api.pause();
+            } else {
+                api.cancel();
+            }
+        });
+        this.isCancelAllPaused = true;
+    };
+
+    /**
+     * Resume uploads frozen by pauseUploadsForCancelAll when the user dismisses the
+     * modal. Chunked uploads continue from their session; plain uploads (cancelled in
+     * the background) are restarted from scratch. Pending items that never started are
+     * picked up by the trailing upload() call.
+     */
+    resumeUploadsForCancelAll = () => {
+        this.isCancelAllPaused = false;
+        this.itemsRef.current.forEach(item => {
+            if (item.status !== STATUS_IN_PROGRESS || item.isFolder) {
+                return;
+            }
+            if (this.getIsChunkedUpload(item)) {
+                item.api.unpause();
+            } else {
+                this.resetFile(item);
+                this.uploadFile(item);
+            }
+        });
+        this.upload();
+    };
+
+    /**
+     * Open the Cancel All confirmation modal and freeze in-progress uploads. Wired as
+     * the onCancelAll prop passed to the modernized uploads manager so the action
+     * requires explicit confirmation before destroying in-progress uploads.
      */
     handleCancelAllClick = () => {
+        this.pauseUploadsForCancelAll();
         this.setState({ isCancelAllModalOpen: true });
     };
 
     handleCancelAllDismiss = () => {
         this.setState({ isCancelAllModalOpen: false });
+        this.resumeUploadsForCancelAll();
     };
 
     handleCancelAllConfirm = () => {
+        this.isCancelAllPaused = false;
         this.setState({ isCancelAllModalOpen: false });
         this.handleUploadsManagerCancelAll();
     };
@@ -1373,17 +1448,15 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * chunked uploads, otherwise restart from scratch. Shared by RetryAll and per-item retry.
      */
     retryUploadsManagerItem = (item: UploadItem) => {
-        const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
-        const { file, api, error } = item;
+        const { isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
+        const { api, error } = item;
         // Name-in-use cannot be resolved by retrying — drop the item like the legacy onClick path.
         if (error?.code === ERROR_CODE_ITEM_NAME_IN_USE) {
             this.removeFileFromUploadQueue(item);
             onClickCancel(item);
             return;
         }
-        const isChunkedUpload =
-            chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
-        const isResumable = isResumableUploadsEnabled && isChunkedUpload && api?.sessionId;
+        const isResumable = isResumableUploadsEnabled && this.getIsChunkedUpload(item) && api?.sessionId;
         if (isResumable) {
             item.bytesUploadedOnLastResume = api.totalUploadedBytes;
             this.resumeFile(item);

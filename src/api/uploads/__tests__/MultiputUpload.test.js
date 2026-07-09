@@ -175,15 +175,18 @@ describe('api/uploads/MultiputUpload', () => {
         // upload pipeline full
         // upload pipeline not full and not ended
         // upload pipeline not full and not ended but no digest is ready
+        // paused
         test.each`
-            expected | ended    | numPartsUploading | numPartsDigestReady
-            ${false} | ${true}  | ${1}              | ${undefined}
-            ${false} | ${false} | ${2}              | ${1}
-            ${true}  | ${false} | ${1}              | ${1}
-            ${false} | ${false} | ${1}              | ${0}
-        `('should return correct value:', ({ expected, ended, numPartsUploading, numPartsDigestReady }) => {
+            expected | ended    | paused   | numPartsUploading | numPartsDigestReady
+            ${false} | ${true}  | ${false} | ${1}              | ${undefined}
+            ${false} | ${false} | ${false} | ${2}              | ${1}
+            ${true}  | ${false} | ${false} | ${1}              | ${1}
+            ${false} | ${false} | ${false} | ${1}              | ${0}
+            ${false} | ${false} | ${true}  | ${1}              | ${1}
+        `('should return correct value:', ({ expected, ended, paused, numPartsUploading, numPartsDigestReady }) => {
             // Setup
             multiputUploadTest.destroyed = ended;
+            multiputUploadTest.isPaused = paused;
             multiputUploadTest.numPartsUploading = numPartsUploading;
             multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
             // Execute
@@ -787,6 +790,68 @@ describe('api/uploads/MultiputUpload', () => {
         });
     });
 
+    describe('pause()', () => {
+        beforeEach(() => {
+            multiputUploadTest.numPartsUploading = 2;
+            multiputUploadTest.numPartsDigestReady = 0;
+            multiputUploadTest.firstUnuploadedPartIndex = 0;
+            multiputUploadTest.parts = [
+                { state: PART_STATE_UPLOADING, reset: jest.fn(), pause: jest.fn() },
+                { state: PART_STATE_UPLOADED, reset: jest.fn(), pause: jest.fn() },
+                { state: PART_STATE_UPLOADING, reset: jest.fn(), pause: jest.fn() },
+            ];
+        });
+
+        test('should set isPaused and reset/pause only in-flight parts', () => {
+            multiputUploadTest.pause();
+
+            expect(multiputUploadTest.isPaused).toBe(true);
+            expect(multiputUploadTest.numPartsUploading).toBe(0);
+            expect(multiputUploadTest.numPartsDigestReady).toBe(2);
+            expect(multiputUploadTest.parts[0].pause).toBeCalled();
+            expect(multiputUploadTest.parts[1].pause).not.toBeCalled();
+            expect(multiputUploadTest.parts[2].pause).toBeCalled();
+        });
+
+        test('should do nothing when destroyed', () => {
+            multiputUploadTest.destroyed = true;
+
+            multiputUploadTest.pause();
+
+            expect(multiputUploadTest.isPaused).toBe(false);
+            expect(multiputUploadTest.parts[0].pause).not.toBeCalled();
+        });
+
+        test('should not pause twice', () => {
+            multiputUploadTest.isPaused = true;
+
+            multiputUploadTest.pause();
+
+            expect(multiputUploadTest.parts[0].pause).not.toBeCalled();
+        });
+    });
+
+    describe('unpause()', () => {
+        test('should clear isPaused and resume processing parts', () => {
+            multiputUploadTest.isPaused = true;
+            multiputUploadTest.processNextParts = jest.fn();
+
+            multiputUploadTest.unpause();
+
+            expect(multiputUploadTest.isPaused).toBe(false);
+            expect(multiputUploadTest.processNextParts).toBeCalled();
+        });
+
+        test('should do nothing when not paused', () => {
+            multiputUploadTest.isPaused = false;
+            multiputUploadTest.processNextParts = jest.fn();
+
+            multiputUploadTest.unpause();
+
+            expect(multiputUploadTest.processNextParts).not.toBeCalled();
+        });
+    });
+
     describe('updateProgress()', () => {
         test('should call progressCallback() properly', () => {
             const prevUploadedBytes = 10;
@@ -814,18 +879,21 @@ describe('api/uploads/MultiputUpload', () => {
         // all parts started
         // readahead is full
         // no part computing, there is a part not started and readahead not full
+        // paused
         test.each`
-            expected | ended    | numPartsDigestComputing | numPartsNotStarted | numPartsDigestReady
-            ${false} | ${true}  | ${undefined}            | ${undefined}       | ${undefined}
-            ${false} | ${false} | ${1}                    | ${undefined}       | ${undefined}
-            ${false} | ${false} | ${0}                    | ${0}               | ${undefined}
-            ${false} | ${false} | ${0}                    | ${1}               | ${2}
-            ${true}  | ${false} | ${0}                    | ${1}               | ${1}
+            expected | ended    | paused   | numPartsDigestComputing | numPartsNotStarted | numPartsDigestReady
+            ${false} | ${true}  | ${false} | ${undefined}            | ${undefined}       | ${undefined}
+            ${false} | ${false} | ${false} | ${1}                    | ${undefined}       | ${undefined}
+            ${false} | ${false} | ${false} | ${0}                    | ${0}               | ${undefined}
+            ${false} | ${false} | ${false} | ${0}                    | ${1}               | ${2}
+            ${true}  | ${false} | ${false} | ${0}                    | ${1}               | ${1}
+            ${false} | ${false} | ${true}  | ${0}                    | ${1}               | ${1}
         `(
             'should return correct value',
-            ({ expected, ended, numPartsDigestComputing, numPartsNotStarted, numPartsDigestReady }) => {
+            ({ expected, ended, paused, numPartsDigestComputing, numPartsNotStarted, numPartsDigestReady }) => {
                 // Setup
-                multiputUploadTest.ended = ended;
+                multiputUploadTest.destroyed = ended;
+                multiputUploadTest.isPaused = paused;
                 multiputUploadTest.numPartsDigestComputing = numPartsDigestComputing;
                 multiputUploadTest.numPartsNotStarted = numPartsNotStarted;
                 multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
