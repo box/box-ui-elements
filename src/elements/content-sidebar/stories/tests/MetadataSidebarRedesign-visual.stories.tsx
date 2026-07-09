@@ -894,6 +894,62 @@ export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = 
     },
 };
 
+const taxonomyPickerFeatures = {
+    ...mockFeatures,
+    'metadata.multilevelTaxonomy.enabled': true,
+    'metadata.taxonomyPicker.enabled': true,
+};
+
+const openTaxonomyEditor = async (canvas: ReturnType<typeof within>) => {
+    await waitForLoadingToComplete(canvas);
+    const editButton = await canvas.findByRole('button', { name: 'Edit My Taxonomy' });
+    await userEvent.click(editButton);
+};
+
+export const ViewMultilevelTaxonomyWithPicker: StoryObj<typeof MetadataSidebarRedesign> = {
+    ...ViewMultilevelTaxonomy,
+    args: {
+        ...ViewMultilevelTaxonomy.args,
+        features: taxonomyPickerFeatures,
+    },
+    play: async ({ canvasElement }) => {
+        await waitForLoadingToComplete(within(canvasElement));
+    },
+};
+
+export const EditMultilevelTaxonomyWithPicker: StoryObj<typeof MetadataSidebarRedesign> = {
+    ...ViewMultilevelTaxonomy,
+    args: {
+        ...ViewMultilevelTaxonomy.args,
+        features: taxonomyPickerFeatures,
+    },
+    play: async ({ canvasElement }) => {
+        await openTaxonomyEditor(within(canvasElement));
+    },
+};
+
+export const ViewSinglelevelTaxonomyWithPicker: StoryObj<typeof MetadataSidebarRedesign> = {
+    ...ViewSinglelevelTaxonomy,
+    args: {
+        ...ViewSinglelevelTaxonomy.args,
+        features: taxonomyPickerFeatures,
+    },
+    play: async ({ canvasElement }) => {
+        await waitForLoadingToComplete(within(canvasElement));
+    },
+};
+
+export const EditSinglelevelTaxonomyWithPicker: StoryObj<typeof MetadataSidebarRedesign> = {
+    ...ViewSinglelevelTaxonomy,
+    args: {
+        ...ViewSinglelevelTaxonomy.args,
+        features: taxonomyPickerFeatures,
+    },
+    play: async ({ canvasElement }) => {
+        await openTaxonomyEditor(within(canvasElement));
+    },
+};
+
 export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = {
     ...ViewSinglelevelTaxonomy,
     play: async ({ canvasElement }) => {

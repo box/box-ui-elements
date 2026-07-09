@@ -2,7 +2,7 @@
  * @file Redesigned Metadata sidebar component
  * @author Box
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -43,7 +43,12 @@ import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
+import {
+    createTaxonomyItemsService,
+    metadataTaxonomyFetcher,
+    metadataTaxonomyNodeAncestorsFetcher,
+    type TaxonomyFieldConfig,
+} from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
@@ -115,6 +120,7 @@ function MetadataSidebarRedesign({
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
     const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
+    const isMetadataTaxonomyPickerEnabled: boolean = useFeatureEnabled('metadata.taxonomyPicker.enabled');
     const isAdvancedExtractAgentEnabled: boolean = useFeatureEnabled('metadata.extractAdvancedAgents.enabled');
     const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
         'metadata.deleteConfirmationModalCheckbox.enabled',
@@ -329,6 +335,25 @@ function MetadataSidebarRedesign({
         [api, fileId],
     );
 
+    const resolveTaxonomyFieldConfig = useCallback(
+        (_templateKey: string, fieldKey: string): TaxonomyFieldConfig | undefined => {
+            const field = editingTemplate?.fields?.find(f => f.key === fieldKey && f.type === 'taxonomy');
+            if (!field) {
+                return undefined;
+            }
+            return {
+                levels: field.levels,
+                selectableLevels: field.optionsRules?.selectableLevels,
+            };
+        },
+        [editingTemplate],
+    );
+
+    const taxonomyItemsServiceCreator = useMemo(
+        () => createTaxonomyItemsService(api, fileId, resolveTaxonomyFieldConfig),
+        [api, fileId, resolveTaxonomyFieldConfig],
+    );
+
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
             isSessionInitiated.current = true;
@@ -369,6 +394,7 @@ function MetadataSidebarRedesign({
                             isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
                             isLargeFile={isLargeFile}
                             isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
+                            isMetadataTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             onCancel={handleCancel}
                             onDelete={handleDeleteInstance}
@@ -378,6 +404,9 @@ function MetadataSidebarRedesign({
                             setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
                             shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+                            createTaxonomyItemsService={
+                                isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
+                            }
                             template={editingTemplate}
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}

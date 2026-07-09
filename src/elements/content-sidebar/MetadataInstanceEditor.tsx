@@ -5,7 +5,10 @@ import {
     type MetadataTemplateField,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
-import { TaxonomyOptionsFetcher } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
+import {
+    CreateTaxonomyItemsService,
+    TaxonomyOptionsFetcher,
+} from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import React, { useContext } from 'react';
 import PreviewContext, { type PreviewContextType } from '../content-preview/PreviewContext';
 import {
@@ -23,6 +26,7 @@ export interface MetadataInstanceEditorProps {
     isDeleteConfirmationModalCheckboxEnabled: boolean;
     isLargeFile: boolean;
     isMetadataMultiLevelTaxonomyFieldEnabled: boolean;
+    isMetadataTaxonomyPickerEnabled?: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
@@ -32,6 +36,7 @@ export interface MetadataInstanceEditorProps {
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
     shouldShowOnlyReviewFields?: boolean;
     taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
+    createTaxonomyItemsService?: CreateTaxonomyItemsService;
     template: MetadataTemplateInstance;
     isAdvancedExtractAgentEnabled?: boolean;
     isConfidenceScoreReviewEnabled?: boolean;
@@ -50,6 +55,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isDeleteConfirmationModalCheckboxEnabled,
     isLargeFile,
     isMetadataMultiLevelTaxonomyFieldEnabled,
+    isMetadataTaxonomyPickerEnabled = false,
     isUnsavedChangesModalOpen,
     onCancel,
     onDelete,
@@ -59,6 +65,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     shouldShowOnlyReviewFields = false,
     taxonomyOptionsFetcher,
+    createTaxonomyItemsService,
     template,
     isAdvancedExtractAgentEnabled = false,
     isConfidenceScoreReviewEnabled = false,
@@ -74,6 +81,8 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
         <MetadataInstanceForm
             // TODO investigate if this property should be optional and by default false
             isMultilevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
+            isTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
+            createTaxonomyItemsService={createTaxonomyItemsService}
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             errorCode={errorCode}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
