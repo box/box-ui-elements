@@ -274,7 +274,7 @@
         "sass": "1.77.6",
         "sass-loader": "^16.0.6",
         "scroll-into-view-if-needed": "^2.2.31",
-        "semantic-release": "^24.2.9",
+        "semantic-release": "^25.0.5",
         "sinon": "^2.3.7",
         "storybook": "^9.1.20",
         "storybook-react-intl": "^4.0.7",
@@ -365,7 +365,6 @@
         "uuid": "^8.3.2"
     },
     "resolutions": {
-        "@sigstore/core": "3.2.1",
         "draft-js/immutable": "^3.8.3",
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
         "js-yaml": "^4.2.0",
