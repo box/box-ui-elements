@@ -4,27 +4,27 @@ import * as vars from '../src/styles/variables';
 export default create({
     base: 'light',
 
-    colorPrimary: vars.bdlBoxBlue,
-    colorSecondary: vars.bdlBoxBlue,
-
-    // UI
-    appBg: vars.bdlGray05,
-    appContentBg: vars.white,
-    appBorderColor: vars.bdlGray10,
-    appBorderRadius: parseInt(vars.bdlBorderRadiusSize, 10),
-
     // Typography
     fontBase: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
     fontCode: 'monospace',
 
+    colorPrimary: vars.bdlBoxBlue,
+    colorSecondary: vars.bdlBoxBlue,
+
+    // UI
+    appBg: vars.bdlBoxBlue05,
+    appContentBg: vars.white,
+    appBorderColor: vars.bdlGray10,
+    appBorderRadius: parseInt(vars.bdlBorderRadiusSize, 10),
+
     // Text colors
     textColor: vars.bdlGray,
-    textInverseColor: vars.bdlGray02,
+    textInverseColor: vars.white,
 
     // Toolbar default and active colors
-    barTextColor: vars.white,
-    barSelectedColor: vars.white,
-    barBg: vars.bdlBoxBlue,
+    barTextColor: vars.bdlGray65,
+    barSelectedColor: vars.bdlBoxBlue,
+    barBg: vars.white,
 
     brandTitle: 'Box Elements',
     brandUrl: 'https://opensource.box.com/box-ui-elements/',

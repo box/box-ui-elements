@@ -116,7 +116,7 @@ jobs:
          name: Cypress run
          command: yarn --cwd /buie test:e2e
 
-  chromatic-deploy:
+  chromatic:
     executor: default
     steps:
       - checkout
@@ -144,6 +144,6 @@ workflows:
       - e2e-tests:
           requires:
             - setup
-      - chromatic-deploy:
+      - chromatic:
           requires:
             - setup
