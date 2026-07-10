@@ -133,6 +133,21 @@ const toUpdatedAt = (createdAt: string, modifiedAt: string): number | undefined 
     return toUnixMs(modifiedAt);
 };
 
+const TERMINAL_TASK_STATUSES = new Set(['APPROVED', 'COMPLETED', 'REJECTED']);
+
+// The file activities endpoint does not populate task-level completed_at, so for tasks in a
+// terminal status the latest assignee completion is the only available completion timestamp.
+const getTaskCompletedAt = (task: TaskNew): number | undefined => {
+    const taskCompletedAt = toUnixMs(task.completed_at);
+    if (taskCompletedAt !== undefined) return taskCompletedAt;
+    if (!TERMINAL_TASK_STATUSES.has(task.status)) return undefined;
+
+    const assigneeCompletedTimes = (task.assigned_to?.entries ?? [])
+        .map(entry => toUnixMs(entry.completed_at))
+        .filter((ms): ms is number => ms !== undefined);
+    return assigneeCompletedTimes.length > 0 ? Math.max(...assigneeCompletedTimes) : undefined;
+};
+
 const resolveAvatarUrl = (userId: string | undefined, avatarUrls?: AvatarUrlMap): string | undefined =>
     userId ? avatarUrls?.[userId] : undefined;
 
@@ -235,7 +250,7 @@ export const transformTaskToProps = (
         id: task.created_by?.target?.id ?? '',
         name: task.created_by?.target?.name ?? '',
     },
-    completedAt: toUnixMs(task.completed_at),
+    completedAt: getTaskCompletedAt(task),
     completionRule:
         task.completion_rule === 'ALL_ASSIGNEES' ? TaskCompletionRule.ALL_ASSIGNEES : TaskCompletionRule.ANY_ASSIGNEE,
     createdAt: toUnixMs(task.created_at) ?? 0,
