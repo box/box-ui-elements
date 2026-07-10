@@ -382,6 +382,70 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const result = transformTaskToProps(taskWithMore as unknown as TaskNew);
             expect(result.hasNextPage).toBe(true);
         });
+
+        test('should use task-level completed_at when present', () => {
+            const completedTask = {
+                ...mockTask,
+                completed_at: '2024-03-10T00:00:00Z',
+                status: 'COMPLETED',
+            };
+            const result = transformTaskToProps(completedTask as unknown as TaskNew);
+            expect(result.completedAt).toBe(new Date('2024-03-10T00:00:00Z').getTime());
+        });
+
+        test.each([['APPROVED'], ['COMPLETED'], ['REJECTED']])(
+            'should fall back to latest assignee completed_at for terminal status %s',
+            status => {
+                const terminalTask = {
+                    ...mockTask,
+                    assigned_to: {
+                        ...mockTask.assigned_to,
+                        entries: [
+                            {
+                                ...mockTask.assigned_to.entries[0],
+                                completed_at: '2024-03-08T00:00:00Z',
+                                status,
+                            },
+                            {
+                                ...mockTask.assigned_to.entries[0],
+                                completed_at: '2024-03-09T00:00:00Z',
+                                id: 'tc-2',
+                                status,
+                                target: { id: '101', name: 'Assignee Two', type: 'user' },
+                            },
+                        ],
+                    },
+                    status,
+                };
+                const result = transformTaskToProps(terminalTask as unknown as TaskNew);
+                expect(result.completedAt).toBe(new Date('2024-03-09T00:00:00Z').getTime());
+            },
+        );
+
+        test('should leave completedAt undefined for non-terminal status even when an assignee has completed_at', () => {
+            const inProgressTask = {
+                ...mockTask,
+                assigned_to: {
+                    ...mockTask.assigned_to,
+                    entries: [
+                        {
+                            ...mockTask.assigned_to.entries[0],
+                            completed_at: '2024-03-08T00:00:00Z',
+                            status: 'APPROVED',
+                        },
+                    ],
+                },
+                status: 'IN_PROGRESS',
+            };
+            const result = transformTaskToProps(inProgressTask as unknown as TaskNew);
+            expect(result.completedAt).toBeUndefined();
+        });
+
+        test('should leave completedAt undefined for terminal status when no assignee has completed_at', () => {
+            const rejectedTask = { ...mockTask, status: 'REJECTED' };
+            const result = transformTaskToProps(rejectedTask as unknown as TaskNew);
+            expect(result.completedAt).toBeUndefined();
+        });
     });
 
     describe('transformVersionToProps()', () => {
