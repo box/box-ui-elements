@@ -191,6 +191,7 @@ const TaskFormV2 = ({
                 disabled={isDisabled}
                 error={messageError}
                 label={formatMessage(messages.messageLabel)}
+                maxRows={6}
                 minRows={3}
                 name="taskMessage"
                 onChange={event => setMessage(event.target.value)}
