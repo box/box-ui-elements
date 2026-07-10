@@ -353,6 +353,72 @@ const messages = defineMessages({
         description: 'Bullet point that summarizes integration download restriction applied to classification',
         id: 'boxui.securityControls.integrationDownloadRestricted',
     },
+    appPreviewRestricted: {
+        defaultMessage: 'Read restricted for some applications.',
+        description: 'Bullet point that summarizes application preview restriction applied to classification',
+        id: 'boxui.securityControls.appPreviewRestricted',
+    },
+    integrationPreviewRestricted: {
+        defaultMessage: 'Read restricted for some integrations.',
+        description: 'Bullet point that summarizes integration preview restriction applied to classification',
+        id: 'boxui.securityControls.integrationPreviewRestricted',
+    },
+    appPreviewBlacklist: {
+        defaultMessage: 'Read restricted for some applications: {appNames}',
+        description: 'Bullet point that summarizes application preview restriction applied to classification',
+        id: 'boxui.securityControls.appPreviewBlacklist',
+    },
+    integrationPreviewDenylist: {
+        defaultMessage: 'Read restricted for some integrations: {appNames}',
+        description: 'Bullet point that summarizes integration preview restriction applied to classification',
+        id: 'boxui.securityControls.integrationPreviewDenylist',
+    },
+    appPreviewBlacklistOverflow: {
+        defaultMessage: 'Read restricted for some applications: {appNames} +{remainingAppCount} more',
+        description:
+            'Bullet point that summarizes application preview restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
+        id: 'boxui.securityControls.appPreviewBlacklistOverflow',
+    },
+    integrationPreviewDenylistOverflow: {
+        defaultMessage: 'Read restricted for some integrations: {appNames} +{remainingAppCount} more',
+        description:
+            'Bullet point that summarizes integration preview restriction applied to classification. This variation is used when the list of integrations is longer than the configured threshold',
+        id: 'boxui.securityControls.integrationPreviewDenylistOverflow',
+    },
+    appPreviewWhitelist: {
+        defaultMessage: 'Only select applications can read: {appNames}',
+        description: 'Bullet point that summarizes application preview restriction applied to classification',
+        id: 'boxui.securityControls.appPreviewWhitelist',
+    },
+    appPreviewWhitelistDefault: {
+        defaultMessage: 'Only select applications can read.',
+        description:
+            'Bullet point that summarizes application preview restriction applied to classification when the allowed application list is not provided',
+        id: 'boxui.securityControls.appPreviewWhitelistDefault',
+    },
+    integrationPreviewAllowlist: {
+        defaultMessage: 'Only select integrations can read: {appNames}',
+        description: 'Bullet point that summarizes integration preview restriction applied to classification',
+        id: 'boxui.securityControls.integrationPreviewAllowlist',
+    },
+    integrationPreviewAllowlistDefault: {
+        defaultMessage: 'Only select integrations can read.',
+        description:
+            'Bullet point that summarizes integration preview restriction applied to classification when the allowed integration list is not provided',
+        id: 'boxui.securityControls.integrationPreviewAllowlistDefault',
+    },
+    appPreviewWhitelistOverflow: {
+        defaultMessage: 'Only select applications can read: {appNames} +{remainingAppCount} more',
+        description:
+            'Bullet point that summarizes application preview restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
+        id: 'boxui.securityControls.appPreviewWhitelistOverflow',
+    },
+    integrationPreviewAllowlistOverflow: {
+        defaultMessage: 'Only select integrations can read: {appNames} +{remainingAppCount} more',
+        description:
+            'Bullet point that summarizes integration preview restriction applied to classification. This variation is used when the list of integrations is longer than the configured threshold',
+        id: 'boxui.securityControls.integrationPreviewAllowlistOverflow',
+    },
     appDownloadBlacklist: {
         defaultMessage: 'Download restricted for some applications: {appNames}',
         description: 'Bullet point that summarizes application download restriction applied to classification',

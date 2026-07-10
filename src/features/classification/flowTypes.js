@@ -4,6 +4,7 @@ import type { MessageDescriptor } from 'react-intl';
 
 import {
     LIST_ACCESS_LEVEL,
+    PREVIEW_ACCESS_LEVEL,
     MANAGED_USERS_ACCESS_LEVEL,
     SECURITY_CONTROLS_FORMAT,
     SHARED_LINK_ACCESS_LEVEL,
@@ -30,6 +31,8 @@ type ExternalCollabAccessLevel = $Values<typeof LIST_ACCESS_LEVEL> | null;
 
 type ApplicationAccessLevel = $Values<typeof LIST_ACCESS_LEVEL> | null;
 
+type AppPreviewAccessLevel = $Values<typeof PREVIEW_ACCESS_LEVEL> | null;
+
 type App = {
     displayText: string,
 };
@@ -40,6 +43,11 @@ type ExternalCollabRestriction = {
 
 type ApplicationRestriction = {
     accessLevel?: ApplicationAccessLevel,
+    apps: Array<App>,
+};
+
+type AppPreviewRestriction = {
+    accessLevel?: AppPreviewAccessLevel,
     apps: Array<App>,
 };
 
@@ -70,6 +78,7 @@ type SharedLinkAutoExpirationRestriction = {};
 
 type Controls = {
     app?: ApplicationRestriction,
+    appPreview?: AppPreviewRestriction,
     boxSignRequest?: BoxSignRequestRestriction,
     download?: DownloadRestrictions,
     externalCollab?: ExternalCollabRestriction,
@@ -88,6 +97,7 @@ type MessageItem = {
 export type {
     AiClassificationReason,
     ApplicationRestriction,
+    AppPreviewRestriction,
     Controls,
     ControlsFormat,
     DownloadRestrictions,
