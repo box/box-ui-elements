@@ -7,8 +7,8 @@
  * - Please do NOT modify this file.
  */
 
-const PACKAGE_VERSION = '2.10.2'
-const INTEGRITY_CHECKSUM = 'f5825c521429caf22a4dd13b66e243af'
+const PACKAGE_VERSION = '2.15.0'
+const INTEGRITY_CHECKSUM = '03cb67ac84128e63d7cd722a6e5b7f1e'
 const IS_MOCKED_RESPONSE = Symbol('isMockedResponse')
 const activeClientIds = new Set()
 
@@ -71,11 +71,6 @@ addEventListener('message', async function (event) {
       break
     }
 
-    case 'MOCK_DEACTIVATE': {
-      activeClientIds.delete(clientId)
-      break
-    }
-
     case 'CLIENT_CLOSED': {
       activeClientIds.delete(clientId)
 
@@ -94,6 +89,8 @@ addEventListener('message', async function (event) {
 })
 
 addEventListener('fetch', function (event) {
+  const requestInterceptedAt = Date.now()
+
   // Bypass navigation requests.
   if (event.request.mode === 'navigate') {
     return
@@ -110,23 +107,29 @@ addEventListener('fetch', function (event) {
 
   // Bypass all requests when there are no active clients.
   // Prevents the self-unregistered worked from handling requests
-  // after it's been deleted (still remains active until the next reload).
+  // after it's been terminated (still remains active until the next reload).
   if (activeClientIds.size === 0) {
     return
   }
 
   const requestId = crypto.randomUUID()
-  event.respondWith(handleRequest(event, requestId))
+  event.respondWith(handleRequest(event, requestId, requestInterceptedAt))
 })
 
 /**
  * @param {FetchEvent} event
  * @param {string} requestId
+ * @param {number} requestInterceptedAt
  */
-async function handleRequest(event, requestId) {
+async function handleRequest(event, requestId, requestInterceptedAt) {
   const client = await resolveMainClient(event)
   const requestCloneForEvents = event.request.clone()
-  const response = await getResponse(event, client, requestId)
+  const response = await getResponse(
+    event,
+    client,
+    requestId,
+    requestInterceptedAt,
+  )
 
   // Send back the response clone for the "response:*" life-cycle events.
   // Ensure MSW is active and ready to handle the message, otherwise
@@ -134,8 +137,18 @@ async function handleRequest(event, requestId) {
   if (client && activeClientIds.has(client.id)) {
     const serializedRequest = await serializeRequest(requestCloneForEvents)
 
+    // Omit the body of server-sent event stream responses.
+    // Cloning such responses would prevent client-side stream cancelations
+    // from reaching the original stream (a teed stream only cancels its
+    // source once both of its branches cancel) and would buffer the
+    // entire stream into the unconsumed clone indefinitely.
+    const isEventStreamResponse = response.headers
+      .get('content-type')
+      ?.toLowerCase()
+      .startsWith('text/event-stream')
+
     // Clone the response so both the client and the library could consume it.
-    const responseClone = response.clone()
+    const responseClone = isEventStreamResponse ? null : response.clone()
 
     sendToClient(
       client,
@@ -148,15 +161,17 @@ async function handleRequest(event, requestId) {
             ...serializedRequest,
           },
           response: {
-            type: responseClone.type,
-            status: responseClone.status,
-            statusText: responseClone.statusText,
-            headers: Object.fromEntries(responseClone.headers.entries()),
-            body: responseClone.body,
+            type: response.type,
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries()),
+            body: responseClone ? responseClone.body : null,
           },
         },
       },
-      responseClone.body ? [serializedRequest.body, responseClone.body] : [],
+      responseClone && responseClone.body
+        ? [serializedRequest.body, responseClone.body]
+        : [],
     )
   }
 
@@ -202,9 +217,10 @@ async function resolveMainClient(event) {
  * @param {FetchEvent} event
  * @param {Client | undefined} client
  * @param {string} requestId
+ * @param {number} requestInterceptedAt
  * @returns {Promise<Response>}
  */
-async function getResponse(event, client, requestId) {
+async function getResponse(event, client, requestId, requestInterceptedAt) {
   // Clone the request because it might've been already used
   // (i.e. its body has been read and sent to the client).
   const requestClone = event.request.clone()
@@ -255,6 +271,7 @@ async function getResponse(event, client, requestId) {
       type: 'REQUEST',
       payload: {
         id: requestId,
+        interceptedAt: requestInterceptedAt,
         ...serializedRequest,
       },
     },
