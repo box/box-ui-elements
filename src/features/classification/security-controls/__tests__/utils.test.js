@@ -1,6 +1,8 @@
 import messages from '../messages';
 import appRestrictionsMessageMap from '../appRestrictionsMessageMap';
+import appPreviewRestrictionsMessageMap from '../appPreviewRestrictionsMessageMap';
 import integrationRestrictionsMessageMap from '../integrationRestrictionsMessageMap';
+import integrationPreviewRestrictionsMessageMap from '../integrationPreviewRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from '../downloadRestrictionsMessageMap';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
 import {
@@ -8,12 +10,14 @@ import {
     DOWNLOAD_CONTROL,
     LIST_ACCESS_LEVEL,
     MANAGED_USERS_ACCESS_LEVEL,
+    PREVIEW_ACCESS_LEVEL,
     SHARED_LINK_ACCESS_LEVEL,
 } from '../../constants';
 
 const { DEFAULT, WITH_APP_LIST, WITH_OVERFLOWN_APP_LIST } = APP_RESTRICTION_MESSAGE_TYPE;
 const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
+const { WHITELIST: PREVIEW_WHITELIST, BLACKLIST: PREVIEW_BLACKLIST } = PREVIEW_ACCESS_LEVEL;
 const { OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS } = MANAGED_USERS_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
@@ -59,6 +63,7 @@ describe('features/classification/security-controls/utils', () => {
             ${{ externalCollab: {} }}                                                                            | ${[messages.shortSharing]}                                            | ${'external collab restrictions are present'}
             ${{ download: {} }}                                                                                  | ${[messages.shortDownload]}                                           | ${'download restrictions are present'}
             ${{ app: {} }}                                                                                       | ${[messages.shortApp]}                                                | ${'app restrictions are present'}
+            ${{ appPreview: {} }}                                                                                | ${[messages.shortApp]}                                                | ${'app preview restrictions are present'}
             ${{ watermark: {} }}                                                                                 | ${[messages.shortWatermarking]}                                       | ${'watermark restrictions are present'}
             ${{ boxSignRequest: {} }}                                                                            | ${[messages.shortSign]}                                               | ${'sign restrictions are present'}
             ${{ sharedLinkAutoExpiration: true }}                                                                | ${[messages.shortSharedLinkAutoExpiration]}                           | ${'Shared Link Auto-Expiration restriction is present'}
@@ -119,6 +124,7 @@ describe('features/classification/security-controls/utils', () => {
             ${{ externalCollab: {} }}                                                                            | ${[messages.shortSharing]}                                                    | ${'external collab restrictions are present'}
             ${{ download: {} }}                                                                                  | ${[messages.shortDownload]}                                                   | ${'download restrictions are present'}
             ${{ app: {} }}                                                                                       | ${[messages.shortIntegration]}                                                | ${'integration restrictions are present'}
+            ${{ appPreview: {} }}                                                                                | ${[messages.shortIntegration]}                                                | ${'integration preview restrictions are present'}
             ${{ watermark: {} }}                                                                                 | ${[messages.shortWatermarking]}                                               | ${'watermark restrictions are present'}
             ${{ boxSignRequest: {} }}                                                                            | ${[messages.shortSign]}                                                       | ${'sign restrictions are present'}
             ${{ sharedLinkAutoExpiration: true }}                                                                | ${[messages.shortSharedLinkAutoExpiration]}                                   | ${'Shared Link Auto-Expiration restriction is present'}
@@ -226,6 +232,162 @@ describe('features/classification/security-controls/utils', () => {
             ]);
         });
 
+        test.each([PREVIEW_WHITELIST, PREVIEW_BLACKLIST])(
+            'should include correct message when app preview is restricted by %s and apps list is not provided',
+            listType => {
+                accessPolicy = {
+                    appPreview: {
+                        accessLevel: listType,
+                        apps: [],
+                    },
+                };
+                const expectedMessage = appPreviewRestrictionsMessageMap[listType][DEFAULT];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: '' },
+                        },
+                    },
+                ]);
+            },
+        );
+
+        test.each([PREVIEW_WHITELIST, PREVIEW_BLACKLIST])(
+            'should include correct variable when integration preview is restricted by %s and integrations list is not provided and shouldDisplayAppsAsIntegrations is true',
+            listType => {
+                accessPolicy = {
+                    appPreview: {
+                        accessLevel: listType,
+                        apps: [],
+                    },
+                };
+                const expectedMessage = integrationPreviewRestrictionsMessageMap[listType][DEFAULT];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: '' },
+                        },
+                    },
+                ]);
+            },
+        );
+
+        test('should include allowlist message when app preview is allowlisted and apps list is not provided', () => {
+            accessPolicy = {
+                appPreview: {
+                    accessLevel: PREVIEW_WHITELIST,
+                    apps: [],
+                },
+            };
+
+            expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
+                {
+                    message: {
+                        ...messages.appPreviewWhitelistDefault,
+                        values: { appNames: '' },
+                    },
+                },
+            ]);
+        });
+
+        test('should include allowlist message when integration preview is allowlisted and integrations list is not provided', () => {
+            accessPolicy = {
+                appPreview: {
+                    accessLevel: PREVIEW_WHITELIST,
+                    apps: [],
+                },
+            };
+
+            expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
+                {
+                    message: {
+                        ...messages.integrationPreviewAllowlistDefault,
+                        values: { appNames: '' },
+                    },
+                },
+            ]);
+        });
+
+        test('should include general message when integration preview is restricted but integration names are not provided', () => {
+            accessPolicy = {
+                appPreview: {
+                    accessLevel: PREVIEW_BLACKLIST,
+                    apps: [{ displayText: '' }],
+                },
+            };
+
+            expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
+                {
+                    message: {
+                        ...messages.integrationPreviewRestricted,
+                        values: { appNames: '' },
+                    },
+                },
+            ]);
+        });
+
+        test.each([PREVIEW_WHITELIST, PREVIEW_BLACKLIST])(
+            'should include correct message when app preview is restricted by %s and apps are less than maxAppCount',
+            listType => {
+                accessPolicy = {
+                    appPreview: {
+                        accessLevel: listType,
+                        apps: [{ displayText: 'a' }, { displayText: 'b' }, { displayText: 'c' }],
+                    },
+                };
+                const expectedMessage = appPreviewRestrictionsMessageMap[listType][WITH_APP_LIST];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: 'a, b, c' },
+                        },
+                    },
+                ]);
+            },
+        );
+
+        test.each([PREVIEW_WHITELIST, PREVIEW_BLACKLIST])(
+            'should include correct message and tooltipMessage when app preview is restricted by %s and apps are maxAppCount or more',
+            listType => {
+                accessPolicy = {
+                    appPreview: {
+                        accessLevel: listType,
+                        apps: [
+                            { displayText: 'a' },
+                            { displayText: 'b' },
+                            { displayText: 'c' },
+                            { displayText: 'd' },
+                            { displayText: 'e' },
+                        ],
+                    },
+                };
+                const expectedMessage = appPreviewRestrictionsMessageMap[listType][WITH_OVERFLOWN_APP_LIST];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: 'a, b, c', remainingAppCount: 2 },
+                        },
+                        tooltipMessage: {
+                            ...messages.allAppNames,
+                            values: { appsList: 'a, b, c, d, e' },
+                        },
+                    },
+                ]);
+            },
+        );
+
         test.each([WHITELIST, BLACKLIST])(
             'should include correct message when app download is restricted by %s and apps list is not provided',
             listType => {
@@ -271,6 +433,24 @@ describe('features/classification/security-controls/utils', () => {
                 ]);
             },
         );
+
+        test('should include general message when integration download is restricted but integration names are not provided', () => {
+            accessPolicy = {
+                app: {
+                    accessLevel: BLACKLIST,
+                    apps: [{ displayText: '' }],
+                },
+            };
+
+            expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
+                {
+                    message: {
+                        ...messages.integrationDownloadRestricted,
+                        values: { appNames: '' },
+                    },
+                },
+            ]);
+        });
 
         test.each([WHITELIST, BLACKLIST])(
             'should include correct message when app download is restricted by %s and apps are less than maxAppCount',
