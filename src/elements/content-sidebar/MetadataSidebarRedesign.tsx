@@ -387,6 +387,9 @@ function MetadataSidebarRedesign({
                     {editingTemplate && (
                         <MetadataInstanceEditor
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            createTaxonomyItemsService={
+                                isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
+                            }
                             errorCode={extractErrorCode}
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
@@ -404,9 +407,6 @@ function MetadataSidebarRedesign({
                             setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
                             shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
-                            createTaxonomyItemsService={
-                                isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
-                            }
                             template={editingTemplate}
                             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}

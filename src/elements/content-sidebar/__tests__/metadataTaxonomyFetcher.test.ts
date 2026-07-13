@@ -301,7 +301,10 @@ describe('metadataTaxonomyFetcher', () => {
     });
 });
 
-// TODO: delete whole section during clean up as for now we have to handle both new and old naming convention
+// The backend `taxonomy-node` endpoint is migrating from snake_case (`display_name`) to
+// camelCase (`displayName`). Until the migration completes we validate both response shapes
+// side-by-side; delete this "(old keys naming convention)" block once the snake_case
+// response is fully retired.
 describe('metadataTaxonomyNodeAncestorsFetcher (old keys naming convention)', () => {
     const fileID = '12345';
     const scope = 'global';

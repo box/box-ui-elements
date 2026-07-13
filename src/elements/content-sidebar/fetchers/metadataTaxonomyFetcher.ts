@@ -115,51 +115,83 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
     return hydratedLevels;
 };
 
-// Upstream sources mix snake_case (/options) and camelCase (taxonomy-node), so read both.
-const getDisplayName = (option: MetadataOptionEntry): string => option.display_name || option.displayName || '';
+/**
+ * Shape of a taxonomy node as it arrives from the backend.
+ *
+ * The `/options` endpoint currently emits snake_case (`display_name`, `has_children`)
+ * while the `taxonomy-node` endpoint has migrated to camelCase (`displayName`,
+ * `hasChildren`). Until both endpoints converge on camelCase we accept either
+ * spelling on every field. See `getDisplayName` / `getHasChildren` for the
+ * normalization logic.
+ *
+ * This local type intentionally supersedes the untyped Flow `MetadataOptionEntry`
+ * for taxonomy code — it documents which fields we actually consume.
+ */
+type TaxonomyEntry = {
+    id: string;
+    // API may return level as number ('1') or string ('"1"'); callers coerce.
+    level: number | string;
+    display_name?: string;
+    displayName?: string;
+    has_children?: boolean;
+    hasChildren?: boolean;
+    selectable?: boolean;
+    ancestors?: Array<TaxonomyEntryAncestor | string | null | undefined>;
+};
 
-const mapAncestors = (ancestors: MetadataOptionEntry['ancestors']): TaxonomyAncestor[] => {
+type TaxonomyEntryAncestor = {
+    id: string;
+    level: number | string;
+    display_name?: string;
+    displayName?: string;
+};
+
+const getDisplayName = (entry: TaxonomyEntry | TaxonomyEntryAncestor): string =>
+    entry.display_name || entry.displayName || '';
+
+const mapAncestors = (ancestors: TaxonomyEntry['ancestors']): TaxonomyAncestor[] => {
     const list = ancestors ?? [];
     // Bare-string ancestor ids lack the data needed to render a breadcrumb.
     return list
-        .filter(ancestor => !!ancestor && typeof ancestor === 'object')
+        .filter((ancestor): ancestor is TaxonomyEntryAncestor => !!ancestor && typeof ancestor === 'object')
         .map(ancestor => ({
             id: ancestor.id,
-            displayName: ancestor.display_name || ancestor.displayName || '',
+            displayName: getDisplayName(ancestor),
             level: Number(ancestor.level),
         }));
 };
 
-// Prefers backend `has_children`; falls back to depth. `forceLeaf` disables drill-down.
-const getHasChildren = (option: MetadataOptionEntry, maxLevel?: number, forceLeaf?: boolean): boolean => {
-    if (forceLeaf) {
+/**
+ * Prefers the backend `has_children` / `hasChildren` flag when present, otherwise
+ * infers from taxonomy depth. In single-level picker mode every node is treated
+ * as a leaf so the drill-down chevron never appears.
+ */
+const getHasChildren = (entry: TaxonomyEntry, maxLevel: number, isSingleLevelMode: boolean): boolean => {
+    if (isSingleLevelMode) {
         return false;
     }
-    if (typeof option.has_children === 'boolean') {
-        return option.has_children;
+    if (typeof entry.has_children === 'boolean') {
+        return entry.has_children;
     }
-    if (typeof option.hasChildren === 'boolean') {
-        return option.hasChildren;
+    if (typeof entry.hasChildren === 'boolean') {
+        return entry.hasChildren;
     }
-    return maxLevel != null ? Number(option.level) < maxLevel : false;
+    return maxLevel > 0 ? Number(entry.level) < maxLevel : false;
 };
 
 // Always producing `ancestors` lets one mapper satisfy both browse (optional) and search (required).
 const mapOption = (
-    option: MetadataOptionEntry,
-    maxLevel?: number,
-    forceLeaf?: boolean,
+    entry: TaxonomyEntry,
+    maxLevel: number,
+    isSingleLevelMode: boolean,
 ): TaxonomyNode & TaxonomySearchResult => ({
-    id: option.id,
-    displayName: getDisplayName(option),
-    level: Number(option.level),
-    selectable: !!option.selectable,
-    hasChildren: getHasChildren(option, maxLevel, forceLeaf),
-    ancestors: mapAncestors(option.ancestors),
+    id: entry.id,
+    displayName: getDisplayName(entry),
+    level: Number(entry.level),
+    selectable: !!entry.selectable,
+    hasChildren: getHasChildren(entry, maxLevel, isSingleLevelMode),
+    ancestors: mapAncestors(entry.ancestors),
 });
-
-const getMaxLevel = (levels?: Level[]): number | undefined =>
-    levels && levels.length > 0 ? Math.max(...levels.map(({ level }) => level)) : undefined;
 
 export type TaxonomyFieldConfig = {
     levels?: Level[];
@@ -180,31 +212,25 @@ export const createTaxonomyItemsService =
         resolveField?: (templateKey: string, fieldKey: string) => TaxonomyFieldConfig | undefined,
     ): CreateTaxonomyItemsService =>
     ({ scope, templateKey, fieldKey }): TaxonomyItemsService => {
-        const fieldConfig = resolveField?.(templateKey, fieldKey);
-        const maxLevel = getMaxLevel(fieldConfig?.levels);
-        const selectableLevels = fieldConfig?.selectableLevels;
-        const singleSelectableLevel =
-            selectableLevels && selectableLevels.length === 1 ? Number(selectableLevels[0]) : undefined;
-        const isSingleLevelPickerMode = singleSelectableLevel != null;
+        // Defaults keep the rest of the logic free of `?.` / `!= null` noise.
+        const { levels = [], selectableLevels = [] } = resolveField?.(templateKey, fieldKey) ?? {};
+        const maxLevel = levels.length > 0 ? Math.max(...levels.map(({ level }) => level)) : 0;
+        const isSingleLevelMode = selectableLevels.length === 1;
+        const singleSelectableLevel = isSingleLevelMode ? Number(selectableLevels[0]) : undefined;
         // Multi-level taxonomies need a `level` filter or /options mixes branches.
-        const isMultiLevelTaxonomy = maxLevel != null && maxLevel > 1;
+        const isMultiLevelTaxonomy = maxLevel > 1;
 
         // Tracks levels of returned nodes so drill-down can request `parentLevel + 1`.
         const nodeLevelById = new Map<string, number>();
 
-        const rememberLevels = (entries: MetadataOptionEntry[] | undefined): void => {
-            if (!entries) {
-                return;
-            }
+        const rememberLevels = (entries: TaxonomyEntry[]): void => {
             for (const entry of entries) {
                 if (entry?.id != null && entry.level != null) {
                     nodeLevelById.set(String(entry.id), Number(entry.level));
                 }
-                if (Array.isArray(entry?.ancestors)) {
-                    for (const ancestor of entry.ancestors) {
-                        if (ancestor && typeof ancestor === 'object' && ancestor.id != null && ancestor.level != null) {
-                            nodeLevelById.set(String(ancestor.id), Number(ancestor.level));
-                        }
+                for (const ancestor of entry?.ancestors ?? []) {
+                    if (ancestor && typeof ancestor === 'object' && ancestor.id != null && ancestor.level != null) {
+                        nodeLevelById.set(String(ancestor.id), Number(ancestor.level));
                     }
                 }
             }
@@ -215,7 +241,7 @@ export const createTaxonomyItemsService =
                 return singleSelectableLevel ?? 1;
             }
             const parentLevel = nodeLevelById.get(parentId);
-            return parentLevel != null ? parentLevel + 1 : 1;
+            return parentLevel !== undefined ? parentLevel + 1 : 1;
         };
 
         const getNodes = async (
@@ -223,9 +249,9 @@ export const createTaxonomyItemsService =
             { marker, signal }: FetchParams,
         ): Promise<FetchResponse<TaxonomyNode>> => {
             // Single-level picker is flat — defensively ignore drill-down.
-            const effectiveParentId = isSingleLevelPickerMode ? null : parentId;
+            const effectiveParentId = isSingleLevelMode ? null : parentId;
             const childLevel = getChildLevel(effectiveParentId);
-            const shouldFilterByLevel = isMultiLevelTaxonomy || isSingleLevelPickerMode;
+            const shouldFilterByLevel = isMultiLevelTaxonomy || isSingleLevelMode;
             const response = await api
                 .getMetadataAPI(false)
                 .getMetadataOptions(fileId, scope, templateKey, fieldKey, childLevel, {
@@ -235,13 +261,11 @@ export const createTaxonomyItemsService =
                     signal,
                 });
 
-            const entries = response.entries ?? [];
+            const entries: TaxonomyEntry[] = response.entries ?? [];
             rememberLevels(entries);
 
             return {
-                entries: entries.map((option: MetadataOptionEntry) =>
-                    mapOption(option, maxLevel, isSingleLevelPickerMode),
-                ),
+                entries: entries.map(entry => mapOption(entry, maxLevel, isSingleLevelMode)),
                 next_marker: response.next_marker ?? undefined,
             };
         };
@@ -260,13 +284,11 @@ export const createTaxonomyItemsService =
                     signal,
                 });
 
-            const entries = response.entries ?? [];
+            const entries: TaxonomyEntry[] = response.entries ?? [];
             rememberLevels(entries);
 
             return {
-                entries: entries.map((option: MetadataOptionEntry) =>
-                    mapOption(option, maxLevel, isSingleLevelPickerMode),
-                ),
+                entries: entries.map(entry => mapOption(entry, maxLevel, isSingleLevelMode)),
                 next_marker: response.next_marker ?? undefined,
             };
         };
