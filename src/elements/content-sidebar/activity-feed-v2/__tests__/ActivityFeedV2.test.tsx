@@ -200,6 +200,19 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         expect(screen.getByTestId('activity-feed-editor')).toBeVisible();
     });
 
+    test('should tag the feed wrapper with resin feature and fileid', () => {
+        const { container } = render(
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[] as ActivityFeedV2Props['feedItems']}
+                file={{ id: '12345' }}
+            />,
+        );
+
+        expect(container.firstChild).toHaveAttribute('data-resin-feature', 'activityfeedv2');
+        expect(container.firstChild).toHaveAttribute('data-resin-fileid', '12345');
+    });
+
     test('should not render the list when feedItems is undefined', () => {
         render(<ActivityFeedV2 currentUser={mockCurrentUser} />);
         expect(screen.queryByTestId('activity-feed-list')).not.toBeInTheDocument();
@@ -1213,9 +1226,10 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         };
 
         test('should forward create-mode props to TaskModalV2', () => {
-            renderFeed({ createTask: jest.fn(), onTaskUpdate: jest.fn() });
+            renderFeed({ createTask: jest.fn(), file: { id: '12345' }, onTaskUpdate: jest.fn() });
             expect(lastTaskModalProps.mode).toBeUndefined();
             expect(lastTaskModalProps.editingTask).toBeUndefined();
+            expect(lastTaskModalProps.fileId).toBe('12345');
             expect(lastTaskModalProps.taskType).toBe('APPROVAL');
             expect(lastTaskModalProps.isOpen).toBe(false);
         });
