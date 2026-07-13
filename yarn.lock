@@ -1179,20 +1179,20 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^2.2.11":
-  version "2.2.11"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.2.11.tgz#6a4875e0c1f3ba3593887ad6694e2b74162853d8"
-  integrity sha512-ouF4cPC2kzqgVJ9hnMOqtOy+SDd7MMec/igg0EqzGXXGpo8vuIsl3M2zk4qXHS9kTXXDbK+Xq0wb7WMfCj+ccA==
+"@box/metadata-editor@^2.2.28":
+  version "2.2.28"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.2.28.tgz#4e0f12a0d2c0797855f0beb87fafdea8de5fc44b"
+  integrity sha512-xa49ovqe7ePMnZh+cq1B6kkCQCq55TQO5+BaB/pits+EPOFnZ5CawZYzzwb8PXIp/kWp2f2yw0D9kSqYnkv6NQ==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
 
-"@box/metadata-taxonomy-picker@^3.1.8":
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.1.8.tgz#d72f6df53c69b75f9e3fddbdaaca39858d43aade"
-  integrity sha512-ahlkefldWk1OlMtbD3i8b7yrPgHDkP2IBXvcFC3R+ckSsBjxa2amo63C0lViOHUc9vjZWrutY7EqeKUtTJ7OGw==
+"@box/metadata-taxonomy-picker@^3.1.25":
+  version "3.1.25"
+  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.1.25.tgz#ff128f082086ec18b4e24b76b786c915ebaf3064"
+  integrity sha512-IfcUZEhtta/2nkzo0vilgvn9hp44xdNldpw03Ska+s5Jpo3kZh0CzzooRoMd/w9nhYHn3pW2/U6LmR/X37noEw==
 
 "@box/metadata-template-browser@^2.1.7":
   version "2.1.7"
@@ -1752,7 +1752,7 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.6.0.tgz#5b0cb058cc13d9c92d4e561d3538807fa5127c95"
   integrity sha512-D9B0/3vNg44ZeWbYMpBoXqNP4j6eQD5vNwIlGAuFRRzK/WtT/jvDQW3Bi9kkf3PMDMlM7Yi+73VLUsn5bJcl8A==
 
-"@floating-ui/core@^1.7.2", "@floating-ui/core@^1.7.5":
+"@floating-ui/core@^1.7.5":
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.7.5.tgz#d4af157a03330af5a60e69da7a4692507ada0622"
   integrity sha512-1Ih4WTWyw0+lKyFMcBHGbb5U5FtuHJuujoyyr5zTaWS5EYMeT6Jb2AuDeftsCsEuchO+mM2ij5+q9crhydzLhQ==
@@ -1774,7 +1774,7 @@
   dependencies:
     "@floating-ui/dom" "^1.7.2"
 
-"@floating-ui/utils@^0.2.10", "@floating-ui/utils@^0.2.11":
+"@floating-ui/utils@^0.2.11":
   version "0.2.11"
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.11.tgz#a269e055e40e2f45873bae9d1a2fdccbd314ea3f"
   integrity sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==
