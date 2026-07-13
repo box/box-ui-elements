@@ -40,6 +40,7 @@ type SharedProps = {
     error?: ElementsXhrError;
     fetchAvatarUrls: (contacts: UserContactType[]) => Promise<FetchedAvatarUrls>;
     fetchUsers: (query: string) => Promise<UserContactType[]>;
+    fileId?: string;
     isOpen: boolean;
     onClose: () => void;
     onSubmitError: (error: ElementsXhrError) => void;
@@ -89,6 +90,7 @@ const TaskModalV2 = ({
     error,
     fetchAvatarUrls,
     fetchUsers,
+    fileId,
     isOpen,
     onClose,
     onSubmitError,
@@ -174,6 +176,8 @@ const TaskModalV2 = ({
             <Modal.Content
                 className="bcs-NewTaskModal"
                 data-resin-component="taskmodalv2"
+                data-resin-feature="activityfeedv2"
+                data-resin-fileid={fileId}
                 data-testid="task-modal-v2"
                 size="medium"
             >

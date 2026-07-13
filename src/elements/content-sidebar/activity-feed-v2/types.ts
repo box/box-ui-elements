@@ -81,6 +81,7 @@ export type TransformedFeedItem =
 export type ActivityFeedV2File = {
     extension?: string;
     file_version?: { id: string };
+    id?: string;
 };
 
 export type ViewerHandle = {
