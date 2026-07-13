@@ -2,6 +2,7 @@ import * as React from 'react';
 import { mount, MountRendererProps, ReactWrapper } from 'enzyme';
 
 import Portal from '../Portal';
+import PortalContainerContext from '../../../common/PortalContainerContext';
 
 describe('components/portal/Portal', () => {
     let attachTo: HTMLElement | null;
@@ -103,6 +104,40 @@ describe('components/portal/Portal', () => {
         }
         const portal = document.querySelector('[data-portal]');
         expect(portal && portal.textContent).toEqual('boo');
+    });
+
+    test('should render into the PortalContainerContext container when no container prop is given', () => {
+        const contextContainer = document.createElement('div');
+        contextContainer.setAttribute('data-context-container', '');
+        document.body.appendChild(contextContainer);
+
+        mountToBody(
+            <PortalContainerContext.Provider value={contextContainer}>
+                <Portal>text</Portal>
+            </PortalContainerContext.Provider>,
+        );
+
+        expect(contextContainer.querySelector('[data-portal]')).toBeTruthy();
+        document.body.removeChild(contextContainer);
+    });
+
+    test('should prefer an explicit container prop over the PortalContainerContext', () => {
+        const contextContainer = document.createElement('div');
+        const propContainer = document.createElement('div');
+        propContainer.setAttribute('data-prop-container', '');
+        document.body.appendChild(contextContainer);
+        document.body.appendChild(propContainer);
+
+        mountToBody(
+            <PortalContainerContext.Provider value={contextContainer}>
+                <Portal container={propContainer}>text</Portal>
+            </PortalContainerContext.Provider>,
+        );
+
+        expect(propContainer.querySelector('[data-portal]')).toBeTruthy();
+        expect(contextContainer.querySelector('[data-portal]')).toBeFalsy();
+        document.body.removeChild(contextContainer);
+        document.body.removeChild(propContainer);
     });
 
     test('should used a passed in document if provided', () => {

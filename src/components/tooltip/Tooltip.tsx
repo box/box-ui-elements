@@ -5,6 +5,7 @@ import getProp from 'lodash/get';
 import TetherComponent, { type TetherProps } from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
+import PortalContainerContext from '../../common/PortalContainerContext';
 import CloseButton from './CloseButton';
 
 import './Tooltip.scss';
@@ -115,6 +116,10 @@ type State = {
 };
 
 class Tooltip extends React.Component<TooltipProps, State> {
+    static contextType = PortalContainerContext;
+
+    context!: React.ContextType<typeof PortalContainerContext>;
+
     static defaultProps: DefaultTooltipProps = {
         constrainToScrollParent: false,
         constrainToWindow: true,
@@ -307,7 +312,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
             }
         }
 
-        const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
+        // Explicit prop wins, then the context container, then document.body.
+        const contextContainer = this.context instanceof HTMLElement ? this.context : null;
+        const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : contextContainer ?? document.body;
 
         const classes = classNames('tooltip', 'bdl-Tooltip', className, {
             'is-callout': theme === TooltipTheme.CALLOUT,
@@ -321,12 +328,16 @@ class Tooltip extends React.Component<TooltipProps, State> {
         > & {
             offset?: string;
             className?: string;
+            bodyElement?: HTMLElement;
         } = {
             attachment: tetherPosition.attachment,
             classPrefix: 'tooltip',
             constraints,
             targetAttachment: tetherPosition.targetAttachment,
+            // renderElementTo controls react-tether's mount; bodyElement controls where
+            // Tether's positioning re-parents the element. Set both to keep it in place.
             renderElementTo: bodyEl,
+            bodyElement: bodyEl,
         };
 
         if (tetherElementClassName) {

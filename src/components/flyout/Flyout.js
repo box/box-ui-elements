@@ -6,6 +6,7 @@ import uniqueId from 'lodash/uniqueId';
 import { KEYS } from '../../constants';
 
 import FlyoutContext from './FlyoutContext';
+import PortalContainerContext from '../../common/PortalContainerContext';
 
 import './Flyout.scss';
 
@@ -181,6 +182,8 @@ type State = {
 type Props = FlyoutProps;
 
 class Flyout extends React.Component<Props, State> {
+    static contextType = PortalContainerContext;
+
     static defaultProps = {
         className: '',
         closeOnClick: true,
@@ -485,6 +488,15 @@ class Flyout extends React.Component<Props, State> {
                 default:
                 // no default
             }
+        }
+
+        // Explicit context container wins, else react-tether defaults to document.body.
+        // renderElementTo controls react-tether's initial mount; bodyElement controls
+        // where Tether's positioning engine re-parents the element. Both must point at
+        // the container or Tether moves the element back to document.body.
+        if (this.context instanceof HTMLElement) {
+            tetherProps.renderElementTo = this.context;
+            tetherProps.bodyElement = this.context;
         }
 
         return (
