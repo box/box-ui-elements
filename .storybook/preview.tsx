@@ -1,4 +1,5 @@
 import { boxLanguages } from '@box/languages';
+import { addWindowFocusTracking } from '@react-aria/interactions';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import '../src/styles/variables';
@@ -12,6 +13,10 @@ global.FILE_ID = global.FILE_ID || '415542803939';
 global.FOLDER_ID = global.FOLDER_ID || '69083462919';
 // NOTE: The token used is a readonly token accessing public data in a demo enterprise. DO NOT PUT A WRITE TOKEN
 global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
+
+// Initialize react-aria focus tracking before Storybook patches HTMLElement.prototype.focus,
+// which causes react-aria to throw "TypeError: Illegal invocation" and crash the component.
+addWindowFocusTracking();
 
 initialize({
     serviceWorker: {
