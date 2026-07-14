@@ -46,7 +46,12 @@ jest.mock('@box/user-selector', () => ({
     },
 }));
 
-type DatePickerMockProps = { label: React.ReactNode; value?: unknown; minValue?: unknown };
+type DatePickerMockProps = {
+    'data-resin-target'?: string;
+    label: React.ReactNode;
+    minValue?: unknown;
+    value?: unknown;
+};
 
 let lastDatePickerProps: DatePickerMockProps = { label: null };
 
@@ -240,6 +245,11 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskFormV2', (
     test('passes today as the DatePicker minValue for new tasks', () => {
         renderForm();
         expect(lastDatePickerProps.minValue).toBeDefined();
+    });
+
+    test('tags the DatePicker with the task datepicker resin target', () => {
+        renderForm();
+        expect(lastDatePickerProps['data-resin-target']).toBe('activityfeed-taskdatepicker');
     });
 
     test('omits the DatePicker minValue when editing a task whose due date is already in the past', () => {
