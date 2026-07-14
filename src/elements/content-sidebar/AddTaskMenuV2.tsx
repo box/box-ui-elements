@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { DropdownMenu, TriggerButton } from '@box/blueprint-web';
 import { ApprovalTask } from '@box/blueprint-web-assets/icons/Fill';
 import { Tasks } from '@box/blueprint-web-assets/icons/MediumFilled';
+import PortalContainerContext from '../../common/PortalContainerContext';
 import messages from './messages';
 import { TASK_TYPE_APPROVAL, TASK_TYPE_GENERAL } from '../../constants';
 import type { TaskType } from '../../common/types/tasks';
@@ -18,6 +19,7 @@ export interface AddTaskMenuV2Props {
 
 const AddTaskMenuV2: React.FC<AddTaskMenuV2Props> = ({ isDisabled, onMenuItemClick, setAddTaskButtonRef }) => {
     const { formatMessage } = useIntl();
+    const portalContainer = React.useContext(PortalContainerContext);
 
     const [isOpen, setIsOpen] = React.useState(false);
 
@@ -46,6 +48,7 @@ const AddTaskMenuV2: React.FC<AddTaskMenuV2Props> = ({ isDisabled, onMenuItemCli
             <DropdownMenu.Content
                 align="end"
                 className="bcs-AddTaskMenu-v-two"
+                container={portalContainer ?? undefined}
                 onCloseAutoFocus={(event: Event) => {
                     // Prevent focus from returning to the trigger button when the menu closes.
                     // This allows the Modal (which was just opened) to keep focus on its input field

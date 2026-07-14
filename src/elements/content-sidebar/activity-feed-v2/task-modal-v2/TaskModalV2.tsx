@@ -5,6 +5,7 @@ import type { MessageDescriptor } from 'react-intl';
 import { Modal } from '@box/blueprint-web';
 import type { FetchedAvatarUrls, UserContactType } from '@box/user-selector';
 
+import PortalContainerContext from '../../../../common/PortalContainerContext';
 import { TASK_COMPLETION_RULE_ALL, TASK_EDIT_MODE_EDIT, TASK_TYPE_GENERAL } from '../../../../constants';
 
 import type { ElementsXhrError } from '../../../../common/types/api';
@@ -105,6 +106,7 @@ const TaskModalV2 = ({
     const editTask = isEditMode ? editProps.editTask : undefined;
 
     const { formatMessage } = useIntl();
+    const portalContainer = React.useContext(PortalContainerContext);
     const titleMessage = getTitleMessage(taskType, editMode);
 
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -175,6 +177,7 @@ const TaskModalV2 = ({
         <Modal open={isOpen} onOpenChange={handleOpenChange}>
             <Modal.Content
                 className="bcs-NewTaskModal"
+                container={portalContainer instanceof HTMLElement ? portalContainer : undefined}
                 data-resin-component="taskmodalv2"
                 data-resin-feature="activityfeedv2"
                 data-resin-fileid={fileId}

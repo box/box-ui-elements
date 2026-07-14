@@ -10,6 +10,7 @@ import noop from 'lodash/noop';
 import flow from 'lodash/flow';
 import { TooltipProvider } from '@box/blueprint-web';
 import type { RouterHistory } from 'react-router-dom';
+import PortalContainerContext from '../../common/PortalContainerContext';
 import API from '../../api';
 import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
@@ -136,6 +137,8 @@ const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 class ContentSidebar extends React.Component<Props, State> {
+    static contextType = PortalContainerContext;
+
     props: Props;
 
     state: State = { isLoading: true };
@@ -423,7 +426,7 @@ class ContentSidebar extends React.Component<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: any)}>
                     <NavRouter history={history} initialEntries={[initialPath]} features={features}>
-                        <TooltipProvider>
+                        <TooltipProvider container={this.context instanceof HTMLElement ? this.context : undefined}>
                             <Sidebar
                                 activitySidebarProps={activitySidebarProps}
                                 additionalTabs={additionalTabs}
