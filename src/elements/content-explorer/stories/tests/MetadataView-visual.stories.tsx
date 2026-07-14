@@ -321,9 +321,9 @@ const meta: Meta<typeof ContentExplorer> = {
             handlers: [
                 // Note that the Metadata API backend normally handles the sorting. The mocks below simulate the sorting for specific cases, but may not 100% accurately reflect the backend behavior.
                 http.post(`${DEFAULT_HOSTNAME_API}/2.0/metadata_queries/execute_read`, async ({ request }) => {
-                    const body = await request.clone().json();
-                    const orderByDirection = body.order_by[0].direction;
-                    const orderByFieldKey = body.order_by[0].field_key;
+                    const { order_by } = (await request.clone().json()) as { order_by };
+                    const orderByDirection = order_by[0].direction;
+                    const orderByFieldKey = order_by[0].field_key;
 
                     // Hardcoded case for sorting by industry
                     if (orderByFieldKey === `industry` && orderByDirection === 'ASC') {

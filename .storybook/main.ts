@@ -5,8 +5,11 @@ import type { Configuration } from 'webpack';
 
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
-import { DefinePlugin } from 'webpack';
-import { translationDependencies } from '../scripts/i18n.config';
+import _webpack from 'webpack';
+import _i18n from '../scripts/i18n.config.js';
+
+const { DefinePlugin } = _webpack;
+const { translationDependencies } = _i18n;
 
 const language = process.env.LANGUAGE;
 const version = process.env.NODE_ENV === 'production' ? 'demo' : 'dev';

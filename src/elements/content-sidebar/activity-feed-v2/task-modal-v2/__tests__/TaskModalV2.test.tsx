@@ -96,6 +96,7 @@ type RenderModalOptions = {
     editingAssignees?: TaskAssignee[];
     editingTask?: TaskNew | null;
     error?: ElementsXhrError;
+    fileId?: string;
     isOpen?: boolean;
     taskType?: TaskNew['task_type'];
 };
@@ -309,9 +310,12 @@ describe('elements/content-sidebar/activity-feed-v2/task-modal-v2/TaskModalV2', 
         expect(screen.getByRole('button', { name: /cancel/i })).toBeDisabled();
     });
 
-    test('tags the modal content with data-resin-component=taskmodalv2', () => {
-        renderModal();
-        expect(screen.getByTestId('task-modal-v2')).toHaveAttribute('data-resin-component', 'taskmodalv2');
+    test('tags the modal content with resin component, feature, and fileid', () => {
+        renderModal({ fileId: '12345' });
+        const modalContent = screen.getByTestId('task-modal-v2');
+        expect(modalContent).toHaveAttribute('data-resin-component', 'taskmodalv2');
+        expect(modalContent).toHaveAttribute('data-resin-feature', 'activityfeedv2');
+        expect(modalContent).toHaveAttribute('data-resin-fileid', '12345');
     });
 
     test('tags the Cancel and Create buttons with data-resin-target and data-target-id', () => {
