@@ -107,6 +107,7 @@ describe('MetadataSidebarRedesign taxonomy picker wiring', () => {
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
             templateInstances: [taxonomyTemplateInstance],
             templates: mockTemplates,
             errorMessage: null,
