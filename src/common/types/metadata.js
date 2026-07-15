@@ -49,7 +49,8 @@ type MetadataTemplate = {
     hidden?: boolean,
     id: string,
     isHidden?: boolean,
-    scope: string, // V2
+    namespace?: string, // MIGRATION/FINAL modes
+    scope: string, // V2; absent for namespace-only templates in FINAL mode
     templateKey: string, // V3
 };
 
@@ -115,8 +116,9 @@ type MetadataInstance = {
 type MetadataInstanceV2 = {
     $canEdit: boolean,
     $id: string,
+    $namespace?: string, // MIGRATION/FINAL modes
     $parent: string,
-    $scope: string,
+    $scope?: string, // absent for namespace-only instances in MIGRATION/FINAL modes
     $template: string,
     $type: string,
     $typeVersion: number,
@@ -214,7 +216,8 @@ type MetadataTemplateInstance = {
     hidden?: boolean,
     id: string,
     fields: MetadataTemplateInstanceField[],
-    scope: string,
+    namespace?: string,
+    scope?: string,
     templateKey: string,
     type: string,
 };
