@@ -57,6 +57,8 @@ interface DataFetcher {
         JSONPatch: Array<Object>,
         successCallback: () => void,
     ) => Promise<void>;
+    /** Re-fetches metadata (templates + instances) using the current file. */
+    refetchMetadata: () => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
@@ -275,7 +277,9 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templates.find(template => template.templateKey === templateKey && template.scope);
+            const templateInstance = templates.find(
+                template => template.templateKey === templateKey && (template.scope || template.namespace),
+            );
             const fields = templateInstance?.fields || [];
 
             return fields.map(field => {
@@ -324,12 +328,19 @@ function useSidebarMetadataFetcher(
         }
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
+    const refetchMetadata = React.useCallback(() => {
+        if (file) {
+            fetchMetadata(file);
+        }
+    }, [file, fetchMetadata]);
+
     return {
         clearExtractError: () => setExtractErrorCode(null),
         extractSuggestions,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
+        refetchMetadata,
         extractErrorCode,
         errorMessage,
         file,

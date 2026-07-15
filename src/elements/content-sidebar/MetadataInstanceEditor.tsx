@@ -115,11 +115,11 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
             isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
-            isBoundingBoxEnabled={isBoundingBoxEnabled}
             onSelectMetadataField={onSelectMetadataField}
             selectedMetadataFieldId={selectedMetadataFieldId}
             customRef={customRef}
             trackEvent={trackEvent}
+            isBoundingBoxEnabled={isBoundingBoxEnabled}
         />
     );
 };

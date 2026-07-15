@@ -171,6 +171,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
     });
 
@@ -197,6 +198,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -301,6 +303,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -326,6 +329,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.ERROR,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
@@ -348,6 +352,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.LOADING,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -394,6 +399,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -418,6 +424,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -444,6 +451,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent({}, { 'metadata.deleteConfirmationModalCheckbox.enabled': true });
@@ -474,6 +482,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -502,6 +511,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
                 status: STATUS.SUCCESS,
                 file: mockFile,
                 extractErrorCode: null,
+                refetchMetadata: jest.fn(),
             });
 
             renderComponent();
@@ -523,6 +533,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         const filteredTemplateIds = [mockVisibleTemplateInstance.id];
@@ -547,6 +558,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         const filteredTemplateIds = ['non-existing-template-id'];
@@ -748,6 +760,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
                 status: STATUS.SUCCESS,
                 file: mockFile,
                 extractErrorCode: null,
+                refetchMetadata: jest.fn(),
             });
         };
 
