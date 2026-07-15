@@ -13,6 +13,7 @@ import {
     ERROR_CODE_FETCH_SKILLS,
     ERROR_CODE_UPDATE_METADATA,
     ERROR_CODE_UPDATE_SKILLS,
+    METADATA_NAMESPACE_GLOBAL,
     METADATA_SCOPE_GLOBAL,
     METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
     METADATA_TEMPLATE_CLASSIFICATION,
@@ -162,6 +163,7 @@ describe('api/Metadata', () => {
             expect(metadata.getCustomPropertiesTemplate()).toEqual({
                 id: expect.stringContaining('metadata_template_'),
                 scope: METADATA_SCOPE_GLOBAL,
+                namespace: METADATA_NAMESPACE_GLOBAL,
                 templateKey: METADATA_TEMPLATE_PROPERTIES,
                 hidden: false,
                 fields: [],
