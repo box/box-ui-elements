@@ -18,6 +18,10 @@ import {
     DEFAULT_API_OPTIONS,
     getFileId,
     getDataTransferItemId,
+    clipboardHasFiles,
+    getFilesFromClipboard,
+    generateClipboardFileName,
+    isEditablePasteTarget,
 } from '../uploads';
 
 const mockFile = { name: 'hi' };
@@ -417,6 +421,139 @@ describe('util/uploads', () => {
             }));
             browser.isMobileSafari = jest.fn().mockReturnValueOnce(mobileSafari);
             expect(isMultiputSupported()).toEqual(expected);
+        });
+    });
+
+    describe('clipboardHasFiles()', () => {
+        test('should return false when clipboardData is null', () => {
+            expect(clipboardHasFiles({ clipboardData: null })).toBe(false);
+        });
+
+        test('should return true when clipboardData.files is not empty', () => {
+            const file = new File(['x'], 'photo.png', { type: 'image/png' });
+            expect(clipboardHasFiles({ clipboardData: { files: [file], items: [] } })).toBe(true);
+        });
+
+        test('should return true when a clipboardData item has kind file', () => {
+            const items = [
+                { kind: 'string', type: 'text/plain' },
+                { kind: 'file', type: 'image/png' },
+            ];
+            expect(clipboardHasFiles({ clipboardData: { files: [], items } })).toBe(true);
+        });
+
+        test('should return false when clipboard has only non-file items', () => {
+            const items = [{ kind: 'string', type: 'text/plain' }];
+            expect(clipboardHasFiles({ clipboardData: { files: [], items } })).toBe(false);
+        });
+    });
+
+    describe('getFilesFromClipboard()', () => {
+        test('should return an empty array when clipboardData is null', () => {
+            expect(getFilesFromClipboard({ clipboardData: null })).toEqual([]);
+        });
+
+        test('should extract from clipboardData.files first', () => {
+            const file = new File(['x'], 'photo.png', { type: 'image/png' });
+            const items = [{ kind: 'file', getAsFile: jest.fn() }];
+            const result = getFilesFromClipboard({ clipboardData: { files: [file], items } });
+
+            expect(result).toEqual([file]);
+            expect(items[0].getAsFile).not.toHaveBeenCalled();
+        });
+
+        test('should fall back to items getAsFile when files is empty', () => {
+            const file = new File(['x'], 'photo.png', { type: 'image/png' });
+            const items = [
+                { kind: 'string', type: 'text/plain', getAsFile: () => null },
+                { kind: 'file', type: 'image/png', getAsFile: () => file },
+            ];
+            const result = getFilesFromClipboard({ clipboardData: { files: [], items } });
+
+            expect(result).toEqual([file]);
+        });
+
+        test('should skip non-file items in the fallback path', () => {
+            const items = [{ kind: 'string', type: 'text/plain', getAsFile: () => null }];
+            expect(getFilesFromClipboard({ clipboardData: { files: [], items } })).toEqual([]);
+        });
+
+        test('should skip items whose getAsFile returns null', () => {
+            const items = [{ kind: 'file', type: 'image/png', getAsFile: () => null }];
+            expect(getFilesFromClipboard({ clipboardData: { files: [], items } })).toEqual([]);
+        });
+    });
+
+    describe('generateClipboardFileName()', () => {
+        beforeEach(() => {
+            jest.useFakeTimers().setSystemTime(new Date('2026-07-15T09:08:07'));
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        test('should preserve a meaningful file name', () => {
+            const file = new File(['x'], 'quarterly-report.pdf', { type: 'application/pdf' });
+            expect(generateClipboardFileName(file)).toBe('quarterly-report.pdf');
+        });
+
+        test('should rename a generic image name using its extension', () => {
+            const file = new File(['x'], 'image.png', { type: 'image/png' });
+            expect(generateClipboardFileName(file)).toBe('Pasted Image 2026-07-15 at 09.08.07.png');
+        });
+
+        test('should rename a generic image name with no extension using the MIME type', () => {
+            const file = new File(['x'], 'image', { type: 'image/jpeg' });
+            expect(generateClipboardFileName(file)).toBe('Pasted Image 2026-07-15 at 09.08.07.jpeg');
+        });
+
+        test('should rename a nameless file using the MIME type', () => {
+            const file = new File(['x'], '', { type: 'image/gif' });
+            expect(generateClipboardFileName(file)).toBe('Pasted Image 2026-07-15 at 09.08.07.gif');
+        });
+
+        test('should strip structured suffixes from the MIME subtype', () => {
+            const file = new File(['x'], 'image', { type: 'image/svg+xml' });
+            expect(generateClipboardFileName(file)).toBe('Pasted Image 2026-07-15 at 09.08.07.svg');
+        });
+    });
+
+    describe('isEditablePasteTarget()', () => {
+        test.each(['input', 'textarea', 'select'])('should return true for a %s element', tagName => {
+            expect(isEditablePasteTarget(document.createElement(tagName))).toBe(true);
+        });
+
+        test('should return true for a contenteditable element', () => {
+            const el = document.createElement('div');
+            el.setAttribute('contenteditable', 'true');
+            expect(isEditablePasteTarget(el)).toBe(true);
+        });
+
+        test('should return true for a node inside a contenteditable element', () => {
+            const editable = document.createElement('div');
+            editable.setAttribute('contenteditable', 'true');
+            const child = document.createElement('span');
+            editable.appendChild(child);
+            expect(isEditablePasteTarget(child)).toBe(true);
+        });
+
+        test('should return true for a role textbox element', () => {
+            const el = document.createElement('div');
+            el.setAttribute('role', 'textbox');
+            expect(isEditablePasteTarget(el)).toBe(true);
+        });
+
+        test('should return false for a non-editable element', () => {
+            expect(isEditablePasteTarget(document.createElement('div'))).toBe(false);
+        });
+
+        test('should return false for a null target', () => {
+            expect(isEditablePasteTarget(null)).toBe(false);
+        });
+
+        test('should return false for a target without closest', () => {
+            expect(isEditablePasteTarget({})).toBe(false);
         });
     });
 });

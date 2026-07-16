@@ -360,8 +360,148 @@ function isMultiputSupported(): boolean {
     return window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle;
 }
 
+/**
+ * Returns true if the clipboard event carries at least one file
+ *
+ * @param {ClipboardEvent} event
+ * @returns {boolean}
+ */
+function clipboardHasFiles(event: ClipboardEvent): boolean {
+    const { clipboardData } = event;
+    if (!clipboardData) {
+        return false;
+    }
+
+    if (clipboardData.files && clipboardData.files.length > 0) {
+        return true;
+    }
+
+    return Array.from(clipboardData.items || []).some(item => item.kind === 'file');
+}
+
+/**
+ * Extracts File objects from a clipboard event.
+ * Prefers clipboardData.files, falling back to clipboardData.items[].getAsFile()
+ *
+ * @param {ClipboardEvent} event
+ * @returns {File[]}
+ */
+function getFilesFromClipboard(event: ClipboardEvent): File[] {
+    const { clipboardData } = event;
+    if (!clipboardData) {
+        return [];
+    }
+
+    if (clipboardData.files && clipboardData.files.length > 0) {
+        return Array.from(clipboardData.files);
+    }
+
+    return Array.from(clipboardData.items || [])
+        .filter(item => item.kind === 'file')
+        .map(item => item.getAsFile())
+        .filter(Boolean);
+}
+
+/**
+ * Zero-pads a number to 2 digits
+ *
+ * @param {number} num
+ * @returns {string}
+ */
+function padTo2Digits(num: number): string {
+    return String(num).padStart(2, '0');
+}
+
+/**
+ * Formats a Date as 'YYYY-MM-DD at HH.MM.SS' using local time
+ *
+ * @param {Date} date
+ * @returns {string}
+ */
+function formatPastedImageTimestamp(date: Date): string {
+    const dateStr = `${date.getFullYear()}-${padTo2Digits(date.getMonth() + 1)}-${padTo2Digits(date.getDate())}`;
+    const timeStr = `${padTo2Digits(date.getHours())}.${padTo2Digits(date.getMinutes())}.${padTo2Digits(date.getSeconds())}`;
+
+    return `${dateStr} at ${timeStr}`;
+}
+
+/**
+ * Returns the extension (without the dot) from a file name, or '' if none
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+function getExtensionFromFileName(name: string): string {
+    const match = /\.([a-z0-9]+)$/i.exec(name);
+    return match ? match[1] : '';
+}
+
+/**
+ * Returns the file extension implied by a MIME type, e.g. 'image/svg+xml' -> 'svg'
+ *
+ * @param {string} mimeType
+ * @returns {string}
+ */
+function getExtensionFromMimeType(mimeType: string): string {
+    if (!mimeType || !mimeType.includes('/')) {
+        return '';
+    }
+
+    const [, subtype = ''] = mimeType.split('/');
+    return subtype.split('+')[0];
+}
+
+/**
+ * Returns true if a clipboard file name is a generic placeholder (e.g. 'image.png', 'image', '')
+ * rather than a meaningful name the OS/app assigned
+ *
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isGenericClipboardFileName(name: string): boolean {
+    return !name || /^image(\.[a-z0-9]+)?$/i.test(name);
+}
+
+/**
+ * Generates a file name for a pasted clipboard file.
+ * Preserves meaningful names; renames generic placeholders (e.g. 'image.png') to
+ * 'Pasted Image YYYY-MM-DD at HH.MM.SS.<ext>'
+ *
+ * @param {File} file
+ * @returns {string}
+ */
+function generateClipboardFileName(file: File): string {
+    if (!isGenericClipboardFileName(file.name)) {
+        return file.name;
+    }
+
+    const extension = getExtensionFromFileName(file.name) || getExtensionFromMimeType(file.type);
+    const timestamp = formatPastedImageTimestamp(new Date());
+
+    return `Pasted Image ${timestamp}${extension ? `.${extension}` : ''}`;
+}
+
+/**
+ * Returns true if a paste target is an editable element (input, textarea, select,
+ * contenteditable, or textbox role) where native paste should not be intercepted
+ *
+ * @param {EventTarget | null} target
+ * @returns {boolean}
+ */
+function isEditablePasteTarget(target: EventTarget | null): boolean {
+    if (!target || typeof (target: any).closest !== 'function') {
+        return false;
+    }
+
+    return !!(target: any).closest('input, textarea, select, [contenteditable="true"], [role="textbox"]');
+}
+
 export {
     DEFAULT_API_OPTIONS,
+    clipboardHasFiles,
+    generateClipboardFileName,
+    getFilesFromClipboard,
+    isEditablePasteTarget,
     doesDataTransferItemContainAPIOptions,
     doesFileContainAPIOptions,
     getBoundedExpBackoffRetryDelay,
