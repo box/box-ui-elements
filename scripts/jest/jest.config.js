@@ -28,6 +28,6 @@ module.exports = {
     testMatch: ['**/__tests__/**/*.test.+(js|jsx|ts|tsx)'],
     testPathIgnorePatterns: ['stories.test.js$', 'stories.test.tsx$', 'stories.test.d.ts'],
     transformIgnorePatterns: [
-        'node_modules/(?!(@box/activity-feed|@box/blueprint-web|@box/blueprint-web-assets|@box/box-ai-agent-selector|@box/box-ai-content-answers|@box/box-item-type-selector|@box/cldr-data|@box/collaboration-popover|@box/combobox-with-api|@box/content-field|@box/copy-input|@box/item-icon|@box/metadata-editor|@box/metadata-filter|@box/metadata-taxonomy-picker|@box/metadata-template-browser|@box/metadata-view|@box/react-virtualized/dist/es|@box/readable-time|@box/threaded-annotations|@box/tree|@box/types|@box/unified-share-modal|@box/uploads-manager|@box/user-selector)/)',
+        'node_modules/(?!(@box/activity-feed|@box/blueprint-web|@box/blueprint-web-assets|@box/box-ai-agent-selector|@box/box-ai-content-answers|@box/box-item-type-selector|@box/cldr-data|@box/collaboration-popover|@box/combobox-with-api|@box/content-field|@box/copy-input|@box/item-icon|@box/metadata-editor|@box/metadata-filter|@box/metadata-taxonomy-picker|@box/metadata-template-browser|@box/metadata-template-editor|@box/metadata-view|@box/react-virtualized/dist/es|@box/readable-time|@box/threaded-annotations|@box/tree|@box/types|@box/unified-share-modal|@box/uploads-manager|@box/user-selector)/)',
     ],
 };
