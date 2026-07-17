@@ -19,9 +19,9 @@ interface UseMetadataNamespaceModeReturn {
  * Fetches the metadata namespace migration mode for the given enterprise from
  * `GET /2.0/enterprise_configurations/{enterpriseNumericId}`.
  *
- * The fetch is deferred until `enterpriseNumericId` is known (i.e. after
- * templates are loaded). Cancels any in-flight request when the component
- * unmounts or the enterprise ID changes.
+ * The fetch is deferred until `enterpriseNumericId` is known (typically from
+ * the current user's enterprise). Cancels any in-flight request when the
+ * component unmounts or the enterprise ID changes.
  *
  * When `isEnabled` is `false` the hook skips the API call entirely and returns
  * `{ mode: null, isLoading: false }`, keeping the UI in legacy SCOPED mode.
