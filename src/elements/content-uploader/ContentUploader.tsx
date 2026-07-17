@@ -120,6 +120,7 @@ export interface ContentUploaderProps {
     isExpanded?: boolean;
     onToggle?: (isExpanded: boolean) => void;
     maxFileSize?: number;
+    modernizedDismissDelayMs?: number;
 }
 
 type ModernizedPanelState = 'hidden' | 'shown' | 'dismissing';
@@ -203,6 +204,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         useUploadsManager: false,
         enableModernizedUploads: false,
         isUpgradeModalEnabled: false,
+        modernizedDismissDelayMs: HIDE_MODERNIZED_UPLOAD_MANAGER_DELAY_MS,
     };
 
     /**
@@ -893,7 +895,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     upload = () => {
         const { enableModernizedUploads, isUpgradeModalEnabled, maxFileSize } = this.props;
 
-        if (this.isCancelAllPaused) { 
+        if (this.isCancelAllPaused) {
             return;
         }
 
@@ -1637,6 +1639,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     startModernizedDismissTimer = (): void => {
         this.clearModernizedDismissTimer();
 
+        const { modernizedDismissDelayMs } = this.props;
         const { modernizedPanelState, items } = this.state;
         const isUploadsBatchSuccessfullyComplete = items.every(
             item => item.status === STATUS_COMPLETE || item.status === STATUS_CANCELED,
@@ -1654,7 +1657,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         this.modernizedDismissTimer = setTimeout(() => {
             this.setState({ modernizedPanelState: 'dismissing' });
             this.modernizedDismissTimer = null;
-        }, HIDE_MODERNIZED_UPLOAD_MANAGER_DELAY_MS);
+        }, modernizedDismissDelayMs);
     };
 
     finalizeModernizedDismiss = (): void => {

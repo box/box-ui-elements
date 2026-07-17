@@ -1787,6 +1787,22 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
         });
 
+        test('honors a custom modernizedDismissDelayMs', () => {
+            const CUSTOM_DELAY_MS = 3000;
+            const setTimeoutSpy = jest.spyOn(global, 'setTimeout');
+            const wrapper = getWrapper({ enableModernizedUploads: true, modernizedDismissDelayMs: CUSTOM_DELAY_MS });
+            armDismissTimer(wrapper);
+
+            expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), CUSTOM_DELAY_MS);
+
+            jest.advanceTimersByTime(CUSTOM_DELAY_MS - 1);
+            expect(wrapper.state('modernizedPanelState')).toBe('shown');
+
+            jest.advanceTimersByTime(1);
+            expect(wrapper.state('modernizedPanelState')).toBe('dismissing');
+            setTimeoutSpy.mockRestore();
+        });
+
         test('clears timer when a new in-progress item is added mid-wait', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true });
             const instance = armDismissTimer(wrapper);
