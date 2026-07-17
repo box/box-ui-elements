@@ -35,7 +35,6 @@ import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
-    METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_MODE_SCOPED,
 } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
@@ -62,6 +61,7 @@ import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUns
 import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
 import useMetadataTemplateItemsService from './hooks/useMetadataTemplateItemsService';
 import useMetadataNamespaceMode from './hooks/useMetadataNamespaceMode';
+import useCurrentUserEnterpriseId from './hooks/useCurrentUserEnterpriseId';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -179,15 +179,13 @@ function MetadataSidebarRedesign({
     // Template management — gated behind namespace migration mode (MIGRATION or FINAL).
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean | undefined>(undefined);
 
-    // Real enterprise FQN (e.g. "enterprise_123456") derived from the already-loaded templates.
-    // The numeric ID (without the "enterprise_" prefix) is used for the enterprise configurations API.
-    const enterpriseId = templates.find(t => t.scope?.startsWith(`${METADATA_SCOPE_ENTERPRISE}_`))?.scope;
-    const enterpriseNumericId = enterpriseId?.slice(METADATA_SCOPE_ENTERPRISE.length + 1);
-
     // Fetch the migration mode from the enterprise configurations API.
     // Gated behind the enterprise_metadata_namespaces_opt_in split treatment — when the
     // flag is off the hook skips the API call and returns null (= legacy SCOPED behaviour).
+    // Enterprise ID comes from the current user (not templates), so mode can be resolved
+    // even when the file has no enterprise templates yet.
     const isNamespacesOptInEnabled: boolean = useFeatureEnabled('metadata.namespacesOptIn.enabled');
+    const { enterpriseId, enterpriseNumericId } = useCurrentUserEnterpriseId(api, file, isNamespacesOptInEnabled);
     const { mode: metadataNamespaceMode } = useMetadataNamespaceMode(
         file,
         api,

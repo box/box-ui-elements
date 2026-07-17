@@ -198,6 +198,28 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(screen.getByRole('button', { name: 'Add template' })).toBeInTheDocument();
     });
 
+    // Regression: templates is null while the fetcher is loading. Reading templates.find
+    // without optional chaining crashed the sidebar before the Add button could mount.
+    test('should not crash while metadata templates are still loading', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
+            templateInstances: [],
+            templates: null,
+            errorMessage: null,
+            status: STATUS.LOADING,
+            file: null,
+            extractErrorCode: null,
+        });
+
+        expect(() => renderComponent()).not.toThrow();
+        expect(screen.queryByRole('button', { name: 'Add template' })).not.toBeInTheDocument();
+    });
+
     test('should render "Add template" button when user has can_upload permission', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             clearExtractError: jest.fn(),
