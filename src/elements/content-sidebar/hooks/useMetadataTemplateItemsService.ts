@@ -31,7 +31,7 @@ function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName
  *   already fetched by `useSidebarMetadataFetcher`. A server-side search endpoint
  *   would replace this body when available.
  *
- * Returns `undefined` when `enterpriseFqn` is not yet known (templates still loading).
+ * Returns `undefined` when `enterpriseFqn` is not yet known (current user still loading).
  *
  * @example
  * const itemsService = useMetadataTemplateItemsService(api, enterpriseFqn, templates);
