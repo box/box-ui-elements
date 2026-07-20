@@ -196,6 +196,7 @@
         "babel-plugin-react-remove-properties": "^0.3.0",
         "babel-plugin-rewire": "^1.0.0",
         "babel-plugin-styled-components": "^1.10.7",
+        "box-content-preview": "3.62.1",
         "chromatic": "^18.0.1",
         "circular-dependency-plugin": "^5.2.2",
         "classnames": "^2.5.1",
@@ -322,6 +323,7 @@
         "@hapi/address": "^2.1.4",
         "@tanstack/react-virtual": "^3.13.12",
         "axios": "^0.32.0",
+        "box-content-preview": "^3.62.0",
         "classnames": "^2.5.1",
         "color": "^3.2.1",
         "draft-js": "^0.11.7",
@@ -363,6 +365,11 @@
         "scroll-into-view-if-needed": "^2.2.31",
         "tabbable": "^1.1.3",
         "uuid": "^8.3.2"
+    },
+    "peerDependenciesMeta": {
+        "box-content-preview": {
+            "optional": true
+        }
     },
     "resolutions": {
         "@sigstore/core": "3.2.1",
