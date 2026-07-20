@@ -726,7 +726,7 @@ class Metadata extends File {
         const url = this.getMetadataTemplateSchemaUrl(templateKey, scope);
         const response = await this.xhr.get({
             url,
-            ...(fileId && { id: getTypedFileId(fileId) }),
+            ...(fileId ? { id: getTypedFileId(fileId) } : {}),
         });
 
         cache.set(key, response);
@@ -872,9 +872,9 @@ class Metadata extends File {
             template = templates.find(t => t.templateKey === templateKey && t.namespace === namespace);
         }
 
-        // Enterprise scopes are always enterprise_XXXXX; use optional chaining
-        // to guard against namespace-only instances where $scope is undefined.
-        if (!template && scope?.startsWith(METADATA_SCOPE_ENTERPRISE)) {
+        // Enterprise scopes are always enterprise_XXXXX; guard against
+        // namespace-only instances where $scope is undefined.
+        if (!template && scope && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
             // Any missing template is likely from another enterprise (e.g. collaborated file);
             // Templates array has no pagination so we can assume cross-enterprise as it contains all templates.
             const crossEnterpriseTemplates = await this.getTemplates(id, scope, instanceId, true);
@@ -1062,12 +1062,13 @@ class Metadata extends File {
      */
     getEnterpriseScopeFromInstances(instances: Array<MetadataInstanceV2>): string | null {
         for (const inst of instances) {
-            if (inst.$scope?.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-                return inst.$scope;
+            const { $scope, $namespace } = inst;
+            if ($scope && $scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
+                return $scope;
             }
-            if (inst.$namespace?.startsWith(METADATA_SCOPE_ENTERPRISE)) {
+            if ($namespace && $namespace.startsWith(METADATA_SCOPE_ENTERPRISE)) {
                 // Namespace FQNs may be "enterprise_123/key" — take the leading segment.
-                return inst.$namespace.split('/')[0];
+                return $namespace.split('/')[0];
             }
         }
         return null;
