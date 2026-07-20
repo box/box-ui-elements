@@ -386,12 +386,12 @@ const messages = defineMessages({
         id: 'boxui.securityControls.integrationPreviewDenylistOverflow',
     },
     appPreviewWhitelist: {
-        defaultMessage: 'Only select applications can read: {appNames}',
+        defaultMessage: 'Only selected applications can read: {appNames}',
         description: 'Bullet point that summarizes application preview restriction applied to classification',
         id: 'boxui.securityControls.appPreviewWhitelist',
     },
     appPreviewWhitelistDefault: {
-        defaultMessage: 'Only select applications can read.',
+        defaultMessage: 'Only selected applications can read.',
         description:
             'Bullet point that summarizes application preview restriction applied to classification when the allowed application list is not provided',
         id: 'boxui.securityControls.appPreviewWhitelistDefault',
@@ -408,7 +408,7 @@ const messages = defineMessages({
         id: 'boxui.securityControls.integrationPreviewAllowlistDefault',
     },
     appPreviewWhitelistOverflow: {
-        defaultMessage: 'Only select applications can read: {appNames} +{remainingAppCount} more',
+        defaultMessage: 'Only selected applications can read: {appNames} +{remainingAppCount} more',
         description:
             'Bullet point that summarizes application preview restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold',
         id: 'boxui.securityControls.appPreviewWhitelistOverflow',
