@@ -124,7 +124,7 @@
         "@babel/preset-typescript": "^7.24.7",
         "@babel/template": "^7.24.7",
         "@babel/types": "^7.24.7",
-        "@box/activity-feed": "^2.2.1",
+        "@box/activity-feed": "^2.2.18",
         "@box/blueprint-web": "^16.8.0",
         "@box/blueprint-web-assets": "^5.4.3",
         "@box/box-ai-agent-selector": "^1.39.21",
