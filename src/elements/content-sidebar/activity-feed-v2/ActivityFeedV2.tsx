@@ -176,6 +176,8 @@ const ActivityFeedV2 = ({
                 onClose: noop,
                 onSubmit: noop,
             },
+            // Mentions are restricted to file collaborators; the invite popover is intentionally never shown.
+            fetchCollaboratorState: async () => true,
         }),
         [],
     );
