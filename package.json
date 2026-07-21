@@ -124,7 +124,7 @@
         "@babel/preset-typescript": "^7.24.7",
         "@babel/template": "^7.24.7",
         "@babel/types": "^7.24.7",
-        "@box/activity-feed": "^2.2.1",
+        "@box/activity-feed": "^2.2.18",
         "@box/blueprint-web": "^16.8.0",
         "@box/blueprint-web-assets": "^5.4.3",
         "@box/box-ai-agent-selector": "^1.39.21",
@@ -368,7 +368,7 @@
         "@sigstore/core": "3.2.1",
         "draft-js/immutable": "^3.8.3",
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
-        "js-yaml": "^4.2.0",
+        "js-yaml": "^4.3.0",
         "qs": "^6.15.2",
         "serialize-javascript": "^7.0.5",
         "tar": "^7.5.16"
