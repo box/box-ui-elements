@@ -2251,4 +2251,69 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
         });
     });
+
+    describe('handleUploadProgress()', () => {
+        const makeProgressItem = () => ({
+            api: {},
+            extension: 'txt',
+            file: new File(['contents'], 'a.txt'),
+            name: 'a.txt',
+            progress: 0,
+            size: 1000,
+            status: STATUS_PENDING,
+        });
+
+        test('records byte progress and total on the item', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            instance.handleUploadProgress(item, { loaded: 400, total: 1000 });
+
+            expect(item.bytesUploaded).toBe(400);
+            expect(item.totalBytes).toBe(1000);
+            expect(item.progress).toBe(40);
+        });
+
+        test('leaves remainingSeconds undefined on the first progress event (no speed sample yet)', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            instance.handleUploadProgress(item, { loaded: 400, total: 1000 });
+
+            expect(item.remainingSeconds).toBeUndefined();
+        });
+
+        test('estimates remainingSeconds once a second sample arrives', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            const nowSpy = jest.spyOn(Date, 'now');
+            nowSpy.mockReturnValueOnce(0);
+            instance.handleUploadProgress(item, { loaded: 200, total: 1000 });
+            nowSpy.mockReturnValueOnce(1000); // 1s later, +300 bytes -> 300 B/s
+            instance.handleUploadProgress(item, { loaded: 500, total: 1000 });
+
+            // 500 bytes left at 300 B/s
+            expect(item.remainingSeconds).toBeCloseTo(500 / 300, 5);
+            nowSpy.mockRestore();
+        });
+
+        test('ignores progress events without a total', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            instance.handleUploadProgress(item, { loaded: 400, total: 0 });
+
+            expect(item.bytesUploaded).toBeUndefined();
+            expect(item.totalBytes).toBeUndefined();
+        });
+    });
 });

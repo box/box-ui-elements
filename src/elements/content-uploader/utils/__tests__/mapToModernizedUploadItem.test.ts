@@ -31,7 +31,25 @@ describe('mapToModernizedUploadItem()', () => {
             isFolder: undefined,
             errorMessage: undefined,
             versionNumber: undefined,
+            bytesUploaded: undefined,
+            totalBytes: 100,
+            remainingSeconds: undefined,
         });
+    });
+
+    test('forwards byte progress and ETA fields', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ bytesUploaded: 40, totalBytes: 100, remainingSeconds: 12 }),
+            '0',
+        );
+        expect(result.bytesUploaded).toBe(40);
+        expect(result.totalBytes).toBe(100);
+        expect(result.remainingSeconds).toBe(12);
+    });
+
+    test('falls back to size for totalBytes before first progress event', () => {
+        const result = mapToModernizedUploadItem(buildLegacyItem({ totalBytes: undefined, size: 2048 }), '0');
+        expect(result.totalBytes).toBe(2048);
     });
 
     test.each([

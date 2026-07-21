@@ -35,6 +35,7 @@ export function getUploadItemKey(item: LegacyUploadItem | FolderUploadItem, root
 
 export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadItem, rootFolderId: string): UploadItem {
     const errorMessage = item.error ? (item.error as { message?: string }).message : undefined;
+    const fileItem = item as LegacyUploadItem;
 
     return {
         id: getUploadItemKey(item, rootFolderId),
@@ -45,6 +46,11 @@ export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadI
         isFolder: item.isFolder,
         errorMessage,
         versionNumber: item.boxFile?.version_number,
+        bytesUploaded: fileItem.bytesUploaded,
+        // Fall back to the file size so the "X / TOTAL" line shows before the
+        // first progress event lands.
+        totalBytes: fileItem.totalBytes ?? item.size,
+        remainingSeconds: fileItem.remainingSeconds,
     };
 }
 
