@@ -27,10 +27,12 @@ const mockScrollTo = jest.fn<boolean, [string]>(() => true);
 
 type FilterMenuProps = { children?: React.ReactNode; hasActiveFilters?: boolean };
 type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
+type RootProps = React.ComponentProps<typeof ActivityFeed.Root>;
 let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
 let lastEditorProps: Partial<EditorProps> = {};
+let lastRootProps: Partial<RootProps> = {};
 let lastTaskModalProps: Partial<TaskModalV2Props> = {};
 
 jest.mock('../task-modal-v2', () => ({
@@ -43,9 +45,10 @@ jest.mock('../task-modal-v2', () => ({
 
 jest.mock('@box/activity-feed', () => {
     const actual = jest.requireActual('@box/activity-feed');
-    const ActivityFeedRoot = ({ children }: { children: React.ReactNode }) => (
-        <div data-testid="activity-feed-root">{children}</div>
-    );
+    const ActivityFeedRoot = (props: Partial<RootProps>) => {
+        lastRootProps = props;
+        return <div data-testid="activity-feed-root">{props.children}</div>;
+    };
     const ActivityFeedList = ({ children }: { children: React.ReactNode }) => (
         <div data-testid="activity-feed-list">{children}</div>
     );
@@ -181,6 +184,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         lastShowResolvedOptionProps = {};
         lastMentionMeOptionProps = {};
         lastEditorProps = {};
+        lastRootProps = {};
         lastTaskModalProps = {};
         mockSerializeMentionMarkup.mockImplementation((doc: unknown) => ({
             hasMention: false,
@@ -399,6 +403,15 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
 
             expect(lastEditorProps.userSelectorProps?.allowEmptyQuery).toBe(true);
+        });
+
+        test('should report every mentioned user as a collaborator so the invite popover never opens', async () => {
+            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+
+            const { fetchCollaboratorState } = lastRootProps.mentionContext ?? {};
+            await expect(fetchCollaboratorState?.({ email: 'a@box.com', id: 1, name: 'A', value: '1' })).resolves.toBe(
+                true,
+            );
         });
 
         test('should skip the API call when fetchUsers is invoked with an empty query', async () => {
