@@ -371,7 +371,7 @@
         "js-yaml": "^4.3.0",
         "qs": "^6.15.2",
         "serialize-javascript": "^7.0.5",
-        "tar": "^7.5.16"
+        "tar": "^7.5.19"
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
