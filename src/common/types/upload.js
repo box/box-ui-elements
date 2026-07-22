@@ -75,7 +75,7 @@ type UploadItem = {
     name: string,
     options?: UploadItemAPIOptions,
     progress: number,
-    remainingSeconds?: number,
+    remainingMs?: number,
     size: number,
     status: UploadStatus,
     totalBytes?: number,

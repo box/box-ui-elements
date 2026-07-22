@@ -16,7 +16,7 @@ import Footer from './Footer';
 import ModernizedUploadsManagerDropZone from './ModernizedUploadsManagerDropZone';
 import UploadsManager from './UploadsManager';
 import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
-import { updateEta, getRemainingSeconds, type EtaState } from './utils/uploadEta';
+import { updateEta, getRemainingMs, type EtaState } from './utils/uploadEta';
 import './ModernizedUploadsManagerPanel.scss';
 import API from '../../api';
 import Browser from '../../utils/Browser';
@@ -1022,6 +1022,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         item.status = STATUS_PENDING;
         delete item.error;
 
+        // Drop byte/ETA progress from the previous attempt
+        item.bytesUploaded = 0;
+        item.remainingMs = undefined;
+        this.etaByItem.delete(item);
+
         const updatedItems = [...this.itemsRef.current];
         updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
@@ -1266,11 +1271,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         item.status = item.progress === 100 ? STATUS_STAGED : STATUS_IN_PROGRESS;
 
         // Track byte-level progress and a smoothed ETA for the modernized manager.
-        const nextEta = updateEta(this.etaByItem.get(item), event.loaded, Date.now());
+        const nextEta = updateEta(this.etaByItem.get(item), event.loaded, event.total, Date.now());
         this.etaByItem.set(item, nextEta);
         item.bytesUploaded = event.loaded;
         item.totalBytes = event.total;
-        item.remainingSeconds = getRemainingSeconds(nextEta, event.loaded, event.total);
+        item.remainingMs = getRemainingMs(nextEta);
 
         const { onProgress } = this.props;
         onProgress(item);
