@@ -172,8 +172,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
     itemIdsRef: React.MutableRefObject<Object>;
 
-    // Per-item upload speed tracking for the modernized manager's ETA. WeakMap so
-    // entries are garbage-collected with their item; no manual cleanup needed.
     etaByItem: WeakMap<UploadItem, EtaState> = new WeakMap();
 
     static defaultProps = {

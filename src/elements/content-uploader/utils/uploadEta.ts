@@ -23,10 +23,6 @@ export interface EtaState {
     etaMs: number | null;
 }
 
-/**
- * Folds a new progress sample into the ETA estimate. Pass the absolute
- * `loaded`/`total` bytes and the current time in ms.
- */
 export function updateEta(prev: EtaState | undefined, loaded: number, total: number, nowMs: number): EtaState {
     if (!prev) {
         return { startMs: nowMs, lastSampleMs: nowMs, times: [nowMs], loaded: [loaded], etaMs: null };
