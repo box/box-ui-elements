@@ -42,12 +42,6 @@ export const withModernizedUploads = {
     },
 };
 
-// The modernized uploads manager renders the `X / TOTAL · <time> left` status
-// only when items carry byte-level progress and an ETA. A real upload through
-// MSW can't produce a paused mid-transfer state (upload progress isn't streamed
-// and the response resolves immediately), so this story renders the modernized
-// manager directly with fixed in-progress items to make the size + ETA line
-// observable. It also exercises the linked @box/uploads-manager build.
 const modernizedInProgressItems = [
     {
         id: '1',
