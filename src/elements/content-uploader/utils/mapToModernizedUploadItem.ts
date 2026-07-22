@@ -37,20 +37,33 @@ export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadI
     const errorMessage = item.error ? (item.error as { message?: string }).message : undefined;
     const fileItem = item as LegacyUploadItem;
 
+    const status = STATUS_MAP[item.status] ?? 'pending';
+    // Fall back to the file size so the "X / TOTAL" line shows before the
+    // first progress event lands.
+    const totalBytes = fileItem.totalBytes ?? item.size;
+
+    // Progress rounds to 100% at ~99.5%, which flips the item to "staged" and
+    // stops further progress events — so bytesUploaded can freeze a hair below
+    // the total and the "X / TOTAL" line looks stuck ~1 unit short. Once the
+    // bytes are all in, report the full size and drop the ETA: there's nothing
+    // left to wait for, and the smoothed estimate otherwise lags a few seconds
+    // behind and shows a stale "time left".
+    const isFullyUploaded = status === 'staged' || status === 'complete';
+    const bytesUploaded = isFullyUploaded && totalBytes != null ? totalBytes : fileItem.bytesUploaded;
+    const remainingMs = !isFullyUploaded ? fileItem.remainingMs : undefined;
+
     return {
         id: getUploadItemKey(item, rootFolderId),
         name: item.name,
         extension: item.extension ?? '',
         progress: item.progress ?? 0,
-        status: STATUS_MAP[item.status] ?? 'pending',
+        status,
         isFolder: item.isFolder,
         errorMessage,
         versionNumber: item.boxFile?.version_number,
-        bytesUploaded: fileItem.bytesUploaded,
-        // Fall back to the file size so the "X / TOTAL" line shows before the
-        // first progress event lands.
-        totalBytes: fileItem.totalBytes ?? item.size,
-        remainingSeconds: fileItem.remainingSeconds,
+        bytesUploaded,
+        totalBytes,
+        remainingMs,
     };
 }
 

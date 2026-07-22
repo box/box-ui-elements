@@ -360,6 +360,23 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(item.status).toBe(STATUS_PENDING);
             expect(item.error).toBeUndefined();
         });
+
+        test('should clear byte/ETA progress from the previous attempt', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = {
+                api: { cancel: jest.fn() },
+                file: { size: 10 },
+                bytesUploaded: 8,
+                remainingMs: 4200,
+            };
+            instance.etaByItem.set(item, { etaMs: 4200 });
+
+            instance.resetFile(item);
+            expect(item.bytesUploaded).toBe(0);
+            expect(item.remainingMs).toBeUndefined();
+            expect(instance.etaByItem.has(item)).toBe(false);
+        });
     });
 
     describe('resumeFile()', () => {
@@ -2276,7 +2293,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(item.progress).toBe(40);
         });
 
-        test('leaves remainingSeconds undefined on the first progress event (no speed sample yet)', () => {
+        test('leaves remainingMs undefined on the first progress event (no speed sample yet)', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true });
             const instance = wrapper.instance();
             const item = makeProgressItem();
@@ -2284,10 +2301,10 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             instance.handleUploadProgress(item, { loaded: 400, total: 1000 });
 
-            expect(item.remainingSeconds).toBeUndefined();
+            expect(item.remainingMs).toBeUndefined();
         });
 
-        test('estimates remainingSeconds once a second sample arrives', () => {
+        test('estimates remainingMs once a second sample arrives', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true });
             const instance = wrapper.instance();
             const item = makeProgressItem();
@@ -2299,8 +2316,8 @@ describe('elements/content-uploader/ContentUploader', () => {
             nowSpy.mockReturnValueOnce(1000); // 1s later, +300 bytes -> 300 B/s
             instance.handleUploadProgress(item, { loaded: 500, total: 1000 });
 
-            // 500 bytes left at 300 B/s
-            expect(item.remainingSeconds).toBeCloseTo(500 / 300, 5);
+            // 500 bytes left at 300 B/s -> ~1.667s -> ~1666.67ms
+            expect(item.remainingMs).toBeCloseTo((500 / 300) * 1000, 5);
             nowSpy.mockRestore();
         });
 

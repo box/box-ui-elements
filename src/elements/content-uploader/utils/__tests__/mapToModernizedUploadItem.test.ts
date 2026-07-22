@@ -33,23 +33,62 @@ describe('mapToModernizedUploadItem()', () => {
             versionNumber: undefined,
             bytesUploaded: undefined,
             totalBytes: 100,
-            remainingSeconds: undefined,
+            remainingMs: undefined,
         });
     });
 
     test('forwards byte progress and ETA fields', () => {
         const result = mapToModernizedUploadItem(
-            buildLegacyItem({ bytesUploaded: 40, totalBytes: 100, remainingSeconds: 12 }),
+            buildLegacyItem({ bytesUploaded: 40, totalBytes: 100, remainingMs: 12000 }),
             '0',
         );
         expect(result.bytesUploaded).toBe(40);
         expect(result.totalBytes).toBe(100);
-        expect(result.remainingSeconds).toBe(12);
+        expect(result.remainingMs).toBe(12000);
     });
 
     test('falls back to size for totalBytes before first progress event', () => {
         const result = mapToModernizedUploadItem(buildLegacyItem({ totalBytes: undefined, size: 2048 }), '0');
         expect(result.totalBytes).toBe(2048);
+    });
+
+    test.each([STATUS_STAGED, STATUS_COMPLETE])(
+        'reports full bytesUploaded once the item is %s (progress events stop before hitting the total)',
+        status => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status, bytesUploaded: 259, totalBytes: 260 }),
+                '0',
+            );
+            expect(result.bytesUploaded).toBe(260);
+            expect(result.totalBytes).toBe(260);
+        },
+    );
+
+    test('does not inflate bytesUploaded while still uploading', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ status: STATUS_IN_PROGRESS, bytesUploaded: 259, totalBytes: 260 }),
+            '0',
+        );
+        expect(result.bytesUploaded).toBe(259);
+    });
+
+    test.each([STATUS_STAGED, STATUS_COMPLETE])(
+        'drops the ETA once the item is %s (the smoothed estimate lags and looks stale)',
+        status => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status, bytesUploaded: 260, totalBytes: 260, remainingMs: 3000 }),
+                '0',
+            );
+            expect(result.remainingMs).toBeUndefined();
+        },
+    );
+
+    test('still forwards the ETA while uploading', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ status: STATUS_IN_PROGRESS, remainingMs: 3000 }),
+            '0',
+        );
+        expect(result.remainingMs).toBe(3000);
     });
 
     test.each([
