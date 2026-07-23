@@ -4,11 +4,7 @@ import noop from 'lodash/noop';
 import { v4 as uuidv4 } from 'uuid';
 import { isMarkSupported } from '../../../utils/performance';
 import { EVENT_DATA_READY, EVENT_JS_READY } from './constants';
-import {
-    METRIC_TYPE_PREVIEW,
-    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-    METRIC_TYPE_UAA_PARITY_METRIC,
-} from '../../../constants';
+import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../constants';
 import type { ElementOrigin } from '../flowTypes';
 import type { MetricType, ElementsLoadMetricData, LoggerProps } from '../../../common/types/logging';
 
@@ -128,17 +124,10 @@ class Logger extends React.Component<Props> {
     handlePreviewMetric = (data: Object) => {
         const { onMetric } = this.props;
 
-        if (data.type === METRIC_TYPE_UAA_PARITY_METRIC) {
-            onMetric({
-                ...data,
-                type: METRIC_TYPE_UAA_PARITY_METRIC,
-            });
-        } else {
-            onMetric({
-                ...data,
-                type: METRIC_TYPE_PREVIEW,
-            });
-        }
+        onMetric({
+            ...data,
+            type: METRIC_TYPE_PREVIEW,
+        });
     };
 
     /**
