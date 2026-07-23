@@ -14,6 +14,11 @@ describe('features/virtualized-table-renderers/readableTimeCellRenderer', () => 
         expect(readableTimeCellRenderer(cellRendererParams)).toMatchSnapshot();
     });
 
+    test('should handle already parsed date', () => {
+        cellRendererParams = { cellData: 1563482709000 };
+        expect(readableTimeCellRenderer(cellRendererParams)).toMatchSnapshot();
+    });
+
     test('should render a dash when cellData is missing', () => {
         cellRendererParams.cellData = null;
         expect(readableTimeCellRenderer(cellRendererParams)).toBe('--');
