@@ -153,6 +153,13 @@ type Props = {
     previewExperiences?: {
         [name: string]: TargetingApi,
     },
+    /**
+     * Optional externally-managed Box.Preview instance. When provided,
+     * ContentPreview reuses it instead of constructing its own, and on
+     * cleanup it only detaches its listeners rather than destroying the
+     * instance — the host application retains ownership of its lifecycle.
+     */
+    previewInstance?: Object,
     previewLibraryVersion: string,
     previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
     requestInterceptor?: Function,
@@ -426,8 +433,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.clearLoadingIndicatorDelayTimeout();
         const { onPreviewDestroy } = this.props;
         if (this.preview) {
-            this.preview.destroy();
-            this.preview.removeAllListeners();
+            if (this.props.previewInstance) {
+                this.preview.removeListener('load', this.onPreviewLoad);
+                this.preview.removeListener('preload', this.endLoadingSession);
+                this.preview.removeListener('preview_error', this.onPreviewError);
+                this.preview.removeListener('preview_metric', this.onPreviewMetric);
+            } else {
+                this.preview.destroy();
+                this.preview.removeAllListeners();
+            }
             this.preview = undefined;
 
             onPreviewDestroy(shouldReset);
@@ -1008,7 +1022,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             useHotkeys: false,
         };
         const { Preview } = global.Box;
-        this.preview = new Preview();
+        this.preview = this.props.previewInstance || new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preload', this.endLoadingSession);
 
