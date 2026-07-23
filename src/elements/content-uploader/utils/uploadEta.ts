@@ -65,7 +65,7 @@ export function updateEta(prev: EtaState | undefined, loaded: number, total: num
     const elapsedMs = nowMs - prev.startMs;
 
     // Only estimate once we have positive speed and the warm-up grace has passed.
-    if (total > 0 && speedBytesPerMs > 0 && elapsedMs > GRACE_PERIOD_MS) {
+    if (total > 0 && speedBytesPerMs > 0 && elapsedMs >= GRACE_PERIOD_MS) {
         const rawEtaMs = Math.max(0, total - loaded) / speedBytesPerMs;
         const etaMs = prev.etaMs == null ? rawEtaMs : (1 - ETA_SMOOTHING) * rawEtaMs + ETA_SMOOTHING * prev.etaMs;
         return { ...base, etaMs };
