@@ -33,17 +33,17 @@ export function getUploadItemKey(item: LegacyUploadItem | FolderUploadItem, root
     return `${item.name}_${folderId}_${uploadInitTimestamp}`;
 }
 
-export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadItem, rootFolderId: string): UploadItem {
+export function mapToModernizedUploadItem(
+    item: LegacyUploadItem | FolderUploadItem,
+    rootFolderId: string,
+    isUploadEtaEnabled = false,
+): UploadItem {
     const errorMessage = item.error ? (item.error as { message?: string }).message : undefined;
     const fileItem = item as LegacyUploadItem;
 
     const status = STATUS_MAP[item.status] ?? 'pending';
-    const totalBytes = fileItem.totalBytes ?? item.size;
-    const isFullyUploaded = status === 'staged' || status === 'complete';
-    const bytesUploaded = isFullyUploaded && totalBytes != null ? totalBytes : fileItem.bytesUploaded;
-    const remainingMs = !isFullyUploaded ? fileItem.remainingMs : undefined;
 
-    return {
+    const baseItem: UploadItem = {
         id: getUploadItemKey(item, rootFolderId),
         name: item.name,
         extension: item.extension ?? '',
@@ -52,6 +52,21 @@ export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadI
         isFolder: item.isFolder,
         errorMessage,
         versionNumber: item.boxFile?.version_number,
+    };
+
+    // Kill switch: when the ETA/byte-progress treatment is off, omit the fields
+    // entirely so the modernized manager falls back to the plain percentage.
+    if (!isUploadEtaEnabled) {
+        return baseItem;
+    }
+
+    const totalBytes = fileItem.totalBytes ?? item.size;
+    const isFullyUploaded = status === 'staged' || status === 'complete';
+    const bytesUploaded = isFullyUploaded && totalBytes != null ? totalBytes : fileItem.bytesUploaded;
+    const remainingMs = !isFullyUploaded ? fileItem.remainingMs : undefined;
+
+    return {
+        ...baseItem,
         bytesUploaded,
         totalBytes,
         remainingMs,
@@ -61,6 +76,7 @@ export function mapToModernizedUploadItem(item: LegacyUploadItem | FolderUploadI
 export function mapToModernizedUploadItems(
     items: Array<LegacyUploadItem | FolderUploadItem>,
     rootFolderId: string,
+    isUploadEtaEnabled = false,
 ): UploadItem[] {
-    return items.map(item => mapToModernizedUploadItem(item, rootFolderId));
+    return items.map(item => mapToModernizedUploadItem(item, rootFolderId, isUploadEtaEnabled));
 }

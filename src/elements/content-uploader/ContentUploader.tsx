@@ -117,6 +117,7 @@ export interface ContentUploaderProps {
     uploadHost: string;
     useUploadsManager?: boolean;
     enableModernizedUploads?: boolean;
+    isUploadEtaEnabled?: boolean;
     isUpgradeModalEnabled?: boolean;
     isExpanded?: boolean;
     onToggle?: (isExpanded: boolean) => void;
@@ -206,6 +207,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         useUploadsManager: false,
         enableModernizedUploads: false,
+        isUploadEtaEnabled: false,
         isUpgradeModalEnabled: false,
         modernizedDismissDelayMs: HIDE_MODERNIZED_UPLOAD_MANAGER_DELAY_MS,
     };
@@ -1841,6 +1843,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             className,
             canDropOnUploadsManager,
             enableModernizedUploads,
+            isUploadEtaEnabled,
             fileLimit,
             isDraggingItemsToUploadsManager = false,
             isFolderUploadEnabled,
@@ -1911,7 +1914,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onMouseLeave={this.handleModernizedMouseLeave}
                         >
                             <UploadsManagerBP
-                                items={mapToModernizedUploadItems(uploadsManagerItems, rootFolderId)}
+                                items={mapToModernizedUploadItems(
+                                    uploadsManagerItems,
+                                    rootFolderId,
+                                    isUploadEtaEnabled,
+                                )}
                                 isExpanded={isUploadsManagerExpanded}
                                 onToggle={this.toggleUploadsManager}
                                 onItemCancel={this.handleUploadsManagerItemCancel}
