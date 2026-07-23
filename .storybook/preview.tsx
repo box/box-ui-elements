@@ -27,7 +27,7 @@ initialize({
     },
 });
 
-const withBlueprintAnimations: Decorator = Story => (
+const withStorybookBlueprintAnimations: Decorator = Story => (
     <BlueprintProvider
         useTreatment={useNoopTreatment}
         configurationOverrides={{
@@ -40,7 +40,7 @@ const withBlueprintAnimations: Decorator = Story => (
 );
 
 const preview: Preview = {
-    decorators: [withBlueprintAnimations],
+    decorators: [withStorybookBlueprintAnimations],
 
     parameters: {
         chromatic: {

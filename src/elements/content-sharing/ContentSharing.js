@@ -16,11 +16,7 @@ import { isFeatureEnabled } from '../common/feature-checking';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
 // $FlowFixMe
-import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
-// $FlowFixMe
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
-// $FlowFixMe
-import { ContentSharingV2Component as ContentSharingV2 } from './ContentSharingV2';
+import ContentSharingV2 from './ContentSharingV2';
 import SharingModal from './SharingModal';
 
 import type { ElementsXhrError } from '../../common/types/api';
@@ -53,6 +49,10 @@ type ContentSharingProps = {
      * the modal will appear on page load. See ContentSharing.stories.js for examples.
      */
     displayInModal: boolean,
+    /** Forwarded to ContentSharingV2 Blueprint HOCs when contentSharingV2 is enabled */
+    enableBlueprintAnimations?: boolean | Object,
+    /** Forwarded to ContentSharingV2 Blueprint HOCs when contentSharingV2 is enabled */
+    enableModernizedComponents?: boolean,
     /** features - Features for the element */
     features?: FeatureConfig,
     /** hasProviders - Whether the element has providers for USM already */
@@ -94,6 +94,8 @@ function ContentSharing({
     config,
     customButton,
     displayInModal,
+    enableBlueprintAnimations,
+    enableModernizedComponents,
     features = {},
     hasProviders = true,
     itemID,
@@ -143,6 +145,8 @@ function ContentSharing({
                         <ContentSharingV2
                             api={api}
                             config={config}
+                            enableBlueprintAnimations={enableBlueprintAnimations}
+                            enableModernizedComponents={enableModernizedComponents}
                             itemId={itemID}
                             itemType={itemType}
                             onClose={onClose}
@@ -179,4 +183,4 @@ function ContentSharing({
     );
 }
 
-export default withBlueprintAnimations(withBlueprintModernization(ContentSharing));
+export default ContentSharing;

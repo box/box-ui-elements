@@ -43,15 +43,15 @@ describe('src/elements/common/withBlueprintAnimations', () => {
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase2', 'true');
     });
 
-    test('should opt out when animationsEnabled is false', () => {
-        const { getByTestId } = renderComponent({ animationsEnabled: false });
+    test('should opt out when enableBlueprintAnimations is false', () => {
+        const { getByTestId } = renderComponent({ enableBlueprintAnimations: false });
 
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase1', 'false');
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase2', 'false');
     });
 
-    test('should enable all phases when animationsEnabled is true', () => {
-        const { getByTestId } = renderComponent({ animationsEnabled: true });
+    test('should enable all phases when enableBlueprintAnimations is true', () => {
+        const { getByTestId } = renderComponent({ enableBlueprintAnimations: true });
 
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase1', 'true');
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase2', 'true');
@@ -59,7 +59,7 @@ describe('src/elements/common/withBlueprintAnimations', () => {
 
     test('should honor per-phase overrides matching Blueprint configurationOverrides keys', () => {
         const { getByTestId } = renderComponent({
-            animationsEnabled: {
+            enableBlueprintAnimations: {
                 animationsPhase1Enabled: true,
                 animationsPhase2Enabled: false,
             },
@@ -71,7 +71,7 @@ describe('src/elements/common/withBlueprintAnimations', () => {
 
     test('should default omitted phase keys to on when an object is passed', () => {
         const { getByTestId } = renderComponent({
-            animationsEnabled: {
+            enableBlueprintAnimations: {
                 animationsPhase2Enabled: false,
             },
         });
@@ -86,7 +86,7 @@ describe('src/elements/common/withBlueprintAnimations', () => {
         expect(getByTestId('test-component')).toHaveTextContent('Test test-value');
     });
 
-    test('should not forward animationsEnabled to the wrapped component', () => {
+    test('should not forward enableBlueprintAnimations to the wrapped component', () => {
         const DomFacingComponent = ({ value, ...rest }: TestComponentProps & Record<string, unknown>) => (
             <div data-testid="dom-facing" {...rest}>
                 {value}
@@ -94,9 +94,11 @@ describe('src/elements/common/withBlueprintAnimations', () => {
         );
         const WrappedDomFacing = withBlueprintAnimations(DomFacingComponent);
 
-        const { getByTestId } = render(<WrappedDomFacing value="ok" animationsEnabled={false} data-extra="keep" />);
+        const { getByTestId } = render(
+            <WrappedDomFacing value="ok" enableBlueprintAnimations={false} data-extra="keep" />,
+        );
 
-        expect(getByTestId('dom-facing')).not.toHaveAttribute('animationsEnabled');
+        expect(getByTestId('dom-facing')).not.toHaveAttribute('enableBlueprintAnimations');
         expect(getByTestId('dom-facing')).toHaveAttribute('data-extra', 'keep');
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase1', 'false');
     });
