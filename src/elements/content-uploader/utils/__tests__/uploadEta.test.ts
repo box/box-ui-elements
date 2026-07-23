@@ -21,11 +21,14 @@ describe('updateEta()', () => {
 
     test('produces an estimate once the grace period has passed', () => {
         let state = updateEta(undefined, 0, 1000, 0);
-        state = updateEta(state, 200, 1000, 1000); // elapsed == grace -> still hidden
-        expect(getRemainingMs(state)).toBeUndefined();
-        state = updateEta(state, 400, 1000, 2000); // elapsed 2s > grace
-        // window [0,1000,2000] / [0,200,400] -> 200 B/s, 600 B left -> ~3s -> 3000ms
-        expect(getRemainingMs(state)).toBeCloseTo(3000, 5);
+        // elapsed == grace -> the estimate is now surfaced.
+        // window [0,1000] / [0,200] -> 200 B/s, 800 B left -> raw 4000ms (no prior ETA to smooth against).
+        state = updateEta(state, 200, 1000, 1000);
+        expect(getRemainingMs(state)).toBeCloseTo(4000, 5);
+        // window [0,1000,2000] / [0,200,400] -> 200 B/s, 600 B left -> raw 3000ms.
+        // Smoothed against 4000: 0.1 * 3000 + 0.9 * 4000 = 3900ms.
+        state = updateEta(state, 400, 1000, 2000);
+        expect(getRemainingMs(state)).toBeCloseTo(3900, 5);
     });
 
     test('smooths the ETA with heavy inertia (does not jump)', () => {
