@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BlueprintProvider, useNoopTreatment } from '@box/blueprint-web';
 
 export type BlueprintAnimationPhases = {
@@ -15,12 +15,6 @@ export type BlueprintAnimationsProps = {
      */
     animationsEnabled?: boolean | BlueprintAnimationPhases;
 };
-
-/**
- * Optional gate for Storybook/Chromatic. `null` means no override (use prop / default).
- * Chromatic sets this to `false` so Element HOCs cannot reinstate animations in VRTs.
- */
-export const AnimationsEnabledContext = React.createContext<boolean | null>(null);
 
 export function resolveAnimationPhases(
     value: boolean | BlueprintAnimationPhases | undefined,
@@ -49,17 +43,12 @@ export function withBlueprintAnimations<P>(
     Component: React.ComponentType<P>,
 ): React.FC<P & BlueprintAnimationsProps> {
     return function WithBlueprintAnimations(props: P & BlueprintAnimationsProps) {
-        const contextAnimationsEnabled = useContext(AnimationsEnabledContext);
         const { animationsEnabled, ...rest } = props;
-        const animationPhases =
-            contextAnimationsEnabled === null
-                ? resolveAnimationPhases(animationsEnabled)
-                : resolveAnimationPhases(contextAnimationsEnabled);
 
         return (
             <BlueprintProvider
                 useTreatment={useNoopTreatment}
-                configurationOverrides={animationPhases}
+                configurationOverrides={resolveAnimationPhases(animationsEnabled)}
             >
                 <Component {...(rest as P)} />
             </BlueprintProvider>

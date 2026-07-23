@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { render } from '../../../test-utils/testing-library';
-import {
-    AnimationsEnabledContext,
-    type BlueprintAnimationsProps,
-    withBlueprintAnimations,
-} from '../withBlueprintAnimations';
+import { type BlueprintAnimationsProps, withBlueprintAnimations } from '../withBlueprintAnimations';
 
 jest.mock('@box/blueprint-web', () => {
     const ReactMock = jest.requireActual('react');
@@ -103,21 +99,5 @@ describe('src/elements/common/withBlueprintAnimations', () => {
         expect(getByTestId('dom-facing')).not.toHaveAttribute('animationsEnabled');
         expect(getByTestId('dom-facing')).toHaveAttribute('data-extra', 'keep');
         expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase1', 'false');
-    });
-
-    test('should force animations off when AnimationsEnabledContext is false', () => {
-        const { getByTestId } = render(
-            <AnimationsEnabledContext.Provider value={false}>
-                <WrappedComponent
-                    animationsEnabled={{
-                        animationsPhase1Enabled: true,
-                        animationsPhase2Enabled: true,
-                    }}
-                />
-            </AnimationsEnabledContext.Provider>,
-        );
-
-        expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase1', 'false');
-        expect(getByTestId('blueprint-animations-provider')).toHaveAttribute('data-animations-phase2', 'false');
     });
 });

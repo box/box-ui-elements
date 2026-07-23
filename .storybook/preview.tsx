@@ -2,14 +2,12 @@ import React from 'react';
 import { BlueprintProvider, useNoopTreatment } from '@box/blueprint-web';
 import { boxLanguages } from '@box/languages';
 import { addWindowFocusTracking } from '@react-aria/interactions';
-import isChromatic from 'chromatic/isChromatic';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 import type { Decorator, Preview } from '@storybook/react-webpack5';
 
 import '../src/styles/variables';
 import '../src/styles/base.scss';
 
-import { AnimationsEnabledContext } from '../src/elements/common/withBlueprintAnimations';
 import { reactIntl } from './reactIntl';
 
 // Constants
@@ -29,22 +27,17 @@ initialize({
     },
 });
 
-const withBlueprintAnimations: Decorator = Story =>
-    isChromatic() ? (
-        <AnimationsEnabledContext.Provider value={false}>
-            <Story />
-        </AnimationsEnabledContext.Provider>
-    ) : (
-        <BlueprintProvider
-            useTreatment={useNoopTreatment}
-            configurationOverrides={{
-                animationsPhase1Enabled: true,
-                animationsPhase2Enabled: true,
-            }}
-        >
-            <Story />
-        </BlueprintProvider>
-    );
+const withBlueprintAnimations: Decorator = Story => (
+    <BlueprintProvider
+        useTreatment={useNoopTreatment}
+        configurationOverrides={{
+            animationsPhase1Enabled: true,
+            animationsPhase2Enabled: true,
+        }}
+    >
+        <Story />
+    </BlueprintProvider>
+);
 
 const preview: Preview = {
     decorators: [withBlueprintAnimations],
