@@ -16,9 +16,11 @@ import { isFeatureEnabled } from '../common/feature-checking';
 import Internationalize from '../common/Internationalize';
 import Providers from '../common/Providers';
 // $FlowFixMe
+import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
+// $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 // $FlowFixMe
-import ContentSharingV2 from './ContentSharingV2';
+import { ContentSharingV2Component as ContentSharingV2 } from './ContentSharingV2';
 import SharingModal from './SharingModal';
 
 import type { ElementsXhrError } from '../../common/types/api';
@@ -177,4 +179,4 @@ function ContentSharing({
     );
 }
 
-export default withBlueprintModernization(ContentSharing);
+export default withBlueprintAnimations(withBlueprintModernization(ContentSharing));

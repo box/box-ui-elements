@@ -103,6 +103,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import Providers from '../common/Providers';
 
@@ -2100,6 +2101,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider, withBlueprintModernization])(
-    ContentExplorer,
-);
+export default flow([
+    makeResponsive,
+    withFeatureConsumer,
+    withFeatureProvider,
+    withBlueprintModernization,
+    withBlueprintAnimations,
+])(ContentExplorer);

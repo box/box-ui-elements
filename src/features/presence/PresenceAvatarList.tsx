@@ -6,6 +6,7 @@ import { Tooltip as BPTooltip, TooltipProvider as BPTooltipProvider } from '@box
 import PresenceAvatar from './PresenceAvatar';
 import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
+import { withBlueprintAnimations } from '../../elements/common/withBlueprintAnimations';
 import { withBlueprintModernization } from '../../elements/common/withBlueprintModernization';
 import './PresenceAvatarList.scss';
 
@@ -146,4 +147,4 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
 
 export { PresenceAvatarList as PresenceAvatarListComponent };
 
-export default withBlueprintModernization(React.forwardRef(PresenceAvatarList));
+export default withBlueprintAnimations(withBlueprintModernization(React.forwardRef(PresenceAvatarList)));
