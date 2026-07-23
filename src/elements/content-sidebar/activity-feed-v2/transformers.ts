@@ -257,6 +257,7 @@ export const transformTaskToProps = (
     currentUserId,
     description: task.description,
     dueDate: toUnixMs(task.due_at),
+    fileCount: task.task_links?.entries?.length,
     hasNextPage: Boolean(task.assigned_to?.next_marker),
     id: task.id,
     permissions: {
