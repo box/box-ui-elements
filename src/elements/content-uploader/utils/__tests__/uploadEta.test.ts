@@ -40,7 +40,7 @@ describe('updateEta()', () => {
             etaMs: 10000,
         };
         // Window [0,2000,3000] / [0,2000,3000] -> 1000 B/s, 7000 B left -> raw ETA 7000ms.
-        // Smoothed: 0.1 * 7000 + 0.9 * 10000 = 9700 (barely moves off the previous 10000).
+        // Smoothed: 0.1 * 7000 + 0.9 * 10000 = 9700 (barely moves off the previous 10000)
         const next = updateEta(prev, 3000, 10000, 3000);
         expect(next.etaMs).toBeCloseTo(9700, 5);
     });
