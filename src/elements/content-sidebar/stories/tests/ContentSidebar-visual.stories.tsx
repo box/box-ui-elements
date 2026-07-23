@@ -66,6 +66,9 @@ export default {
         hasVersions: true,
         token: global.TOKEN,
     },
+    parameters: {
+        chromatic: { ignoreSelectors: ['.bcs-scroll-content'] },
+    },
 };
 
 // Basic
