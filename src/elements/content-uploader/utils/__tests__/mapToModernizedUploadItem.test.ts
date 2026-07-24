@@ -131,6 +131,17 @@ describe('mapToModernizedUploadItem()', () => {
         expect(result.isFolder).toBe(true);
     });
 
+    test('omits byte progress and ETA fields for folders even when the treatment is on', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ isFolder: true, size: 1, bytesUploaded: 0, remainingMs: 12000 }),
+            '0',
+            true,
+        );
+        expect(result.bytesUploaded).toBeUndefined();
+        expect(result.totalBytes).toBeUndefined();
+        expect(result.remainingMs).toBeUndefined();
+    });
+
     test('defaults missing extension and progress', () => {
         const result = mapToModernizedUploadItem(buildLegacyItem({ extension: undefined, progress: undefined }), '0');
         expect(result.extension).toBe('');

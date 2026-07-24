@@ -56,7 +56,9 @@ export function mapToModernizedUploadItem(
 
     // Kill switch: when the ETA/byte-progress treatment is off, omit the fields
     // entirely so the modernized manager falls back to the plain percentage.
-    if (!isUploadEtaEnabled) {
+    // Folders are queued with a synthetic size of 1 and never receive real byte
+    // aggregate progress, so treat them as non-file data and skip the fields too.
+    if (!isUploadEtaEnabled || item.isFolder) {
         return baseItem;
     }
 
