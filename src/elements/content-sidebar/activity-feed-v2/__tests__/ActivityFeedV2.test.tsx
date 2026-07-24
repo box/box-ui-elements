@@ -28,12 +28,18 @@ const mockScrollTo = jest.fn<boolean, [string]>(() => true);
 type FilterMenuProps = { children?: React.ReactNode; hasActiveFilters?: boolean };
 type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
 type RootProps = React.ComponentProps<typeof ActivityFeed.Root>;
+type TaskListItemProps = {
+    hasNextPage?: boolean;
+    id: string;
+    onLoadAllAssignee?: () => Promise<unknown>;
+};
 let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
 let lastEditorProps: Partial<EditorProps> = {};
 let lastRootProps: Partial<RootProps> = {};
 let lastTaskModalProps: Partial<TaskModalV2Props> = {};
+let lastTaskItemProps: Partial<TaskListItemProps> = {};
 
 jest.mock('../task-modal-v2', () => ({
     __esModule: true,
@@ -55,7 +61,10 @@ jest.mock('@box/activity-feed', () => {
     ActivityFeedList.AppActivity = (props: { id: string }) => (
         <div data-testid={`app-activity-${props.id}`}>AppActivity</div>
     );
-    ActivityFeedList.Task = (props: { id: string }) => <div data-testid={`task-${props.id}`}>Task</div>;
+    ActivityFeedList.Task = (props: TaskListItemProps) => {
+        lastTaskItemProps = props;
+        return <div data-testid={`task-${props.id}`}>Task</div>;
+    };
     ActivityFeedList.ThreadedAnnotation = (props: { messages?: Array<{ id: string }> }) => (
         <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>
     );
@@ -186,6 +195,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         lastEditorProps = {};
         lastRootProps = {};
         lastTaskModalProps = {};
+        lastTaskItemProps = {};
         mockSerializeMentionMarkup.mockImplementation((doc: unknown) => ({
             hasMention: false,
             text: JSON.stringify(doc),
@@ -250,6 +260,87 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         );
 
         expect(screen.getByTestId('task-task-1')).toBeVisible();
+    });
+
+    describe('task assignee loading', () => {
+        // First page of assignees is partial (next_marker set), so the assignee list shows "Show more"
+        const taskWithMoreAssignees = {
+            ...mockTask,
+            assigned_to: {
+                entries: [
+                    {
+                        id: 'assignment-1',
+                        permissions: { can_delete: true, can_update: true },
+                        role: 'ASSIGNEE',
+                        status: 'NOT_STARTED',
+                        target: { id: 'user-2', name: 'Assignee One', type: 'user' },
+                        type: 'task_collaborator',
+                    },
+                ],
+                limit: 20,
+                next_marker: 'marker-1',
+            },
+        };
+
+        test('should fetch and transform the full assignee list when onLoadAllAssignee fires', async () => {
+            const getTaskCollaborators = jest.fn().mockResolvedValue({
+                entries: [
+                    {
+                        id: 'assignment-1',
+                        permissions: { can_delete: true, can_update: true },
+                        role: 'ASSIGNEE',
+                        status: 'NOT_STARTED',
+                        target: { id: 'user-2', name: 'Assignee One', type: 'user' },
+                        type: 'task_collaborator',
+                    },
+                    {
+                        completed_at: '2024-03-02T00:00:00Z',
+                        id: 'assignment-2',
+                        permissions: { can_delete: false, can_update: false },
+                        role: 'ASSIGNEE',
+                        status: 'COMPLETED',
+                        target: { id: 'user-3', name: 'Assignee Two', type: 'user' },
+                        type: 'task_collaborator',
+                    },
+                ],
+                limit: 1000,
+                next_marker: null,
+            });
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+
+            expect(lastTaskItemProps.hasNextPage).toBe(true);
+
+            const result = await lastTaskItemProps.onLoadAllAssignee?.();
+
+            expect(getTaskCollaborators).toHaveBeenCalledWith(taskWithMoreAssignees);
+            expect(result).toEqual([
+                expect.objectContaining({ id: 'user-2', name: 'Assignee One', status: 'NOT_STARTED' }),
+                expect.objectContaining({
+                    completedAt: new Date('2024-03-02T00:00:00Z').getTime(),
+                    id: 'user-3',
+                    name: 'Assignee Two',
+                    status: 'COMPLETED',
+                }),
+            ]);
+        });
+
+        test('should omit onLoadAllAssignee when getTaskCollaborators is not provided', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+
+            expect(lastTaskItemProps.hasNextPage).toBe(true);
+            expect(lastTaskItemProps.onLoadAllAssignee).toBeUndefined();
+        });
     });
 
     test('should render version feed items alongside other items', () => {
