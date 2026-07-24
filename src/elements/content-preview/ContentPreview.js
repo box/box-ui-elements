@@ -40,6 +40,8 @@ import { mark } from '../../utils/performance';
 import { convertTimestampToSeconds } from '../../utils/timestamp';
 import { isFeatureEnabled, withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
 // $FlowFixMe
+import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
+// $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
@@ -1763,6 +1765,7 @@ export default flow([
     withFeatureConsumer,
     withFeatureProvider,
     withBlueprintModernization,
+    withBlueprintAnimations,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
 ])(ContentPreview);
