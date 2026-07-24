@@ -230,13 +230,21 @@ const ActivityFeedV2 = ({
 
     const avatarUrls = useAvatarUrls(feedItems, getAvatarUrl);
 
-    // Loads the full assignee list (up to 1000) when the assignee list's "Show more"
-    // is clicked on a task whose first page (20) did not include all assignees.
+    // Loads the full assignee list (limit=API_PAGE_LIMIT via getTaskCollaborators) when the
+    // assignee list's "Show more" is clicked on a task whose embedded first page of assignees
+    // was incomplete (assigned_to.next_marker present, i.e. hasNextPage). Rejections are
+    // rethrown so AssigneeList can render its inline load error.
     const handleTaskLoadAllAssignees = React.useMemo(() => {
         if (!getTaskCollaborators) return undefined;
         return async (task: TaskNew) => {
-            const collection = await getTaskCollaborators(task);
-            return transformTaskAssignees(collection?.entries ?? [], avatarUrls);
+            try {
+                const collection = await getTaskCollaborators(task);
+                return transformTaskAssignees(collection.entries, avatarUrls);
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(`ActivityFeedV2: failed to load assignees for task "${task.id}"`, error);
+                throw error;
+            }
         };
     }, [avatarUrls, getTaskCollaborators]);
 

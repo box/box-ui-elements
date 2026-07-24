@@ -263,7 +263,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     });
 
     describe('task assignee loading', () => {
-        // First page of assignees is partial (next_marker set), so the assignee list shows "Show more"
+        // First page of assignees is partial (next_marker set), so hasNextPage is passed as true
+        // to the Task item (which is what makes the real AssigneeList offer "Show more")
         const taskWithMoreAssignees = {
             ...mockTask,
             assigned_to: {
@@ -340,6 +341,27 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             expect(lastTaskItemProps.hasNextPage).toBe(true);
             expect(lastTaskItemProps.onLoadAllAssignee).toBeUndefined();
+        });
+
+        test('should log and rethrow when getTaskCollaborators rejects so AssigneeList can show its error state', async () => {
+            const loadError = new Error('network failure');
+            const getTaskCollaborators = jest.fn().mockRejectedValue(loadError);
+            const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+
+            await expect(lastTaskItemProps.onLoadAllAssignee?.()).rejects.toThrow('network failure');
+
+            expect(consoleSpy).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to load assignees for task "task-1"',
+                loadError,
+            );
+            consoleSpy.mockRestore();
         });
     });
 
