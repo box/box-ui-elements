@@ -13,6 +13,7 @@ import {
     ERROR_CODE_FETCH_SKILLS,
     ERROR_CODE_UPDATE_METADATA,
     ERROR_CODE_UPDATE_SKILLS,
+    METADATA_NAMESPACE_GLOBAL,
     METADATA_SCOPE_GLOBAL,
     METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
     METADATA_TEMPLATE_CLASSIFICATION,
@@ -162,6 +163,7 @@ describe('api/Metadata', () => {
             expect(metadata.getCustomPropertiesTemplate()).toEqual({
                 id: expect.stringContaining('metadata_template_'),
                 scope: METADATA_SCOPE_GLOBAL,
+                namespace: METADATA_NAMESPACE_GLOBAL,
                 templateKey: METADATA_TEMPLATE_PROPERTIES,
                 hidden: false,
                 fields: [],
@@ -769,6 +771,25 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.get).toHaveBeenCalledWith({ url });
             expect(response).toBe(metadataTemplate);
         });
+
+        test('should use distinct cache keys when scope differs', async () => {
+            const templateKey = 'templateKey_123';
+            const enterpriseResponse = { data: { scope: 'enterprise' } };
+            const namespaceResponse = { data: { namespace: 'enterprise_123' } };
+            metadata.xhr.get = jest
+                .fn()
+                .mockResolvedValueOnce(enterpriseResponse)
+                .mockResolvedValueOnce(namespaceResponse);
+
+            const first = await metadata.getSchemaByTemplateKey(templateKey, 'enterprise');
+            const second = await metadata.getSchemaByTemplateKey(templateKey, 'enterprise_123');
+            const firstCached = await metadata.getSchemaByTemplateKey(templateKey, 'enterprise');
+
+            expect(first).toBe(enterpriseResponse);
+            expect(second).toBe(namespaceResponse);
+            expect(firstCached).toBe(enterpriseResponse);
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
+        });
     });
 
     describe('getInstances()', () => {
@@ -1022,6 +1043,29 @@ describe('api/Metadata', () => {
             expect(result.template).toBe('collabed_template');
             expect(result.isExternallyOwned).toBe(true);
             expect(metadata.getTemplates).toBeCalledWith('id', 'enterprise', 'instanceId', true);
+        });
+
+        test('should match namespace-only instance by namespace when scope is undefined', async () => {
+            const namespaceTemplate = {
+                id: 7,
+                templateKey: 'namespaced1',
+                namespace: 'enterprise_123.box.extract',
+            };
+            const scopeLessWrongMatch = {
+                id: 8,
+                templateKey: 'namespaced1',
+            };
+            const result = await metadata.getTemplateForInstance(
+                'id',
+                {
+                    $id: 'instanceId',
+                    $template: 'namespaced1',
+                    $namespace: 'enterprise_123.box.extract',
+                },
+                [scopeLessWrongMatch, namespaceTemplate],
+            );
+            expect(result.template).toBe(namespaceTemplate);
+            expect(result.isExternallyOwned).toBe(false);
         });
     });
 

@@ -17,6 +17,7 @@ import {
     HTTP_POST,
     HTTP_PUT,
     HTTP_DELETE,
+    METADATA_SCOPE_MODE_SCOPED,
 } from '../constants';
 import type { ElementsErrorCallback, APIOptions } from '../common/types/api';
 import type APICache from '../utils/Cache';
@@ -58,6 +59,15 @@ class Base {
      * @property {?string}
      */
     metadataApiHost: ?string;
+
+    /**
+     * Namespace migration mode for the Box Metadata Namespaces API.
+     * Controls whether requests use legacy scopes ('SCOPED'), both ('MIGRATION'),
+     * or namespace-only ('FINAL'). Defaults to 'SCOPED'.
+     *
+     * @property {string}
+     */
+    metadataNamespaceMode: string;
 
     /**
      * @property {string}
@@ -118,6 +128,7 @@ class Base {
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.metadataApiHost = options.metadataApiHost;
+        this.metadataNamespaceMode = options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
         // @TODO: avoid keeping another copy of data in this.options
         this.options = {
