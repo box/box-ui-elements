@@ -21,7 +21,7 @@ const buildLegacyItem = (overrides = {}) => ({
 
 describe('mapToModernizedUploadItem()', () => {
     test('maps core fields', () => {
-        const result = mapToModernizedUploadItem(buildLegacyItem(), '0');
+        const result = mapToModernizedUploadItem(buildLegacyItem(), '0', true);
         expect(result).toEqual({
             id: 'foo.pdf',
             name: 'foo.pdf',
@@ -31,7 +31,79 @@ describe('mapToModernizedUploadItem()', () => {
             isFolder: undefined,
             errorMessage: undefined,
             versionNumber: undefined,
+            bytesUploaded: undefined,
+            totalBytes: 100,
+            remainingMs: undefined,
         });
+    });
+
+    test('omits byte progress and ETA fields when the treatment is off (kill switch)', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ bytesUploaded: 40, totalBytes: 100, remainingMs: 12000 }),
+            '0',
+        );
+        expect(result.bytesUploaded).toBeUndefined();
+        expect(result.totalBytes).toBeUndefined();
+        expect(result.remainingMs).toBeUndefined();
+    });
+
+    test('forwards byte progress and ETA fields', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ bytesUploaded: 40, totalBytes: 100, remainingMs: 12000 }),
+            '0',
+            true,
+        );
+        expect(result.bytesUploaded).toBe(40);
+        expect(result.totalBytes).toBe(100);
+        expect(result.remainingMs).toBe(12000);
+    });
+
+    test('falls back to size for totalBytes before first progress event', () => {
+        const result = mapToModernizedUploadItem(buildLegacyItem({ totalBytes: undefined, size: 2048 }), '0', true);
+        expect(result.totalBytes).toBe(2048);
+    });
+
+    test.each([STATUS_STAGED, STATUS_COMPLETE])(
+        'reports full bytesUploaded once the item is %s (progress events stop before hitting the total)',
+        status => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status, bytesUploaded: 259, totalBytes: 260 }),
+                '0',
+                true,
+            );
+            expect(result.bytesUploaded).toBe(260);
+            expect(result.totalBytes).toBe(260);
+        },
+    );
+
+    test('does not inflate bytesUploaded while still uploading', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ status: STATUS_IN_PROGRESS, bytesUploaded: 259, totalBytes: 260 }),
+            '0',
+            true,
+        );
+        expect(result.bytesUploaded).toBe(259);
+    });
+
+    test.each([STATUS_STAGED, STATUS_COMPLETE])(
+        'drops the ETA once the item is %s (the smoothed estimate lags and looks stale)',
+        status => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status, bytesUploaded: 260, totalBytes: 260, remainingMs: 3000 }),
+                '0',
+                true,
+            );
+            expect(result.remainingMs).toBeUndefined();
+        },
+    );
+
+    test('still forwards the ETA while uploading', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ status: STATUS_IN_PROGRESS, remainingMs: 3000 }),
+            '0',
+            true,
+        );
+        expect(result.remainingMs).toBe(3000);
     });
 
     test.each([
@@ -57,6 +129,17 @@ describe('mapToModernizedUploadItem()', () => {
     test('forwards isFolder', () => {
         const result = mapToModernizedUploadItem(buildLegacyItem({ isFolder: true }), '0');
         expect(result.isFolder).toBe(true);
+    });
+
+    test('omits byte progress and ETA fields for folders even when the treatment is on', () => {
+        const result = mapToModernizedUploadItem(
+            buildLegacyItem({ isFolder: true, size: 1, bytesUploaded: 0, remainingMs: 12000 }),
+            '0',
+            true,
+        );
+        expect(result.bytesUploaded).toBeUndefined();
+        expect(result.totalBytes).toBeUndefined();
+        expect(result.remainingMs).toBeUndefined();
     });
 
     test('defaults missing extension and progress', () => {
@@ -149,5 +232,17 @@ describe('mapToModernizedUploadItems()', () => {
 
         const result = mapToModernizedUploadItems([folderA, folderB], '0');
         expect(result[0].id).not.toBe(result[1].id);
+    });
+
+    test('forwards the ETA treatment flag to each item', () => {
+        const item = buildLegacyItem({ bytesUploaded: 40, totalBytes: 100, remainingMs: 12000 });
+
+        const disabled = mapToModernizedUploadItems([item], '0');
+        expect(disabled[0].bytesUploaded).toBeUndefined();
+        expect(disabled[0].remainingMs).toBeUndefined();
+
+        const enabled = mapToModernizedUploadItems([item], '0', true);
+        expect(enabled[0].bytesUploaded).toBe(40);
+        expect(enabled[0].remainingMs).toBe(12000);
     });
 });
