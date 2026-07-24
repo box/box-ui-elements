@@ -155,6 +155,9 @@ type Props = {
     },
     previewLibraryVersion: string,
     previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
+    resin?: {
+        recordAction?: (data: Object) => void,
+    },
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,
@@ -1588,6 +1591,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             requestInterceptor,
+            resin,
             responseInterceptor,
             theme,
         }: Props = this.props;
@@ -1725,6 +1729,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             isDefaultOpen={isLarge || isVeryLarge}
                                             language={language}
                                             ref={this.contentSidebar}
+                                            resin={resin}
                                             sharedLink={sharedLink}
                                             sharedLinkPassword={sharedLinkPassword}
                                             requestInterceptor={requestInterceptor}

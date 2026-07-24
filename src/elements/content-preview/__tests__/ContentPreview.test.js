@@ -2460,6 +2460,22 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(bodyDiv.find('.bcpr-container').exists()).toBe(true);
         });
 
+        test('should pass the Resin integration to the sidebar', () => {
+            const resin = { recordAction: jest.fn() };
+            const wrapper = getWrapper({
+                fileId: '123',
+                hideSidebar: false,
+                resin,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const sidebar = wrapper.find('.bcpr-body').children().at(1);
+            expect(sidebar.prop('resin')).toBe(resin);
+        });
+
         test('should render sidebar components when hideSidebar is not provided (default)', () => {
             const wrapper = getWrapper({
                 fileId: '123',

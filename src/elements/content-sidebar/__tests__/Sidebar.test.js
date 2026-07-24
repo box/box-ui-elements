@@ -26,6 +26,7 @@ jest.mock('../../../utils/LocalStore');
 
 describe('elements/content-sidebar/Sidebar', () => {
     const file = {
+        extension: 'pdf',
         id: 'id',
         file_version: {
             id: '123',
@@ -608,6 +609,49 @@ describe('elements/content-sidebar/Sidebar', () => {
             const wrapper = getWrapper({ ...resizableProps, viewWidth: 1200 });
 
             expect(wrapper.find('SidebarResizeHandle').prop('maxWidth')).toBe(600);
+        });
+
+        test('records programmatic Resin actions when resizing starts and ends', () => {
+            const recordAction = jest.fn();
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: jest.fn(),
+            }));
+            const wrapper = getWrapper({
+                ...resizableProps,
+                fileId: file.id,
+                resin: { recordAction },
+            });
+
+            wrapper.instance().handleResizeStart(400);
+            wrapper.instance().handleResizeEnd(550, 400);
+
+            expect(recordAction).toHaveBeenNthCalledWith(1, {
+                action: 'programmatic',
+                component: 'preview',
+                data: {
+                    phase: 'resizeStart',
+                    startWidth: 400,
+                    viewWidth: 1600,
+                    width: 400,
+                },
+                fileExtension: 'pdf',
+                fileId: 'id',
+                target: 'sidebarresizehandle',
+            });
+            expect(recordAction).toHaveBeenNthCalledWith(2, {
+                action: 'programmatic',
+                component: 'preview',
+                data: {
+                    phase: 'resizeEnd',
+                    startWidth: 400,
+                    viewWidth: 1600,
+                    width: 550,
+                },
+                fileExtension: 'pdf',
+                fileId: 'id',
+                target: 'sidebarresizehandle',
+            });
         });
     });
 

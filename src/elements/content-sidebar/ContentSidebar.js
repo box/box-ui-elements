@@ -110,6 +110,9 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    resin?: {
+        recordAction?: (data: Object) => void,
+    },
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     sharedLink?: string,
@@ -405,6 +408,7 @@ class ContentSidebar extends React.Component<Props, State> {
             onPanelChange,
             onVersionChange,
             onVersionHistoryClick,
+            resin,
             signSidebarProps,
             theme,
             versionsSidebarProps,
@@ -453,6 +457,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 onPanelChange={onPanelChange}
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}
+                                resin={resin}
                                 signSidebarProps={signSidebarProps}
                                 theme={theme}
                                 versionsSidebarProps={versionsSidebarProps}
