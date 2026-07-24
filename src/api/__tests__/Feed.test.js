@@ -610,7 +610,7 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should use the file activities api if shouldUseUAA is true and shadow call v2 APIs', done => {
+        test('should use the file activities api if shouldUseUAA is true', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, {
                 shouldUseUAA: true,
                 shouldShowAnnotations: true,
@@ -632,7 +632,13 @@ describe('api/Feed', () => {
                     true,
                     false,
                 );
-                expect(feed.fetchThreadedComments).toBeCalled();
+                expect(feed.fetchComments).not.toBeCalled();
+                expect(feed.fetchThreadedComments).not.toBeCalled();
+                expect(feed.fetchAnnotations).not.toBeCalled();
+                expect(feed.fetchTasksNew).not.toBeCalled();
+                expect(feed.fetchAppActivity).not.toBeCalled();
+                expect(feed.fetchVersions).not.toBeCalled();
+                expect(feed.fetchCurrentVersion).not.toBeCalled();
                 done();
             });
         });
