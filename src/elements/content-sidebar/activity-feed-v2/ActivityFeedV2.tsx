@@ -232,26 +232,34 @@ const ActivityFeedV2 = ({
 
     // Loads the full assignee list (limit=API_PAGE_LIMIT via getTaskCollaborators) when the
     // assignee list's "Show more" is clicked on a task whose embedded first page of assignees
-    // was incomplete (assigned_to.next_marker present, i.e. hasNextPage). Rejections are
-    // rethrown so AssigneeList can render its inline load error.
+    // was incomplete (assigned_to.next_marker present, i.e. hasNextPage). Assignee-fetch
+    // rejections are rethrown so AssigneeList can render its inline load error; avatar-fetch
+    // rejections are non-fatal and fall back to initials.
     const handleTaskLoadAllAssignees = React.useMemo(() => {
         if (!getTaskCollaborators) return undefined;
         return async (task: TaskNew) => {
             try {
                 const collection = await getTaskCollaborators(task);
 
-                // Resolve avatars for assignees beyond the embedded first page, which
-                // useAvatarUrls never saw. Failures fall back to initials (null), matching
-                // useAvatarUrls behavior — only the assignee fetch itself is fatal.
-                const missingIds = collection.entries
-                    .map(entry => entry.target?.id)
-                    .filter((id): id is string => Boolean(id) && !(id in avatarUrls));
+                // Resolve avatars for any assignee ids missing from the useAvatarUrls map —
+                // typically those beyond the embedded first page, which the hook never saw.
+                // Per-avatar failures fall back to initials (null), matching useAvatarUrls
+                // behavior — only the assignee fetch itself is fatal.
+                const missingIds = Array.from(
+                    new Set<string>(
+                        collection.entries
+                            .map(entry => entry.target?.id)
+                            .filter((id): id is string => Boolean(id) && !(id in avatarUrls)),
+                    ),
+                );
                 const fetchedEntries = getAvatarUrl
                     ? await Promise.all(
                           missingIds.map(async id => {
                               try {
                                   return [id, await getAvatarUrl(id)] as const;
-                              } catch {
+                              } catch (avatarError) {
+                                  // eslint-disable-next-line no-console
+                                  console.warn(`ActivityFeedV2: failed to load avatar for user "${id}"`, avatarError);
                                   return [id, null] as const;
                               }
                           }),

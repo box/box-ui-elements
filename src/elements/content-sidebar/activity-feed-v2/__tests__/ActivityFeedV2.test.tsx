@@ -386,7 +386,9 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should fall back to initials (no avatarUrl) when getAvatarUrl rejects for a revealed assignee', async () => {
             const getTaskCollaborators = jest.fn().mockResolvedValue(fullAssigneeCollection);
-            const getAvatarUrl = jest.fn().mockRejectedValue(new Error('avatar service down'));
+            const avatarError = new Error('avatar service down');
+            const getAvatarUrl = jest.fn().mockRejectedValue(avatarError);
+            const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
@@ -403,6 +405,15 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 expect.objectContaining({ avatarUrl: undefined, id: 'user-2' }),
                 expect.objectContaining({ avatarUrl: undefined, id: 'user-3' }),
             ]);
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to load avatar for user "user-2"',
+                avatarError,
+            );
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to load avatar for user "user-3"',
+                avatarError,
+            );
+            consoleWarnSpy.mockRestore();
         });
 
         test('should omit onLoadAllAssignee when getTaskCollaborators is not provided', () => {
