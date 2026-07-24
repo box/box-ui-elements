@@ -121,10 +121,11 @@ class Metadata extends File {
      * Creates a key for the metadata template schema cache
      *
      * @param {string} templateKey - template key
+     * @param {string} [scope] - scope or namespace FQN (defaults to `enterprise`)
      * @return {string} key
      */
-    getMetadataTemplateSchemaCacheKey(templateKey: string): string {
-        return `${CACHE_PREFIX_METADATA}template_schema_${templateKey}`;
+    getMetadataTemplateSchemaCacheKey(templateKey: string, scope?: string = METADATA_SCOPE_ENTERPRISE): string {
+        return `${CACHE_PREFIX_METADATA}template_schema_${scope}_${templateKey}`;
     }
 
     /**
@@ -717,7 +718,7 @@ class Metadata extends File {
         fileId?: string,
     ): Promise<MetadataTemplateSchemaResponse> {
         const cache: APICache = this.getCache();
-        const key = this.getMetadataTemplateSchemaCacheKey(templateKey);
+        const key = this.getMetadataTemplateSchemaCacheKey(templateKey, scope);
 
         if (cache.has(key)) {
             return cache.get(key);
@@ -864,7 +865,10 @@ class Metadata extends File {
 
         // Primary match: by scope (SCOPED mode; also works for enterprise-scoped
         // instances in MIGRATION mode where $scope is still populated).
-        let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
+        // Only run when scope is defined so namespace-only instances (undefined
+        // $scope) do not incorrectly match templates that also lack scope.
+        let template =
+            scope != null ? templates.find(t => t.templateKey === templateKey && t.scope === scope) : undefined;
 
         // Fallback match: by namespace for namespace-only instances in
         // MIGRATION/FINAL mode where $scope is absent.

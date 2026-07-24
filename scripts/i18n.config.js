@@ -11,6 +11,7 @@ module.exports = {
         '@box/metadata-editor',
         '@box/metadata-filter',
         '@box/metadata-template-browser',
+        '@box/metadata-template-editor',
         '@box/metadata-view',
         '@box/unified-share-modal',
         '@box/user-selector',
