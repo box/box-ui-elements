@@ -18,7 +18,7 @@ import TaskModalV2 from './task-modal-v2';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
-import { transformFeedItem } from './transformers';
+import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
@@ -229,6 +229,16 @@ const ActivityFeedV2 = ({
     );
 
     const avatarUrls = useAvatarUrls(feedItems, getAvatarUrl);
+
+    // Loads the full assignee list (up to 1000) when the assignee list's "Show more"
+    // is clicked on a task whose first page (20) did not include all assignees.
+    const handleTaskLoadAllAssignees = React.useMemo(() => {
+        if (!getTaskCollaborators) return undefined;
+        return async (task: TaskNew) => {
+            const collection = await getTaskCollaborators(task);
+            return transformTaskAssignees(collection?.entries ?? [], avatarUrls);
+        };
+    }, [avatarUrls, getTaskCollaborators]);
 
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
@@ -507,6 +517,7 @@ const ActivityFeedV2 = ({
                                     onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                     onTaskDelete={onTaskDelete}
                                     onTaskEdit={onTaskUpdate ? handleTaskEdit : undefined}
+                                    onTaskLoadAllAssignees={handleTaskLoadAllAssignees}
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     timeFormat={timeFormat}
