@@ -61,7 +61,7 @@ export function mapToModernizedUploadItem(
     }
 
     const totalBytes = fileItem.totalBytes ?? item.size;
-    const isFullyUploaded = status === 'staged' || status === 'complete';
+    const isFullyUploaded = status === STATUS_STAGED || status === STATUS_COMPLETE;
     const bytesUploaded = isFullyUploaded && totalBytes != null ? totalBytes : fileItem.bytesUploaded;
     const remainingMs = !isFullyUploaded ? fileItem.remainingMs : undefined;
 
