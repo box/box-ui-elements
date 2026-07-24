@@ -1,9 +1,0 @@
-@mixin icon-collection-item-link-style-override($foregroundColor, $backgroundColor) {
-    .foreground-color {
-        fill: $foregroundColor;
-    }
-
-    .background-color {
-        fill: $backgroundColor;
-    }
-}

@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`elements/content-open-with/IntegrationPortal IntegrationPortal() should portal passed in children to the container element 1`] = `
-<Portal
-  containerInfo={<div />}
->
-  <Component />
-</Portal>
-`;
