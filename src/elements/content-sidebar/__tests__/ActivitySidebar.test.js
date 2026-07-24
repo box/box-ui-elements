@@ -789,7 +789,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.errorCallback = jest.fn();
                 instance.fetchFeedItemsErrorCallback = jest.fn();
                 instance.fetchFeedItemsSuccessCallback = jest.fn();
-                instance.logAPIParity = jest.fn();
 
                 instance.fetchFeedItems();
                 expect(feedAPI.feedItems).toHaveBeenCalledWith(
@@ -807,7 +806,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldUseEnhancedActivities: false,
                         shouldUseUAA: expectedUseUAA,
                     },
-                    expectedUseUAA ? instance.logAPIParity : undefined,
                 );
             },
         );
@@ -842,7 +840,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldUseEnhancedActivities: false,
                     shouldUseUAA: false,
                 },
-                undefined,
             );
         });
 
@@ -869,7 +866,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
                 expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
-                undefined,
             );
         });
 
@@ -896,7 +892,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
                 expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
-                undefined,
             );
         });
 
@@ -926,7 +921,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
                 expect.objectContaining({ shouldShowReplies: true }),
-                undefined,
             );
         });
     });
