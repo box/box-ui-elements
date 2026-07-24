@@ -239,14 +239,37 @@ const ActivityFeedV2 = ({
         return async (task: TaskNew) => {
             try {
                 const collection = await getTaskCollaborators(task);
-                return transformTaskAssignees(collection.entries, avatarUrls);
+
+                // Resolve avatars for assignees beyond the embedded first page, which
+                // useAvatarUrls never saw. Failures fall back to initials (null), matching
+                // useAvatarUrls behavior — only the assignee fetch itself is fatal.
+                const missingIds = collection.entries
+                    .map(entry => entry.target?.id)
+                    .filter((id): id is string => Boolean(id) && !(id in avatarUrls));
+                const fetchedEntries = getAvatarUrl
+                    ? await Promise.all(
+                          missingIds.map(async id => {
+                              try {
+                                  return [id, await getAvatarUrl(id)] as const;
+                              } catch {
+                                  return [id, null] as const;
+                              }
+                          }),
+                      )
+                    : [];
+                const mergedAvatarUrls: Record<string, string> = { ...avatarUrls };
+                fetchedEntries.forEach(([id, url]) => {
+                    if (url) mergedAvatarUrls[id] = url;
+                });
+
+                return transformTaskAssignees(collection.entries, mergedAvatarUrls);
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error(`ActivityFeedV2: failed to load assignees for task "${task.id}"`, error);
                 throw error;
             }
         };
-    }, [avatarUrls, getTaskCollaborators]);
+    }, [avatarUrls, getAvatarUrl, getTaskCollaborators]);
 
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];

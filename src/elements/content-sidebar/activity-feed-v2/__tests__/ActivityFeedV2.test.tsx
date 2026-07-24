@@ -331,6 +331,80 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             ]);
         });
 
+        const fullAssigneeCollection = {
+            entries: [
+                {
+                    id: 'assignment-1',
+                    permissions: { can_delete: true, can_update: true },
+                    role: 'ASSIGNEE',
+                    status: 'NOT_STARTED',
+                    target: { id: 'user-2', name: 'Assignee One', type: 'user' },
+                    type: 'task_collaborator',
+                },
+                {
+                    id: 'assignment-2',
+                    permissions: { can_delete: false, can_update: false },
+                    role: 'ASSIGNEE',
+                    status: 'COMPLETED',
+                    target: { id: 'user-3', name: 'Assignee Two', type: 'user' },
+                    type: 'task_collaborator',
+                },
+            ],
+            limit: 1000,
+            next_marker: null,
+        };
+
+        test('should resolve avatar urls for assignees revealed by onLoadAllAssignee', async () => {
+            const getTaskCollaborators = jest.fn().mockResolvedValue(fullAssigneeCollection);
+            const avatarUrlsByUserId: Record<string, string> = {
+                'user-2': 'https://example.com/avatar-2.png',
+                'user-3': 'https://example.com/avatar-3.png',
+            };
+            const getAvatarUrl = jest.fn(async (userId: string) => avatarUrlsByUserId[userId] ?? null);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getAvatarUrl={getAvatarUrl}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+
+            // Let useAvatarUrls resolve the first-page ids (author user-1, assignee user-2)
+            await act(() => Promise.resolve());
+            getAvatarUrl.mockClear();
+
+            const result = await lastTaskItemProps.onLoadAllAssignee?.();
+
+            // Only user-3 was missing from the avatar map; user-2 was already resolved
+            expect(getAvatarUrl.mock.calls.map(([id]) => id)).toEqual(['user-3']);
+            expect(result).toEqual([
+                expect.objectContaining({ avatarUrl: 'https://example.com/avatar-2.png', id: 'user-2' }),
+                expect.objectContaining({ avatarUrl: 'https://example.com/avatar-3.png', id: 'user-3' }),
+            ]);
+        });
+
+        test('should fall back to initials (no avatarUrl) when getAvatarUrl rejects for a revealed assignee', async () => {
+            const getTaskCollaborators = jest.fn().mockResolvedValue(fullAssigneeCollection);
+            const getAvatarUrl = jest.fn().mockRejectedValue(new Error('avatar service down'));
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getAvatarUrl={getAvatarUrl}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+            await act(() => Promise.resolve());
+
+            const result = await lastTaskItemProps.onLoadAllAssignee?.();
+
+            expect(result).toEqual([
+                expect.objectContaining({ avatarUrl: undefined, id: 'user-2' }),
+                expect.objectContaining({ avatarUrl: undefined, id: 'user-3' }),
+            ]);
+        });
+
         test('should omit onLoadAllAssignee when getTaskCollaborators is not provided', () => {
             render(
                 <ActivityFeedV2
