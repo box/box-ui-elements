@@ -232,9 +232,11 @@ const ActivityFeedV2 = ({
 
     // Loads the full assignee list when "Show more" is clicked. Assignee-fetch failures are
     // rethrown so AssigneeList shows its inline error; avatar failures fall back to initials.
-    const handleTaskLoadAllAssignees = React.useMemo(() => {
-        if (!getTaskCollaborators) return undefined;
-        return async (task: TaskNew) => {
+    const handleTaskLoadAllAssignees = React.useCallback(
+        async (task: TaskNew) => {
+            if (!getTaskCollaborators) {
+                throw new Error('ActivityFeedV2: getTaskCollaborators is required to load assignees');
+            }
             try {
                 const collection = await getTaskCollaborators(task);
 
@@ -270,8 +272,9 @@ const ActivityFeedV2 = ({
                 console.error(`ActivityFeedV2: failed to load assignees for task "${task.id}"`, error);
                 throw error;
             }
-        };
-    }, [avatarUrls, getAvatarUrl, getTaskCollaborators]);
+        },
+        [avatarUrls, getAvatarUrl, getTaskCollaborators],
+    );
 
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
@@ -550,7 +553,9 @@ const ActivityFeedV2 = ({
                                     onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                     onTaskDelete={onTaskDelete}
                                     onTaskEdit={onTaskUpdate ? handleTaskEdit : undefined}
-                                    onTaskLoadAllAssignees={handleTaskLoadAllAssignees}
+                                    onTaskLoadAllAssignees={
+                                        getTaskCollaborators ? handleTaskLoadAllAssignees : undefined
+                                    }
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     timeFormat={timeFormat}
