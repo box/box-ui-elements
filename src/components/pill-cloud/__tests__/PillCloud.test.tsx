@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import PillCloud from '..';
 
@@ -45,12 +46,7 @@ describe('components/pill-cloud/PillCloud', () => {
         ];
         const wrapper = shallow(<PillCloud options={pills} selectedOptions={[pills[1]]} />);
         const buttons = wrapper.find('.bdl-PillCloud-button');
-        expect(
-            buttons
-                .at(1)
-                .props()
-                .className.includes('is-selected'),
-        ).toBeTruthy();
+        expect(buttons.at(1).props().className.includes('is-selected')).toBeTruthy();
     });
 
     test('should add selected class to a selected pill when passed by value', () => {
@@ -61,12 +57,7 @@ describe('components/pill-cloud/PillCloud', () => {
         ];
         const wrapper = shallow(<PillCloud options={pills} selectedOptions={[{ value: 3, displayText: 'Sir' }]} />);
         const buttons = wrapper.find('.bdl-PillCloud-button');
-        expect(
-            buttons
-                .at(2)
-                .props()
-                .className.includes('is-selected'),
-        ).toBeTruthy();
+        expect(buttons.at(2).props().className.includes('is-selected')).toBeTruthy();
     });
 
     test('should pass selected child through to onSelect', () => {
