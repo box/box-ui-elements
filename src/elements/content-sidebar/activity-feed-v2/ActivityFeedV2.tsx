@@ -18,7 +18,7 @@ import TaskModalV2 from './task-modal-v2';
 import FeedItemRow from './FeedItemRow';
 import { serializeEditorContent } from './helpers';
 import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
-import { transformFeedItem } from './transformers';
+import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
@@ -229,6 +229,52 @@ const ActivityFeedV2 = ({
     );
 
     const avatarUrls = useAvatarUrls(feedItems, getAvatarUrl);
+
+    // Loads the full assignee list when "Show more" is clicked. Assignee-fetch failures are
+    // rethrown so AssigneeList shows its inline error; avatar failures fall back to initials.
+    const handleTaskLoadAllAssignees = React.useCallback(
+        async (task: TaskNew) => {
+            if (!getTaskCollaborators) {
+                throw new Error('ActivityFeedV2: getTaskCollaborators is required to load assignees');
+            }
+            try {
+                const collection = await getTaskCollaborators(task);
+
+                // Resolve avatars for assignee ids the useAvatarUrls map doesn't have yet
+                const missingIds = Array.from(
+                    new Set<string>(
+                        collection.entries
+                            .map(entry => entry.target?.id)
+                            .filter((id): id is string => Boolean(id) && !(id in avatarUrls)),
+                    ),
+                );
+                const fetchedEntries = getAvatarUrl
+                    ? await Promise.all(
+                          missingIds.map(async id => {
+                              try {
+                                  return [id, await getAvatarUrl(id)] as const;
+                              } catch (avatarError) {
+                                  // eslint-disable-next-line no-console
+                                  console.warn(`ActivityFeedV2: failed to load avatar for user "${id}"`, avatarError);
+                                  return [id, null] as const;
+                              }
+                          }),
+                      )
+                    : [];
+                const mergedAvatarUrls: Record<string, string> = { ...avatarUrls };
+                fetchedEntries.forEach(([id, url]) => {
+                    if (url) mergedAvatarUrls[id] = url;
+                });
+
+                return transformTaskAssignees(collection.entries, mergedAvatarUrls);
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error(`ActivityFeedV2: failed to load assignees for task "${task.id}"`, error);
+                throw error;
+            }
+        },
+        [avatarUrls, getAvatarUrl, getTaskCollaborators],
+    );
 
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
@@ -507,6 +553,9 @@ const ActivityFeedV2 = ({
                                     onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                     onTaskDelete={onTaskDelete}
                                     onTaskEdit={onTaskUpdate ? handleTaskEdit : undefined}
+                                    onTaskLoadAllAssignees={
+                                        getTaskCollaborators ? handleTaskLoadAllAssignees : undefined
+                                    }
                                     onTaskView={onTaskView}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     timeFormat={timeFormat}
