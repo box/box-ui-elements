@@ -12,34 +12,36 @@ import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { matchPath, withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
+
+import API from '../../api';
+import type { BoxItem, User } from '../../common/types/core';
+import type { MetadataEditor } from '../../common/types/metadata';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import LocalStore from '../../utils/LocalStore';
-import withMediaQuery from '../../components/media-query/withMediaQuery';
 import { VIEW_SIZE_TYPE } from '../../components/media-query/constants';
+import withMediaQuery from '../../components/media-query/withMediaQuery';
+import { SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_BOXAI, SIDEBAR_VIEW_DOCGEN } from '../../constants';
+import LocalStore from '../../utils/LocalStore';
+import { withCurrentUser } from '../common/current-user';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
+import type { FeatureConfig } from '../common/feature-checking';
+import type { Errors } from '../common/flowTypes';
+import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
+// $FlowFixMe TypeScript file
+import ThemingStyles from '../common/theming';
+// $FlowFixMe TypeScript file
+import type { Theme } from '../common/theming';
+import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { BoxAISidebarProps } from './BoxAISidebar';
+import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
+import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
+import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { SignSidebarProps } from './SidebarNavSign';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarResizeHandle from './SidebarResizeHandle';
 import SidebarUtils from './SidebarUtils';
-// $FlowFixMe TypeScript file
-import ThemingStyles from '../common/theming';
-import { withCurrentUser } from '../common/current-user';
-import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
-import type { FeatureConfig } from '../common/feature-checking';
-import type { ActivitySidebarProps } from './ActivitySidebar';
-import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
-import type { MetadataSidebarProps } from './MetadataSidebar';
-import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
-import type { MetadataEditor } from '../../common/types/metadata';
-import type { BoxItem, User } from '../../common/types/core';
-import type { SignSidebarProps } from './SidebarNavSign';
-import type { Errors } from '../common/flowTypes';
-// $FlowFixMe TypeScript file
-import type { Theme } from '../common/theming';
-import { SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_BOXAI, SIDEBAR_VIEW_DOCGEN } from '../../constants';
-import API from '../../api';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -74,6 +76,9 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    resin?: {
+        recordAction?: (data: Object) => void,
+    },
     /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
     shouldFetchSidebarData?: boolean,
     signSidebarProps: SignSidebarProps,
@@ -151,8 +156,33 @@ class Sidebar extends React.Component<Props, State> {
         this.setState({ width });
     };
 
-    handleResizeEnd = (width: number): void => {
+    handleResizeStart = (width: number): void => {
+        this.recordResizeAction('resizeStart', width, width);
+    };
+
+    handleResizeEnd = (width: number, startWidth: number): void => {
         this.store.setItem(SIDEBAR_WIDTH_KEY, width);
+        this.recordResizeAction('resizeEnd', width, startWidth);
+    };
+
+    recordResizeAction = (phase: 'resizeStart' | 'resizeEnd', width: number, startWidth: number): void => {
+        const { file, fileId, resin, viewWidth } = this.props;
+
+        if (resin && resin.recordAction) {
+            resin.recordAction({
+                action: 'programmatic',
+                component: 'preview',
+                data: {
+                    phase,
+                    startWidth,
+                    viewWidth,
+                    width,
+                },
+                fileExtension: file.extension,
+                fileId,
+                target: SIDEBAR_NAV_TARGETS.RESIZE_HANDLE,
+            });
+        }
     };
 
     componentDidMount() {
@@ -410,6 +440,7 @@ class Sidebar extends React.Component<Props, State> {
                         minWidth={minWidth}
                         onResize={this.handleResize}
                         onResizeEnd={this.handleResizeEnd}
+                        onResizeStart={this.handleResizeStart}
                         width={currentWidth}
                     />
                 )}

@@ -113,6 +113,19 @@ describe('elements/content-sidebar/SidebarResizeHandle', () => {
         expect(handle).not.toHaveClass('bcs-resize-handle-is-dragging');
     });
 
+    test('calls onResizeStart with the initial width on pointerdown', () => {
+        const onResizeStart = jest.fn();
+        render(<SidebarResizeHandle {...defaultProps} onResizeStart={onResizeStart} width={600} />);
+        const handle = screen.getByTestId('sidebar-resize-handle');
+
+        fireEvent(
+            handle,
+            Object.assign(new MouseEvent('pointerdown', { bubbles: true, clientX: 1000 }), { pointerId: 1 }),
+        );
+
+        expect(onResizeStart).toHaveBeenCalledWith(600);
+    });
+
     test('removes window pointer listeners on unmount', () => {
         const removeSpy = jest.spyOn(window, 'removeEventListener');
         const { unmount } = render(<SidebarResizeHandle {...defaultProps} />);
@@ -138,6 +151,6 @@ describe('elements/content-sidebar/SidebarResizeHandle', () => {
             dispatchWindowPointer('pointerup', { clientX: 950, pointerId: 1 });
         });
 
-        expect(onResizeEnd).toHaveBeenCalledWith(450);
+        expect(onResizeEnd).toHaveBeenCalledWith(450, 400);
     });
 });

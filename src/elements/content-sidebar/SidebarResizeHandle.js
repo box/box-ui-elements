@@ -12,13 +12,14 @@ type Props = {
     maxWidth: number,
     minWidth: number,
     onResize: (width: number) => void,
-    onResizeEnd?: (width: number) => void,
+    onResizeEnd?: (width: number, startWidth: number) => void,
+    onResizeStart?: (width: number) => void,
     width: number,
 };
 
 const clamp = (value: number, min: number, max: number): number => Math.min(Math.max(value, min), max);
 
-const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, width }: Props) => {
+const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, onResizeStart, width }: Props) => {
     const startXRef = React.useRef<number>(0);
     const startWidthRef = React.useRef<number>(width);
     const [isDragging, setIsDragging] = React.useState(false);
@@ -47,7 +48,7 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, width 
             const finalWidth = clamp(startWidthRef.current + deltaX, minWidth, maxWidth);
             onResize(finalWidth);
             if (onResizeEnd) {
-                onResizeEnd(finalWidth);
+                onResizeEnd(finalWidth, startWidthRef.current);
             }
         },
         [handlePointerMove, maxWidth, minWidth, onResize, onResizeEnd],
@@ -57,6 +58,9 @@ const SidebarResizeHandle = ({ maxWidth, minWidth, onResize, onResizeEnd, width 
         event.preventDefault();
         startXRef.current = event.clientX;
         startWidthRef.current = width;
+        if (onResizeStart) {
+            onResizeStart(width);
+        }
         setIsDragging(true);
         if (typeof event.currentTarget.setPointerCapture === 'function') {
             event.currentTarget.setPointerCapture(((event.pointerId: any): string));

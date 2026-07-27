@@ -403,5 +403,16 @@ describe('elements/content-sidebar/ContentSidebar', () => {
 
             expect(wrapper.find('sidebar').prop('isLoading')).toBe(false);
         });
+
+        test('should pass the Resin integration to Sidebar', () => {
+            const resin = { recordAction: jest.fn() };
+            const wrapper = getWrapper({
+                fileId: 'test_id',
+                minimalFile,
+                resin,
+            });
+
+            expect(wrapper.find('sidebar').prop('resin')).toBe(resin);
+        });
     });
 });
