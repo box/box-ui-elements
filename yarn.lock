@@ -1067,24 +1067,24 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/activity-feed@^2.2.20":
-  version "2.2.20"
-  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-2.2.20.tgz#cfabd1ce23cdd04ab3a60e7680640015c6f31eb4"
-  integrity sha512-M+I+Ozxp4ArBMadNWWo+eHYhc40BKI1iWhIII3OR0e2JBCs+nCDOfIhtZxsFf0NFX0qLXwQ9Ezs+xxmdsGssbA==
+"@box/activity-feed@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-2.3.7.tgz#edda448d52a5089f492c0c5b9a6a3c6cfac00aff"
+  integrity sha512-CSO1UPjdqQBJMb20h6tEEcc6zV60DiLfveLmX8lgHH7iWeP0w/VVPfj4Q0cWELYZzDaNmlWaJS1R2L1ycLOAmg==
 
-"@box/blueprint-web-assets@^5.5.11":
-  version "5.5.11"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-5.5.11.tgz#1ff7897291fb9376de58e2ba2429acae41af3e07"
-  integrity sha512-WC6M4nI4UK9D2J7x/K5BwfjBuPY8N67ikTaNfnwlX7Fg0yyBGk7fieuqqdVdz5ql3h20A4Qv1NZXU/gbiOnlAQ==
+"@box/blueprint-web-assets@^5.6.5":
+  version "5.6.5"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-5.6.5.tgz#77108eca83d88b3d4a76a54e588c10b2ecc33d49"
+  integrity sha512-bRy49Mq7ugw5pfyXco0PVsln60ATOMrdNBAesuPNFxlZxziTVZYNJpg4C5iaOcjFNqPc5cRn8PAXSV+Vmxkn4A==
 
-"@box/blueprint-web@^16.13.2":
-  version "16.13.2"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-16.13.2.tgz#527f739b1333f8683010f86cae31d4e367a66707"
-  integrity sha512-rgyBMSsIKBtwSz/nirvpGQRZCjIHBuYIUPXifcq9bOy3bRrRi3yGSau636pwWv7ajIGALkiDWBYlYUkHQm2Myw==
+"@box/blueprint-web@^16.16.1":
+  version "16.16.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-16.16.1.tgz#90f2d6ffca92a4d4f034b14db247bb3eac5dbbe9"
+  integrity sha512-k+fbFnT9NI+uQhF7r3Z1grmN7y5ndq9/+UXOoq+RQ6Kz4g7YVPDmNAtRArl9AsUyuFYaPeEw4oiRlfFVfAqzIA==
   dependencies:
     "@ariakit/react" "0.4.21"
     "@ariakit/react-core" "0.4.21"
-    "@box/blueprint-web-assets" "^5.5.11"
+    "@box/blueprint-web-assets" "^5.6.5"
     "@internationalized/date" "^3.12.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1135,10 +1135,10 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/collaboration-popover@^2.1.36":
-  version "2.1.36"
-  resolved "https://registry.yarnpkg.com/@box/collaboration-popover/-/collaboration-popover-2.1.36.tgz#21bad0d70c1a6cc9fda5d4c49aa9652e50ef2779"
-  integrity sha512-agIRqK5THWxSvd7Agr+ZlVBQBILH+MwZ7r9iwMa9dsHVmCRN3XtpoApT/aAvbZ7Xih8maE4oUH+EipMf+IaLrQ==
+"@box/collaboration-popover@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@box/collaboration-popover/-/collaboration-popover-2.2.5.tgz#2e8cc398bf1e98ba4bc2bc2122129cc9dbc455d8"
+  integrity sha512-91fnZPnS+xCXL4bJrBUpi4tzT2EN9LiBuNB7IY2pwsA4vZZ6R4CJXnL1YJSz2uaNG0Ebs+LWiGfLlHUP4Kjx6w==
 
 "@box/combobox-with-api@^1.42.22":
   version "1.46.5"
@@ -1214,23 +1214,27 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/readable-time@^2.1.36":
-  version "2.1.36"
-  resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-2.1.36.tgz#319eeddb2cef282875de431ef81e1d3b65cdd2ed"
-  integrity sha512-7/PbGGZUqio9ZwHtoZJyJ1kKtju8UTOcOfJv3yOibki47WepjHoXeTkCgRaX4qSLzDca0fntj+lTeV3CwsN7MQ==
+"@box/readable-time@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-2.2.5.tgz#8968802904550055f484c626f91734d58bbf012f"
+  integrity sha512-ODgWC/nmoSxQx03K3u4EqAc8A67I5orhfAObuN5aNddH5Azx72q906GW6pvCnvOl4f6zte1+suML+GsJFxNwmw==
 
-"@box/threaded-annotations@^4.1.12":
-  version "4.1.12"
-  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-4.1.12.tgz#1a3fd296c89b858d1587e0993ecb25c5381ce59b"
-  integrity sha512-lpSp/9lS6vQKKZr7xV+guZk6hdYqbWTy3WPB4tS82wkhBtd10LEOtqlPE6YGh3cUkQ3r+oE3IsiKRk2g+bncvw==
+"@box/threaded-annotations@^4.4.1":
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-4.4.1.tgz#d9efde9a732d4a4a7cbc88facd5b67007c7d1500"
+  integrity sha512-DyPqoocXzznrDrw/XnTTv8+MfxEuB+a2oUVrFOFmQtPOom2TDJ3gJBvGlQO96zp3wJan4jmg9m0HcNTafMICiw==
   dependencies:
     "@floating-ui/dom" "^1.6.0"
     "@tanstack/react-virtual" "^3.10.8"
     "@tiptap/core" "3.26.1"
+    "@tiptap/extension-bold" "3.26.1"
     "@tiptap/extension-document" "3.26.1"
+    "@tiptap/extension-italic" "3.26.1"
+    "@tiptap/extension-list" "3.26.1"
     "@tiptap/extension-mention" "3.26.1"
     "@tiptap/extension-paragraph" "3.26.1"
     "@tiptap/extension-text" "3.26.1"
+    "@tiptap/extension-underline" "3.26.1"
     "@tiptap/extensions" "3.26.1"
     "@tiptap/pm" "3.26.1"
     "@tiptap/react" "3.26.1"
@@ -1257,10 +1261,10 @@
   resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-2.4.0.tgz#c336bc4baef6265fa5a75d266dedd8784532f1eb"
   integrity sha512-8tXfla+FNnKoqLnUSs+CLc2EEIueOJhGvJFhVtnJ8YOKGvoBSC3eiZA9iSScJQ4/OjK0ImqBlCsuLOAReCflfw==
 
-"@box/user-selector@^2.1.39":
-  version "2.1.39"
-  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-2.1.39.tgz#6b80a1a74fb05c4514df4b2cc22f01136ecb1bfc"
-  integrity sha512-e4HNGHE1T0T7v3GnW2nmZmTE0WzWbU2gVq4Ybcr1ZXcf0xWS8N+Kbamu5CBLPi/8Nc3M/AWsEhtpuVhKdnmquA==
+"@box/user-selector@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-2.2.5.tgz#b99e6f4be6a27e79159731aaab91f334a84115b9"
+  integrity sha512-t93vbGuzezim6zNwvNSUxqKf0HZq7f0dYxSmTp+ev4z6nVrGQAiYX7NhFORgBsH4W409vkAgENnmYh3JuFcMug==
 
 "@cacheable/memory@^2.0.8":
   version "2.0.8"
@@ -5400,6 +5404,11 @@
   resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-3.26.1.tgz#a4d3222248af7af01aede146806a5757465cc654"
   integrity sha512-TX9PyPqBoix0qDLjtok/bddtdSy54QhzLVha405C07V+WySOpH3s/pWYkywehZQY0SQtcrcY4MNSCeQjCbA28A==
 
+"@tiptap/extension-bold@3.26.1":
+  version "3.26.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-bold/-/extension-bold-3.26.1.tgz#5e6b1caca15e90a45324e960a597e6bedef15491"
+  integrity sha512-VIlF2sAiV6K009pcIDotfY8mvsPaq90dxeG9Q0ZIqfMD958TUCqjHw4MGYZf0/FgP12xksBfmcR7W312xgUf9Q==
+
 "@tiptap/extension-bubble-menu@^3.26.1":
   version "3.27.1"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bubble-menu/-/extension-bubble-menu-3.27.1.tgz#36b2da978525eb894bc68d5363f9743c6f1fa1cf"
@@ -5417,6 +5426,16 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-3.27.1.tgz#800b0bd87ea4b587c7e2c403c51a7a75aa856325"
   integrity sha512-BmJF1VqB7dSJkgAalrpVFj88WLhxKjcWPuWHOqf2ITrUU2832BhKLXKmxjWUy1gqV8PfNNVWtGfIERy7I0y0+Q==
 
+"@tiptap/extension-italic@3.26.1":
+  version "3.26.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-italic/-/extension-italic-3.26.1.tgz#656ff4d6cac83c8cdd1fd030cd1c0fc368803283"
+  integrity sha512-cLKYvOLToWEkJkAPspgIZ/PYDzAxacLm1VWcAq1tO1QDQCDe2Kw+y/zsGlyYEq/aKsAgpp4JNopBwAXRXxt2/A==
+
+"@tiptap/extension-list@3.26.1":
+  version "3.26.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-list/-/extension-list-3.26.1.tgz#532804fda623a25ed10bcacad55ccf5ab347969e"
+  integrity sha512-06nOjnyXpzMO8Ys5k3IbYsDsKib1mv2OtaxBYX1/1uvRyOKwUX5tqDLb/qigic0LIANNL73lkNC8Z8XPeG4Tkg==
+
 "@tiptap/extension-mention@3.26.1":
   version "3.26.1"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-mention/-/extension-mention-3.26.1.tgz#9ac3147291d343b8b4edccfb4ac2753d0d503216"
@@ -5431,6 +5450,11 @@
   version "3.26.1"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-text/-/extension-text-3.26.1.tgz#4b693434477a8fed89f964974634dbe5ae23d742"
   integrity sha512-Gocui5WvcCCJJIX17gdOVCSdYi5H4fDwaR0qkMAUZPq5kJCdrfl+vNpt8BTt53Bk+/QumiUW21fhQ184w7RoeQ==
+
+"@tiptap/extension-underline@3.26.1":
+  version "3.26.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-underline/-/extension-underline-3.26.1.tgz#bf83cdc3119422d1401416438497ecfb1f0bc3e3"
+  integrity sha512-HUHtQ+DRWDM0opW7Nk3YQwrLzw876hMU7cr1X/ZTG+8Bp+AKHihlwU+bqrPgG5St0mqASyUEhHQ/vK5PlnUYOQ==
 
 "@tiptap/extensions@3.26.1":
   version "3.26.1"
