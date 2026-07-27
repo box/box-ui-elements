@@ -1252,10 +1252,10 @@
   resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-2.15.16.tgz#49deb182bf1ac7f1ffe4bae713ab12ff2822533e"
   integrity sha512-Y1bE+JWDQm058lT+AcsfwJqK3WvGAsZj6ro9PLvejJZ1LxzexvOzyQFkM0sL4Kmj/93k2VEKoAJ/onBgheAJoQ==
 
-"@box/uploads-manager@^1.17.2":
-  version "1.17.2"
-  resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-1.17.2.tgz#e7640ca60c0b1eac6fda1ab6dc5d8269a124eb69"
-  integrity sha512-pVXoPDFmAYx/ErD8+kP3yi4/EOG331tWl4yiO7cEDE1ia5X6mmKGp3va5twJfiqmTmnxBJJZAFEBa4QYb5yV5Q==
+"@box/uploads-manager@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-2.4.0.tgz#c336bc4baef6265fa5a75d266dedd8784532f1eb"
+  integrity sha512-8tXfla+FNnKoqLnUSs+CLc2EEIueOJhGvJFhVtnJ8YOKGvoBSC3eiZA9iSScJQ4/OjK0ImqBlCsuLOAReCflfw==
 
 "@box/user-selector@^2.1.39":
   version "2.1.39"
