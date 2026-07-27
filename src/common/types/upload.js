@@ -65,6 +65,7 @@ type FolderUploadItem = {
 type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
+    bytesUploaded?: number,
     bytesUploadedOnLastResume?: number,
     dedupeKey?: string,
     error?: Object,
@@ -74,8 +75,10 @@ type UploadItem = {
     name: string,
     options?: UploadItemAPIOptions,
     progress: number,
+    remainingMs?: number,
     size: number,
     status: UploadStatus,
+    totalBytes?: number,
 };
 
 type MultiputConfig = {

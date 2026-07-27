@@ -16,6 +16,7 @@ import Footer from './Footer';
 import ModernizedUploadsManagerDropZone from './ModernizedUploadsManagerDropZone';
 import UploadsManager from './UploadsManager';
 import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
+import { updateEta, getRemainingMs, type EtaState } from './utils/uploadEta';
 import './ModernizedUploadsManagerPanel.scss';
 import API from '../../api';
 import Browser from '../../utils/Browser';
@@ -117,6 +118,7 @@ export interface ContentUploaderProps {
     uploadHost: string;
     useUploadsManager?: boolean;
     enableModernizedUploads?: boolean;
+    isUploadEtaEnabled?: boolean;
     isUpgradeModalEnabled?: boolean;
     isExpanded?: boolean;
     onToggle?: (isExpanded: boolean) => void;
@@ -172,6 +174,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
     itemIdsRef: React.MutableRefObject<Object>;
 
+    etaByItem: WeakMap<UploadItem, EtaState> = new WeakMap();
+
     static defaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
@@ -204,6 +208,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         useUploadsManager: false,
         enableModernizedUploads: false,
+        isUploadEtaEnabled: false,
         isUpgradeModalEnabled: false,
         modernizedDismissDelayMs: HIDE_MODERNIZED_UPLOAD_MANAGER_DELAY_MS,
     };
@@ -1018,6 +1023,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         item.status = STATUS_PENDING;
         delete item.error;
 
+        // Drop byte/ETA progress from the previous attempt
+        item.bytesUploaded = 0;
+        item.remainingMs = undefined;
+        this.etaByItem.delete(item);
+
         const updatedItems = [...this.itemsRef.current];
         updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
@@ -1260,6 +1270,13 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
         item.status = item.progress === 100 ? STATUS_STAGED : STATUS_IN_PROGRESS;
+
+        // Track byte-level progress and a smoothed ETA for the modernized manager.
+        const nextEta = updateEta(this.etaByItem.get(item), event.loaded, event.total, Date.now());
+        this.etaByItem.set(item, nextEta);
+        item.bytesUploaded = event.loaded;
+        item.totalBytes = event.total;
+        item.remainingMs = getRemainingMs(nextEta);
 
         const { onProgress } = this.props;
         onProgress(item);
@@ -1827,6 +1844,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             className,
             canDropOnUploadsManager,
             enableModernizedUploads,
+            isUploadEtaEnabled,
             fileLimit,
             isDraggingItemsToUploadsManager = false,
             isFolderUploadEnabled,
@@ -1897,7 +1915,11 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onMouseLeave={this.handleModernizedMouseLeave}
                         >
                             <UploadsManagerBP
-                                items={mapToModernizedUploadItems(uploadsManagerItems, rootFolderId)}
+                                items={mapToModernizedUploadItems(
+                                    uploadsManagerItems,
+                                    rootFolderId,
+                                    isUploadEtaEnabled,
+                                )}
                                 isExpanded={isUploadsManagerExpanded}
                                 onToggle={this.toggleUploadsManager}
                                 onItemCancel={this.handleUploadsManagerItemCancel}

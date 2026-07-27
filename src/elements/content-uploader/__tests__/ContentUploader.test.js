@@ -360,6 +360,23 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(item.status).toBe(STATUS_PENDING);
             expect(item.error).toBeUndefined();
         });
+
+        test('should clear byte/ETA progress from the previous attempt', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const item = {
+                api: { cancel: jest.fn() },
+                file: { size: 10 },
+                bytesUploaded: 8,
+                remainingMs: 4200,
+            };
+            instance.etaByItem.set(item, { etaMs: 4200 });
+
+            instance.resetFile(item);
+            expect(item.bytesUploaded).toBe(0);
+            expect(item.remainingMs).toBeUndefined();
+            expect(instance.etaByItem.has(item)).toBe(false);
+        });
     });
 
     describe('resumeFile()', () => {
@@ -2249,6 +2266,71 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(instance.itemIdsRef.current['small.txt']).toBeUndefined();
             expect(wrapper.state('items')).toEqual([]);
             expect(wrapper.state('isLargeFileWarningModalOpen')).toBe(false);
+        });
+    });
+
+    describe('handleUploadProgress()', () => {
+        const makeProgressItem = () => ({
+            api: {},
+            extension: 'txt',
+            file: new File(['contents'], 'a.txt'),
+            name: 'a.txt',
+            progress: 0,
+            size: 1000,
+            status: STATUS_PENDING,
+        });
+
+        test('records byte progress and total on the item', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            instance.handleUploadProgress(item, { loaded: 400, total: 1000 });
+
+            expect(item.bytesUploaded).toBe(400);
+            expect(item.totalBytes).toBe(1000);
+            expect(item.progress).toBe(40);
+        });
+
+        test('leaves remainingMs undefined on the first progress event (no speed sample yet)', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            instance.handleUploadProgress(item, { loaded: 400, total: 1000 });
+
+            expect(item.remainingMs).toBeUndefined();
+        });
+
+        test('estimates remainingMs once a second sample arrives', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            const nowSpy = jest.spyOn(Date, 'now');
+            nowSpy.mockReturnValueOnce(0);
+            instance.handleUploadProgress(item, { loaded: 200, total: 1000 });
+            nowSpy.mockReturnValueOnce(1000); // 1s later, +300 bytes -> 300 B/s
+            instance.handleUploadProgress(item, { loaded: 500, total: 1000 });
+
+            // 500 bytes left at 300 B/s -> ~1.667s -> ~1666.67ms
+            expect(item.remainingMs).toBeCloseTo((500 / 300) * 1000, 5);
+            nowSpy.mockRestore();
+        });
+
+        test('ignores progress events without a total', () => {
+            const wrapper = getWrapper({ enableModernizedUploads: true });
+            const instance = wrapper.instance();
+            const item = makeProgressItem();
+            instance.itemsRef.current = [item];
+
+            instance.handleUploadProgress(item, { loaded: 400, total: 0 });
+
+            expect(item.bytesUploaded).toBeUndefined();
+            expect(item.totalBytes).toBeUndefined();
         });
     });
 });

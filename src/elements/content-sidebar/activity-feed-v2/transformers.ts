@@ -23,7 +23,7 @@ import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
 import type { Annotation, Target } from '../../../common/types/annotations';
 import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '../../../common/types/feed';
 import type { BoxItemVersion, User } from '../../../common/types/core';
-import type { TaskNew } from '../../../common/types/tasks';
+import type { TaskCollabAssignee, TaskNew } from '../../../common/types/tasks';
 
 import type {
     AnnotationBadgeTargetType,
@@ -230,12 +230,11 @@ export const transformAnnotationToMessages = (annotation: Annotation, avatarUrls
     return [root, ...replies];
 };
 
-export const transformTaskToProps = (
-    task: TaskNew,
-    currentUserId?: string,
+export const transformTaskAssignees = (
+    entries: TaskCollabAssignee[],
     avatarUrls?: AvatarUrlMap,
-): TaskItemProps => ({
-    assignees: (task.assigned_to?.entries ?? []).map(entry => ({
+): TaskItemProps['assignees'] =>
+    entries.map(entry => ({
         avatarUrl: resolveAvatarUrl(entry.target?.id, avatarUrls),
         completedAt: toUnixMs(entry.completed_at),
         id: entry.target?.id ?? entry.id,
@@ -244,7 +243,14 @@ export const transformTaskToProps = (
             ? { canDelete: entry.permissions.can_delete, canUpdate: entry.permissions.can_update }
             : undefined,
         status: entry.status as TaskItemProps['assignees'][number]['status'],
-    })),
+    }));
+
+export const transformTaskToProps = (
+    task: TaskNew,
+    currentUserId?: string,
+    avatarUrls?: AvatarUrlMap,
+): TaskItemProps => ({
+    assignees: transformTaskAssignees(task.assigned_to?.entries ?? [], avatarUrls),
     author: {
         avatarUrl: resolveAvatarUrl(task.created_by?.target?.id, avatarUrls),
         id: task.created_by?.target?.id ?? '',
