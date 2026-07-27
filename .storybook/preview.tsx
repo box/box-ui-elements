@@ -1,6 +1,9 @@
+import React from 'react';
+import { BlueprintProvider, useNoopTreatment } from '@box/blueprint-web';
 import { boxLanguages } from '@box/languages';
 import { addWindowFocusTracking } from '@react-aria/interactions';
 import { initialize, mswLoader } from 'msw-storybook-addon';
+import type { Decorator, Preview } from '@storybook/react-webpack5';
 
 import '../src/styles/variables';
 import '../src/styles/base.scss';
@@ -24,7 +27,21 @@ initialize({
     },
 });
 
-const preview = {
+const withStorybookBlueprintAnimations: Decorator = Story => (
+    <BlueprintProvider
+        useTreatment={useNoopTreatment}
+        configurationOverrides={{
+            animationsPhase1Enabled: true,
+            animationsPhase2Enabled: true,
+        }}
+    >
+        <Story />
+    </BlueprintProvider>
+);
+
+const preview: Preview = {
+    decorators: [withStorybookBlueprintAnimations],
+
     parameters: {
         chromatic: {
             cropToViewport: true,
