@@ -18,7 +18,10 @@ export const withModernization = {
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
-        expect(screen.getByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+        // Wait for modal to finish animation before checking visibility
+        await waitFor(() => {
+            expect(screen.getByRole('heading', { name: 'Share ‘Box Development Guide.pdf’' })).toBeVisible();
+        });
         expect(screen.getByRole('combobox', { name: 'Invite People' })).toBeVisible();
         expect(screen.getByRole('switch', { name: 'Shared link' })).toBeVisible();
     },

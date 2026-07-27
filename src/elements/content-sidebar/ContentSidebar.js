@@ -27,6 +27,8 @@ import { mark } from '../../utils/performance';
 import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
 import { withErrorBoundary } from '../common/error-boundary';
 // $FlowFixMe
+import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
+// $FlowFixMe
 import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import {
     isFeatureEnabled as isFeatureEnabledInContext,
@@ -474,6 +476,7 @@ export default flow([
     withFeatureConsumer,
     withFeatureProvider,
     withBlueprintModernization,
+    withBlueprintAnimations,
     withLogger(ORIGIN_CONTENT_SIDEBAR),
     withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),
 ])(ContentSidebar);
