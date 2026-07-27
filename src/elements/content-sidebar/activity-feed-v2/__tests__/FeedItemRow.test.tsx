@@ -787,6 +787,35 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastTaskProps.onReject).toBeUndefined();
         });
 
+        test('should omit onApprove/onComplete/onReject when the task is linked to multiple files', () => {
+            const multiFileTask: TransformedFeedItem = {
+                ...mockTask,
+                originalTask: {
+                    ...mockOriginalTask,
+                    task_links: {
+                        entries: [
+                            { id: 'link-1', target: { id: 'file-1', type: 'file' }, type: 'task_link' },
+                            { id: 'link-2', target: { id: 'file-2', type: 'file' }, type: 'task_link' },
+                        ],
+                        limit: 20,
+                        next_marker: null,
+                    },
+                } as unknown as TaskNew,
+            };
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    currentUserId="user-1"
+                    item={multiFileTask}
+                    onTaskAssignmentUpdate={jest.fn()}
+                />,
+            );
+
+            expect(lastTaskProps.onApprove).toBeUndefined();
+            expect(lastTaskProps.onComplete).toBeUndefined();
+            expect(lastTaskProps.onReject).toBeUndefined();
+        });
+
         test('should omit onApprove/onComplete/onReject when assignment status is not NOT_STARTED', () => {
             const completedTask: TransformedFeedItem = {
                 ...mockTask,
@@ -852,6 +881,23 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             render(<FeedItemRow {...defaultProps} item={mockTask} />);
 
             expect(lastTaskProps.onEdit).toBeUndefined();
+        });
+
+        test('should call onTaskLoadAllAssignees with the original task when onLoadAllAssignee fires', async () => {
+            const allAssignees = [{ id: 'user-1', name: 'Creator', status: 'NOT_STARTED' }];
+            const onTaskLoadAllAssignees = jest.fn().mockResolvedValue(allAssignees);
+            render(<FeedItemRow {...defaultProps} item={mockTask} onTaskLoadAllAssignees={onTaskLoadAllAssignees} />);
+
+            const result = await lastTaskProps.onLoadAllAssignee?.();
+
+            expect(onTaskLoadAllAssignees).toHaveBeenCalledWith(mockOriginalTask);
+            expect(result).toEqual(allAssignees);
+        });
+
+        test('should omit onLoadAllAssignee when onTaskLoadAllAssignees is not provided', () => {
+            render(<FeedItemRow {...defaultProps} item={mockTask} />);
+
+            expect(lastTaskProps.onLoadAllAssignee).toBeUndefined();
         });
     });
 

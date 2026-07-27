@@ -18,7 +18,7 @@ import { annotationTargetToBadge } from './transformers';
 import { formatByTimeFormat } from './useTimeFormat';
 import { seekVideoToMs } from './useVideoTimestamp';
 
-import type { OnReplyDelete, OnReplyUpdate, TransformedFeedItem, UserSelectorProps } from './types';
+import type { OnReplyDelete, OnReplyUpdate, TaskItemProps, TransformedFeedItem, UserSelectorProps } from './types';
 
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -61,6 +61,7 @@ type FeedItemRowProps = {
     onTaskAssignmentUpdate?: (taskId: string, taskAssignmentId: string, status: TaskCollabStatus) => void;
     onTaskDelete?: (task: TaskNew) => void;
     onTaskEdit?: (task: TaskNew) => void;
+    onTaskLoadAllAssignees?: (task: TaskNew) => Promise<TaskItemProps['assignees']>;
     onTaskView?: (id: string, isCreator: boolean) => void;
     onVersionHistoryClick?: (version: { id: string; version_number: number }) => void;
     timeFormat: TimeFormat;
@@ -101,6 +102,7 @@ const FeedItemRow = ({
     onTaskAssignmentUpdate,
     onTaskDelete,
     onTaskEdit,
+    onTaskLoadAllAssignees,
     onTaskView,
     onVersionHistoryClick,
     timeFormat,
@@ -247,7 +249,11 @@ const FeedItemRow = ({
             const currentUserAssignment = currentUserId
                 ? item.originalTask.assigned_to?.entries?.find(entry => entry.target?.id === currentUserId)
                 : undefined;
+            // Multi-file tasks cannot be updated inline: the Preview file-scoped token lacks
+            // permissions on the other linked files, so route users to the task details view.
+            const isMultiFileTask = (item.originalTask.task_links?.entries?.length ?? 0) > 1;
             const canActOnAssignment =
+                !isMultiFileTask &&
                 !!onTaskAssignmentUpdate &&
                 !!currentUserAssignment &&
                 currentUserAssignment.permissions?.can_update === true &&
@@ -265,6 +271,9 @@ const FeedItemRow = ({
                     onComplete={canActOnAssignment ? () => handleAssignmentUpdate(TASK_NEW_COMPLETED) : undefined}
                     onDelete={onTaskDelete ? () => onTaskDelete(item.originalTask) : undefined}
                     onEdit={onTaskEdit ? () => onTaskEdit(item.originalTask) : undefined}
+                    onLoadAllAssignee={
+                        onTaskLoadAllAssignees ? () => onTaskLoadAllAssignees(item.originalTask) : undefined
+                    }
                     onReject={canActOnAssignment ? () => handleAssignmentUpdate(TASK_NEW_REJECTED) : undefined}
                     onView={
                         onTaskView

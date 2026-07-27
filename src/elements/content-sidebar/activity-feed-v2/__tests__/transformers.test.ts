@@ -369,6 +369,28 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             expect(result.taskType).toBe('APPROVAL');
         });
 
+        test('should set fileCount from the number of task_links entries', () => {
+            const multiFileTask = {
+                ...mockTask,
+                task_links: {
+                    entries: [
+                        { id: 'link-1', target: { id: 'file-1', type: 'file' }, type: 'task_link' },
+                        { id: 'link-2', target: { id: 'file-2', type: 'file' }, type: 'task_link' },
+                    ],
+                    limit: 20,
+                    next_marker: null,
+                },
+            };
+            const result = transformTaskToProps(multiFileTask as unknown as TaskNew);
+            expect(result.fileCount).toBe(2);
+        });
+
+        test('should set fileCount to undefined when task_links is missing', () => {
+            const taskWithoutLinks = { ...mockTask, task_links: undefined };
+            const result = transformTaskToProps(taskWithoutLinks as unknown as TaskNew);
+            expect(result.fileCount).toBeUndefined();
+        });
+
         test('should set hasNextPage=false when assigned_to.next_marker is null', () => {
             const result = transformTaskToProps(mockTask as unknown as TaskNew);
             expect(result.hasNextPage).toBe(false);
