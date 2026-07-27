@@ -28,12 +28,18 @@ const mockScrollTo = jest.fn<boolean, [string]>(() => true);
 type FilterMenuProps = { children?: React.ReactNode; hasActiveFilters?: boolean };
 type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
 type RootProps = React.ComponentProps<typeof ActivityFeed.Root>;
+type TaskListItemProps = {
+    hasNextPage?: boolean;
+    id: string;
+    onLoadAllAssignee?: () => Promise<unknown>;
+};
 let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
 let lastEditorProps: Partial<EditorProps> = {};
 let lastRootProps: Partial<RootProps> = {};
 let lastTaskModalProps: Partial<TaskModalV2Props> = {};
+let lastTaskItemProps: Partial<TaskListItemProps> = {};
 
 jest.mock('../task-modal-v2', () => ({
     __esModule: true,
@@ -55,7 +61,10 @@ jest.mock('@box/activity-feed', () => {
     ActivityFeedList.AppActivity = (props: { id: string }) => (
         <div data-testid={`app-activity-${props.id}`}>AppActivity</div>
     );
-    ActivityFeedList.Task = (props: { id: string }) => <div data-testid={`task-${props.id}`}>Task</div>;
+    ActivityFeedList.Task = (props: TaskListItemProps) => {
+        lastTaskItemProps = props;
+        return <div data-testid={`task-${props.id}`}>Task</div>;
+    };
     ActivityFeedList.ThreadedAnnotation = (props: { messages?: Array<{ id: string }> }) => (
         <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>
     );
@@ -186,6 +195,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         lastEditorProps = {};
         lastRootProps = {};
         lastTaskModalProps = {};
+        lastTaskItemProps = {};
         mockSerializeMentionMarkup.mockImplementation((doc: unknown) => ({
             hasMention: false,
             text: JSON.stringify(doc),
@@ -250,6 +260,194 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         );
 
         expect(screen.getByTestId('task-task-1')).toBeVisible();
+    });
+
+    describe('task assignee loading', () => {
+        // First page of assignees is partial (next_marker set), so hasNextPage is passed as true
+        // to the Task item (which is what makes the real AssigneeList offer "Show more")
+        const taskWithMoreAssignees = {
+            ...mockTask,
+            assigned_to: {
+                entries: [
+                    {
+                        id: 'assignment-1',
+                        permissions: { can_delete: true, can_update: true },
+                        role: 'ASSIGNEE',
+                        status: 'NOT_STARTED',
+                        target: { id: 'user-2', name: 'Assignee One', type: 'user' },
+                        type: 'task_collaborator',
+                    },
+                ],
+                limit: 20,
+                next_marker: 'marker-1',
+            },
+        };
+
+        test('should fetch and transform the full assignee list when onLoadAllAssignee fires', async () => {
+            const getTaskCollaborators = jest.fn().mockResolvedValue({
+                entries: [
+                    {
+                        id: 'assignment-1',
+                        permissions: { can_delete: true, can_update: true },
+                        role: 'ASSIGNEE',
+                        status: 'NOT_STARTED',
+                        target: { id: 'user-2', name: 'Assignee One', type: 'user' },
+                        type: 'task_collaborator',
+                    },
+                    {
+                        completed_at: '2024-03-02T00:00:00Z',
+                        id: 'assignment-2',
+                        permissions: { can_delete: false, can_update: false },
+                        role: 'ASSIGNEE',
+                        status: 'COMPLETED',
+                        target: { id: 'user-3', name: 'Assignee Two', type: 'user' },
+                        type: 'task_collaborator',
+                    },
+                ],
+                limit: 1000,
+                next_marker: null,
+            });
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+
+            expect(lastTaskItemProps.hasNextPage).toBe(true);
+
+            const result = await lastTaskItemProps.onLoadAllAssignee?.();
+
+            expect(getTaskCollaborators).toHaveBeenCalledWith(taskWithMoreAssignees);
+            expect(result).toEqual([
+                expect.objectContaining({ id: 'user-2', name: 'Assignee One', status: 'NOT_STARTED' }),
+                expect.objectContaining({
+                    completedAt: new Date('2024-03-02T00:00:00Z').getTime(),
+                    id: 'user-3',
+                    name: 'Assignee Two',
+                    status: 'COMPLETED',
+                }),
+            ]);
+        });
+
+        const fullAssigneeCollection = {
+            entries: [
+                {
+                    id: 'assignment-1',
+                    permissions: { can_delete: true, can_update: true },
+                    role: 'ASSIGNEE',
+                    status: 'NOT_STARTED',
+                    target: { id: 'user-2', name: 'Assignee One', type: 'user' },
+                    type: 'task_collaborator',
+                },
+                {
+                    id: 'assignment-2',
+                    permissions: { can_delete: false, can_update: false },
+                    role: 'ASSIGNEE',
+                    status: 'COMPLETED',
+                    target: { id: 'user-3', name: 'Assignee Two', type: 'user' },
+                    type: 'task_collaborator',
+                },
+            ],
+            limit: 1000,
+            next_marker: null,
+        };
+
+        test('should resolve avatar urls for assignees revealed by onLoadAllAssignee', async () => {
+            const getTaskCollaborators = jest.fn().mockResolvedValue(fullAssigneeCollection);
+            const avatarUrlsByUserId: Record<string, string> = {
+                'user-2': 'https://example.com/avatar-2.png',
+                'user-3': 'https://example.com/avatar-3.png',
+            };
+            const getAvatarUrl = jest.fn(async (userId: string) => avatarUrlsByUserId[userId] ?? null);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getAvatarUrl={getAvatarUrl}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+
+            // Let useAvatarUrls resolve the first-page ids (author user-1, assignee user-2)
+            await act(() => Promise.resolve());
+            getAvatarUrl.mockClear();
+
+            const result = await lastTaskItemProps.onLoadAllAssignee?.();
+
+            // Only user-3 was missing from the avatar map; user-2 was already resolved
+            expect(getAvatarUrl.mock.calls.map(([id]) => id)).toEqual(['user-3']);
+            expect(result).toEqual([
+                expect.objectContaining({ avatarUrl: 'https://example.com/avatar-2.png', id: 'user-2' }),
+                expect.objectContaining({ avatarUrl: 'https://example.com/avatar-3.png', id: 'user-3' }),
+            ]);
+        });
+
+        test('should fall back to initials (no avatarUrl) when getAvatarUrl rejects for a revealed assignee', async () => {
+            const getTaskCollaborators = jest.fn().mockResolvedValue(fullAssigneeCollection);
+            const avatarError = new Error('avatar service down');
+            const getAvatarUrl = jest.fn().mockRejectedValue(avatarError);
+            const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getAvatarUrl={getAvatarUrl}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+            await act(() => Promise.resolve());
+
+            const result = await lastTaskItemProps.onLoadAllAssignee?.();
+
+            expect(result).toEqual([
+                expect.objectContaining({ avatarUrl: undefined, id: 'user-2' }),
+                expect.objectContaining({ avatarUrl: undefined, id: 'user-3' }),
+            ]);
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to load avatar for user "user-2"',
+                avatarError,
+            );
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to load avatar for user "user-3"',
+                avatarError,
+            );
+            consoleWarnSpy.mockRestore();
+        });
+
+        test('should omit onLoadAllAssignee when getTaskCollaborators is not provided', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                />,
+            );
+
+            expect(lastTaskItemProps.hasNextPage).toBe(true);
+            expect(lastTaskItemProps.onLoadAllAssignee).toBeUndefined();
+        });
+
+        test('should log and rethrow when getTaskCollaborators rejects so AssigneeList can show its error state', async () => {
+            const loadError = new Error('network failure');
+            const getTaskCollaborators = jest.fn().mockRejectedValue(loadError);
+            const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    getTaskCollaborators={getTaskCollaborators}
+                />,
+            );
+
+            await expect(lastTaskItemProps.onLoadAllAssignee?.()).rejects.toThrow('network failure');
+
+            expect(consoleSpy).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to load assignees for task "task-1"',
+                loadError,
+            );
+            consoleSpy.mockRestore();
+        });
     });
 
     test('should render version feed items alongside other items', () => {
