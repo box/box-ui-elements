@@ -95,11 +95,12 @@ class DropdownMenu extends React.Component<Props, State> {
 
     closeMenu = (event: SyntheticEvent<> | MouseEvent) => {
         const { onMenuClose = noop } = this.props;
+        const callback = event ? () => onMenuClose(event) : noop;
         this.setState(
             {
                 isOpen: false,
             },
-            () => onMenuClose(event),
+            callback,
         );
     };
 
