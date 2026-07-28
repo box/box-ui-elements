@@ -1,18 +1,24 @@
 module.exports = {
     // packages to bundle into translation files
     translationDependencies: [
+        '@box/activity-feed',
         '@box/box-ai-agent-selector',
         '@box/box-ai-content-answers',
         '@box/box-item-type-selector',
+        '@box/collaboration-popover',
         '@box/combobox-with-api',
-        '@box/copy-input',
         '@box/content-field',
+        '@box/copy-input',
         '@box/item-icon',
         '@box/metadata-editor',
         '@box/metadata-filter',
+        '@box/metadata-taxonomy-picker',
         '@box/metadata-template-browser',
         '@box/metadata-view',
+        '@box/readable-time',
+        '@box/threaded-annotations',
         '@box/unified-share-modal',
+        '@box/uploads-manager',
         '@box/user-selector',
     ],
 };
