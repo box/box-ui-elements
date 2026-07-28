@@ -71,6 +71,9 @@ export * from './menu';
 export { default as PlainButton } from './plain-button';
 export * from './plain-button';
 
+export { default as PillCloud } from './pill-cloud';
+export * from './pill-cloud';
+
 export { default as Portal } from './portal';
 export * from './portal';
 

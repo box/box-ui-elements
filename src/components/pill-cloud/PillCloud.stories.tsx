@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import PillCloud from './PillCloud';
+import PillCloud, { PillCloudOption } from './PillCloud';
 import notes from './PillCloud.stories.md';
 
-const pills = [
+const pills: PillCloudOption[] = [
     { value: 0, displayText: 'Box' },
     { value: 1, displayText: 'Fox' },
     { value: 2, displayText: 'Socks' },
@@ -23,7 +23,7 @@ const pills = [
 ];
 export const regular = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [selectedOption, setSelectedOption] = useState(pills[5]);
+    const [selectedOption, setSelectedOption] = useState<PillCloudOption>(pills[5]);
     return (
         <div>
             <PillCloud
