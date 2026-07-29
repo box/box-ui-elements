@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import API from '../../../api';
 import type { BoxItem } from '../../../common/types/core';
 
@@ -44,7 +44,6 @@ export default function useMetadataNamespaceMode(
 ): UseMetadataNamespaceModeReturn {
     const [mode, setMode] = useState<MetadataScopeMode | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const cancelledRef = useRef(false);
 
     useEffect(() => {
         if (!isEnabled || !file || !enterpriseNumericId) {
@@ -53,19 +52,19 @@ export default function useMetadataNamespaceMode(
             return undefined;
         }
 
-        cancelledRef.current = false;
+        let isCancelled = false;
         setIsLoading(true);
 
         const metadataAPI = api.getMetadataAPI(false);
         metadataAPI.getMetadataNamespaceMode(file, enterpriseNumericId).then(resolvedMode => {
-            if (!cancelledRef.current) {
-                setMode(resolvedMode);
+            if (!isCancelled) {
+                setMode(resolvedMode as MetadataScopeMode | null);
                 setIsLoading(false);
             }
         });
 
         return () => {
-            cancelledRef.current = true;
+            isCancelled = true;
         };
     }, [api, file, enterpriseNumericId, isEnabled]);
 
