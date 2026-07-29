@@ -31,6 +31,9 @@ export * from './datalist-item';
 export { default as DatePicker } from './date-picker';
 export * from './date-picker';
 
+export { default as DraftJSEditor } from './draft-js-editor';
+export * from './draft-js-editor';
+
 export { default as DraggableList } from './draggable-list';
 export * from './draggable-list';
 

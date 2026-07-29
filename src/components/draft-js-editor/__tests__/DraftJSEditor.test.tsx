@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import { Editor, EditorState } from 'draft-js';
@@ -12,10 +13,10 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
         editorState: EditorState.createEmpty(),
         label: 'Label text',
         description: 'talesss',
-        onBlur: () => {},
+        onBlur: jest.fn(),
         onChange: sandbox.stub(),
-        onFocus: () => {},
-    };
+        onFocus: jest.fn(),
+    } as const;
 
     afterEach(() => {
         sandbox.verifyAndRestore();
@@ -57,7 +58,8 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
             wrapper.setProps({});
 
             const editor = wrapper.find(Editor);
-            editor.prop('onChange')();
+            const onChange = editor.prop('onChange') as () => void;
+            onChange();
         });
 
         test('should render with a11y props when inputProps is passed in', () => {
@@ -67,7 +69,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
                 'aria-expanded': true,
                 'aria-owns': 'id',
                 role: 'textbox',
-            };
+            } as const;
             const wrapper = shallow(<DraftJSEditor {...requiredProps} inputProps={inputProps} />);
 
             const editor = wrapper.find(Editor);
@@ -81,15 +83,17 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
 
     describe('handleChange()', () => {
         test('should call passed-in onChange handler when called', () => {
-            const wrapper = shallow(<DraftJSEditor {...requiredProps} onChange={sandbox.mock()} />);
+            const wrapper = shallow<InstanceType<typeof DraftJSEditor>>(
+                <DraftJSEditor {...requiredProps} onChange={sandbox.mock()} />,
+            );
 
             const instance = wrapper.instance();
-            instance.handleChange();
+            instance.handleChange(requiredProps.editorState);
         });
     });
 
     describe('handleReturn()', () => {
-        const returnKeyEvent = { key: 'Enter' };
+        const returnKeyEvent = { key: 'Enter' } as unknown as React.KeyboardEvent;
         [
             {
                 isReturnHandled: true,
@@ -98,13 +102,10 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
                 isReturnHandled: false,
             },
         ].forEach(({ isReturnHandled }) => {
-            const wrapper = shallow(
+            const wrapper = shallow<InstanceType<typeof DraftJSEditor>>(
                 <DraftJSEditor
                     {...requiredProps}
-                    onReturn={sandbox
-                        .stub()
-                        .withArgs(returnKeyEvent)
-                        .returns(isReturnHandled)}
+                    onReturn={sandbox.stub().withArgs(returnKeyEvent).returns(isReturnHandled)}
                 />,
             );
 
@@ -114,7 +115,7 @@ describe('components/draft-js-editor/DraftJSEditor', () => {
         });
 
         test('should return <not-handled> if onReturn prop is not set', () => {
-            const wrapper = shallow(<DraftJSEditor {...requiredProps} />);
+            const wrapper = shallow<InstanceType<typeof DraftJSEditor>>(<DraftJSEditor {...requiredProps} />);
 
             const instance = wrapper.instance();
             const handleResult = instance.handleReturn(returnKeyEvent);

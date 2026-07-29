@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
 import { ContentState, EditorState } from 'draft-js';
@@ -15,7 +14,7 @@ export const basic = () => {
 
     const [exampleExternalEditorState, setExampleExternalEditorState] = React.useState(initialEditorState);
 
-    const setEditorState = newEditorState => setExampleExternalEditorState(newEditorState);
+    const setEditorState = (newEditorState: EditorState) => setExampleExternalEditorState(newEditorState);
 
     return (
         <DraftJSEditor
