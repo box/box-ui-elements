@@ -43,6 +43,9 @@ export * from './error-mask';
 export { default as Fieldset } from './fieldset';
 export * from './fieldset';
 
+export { default as FocusTrap } from './focus-trap';
+export * from './focus-trap';
+
 export { default as Ghost } from './ghost';
 export * from './ghost';
 

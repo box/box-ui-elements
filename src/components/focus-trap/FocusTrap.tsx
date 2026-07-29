@@ -1,24 +1,27 @@
-// @flow
 import * as React from 'react';
 import tabbable from 'tabbable';
 import classNames from 'classnames';
 
-type Props = {
-    children: React.Node,
-    className?: string,
+export interface FocusTrapProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Contents whose focus should be trapped */
+    children: React.ReactNode;
+    /** Custom class name for the focus trap wrapper */
+    className?: string;
     /** Function to get the ref to the focus trap wrapper element */
-    getRef?: Function,
+    getRef?: Function;
     /** Function to handle keyboard input passed in from parent component. e.g. close overlay on Escape */
-    handleOverlayKeyDown?: Function,
-    shouldDefaultFocus?: boolean,
-    shouldOutlineFocus?: boolean,
-};
+    handleOverlayKeyDown?: Function;
+    /** Whether to focus the first tabbable child when mounted */
+    shouldDefaultFocus?: boolean;
+    /** Whether to display the focus outline on the wrapper */
+    shouldOutlineFocus?: boolean;
+}
 
-class FocusTrap extends React.Component<Props> {
+class FocusTrap extends React.Component<FocusTrapProps> {
     componentDidMount() {
         if (this.props.shouldDefaultFocus) {
             setTimeout(() => {
-                this.previousFocusEl = document.activeElement;
+                this.previousFocusEl = document.activeElement as HTMLElement | null;
                 this.focusFirstElement();
             }, 0);
         } else {
@@ -38,11 +41,11 @@ class FocusTrap extends React.Component<Props> {
         }, 0);
     }
 
-    el: ?HTMLDivElement;
+    el: HTMLDivElement | null | undefined;
 
-    previousFocusEl: ?HTMLElement;
+    previousFocusEl: HTMLElement | null | undefined;
 
-    trapEl: ?HTMLElement;
+    trapEl: HTMLElement | null | undefined;
 
     /**
      * Focus the first tabbable element
@@ -84,7 +87,7 @@ class FocusTrap extends React.Component<Props> {
         }
     };
 
-    handleElKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+    handleElKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
         const { handleOverlayKeyDown } = this.props;
         if (this.el === document.activeElement && event.key === 'Tab') {
             this.focusFirstElement();
@@ -97,7 +100,7 @@ class FocusTrap extends React.Component<Props> {
         }
     };
 
-    handleTrapElKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+    handleTrapElKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
         if (event.key !== 'Tab') {
             return;
         }
@@ -110,8 +113,8 @@ class FocusTrap extends React.Component<Props> {
             children,
             className,
             getRef,
-            handleOverlayKeyDown,
-            shouldDefaultFocus,
+            handleOverlayKeyDown: _handleOverlayKeyDown, // eslint-disable-line @typescript-eslint/no-unused-vars
+            shouldDefaultFocus: _shouldDefaultFocus, // eslint-disable-line @typescript-eslint/no-unused-vars
             shouldOutlineFocus,
             ...rest
         } = this.props;
@@ -131,10 +134,10 @@ class FocusTrap extends React.Component<Props> {
                 {...rest}
             >
                 {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-                <i aria-hidden onFocus={this.focusLastElement} tabIndex="0" />
+                <i aria-hidden onFocus={this.focusLastElement} tabIndex={0} />
                 {children}
                 {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-                <i aria-hidden onFocus={this.focusFirstElement} tabIndex="0" />
+                <i aria-hidden onFocus={this.focusFirstElement} tabIndex={0} />
                 {/* in case children doesn't contain any focusable elements, focus on trap */}
                 <i
                     ref={ref => {
@@ -143,7 +146,7 @@ class FocusTrap extends React.Component<Props> {
                     aria-hidden
                     onKeyDown={this.handleTrapElKeyDown}
                     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                    tabIndex="0"
+                    tabIndex={0}
                 />
             </div>
         );
