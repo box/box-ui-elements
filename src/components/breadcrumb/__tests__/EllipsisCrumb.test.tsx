@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 import EllipsisCrumb from '../EllipsisCrumb';
 
-let wrapper;
+let wrapper: ShallowWrapper;
 
 describe('components/breadcrumb/EllipsisCrumb', () => {
     beforeEach(() => {

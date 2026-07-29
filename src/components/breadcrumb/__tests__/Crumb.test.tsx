@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 import { Link } from '../../link';
 import Crumb from '../Crumb';
 
-let wrapper;
+let wrapper: ShallowWrapper;
 
 describe('components/breadcrumb/Crumb', () => {
     beforeEach(() => {

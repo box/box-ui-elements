@@ -4,6 +4,9 @@ export * from './accessible-svg';
 export { default as Avatar } from './avatar';
 export * from './avatar';
 
+export { default as Breadcrumb } from './breadcrumb';
+export * from './breadcrumb';
+
 export { default as Button } from './button';
 export * from './button';
 
