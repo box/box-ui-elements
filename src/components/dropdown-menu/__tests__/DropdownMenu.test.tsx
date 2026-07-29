@@ -7,14 +7,24 @@ import DropdownMenu from '../DropdownMenu';
 import { KEYS } from '../../../constants';
 
 const sandbox = sinon.sandbox.create();
+const syntheticEvent = {} as React.SyntheticEvent;
+const getDropdownMenuInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof DropdownMenu>;
 
 describe('components/dropdown-menu/DropdownMenu', () => {
     // eslint-disable-next-line react/button-has-type
-    const FakeButton = props => <button {...props}>Some Button</button>;
+    const FakeButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+        <button {...props}>Some Button</button>
+    );
     FakeButton.displayName = 'FakeButton';
 
     /* eslint-disable */
-    const FakeMenu = ({ initialFocusIndex = 0, onClose = () => {}, ...rest }) => (
+    interface FakeMenuProps extends React.HTMLAttributes<HTMLUListElement> {
+        initialFocusIndex?: number;
+        onClose?: (isKeyboardEvent: boolean, event: React.SyntheticEvent | MouseEvent) => void;
+    }
+
+    const FakeMenu = ({ initialFocusIndex = 0, onClose = () => {}, ...rest }: FakeMenuProps) => (
         <ul {...rest} role="menu">
             Some Menu
         </ul>
@@ -66,7 +76,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 </DropdownMenu>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             const button = wrapper.find(FakeButton);
             expect(button.length).toBe(1);
 
@@ -85,7 +95,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 </DropdownMenu>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             act(() => {
                 instance.openMenuAndSetFocusIndex(0);
             });
@@ -116,7 +126,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 </DropdownMenu>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             act(() => {
                 instance.openMenuAndSetFocusIndex(1);
             });
@@ -206,7 +216,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should render TetherComponent with enabled prop when menu is open', () => {
             const wrapper = getWrapper();
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             act(() => {
                 instance.openMenuAndSetFocusIndex(0);
             });
@@ -290,7 +300,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     describe('openMenuAndSetFocusIndex()', () => {
         test('should call setState() with correct values', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             sandbox.mock(instance).expects('setState').withArgs({
                 isOpen: true,
                 initialFocusIndex: 1,
@@ -302,11 +312,11 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     describe('closeMenu()', () => {
         test('should call setState() with correct values', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             sandbox.mock(instance).expects('setState').withArgs({
                 isOpen: false,
             });
-            instance.closeMenu();
+            instance.closeMenu(syntheticEvent);
         });
     });
 
@@ -319,7 +329,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 </DropdownMenu>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             sandbox.mock(instance).expects('openMenuAndSetFocusIndex').withArgs(null);
 
             wrapper.find(FakeButton).simulate('click', {
@@ -332,7 +342,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             const event = {
                 preventDefault: jest.fn(),
                 stopPropagation: jest.fn(),
-            };
+            } as const;
             const onMenuClose = jest.fn();
             const wrapper = mount(
                 <DropdownMenu onMenuClose={onMenuClose}>
@@ -341,7 +351,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 </DropdownMenu>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             act(() => {
                 instance.openMenuAndSetFocusIndex(1);
             });
@@ -374,7 +384,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                     </DropdownMenu>,
                 );
 
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 sandbox.mock(instance).expects('openMenuAndSetFocusIndex').withArgs(0);
 
                 wrapper.find(FakeButton).simulate('keydown', {
@@ -435,7 +445,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 </DropdownMenu>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             sandbox.mock(instance).expects('openMenuAndSetFocusIndex').withArgs(-1);
 
             wrapper.find(FakeButton).simulate('keydown', {
@@ -450,11 +460,11 @@ describe('components/dropdown-menu/DropdownMenu', () => {
         test('should call closeMenu() and focusButton() when called', () => {
             const wrapper = getWrapper();
 
-            const instance = wrapper.instance();
+            const instance = getDropdownMenuInstance(wrapper);
             sandbox.mock(instance).expects('closeMenu');
             sandbox.mock(instance).expects('focusButton');
 
-            instance.handleMenuClose();
+            instance.handleMenuClose(false, syntheticEvent);
         });
     });
 
@@ -467,7 +477,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                         <FakeMenu />
                     </DropdownMenu>,
                 );
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 const documentMock = sandbox.mock(document);
                 documentMock.expects('addEventListener').withArgs('click', sinon.match.any, !useBubble);
                 documentMock.expects('addEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
@@ -483,7 +493,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                         <FakeMenu />
                     </DropdownMenu>,
                 );
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 act(() => {
                     instance.openMenuAndSetFocusIndex(0);
                 });
@@ -492,7 +502,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 documentMock.expects('removeEventListener').withArgs('click', sinon.match.any, !useBubble);
                 documentMock.expects('addEventListener').never();
                 act(() => {
-                    instance.closeMenu();
+                    instance.closeMenu(syntheticEvent);
                 });
             });
             test('should not do anything opening a menu when menu is already open', () => {
@@ -502,7 +512,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                         <FakeMenu />
                     </DropdownMenu>,
                 );
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 const documentMock = sandbox.mock(document);
                 instance.openMenuAndSetFocusIndex(0);
                 documentMock.expects('addEventListener').never();
@@ -533,7 +543,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                     </DropdownMenu>,
                 );
                 const documentMock = sandbox.mock(document);
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 act(() => {
                     instance.openMenuAndSetFocusIndex(0);
                 });
@@ -545,14 +555,14 @@ describe('components/dropdown-menu/DropdownMenu', () => {
     });
 
     describe('tests requiring body mounting', () => {
-        let attachTo;
+        let attachTo: HTMLDivElement;
         let wrapper = null;
 
         /**
          * Helper method to mount things to the correct DOM element
          * this makes it easier to clean up after ourselves after each test.
          */
-        const mountToBody = component => {
+        const mountToBody = (component: React.ReactElement) => {
             wrapper = mount(component, { attachTo });
         };
 
@@ -584,14 +594,14 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                     </DropdownMenu>,
                 );
 
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 act(() => {
                     instance.openMenuAndSetFocusIndex(0);
                 });
                 instance.closeMenu = closeMenuSpy;
                 const handleDocumentClickEvent = {
                     target: document.createElement('div'),
-                };
+                } as unknown as MouseEvent;
                 instance.handleDocumentClick(handleDocumentClickEvent);
 
                 expect(closeMenuSpy).toHaveBeenCalled();
@@ -606,14 +616,14 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                     </DropdownMenu>,
                 );
 
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 act(() => {
                     instance.openMenuAndSetFocusIndex(0);
                 });
 
                 const handleDocumentClickEvent = {
                     target: document.createElement('div'),
-                };
+                } as unknown as MouseEvent;
                 act(() => {
                     instance.handleDocumentClick(handleDocumentClickEvent);
                 });
@@ -625,24 +635,27 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 elementID         | description
                 ${'menuButtonID'} | ${'button'}
                 ${'menuID'}       | ${'menu'}
-            `('should not call handleMenuClose() when event target is within the $description', ({ elementID }) => {
-                mountToBody(
-                    <DropdownMenu>
-                        <FakeButton />
-                        <FakeMenu />
-                    </DropdownMenu>,
-                );
+            `(
+                'should not call handleMenuClose() when event target is within the $description',
+                ({ elementID }: { elementID: 'menuButtonID' | 'menuID' }) => {
+                    mountToBody(
+                        <DropdownMenu>
+                            <FakeButton />
+                            <FakeMenu />
+                        </DropdownMenu>,
+                    );
 
-                const instance = wrapper.instance();
-                instance.openMenuAndSetFocusIndex(0);
-                instance.closeMenu = closeMenuSpy;
-                const handleDocumentClickEvent = {
-                    target: document.getElementById(instance[elementID]),
-                };
+                    const instance = getDropdownMenuInstance(wrapper);
+                    instance.openMenuAndSetFocusIndex(0);
+                    instance.closeMenu = closeMenuSpy;
+                    const handleDocumentClickEvent = {
+                        target: document.getElementById(instance[elementID]),
+                    } as unknown as MouseEvent;
 
-                instance.handleDocumentClick(handleDocumentClickEvent);
-                expect(closeMenuSpy).not.toHaveBeenCalled();
-            });
+                    instance.handleDocumentClick(handleDocumentClickEvent);
+                    expect(closeMenuSpy).not.toHaveBeenCalled();
+                },
+            );
         });
 
         describe('focusButton()', () => {
@@ -654,7 +667,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                     </DropdownMenu>,
                 );
 
-                const instance = wrapper.instance();
+                const instance = getDropdownMenuInstance(wrapper);
                 const menuButtonEl = document.getElementById(instance.menuButtonID);
                 sandbox.mock(menuButtonEl).expects('focus');
 
