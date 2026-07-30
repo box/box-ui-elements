@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
+import { IntlShape } from 'react-intl';
 
 import { Link } from '../../link';
 
 import { BreadcrumbBase as Breadcrumb } from '../Breadcrumb';
 
-let wrapper;
+let wrapper: ShallowWrapper;
 const intl = {
     formatMessage: jest.fn().mockReturnValue('breadcrumb'),
-};
+} as unknown as IntlShape;
 
 describe('components/breadcrumb/Breadcrumb', () => {
     test('should render correct breadcrumbs', () => {

@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -10,7 +9,7 @@ import notes from './Breadcrumb.stories.md';
 
 export const regular = () => (
     <IntlProvider locale="en">
-        <Breadcrumb label="Breadcrumb">
+        <Breadcrumb>
             <IconHome />
             <Link href="#foo">Box Engineering</Link>
         </Breadcrumb>
@@ -19,7 +18,7 @@ export const regular = () => (
 
 export const withMultipleCrumbs = () => (
     <IntlProvider locale="en">
-        <Breadcrumb label="Breadcrumb">
+        <Breadcrumb>
             <IconHome />
             <Link href="#foo">Box Engineering</Link>
             <Link href="#foo">Frameworks</Link>
