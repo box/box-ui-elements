@@ -49,6 +49,9 @@ export * from './header';
 export { default as InfiniteScroll } from './infinite-scroll';
 export * from './infinite-scroll';
 
+export { default as InlineNotice } from './inline-notice';
+export * from './inline-notice';
+
 export { default as InlineError } from './inline-error';
 export * from './inline-error';
 

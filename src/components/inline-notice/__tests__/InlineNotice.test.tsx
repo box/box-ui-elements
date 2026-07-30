@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render } from 'enzyme';
+import { render, shallow } from 'enzyme';
 
 import InlineNotice from '..';
 
@@ -21,12 +21,7 @@ describe('components/inline-notice/InlineNotice', () => {
         const wrapper = shallow(<InlineNotice title={title}>{children}</InlineNotice>);
 
         expect(wrapper.find('strong').text()).toEqual(title);
-        expect(
-            wrapper
-                .children()
-                .find('div')
-                .text(),
-        ).toEqual(children);
+        expect(wrapper.children().find('div').text()).toEqual(children);
     });
 
     test('should have a default type', () => {
