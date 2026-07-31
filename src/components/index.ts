@@ -84,6 +84,8 @@ export * from './logo';
 export { default as Media } from './media';
 export * from './media';
 
+export * from './media-query';
+
 export * from './menu';
 
 export * from './nav-sidebar';
