@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import tabbable from 'tabbable';
 
 import FocusTrap from '../FocusTrap';
@@ -7,9 +8,15 @@ jest.mock('tabbable', () => jest.fn());
 
 jest.useFakeTimers();
 
+const createFocusableElement = () => {
+    const element = document.createElement('div');
+    element.focus = jest.fn();
+    return element;
+};
+
 describe('components/focus-trap/FocusTrap', () => {
     const getWrapper = (props = {}) =>
-        shallow(
+        shallow<InstanceType<typeof FocusTrap>>(
             <FocusTrap {...props}>
                 <div className="trap-children" />
             </FocusTrap>,
@@ -41,7 +48,7 @@ describe('components/focus-trap/FocusTrap', () => {
             }).instance();
 
             instance.focusFirstElement = jest.fn();
-            instance.el = { focus: jest.fn() };
+            instance.el = createFocusableElement();
             instance.componentDidMount();
 
             jest.runAllTimers();
@@ -54,7 +61,7 @@ describe('components/focus-trap/FocusTrap', () => {
         test('should focus on previousFocusEl', () => {
             const instance = getWrapper().instance();
 
-            instance.previousFocusEl = { focus: jest.fn() };
+            instance.previousFocusEl = createFocusableElement();
             instance.componentWillUnmount();
 
             jest.runAllTimers();
@@ -78,7 +85,7 @@ describe('components/focus-trap/FocusTrap', () => {
             ]);
 
             const instance = getWrapper().instance();
-            instance.el = {};
+            instance.el = document.createElement('div');
             instance.focusFirstElement();
 
             expect(shouldNotCallStub).not.toHaveBeenCalled();
@@ -95,8 +102,8 @@ describe('components/focus-trap/FocusTrap', () => {
             ]);
 
             const instance = getWrapper().instance();
-            instance.el = {};
-            instance.trapEl = { focus: jest.fn() };
+            instance.el = document.createElement('div');
+            instance.trapEl = createFocusableElement();
             instance.focusFirstElement();
 
             expect(shouldNotCallStub).not.toHaveBeenCalled();
@@ -119,7 +126,7 @@ describe('components/focus-trap/FocusTrap', () => {
             ]);
 
             const instance = getWrapper().instance();
-            instance.el = {};
+            instance.el = document.createElement('div');
             instance.focusLastElement();
 
             expect(shouldNotCallStub).not.toHaveBeenCalled();
@@ -136,8 +143,8 @@ describe('components/focus-trap/FocusTrap', () => {
             ]);
 
             const instance = getWrapper().instance();
-            instance.el = {};
-            instance.trapEl = { focus: jest.fn() };
+            instance.el = document.createElement('div');
+            instance.trapEl = createFocusableElement();
             instance.focusLastElement();
 
             expect(shouldNotCallStub).not.toHaveBeenCalled();
@@ -153,7 +160,7 @@ describe('components/focus-trap/FocusTrap', () => {
                 key: 'Enter',
                 stopPropagation: jest.fn(),
                 preventDefault: jest.fn(),
-            };
+            } as unknown as React.KeyboardEvent<HTMLElement>;
             instance.handleTrapElKeyDown(event);
 
             expect(event.stopPropagation).not.toHaveBeenCalled();
@@ -167,7 +174,7 @@ describe('components/focus-trap/FocusTrap', () => {
                 key: 'Tab',
                 stopPropagation: jest.fn(),
                 preventDefault: jest.fn(),
-            };
+            } as unknown as React.KeyboardEvent<HTMLElement>;
             instance.handleTrapElKeyDown(event);
 
             expect(event.stopPropagation).toHaveBeenCalled();
