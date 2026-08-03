@@ -322,7 +322,7 @@ function useSidebarMetadataFetcher(
                 fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
             });
         }
-    }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId]);
+    }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
         clearExtractError: () => setExtractErrorCode(null),
