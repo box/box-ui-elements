@@ -59,7 +59,8 @@
     @at-root {
         &:where(body.is-inter-font),
         :where(body.is-inter-font) & {
-            letter-spacing: 0;
+            line-height: 22px;
+            letter-spacing: 0.1px;
         }
     }
 }
