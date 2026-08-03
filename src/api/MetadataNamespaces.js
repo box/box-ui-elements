@@ -22,7 +22,7 @@ import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import type Xhr from '../utils/Xhr';
 import { resolveMetadataNamespaceMode } from './metadataNamespaceUtils';
-// TODO(MDX-2136): remove this import when namespace API is deployed
+// TODO: remove this import when namespace API is deployed
 import {
     IS_NAMESPACE_API_MOCKED,
     mockListNamespaces,
@@ -70,7 +70,7 @@ export default class MetadataNamespaces {
         namespaceFqn: string,
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
-        // TODO(MDX-2136): remove next line when namespace API is deployed
+        // TODO: remove next line when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) return mockListNamespaces(file, namespaceFqn, params);
 
         const { id }: BoxItem = file;
@@ -95,7 +95,7 @@ export default class MetadataNamespaces {
         namespaceFqn: string,
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
-        // TODO(MDX-2136): remove next line when namespace API is deployed
+        // TODO: remove next line when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) return mockListTemplatesForNamespace(file, namespaceFqn, params);
 
         const { id }: BoxItem = file;
@@ -144,7 +144,7 @@ export default class MetadataNamespaces {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
-        // TODO(MDX-2136): remove next two lines when namespace API is deployed
+        // TODO: remove next two lines when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) {
             mockCreateMetadataTemplate(file, body, successCallback);
             return;
@@ -174,7 +174,7 @@ export default class MetadataNamespaces {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
-        // TODO(MDX-2136): remove next two lines when namespace API is deployed
+        // TODO: remove next two lines when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) {
             mockUpdateMetadataTemplate(file, namespaceFqn, templateKey, patchItems, successCallback);
             return;
@@ -203,7 +203,7 @@ export default class MetadataNamespaces {
      * Fetches a template schema in the shape expected by MetadataTemplateEditor.
      */
     async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string): Promise<Object> {
-        // TODO(MDX-2136): remove the mock block when namespace API is deployed.
+        // TODO: remove the mock block when namespace API is deployed.
         if (IS_NAMESPACE_API_MOCKED) {
             const mockResult = mockGetTemplateSchemaForEditor(namespaceFqn, templateKey);
             if (mockResult) return mockResult;

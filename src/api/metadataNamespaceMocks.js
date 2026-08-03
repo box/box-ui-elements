@@ -1,5 +1,5 @@
 // @flow
-// ─── TODO(MDX-2136): Namespace API mocks ─────────────────────────────────────
+// ─── TODO: Namespace API mocks (remove when namespace API is deployed) ────────
 // Temporary stand-ins for the namespace-related Metadata APIs.
 //
 // To remove all mocks when the real API is deployed:
