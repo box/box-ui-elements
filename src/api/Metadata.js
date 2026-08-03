@@ -30,12 +30,7 @@ import {
     AI_ACCEPTED_PROCESS,
     AI_EXTRACTED_PROCESS,
     HEADER_CONTENT_TYPE,
-    HEADER_BOX_VERSION,
-    METADATA_NAMESPACE_MIGRATION_FIELD,
-    METADATA_NAMESPACE_FINAL_FIELD,
     METADATA_SCOPE_MODE_SCOPED,
-    METADATA_SCOPE_MODE_MIGRATION,
-    METADATA_SCOPE_MODE_FINAL,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
     METADATA_NAMESPACE_GLOBAL,
@@ -48,9 +43,7 @@ import {
     CACHE_PREFIX_METADATA,
     ERROR_CODE_UPDATE_SKILLS,
     ERROR_CODE_UPDATE_METADATA,
-    ERROR_CODE_UPDATE_METADATA_TEMPLATE,
     ERROR_CODE_CREATE_METADATA,
-    ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_DELETE_METADATA,
     ERROR_CODE_FETCH_METADATA,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
@@ -63,7 +56,7 @@ import {
     ERROR_CODE_FETCH_METADATA_TAXONOMY,
 } from '../constants';
 
-import type { RequestOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
+import type { ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -76,17 +69,39 @@ import type {
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
-// TODO(MDX-2136): remove this import when namespace API is deployed
+import MetadataNamespaces from './MetadataNamespaces';
 import {
-    IS_NAMESPACE_API_MOCKED,
-    mockListNamespaces,
-    mockListTemplatesForNamespace,
-    mockCreateMetadataTemplate,
-    mockUpdateMetadataTemplate,
-    mockGetTemplateSchemaForEditor,
-} from './metadataNamespaceMocks';
+    getEnterpriseNamespaceFromInstances as resolveEnterpriseNamespaceFromInstances,
+    getEnterpriseRootFromScopeOrNamespace as resolveEnterpriseRoot,
+    isTemplateExternallyOwned,
+    resolveScopeOrNamespace,
+} from './metadataNamespaceUtils';
+
+/** Options for getMetadata — cache flags plus namespace-migration context. */
+type MetadataGetOptions = {
+    enterpriseFqn?: string,
+    fields?: Array<string>,
+    forceFetch?: boolean,
+    metadataNamespaceMode?: string,
+    noPagination?: boolean,
+    refreshCache?: boolean,
+};
 
 class Metadata extends File {
+    _namespacesAPI: ?MetadataNamespaces;
+
+    /**
+     * Lazy collaborator for namespace-migration HTTP (list/create/update + mode).
+     *
+     * @return {MetadataNamespaces}
+     */
+    getNamespacesAPI(): MetadataNamespaces {
+        if (!this._namespacesAPI) {
+            this._namespacesAPI = new MetadataNamespaces(this);
+        }
+        return this._namespacesAPI;
+    }
+
     /**
      * Creates a key for the metadata cache
      *
@@ -142,13 +157,7 @@ class Metadata extends File {
      * @return {string} resolved URL path segment
      */
     getScopeOrNamespace(scope: ?string, namespace?: ?string): string {
-        if (this.metadataNamespaceMode === METADATA_SCOPE_MODE_FINAL && scope === METADATA_SCOPE_GLOBAL) {
-            return METADATA_NAMESPACE_GLOBAL;
-        }
-        if (!scope && namespace) {
-            return namespace;
-        }
-        return scope || '';
+        return resolveScopeOrNamespace(this.metadataNamespaceMode, scope, namespace);
     }
 
     /**
@@ -281,172 +290,51 @@ class Metadata extends File {
         return `${this.getMetadataTemplateUrl()}/${scope}`;
     }
 
-    /**
-     * API URL for listing child namespaces under a given namespace FQN.
-     *
-     * @param {string} namespaceFqn - namespace FQN (e.g. "enterprise_123456")
-     * @return {string} URL for namespace listing
-     */
+    /** @see MetadataNamespaces.getMetadataNamespacesUrl */
     getMetadataNamespacesUrl(namespaceFqn: string): string {
-        return `${this.getBaseApiUrl()}/metadata_namespaces/${namespaceFqn}`;
+        return this.getNamespacesAPI().getMetadataNamespacesUrl(namespaceFqn);
     }
 
-    /**
-     * Lists child namespaces under a given namespace FQN.
-     * Used by the namespace browser's ItemsService.getNamespaces.
-     *
-     * @param {BoxItem} file - current file (typed id is used for token auth)
-     * @param {string} namespaceFqn - parent namespace FQN
-     * @param {Object} params - pagination params (limit, marker)
-     * @return {Promise} namespace listing response
-     */
-    async listNamespaces(
+    /** @see MetadataNamespaces.listNamespaces */
+    listNamespaces(
         file: BoxItem,
         namespaceFqn: string,
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
-        // TODO(MDX-2136): remove next line when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) return mockListNamespaces(file, namespaceFqn, params);
-
-        const { id }: BoxItem = file;
-        const url = this.getMetadataNamespacesUrl(namespaceFqn);
-        try {
-            const response = await this.xhr.get({
-                url,
-                id: getTypedFileId(id),
-                params: { limit: params.limit, marker: params.marker },
-            });
-            return getProp(response, 'data', { entries: [] });
-        } catch (e) {
-            return { entries: [] };
-        }
+        return this.getNamespacesAPI().listNamespaces(file, namespaceFqn, params);
     }
 
-    /**
-     * Lists templates under a namespace FQN with cursor pagination.
-     * Used by the namespace browser's ItemsService.getTemplates.
-     *
-     * @param {BoxItem} file - current file (typed id is used for token auth)
-     * @param {string} namespaceFqn - namespace FQN
-     * @param {Object} params - pagination params (limit, marker)
-     * @return {Promise} template listing response
-     */
-    async listTemplatesForNamespace(
+    /** @see MetadataNamespaces.listTemplatesForNamespace */
+    listTemplatesForNamespace(
         file: BoxItem,
         namespaceFqn: string,
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
-        // TODO(MDX-2136): remove next line when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) return mockListTemplatesForNamespace(file, namespaceFqn, params);
-
-        const { id }: BoxItem = file;
-        const url = this.getMetadataTemplateUrlForScope(namespaceFqn);
-        try {
-            const response = await this.xhr.get({
-                url,
-                id: getTypedFileId(id),
-                params: { limit: params.limit, marker: params.marker },
-            });
-            return getProp(response, 'data', { entries: [] });
-        } catch (e) {
-            return { entries: [] };
-        }
+        return this.getNamespacesAPI().listTemplatesForNamespace(file, namespaceFqn, params);
     }
 
-    /**
-     * Returns the URL for the enterprise configurations endpoint.
-     *
-     * @param {string} enterpriseNumericId - numeric enterprise ID (without "enterprise_" prefix)
-     * @return {string} URL
-     */
+    /** @see MetadataNamespaces.getEnterpriseConfigurationsUrl */
     getEnterpriseConfigurationsUrl(enterpriseNumericId: string): string {
-        return `${this.getBaseApiUrl()}/enterprise_configurations/${enterpriseNumericId}`;
+        return this.getNamespacesAPI().getEnterpriseConfigurationsUrl(enterpriseNumericId);
     }
 
-    /**
-     * Fetches the metadata namespace migration mode for the given enterprise from the
-     * enterprise_configurations endpoint.
-     *
-     * The mode is derived from two boolean feature flags in `content_and_sharing`:
-     *   - neither enabled  → SCOPED  (legacy, pre-migration)
-     *   - migration only   → MIGRATION
-     *   - both enabled     → FINAL
-     *
-     * Returns `null` when the request fails so callers can fall back safely.
-     *
-     * @param {string} enterpriseNumericId - numeric enterprise ID (without "enterprise_" prefix)
-     * @return {Promise<string | null>} one of the METADATA_SCOPE_MODE_* constants, or null on error
-     */
-    async getMetadataNamespaceMode(file: BoxItem, enterpriseNumericId: string): Promise<string | null> {
-        const url = this.getEnterpriseConfigurationsUrl(enterpriseNumericId);
-
-        const { id }: BoxItem = file;
-        try {
-            const response = await this.xhr.get({
-                id: getTypedFileId(id),
-                url,
-                params: { categories: 'content_and_sharing' },
-                headers: { [HEADER_BOX_VERSION]: '2025.0' },
-            });
-            const contentAndSharing = getProp(response, 'data.content_and_sharing', {});
-            const isMigration = getProp(contentAndSharing, `${METADATA_NAMESPACE_MIGRATION_FIELD}.value`, false);
-            const isFinal = getProp(contentAndSharing, `${METADATA_NAMESPACE_FINAL_FIELD}.value`, false);
-
-            if (isFinal) return METADATA_SCOPE_MODE_FINAL;
-            if (isMigration) return METADATA_SCOPE_MODE_MIGRATION;
-            return METADATA_SCOPE_MODE_SCOPED;
-        } catch (e) {
-            return null;
-        }
+    /** @see MetadataNamespaces.getMetadataNamespaceMode */
+    getMetadataNamespaceMode(file: BoxItem, enterpriseNumericId: string): Promise<string | null> {
+        return this.getNamespacesAPI().getMetadataNamespaceMode(file, enterpriseNumericId);
     }
 
-    /**
-     * Creates a new namespaced metadata template.
-     * Maps to POST /metadata_templates/schema with `namespace` in body (MIGRATION/FINAL mode).
-     *
-     * @param {Object} body - template create body (namespace, templateKey, displayName, hidden, fields)
-     * @param {Function} successCallback - called with the created template on success
-     * @param {Function} errorCallback - called with error on failure
-     * @return {Promise}
-     */
-    async createMetadataTemplate(
+    /** @see MetadataNamespaces.createMetadataTemplate */
+    createMetadataTemplate(
         file: BoxItem,
         body: Object,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
-        // TODO(MDX-2136): remove next two lines when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) {
-            mockCreateMetadataTemplate(file, body, successCallback);
-            return;
-        }
-
-        const { id }: BoxItem = file;
-        this.errorCode = ERROR_CODE_CREATE_METADATA_TEMPLATE;
-        const url = `${this.getMetadataTemplateUrl()}/schema`;
-        try {
-            const response = await this.xhr.post({ url, id: getTypedFileId(id), data: body });
-            if (!this.isDestroyed()) {
-                successCallback(getProp(response, 'data'));
-            }
-        } catch (e) {
-            errorCallback(e, this.errorCode);
-        }
+        return this.getNamespacesAPI().createMetadataTemplate(file, body, successCallback, errorCallback);
     }
 
-    /**
-     * Updates a namespaced metadata template via a list of patch operations.
-     * Maps to PUT /metadata_templates/{namespaceFqn}/{templateKey}/schema.
-     *
-     * @param {BoxItem} file - current file (typed id is used for token auth)
-     * @param {string} namespaceFqn - namespace FQN of the template
-     * @param {string} templateKey - template key
-     * @param {Array} patchItems - array of patch operations
-     * @param {Function} successCallback - called with the updated template on success
-     * @param {Function} errorCallback - called with error on failure
-     * @return {Promise}
-     */
-    async updateMetadataTemplate(
+    /** @see MetadataNamespaces.updateMetadataTemplate */
+    updateMetadataTemplate(
         file: BoxItem,
         namespaceFqn: string,
         templateKey: string,
@@ -454,60 +342,19 @@ class Metadata extends File {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
-        // TODO(MDX-2136): remove next two lines when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) {
-            mockUpdateMetadataTemplate(file, namespaceFqn, templateKey, patchItems, successCallback);
-            return;
-        }
-
-        const { id }: BoxItem = file;
-        this.errorCode = ERROR_CODE_UPDATE_METADATA_TEMPLATE;
-        const url = this.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
-        try {
-            const response = await this.xhr.put({
-                url,
-                id: getTypedFileId(id),
-                headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
-                data: patchItems,
-            });
-            if (!this.isDestroyed()) {
-                successCallback(getProp(response, 'data'));
-            }
-        } catch (e) {
-            errorCallback(e, this.errorCode);
-        }
+        return this.getNamespacesAPI().updateMetadataTemplate(
+            file,
+            namespaceFqn,
+            templateKey,
+            patchItems,
+            successCallback,
+            errorCallback,
+        );
     }
 
-    /**
-     * Fetches a template schema in the shape expected by MetadataTemplateEditor.
-     * The Box API returns `hidden` for templates; the editor expects `isHidden`.
-     *
-     * @param {string} namespaceFqn - namespace FQN of the template
-     * @param {string} templateKey - template key
-     * @return {Promise<Object>} MetadataTemplateApiResponse shape for the editor
-     */
-    async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string): Promise<Object> {
-        // TODO(MDX-2136): remove the mock block when namespace API is deployed.
-        // Falls through to the real API when the template is not found in the mock store.
-        if (IS_NAMESPACE_API_MOCKED) {
-            const mockResult = mockGetTemplateSchemaForEditor(namespaceFqn, templateKey);
-            if (mockResult) return mockResult;
-        }
-
-        const url = this.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
-        const response = await this.xhr.get({ url });
-        const data = getProp(response, 'data', {});
-        // Normalize: Box template API uses `hidden`; the editor's MetadataTemplateApiResponse expects `isHidden`.
-        return {
-            namespace: data.namespace || namespaceFqn,
-            templateKey: data.templateKey,
-            displayName: data.displayName,
-            fields: (data.fields || []).map(f => ({
-                ...f,
-                isHidden: f.isHidden != null ? f.isHidden : f.hidden ?? false,
-            })),
-            isHidden: data.isHidden != null ? data.isHidden : data.hidden ?? false,
-        };
+    /** @see MetadataNamespaces.getTemplateSchemaForEditor */
+    getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string): Promise<Object> {
+        return this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey);
     }
 
     /**
@@ -676,6 +523,7 @@ class Metadata extends File {
         const url = instanceId
             ? this.getMetadataTemplateUrlForInstance(instanceId)
             : this.getMetadataTemplateUrlForScope(scope);
+        console.log('fetching templates for scope', scope, 'and instanceId', instanceId, 'url', url);
 
         try {
             templates = await this.xhr.get({
@@ -845,18 +693,25 @@ class Metadata extends File {
         return instances;
     }
 
+    /** @see metadataNamespaceUtils.getEnterpriseRootFromScopeOrNamespace */
+    getEnterpriseRootFromScopeOrNamespace(scope: ?string, namespace: ?string): string | null {
+        return resolveEnterpriseRoot(scope, namespace);
+    }
+
     /**
      * Finds template for a given metadata instance.
      *
      * @param {string} id - Box file id
      * @param {Object} instance - metadata instance
      * @param {Array} templates - metadata templates
+     * @param {string} [viewerEnterpriseFqn] - viewer's enterprise root FQN
      * @return {Object|undefined} template for metadata instance
      */
     async getTemplateForInstance(
         id: string,
         instance: MetadataInstanceV2,
         templates: Array<MetadataTemplate>,
+        viewerEnterpriseFqn?: string,
     ): Promise<?{ template: MetadataTemplate, isExternallyOwned: boolean }> {
         const instanceId = instance.$id;
         const templateKey = instance.$template;
@@ -876,15 +731,25 @@ class Metadata extends File {
             template = templates.find(t => t.templateKey === templateKey && t.namespace === namespace);
         }
 
-        // Enterprise scopes are always enterprise_XXXXX; guard against
-        // namespace-only instances where $scope is undefined.
-        if (!template && scope && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-            // Any missing template is likely from another enterprise (e.g. collaborated file);
-            // Templates array has no pagination so we can assume cross-enterprise as it contains all templates.
-            const crossEnterpriseTemplates = await this.getTemplates(id, scope, instanceId, true);
-            // The API always returns an array of at most one item
-            const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
-            return { template: crossEnterpriseTemplate, isExternallyOwned: true };
+        if (!template && instanceId) {
+            const instanceEnterpriseRoot = resolveEnterpriseRoot(scope, namespace);
+            if (instanceEnterpriseRoot) {
+                const isExternallyOwned = isTemplateExternallyOwned(
+                    instanceEnterpriseRoot,
+                    viewerEnterpriseFqn,
+                    !!(scope && scope.startsWith(METADATA_SCOPE_ENTERPRISE)),
+                );
+
+                const fetchedTemplates = await this.getTemplates(
+                    id,
+                    scope || namespace || instanceEnterpriseRoot,
+                    instanceId,
+                    isExternallyOwned,
+                );
+                // The API always returns an array of at most one item
+                const fetchedTemplate = fetchedTemplates[0];
+                return fetchedTemplate ? { template: fetchedTemplate, isExternallyOwned } : null;
+            }
         }
         return template ? { template, isExternallyOwned: false } : null;
     }
@@ -907,6 +772,7 @@ class Metadata extends File {
         enterpriseTemplates: Array<MetadataTemplate>,
         globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
+        viewerEnterpriseFqn?: string,
     ): Promise<Array<MetadataEditor>> {
         // All usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -918,7 +784,7 @@ class Metadata extends File {
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
             instances.map(async instance => {
-                const result = await this.getTemplateForInstance(id, instance, templates);
+                const result = await this.getTemplateForInstance(id, instance, templates, viewerEnterpriseFqn);
                 if (result && result.template) {
                     editors.push(this.createEditor(instance, result.template, canEdit));
                 }
@@ -1023,6 +889,7 @@ class Metadata extends File {
         globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
+        viewerEnterpriseFqn?: string,
     ): Promise<Array<MetadataTemplateInstance>> {
         // Get all usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -1035,7 +902,7 @@ class Metadata extends File {
 
         await Promise.all(
             instances.map(async instance => {
-                const result = await this.getTemplateForInstance(id, instance, templates);
+                const result = await this.getTemplateForInstance(id, instance, templates, viewerEnterpriseFqn);
                 if (result && result.template) {
                     templateInstances.push(
                         this.createTemplateInstance(
@@ -1053,29 +920,55 @@ class Metadata extends File {
         return templateInstances;
     }
 
+    /** @see metadataNamespaceUtils.getEnterpriseNamespaceFromInstances */
+    getEnterpriseNamespaceFromInstances(instances: Array<MetadataInstanceV2>): string | null {
+        return resolveEnterpriseNamespaceFromInstances(instances);
+    }
+
     /**
-     * Extracts the full enterprise scope FQN (e.g. `enterprise_123456`) from a list
-     * of metadata instances. Used in MIGRATION/FINAL mode where the `'enterprise'`
-     * shorthand is no longer a valid template-fetch scope.
-     *
-     * Checks `$scope` first (populated in MIGRATION mode) and falls back to the
-     * leading `enterprise_XXXXX` segment of `$namespace` (used in FINAL mode).
-     *
-     * @param {Array<MetadataInstanceV2>} instances - raw metadata instances
-     * @return {string|null} full enterprise FQN or null when none found
+     * SCOPED mode: fetch instances + global + enterprise templates in parallel.
      */
-    getEnterpriseScopeFromInstances(instances: Array<MetadataInstanceV2>): string | null {
-        for (const inst of instances) {
-            const { $scope, $namespace } = inst;
-            if ($scope && $scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-                return $scope;
-            }
-            if ($namespace && $namespace.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-                // Namespace FQNs may be "enterprise_123/key" — take the leading segment.
-                return $namespace.split('/')[0];
-            }
-        }
-        return null;
+    async fetchTemplatesAndInstancesScoped(
+        id: string,
+        hasMetadataFeature: boolean,
+        isMetadataRedesign: boolean,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean,
+    ): Promise<{
+        instances: Array<MetadataInstanceV2>,
+        globalTemplates: Array<MetadataTemplate>,
+        enterpriseTemplates: Array<MetadataTemplate>,
+    }> {
+        const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
+            this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
+            this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
+            hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
+        ]);
+        return { instances, globalTemplates, enterpriseTemplates };
+    }
+
+    /**
+     * MIGRATION/FINAL mode: `'enterprise'` shorthand is invalid. Prefer the
+     * caller's enterprise root FQN; fall back to deriving it from instances.
+     */
+    async fetchTemplatesAndInstancesNamespaced(
+        id: string,
+        hasMetadataFeature: boolean,
+        isMetadataRedesign: boolean,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean,
+        enterpriseFqn?: string,
+    ): Promise<{
+        instances: Array<MetadataInstanceV2>,
+        globalTemplates: Array<MetadataTemplate>,
+        enterpriseTemplates: Array<MetadataTemplate>,
+    }> {
+        const [instances, globalTemplates] = await Promise.all([
+            this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
+            this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
+        ]);
+        const enterpriseNamespace = enterpriseFqn || resolveEnterpriseNamespaceFromInstances(instances);
+        const enterpriseTemplates =
+            hasMetadataFeature && enterpriseNamespace ? await this.getTemplates(id, enterpriseNamespace) : [];
+        return { instances, globalTemplates, enterpriseTemplates };
     }
 
     /**
@@ -1099,7 +992,7 @@ class Metadata extends File {
         }) => void,
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
-        options: RequestOptions = {},
+        options: MetadataGetOptions = {},
         isMetadataRedesign: boolean = false,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): Promise<void> {
@@ -1134,31 +1027,31 @@ class Metadata extends File {
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
 
-            // In namespace modes (MIGRATION/FINAL) the 'enterprise' shorthand is no longer
-            // valid. Fetch instances first so we can derive the full enterprise scope FQN
-            // (e.g. enterprise_123456) from the instances' $scope / $namespace fields.
-            // In SCOPED mode all three fetches run in parallel for performance.
-            let instances;
-            let globalTemplates;
-            let enterpriseTemplates;
-            if (this.metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED) {
-                [instances, globalTemplates] = await Promise.all([
-                    this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
-                    this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
-                ]);
-                const enterpriseScope = this.getEnterpriseScopeFromInstances(instances);
-                enterpriseTemplates =
-                    hasMetadataFeature && enterpriseScope ? await this.getTemplates(id, enterpriseScope) : [];
-            } else {
-                [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
-                    this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
-                    this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
-                    hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
-                ]);
+            // Prefer the mode from this call (sidebar) so URL helpers and template
+            // fetches stay in sync with the enterprise configuration API.
+            if (options.metadataNamespaceMode) {
+                this.metadataNamespaceMode = options.metadataNamespaceMode;
             }
+
+            const { instances, globalTemplates, enterpriseTemplates } =
+                this.metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED
+                    ? await this.fetchTemplatesAndInstancesNamespaced(
+                          id,
+                          hasMetadataFeature,
+                          isMetadataRedesign,
+                          isBoundingBoxOrConfidenceScoreReviewEnabled,
+                          options.enterpriseFqn,
+                      )
+                    : await this.fetchTemplatesAndInstancesScoped(
+                          id,
+                          hasMetadataFeature,
+                          isMetadataRedesign,
+                          isBoundingBoxOrConfidenceScoreReviewEnabled,
+                      );
 
             // Filter out classification
             const filteredInstances = this.extractClassification(id, instances);
+            const viewerEnterpriseFqn = options.enterpriseFqn;
 
             const templateInstances = isMetadataRedesign
                 ? await this.getTemplateInstances(
@@ -1169,6 +1062,7 @@ class Metadata extends File {
                       globalTemplates,
                       !!permissions.can_upload,
                       isBoundingBoxOrConfidenceScoreReviewEnabled,
+                      viewerEnterpriseFqn,
                   )
                 : [];
             const editors = !isMetadataRedesign
@@ -1179,6 +1073,7 @@ class Metadata extends File {
                       enterpriseTemplates,
                       globalTemplates,
                       !!permissions.can_upload,
+                      viewerEnterpriseFqn,
                   )
                 : [];
 

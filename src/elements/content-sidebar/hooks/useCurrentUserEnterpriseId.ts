@@ -21,13 +21,14 @@ interface UseCurrentUserEnterpriseIdReturn {
  */
 export default function useCurrentUserEnterpriseId(
     api: API,
-    file: BoxItem | null,
+    file: BoxItem | { id: string } | null,
     isEnabled: boolean = true,
 ): UseCurrentUserEnterpriseIdReturn {
     const [enterpriseNumericId, setEnterpriseNumericId] = useState<string | undefined>(undefined);
+    const fileId = file?.id;
 
     useEffect(() => {
-        if (!isEnabled || !file?.id) {
+        if (!isEnabled || !fileId) {
             setEnterpriseNumericId(undefined);
             return undefined;
         }
@@ -35,7 +36,7 @@ export default function useCurrentUserEnterpriseId(
         let cancelled = false;
 
         api.getUsersAPI(false).getUser(
-            file.id,
+            fileId,
             (user: User) => {
                 if (!cancelled) {
                     setEnterpriseNumericId(user?.enterprise?.id);
@@ -56,7 +57,7 @@ export default function useCurrentUserEnterpriseId(
         return () => {
             cancelled = true;
         };
-    }, [api, file?.id, isEnabled]);
+    }, [api, fileId, isEnabled]);
 
     const enterpriseId = enterpriseNumericId ? `${METADATA_SCOPE_ENTERPRISE}_${enterpriseNumericId}` : undefined;
 
