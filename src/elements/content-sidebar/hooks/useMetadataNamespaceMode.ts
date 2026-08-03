@@ -37,16 +37,17 @@ interface UseMetadataNamespaceModeReturn {
  *     !!mode && mode !== METADATA_SCOPE_MODE_SCOPED;
  */
 export default function useMetadataNamespaceMode(
-    file: BoxItem,
+    file: BoxItem | { id: string } | null,
     api: API,
     enterpriseNumericId: string | undefined,
     isEnabled: boolean = false,
 ): UseMetadataNamespaceModeReturn {
     const [mode, setMode] = useState<MetadataScopeMode | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const fileId = file?.id;
 
     useEffect(() => {
-        if (!isEnabled || !file || !enterpriseNumericId) {
+        if (!isEnabled || !fileId || !enterpriseNumericId) {
             setMode(null);
             setIsLoading(false);
             return undefined;
@@ -56,7 +57,7 @@ export default function useMetadataNamespaceMode(
         setIsLoading(true);
 
         const metadataAPI = api.getMetadataAPI(false);
-        metadataAPI.getMetadataNamespaceMode(file, enterpriseNumericId).then(resolvedMode => {
+        metadataAPI.getMetadataNamespaceMode({ id: fileId }, enterpriseNumericId).then(resolvedMode => {
             if (!isCancelled) {
                 setMode(resolvedMode as MetadataScopeMode | null);
                 setIsLoading(false);
@@ -66,7 +67,7 @@ export default function useMetadataNamespaceMode(
         return () => {
             isCancelled = true;
         };
-    }, [api, file, enterpriseNumericId, isEnabled]);
+    }, [api, fileId, enterpriseNumericId, isEnabled]);
 
     return { mode, isLoading };
 }

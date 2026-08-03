@@ -196,6 +196,8 @@ export function mockUpdateMetadataTemplate(
             }
         });
         templates[idx] = updated;
+        successCallback(updated);
+        return;
     }
     successCallback({ type: 'metadata_template', namespace: namespaceFqn, templateKey });
 }
