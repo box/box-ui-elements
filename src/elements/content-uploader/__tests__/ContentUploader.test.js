@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import * as UploaderUtils from '../../../utils/uploads';
 import Browser from '../../../utils/Browser';
 import { fireEvent, render, screen } from '../../../test-utils/testing-library';
 import { ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES } from '../ContentUploader';
 import Footer from '../Footer';
+import ModernizedUploadsManager from '../ModernizedUploadsManager';
+import { getUploadItemKey } from '../utils/mapToModernizedUploadItem';
 import UploadsManager from '../UploadsManager';
 import DroppableContent from '../DroppableContent';
 import ModernizedUploadsManagerDropZone from '../ModernizedUploadsManagerDropZone';
@@ -738,7 +739,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             wrapper.setState({ items: orderedItems });
 
             const renderedNames = wrapper
-                .find(UploadsManagerBP)
+                .find(ModernizedUploadsManager)
                 .prop('items')
                 .map(item => item.name);
 
@@ -761,7 +762,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
             wrapper.setState({ items: orderedItems });
 
-            wrapper.find(UploadsManagerBP);
+            wrapper.find(ModernizedUploadsManager);
 
             expect(wrapper.state().items.map(item => item.name)).toEqual(['first.txt', 'second.txt', 'third.txt']);
         });
@@ -770,18 +771,18 @@ describe('elements/content-uploader/ContentUploader', () => {
     describe('controlled isExpanded / onToggle', () => {
         test('uses isExpanded prop value when in controlled mode', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true, isExpanded: true, onToggle: jest.fn() });
-            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+            expect(wrapper.find(ModernizedUploadsManager).prop('isExpanded')).toBe(true);
 
             wrapper.setProps({ isExpanded: false });
-            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(false);
+            expect(wrapper.find(ModernizedUploadsManager).prop('isExpanded')).toBe(false);
         });
 
         test('falls back to internal state when isExpanded prop is not provided', () => {
             const wrapper = getWrapper({ enableModernizedUploads: true });
-            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(false);
+            expect(wrapper.find(ModernizedUploadsManager).prop('isExpanded')).toBe(false);
 
             wrapper.setState({ isUploadsManagerExpanded: true });
-            expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+            expect(wrapper.find(ModernizedUploadsManager).prop('isExpanded')).toBe(true);
         });
 
         test('toggleUploadsManager calls onToggle with next value in controlled mode and does not mutate internal state', () => {
@@ -1136,7 +1137,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             test('should render legacy UploadsManager when enableModernizedUploads is false and useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: false, useUploadsManager: true });
                 expect(wrapper.find(UploadsManager)).toHaveLength(1);
-                expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
+                expect(wrapper.find(ModernizedUploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
             });
 
@@ -1144,12 +1145,12 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: false, useUploadsManager: false });
                 expect(wrapper.find(DroppableContent)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
-                expect(wrapper.find(UploadsManagerBP)).toHaveLength(0);
+                expect(wrapper.find(ModernizedUploadsManager)).toHaveLength(0);
             });
 
-            test('should render modernized UploadsManagerBP when enableModernizedUploads is true', () => {
+            test('should render modernized ModernizedUploadsManager when enableModernizedUploads is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
+                expect(wrapper.find(ModernizedUploadsManager)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
                 expect(wrapper.find(DroppableContent)).toHaveLength(0);
                 expect(wrapper.find(ModernizedUploadsManagerDropZone)).toHaveLength(1);
@@ -1161,39 +1162,33 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(wrapper.find(ModernizedUploadsManagerDropZone).prop('isDropEnabled')).toBe(false);
             });
 
-            test('should render modernized UploadsManagerBP even when useUploadsManager is true', () => {
+            test('should render modernized ModernizedUploadsManager even when useUploadsManager is true', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true, useUploadsManager: true });
-                expect(wrapper.find(UploadsManagerBP)).toHaveLength(1);
+                expect(wrapper.find(ModernizedUploadsManager)).toHaveLength(1);
                 expect(wrapper.find(UploadsManager)).toHaveLength(0);
             });
 
-            test('should map state.items to modernized item shape', () => {
-                const wrapper = getWrapper({ enableModernizedUploads: true });
-                wrapper.setState({
-                    items: [
-                        {
-                            name: 'foo.pdf',
-                            extension: 'pdf',
-                            progress: 42,
-                            status: STATUS_IN_PROGRESS,
-                            file: { name: 'foo.pdf' },
-                        },
-                    ],
-                });
-                const items = wrapper.find(UploadsManagerBP).prop('items');
-                expect(items).toHaveLength(1);
-                expect(items[0]).toMatchObject({
+            test('should hand state.items and the mapping options to the modernized manager', () => {
+                const wrapper = getWrapper({ enableModernizedUploads: true, isUploadEtaEnabled: true });
+                const item = {
                     name: 'foo.pdf',
                     extension: 'pdf',
                     progress: 42,
-                    status: 'uploading',
-                });
+                    status: STATUS_IN_PROGRESS,
+                    file: { name: 'foo.pdf' },
+                };
+                wrapper.setState({ items: [item] });
+
+                const modernizedManager = wrapper.find(ModernizedUploadsManager);
+                expect(modernizedManager.prop('items')).toEqual([item]);
+                expect(modernizedManager.prop('rootFolderId')).toBe('0');
+                expect(modernizedManager.prop('isUploadEtaEnabled')).toBe(true);
             });
 
             test('should pass isExpanded from state', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
                 wrapper.setState({ isUploadsManagerExpanded: true });
-                expect(wrapper.find(UploadsManagerBP).prop('isExpanded')).toBe(true);
+                expect(wrapper.find(ModernizedUploadsManager).prop('isExpanded')).toBe(true);
             });
 
             test('should mark in-progress item as canceled when onItemCancel is invoked', () => {
@@ -1211,7 +1206,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const instance = wrapper.instance();
                 instance.itemsRef.current = [item];
 
-                wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
+                wrapper.find(ModernizedUploadsManager).prop('onItemCancel')('foo.pdf');
 
                 expect(cancelMock).toHaveBeenCalled();
                 expect(item.status).toBe(STATUS_CANCELED);
@@ -1232,7 +1227,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const instance = wrapper.instance();
                 instance.itemsRef.current = [item];
 
-                wrapper.find(UploadsManagerBP).prop('onItemCancel')('foo.pdf');
+                wrapper.find(ModernizedUploadsManager).prop('onItemCancel')('foo.pdf');
 
                 expect(cancelMock).not.toHaveBeenCalled();
                 expect(item.status).toBe(STATUS_COMPLETE);
@@ -1251,7 +1246,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const instance = wrapper.instance();
                 const removeSpy = jest.spyOn(instance, 'removeFileFromUploadQueue').mockImplementation(() => {});
 
-                wrapper.find(UploadsManagerBP).prop('onItemRemove')('foo.pdf');
+                wrapper.find(ModernizedUploadsManager).prop('onItemRemove')('foo.pdf');
 
                 expect(removeSpy).toHaveBeenCalledWith(item);
             });
@@ -1272,7 +1267,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 instance.itemsRef.current = [item];
                 const markSpy = jest.spyOn(instance, 'markItemCanceled');
 
-                wrapper.find(UploadsManagerBP).prop('onItemCancel')('missing-id');
+                wrapper.find(ModernizedUploadsManager).prop('onItemCancel')('missing-id');
 
                 expect(markSpy).not.toHaveBeenCalled();
                 expect(item.api.cancel).not.toHaveBeenCalled();
@@ -1292,8 +1287,8 @@ describe('elements/content-uploader/ContentUploader', () => {
                 };
                 wrapper.setState({ items: [folderItem] });
 
-                expect(() => wrapper.find(UploadsManagerBP).prop('items')).not.toThrow();
-                const items = wrapper.find(UploadsManagerBP).prop('items');
+                expect(() => wrapper.find(ModernizedUploadsManager).prop('items')).not.toThrow();
+                const items = wrapper.find(ModernizedUploadsManager).prop('items');
                 expect(items).toHaveLength(1);
                 expect(items[0]).toMatchObject({ name: 'my-folder', isFolder: true });
             });
@@ -1312,8 +1307,8 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const instance = wrapper.instance();
                 instance.itemsRef.current = [folderItem];
 
-                const folderId = wrapper.find(UploadsManagerBP).prop('items')[0].id;
-                wrapper.find(UploadsManagerBP).prop('onItemCancel')(folderId);
+                const folderId = getUploadItemKey(folderItem, '0');
+                wrapper.find(ModernizedUploadsManager).prop('onItemCancel')(folderId);
 
                 expect(folderItem.status).toBe(STATUS_CANCELED);
             });
@@ -1341,7 +1336,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const instance = wrapper.instance();
                 instance.itemsRef.current = [chunked, plain];
 
-                wrapper.find(UploadsManagerBP).prop('onCancelAll')();
+                wrapper.find(ModernizedUploadsManager).prop('onCancelAll')();
 
                 expect(wrapper.state('isCancelAllModalOpen')).toBe(true);
                 expect(instance.isCancelAllPaused).toBe(true);
@@ -1593,7 +1588,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
                 const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
 
-                wrapper.find(UploadsManagerBP).prop('onRetryAll')();
+                wrapper.find(ModernizedUploadsManager).prop('onRetryAll')();
 
                 expect(resetSpy).toHaveBeenCalledTimes(2);
                 expect(uploadFileSpy).toHaveBeenCalledTimes(2);
@@ -1625,7 +1620,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 jest.spyOn(UploaderUtils, 'isMultiputSupported').mockReturnValue(true);
                 const resumeSpy = jest.spyOn(instance, 'resumeFile').mockImplementation(() => {});
 
-                wrapper.find(UploadsManagerBP).prop('onRetryAll')();
+                wrapper.find(ModernizedUploadsManager).prop('onRetryAll')();
 
                 expect(resumeSpy).toHaveBeenCalledWith(resumable);
                 expect(onClickResume).toHaveBeenCalledWith(resumable);
@@ -1661,7 +1656,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
                 const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
 
-                wrapper.find(UploadsManagerBP).prop('onRetryAll')();
+                wrapper.find(ModernizedUploadsManager).prop('onRetryAll')();
 
                 expect(onClickCancel).toHaveBeenCalledWith(conflict);
                 expect(conflict.api.cancel).toHaveBeenCalled();
@@ -1689,8 +1684,8 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
                 const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
 
-                const { id } = wrapper.find(UploadsManagerBP).prop('items')[0];
-                wrapper.find(UploadsManagerBP).prop('onItemRetry')(id);
+                const id = getUploadItemKey(item, '0');
+                wrapper.find(ModernizedUploadsManager).prop('onItemRetry')(id);
 
                 expect(resetSpy).toHaveBeenCalledWith(item);
                 expect(uploadFileSpy).toHaveBeenCalledWith(item);
@@ -1716,8 +1711,8 @@ describe('elements/content-uploader/ContentUploader', () => {
                 const resetSpy = jest.spyOn(instance, 'resetFile').mockImplementation(() => {});
                 const uploadFileSpy = jest.spyOn(instance, 'uploadFile').mockImplementation(() => {});
 
-                const { id } = wrapper.find(UploadsManagerBP).prop('items')[0];
-                wrapper.find(UploadsManagerBP).prop('onItemRetry')(id);
+                const id = getUploadItemKey(item, '0');
+                wrapper.find(ModernizedUploadsManager).prop('onItemRetry')(id);
 
                 expect(onClickCancel).toHaveBeenCalledWith(item);
                 expect(item.api.cancel).toHaveBeenCalled();
@@ -1726,26 +1721,26 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(uploadFileSpy).not.toHaveBeenCalled();
             });
 
-            test('should pass onItemShare prop to UploadsManagerBP', () => {
+            test('should pass onItemShare prop to ModernizedUploadsManager', () => {
                 const onItemShare = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onItemShare });
-                expect(wrapper.find(UploadsManagerBP).prop('onItemShare')).toBe(onItemShare);
+                expect(wrapper.find(ModernizedUploadsManager).prop('onItemShare')).toBe(onItemShare);
             });
 
-            test('should pass onItemOpen prop to UploadsManagerBP', () => {
+            test('should pass onItemOpen prop to ModernizedUploadsManager', () => {
                 const onItemOpen = jest.fn();
                 const wrapper = getWrapper({ enableModernizedUploads: true, onItemOpen });
-                expect(wrapper.find(UploadsManagerBP).prop('onItemOpen')).toBe(onItemOpen);
+                expect(wrapper.find(ModernizedUploadsManager).prop('onItemOpen')).toBe(onItemOpen);
             });
 
             test('should default onItemShare to undefined when not provided', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                expect(wrapper.find(UploadsManagerBP).prop('onItemShare')).toBeUndefined();
+                expect(wrapper.find(ModernizedUploadsManager).prop('onItemShare')).toBeUndefined();
             });
 
             test('should default onItemOpen to undefined when not provided', () => {
                 const wrapper = getWrapper({ enableModernizedUploads: true });
-                expect(wrapper.find(UploadsManagerBP).prop('onItemOpen')).toBeUndefined();
+                expect(wrapper.find(ModernizedUploadsManager).prop('onItemOpen')).toBeUndefined();
             });
         });
     });

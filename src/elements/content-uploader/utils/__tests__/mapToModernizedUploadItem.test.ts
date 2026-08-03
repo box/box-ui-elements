@@ -1,4 +1,9 @@
+import type { IntlShape } from 'react-intl';
+
+import messages from '../../../common/messages';
 import {
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
     STATUS_STAGED,
@@ -124,6 +129,68 @@ describe('mapToModernizedUploadItem()', () => {
             '0',
         );
         expect(result.errorMessage).toBe('Boom');
+    });
+
+    describe('localized error messages', () => {
+        const intl = {
+            formatMessage: jest.fn(
+                (descriptor, values) => `${descriptor.id}${values ? `:${JSON.stringify(values)}` : ''}`,
+            ),
+        } as unknown as IntlShape;
+
+        test('prefers the localized copy for a known error code over the API message', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({
+                    status: STATUS_ERROR,
+                    error: { code: ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS, message: 'Untranslated API copy' },
+                }),
+                '0',
+                false,
+                intl,
+            );
+            expect(result.errorMessage).toBe(messages.uploadsInsufficientPermissionsErrorMessage.id);
+        });
+
+        test('forwards the item name to the invalid folder name message', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({
+                    name: 'bad/name',
+                    status: STATUS_ERROR,
+                    error: { code: ERROR_CODE_ITEM_NAME_INVALID },
+                }),
+                '0',
+                false,
+                intl,
+            );
+            expect(result.errorMessage).toBe(
+                `${messages.uploadsProvidedFolderNameInvalidMessage.id}:{"name":"bad/name"}`,
+            );
+        });
+
+        test('falls back to the API message for an unmapped error code', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status: STATUS_ERROR, error: { code: 'UNKNOWN_ERROR_CODE', message: 'Boom' } }),
+                '0',
+                false,
+                intl,
+            );
+            expect(result.errorMessage).toBe('Boom');
+        });
+
+        test('falls back to the generic message when neither a code nor an API message is usable', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status: STATUS_ERROR, error: { code: 'UNKNOWN_ERROR_CODE' } }),
+                '0',
+                false,
+                intl,
+            );
+            expect(result.errorMessage).toBe(messages.uploadsDefaultErrorMessage.id);
+        });
+
+        test('leaves errorMessage undefined when the item has no error', () => {
+            const result = mapToModernizedUploadItem(buildLegacyItem(), '0', false, intl);
+            expect(result.errorMessage).toBeUndefined();
+        });
     });
 
     test('forwards isFolder', () => {
