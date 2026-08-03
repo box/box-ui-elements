@@ -88,7 +88,7 @@ type MetadataGetOptions = {
 };
 
 class Metadata extends File {
-    _namespacesAPI: ?MetadataNamespaces;
+    namespacesAPI: ?MetadataNamespaces;
 
     /**
      * Lazy collaborator for namespace-migration HTTP (list/create/update + mode).
@@ -96,10 +96,10 @@ class Metadata extends File {
      * @return {MetadataNamespaces}
      */
     getNamespacesAPI(): MetadataNamespaces {
-        if (!this._namespacesAPI) {
-            this._namespacesAPI = new MetadataNamespaces(this);
+        if (!this.namespacesAPI) {
+            this.namespacesAPI = new MetadataNamespaces(this);
         }
-        return this._namespacesAPI;
+        return this.namespacesAPI;
     }
 
     /**
@@ -523,8 +523,6 @@ class Metadata extends File {
         const url = instanceId
             ? this.getMetadataTemplateUrlForInstance(instanceId)
             : this.getMetadataTemplateUrlForScope(scope);
-        console.log('fetching templates for scope', scope, 'and instanceId', instanceId, 'url', url);
-
         try {
             templates = await this.xhr.get({
                 url,
