@@ -1,5 +1,4 @@
 import * as React from 'react';
-import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
 import {
     type JSONPatchOperations,
@@ -19,7 +18,6 @@ import {
     ERROR_CODE_UNKNOWN,
     ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
-    FIELD_PERMISSIONS_CAN_UPLOAD,
     FIELD_PERMISSIONS,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
@@ -144,18 +142,14 @@ function useSidebarMetadataFetcher(
 
     const fetchFileSuccessCallback = React.useCallback(
         (fetchedFile: BoxItem) => {
-            const { currentFile } = file ?? {};
-            const currentFileCanUpload = getProp(currentFile, FIELD_PERMISSIONS_CAN_UPLOAD, false);
-            const newFileCanUpload = getProp(fetchedFile, FIELD_PERMISSIONS_CAN_UPLOAD, false);
-            const shouldFetchMetadata = !currentFile || currentFileCanUpload !== newFileCanUpload;
             setFile(fetchedFile);
-            if (shouldFetchMetadata && fetchedFile) {
+            if (fetchedFile) {
                 fetchMetadata(fetchedFile);
             } else {
                 setStatus(STATUS.SUCCESS);
             }
         },
-        [fetchMetadata, file],
+        [fetchMetadata],
     );
 
     const fetchFileErrorCallback = React.useCallback(
@@ -321,12 +315,14 @@ function useSidebarMetadataFetcher(
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
+            // Avoid refreshCache: true — File.getFile invokes success twice (cache, then network)
+            // which would duplicate the metadata fetch. Cache hit or a single network fetch is enough;
+            // missing fields are still requested when not present on the cached file.
             api.getFileAPI().getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
                 fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
-                refreshCache: true,
             });
         }
-    }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
+    }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId]);
 
     return {
         clearExtractError: () => setExtractErrorCode(null),
