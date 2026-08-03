@@ -20,6 +20,7 @@ import {
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
+import type Xhr from '../utils/Xhr';
 import { resolveMetadataNamespaceMode } from './metadataNamespaceUtils';
 // TODO(MDX-2136): remove this import when namespace API is deployed
 import {
@@ -33,19 +34,17 @@ import {
 
 /** Minimal host surface MetadataNamespaces needs from Metadata. */
 export type MetadataNamespaceHost = {
+    // Writable: MetadataNamespaces assigns error codes onto the host.
     errorCode: string,
-    getBaseApiUrl: () => string,
-    getCache: () => APICache,
-    getMetadataTemplateSchemaCacheKey: (templateKey: string, scope?: string) => string,
-    getMetadataTemplateSchemaUrl: (templateKey: string, scope?: string) => string,
-    getMetadataTemplateUrl: () => string,
-    getMetadataTemplateUrlForScope: (scope: string) => string,
-    isDestroyed: () => boolean,
-    xhr: {
-        get: (config: Object) => Promise<Object>,
-        post: (config: Object) => Promise<Object>,
-        put: (config: Object) => Promise<Object>,
-    },
+    // Methods/+xhr are covariant so class instances (read-only methods) are assignable.
+    +getBaseApiUrl: () => string,
+    +getCache: () => APICache,
+    +getMetadataTemplateSchemaCacheKey: (templateKey: string, scope?: string) => string,
+    +getMetadataTemplateSchemaUrl: (templateKey: string, scope?: string) => string,
+    +getMetadataTemplateUrl: () => string,
+    +getMetadataTemplateUrlForScope: (scope: string) => string,
+    +isDestroyed: () => boolean,
+    +xhr: Xhr,
 };
 
 export default class MetadataNamespaces {
