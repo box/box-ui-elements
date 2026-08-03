@@ -11,6 +11,7 @@ import {
 } from '../MetadataSidebarRedesign';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
+import useMetadataNamespaceContext from '../hooks/useMetadataNamespaceContext';
 
 jest.mock('../hooks/useSidebarMetadataFetcher');
 const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFunction<
@@ -20,6 +21,11 @@ const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFu
 jest.mock('../hooks/useMetadataFieldSelection');
 const mockUseMetadataFieldSelection = useMetadataFieldSelection as jest.MockedFunction<
     typeof useMetadataFieldSelection
+>;
+
+jest.mock('../hooks/useMetadataNamespaceContext');
+const mockUseMetadataNamespaceContext = useMetadataNamespaceContext as jest.MockedFunction<
+    typeof useMetadataNamespaceContext
 >;
 
 const getStructuredTextRep = jest.fn().mockResolvedValue('structured-text-rep');
@@ -141,6 +147,13 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         mockUseMetadataFieldSelection.mockReturnValue({
             selectedMetadataFieldId: null,
             handleSelectMetadataField: jest.fn(),
+        });
+
+        mockUseMetadataNamespaceContext.mockReturnValue({
+            enterpriseId: undefined,
+            metadataNamespaceMode: null,
+            isTemplateManagementEnabled: false,
+            isLoading: false,
         });
 
         mockUseSidebarMetadataFetcher.mockReturnValue({
@@ -624,6 +637,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, metadataNamespaceMode: null },
         );
     });
 
@@ -638,6 +652,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
+            { enterpriseFqn: undefined, metadataNamespaceMode: null },
         );
     });
 
@@ -652,6 +667,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, metadataNamespaceMode: null },
         );
     });
 
@@ -666,6 +682,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
+            { enterpriseFqn: undefined, metadataNamespaceMode: null },
         );
     });
 
