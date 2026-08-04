@@ -86,6 +86,8 @@ export * from './media';
 
 export * from './menu';
 
+export * from './nav-sidebar';
+
 export { default as PlainButton } from './plain-button';
 export * from './plain-button';
 
