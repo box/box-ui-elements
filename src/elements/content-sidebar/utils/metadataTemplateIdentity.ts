@@ -5,7 +5,8 @@
  * in MIGRATION/FINAL modes.
  */
 export type MetadataTemplateIdentity = {
-    templateKey: string;
+    /** Optional on `@box/metadata-template-browser` MetadataTemplate; required at runtime for a match. */
+    templateKey?: string;
     scope?: string;
     namespace?: string;
 };
@@ -27,7 +28,7 @@ export function getMetadataTemplateNamespaceFqn(template: MetadataTemplateIdenti
  *   (e.g. `enterprise_123.legal.contract` vs `enterprise_123.hr.contract`).
  */
 export function isSameMetadataTemplate(a: MetadataTemplateIdentity, b: MetadataTemplateIdentity): boolean {
-    if (a.templateKey !== b.templateKey) {
+    if (a.templateKey == null || b.templateKey == null || a.templateKey !== b.templateKey) {
         return false;
     }
     // Fast path: both sides still carry a legacy scope and they agree.

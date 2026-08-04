@@ -8,7 +8,7 @@ export const convertTemplateToTemplateInstance = (
 ): MetadataTemplateInstance => {
     // `namespace` is present at runtime in MIGRATION/FINAL modes but not yet on
     // the `@box/metadata-editor` MetadataTemplate type.
-    const namespace = (template as MetadataTemplate & MetadataTemplateIdentity).namespace;
+    const { namespace } = template as MetadataTemplate & MetadataTemplateIdentity;
 
     return {
         canEdit: !!file.permissions.can_upload,
