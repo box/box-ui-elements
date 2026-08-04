@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import PlainButton from '../../plain-button';
+import Tooltip from '../../tooltip';
 import Select from '..';
 
 const sandbox = sinon.sandbox.create();
@@ -74,20 +77,16 @@ describe('components/select/Select', () => {
         const wrapper = shallow(
             <Select infoIconProps={{ title: 'hello' }} infoTooltip="hello!!!" label="Album" name="select" />,
         );
-        const getButton = () => wrapper.find('PlainButton');
-        const getInfoTooltip = () => wrapper.find('Tooltip[text="hello!!!"]');
-        expect(getInfoTooltip().props().isShown).toBe(false);
+        const getButton = () => wrapper.find(PlainButton);
+        const getInfoTooltip = () => wrapper.find(Tooltip).filterWhere(node => node.prop('text') === 'hello!!!');
+        expect(getInfoTooltip().prop('isShown')).toBe(false);
         // Toggle on
-        getButton()
-            .props()
-            .onClick();
-        expect(getInfoTooltip().props().isShown).toBe(true);
+        getButton().simulate('click');
+        expect(getInfoTooltip().prop('isShown')).toBe(true);
         // Toggle off
-        getButton()
-            .props()
-            .onClick();
+        getButton().simulate('click');
 
-        expect(getInfoTooltip().props().isShown).toBe(false);
+        expect(getInfoTooltip().prop('isShown')).toBe(false);
     });
 
     test('should show Tooltip when error exists', () => {
