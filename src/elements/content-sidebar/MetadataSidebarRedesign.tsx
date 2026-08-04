@@ -52,6 +52,7 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
+import { isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
     metadataTaxonomyFetcher,
@@ -249,10 +250,7 @@ function MetadataSidebarRedesign({
     useEffect(() => {
         // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
         const isEditingTemplateAlreadyExisting =
-            editingTemplate &&
-            templateInstances.some(
-                t => t.templateKey === editingTemplate.templateKey && t.scope === editingTemplate.scope,
-            );
+            editingTemplate && templateInstances.some(t => isSameMetadataTemplate(t, editingTemplate));
 
         if (!editingTemplate || isEditingTemplateAlreadyExisting) {
             setAppliedTemplateInstances(templateInstances);
