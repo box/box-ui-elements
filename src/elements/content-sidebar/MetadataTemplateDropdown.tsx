@@ -14,6 +14,7 @@ import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-e
 import type { ItemsService } from '@box/metadata-template-browser';
 
 import useMetadataTemplateEventService from './hooks/useMetadataTemplateEventService';
+import { getMetadataTemplateNamespaceFqn } from './utils/metadataTemplateIdentity';
 
 export interface MetadataTemplateDropdownProps {
     templates: EditorMetadataTemplate[];
@@ -62,8 +63,7 @@ export default function MetadataTemplateDropdown({
             // Primary: exact id match against already-loaded editor templates.
             const template = templates.find(t => t.id === templateId);
             if (template?.templateKey) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const namespaceFqn = template.scope ?? (template as any).namespace;
+                const namespaceFqn = getMetadataTemplateNamespaceFqn(template);
                 if (namespaceFqn) {
                     onEditTemplate({ namespaceFqn, templateKey: template.templateKey });
                     return;

@@ -146,7 +146,7 @@
         "@box/metadata-filter": "^1.80.23",
         "@box/metadata-taxonomy-picker": "^3.1.25",
         "@box/metadata-template-browser": "^2.1.7",
-        "@box/metadata-template-editor": "^2.2.16",
+        "@box/metadata-template-editor": "^2.3.0",
         "@box/metadata-view": "^1.53.26",
         "@box/react-virtualized": "^9.22.3-rc-box.10",
         "@box/readable-time": "^2.2.8",

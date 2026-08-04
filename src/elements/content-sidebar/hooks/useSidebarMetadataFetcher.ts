@@ -32,6 +32,7 @@ import messages from '../../common/messages';
 import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
+import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -300,9 +301,8 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templates.find(
-                template =>
-                    template.templateKey === templateKey && (template.scope === scope || template.namespace === scope),
+            const templateInstance = templates.find(template =>
+                isSameMetadataTemplate(template, { templateKey, scope }),
             );
             const fields = templateInstance?.fields || [];
 
