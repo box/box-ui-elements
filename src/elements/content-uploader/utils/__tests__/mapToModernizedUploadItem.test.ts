@@ -1,5 +1,3 @@
-import type { IntlShape } from 'react-intl';
-
 import messages from '../../../common/messages';
 import {
     ERROR_CODE_ITEM_NAME_INVALID,
@@ -132,8 +130,12 @@ describe('mapToModernizedUploadItem()', () => {
     });
 
     describe('localized error messages', () => {
-        const formatMessage: IntlShape['formatMessage'] = (descriptor, values) =>
-            `${descriptor.id}${values ? `:${JSON.stringify(values)}` : ''}`;
+        const localizedMessage = 'Localized message';
+        const formatMessage = jest.fn().mockReturnValue(localizedMessage);
+
+        beforeEach(() => {
+            formatMessage.mockClear();
+        });
 
         test('prefers the localized copy for a known error code over the API message', () => {
             const result = mapToModernizedUploadItem(
@@ -145,7 +147,8 @@ describe('mapToModernizedUploadItem()', () => {
                 false,
                 formatMessage,
             );
-            expect(result.errorMessage).toBe(messages.uploadsInsufficientPermissionsErrorMessage.id);
+            expect(formatMessage).toHaveBeenCalledWith(messages.uploadsInsufficientPermissionsErrorMessage, undefined);
+            expect(result.errorMessage).toBe(localizedMessage);
         });
 
         test('forwards the item name to the invalid folder name message', () => {
@@ -159,9 +162,10 @@ describe('mapToModernizedUploadItem()', () => {
                 false,
                 formatMessage,
             );
-            expect(result.errorMessage).toBe(
-                `${messages.uploadsProvidedFolderNameInvalidMessage.id}:{"name":"bad/name"}`,
-            );
+            expect(formatMessage).toHaveBeenCalledWith(messages.uploadsProvidedFolderNameInvalidMessage, {
+                name: 'bad/name',
+            });
+            expect(result.errorMessage).toBe(localizedMessage);
         });
 
         test('falls back to the API message for an unmapped error code', () => {
@@ -172,6 +176,7 @@ describe('mapToModernizedUploadItem()', () => {
                 formatMessage,
             );
             expect(result.errorMessage).toBe('Boom');
+            expect(formatMessage).not.toHaveBeenCalled();
         });
 
         test('falls back to the generic message when neither a code nor an API message is usable', () => {
@@ -181,12 +186,14 @@ describe('mapToModernizedUploadItem()', () => {
                 false,
                 formatMessage,
             );
-            expect(result.errorMessage).toBe(messages.uploadsDefaultErrorMessage.id);
+            expect(formatMessage).toHaveBeenCalledWith(messages.uploadsDefaultErrorMessage);
+            expect(result.errorMessage).toBe(localizedMessage);
         });
 
         test('leaves errorMessage undefined when the item has no error', () => {
             const result = mapToModernizedUploadItem(buildLegacyItem(), '0', false, formatMessage);
             expect(result.errorMessage).toBeUndefined();
+            expect(formatMessage).not.toHaveBeenCalled();
         });
     });
 
