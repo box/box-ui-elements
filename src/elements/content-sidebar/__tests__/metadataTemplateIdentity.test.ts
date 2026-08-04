@@ -72,6 +72,18 @@ describe('metadataTemplateIdentity', () => {
             ).toBe(false);
         });
 
+        test('does not match when either templateKey is missing', () => {
+            expect(
+                isSameMetadataTemplate(
+                    { templateKey: 'contract', scope: 'enterprise_123' },
+                    { scope: 'enterprise_123' },
+                ),
+            ).toBe(false);
+            expect(
+                isSameMetadataTemplate({ scope: 'enterprise_123' }, { templateKey: 'contract', scope: 'enterprise_123' }),
+            ).toBe(false);
+        });
+
         test('matches when one side stores the FQN in scope and the other in namespace', () => {
             expect(
                 isSameMetadataTemplate(
