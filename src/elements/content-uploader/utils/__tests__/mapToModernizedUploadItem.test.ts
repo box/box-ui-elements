@@ -1,4 +1,3 @@
-import messages from '../../../common/messages';
 import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
@@ -147,7 +146,13 @@ describe('mapToModernizedUploadItem()', () => {
                 false,
                 formatMessage,
             );
-            expect(formatMessage).toHaveBeenCalledWith(messages.uploadsInsufficientPermissionsErrorMessage, undefined);
+            expect(formatMessage).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    id: 'be.uploadsInsufficientPermissionsErrorMessage',
+                    defaultMessage: "You don't have permission to upload to this folder",
+                }),
+                undefined,
+            );
             expect(result.errorMessage).toBe(localizedMessage);
         });
 
@@ -162,9 +167,13 @@ describe('mapToModernizedUploadItem()', () => {
                 false,
                 formatMessage,
             );
-            expect(formatMessage).toHaveBeenCalledWith(messages.uploadsProvidedFolderNameInvalidMessage, {
-                name: 'bad/name',
-            });
+            expect(formatMessage).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    id: 'be.uploadsProvidedFolderNameInvalidMessage',
+                    defaultMessage: 'Provided folder name, {name}, could not be used to create a folder.',
+                }),
+                { name: 'bad/name' },
+            );
             expect(result.errorMessage).toBe(localizedMessage);
         });
 
@@ -186,7 +195,12 @@ describe('mapToModernizedUploadItem()', () => {
                 false,
                 formatMessage,
             );
-            expect(formatMessage).toHaveBeenCalledWith(messages.uploadsDefaultErrorMessage);
+            expect(formatMessage).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    id: 'be.uploadsDefaultErrorMessage',
+                    defaultMessage: 'Something went wrong with the upload. Please try again.',
+                }),
+            );
             expect(result.errorMessage).toBe(localizedMessage);
         });
 
