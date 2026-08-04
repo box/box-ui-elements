@@ -7,7 +7,7 @@
     @at-root {
         &:where(body.is-inter-font),
         :where(body.is-inter-font) & {
-            font-family: InterVariable, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Inter Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
     }
 }
