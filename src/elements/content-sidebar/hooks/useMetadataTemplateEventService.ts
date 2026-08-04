@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { EventService, MetadataTemplate as BrowserMetadataTemplate } from '@box/metadata-template-browser';
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
+import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 interface UseMetadataTemplateEventServiceArgs {
     /**
@@ -50,12 +51,7 @@ export default function useMetadataTemplateEventService({
                 // returns a different id shape than the editor list (e.g. during mock dev).
                 const editorTemplate =
                     templates.find(t => t.id === browserTemplate.id) ??
-                    templates.find(
-                        t =>
-                            t.templateKey === browserTemplate.templateKey &&
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (t.scope === browserTemplate.scope || (t as any).namespace === browserTemplate.scope),
-                    );
+                    templates.find(t => isSameMetadataTemplate(t, browserTemplate));
                 if (editorTemplate) {
                     onSelect(editorTemplate);
                 }

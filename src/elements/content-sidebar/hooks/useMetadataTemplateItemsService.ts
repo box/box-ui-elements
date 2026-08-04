@@ -13,6 +13,7 @@ import API from '../../../api';
 import { METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
 import type { BoxItem } from '../../../common/types/core';
+import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName: string): string {
     if (template.templateKey === METADATA_TEMPLATE_PROPERTIES) {
@@ -89,11 +90,8 @@ export default function useMetadataTemplateItemsService(
                     // handleEditTemplateById / onTemplateSelect resolve correctly.
                     // Falls back to the raw API id when there is no matching editor template
                     // (e.g. child-namespace-only templates not yet in the editor list).
-                    const editorMatch = templates.find(
-                        et =>
-                            et.templateKey === templateKey &&
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            (et.scope === templateScope || (et as any).namespace === templateScope),
+                    const editorMatch = templates.find(et =>
+                        isSameMetadataTemplate(et, { templateKey, scope: templateScope }),
                     );
                     return {
                         id: editorMatch?.id ?? (t.id as string),

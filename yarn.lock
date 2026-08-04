@@ -1197,10 +1197,10 @@
   resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-2.1.7.tgz#f31de745e40004805a230cd624912e1c5cf9547f"
   integrity sha512-MzuFyzVInAR0ZqT4g3wro47DmirT39YaYIsxRborZtL1TpaQpgxZoqCWQ+/pgtuGoGHyoP+kpueO8APeC+XCGg==
 
-"@box/metadata-template-editor@^2.2.16":
-  version "2.2.16"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.2.16.tgz#3eb232280235023cde5e885d876f990365e399c7"
-  integrity sha512-L2Qt1jLzMlQEQ1dAZHPsznDTWjeHvM5O0XfHtaXlah3F5FvVP7gdCsiAkEGc4dJaJw3f9pyV2HeLCZnqQMed0g==
+"@box/metadata-template-editor@^2.3.0":
+  version "2.3.17"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.3.17.tgz#cd99c63748dd9e8942bbd6e2e1fd928a091e4362"
+  integrity sha512-heAXhnnACJ4uT9pENFOQDdwE2LtGeepmK6APRxhU2ZoIShlVWmocSMkzTnJKav2WQ6RE1ZclLXeDVeKBi0I8jg==
 
 "@box/metadata-view@^1.53.26":
   version "1.53.26"
