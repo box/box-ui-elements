@@ -132,11 +132,8 @@ describe('mapToModernizedUploadItem()', () => {
     });
 
     describe('localized error messages', () => {
-        const intl = {
-            formatMessage: jest.fn(
-                (descriptor, values) => `${descriptor.id}${values ? `:${JSON.stringify(values)}` : ''}`,
-            ),
-        } as unknown as IntlShape;
+        const formatMessage: IntlShape['formatMessage'] = (descriptor, values) =>
+            `${descriptor.id}${values ? `:${JSON.stringify(values)}` : ''}`;
 
         test('prefers the localized copy for a known error code over the API message', () => {
             const result = mapToModernizedUploadItem(
@@ -146,7 +143,7 @@ describe('mapToModernizedUploadItem()', () => {
                 }),
                 '0',
                 false,
-                intl,
+                formatMessage,
             );
             expect(result.errorMessage).toBe(messages.uploadsInsufficientPermissionsErrorMessage.id);
         });
@@ -160,7 +157,7 @@ describe('mapToModernizedUploadItem()', () => {
                 }),
                 '0',
                 false,
-                intl,
+                formatMessage,
             );
             expect(result.errorMessage).toBe(
                 `${messages.uploadsProvidedFolderNameInvalidMessage.id}:{"name":"bad/name"}`,
@@ -172,7 +169,7 @@ describe('mapToModernizedUploadItem()', () => {
                 buildLegacyItem({ status: STATUS_ERROR, error: { code: 'UNKNOWN_ERROR_CODE', message: 'Boom' } }),
                 '0',
                 false,
-                intl,
+                formatMessage,
             );
             expect(result.errorMessage).toBe('Boom');
         });
@@ -182,13 +179,13 @@ describe('mapToModernizedUploadItem()', () => {
                 buildLegacyItem({ status: STATUS_ERROR, error: { code: 'UNKNOWN_ERROR_CODE' } }),
                 '0',
                 false,
-                intl,
+                formatMessage,
             );
             expect(result.errorMessage).toBe(messages.uploadsDefaultErrorMessage.id);
         });
 
         test('leaves errorMessage undefined when the item has no error', () => {
-            const result = mapToModernizedUploadItem(buildLegacyItem(), '0', false, intl);
+            const result = mapToModernizedUploadItem(buildLegacyItem(), '0', false, formatMessage);
             expect(result.errorMessage).toBeUndefined();
         });
     });

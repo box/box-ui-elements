@@ -39,14 +39,17 @@ export function getUploadItemKey(item: LegacyUploadItem | FolderUploadItem, root
  * Resolve the copy shown on a failed row. The API message is a last resort: it is returned in the
  * request locale rather than the user's Box language, so a known error code always wins.
  */
-function getErrorMessage(item: LegacyUploadItem | FolderUploadItem, intl?: IntlShape): string | undefined {
+function getErrorMessage(
+    item: LegacyUploadItem | FolderUploadItem,
+    formatMessage?: IntlShape['formatMessage'],
+): string | undefined {
     const error = item.error as { code?: string; message?: string } | undefined;
 
     if (!error) {
         return undefined;
     }
 
-    if (!intl) {
+    if (!formatMessage) {
         return error.message;
     }
 
@@ -54,19 +57,19 @@ function getErrorMessage(item: LegacyUploadItem | FolderUploadItem, intl?: IntlS
     const mappedMessage = getUploadErrorMessage(errorCode, item.name);
 
     if (mappedMessage) {
-        return intl.formatMessage(mappedMessage.descriptor, mappedMessage.values);
+        return formatMessage(mappedMessage.descriptor, mappedMessage.values);
     }
 
-    return error.message ?? intl.formatMessage(defaultUploadErrorMessage.descriptor);
+    return error.message ?? formatMessage(defaultUploadErrorMessage.descriptor);
 }
 
 export function mapToModernizedUploadItem(
     item: LegacyUploadItem | FolderUploadItem,
     rootFolderId: string,
     isUploadEtaEnabled = false,
-    intl?: IntlShape,
+    formatMessage?: IntlShape['formatMessage'],
 ): UploadItem {
-    const errorMessage = getErrorMessage(item, intl);
+    const errorMessage = getErrorMessage(item, formatMessage);
     const fileItem = item as LegacyUploadItem;
 
     const status = STATUS_MAP[item.status] ?? 'pending';
@@ -107,7 +110,7 @@ export function mapToModernizedUploadItems(
     items: Array<LegacyUploadItem | FolderUploadItem>,
     rootFolderId: string,
     isUploadEtaEnabled = false,
-    intl?: IntlShape,
+    formatMessage?: IntlShape['formatMessage'],
 ): UploadItem[] {
-    return items.map(item => mapToModernizedUploadItem(item, rootFolderId, isUploadEtaEnabled, intl));
+    return items.map(item => mapToModernizedUploadItem(item, rootFolderId, isUploadEtaEnabled, formatMessage));
 }

@@ -23,12 +23,12 @@ const ModernizedUploadsManager = ({
     rootFolderId,
     ...uploadsManagerProps
 }: ModernizedUploadsManagerProps) => {
-    const intl = useIntl();
+    const { formatMessage } = useIntl();
 
     return (
         <UploadsManagerBP
             {...uploadsManagerProps}
-            items={mapToModernizedUploadItems(items, rootFolderId, isUploadEtaEnabled, intl)}
+            items={mapToModernizedUploadItems(items, rootFolderId, isUploadEtaEnabled, formatMessage)}
         />
     );
 };
