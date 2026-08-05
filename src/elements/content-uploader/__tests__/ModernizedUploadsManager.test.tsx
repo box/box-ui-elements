@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { render, screen } from '../../../test-utils/testing-library';
 import ModernizedUploadsManager from '../ModernizedUploadsManager';
-import messages from '../../common/messages';
 import { ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS, STATUS_ERROR } from '../../../constants';
 
 describe('elements/content-uploader/ModernizedUploadsManager', () => {
@@ -42,9 +41,7 @@ describe('elements/content-uploader/ModernizedUploadsManager', () => {
             ],
         });
 
-        expect(
-            screen.getByText(`Error: ${messages.uploadsInsufficientPermissionsErrorMessage.defaultMessage}`),
-        ).toBeInTheDocument();
+        expect(screen.getByText("Error: You don't have permission to upload to this folder")).toBeInTheDocument();
         expect(screen.queryByText(/Untranslated API copy/)).not.toBeInTheDocument();
     });
 
