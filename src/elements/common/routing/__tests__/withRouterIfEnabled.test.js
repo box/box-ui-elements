@@ -52,4 +52,3 @@ test('renders without Router and without router props (feature flag)', () => {
     expect(component).not.toHaveAttribute('data-has-location');
     expect(component).not.toHaveAttribute('data-has-match');
 });
-

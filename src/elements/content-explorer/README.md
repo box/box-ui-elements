@@ -70,4 +70,3 @@
 
 ### Keyboard Shortcuts
 *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-keyboard-shortcuts).*
-

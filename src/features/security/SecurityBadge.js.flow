@@ -31,4 +31,3 @@ SecurityBadge.defaultProps = {
 };
 
 export default SecurityBadge;
-
