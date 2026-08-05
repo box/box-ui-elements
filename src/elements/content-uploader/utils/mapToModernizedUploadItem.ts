@@ -1,3 +1,4 @@
+import type { IntlShape } from 'react-intl';
 import type { UploadItem, UploadItemStatus } from '@box/uploads-manager';
 import {
     STATUS_PENDING,
@@ -9,6 +10,7 @@ import {
 } from '../../../constants';
 import { getFileId } from '../../../utils/uploads';
 import { UploadItem as LegacyUploadItem, FolderUploadItem } from '../../../common/types/upload';
+import { defaultUploadErrorMessage, getUploadErrorMessage, resolveUploadErrorCode } from './getUploadErrorMessage';
 
 const STATUS_MAP: Record<string, UploadItemStatus> = {
     [STATUS_PENDING]: 'pending',
@@ -33,12 +35,41 @@ export function getUploadItemKey(item: LegacyUploadItem | FolderUploadItem, root
     return `${item.name}_${folderId}_${uploadInitTimestamp}`;
 }
 
+/**
+ * Resolve the copy shown on a failed row. The API message is a last resort: it is returned in the
+ * request locale rather than the user's Box language, so a known error code always wins.
+ */
+function getErrorMessage(
+    item: LegacyUploadItem | FolderUploadItem,
+    formatMessage?: IntlShape['formatMessage'],
+): string | undefined {
+    const error = item.error as { code?: string; message?: string } | undefined;
+
+    if (!error) {
+        return undefined;
+    }
+
+    if (!formatMessage) {
+        return error.message;
+    }
+
+    const errorCode = resolveUploadErrorCode(error.code, (item as LegacyUploadItem).file?.name);
+    const mappedMessage = getUploadErrorMessage(errorCode, item.name);
+
+    if (mappedMessage) {
+        return formatMessage(mappedMessage.descriptor, mappedMessage.values);
+    }
+
+    return error.message ?? formatMessage(defaultUploadErrorMessage.descriptor);
+}
+
 export function mapToModernizedUploadItem(
     item: LegacyUploadItem | FolderUploadItem,
     rootFolderId: string,
     isUploadEtaEnabled = false,
+    formatMessage?: IntlShape['formatMessage'],
 ): UploadItem {
-    const errorMessage = item.error ? (item.error as { message?: string }).message : undefined;
+    const errorMessage = getErrorMessage(item, formatMessage);
     const fileItem = item as LegacyUploadItem;
 
     const status = STATUS_MAP[item.status] ?? 'pending';
@@ -79,6 +110,7 @@ export function mapToModernizedUploadItems(
     items: Array<LegacyUploadItem | FolderUploadItem>,
     rootFolderId: string,
     isUploadEtaEnabled = false,
+    formatMessage?: IntlShape['formatMessage'],
 ): UploadItem[] {
-    return items.map(item => mapToModernizedUploadItem(item, rootFolderId, isUploadEtaEnabled));
+    return items.map(item => mapToModernizedUploadItem(item, rootFolderId, isUploadEtaEnabled, formatMessage));
 }
