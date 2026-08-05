@@ -37,6 +37,9 @@ export * from './draft-js-editor';
 export { default as DraggableList } from './draggable-list';
 export * from './draggable-list';
 
+export { default as DropdownMenu } from './dropdown-menu';
+export * from './dropdown-menu';
+
 export { default as ErrorMask } from './error-mask';
 export * from './error-mask';
 
@@ -82,6 +85,8 @@ export { default as Media } from './media';
 export * from './media';
 
 export * from './menu';
+
+export * from './nav-sidebar';
 
 export { default as PlainButton } from './plain-button';
 export * from './plain-button';
