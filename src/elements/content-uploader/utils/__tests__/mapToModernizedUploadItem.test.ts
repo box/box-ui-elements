@@ -1,4 +1,6 @@
 import {
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS,
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
     STATUS_STAGED,
@@ -124,6 +126,89 @@ describe('mapToModernizedUploadItem()', () => {
             '0',
         );
         expect(result.errorMessage).toBe('Boom');
+    });
+
+    describe('localized error messages', () => {
+        const localizedMessage = 'Localized message';
+        const formatMessage = jest.fn().mockReturnValue(localizedMessage);
+
+        beforeEach(() => {
+            formatMessage.mockClear();
+        });
+
+        test('prefers the localized copy for a known error code over the API message', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({
+                    status: STATUS_ERROR,
+                    error: { code: ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS, message: 'Untranslated API copy' },
+                }),
+                '0',
+                false,
+                formatMessage,
+            );
+            expect(formatMessage).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    id: 'be.uploadsInsufficientPermissionsErrorMessage',
+                    defaultMessage: "You don't have permission to upload to this folder",
+                }),
+                undefined,
+            );
+            expect(result.errorMessage).toBe(localizedMessage);
+        });
+
+        test('forwards the item name to the invalid folder name message', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({
+                    name: 'bad/name',
+                    status: STATUS_ERROR,
+                    error: { code: ERROR_CODE_ITEM_NAME_INVALID },
+                }),
+                '0',
+                false,
+                formatMessage,
+            );
+            expect(formatMessage).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    id: 'be.uploadsProvidedFolderNameInvalidMessage',
+                    defaultMessage: 'Provided folder name, {name}, could not be used to create a folder.',
+                }),
+                { name: 'bad/name' },
+            );
+            expect(result.errorMessage).toBe(localizedMessage);
+        });
+
+        test('falls back to the API message for an unmapped error code', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status: STATUS_ERROR, error: { code: 'UNKNOWN_ERROR_CODE', message: 'Boom' } }),
+                '0',
+                false,
+                formatMessage,
+            );
+            expect(result.errorMessage).toBe('Boom');
+            expect(formatMessage).not.toHaveBeenCalled();
+        });
+
+        test('falls back to the generic message when neither a code nor an API message is usable', () => {
+            const result = mapToModernizedUploadItem(
+                buildLegacyItem({ status: STATUS_ERROR, error: { code: 'UNKNOWN_ERROR_CODE' } }),
+                '0',
+                false,
+                formatMessage,
+            );
+            expect(formatMessage).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    id: 'be.uploadsDefaultErrorMessage',
+                    defaultMessage: 'Something went wrong with the upload. Please try again.',
+                }),
+            );
+            expect(result.errorMessage).toBe(localizedMessage);
+        });
+
+        test('leaves errorMessage undefined when the item has no error', () => {
+            const result = mapToModernizedUploadItem(buildLegacyItem(), '0', false, formatMessage);
+            expect(result.errorMessage).toBeUndefined();
+            expect(formatMessage).not.toHaveBeenCalled();
+        });
     });
 
     test('forwards isFolder', () => {
