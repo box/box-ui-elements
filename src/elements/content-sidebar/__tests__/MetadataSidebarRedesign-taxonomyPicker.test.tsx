@@ -10,10 +10,12 @@ import {
 } from '../MetadataSidebarRedesign';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
+import useMetadataNamespaceContext from '../hooks/useMetadataNamespaceContext';
 import type { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
 
 jest.mock('../hooks/useSidebarMetadataFetcher');
 jest.mock('../hooks/useMetadataFieldSelection');
+jest.mock('../hooks/useMetadataNamespaceContext');
 
 // Stubbing the editor lets us inspect the props the sidebar hands to it
 // without pulling the full @box/metadata-editor form tree into the test.
@@ -28,6 +30,9 @@ const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFu
 >;
 const mockUseMetadataFieldSelection = useMetadataFieldSelection as jest.MockedFunction<
     typeof useMetadataFieldSelection
+>;
+const mockUseMetadataNamespaceContext = useMetadataNamespaceContext as jest.MockedFunction<
+    typeof useMetadataNamespaceContext
 >;
 
 const mockFile = { id: '123', permissions: { can_upload: true } };
@@ -101,12 +106,20 @@ describe('MetadataSidebarRedesign taxonomy picker wiring', () => {
             handleSelectMetadataField: jest.fn(),
         });
 
+        mockUseMetadataNamespaceContext.mockReturnValue({
+            enterpriseId: undefined,
+            metadataNamespaceMode: null,
+            isTemplateManagementEnabled: false,
+            isLoading: false,
+        });
+
         mockUseSidebarMetadataFetcher.mockReturnValue({
             clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
             templateInstances: [taxonomyTemplateInstance],
             templates: mockTemplates,
             errorMessage: null,

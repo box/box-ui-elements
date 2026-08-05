@@ -82,6 +82,7 @@ export const HEADER_RETRY_AFTER = 'Retry-After';
 export const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 export const HEADER_ACCEPT_LANGUAGE = 'Accept-Language';
+export const HEADER_BOX_VERSION = 'box-version';
 
 /* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
@@ -91,6 +92,13 @@ export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
 export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
+export const METADATA_NAMESPACE_GLOBAL = 'box.metadata';
+export const METADATA_SCOPE_MODE_SCOPED = 'SCOPED';
+export const METADATA_SCOPE_MODE_MIGRATION = 'MIGRATION';
+export const METADATA_SCOPE_MODE_FINAL = 'FINAL';
+// Field names within enterprise_configurations.content_and_sharing that signal namespace migration stage.
+export const METADATA_NAMESPACE_MIGRATION_FIELD = 'is_scoped_templates_migration_enabled';
+export const METADATA_NAMESPACE_FINAL_FIELD = 'are_namespaced_metadata_templates_enabled';
 export const METADATA_TEMPLATE_FETCH_LIMIT = API_PAGE_LIMIT;
 export const METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = 'experimental';
 export const SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE = 'update_metadata_template_instance_success';
@@ -323,6 +331,7 @@ export const ERROR_CODE_CREATE_TASK_ASSIGNMENT = 'create_task_assignment_error';
 export const ERROR_CODE_CREATE_TASK_COLLABORATOR = 'create_task_collaborator_error';
 export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
 export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
+export const ERROR_CODE_CREATE_METADATA_TEMPLATE = 'create_metadata_template_error';
 export const ERROR_CODE_DELETE_APP_ACTIVITY = 'delete_app_activity_error';
 export const ERROR_CODE_DELETE_ANNOTATION = 'delete_annotation_error';
 export const ERROR_CODE_EDIT_ANNOTATION = 'edit_annotation_error';
@@ -342,6 +351,7 @@ export const ERROR_CODE_UPDATE_TASK_COLLABORATOR = 'update_task_collaborator_err
 export const ERROR_CODE_UPDATE_COMMENT = 'update_comment_error';
 export const ERROR_CODE_UPDATE_SKILLS = 'update_skills_error';
 export const ERROR_CODE_UPDATE_METADATA = 'update_metadata_error';
+export const ERROR_CODE_UPDATE_METADATA_TEMPLATE = 'update_metadata_template_error';
 export const ERROR_CODE_GET_DOWNLOAD_URL = 'get_download_url_error';
 export const ERROR_CODE_RENAME_ITEM = 'rename_item_error';
 export const ERROR_CODE_SHARE_ITEM = 'share_item_error';

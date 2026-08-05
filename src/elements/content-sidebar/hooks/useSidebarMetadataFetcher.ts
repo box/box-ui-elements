@@ -19,6 +19,7 @@ import {
     ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
+    METADATA_SCOPE_MODE_SCOPED,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
@@ -29,6 +30,7 @@ import messages from '../../common/messages';
 import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
+import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -57,10 +59,20 @@ interface DataFetcher {
         JSONPatch: Array<Object>,
         successCallback: () => void,
     ) => Promise<void>;
+    /** Re-fetches metadata (templates + instances) using the current file. */
+    refetchMetadata: () => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
 }
+
+/** Namespace migration context forwarded into Metadata.getMetadata options. */
+export type MetadataNamespaceFetchContext = {
+    /** Enterprise root namespace FQN from the current user (e.g. `enterprise_123`). */
+    enterpriseFqn?: string;
+    /** Migration mode from enterprise_configurations (`SCOPED` | `MIGRATION` | `FINAL`). */
+    metadataNamespaceMode?: string | null;
+};
 
 function useSidebarMetadataFetcher(
     api: API,
@@ -70,7 +82,9 @@ function useSidebarMetadataFetcher(
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
     isConfidenceScoreEnabled: boolean = false,
     isBoundingBoxEnabled: boolean = false,
+    namespaceContext: MetadataNamespaceFetchContext = {},
 ): DataFetcher {
+    const { enterpriseFqn, metadataNamespaceMode } = namespaceContext;
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
@@ -126,17 +140,23 @@ function useSidebarMetadataFetcher(
                 fetchMetadataSuccessCallback,
                 fetchMetadataErrorCallback,
                 isFeatureEnabled,
-                { refreshCache: true },
+                {
+                    refreshCache: true,
+                    ...(enterpriseFqn ? { enterpriseFqn } : {}),
+                    ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
+                },
                 true,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
         [
             api,
+            enterpriseFqn,
             fetchMetadataErrorCallback,
             fetchMetadataSuccessCallback,
             isFeatureEnabled,
             isBoundingBoxOrConfidenceScoreReviewEnabled,
+            metadataNamespaceMode,
         ],
     );
 
@@ -275,7 +295,9 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templates.find(template => template.templateKey === templateKey && template.scope);
+            const templateInstance = templates.find(template =>
+                isSameMetadataTemplate(template, { templateKey, scope }),
+            );
             const fields = templateInstance?.fields || [];
 
             return fields.map(field => {
@@ -324,12 +346,34 @@ function useSidebarMetadataFetcher(
         }
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
+    // When namespace mode + enterprise FQN become available, refetch so getMetadata
+    // uses the non-SCOPED path with the authoritative enterprise root namespace.
+    const lastNamespaceFetchKey = React.useRef<string | null>(null);
+    React.useEffect(() => {
+        if (!file || !enterpriseFqn || !metadataNamespaceMode || metadataNamespaceMode === METADATA_SCOPE_MODE_SCOPED) {
+            return;
+        }
+        const fetchKey = `${file.id}:${enterpriseFqn}:${metadataNamespaceMode}`;
+        if (lastNamespaceFetchKey.current === fetchKey) {
+            return;
+        }
+        lastNamespaceFetchKey.current = fetchKey;
+        fetchMetadata(file);
+    }, [enterpriseFqn, fetchMetadata, file, metadataNamespaceMode]);
+
+    const refetchMetadata = React.useCallback(() => {
+        if (file) {
+            fetchMetadata(file);
+        }
+    }, [file, fetchMetadata]);
+
     return {
         clearExtractError: () => setExtractErrorCode(null),
         extractSuggestions,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
+        refetchMetadata,
         extractErrorCode,
         errorMessage,
         file,
