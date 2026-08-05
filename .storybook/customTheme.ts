@@ -5,7 +5,7 @@ export default create({
     base: 'light',
 
     // Typography
-    fontBase: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
+    fontBase: 'Inter Variable, "Helvetica Neue", Helvetica, Arial, sans-serif',
     fontCode: 'monospace',
 
     colorPrimary: vars.bdlBoxBlue,
