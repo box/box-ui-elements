@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import NavListCollapseHeader from '../NavListCollapseHeader';
 
@@ -16,7 +17,7 @@ describe('components/nav-sidebar/NavListCollapseHeader', () => {
         const cp = {
             a: 1,
             'snake-case': 2,
-        };
+        } as const;
         const handler = () => 0;
         const header = shallow(
             <NavListCollapseHeader containerProps={cp} onToggleCollapse={handler}>

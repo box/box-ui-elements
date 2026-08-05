@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import { NavList } from '..';
 import { Link } from '../../link';
@@ -12,18 +13,8 @@ describe('components/nav-sidebar/NavList', () => {
         expect(nav.type()).toEqual('nav');
         expect(nav.hasClass('nav-list')).toBe(true);
         expect(nav.childAt(0).type()).toEqual('ul');
-        expect(
-            nav
-                .childAt(0)
-                .childAt(0)
-                .type(),
-        ).toEqual('li');
-        expect(
-            nav
-                .childAt(0)
-                .childAt(0)
-                .contains(children),
-        ).toBe(true);
+        expect(nav.childAt(0).childAt(0).type()).toEqual('li');
+        expect(nav.childAt(0).childAt(0).contains(children)).toBe(true);
     });
 
     test('should render heading when specified', () => {
@@ -35,12 +26,7 @@ describe('components/nav-sidebar/NavList', () => {
         );
 
         expect(nav.childAt(0).type()).toEqual('h2');
-        expect(
-            nav
-                .childAt(0)
-                .children()
-                .text(),
-        ).toEqual(heading);
+        expect(nav.childAt(0).children().text()).toEqual(heading);
     });
 
     test('should render nav list when one child is null', () => {
@@ -57,7 +43,7 @@ describe('components/nav-sidebar/NavList', () => {
     test('should pass down optional ul props', () => {
         const ulProps = {
             hello: 'world',
-        };
+        } as const;
         const nav = shallow(
             <NavList ulProps={ulProps}>
                 <Link>Test</Link>
@@ -65,6 +51,8 @@ describe('components/nav-sidebar/NavList', () => {
             </NavList>,
         );
 
-        expect(nav.find('ul').props().hello).toEqual('world');
+        const renderedUlProps = nav.find('ul').props() as React.HTMLAttributes<HTMLUListElement> &
+            Record<string, unknown>;
+        expect(renderedUlProps.hello).toEqual('world');
     });
 });
