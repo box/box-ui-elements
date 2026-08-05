@@ -1,8 +1,7 @@
-// @flow
 import * as React from 'react';
 
 import Avatar from '../avatar/Avatar';
-import Button from '../button/Button';
+import Button, { ButtonType } from '../button/Button';
 import Link from '../link/Link';
 import Menu from '../menu/Menu';
 import MenuItem from '../menu/MenuItem';
@@ -16,8 +15,11 @@ import SubmenuItem from '../menu/SubmenuItem';
 import DropdownMenu from './DropdownMenu';
 import notes from './DropdownMenu.stories.md';
 
-function generateClickHandler(message) {
-    return event => {
+type StoryLinkProps = Omit<React.ComponentProps<typeof Link>, 'className'> & React.HTMLAttributes<HTMLAnchorElement>;
+const StoryLink = Link as React.ComponentType<StoryLinkProps>;
+
+function generateClickHandler(message: string) {
+    return (event: React.SyntheticEvent) => {
         event.preventDefault();
         /* eslint-disable-next-line no-console */
         console.log(`${message} menu option selected`);
@@ -36,7 +38,7 @@ export const basic = () => (
             console.log('menu closed');
         }}
     >
-        <PlainButton className="dropdown-menu-example-button" type="button">
+        <PlainButton className="dropdown-menu-example-button" type={ButtonType.BUTTON}>
             <MenuToggle>
                 <Avatar id="123" name="Jay Tee" />
             </MenuToggle>
@@ -49,9 +51,9 @@ export const basic = () => (
             </MenuItem>
             <MenuSeparator />
             <MenuLinkItem>
-                <Link href="/logout-example-link" onClick={generateClickHandler('Log Out')}>
+                <StoryLink href="/logout-example-link" onClick={generateClickHandler('Log Out')}>
                     Log Out
-                </Link>
+                </StoryLink>
             </MenuLinkItem>
         </Menu>
     </DropdownMenu>
@@ -76,7 +78,7 @@ export const withLinkMenu = () => (
 
 export const responsiveWithHeader = () => (
     <DropdownMenu isResponsive>
-        <PlainButton className="dropdown-menu-example-button" type="button">
+        <PlainButton className="dropdown-menu-example-button" type={ButtonType.BUTTON}>
             <MenuToggle>
                 <Button>View in mobile</Button>
             </MenuToggle>

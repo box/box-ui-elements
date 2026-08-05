@@ -37,6 +37,9 @@ export * from './draft-js-editor';
 export { default as DraggableList } from './draggable-list';
 export * from './draggable-list';
 
+export { default as DropdownMenu } from './dropdown-menu';
+export * from './dropdown-menu';
+
 export { default as ErrorMask } from './error-mask';
 export * from './error-mask';
 
