@@ -1177,20 +1177,20 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^2.2.28":
-  version "2.2.28"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.2.28.tgz#4e0f12a0d2c0797855f0beb87fafdea8de5fc44b"
-  integrity sha512-xa49ovqe7ePMnZh+cq1B6kkCQCq55TQO5+BaB/pits+EPOFnZ5CawZYzzwb8PXIp/kWp2f2yw0D9kSqYnkv6NQ==
+"@box/metadata-editor@^2.4.19":
+  version "2.4.19"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.4.19.tgz#bcadf4d09c4084f0a322fefb0a0063f20cd6b1a7"
+  integrity sha512-+35psrAykf16EsE8o2LR5g68zSNyvqAHoHhGFeN8xrqV9lSH24wquph/MFuneZJQIVvuEEmrBu68wM8t3pXmbg==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
 
-"@box/metadata-taxonomy-picker@^3.1.25":
-  version "3.1.25"
-  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.1.25.tgz#ff128f082086ec18b4e24b76b786c915ebaf3064"
-  integrity sha512-IfcUZEhtta/2nkzo0vilgvn9hp44xdNldpw03Ska+s5Jpo3kZh0CzzooRoMd/w9nhYHn3pW2/U6LmR/X37noEw==
+"@box/metadata-taxonomy-picker@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.3.1.tgz#423831600a0ba502ee78fdda43bcd80a506a137e"
+  integrity sha512-cEy2qao4hb8NAAPxNcj7EOGpob9XWRCM+R15jRrvef2SGQZcM46kYCoS4J0xWtUt+gvnpIKVGq2e1G4hm6VNoA==
 
 "@box/metadata-template-browser@^2.1.7":
   version "2.1.7"
