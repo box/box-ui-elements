@@ -6,16 +6,16 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import { UploadsManager as UploadsManagerBP } from '@box/uploads-manager';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import CancelAllUploadsModal from './CancelAllUploadsModal';
 import LargeFileWarningModal from './LargeFileWarningModal';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
+import ModernizedUploadsManager from './ModernizedUploadsManager';
 import ModernizedUploadsManagerDropZone from './ModernizedUploadsManagerDropZone';
 import UploadsManager from './UploadsManager';
-import { getUploadItemKey, mapToModernizedUploadItems } from './utils/mapToModernizedUploadItem';
+import { getUploadItemKey } from './utils/mapToModernizedUploadItem';
 import { updateEta, getRemainingMs, type EtaState } from './utils/uploadEta';
 import './ModernizedUploadsManagerPanel.scss';
 import API from '../../api';
@@ -1914,12 +1914,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             onMouseEnter={this.handleModernizedMouseEnter}
                             onMouseLeave={this.handleModernizedMouseLeave}
                         >
-                            <UploadsManagerBP
-                                items={mapToModernizedUploadItems(
-                                    uploadsManagerItems,
-                                    rootFolderId,
-                                    isUploadEtaEnabled,
-                                )}
+                            <ModernizedUploadsManager
+                                items={uploadsManagerItems}
+                                rootFolderId={rootFolderId}
+                                isUploadEtaEnabled={isUploadEtaEnabled}
                                 isExpanded={isUploadsManagerExpanded}
                                 onToggle={this.toggleUploadsManager}
                                 onItemCancel={this.handleUploadsManagerItemCancel}
