@@ -1,11 +1,10 @@
-// @flow
-
 import * as React from 'react';
 
 import { VIEW_SIZE_TYPE } from '../constants';
 import notes from './MediaQuery.stories.md';
 import useMediaQuery from '../useMediaQuery';
 import withMediaQuery from '../withMediaQuery';
+import type { MediaShape } from '../types';
 
 export const CustomHook = () => {
     const { hover, isTouchDevice, pointer, size, viewWidth, viewHeight } = useMediaQuery();
@@ -36,17 +35,12 @@ export const CustomHook = () => {
     );
 };
 
-type Props = {
-    children?: any,
-    hover: string,
-    isTouchDevice: boolean,
-    pointer: string,
-    size: string,
-    viewHeight: number,
-    viewWidth: number,
-};
+interface DemoComponentProps
+    extends Pick<MediaShape, 'hover' | 'isTouchDevice' | 'pointer' | 'size' | 'viewHeight' | 'viewWidth'> {
+    children?: React.ReactNode;
+}
 
-const DemoComponent = (props: Props) => {
+const DemoComponent = (props: DemoComponentProps) => {
     const { hover, isTouchDevice, pointer, size, viewWidth, viewHeight } = props;
 
     return (
