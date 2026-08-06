@@ -53,7 +53,14 @@ jest.mock('@box/activity-feed', () => {
     const actual = jest.requireActual('@box/activity-feed');
     const ActivityFeedRoot = (props: Partial<RootProps>) => {
         lastRootProps = props;
-        return <div data-testid="activity-feed-root">{props.children}</div>;
+        return (
+            <div data-testid="activity-feed-root">
+                {props.children}
+                {props.areCommentsDisabled ? (
+                    <div data-testid="activity-feed-comments-disabled">CommentsDisabled</div>
+                ) : null}
+            </div>
+        );
     };
     const ActivityFeedList = ({ children }: { children: React.ReactNode }) => (
         <div data-testid="activity-feed-list">{children}</div>
@@ -212,6 +219,20 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
         expect(screen.getByTestId('activity-feed-list')).toBeVisible();
         expect(screen.getByTestId('activity-feed-editor')).toBeVisible();
+    });
+
+    test('should replace the editor with CommentsDisabled when can_comment is false', () => {
+        render(
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[] as ActivityFeedV2Props['feedItems']}
+                file={{ id: '12345', permissions: { can_comment: false } }}
+            />,
+        );
+
+        expect(lastRootProps.areCommentsDisabled).toBe(true);
+        expect(screen.getByTestId('activity-feed-comments-disabled')).toBeVisible();
+        expect(screen.queryByTestId('activity-feed-editor')).not.toBeInTheDocument();
     });
 
     test('should tag the feed wrapper with resin feature and fileid', () => {

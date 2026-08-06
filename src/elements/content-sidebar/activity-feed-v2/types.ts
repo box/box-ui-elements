@@ -82,6 +82,9 @@ export type ActivityFeedV2File = {
     extension?: string;
     file_version?: { id: string };
     id?: string;
+    permissions?: {
+        can_comment?: boolean;
+    };
 };
 
 export type ViewerHandle = {
