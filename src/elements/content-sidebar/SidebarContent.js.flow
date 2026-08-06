@@ -58,4 +58,3 @@ SidebarContent.defaultProps = {
 };
 
 export default SidebarContent;
-

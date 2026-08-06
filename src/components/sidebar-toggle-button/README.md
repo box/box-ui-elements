@@ -11,4 +11,3 @@
 ```js
 <SidebarToggleButton direction="left" isOpen/>
 ```
-

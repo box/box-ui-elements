@@ -72,4 +72,3 @@ SecurityControlsModal.defaultProps = {
 };
 
 export default SecurityControlsModal;
-

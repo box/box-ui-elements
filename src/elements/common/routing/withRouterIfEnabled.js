@@ -21,4 +21,3 @@ export default function withRouterIfEnabled(Wrapped: React.ComponentType<any>) {
 
     return WithRouterIfEnabled;
 }
-

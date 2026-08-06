@@ -141,5 +141,3 @@ class BadgeableExample2 extends React.Component {
 
 <BadgeableExample2/>
 ```
-
-

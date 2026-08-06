@@ -29,4 +29,3 @@ For more information on this element, see this [documentation](https://developer
 | onExecute | Function | | A callback that executes when an integration invocation is attempted. |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
-
