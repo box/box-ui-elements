@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import { Reference, Popper } from 'react-popper';
 import PopperComponent from '..';
 
@@ -47,7 +48,7 @@ describe('components/popper/PopperComponent', () => {
 
         expect(wrapper.exists(Reference)).toBe(true);
         const popperWrapper = wrapper.find(Popper);
-        expect(popperWrapper.length).toBe(1);
+        expect(popperWrapper).toHaveLength(1);
         expect(popperWrapper.prop('placement')).toBe('bottom-end');
     });
 });
