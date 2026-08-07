@@ -116,6 +116,11 @@ const mockCurrentUser: ActivityFeedV2Props['currentUser'] = {
     type: 'user',
 };
 
+const mockFileWithCommentPermission: NonNullable<ActivityFeedV2Props['file']> = {
+    id: '12345',
+    permissions: { can_comment: true },
+};
+
 const mockComment = {
     created_at: '2024-01-01T00:00:00Z',
     created_by: { id: '2', name: 'Commenter', type: 'user' },
@@ -214,19 +219,31 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     });
 
     test('should render the ActivityFeed root, list, and editor when feedItems is provided', () => {
-        render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+        render(
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[] as ActivityFeedV2Props['feedItems']}
+                file={mockFileWithCommentPermission}
+            />,
+        );
 
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
         expect(screen.getByTestId('activity-feed-list')).toBeVisible();
         expect(screen.getByTestId('activity-feed-editor')).toBeVisible();
     });
 
-    test('should replace the editor with CommentsDisabled when can_comment is false', () => {
+    test.each`
+        description                      | file
+        ${'can_comment is false'}        | ${{ id: '12345', permissions: { can_comment: false } }}
+        ${'file is missing'}             | ${undefined}
+        ${'permissions are missing'}     | ${{ id: '12345' }}
+        ${'can_comment is undefined'}    | ${{ id: '12345', permissions: {} }}
+    `('should replace the editor with CommentsDisabled when $description', ({ file }) => {
         render(
             <ActivityFeedV2
                 currentUser={mockCurrentUser}
                 feedItems={[] as ActivityFeedV2Props['feedItems']}
-                file={{ id: '12345', permissions: { can_comment: false } }}
+                file={file}
             />,
         );
 
@@ -619,13 +636,25 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
     describe('mention popover behavior', () => {
         test('should pass allowEmptyQuery=true so the popover opens on @ before any character is typed', () => {
-            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
 
             expect(lastEditorProps.userSelectorProps?.allowEmptyQuery).toBe(true);
         });
 
         test('should report every mentioned user as a collaborator so the invite popover never opens', async () => {
-            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
 
             const { fetchCollaboratorState } = lastRootProps.mentionContext ?? {};
             await expect(fetchCollaboratorState?.({ email: 'a@box.com', id: 1, name: 'A', value: '1' })).resolves.toBe(
@@ -639,6 +668,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
                     feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     getMentionAsync={getMentionAsync}
                 />,
             );
@@ -655,6 +685,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
                     feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     getMentionAsync={getMentionAsync}
                 />,
             );
@@ -674,6 +705,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
                     feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     getMentionAsync={getMentionAsync}
                 />,
             );
@@ -688,7 +720,13 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
 
         test('should render the V1-style start prompt via renderEmpty when value is empty', () => {
-            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
 
             const empty = lastEditorProps.userSelectorProps?.renderEmpty?.('');
             render(<>{empty}</>);
@@ -697,7 +735,13 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
 
         test('should render the V1-style start prompt via renderEmpty when value is whitespace-only', () => {
-            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
 
             const empty = lastEditorProps.userSelectorProps?.renderEmpty?.('   ');
             render(<>{empty}</>);
@@ -706,7 +750,13 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
 
         test('should render the no-users-found message via renderEmpty when value is non-empty', () => {
-            render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
 
             const empty = lastEditorProps.userSelectorProps?.renderEmpty?.('xyz');
             render(<>{empty}</>);
@@ -723,6 +773,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
                     feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -739,6 +790,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
                     feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -773,7 +825,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     <ActivityFeedV2
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={{ extension: 'pdf', file_version: { id: '1' } }}
+                        file={{ extension: 'pdf', file_version: { id: '1' }, permissions: { can_comment: true } }}
                         isTimestampedCommentsEnabled
                     />,
                 );
@@ -790,7 +842,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     <ActivityFeedV2
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={{ extension: 'mp4', file_version: { id: '1' } }}
+                        file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
                     />,
                 );
                 expect(lastEditorProps.videoTimestamp).toBeUndefined();
@@ -806,7 +858,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     <ActivityFeedV2
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={{ extension: 'mp4', file_version: { id: '1' } }}
+                        file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
                         isTimestampedCommentsEnabled
                     />,
                 );
@@ -829,7 +881,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     <ActivityFeedV2
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={{ extension: 'mp4', file_version: { id: '99' } }}
+                        file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
                         isTimestampedCommentsEnabled
                         onCommentCreate={onCommentCreate}
                     />,
@@ -856,7 +908,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     <ActivityFeedV2
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={{ extension: 'mp4', file_version: { id: '99' } }}
+                        file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
                         isTimestampedCommentsEnabled
                         onCommentCreate={onCommentCreate}
                     />,
@@ -877,7 +929,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     <ActivityFeedV2
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={{ extension: 'mp4' }}
+                        file={{ extension: 'mp4', permissions: { can_comment: true } }}
                         isTimestampedCommentsEnabled
                     />,
                 );
@@ -1130,6 +1182,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1143,6 +1196,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1157,6 +1211,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1167,6 +1222,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1181,7 +1237,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
-                />,
+                file={mockFileWithCommentPermission}
+                    />,
             );
             mockScrollTo.mockClear();
 
@@ -1189,7 +1246,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
-                />,
+                file={mockFileWithCommentPermission}
+                    />,
             );
 
             expect(mockScrollTo).not.toHaveBeenCalled();
@@ -1201,6 +1259,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1211,6 +1270,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, strangerComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1225,6 +1285,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1235,6 +1296,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1249,6 +1311,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1259,6 +1322,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1274,6 +1338,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1285,6 +1350,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, userComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1296,6 +1362,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, userComment, strangerComment] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
                     onCommentCreate={onCommentCreate}
                 />,
             );
@@ -1329,7 +1396,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
                     feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
-                    file={{ extension: 'mp4', file_version: { id: '1' } }}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
                     getViewer={mockGetViewer}
                     isTimestampedCommentsEnabled
                     {...props}

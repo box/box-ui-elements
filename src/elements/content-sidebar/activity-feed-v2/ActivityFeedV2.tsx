@@ -79,7 +79,7 @@ const ActivityFeedV2 = ({
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
-    const canComment = file?.permissions?.can_comment ?? true;
+    const canComment = file?.permissions?.can_comment ?? false;
 
     const scrolledEntryIdRef = React.useRef<string | null>(null);
     const hasScrolledToEndRef = React.useRef(false);
