@@ -7,10 +7,15 @@ import './GridViewSlider.scss';
 import messages from '../../elements/common/messages';
 
 export interface GridViewSliderProps {
+    /** Current number of columns displayed in the grid */
     columnCount: number;
+    /** Maximum number of columns supported by the grid */
     gridMaxColumns: number;
+    /** Minimum number of columns supported by the grid */
     gridMinColumns: number;
+    /** Maximum number of columns available at the current viewport size */
     maxColumnCount: number;
+    /** Called when the selected column count changes */
     onChange: (newSliderValue: number) => void;
 }
 
