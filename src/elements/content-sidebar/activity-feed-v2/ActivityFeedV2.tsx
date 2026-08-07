@@ -570,7 +570,7 @@ const ActivityFeedV2 = ({
                         </ActivityFeed.List>
                     </div>
                 )}
-                {canComment ? (
+                {canComment && (
                     <div className="bcs-NewActivityFeed-editor">
                         <ActivityFeed.Editor
                             disableComponent={isDisabled || !currentUser}
@@ -579,7 +579,7 @@ const ActivityFeedV2 = ({
                             videoTimestamp={editorVideoTimestamp}
                         />
                     </div>
-                ) : null}
+                )}
             </ActivityFeed.Root>
             {editingTask ? (
                 <TaskModalV2
