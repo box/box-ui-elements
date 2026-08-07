@@ -43,7 +43,7 @@ class Channel {
         browserToComServerTimeoutMS: number,
         comServerToApplicationTimeoutSec: number,
     ): Promise<any> {
-        return Promise.resolve('TODO');
+        return Promise.reject(new Error('sendCommand is not implemented'));
     }
 
     sendRequest(
@@ -51,11 +51,11 @@ class Channel {
         browserToComServerTimeoutMS: number,
         comServerToApplicationTimeoutSec: number,
     ): Promise<any> {
-        return Promise.resolve('TODO');
+        return Promise.reject(new Error('sendRequest is not implemented'));
     }
 
     getComServerStatus(browserToComServerTimeoutMS: number, comServerToApplicationTimeoutSec: number): Promise<any> {
-        return Promise.resolve('TODO');
+        return Promise.reject(new Error('getComServerStatus is not implemented'));
     }
 
     destroy(): void {}
