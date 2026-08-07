@@ -79,6 +79,7 @@ const ActivityFeedV2 = ({
     const scrollHandle = useActivityFeedScroll();
     const currentUserId = currentUser?.id;
     const headerTitle = intl.formatMessage(commonMessages.sidebarActivityTitle);
+    const canComment = file?.permissions?.can_comment ?? false;
 
     const scrolledEntryIdRef = React.useRef<string | null>(null);
     const hasScrolledToEndRef = React.useRef(false);
@@ -503,7 +504,11 @@ const ActivityFeedV2 = ({
 
     return (
         <div className="bcs-NewActivityFeed" data-resin-feature="activityfeedv2" data-resin-fileid={file?.id}>
-            <ActivityFeed.Root mentionContext={mentionContext} scrollTo={scrollHandle}>
+            <ActivityFeed.Root
+                areCommentsDisabled={!canComment}
+                mentionContext={mentionContext}
+                scrollTo={scrollHandle}
+            >
                 <ActivityFeed.Header title={headerTitle}>
                     <ActivityFeed.Header.Actions>
                         <ActivityFeed.Header.FilterMenu hasActiveFilters={showOnlyMentionsMe || showResolved}>
@@ -565,14 +570,16 @@ const ActivityFeedV2 = ({
                         </ActivityFeed.List>
                     </div>
                 )}
-                <div className="bcs-NewActivityFeed-editor">
-                    <ActivityFeed.Editor
-                        disableComponent={isDisabled || !currentUser}
-                        onPost={handleCommentPost}
-                        userSelectorProps={userSelectorProps}
-                        videoTimestamp={editorVideoTimestamp}
-                    />
-                </div>
+                {canComment && (
+                    <div className="bcs-NewActivityFeed-editor">
+                        <ActivityFeed.Editor
+                            disableComponent={isDisabled || !currentUser}
+                            onPost={handleCommentPost}
+                            userSelectorProps={userSelectorProps}
+                            videoTimestamp={editorVideoTimestamp}
+                        />
+                    </div>
+                )}
             </ActivityFeed.Root>
             {editingTask ? (
                 <TaskModalV2
