@@ -227,6 +227,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             />,
         );
 
+        expect(lastRootProps.areCommentsDisabled).toBe(false);
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
         expect(screen.getByTestId('activity-feed-list')).toBeVisible();
         expect(screen.getByTestId('activity-feed-editor')).toBeVisible();
