@@ -1,10 +1,11 @@
-// @flow
-
 import * as React from 'react';
+import { shallow } from 'enzyme';
+
 import TextAreaField from '../TextAreaField';
 
 describe('components/text-area/TextAreaField', () => {
-    const getWrapper = (props = {}) => shallow(<TextAreaField {...props} />);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}) => shallow(<TextAreaField {...props} />);
 
     test('should render properly', () => {
         const wrapper = getWrapper({

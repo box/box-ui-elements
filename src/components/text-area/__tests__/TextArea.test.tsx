@@ -1,5 +1,5 @@
-import { mount, shallow } from 'enzyme';
 import * as React from 'react';
+import { mount, shallow } from 'enzyme';
 import TetherComponent from 'react-tether';
 
 import TextArea from '../TextArea';
