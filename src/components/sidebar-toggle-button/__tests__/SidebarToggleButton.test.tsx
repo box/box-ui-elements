@@ -13,7 +13,7 @@ describe('components/sidebar-toggle-button/SidebarToggleButton', () => {
         ${false} | ${'right'}
     `(
         'should render correct button correctly when open is $isOpen and direction is $direction and isPreviewModernizationEnabled is false',
-        ({ isOpen, direction }) => {
+        ({ isOpen, direction }: { isOpen: boolean; direction: string }) => {
             render(<SidebarToggleButton isOpen={isOpen} direction={direction} />, {
                 wrapperProps: { features: { previewModernization: { enabled: false } } },
             });
@@ -39,7 +39,7 @@ describe('components/sidebar-toggle-button/SidebarToggleButton', () => {
 
     test.each([true, false])(
         'should stop the mousedown event from being propagated up to box-annotations if isPreviewModernizationEnabled is %s',
-        isPreviewModernizationEnabled => {
+        (isPreviewModernizationEnabled: boolean) => {
             const onMouseDown = jest.fn();
             const onClick = jest.fn();
             render(
@@ -59,7 +59,7 @@ describe('components/sidebar-toggle-button/SidebarToggleButton', () => {
 
     test.each([true, false])(
         'should show proper button isPreviewModernizationEnabled is %s and click handler should work',
-        isPreviewModernizationEnabled => {
+        (isPreviewModernizationEnabled: boolean) => {
             const onClick = jest.fn();
             render(<SidebarToggleButton isOpen onClick={onClick} />, {
                 wrapperProps: { features: { previewModernization: { enabled: isPreviewModernizationEnabled } } },
