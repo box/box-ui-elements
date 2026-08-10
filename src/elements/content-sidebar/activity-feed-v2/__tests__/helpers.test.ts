@@ -3,12 +3,14 @@ import { serializeMentionMarkup } from '@box/threaded-annotations';
 import {
     dispatchReplyDelete,
     dispatchReplyEdit,
+    feedItemMatchesEntryId,
     findMessagePermissions,
     logEditError,
+    resolveFeedItemIdForEntry,
     serializeEditorContent,
 } from '../helpers';
 
-import type { TransformedCommentItem } from '../types';
+import type { TransformedAnnotationItem, TransformedCommentItem, TransformedFeedItem } from '../types';
 
 jest.mock('@box/threaded-annotations', () => ({
     serializeMentionMarkup: jest.fn(),
@@ -163,6 +165,81 @@ describe('elements/content-sidebar/activity-feed-v2/helpers', () => {
 
         test('should not throw when onReplyDelete is not provided', () => {
             expect(() => dispatchReplyDelete({ id: 'reply-1', messages, parentId: 'root' })).not.toThrow();
+        });
+    });
+
+    describe('feedItemMatchesEntryId()', () => {
+        // Partial fixtures — helpers only read id / type / messages.
+        const commentItem = {
+            id: 'comment-1',
+            isResolved: false,
+            messages,
+            originalText: 'Parent comment',
+            permissions: { can_delete: true, can_edit: true, can_reply: true, can_resolve: true },
+            type: 'comment',
+        } as TransformedCommentItem;
+
+        const annotationItem = {
+            id: 'annotation-1',
+            isResolved: false,
+            messages: [
+                { ...messages[0], id: 'annotation-1' },
+                { ...messages[1], id: 'annotation-reply-1' },
+            ],
+            permissions: { can_delete: true, can_edit: true, can_reply: true, can_resolve: true },
+            type: 'annotation',
+        } as TransformedAnnotationItem;
+
+        test.each`
+            item              | feedEntryId             | expected
+            ${commentItem}    | ${'comment-1'}          | ${true}
+            ${commentItem}    | ${'reply-1'}            | ${true}
+            ${commentItem}    | ${'other'}              | ${false}
+            ${annotationItem} | ${'annotation-1'}       | ${true}
+            ${annotationItem} | ${'annotation-reply-1'} | ${true}
+            ${annotationItem} | ${'other'}              | ${false}
+        `('should return $expected when matching $feedEntryId on $item.type', ({ item, feedEntryId, expected }) => {
+            expect(feedItemMatchesEntryId(item, feedEntryId)).toBe(expected);
+        });
+
+        test('should match non-thread items only by root id', () => {
+            const versionItem = { id: 'version-1', props: {}, type: 'version' } as TransformedFeedItem;
+            expect(feedItemMatchesEntryId(versionItem, 'version-1')).toBe(true);
+            expect(feedItemMatchesEntryId(versionItem, 'other')).toBe(false);
+        });
+    });
+
+    describe('resolveFeedItemIdForEntry()', () => {
+        const items = [
+            {
+                id: 'comment-1',
+                isResolved: false,
+                messages,
+                originalText: 'Parent comment',
+                permissions: { can_delete: true, can_edit: true, can_reply: true, can_resolve: true },
+                type: 'comment',
+            },
+            {
+                id: 'annotation-1',
+                isResolved: false,
+                messages: [
+                    { ...messages[0], id: 'annotation-1' },
+                    { ...messages[1], id: 'annotation-reply-1' },
+                ],
+                permissions: { can_delete: true, can_edit: true, can_reply: true, can_resolve: true },
+                type: 'annotation',
+            },
+        ] as TransformedFeedItem[];
+
+        test.each`
+            feedEntryId             | expected
+            ${'comment-1'}          | ${'comment-1'}
+            ${'reply-1'}            | ${'comment-1'}
+            ${'annotation-1'}       | ${'annotation-1'}
+            ${'annotation-reply-1'} | ${'annotation-1'}
+            ${'missing'}            | ${undefined}
+        `('should resolve $feedEntryId to $expected', ({ feedEntryId, expected }) => {
+            expect(resolveFeedItemIdForEntry(items, feedEntryId)).toBe(expected);
         });
     });
 });

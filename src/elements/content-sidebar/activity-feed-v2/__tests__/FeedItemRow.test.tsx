@@ -3,7 +3,7 @@ import * as React from 'react';
 import { AnnotationBadgeType } from '@box/threaded-annotations';
 import type { AnnotationBadgeTargetType, ThreadedAnnotationsPropsV2 } from '@box/threaded-annotations';
 
-import { render, screen } from '../../../../test-utils/testing-library';
+import { act, render, screen } from '../../../../test-utils/testing-library';
 import FeedItemRow from '../FeedItemRow';
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from '../helpers';
 import { annotationTargetToBadge } from '../transformers';
@@ -42,6 +42,7 @@ jest.mock('@box/activity-feed', () => {
 });
 
 jest.mock('../helpers', () => ({
+    ...jest.requireActual('../helpers'),
     dispatchReplyDelete: jest.fn(),
     dispatchReplyEdit: jest.fn(),
     logEditError: jest.fn(),
@@ -215,6 +216,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
     afterEach(() => {
         jest.clearAllMocks();
+        jest.useRealTimers();
     });
 
     describe('comment rendering', () => {
@@ -228,6 +230,44 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         test('should pass isHighlighted=true when activeFeedEntryId matches the comment id', () => {
             render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+        });
+
+        test('should pass isHighlighted=true when activeFeedEntryId matches a reply in the comment thread', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="reply-1" item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+        });
+
+        test('should clear isHighlighted after the hold when activeFeedEntryId matches the comment id', () => {
+            jest.useFakeTimers();
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+        });
+
+        test('should restart the highlight hold when activeFeedEntryId changes within the same comment thread', () => {
+            jest.useFakeTimers();
+            const { rerender } = render(
+                <FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />,
+            );
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+
+            rerender(<FeedItemRow {...defaultProps} activeFeedEntryId="reply-1" item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
         });
 
         test('should pass isHighlighted=false when activeFeedEntryId does not match', () => {
@@ -478,6 +518,46 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
         test('should pass isHighlighted=true when activeFeedEntryId matches the annotation id', () => {
             render(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-1" item={mockAnnotation} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+        });
+
+        test('should pass isHighlighted=true when activeFeedEntryId matches a reply in the annotation thread', () => {
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-reply-1" item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+        });
+
+        test('should clear isHighlighted after the hold when activeFeedEntryId matches the annotation id', () => {
+            jest.useFakeTimers();
+            render(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-1" item={mockAnnotation} />);
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+        });
+
+        test('should restart the highlight hold when activeFeedEntryId changes within the same annotation thread', () => {
+            jest.useFakeTimers();
+            const { rerender } = render(
+                <FeedItemRow {...defaultProps} activeFeedEntryId="annotation-1" item={mockAnnotation} />,
+            );
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+
+            rerender(
+                <FeedItemRow {...defaultProps} activeFeedEntryId="annotation-reply-1" item={mockAnnotation} />,
+            );
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
         });
 
         test('should pass isHighlighted=false when activeFeedEntryId does not match', () => {
