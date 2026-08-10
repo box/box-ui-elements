@@ -1,10 +1,11 @@
-// @flow
-
 import * as React from 'react';
+import { shallow } from 'enzyme';
+
 import TextInputField from '../TextInputField';
 
 describe('components/text-input/TextInputField', () => {
-    const getWrapper = (props = {}) => shallow(<TextInputField {...props} />);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}) => shallow(<TextInputField {...props} />);
 
     test('should render properly', () => {
         const wrapper = getWrapper({

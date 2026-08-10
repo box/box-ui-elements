@@ -6,6 +6,7 @@ exports[`components/text-input/TextInput should render text input with descripti
 >
   <Label
     showOptionalText={true}
+    text="label"
   >
     <div
       className="text-input-description"
