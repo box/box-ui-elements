@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import Toggle from '..';
 
 describe('components/toggle/Toggle', () => {
-    const getWrapper = (props = {}) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}) =>
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         shallow(<Toggle label="Enter things" name="toggle" onChange={() => {}} {...props} />);
 
     test('should correctly render default component', () => {

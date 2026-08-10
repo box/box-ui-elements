@@ -1,10 +1,11 @@
-// @flow
-
 import * as React from 'react';
+import { shallow } from 'enzyme';
+
 import ToggleField from '../ToggleField';
 
 describe('components/toggle/ToggleField', () => {
-    const getWrapper = (props = {}) => shallow(<ToggleField {...props} />);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}) => shallow(<ToggleField {...props} />);
 
     test.each([
         [true, 'value'],
