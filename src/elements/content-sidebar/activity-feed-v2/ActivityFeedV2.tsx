@@ -16,7 +16,7 @@ import type { UserContactType } from '@box/user-selector';
 import TaskModalV2 from './task-modal-v2';
 
 import FeedItemRow from './FeedItemRow';
-import { serializeEditorContent } from './helpers';
+import { resolveFeedItemIdForEntry, serializeEditorContent } from './helpers';
 import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
@@ -327,7 +327,8 @@ const ActivityFeedV2 = ({
         if (!activeFeedEntryId || !scrollHandle || alreadyScrolledToThisEntry) {
             return;
         }
-        const didScroll = scrollHandle.scrollTo(activeFeedEntryId);
+        const scrollTargetId = resolveFeedItemIdForEntry(filteredItems, activeFeedEntryId) ?? activeFeedEntryId;
+        const didScroll = scrollHandle.scrollTo(scrollTargetId, { block: 'start' });
         if (didScroll) {
             scrolledEntryIdRef.current = activeFeedEntryId;
         }

@@ -13,7 +13,7 @@ import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '
 import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 import type { TimeFormat } from './useTimeFormat';
 
-import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from './helpers';
+import { dispatchReplyDelete, dispatchReplyEdit, feedItemMatchesEntryId, logEditError, serializeEditorContent } from './helpers';
 import { annotationTargetToBadge } from './transformers';
 import { formatByTimeFormat } from './useTimeFormat';
 import { seekVideoToMs } from './useVideoTimestamp';
@@ -28,6 +28,9 @@ import {
     TASK_NEW_NOT_STARTED,
     TASK_NEW_REJECTED,
 } from '../../../constants';
+
+/** How long the deep-link highlight stays at peak before `isHighlighted` clears and the card fades. */
+const HIGHLIGHT_HOLD_MS = 2000;
 
 type FeedItemRowProps = {
     activeFeedEntryId?: string;
@@ -108,7 +111,23 @@ const FeedItemRow = ({
     timeFormat,
     userSelectorProps,
 }: FeedItemRowProps) => {
-    const isHighlighted = activeFeedEntryId === item.id;
+    const isActiveEntry = Boolean(activeFeedEntryId && feedItemMatchesEntryId(item, activeFeedEntryId));
+    const [isHighlighted, setIsHighlighted] = React.useState(isActiveEntry);
+
+    // Deep-link hosts keep `activeFeedEntryId` set; clear the visual highlight after a hold so
+    // threaded-annotations' CSS transition can fade the border/background out.
+    // Depend on `activeFeedEntryId` so navigating to another message in the same thread restarts the hold.
+    React.useEffect(() => {
+        if (!isActiveEntry) {
+            setIsHighlighted(false);
+            return undefined;
+        }
+
+        setIsHighlighted(true);
+        const timeoutId = window.setTimeout(() => setIsHighlighted(false), HIGHLIGHT_HOLD_MS);
+
+        return () => window.clearTimeout(timeoutId);
+    }, [activeFeedEntryId, isActiveEntry]);
 
     switch (item.type) {
         case 'comment': {
