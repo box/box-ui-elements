@@ -7,7 +7,7 @@ import { serializeMentionMarkup } from '@box/threaded-annotations';
 
 import type { BoxCommentPermission } from '../../../common/types/feed';
 
-import type { OnReplyDelete, OnReplyUpdate, TransformedCommentItem } from './types';
+import type { OnReplyDelete, OnReplyUpdate, TransformedCommentItem, TransformedFeedItem } from './types';
 
 type EditorContent = Parameters<typeof serializeMentionMarkup>[0];
 
@@ -84,3 +84,20 @@ export const dispatchReplyDelete = ({
     }
     onReplyDelete?.({ id, parentId, permissions });
 };
+
+/** True when the deep-link id is the thread root or any message (parent/reply) in a comment/annotation thread. */
+export const feedItemMatchesEntryId = (item: TransformedFeedItem, feedEntryId: string): boolean => {
+    if (item.id === feedEntryId) {
+        return true;
+    }
+    if (item.type === 'comment' || item.type === 'annotation') {
+        return item.messages.some(message => message.id === feedEntryId);
+    }
+    return false;
+};
+
+/** Resolve a deep-link id (root or reply) to the feed row id used for list scroll (`data-activity-id`). */
+export const resolveFeedItemIdForEntry = (
+    items: readonly TransformedFeedItem[],
+    feedEntryId: string,
+): string | undefined => items.find(item => feedItemMatchesEntryId(item, feedEntryId))?.id;

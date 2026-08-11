@@ -23,7 +23,7 @@ jest.mock('@box/threaded-annotations', () => ({
     serializeMentionMarkup: (doc: unknown) => mockSerializeMentionMarkup(doc),
 }));
 
-const mockScrollTo = jest.fn<boolean, [string]>(() => true);
+const mockScrollTo = jest.fn<boolean, [string, { block?: string }?]>(() => true);
 
 type FilterMenuProps = { children?: React.ReactNode; hasActiveFilters?: boolean };
 type FilterOptionProps = { checked?: boolean; onCheckedChange?: (checked: boolean) => void };
@@ -1088,8 +1088,37 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2 activeFeedEntryId="comment-1" currentUser={mockCurrentUser} feedItems={feedItems} />,
             );
-            expect(mockScrollTo).toHaveBeenCalledWith('comment-1');
+            expect(mockScrollTo).toHaveBeenCalledWith('comment-1', { block: 'start' });
             expect(mockScrollTo).not.toHaveBeenCalledWith('app-activity-1');
+        });
+
+        test('should scroll to the parent thread when activeFeedEntryId matches a reply', () => {
+            const feedItemsWithReply = [
+                {
+                    ...mockComment,
+                    replies: [
+                        {
+                            ...mockComment,
+                            id: 'reply-1',
+                            tagged_message: 'Child reply',
+                        },
+                    ],
+                },
+                mockAnnotation,
+                mockTask,
+                mockVersion,
+                mockAppActivity,
+            ] as ActivityFeedV2Props['feedItems'];
+
+            render(
+                <ActivityFeedV2
+                    activeFeedEntryId="reply-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={feedItemsWithReply}
+                />,
+            );
+            expect(mockScrollTo).toHaveBeenCalledWith('comment-1', { block: 'start' });
+            expect(mockScrollTo).not.toHaveBeenCalledWith('reply-1', expect.anything());
         });
 
         test('should retry scroll-to-entry on later renders when first attempt returns false', () => {
@@ -1101,14 +1130,14 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     feedItems={[] as ActivityFeedV2Props['feedItems']}
                 />,
             );
-            expect(mockScrollTo).toHaveBeenCalledWith('annotation-1');
+            expect(mockScrollTo).toHaveBeenCalledWith('annotation-1', { block: 'start' });
             expect(mockScrollTo).toHaveBeenCalledTimes(1);
 
             rerender(
                 <ActivityFeedV2 activeFeedEntryId="annotation-1" currentUser={mockCurrentUser} feedItems={feedItems} />,
             );
             expect(mockScrollTo).toHaveBeenCalledTimes(2);
-            expect(mockScrollTo).toHaveBeenLastCalledWith('annotation-1');
+            expect(mockScrollTo).toHaveBeenLastCalledWith('annotation-1', { block: 'start' });
         });
 
         test('should not re-scroll to scroll-to-entry target after success', () => {
