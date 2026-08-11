@@ -1,16 +1,12 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-// @ts-ignore flow import
-import Tooltip, { TooltipProps, TooltipTheme } from '../tooltip';
+import Tooltip, { TooltipTheme, type TooltipProps } from '../tooltip';
 import ImageTooltipContent from './ImageTooltipContent';
 
 import './ImageTooltip.scss';
 
-// We manually set "text" with our specific visual tooltip content.
-type OtherTooltipProps = Omit<TooltipProps, 'text'>;
-
-export type ImageTooltipProps = {
+export interface ImageTooltipProps extends Omit<TooltipProps, 'text'> {
     /** A React element to put the tooltip on */
     children: React.ReactChild;
     /** A string to be used in the tooltip's paragraph content */
@@ -19,7 +15,7 @@ export type ImageTooltipProps = {
     image: React.ReactElement;
     /** A string to be used in the tooltip's title heading */
     title: string;
-} & OtherTooltipProps;
+}
 
 const ImageTooltip = ({ children, className, content, image, title, ...otherTooltipProps }: ImageTooltipProps) => {
     // State to track if the image has been loaded before displaying the tooltip
