@@ -113,6 +113,23 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadPreview).toHaveBeenCalledTimes(1);
         });
 
+        test('should not show loading state or reload preview when a custom preview version changes', () => {
+            file = { id: '123', file_version: { id: '1' } };
+
+            const wrapper = getWrapper({ renderCustomPreview: jest.fn() });
+            wrapper.setState({ file, isLoading: false });
+            const instance = wrapper.instance();
+
+            instance.destroyPreview = jest.fn();
+            instance.loadPreview = jest.fn();
+
+            wrapper.setState({ selectedVersion: { id: '2' } });
+
+            expect(instance.destroyPreview).toHaveBeenCalledWith(false);
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(instance.loadPreview).not.toHaveBeenCalled();
+        });
+
         test('should destroy preview and reset selectedVersion state on new fileId', () => {
             file = { id: '123' };
 

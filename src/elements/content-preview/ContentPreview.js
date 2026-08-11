@@ -511,7 +511,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { features, previewExperiences, token } = this.props;
+        const { features, previewExperiences, renderCustomPreview, token } = this.props;
         const { features: prevFeatures, previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
@@ -539,8 +539,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevState)) {
             this.destroyPreview(false);
-            this.setState({ isLoading: true });
-            this.loadPreview();
+            if (!renderCustomPreview) {
+                this.setState({ isLoading: true });
+                this.loadPreview();
+            }
         } else if (hasTokenChanged) {
             this.updatePreviewToken();
         }
