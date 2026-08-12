@@ -23,7 +23,9 @@ exports[`components/select/Select should not show Tooltip when no error exists 1
         <span
           className="select-container-inner"
         >
-          <select />
+          <select
+            name="select"
+          />
           <span
             className="select-overlay"
           />
@@ -57,7 +59,9 @@ exports[`components/select/Select should not show error outline if not specified
         <span
           className="select-container-inner"
         >
-          <select />
+          <select
+            name="select"
+          />
           <span
             className="select-overlay"
           />
@@ -148,7 +152,9 @@ exports[`components/select/Select should show Tooltip when error exists 1`] = `
         <span
           className="select-container-inner"
         >
-          <select />
+          <select
+            name="select"
+          />
           <span
             className="select-overlay"
           />
@@ -182,7 +188,9 @@ exports[`components/select/Select should show error outline if specified 1`] = `
         <span
           className="select-container-inner"
         >
-          <select />
+          <select
+            name="select"
+          />
           <span
             className="select-overlay"
           />
