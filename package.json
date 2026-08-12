@@ -203,7 +203,7 @@
         "color": "^3.2.1",
         "copyfiles": "^2.4.1",
         "css-loader": "^7.1.4",
-        "css-minimizer-webpack-plugin": "^7.0.4",
+        "css-minimizer-webpack-plugin": "^8.0.0",
         "cypress": "^15.20.1",
         "draft-js": "^0.11.7",
         "enzyme": "^3.11.0",
@@ -369,7 +369,6 @@
         "@sigstore/core": "3.2.1",
         "draft-js/immutable": "^3.8.3",
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
-        "serialize-javascript": "^7.0.5",
         "tar": "^7.5.19"
     },
     "msw": {
