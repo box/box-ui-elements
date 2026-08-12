@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import PropTypes from 'prop-types';
 
 import Plural from '../Plural';
 import Composition from '../Composition';
 
-function Link(props) {
-    return <a href={props.to}>{props.children}</a>;
+interface LinkProps {
+    children: React.ReactNode;
+    to: string;
 }
 
-Link.propTypes = {
-    to: PropTypes.string,
-    children: PropTypes.any,
-};
+function Link({ children, to }: LinkProps) {
+    return <a href={to}>{children}</a>;
+}
 
 describe('components/i18n/Plural', () => {
     test('should correctly render simple Plural', () => {
