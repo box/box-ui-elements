@@ -96,11 +96,12 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         } = this.props;
 
         const isDisabled = this.isDisabled();
+        const isOverflow = !!id && id < 0;
 
         const className = classNames('bdl-AdditionalTab', {
             'bdl-is-hidden': isLoading,
             'bdl-is-disabled': isDisabled,
-            'bdl-is-overflow': id && id < 0,
+            'bdl-is-overflow': isOverflow,
         });
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title;
@@ -114,6 +115,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 <PlainButton
                     aria-label={title}
                     className={className}
+                    data-target-id={isOverflow ? 'AdditionalTab-moreButton' : 'AdditionalTab-integrationButton'}
                     data-testid="additionaltab"
                     type="button"
                     isDisabled={isDisabled}

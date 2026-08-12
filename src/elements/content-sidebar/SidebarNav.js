@@ -362,6 +362,7 @@ const SidebarNav = ({
                         className={classNames('bcs-SidebarNav-overflow', {
                             'bcs-SidebarNav-overflow--modernized': isPreviewModernizationEnabled,
                         })}
+                        data-target-id="SidebarNav-additionalTabsOverflow"
                         data-testid="additional-tabs-overflow"
                     >
                         <AdditionalTabs
