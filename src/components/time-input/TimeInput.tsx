@@ -146,7 +146,7 @@ const TimeInput = ({
             label={label}
             onBlur={handleBlur}
             onChange={handleChange}
-            position={errorTooltipPosition}
+            errorPosition={errorTooltipPosition}
             type="text"
             value={displayTime}
         />
