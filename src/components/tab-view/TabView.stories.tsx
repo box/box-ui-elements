@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import Tab from './Tab';
@@ -22,7 +21,7 @@ export const basic = () => (
 
 export const withCallback = () => {
     // eslint-disable-next-line no-alert
-    const cb = selectedIndex => alert(selectedIndex);
+    const cb = (selectedIndex: number) => alert(selectedIndex);
     return (
         <TabView defaultSelectedIndex={1} onTabSelect={cb}>
             <Tab title="Item 1">
