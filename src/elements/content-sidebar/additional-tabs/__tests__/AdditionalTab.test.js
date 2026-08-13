@@ -97,4 +97,44 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
 
         expect(wrapper.find(AdditionalTabTooltip).exists()).toBeTruthy();
     });
+
+    describe('data-target-id', () => {
+        const getTargetId = props =>
+            getWrapper({ title: 'test title', callback: () => {}, ...props })
+                .find(PlainButton)
+                .prop('data-target-id');
+
+        test.each`
+            serviceName     | expected
+            ${'Slack'}      | ${'AdditionalTab-slack'}
+            ${'Adobe Sign'} | ${'AdditionalTab-adobeSign'}
+            ${'Gmail'}      | ${'AdditionalTab-gmail'}
+            ${'zoom.us'}    | ${'AdditionalTab-zoomUs'}
+        `('should derive $expected from serviceName $serviceName', ({ serviceName, expected }) => {
+            expect(getTargetId({ id: 4, serviceName })).toBe(expected);
+        });
+
+        test('should use the overflow id for the more tab regardless of serviceName', () => {
+            expect(getTargetId({ id: -1 })).toBe('AdditionalTab-moreButton');
+        });
+
+        test('should fall back to a shared id when serviceName is missing', () => {
+            expect(getTargetId({ id: 4 })).toBe('AdditionalTab-integrationButton');
+        });
+
+        test('should prefer an explicit targetId over the derived one', () => {
+            expect(getTargetId({ id: 4, serviceName: 'Slack', targetId: 'Custom-tab' })).toBe('Custom-tab');
+        });
+
+        test('should not leak targetId into callbackData', () => {
+            const callback = jest.fn();
+            const wrapper = getWrapper({ id: 4, serviceName: 'Slack', targetId: 'Custom-tab', callback });
+
+            wrapper.find(PlainButton).simulate('click');
+
+            const { callbackData } = callback.mock.calls[0][0];
+            expect(callbackData).not.toHaveProperty('targetId');
+            expect(callbackData.serviceName).toBe('Slack');
+        });
+    });
 });

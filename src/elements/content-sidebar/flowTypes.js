@@ -32,6 +32,10 @@ type AdditionalSidebarTab = {
     id: number,
     title: ?string,
     icon?: React.Node,
+    /** Backend identifier for the integration, e.g. "Adobe Sign". Used to derive the analytics target id. */
+    serviceName?: string,
+    /** Explicit analytics target id, taking precedence over the one derived from serviceName. */
+    targetId?: string,
 };
 
 /**

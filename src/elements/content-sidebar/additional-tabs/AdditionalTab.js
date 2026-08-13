@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import camelCase from 'lodash/camelCase';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
@@ -29,6 +30,8 @@ type State = {
 };
 
 const BLOCKED_BY_SHEILD = 'BLOCKED_BY_SHIELD_ACCESS_POLICY';
+
+const TARGET_ID_PREFIX = 'AdditionalTab';
 
 class AdditionalTab extends React.PureComponent<Props, State> {
     state = {
@@ -56,6 +59,32 @@ class AdditionalTab extends React.PureComponent<Props, State> {
             // noop
         }
         return reason;
+    }
+
+    /**
+     * Analytics target id for this tab.
+     *
+     * Consumers may set targetId explicitly; otherwise it is derived from the integration's
+     * backend serviceName ("Adobe Sign" -> AdditionalTab-adobeSign) so each app in the rail is
+     * distinguishable. The overflow tab has no service of its own, and a tab whose serviceName
+     * is missing falls back to a shared id rather than an unusable one.
+     *
+     * @return {string} the data-target-id value
+     */
+    getTargetId(isOverflow: boolean) {
+        const { serviceName, targetId } = this.props;
+
+        if (targetId) {
+            return targetId;
+        }
+
+        if (isOverflow) {
+            return `${TARGET_ID_PREFIX}-moreButton`;
+        }
+
+        const slug = camelCase(serviceName || '');
+
+        return slug ? `${TARGET_ID_PREFIX}-${slug}` : `${TARGET_ID_PREFIX}-integrationButton`;
     }
 
     getTabIcon() {
@@ -92,6 +121,9 @@ class AdditionalTab extends React.PureComponent<Props, State> {
             ftuxTooltipData,
             onImageLoad,
             title,
+            // Analytics-only; excluded so it does not reach consumers through callbackData.
+            // Note serviceName is deliberately left in rest, since consumers read it from there.
+            targetId: unusedTargetId,
             ...rest
         } = this.props;
 
@@ -115,7 +147,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 <PlainButton
                     aria-label={title}
                     className={className}
-                    data-target-id={isOverflow ? 'AdditionalTab-moreButton' : 'AdditionalTab-integrationButton'}
+                    data-target-id={this.getTargetId(isOverflow)}
                     data-testid="additionaltab"
                     type="button"
                     isDisabled={isDisabled}
