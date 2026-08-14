@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import PlainButton from '../../plain-button';
+import Tooltip from '../../tooltip';
 import Select from '..';
 
 const sandbox = sinon.sandbox.create();
@@ -14,14 +17,14 @@ describe('components/select/Select', () => {
         const wrapper = shallow(<Select label="Album" name="select" />);
         const label = wrapper.find('Label');
 
-        expect(label.length).toBe(1);
+        expect(label).toHaveLength(1);
         expect(label.prop('text')).toEqual('Album');
         expect(label.prop('hideLabel')).toBe(false);
     });
 
     test('should not render divs in labels for accessibility', () => {
         const wrapper = shallow(<Select label="Album" name="select" />);
-        expect(wrapper.find('Label').find('div').length).toBe(0);
+        expect(wrapper.find('Label').find('div')).toHaveLength(0);
     });
 
     test('should hide label when showLabel prop is false', () => {
@@ -39,7 +42,7 @@ describe('components/select/Select', () => {
             </Select>,
         );
 
-        expect(wrapper.find('option').length).toEqual(3);
+        expect(wrapper.find('option')).toHaveLength(3);
     });
 
     test('should correctly render label tooltip when specified', () => {
@@ -74,42 +77,38 @@ describe('components/select/Select', () => {
         const wrapper = shallow(
             <Select infoIconProps={{ title: 'hello' }} infoTooltip="hello!!!" label="Album" name="select" />,
         );
-        const getButton = () => wrapper.find('PlainButton');
-        const getInfoTooltip = () => wrapper.find('Tooltip[text="hello!!!"]');
-        expect(getInfoTooltip().props().isShown).toBe(false);
+        const getButton = () => wrapper.find(PlainButton);
+        const getInfoTooltip = () => wrapper.find(Tooltip).filterWhere(node => node.prop('text') === 'hello!!!');
+        expect(getInfoTooltip().prop('isShown')).toBe(false);
         // Toggle on
-        getButton()
-            .props()
-            .onClick();
-        expect(getInfoTooltip().props().isShown).toBe(true);
+        getButton().simulate('click');
+        expect(getInfoTooltip().prop('isShown')).toBe(true);
         // Toggle off
-        getButton()
-            .props()
-            .onClick();
+        getButton().simulate('click');
 
-        expect(getInfoTooltip().props().isShown).toBe(false);
+        expect(getInfoTooltip().prop('isShown')).toBe(false);
     });
 
     test('should show Tooltip when error exists', () => {
-        const wrapper = shallow(<Select error="error" label="label" />);
+        const wrapper = shallow(<Select error="error" label="label" name="select" />);
 
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not show Tooltip when no error exists', () => {
-        const wrapper = shallow(<Select label="label" />);
+        const wrapper = shallow(<Select label="label" name="select" />);
 
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should show error outline if specified', () => {
-        const wrapper = shallow(<Select label="label" showErrorOutline />);
+        const wrapper = shallow(<Select label="label" name="select" showErrorOutline />);
 
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not show error outline if not specified', () => {
-        const wrapper = shallow(<Select label="label" />);
+        const wrapper = shallow(<Select label="label" name="select" />);
 
         expect(wrapper).toMatchSnapshot();
     });

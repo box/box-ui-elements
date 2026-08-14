@@ -1,0 +1,112 @@
+import * as React from 'react';
+import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
+
+import IconVerified from '../../icons/general/IconVerified';
+
+import Label from '../label';
+import LoadingIndicator from '../loading-indicator';
+import Tooltip, { TooltipPosition, TooltipTheme, type TooltipProps } from '../tooltip';
+
+import './TextInput.scss';
+
+export interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    /** Add a class to the component */
+    className?: string;
+    /** Description shown below the label */
+    description?: React.ReactNode;
+    /** Error message shown in the error tooltip */
+    error?: React.ReactNode;
+    /** Renders error tooltip at the specified position (positions are those from Tooltip) */
+    errorPosition?: NonNullable<TooltipProps['position']>;
+    /** Hides the label */
+    hideLabel?: boolean;
+    /** Hides (optional) text from the label */
+    hideOptionalLabel?: boolean;
+    /** Icon to display in the input field */
+    icon?: React.ReactNode;
+    /** Ref to the underlying input element. @TODO: eventually rename to innerRef for consistancy across all form elements */
+    inputRef?: React.Ref<HTMLInputElement>;
+    /** Renders a loading indicator within the component when true */
+    isLoading?: boolean;
+    /** Makes the input value required */
+    isRequired?: boolean;
+    /** Renders a green verified checkmark within the component when true */
+    isValid?: boolean;
+    /** Label displayed for the text input */
+    label: React.ReactNode;
+    /** Tooltip shown on the label */
+    labelTooltip?: React.ReactNode;
+    /** A CSS class for the tooltip's tether element component */
+    tooltipTetherClassName?: string;
+    /** A CSS class for the tooltip's target wrapper element */
+    tooltipWrapperClassName?: string;
+}
+
+const TextInput = ({
+    className = '',
+    description,
+    error,
+    errorPosition,
+    hideLabel,
+    hideOptionalLabel,
+    icon,
+    inputRef,
+    isLoading,
+    isRequired,
+    isValid,
+    label,
+    labelTooltip,
+    tooltipTetherClassName: tetherElementClassName,
+    tooltipWrapperClassName,
+    ...rest
+}: TextInputProps) => {
+    const hasError = !!error;
+    const classes = classNames(className, 'text-input-container', {
+        'show-error': hasError,
+    });
+
+    const descriptionID = React.useRef(uniqueId('description')).current;
+
+    const ariaAttrs = {
+        'aria-invalid': hasError,
+        'aria-required': isRequired,
+        'aria-describedby': description ? descriptionID : undefined,
+    };
+
+    return (
+        <div className={classes}>
+            <Label
+                hideLabel={hideLabel}
+                showOptionalText={!hideOptionalLabel && !isRequired}
+                text={label}
+                tooltip={labelTooltip}
+            >
+                <>
+                    {!!description && (
+                        <div id={descriptionID} className="text-input-description">
+                            {description}
+                        </div>
+                    )}
+                    <Tooltip
+                        isShown={hasError}
+                        position={errorPosition || TooltipPosition.MIDDLE_RIGHT}
+                        targetWrapperClassName={tooltipWrapperClassName}
+                        tetherElementClassName={tetherElementClassName}
+                        text={error || ''}
+                        theme={TooltipTheme.ERROR}
+                    >
+                        <input ref={inputRef} required={isRequired} {...ariaAttrs} {...rest} />
+                    </Tooltip>
+                    {isLoading && !isValid && <LoadingIndicator className="text-input-loading" />}
+                    {isValid && !isLoading && <IconVerified className="text-input-verified" />}
+                    {!isLoading && !isValid && icon ? icon : null}
+                </>
+            </Label>
+        </div>
+    );
+};
+
+TextInput.displayName = 'TextInput';
+
+export default TextInput;

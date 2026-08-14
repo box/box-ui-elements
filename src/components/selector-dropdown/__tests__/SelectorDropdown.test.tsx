@@ -16,10 +16,11 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
     const Selector = () => <input />;
 
-    const renderEmptyDropdown = props => shallow(<SelectorDropdown selector={<Selector />} {...props} />);
+    const renderEmptyDropdown = (props = {}) =>
+        shallow<InstanceType<typeof SelectorDropdown>>(<SelectorDropdown selector={<Selector />} {...props} />);
 
-    const renderDropdownWithChildren = (children, props) =>
-        shallow(
+    const renderDropdownWithChildren = (children, props = {}) =>
+        shallow<InstanceType<typeof SelectorDropdown>>(
             <SelectorDropdown selector={<Selector />} {...props}>
                 {Children.map(children, item => (
                     <li key={item}>{item}</li>
@@ -32,7 +33,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             document.removeEventListener = jest.fn();
             const wrapper = renderEmptyDropdown();
             wrapper.unmount();
-            expect(document.removeEventListener.mock.calls.length).toBe(1);
+            expect(document.removeEventListener).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -145,7 +146,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             sandbox.mock(instance).expects('closeDropdown');
             instance.handleDocumentClick({
                 target: document.createElement('div'),
-            });
+            } as unknown as MouseEvent);
         });
 
         test('should not close dropdown when click occurs on selector dropdown container', () => {
@@ -161,13 +162,10 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const instance = wrapper.instance();
             wrapper.simulate('focus');
             expect(wrapper.state('shouldOpen')).toBe(true);
-            sandbox
-                .mock(instance)
-                .expects('closeDropdown')
-                .never();
+            sandbox.mock(instance).expects('closeDropdown').never();
             instance.handleDocumentClick({
                 target: document.getElementById(instance.listboxID),
-            });
+            } as unknown as MouseEvent);
         });
     });
 
@@ -212,10 +210,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const instance = wrapper.instance();
             sandbox.stub(instance, 'isDropdownOpen').returns(true);
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(0);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(0);
 
             wrapper.simulate('keyDown', event);
         });
@@ -226,10 +221,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             wrapper.setState({ activeItemIndex: 0 });
             sandbox.stub(instance, 'isDropdownOpen').returns(true);
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(-1);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(-1);
 
             wrapper.simulate('keyDown', event);
         });
@@ -242,7 +234,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
             wrapper.simulate('keyDown', event);
 
-            expect(instance.openDropdown.calledOnce).toEqual(true);
+            expect((instance.openDropdown as sinon.SinonStub).calledOnce).toEqual(true);
         });
     });
 
@@ -264,10 +256,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             wrapper.setState({ activeItemIndex: 0 });
             sandbox.stub(instance, 'isDropdownOpen').returns(true);
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(-1);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(-1);
 
             wrapper.simulate('keyDown', event);
         });
@@ -277,10 +266,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const instance = wrapper.instance();
             sandbox.stub(instance, 'isDropdownOpen').returns(true);
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(0);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(0);
 
             wrapper.simulate('keyDown', event);
         });
@@ -293,7 +279,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
             wrapper.simulate('keyDown', event);
 
-            expect(instance.openDropdown.calledOnce).toEqual(true);
+            expect((instance.openDropdown as sinon.SinonStub).calledOnce).toEqual(true);
         });
     });
 
@@ -302,10 +288,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const wrapper = renderEmptyDropdown();
             const instance = wrapper.instance();
 
-            sandbox
-                .mock(instance)
-                .expects('selectItem')
-                .never();
+            sandbox.mock(instance).expects('selectItem').never();
 
             wrapper.simulate('keyDown', {
                 key: 'Enter',
@@ -320,10 +303,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             wrapper.setState({ activeItemIndex: 0 });
             sandbox.stub(instance, 'isDropdownOpen').returns(false);
 
-            sandbox
-                .mock(instance)
-                .expects('selectItem')
-                .never();
+            sandbox.mock(instance).expects('selectItem').never();
 
             wrapper.simulate('keyDown', {
                 key: 'Enter',
@@ -344,10 +324,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             wrapper.setState({ activeItemIndex });
             sandbox.stub(instance, 'isDropdownOpen').returns(true);
 
-            sandbox
-                .mock(instance)
-                .expects('selectItem')
-                .withExactArgs(activeItemIndex, event);
+            sandbox.mock(instance).expects('selectItem').withExactArgs(activeItemIndex, event);
 
             wrapper.simulate('keyDown', event);
         });
@@ -446,10 +423,9 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
                 isAlwaysOpen: true,
             });
             const instance = wrapper.instance();
-            const instanceMock = sandbox.stub(instance, 'isDropdownOpen').returns(true);
-
-            sandbox.mock(instanceMock.closeDropdown).never();
-            sandbox.mock(instanceMock.resetActiveItem).never();
+            sandbox.mock(instance).expects('closeDropdown').never();
+            sandbox.mock(instance).expects('resetActiveItem').never();
+            sandbox.stub(instance, 'isDropdownOpen').returns(true);
 
             wrapper.simulate('keyDown', {
                 key: 'Escape',
@@ -499,10 +475,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
                 const wrapper = renderDropdownWithChildren(children);
                 const instance = wrapper.instance();
 
-                sandbox
-                    .mock(instance)
-                    .expects('resetActiveItem')
-                    .never();
+                sandbox.mock(instance).expects('resetActiveItem').never();
 
                 wrapper.setProps({ className: 'test' });
             });
@@ -537,10 +510,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
                 const instanceMock = sandbox.mock(wrapper.instance());
 
                 instanceMock.expects('resetActiveItem').never();
-                instanceMock
-                    .expects('setActiveItem')
-                    .once()
-                    .withArgs(0);
+                instanceMock.expects('setActiveItem').once().withArgs(0);
 
                 wrapper.setProps({
                     children: Children.map(nextChildren, item => <li key={item}>{item}</li>),
@@ -555,19 +525,13 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
         test('should update activeItemIndex state when called', () => {
             const index = 1;
-            sandbox
-                .mock(instance)
-                .expects('setActiveItemID')
-                .never();
+            sandbox.mock(instance).expects('setActiveItemID').never();
             instance.setActiveItem(index);
             expect(wrapper.state('activeItemIndex')).toEqual(index);
         });
 
         test('should reset active item ID when index is -1', () => {
-            sandbox
-                .mock(instance)
-                .expects('setActiveItemID')
-                .withArgs(null);
+            sandbox.mock(instance).expects('setActiveItemID').withArgs(null);
             instance.setActiveItem(-1);
         });
     });
@@ -678,7 +642,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const wrapper = renderEmptyDropdown();
             const instance = wrapper.instance();
             instance.openDropdown();
-            expect(document.addEventListener.mock.calls.length).toBe(1);
+            expect(document.addEventListener).toHaveBeenCalledTimes(1);
         });
 
         test('should activate first item when dropdown is opened and shouldSetActiveItemOnOpen is set to true', () => {
@@ -717,7 +681,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const instance = wrapper.instance();
             wrapper.setState({ shouldOpen: true });
             instance.closeDropdown();
-            expect(document.removeEventListener.mock.calls.length).toBe(1);
+            expect(document.removeEventListener).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -727,7 +691,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
             const wrapper = renderEmptyDropdown({ onSelect: onSelectSpy });
             const instance = wrapper.instance();
             const index = 1;
-            const event = { type: 'click' };
+            const event = { type: 'click' } as React.SyntheticEvent;
 
             instance.selectItem(index, event);
 
@@ -740,7 +704,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
             sandbox.mock(instance).expects('closeDropdown');
 
-            instance.selectItem(0, {});
+            instance.selectItem(0, {} as React.SyntheticEvent);
         });
     });
 });

@@ -1,5 +1,5 @@
-// @flow
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import ThumbnailCard from '../ThumbnailCard';
 
@@ -28,7 +28,7 @@ describe('components/thumbnail-card/ThumbnailCard', () => {
     });
 
     test('should not have role and tabIndex when onKeyDown prop exists', () => {
-        const onKeyDown = () => {};
+        const onKeyDown = jest.fn();
         const wrapper = getWrapper({ onKeyDown });
 
         expect(wrapper.find('.thumbnail-card').prop('role')).toBe(null);

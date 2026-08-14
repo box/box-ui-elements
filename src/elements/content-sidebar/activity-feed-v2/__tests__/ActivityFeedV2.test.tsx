@@ -234,11 +234,11 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     });
 
     test.each`
-        description                      | file
-        ${'can_comment is false'}        | ${{ id: '12345', permissions: { can_comment: false } }}
-        ${'file is missing'}             | ${undefined}
-        ${'permissions are missing'}     | ${{ id: '12345' }}
-        ${'can_comment is undefined'}    | ${{ id: '12345', permissions: {} }}
+        description                   | file
+        ${'can_comment is false'}     | ${{ id: '12345', permissions: { can_comment: false } }}
+        ${'file is missing'}          | ${undefined}
+        ${'permissions are missing'}  | ${{ id: '12345' }}
+        ${'can_comment is undefined'} | ${{ id: '12345', permissions: {} }}
     `('should replace the editor with CommentsDisabled when $description', ({ file }) => {
         render(
             <ActivityFeedV2
@@ -618,23 +618,6 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
     });
 
-    test('should return empty array from fetchUsers when getMentionAsync is not provided', async () => {
-        render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
-        expect(screen.getByTestId('activity-feed-root')).toBeVisible();
-    });
-
-    test('should return empty array from fetchUsers when getMentionAsync rejects', async () => {
-        const getMentionAsync = jest.fn().mockRejectedValue(new Error('API error'));
-        render(
-            <ActivityFeedV2
-                currentUser={mockCurrentUser}
-                feedItems={[] as ActivityFeedV2Props['feedItems']}
-                getMentionAsync={getMentionAsync}
-            />,
-        );
-        expect(screen.getByTestId('activity-feed-root')).toBeVisible();
-    });
-
     describe('mention popover behavior', () => {
         test('should pass allowEmptyQuery=true so the popover opens on @ before any character is typed', () => {
             render(
@@ -663,8 +646,37 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             );
         });
 
+        test('should return an empty array from fetchUsers when getMentionAsync is not provided', async () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
+
+            await expect(lastEditorProps.userSelectorProps?.fetchUsers?.('alice')).resolves.toEqual([]);
+        });
+
+        test('should return an empty array from fetchUsers when getMentionAsync rejects', async () => {
+            const getMentionAsync = jest.fn().mockRejectedValue(new Error('API error'));
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            await expect(lastEditorProps.userSelectorProps?.fetchUsers?.('alice')).resolves.toEqual([]);
+            expect(getMentionAsync).toHaveBeenCalledWith('alice');
+        });
+
         test('should skip the API call when fetchUsers is invoked with an empty query', async () => {
-            const getMentionAsync = jest.fn().mockResolvedValue([{ id: '1', name: 'foo' }]);
+            const getMentionAsync = jest
+                .fn()
+                .mockResolvedValue([{ id: '1', item: { id: '1', name: 'foo', type: 'user' }, name: 'foo' }]);
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
@@ -681,7 +693,9 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
 
         test('should skip the API call when fetchUsers is invoked with a whitespace-only query', async () => {
-            const getMentionAsync = jest.fn().mockResolvedValue([{ id: '1', name: 'foo' }]);
+            const getMentionAsync = jest
+                .fn()
+                .mockResolvedValue([{ id: '1', item: { id: '1', name: 'foo', type: 'user' }, name: 'foo' }]);
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
@@ -697,10 +711,18 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(result).toEqual([]);
         });
 
-        test('should call getMentionAsync with the trimmed value and shape results for a non-empty query', async () => {
+        test('should call getMentionAsync with the trimmed value and map SelectorItem.item email into contacts', async () => {
             const getMentionAsync = jest.fn().mockResolvedValue([
-                { email: 'a@b.com', id: '7', name: 'Alice' },
-                { id: '8', login: 'bob@b.com', name: 'Bob' },
+                {
+                    id: '7',
+                    item: { email: 'a@b.com', id: '7', login: 'a@b.com', name: 'Alice', type: 'user' },
+                    name: 'Alice',
+                },
+                {
+                    id: '8',
+                    item: { email: 'bob@b.com', id: '8', login: 'bob@b.com', name: 'Bob', type: 'user' },
+                    name: 'Bob',
+                },
             ]);
             render(
                 <ActivityFeedV2
@@ -715,9 +737,31 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             expect(getMentionAsync).toHaveBeenCalledWith('al');
             expect(result).toEqual([
-                { email: 'a@b.com', id: 7, name: 'Alice', value: '7' },
-                { email: 'bob@b.com', id: 8, name: 'Bob', value: '8' },
+                { email: 'a@b.com', id: 7, name: 'Alice', type: 'user', value: '7' },
+                { email: 'bob@b.com', id: 8, name: 'Bob', type: 'user', value: '8' },
             ]);
+        });
+
+        test('should map mention contacts with empty email when SelectorItem.item.email is missing', async () => {
+            const getMentionAsync = jest.fn().mockResolvedValue([
+                {
+                    id: '11',
+                    item: { id: '11', login: 'login-only@b.com', name: 'Carol', type: 'user' },
+                    name: 'Carol',
+                },
+            ]);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            const result = await lastEditorProps.userSelectorProps?.fetchUsers?.('car');
+
+            expect(result).toEqual([{ email: '', id: 11, name: 'Carol', type: 'user', value: '11' }]);
         });
 
         test('should render the V1-style start prompt via renderEmpty when value is empty', () => {
@@ -1267,8 +1311,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
-                file={mockFileWithCommentPermission}
-                    />,
+                    file={mockFileWithCommentPermission}
+                />,
             );
             mockScrollTo.mockClear();
 
@@ -1276,8 +1320,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
-                file={mockFileWithCommentPermission}
-                    />,
+                    file={mockFileWithCommentPermission}
+                />,
             );
 
             expect(mockScrollTo).not.toHaveBeenCalled();

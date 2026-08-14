@@ -6,6 +6,7 @@ import TetherComponent from 'react-tether';
 import ClockBadge16 from '../../../icon/line/ClockBadge16';
 import IconVerified from '../../../icons/general/IconVerified';
 import LoadingIndicator from '../../loading-indicator';
+import { TooltipPosition } from '../../tooltip';
 import TextInput from '..';
 
 jest.mock('lodash/uniqueId', () => () => 'description20');
@@ -68,10 +69,12 @@ describe('components/text-input/TextInput', () => {
     });
 
     test('should show Tooltip for an error at a custom position', () => {
-        const wrapper = shallow(<TextInput error="error" errorPosition="bottom-center" label="label" />);
+        const wrapper = shallow(
+            <TextInput error="error" errorPosition={TooltipPosition.BOTTOM_CENTER} label="label" />,
+        );
 
         const tooltip = wrapper.find('Tooltip');
-        expect(tooltip.prop('position')).toBe('bottom-center');
+        expect(tooltip.prop('position')).toBe(TooltipPosition.BOTTOM_CENTER);
     });
 
     test('should not show Tooltip when no error exists', () => {
@@ -90,7 +93,7 @@ describe('components/text-input/TextInput', () => {
     });
 
     test('should render text input with description', () => {
-        const wrapper = shallow(<TextInput description="some description" />);
+        const wrapper = shallow(<TextInput description="some description" label="label" />);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -107,7 +110,7 @@ describe('components/text-input/TextInput', () => {
     `(
         'should render $description',
         ({ isLoading, isValid, icon, loadingIndicatorExists, validIconExists, customIconExists }) => {
-            const wrapper = shallow(<TextInput icon={icon} isLoading={isLoading} isValid={isValid} />);
+            const wrapper = shallow(<TextInput icon={icon} isLoading={isLoading} isValid={isValid} label="label" />);
             if (icon) {
                 expect(wrapper.exists(ClockBadge16)).toBe(customIconExists);
             }

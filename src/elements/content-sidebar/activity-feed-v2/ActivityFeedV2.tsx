@@ -24,7 +24,7 @@ import { useTimeFormat } from './useTimeFormat';
 import { useVideoTimestamp } from './useVideoTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
-import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
+import type { ActivityFeedV2Props, TransformedFeedItem } from './types';
 import type { ElementsXhrError } from '../../../common/types/api';
 import type { GroupMini, SelectorItem, UserMini } from '../../../common/types/core';
 import type { TaskAssigneeCollection, TaskNew, TaskType, TaskUpdatePayload } from '../../../common/types/tasks';
@@ -86,19 +86,14 @@ const ActivityFeedV2 = ({
     const knownIdsBeforePostRef = React.useRef<Set<string> | null>(null);
 
     const fetchUsers = React.useCallback(
-        async (inputValue: string): Promise<UserContact[]> => {
+        async (inputValue: string): Promise<UserContactType[]> => {
             const trimmed = inputValue.trim();
             if (!trimmed || !getMentionAsync) {
                 return [];
             }
             try {
                 const entries = await getMentionAsync(trimmed);
-                return entries.map((c: Record<string, unknown>) => ({
-                    email: (c.email as string) ?? (c.login as string) ?? '',
-                    id: Number(c.id) || 0,
-                    name: (c.name as string) ?? '',
-                    value: String(c.id),
-                }));
+                return entries.map(mapCollaboratorToUserContact);
             } catch {
                 return [];
             }
@@ -123,7 +118,7 @@ const ActivityFeedV2 = ({
     );
 
     const fetchAvatarUrls = React.useCallback(
-        async (userContacts: UserContact[]) => {
+        async (userContacts: UserContactType[]) => {
             const urls: Record<string, string> = {};
             if (getAvatarUrl) {
                 await Promise.all(

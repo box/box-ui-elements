@@ -1,15 +1,16 @@
-// @flow
-
 import * as React from 'react';
-import TextInputField from '../TextInputField';
+import { shallow } from 'enzyme';
 
-describe('components/text-input/TextInputField', () => {
-    const getWrapper = (props = {}) => shallow(<TextInputField {...props} />);
+import TextAreaField from '../TextAreaField';
+
+describe('components/text-area/TextAreaField', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}) => shallow(<TextAreaField {...props} />);
 
     test('should render properly', () => {
         const wrapper = getWrapper({
             field: {
-                name: 'input',
+                name: 'textarea',
                 value: 'value',
                 onBlur: 'onblur',
                 onChange: 'onchange',
@@ -23,17 +24,17 @@ describe('components/text-input/TextInputField', () => {
     test('should render properly with error', () => {
         const wrapper = getWrapper({
             field: {
-                name: 'input',
+                name: 'textarea',
                 value: 'value',
                 onBlur: 'onblur',
                 onChange: 'onchange',
             },
             form: {
                 errors: {
-                    input: 'error',
+                    textarea: 'error',
                 },
                 touched: {
-                    input: true,
+                    textarea: true,
                 },
             },
             label: 'Enter things',
@@ -44,17 +45,17 @@ describe('components/text-input/TextInputField', () => {
     test('should hide optional label when required', () => {
         const wrapper = getWrapper({
             field: {
-                name: 'input',
+                name: 'textarea',
                 value: 'value',
                 onBlur: 'onblur',
                 onChange: 'onchange',
             },
             form: {
                 errors: {
-                    input: 'error',
+                    textarea: 'error',
                 },
                 touched: {
-                    input: true,
+                    textarea: true,
                 },
             },
             isRequired: true,
@@ -63,20 +64,20 @@ describe('components/text-input/TextInputField', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should forward innerRef to inputRef', () => {
+    test('should forward innerRef to textareaRef', () => {
         const wrapper = getWrapper({
             field: {
-                name: 'input',
+                name: 'textarea',
                 value: 'value',
                 onBlur: 'onblur',
                 onChange: 'onchange',
             },
             form: {
                 errors: {
-                    input: 'error',
+                    textarea: 'error',
                 },
                 touched: {
-                    input: true,
+                    textarea: true,
                 },
             },
             isRequired: true,
