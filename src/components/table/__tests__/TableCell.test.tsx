@@ -1,16 +1,17 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
-import TableHeaderCell from '../TableHeaderCell';
+import TableCell from '../TableCell';
 
 const TEST_CHILDREN = 'test';
 
-describe('components/table/TableHeaderCell', () => {
-    const render = (props = {}) => shallow(<TableHeaderCell {...props}>{TEST_CHILDREN}</TableHeaderCell>);
+describe('components/table/TableCell', () => {
+    const render = (props = {}) => shallow(<TableCell {...props}>{TEST_CHILDREN}</TableCell>);
 
     test('should render default component', () => {
         const wrapper = render();
 
-        expect(wrapper.is('th')).toBe(true);
+        expect(wrapper.is('td')).toBe(true);
         expect(wrapper.contains(TEST_CHILDREN)).toBe(true);
     });
 
@@ -28,9 +29,9 @@ describe('components/table/TableHeaderCell', () => {
         expect(wrapper.hasClass('is-fixed-width')).toBe(true);
     });
 
-    test('should render additional attributes when specified', () => {
-        const wrapper = render({ colSpan: 2 });
+    test('should render custom attributes when specified', () => {
+        const wrapper = render({ 'data-resin-feature': 'feature' });
 
-        expect(wrapper.prop('colSpan')).toEqual(2);
+        expect(wrapper.prop('data-resin-feature')).toEqual('feature');
     });
 });

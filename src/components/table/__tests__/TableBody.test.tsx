@@ -1,16 +1,17 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
-import TableRow from '../TableRow';
+import TableBody from '../TableBody';
 
 const TEST_CHILDREN = 'test';
 
-describe('components/table/TableRow', () => {
-    const render = (props = {}) => shallow(<TableRow {...props}>{TEST_CHILDREN}</TableRow>);
+describe('components/table/TableBody', () => {
+    const render = (props = {}) => shallow(<TableBody {...props}>{TEST_CHILDREN}</TableBody>);
 
     test('should render default component', () => {
         const wrapper = render();
 
-        expect(wrapper.is('tr')).toBe(true);
+        expect(wrapper.is('tbody')).toBe(true);
         expect(wrapper.contains(TEST_CHILDREN)).toBe(true);
     });
 
@@ -18,7 +19,7 @@ describe('components/table/TableRow', () => {
         const className = 'class';
         const wrapper = render({ className });
 
-        expect(wrapper.hasClass('table-row')).toBe(true);
+        expect(wrapper.hasClass('table-body')).toBe(true);
         expect(wrapper.hasClass(className)).toBe(true);
     });
 });
