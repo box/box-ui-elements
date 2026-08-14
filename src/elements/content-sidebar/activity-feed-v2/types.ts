@@ -5,6 +5,7 @@
 
 import type { AppActivityItemProps, TaskItemProps, VersionItemProps } from '@box/activity-feed';
 import type { AnnotationBadgeTargetType, TextMessageTypeV2 as TextMessageType } from '@box/threaded-annotations';
+import type { UserContactType } from '@box/user-selector';
 
 import type { Annotation, AnnotationPermission } from '../../../common/types/annotations';
 import type { BoxCommentPermission, CommentFeedItemType, FeedItems, FeedItemStatus } from '../../../common/types/feed';
@@ -19,17 +20,10 @@ export type AvatarUrlMap = Readonly<Record<string, string>>;
 
 export type GetAvatarUrl = (userId: string) => Promise<string | null | undefined>;
 
-export type UserContact = {
-    email: string;
-    id: number;
-    name: string;
-    value: string;
-};
-
 export type UserSelectorProps = {
     ariaRoleDescription: string;
-    fetchAvatarUrls: (userContacts: UserContact[]) => Promise<Record<string, string>>;
-    fetchUsers: (inputValue: string) => Promise<UserContact[]>;
+    fetchAvatarUrls: (userContacts: UserContactType[]) => Promise<Record<string, string>>;
+    fetchUsers: (inputValue: string) => Promise<UserContactType[]>;
     loadingAriaLabel: string;
 };
 
@@ -101,7 +95,7 @@ export type ActivityFeedV2Props = {
     file?: ActivityFeedV2File;
     getApproverAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getAvatarUrl?: GetAvatarUrl;
-    getMentionAsync?: (searchStr: string) => Promise<Array<Record<string, unknown>>>;
+    getMentionAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     getViewer?: () => ViewerHandle | null;
     hasTasks?: boolean;

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import ImageTooltipContent from '../ImageTooltipContent';
-// @ts-ignore flow import
 import testImageSrc from '../getTestImageSrc';
 
 describe('components/image-tooltip/ImageTooltipContent', () => {

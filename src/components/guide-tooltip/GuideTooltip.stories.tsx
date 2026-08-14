@@ -4,7 +4,7 @@ import GuideTooltip from './GuideTooltip';
 import Button from '../button/Button';
 import FolderShared32 from '../../icon/content/FolderShared32';
 import notes from './GuideTooltip.stories.md';
-// @ts-ignore flow import
+// @ts-ignore png import has no type declaration
 import testImageSrc from './test-image.png';
 
 const addSpacing = (component: JSX.Element) => <div style={{ textAlign: 'center' }}>{component}</div>;
