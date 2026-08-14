@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
 
