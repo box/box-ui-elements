@@ -1,17 +1,15 @@
-/* eslint-disable react/button-has-type */
-
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
-import sinon from 'sinon';
+import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
+import sinon, { SinonFakeTimers, SinonSpy } from 'sinon';
 
 import Modal from '../Modal';
 
 const sandbox = sinon.sandbox.create();
 
 describe('components/modal/Modal', () => {
-    let onRequestClose;
-    let clock;
-    let wrapper;
+    let onRequestClose: SinonSpy;
+    let clock: SinonFakeTimers;
+    let wrapper: ReactWrapper | ShallowWrapper;
 
     beforeEach(() => {
         onRequestClose = sinon.spy();
@@ -74,7 +72,7 @@ describe('components/modal/Modal', () => {
             const event = {
                 key: 'Escape',
                 stopPropagation: jest.fn(),
-            };
+            } as const;
 
             wrapper.simulate('keyDown', event);
             sinon.assert.calledOnce(onRequestClose);
@@ -88,8 +86,8 @@ describe('components/modal/Modal', () => {
         });
 
         test('should pass styles in to children components when style prop is passed in', () => {
-            const backdrop = { backgroundColor: 'red' };
-            const dialog = { color: 'red' };
+            const backdrop = { backgroundColor: 'red' } as const;
+            const dialog = { color: 'red' } as const;
             wrapper.setProps({
                 style: { backdrop, dialog },
                 isOpen: true,

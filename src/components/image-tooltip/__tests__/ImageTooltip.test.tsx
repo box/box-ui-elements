@@ -3,7 +3,6 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 import Button from '../../button/Button';
 import ImageTooltip from '../ImageTooltip';
-// @ts-ignore flow import
 import testImageSrc from '../getTestImageSrc';
 
 describe('components/image-tooltip/ImageTooltip', () => {
