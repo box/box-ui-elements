@@ -1,21 +1,19 @@
 import * as React from 'react';
-import sinon from 'sinon';
+import { shallow, ShallowWrapper } from 'enzyme';
+import { createIntl } from 'react-intl';
+import sinon, { SinonSpy } from 'sinon';
 
 import { ModalDialogBase } from '../ModalDialog';
 
-const sandbox = sinon.sandbox.create();
-
 describe('components/modal/ModalDialog', () => {
-    let onRequestBack;
-    let onRequestClose;
-    let wrapper;
-    let instance;
+    let onRequestBack: SinonSpy;
+    let onRequestClose: SinonSpy;
+    let wrapper: ShallowWrapper;
+    let instance: InstanceType<typeof ModalDialogBase>;
     const title = 'hello';
 
     beforeEach(() => {
-        const intlShape = {
-            formatMessage: message => message.id,
-        };
+        const intlShape = createIntl({ locale: 'en', messages: {} });
         onRequestClose = sinon.spy();
         onRequestBack = sinon.spy();
         wrapper = shallow(
@@ -28,11 +26,7 @@ describe('components/modal/ModalDialog', () => {
                 children
             </ModalDialogBase>,
         );
-        instance = wrapper.instance();
-    });
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
+        instance = wrapper.instance() as InstanceType<typeof ModalDialogBase>;
     });
 
     test('should set aria props on modal dialog when rendered', () => {
