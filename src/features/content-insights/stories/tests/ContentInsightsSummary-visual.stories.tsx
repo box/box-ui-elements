@@ -108,4 +108,9 @@ export const WithNegativeTrendRedesign = {
 export default {
     title: 'Features/ContentInsights/tests/visual-regression-tests',
     component: ContentInsightsSummary as React.ComponentType,
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };
