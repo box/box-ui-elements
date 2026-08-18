@@ -1,7 +1,19 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import { List, Record } from 'immutable';
 
 import PillSelectorDropdown from '../PillSelectorDropdown';
+import type { Option } from '../flowTypes';
+
+const getInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof PillSelectorDropdown> & {
+        addPillsFromInput: (inputValue?: string) => void;
+        handleBlur: (event?: unknown) => void;
+        handleEnter: (event?: unknown) => void;
+        handlePaste: (event?: unknown) => void;
+        handleSelect: (index: number, event?: unknown) => void;
+        parsePills: ((inputValue: string) => unknown[]) & jest.Mock;
+    };
 
 describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     const OptionRecord = Record({
@@ -9,7 +21,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         value: '',
     });
 
-    const getWrapper = (props, children) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}, children?: any): any => {
         const options = children || (
             <>
                 <div>Option 1</div>
@@ -34,7 +47,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const className = 'test';
             const children = 'hi';
             const wrapper = getWrapper({ className }, children);
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const selectorDropdown = wrapper.find('SelectorDropdown');
 
             expect(selectorDropdown.is('SelectorDropdown')).toBe(true);
@@ -46,20 +59,22 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should render pill selector', () => {
-            const inputProps = { 'aria-label': 'test' };
+            const inputProps = { 'aria-label': 'test' } as const;
             const wrapper = getWrapper({ inputProps });
             wrapper.setState({ inputValue: 'value' });
-            const pillSelector = shallow(wrapper.find('SelectorDropdown').prop('selector'));
-            const wrapperInstance = wrapper.instance();
+            const pillSelector = shallow(wrapper.find('SelectorDropdown').prop('selector') as React.ReactElement);
+            const wrapperInstance = getInstance(wrapper);
             expect(pillSelector.prop('onInput')).toEqual(wrapperInstance.handleInput);
             expect(pillSelector.prop('onPaste')).toEqual(wrapperInstance.handlePaste);
-            expect(pillSelector.dive().instance().props.value).toEqual('value');
+            expect((pillSelector.dive().instance() as unknown as { props: { value: string } }).props.value).toEqual(
+                'value',
+            );
         });
 
         test('should render disabled pill selector', () => {
             const wrapper = getWrapper({ disabled: true });
 
-            wrapper.setState();
+            wrapper.update();
 
             expect(wrapper).toMatchSnapshot();
         });
@@ -67,7 +82,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test('should call addPillsFromInput when pill selector is blurred', () => {
             const wrapper = getWrapper();
             wrapper.setState({ inputValue: 'value' });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const addPillsFromInputMock = jest.fn();
             instance.addPillsFromInput = addPillsFromInputMock;
             instance.handleBlur();
@@ -77,8 +92,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test.each([
             ['test', true],
             ['', false],
-        ])('should render Label component when label exists', (value, expected) => {
-            const labelProp = { label: value };
+        ])('should render Label component when label exists', (value: string, expected: boolean) => {
+            const labelProp = { label: value } as const;
             const wrapper = getWrapper(labelProp);
             expect(wrapper.exists('Label')).toBe(expected);
         });
@@ -87,7 +102,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     describe('parsePills', () => {
         test('should return a formatted map of pills', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const inputValues = 'value1, value2,value3';
             wrapper.setState({ inputValue: inputValues });
 
@@ -100,14 +115,14 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should only return pills that pass validator if one is provided and allowInvalidPills is false', () => {
-            const validator = text => {
+            const validator = (text: string) => {
                 // W3C type="email" input validation
                 const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
                 return pattern.test(text);
             };
 
             const wrapper = getWrapper({ validator });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const inputValues = 'aaron@example.com, bademail,hello@gmail.com';
             wrapper.setState({
                 inputValue: inputValues,
@@ -121,7 +136,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should ignore validator if one is provided but allowInvalidPills is true', () => {
-            const validator = text => {
+            const validator = (text: string) => {
                 // W3C type="email" input validation
                 const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
                 return pattern.test(text);
@@ -129,7 +144,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             const wrapper = getWrapper({ allowInvalidPills: true, validator });
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const inputValues = 'aaron@example.com, bademail, hello@gmail.com';
             wrapper.setState({
                 inputValue: inputValues,
@@ -147,10 +162,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const wrapper = getWrapper({ allowInvalidPills: true });
             wrapper.setState({ inputValue: 'a,b' });
 
-            const { parsePills } = wrapper.instance();
-            const stringParser = input => input.split(',');
-            const optionParser = input =>
-                input.split(',').map(token => ({
+            const { parsePills } = getInstance(wrapper);
+            const stringParser = (input: string) => input.split(',');
+            const optionParser = (input: string) =>
+                input.split(',').map((token: string) => ({
                     customProp: token,
                 }));
 
@@ -185,7 +200,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const onPillCreateMock = jest.fn();
             const onSelectMock = jest.fn();
             const wrapper = getWrapper({ onPillCreate: onPillCreateMock, onSelect: onSelectMock });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const inputValue = 'value';
             wrapper.setState({ inputValue });
 
@@ -212,7 +227,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 validateForError: validateForErrorMock,
             });
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput();
 
@@ -224,7 +239,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should call props.validateForError if no pills were added but input exists', () => {
-            const pills = [];
+            const pills: Array<Option> = [];
             const selectedOptions = [{ text: 'a pill', value: 'pill' }];
             const onInputMock = jest.fn();
             const onPillCreateMock = jest.fn();
@@ -239,7 +254,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 validateForError: validateForErrorMock,
             });
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             wrapper.setState({ inputValue: 'value1' });
             instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput();
@@ -251,8 +266,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should call props.validateForError if no pills were added and no options are selected', () => {
-            const pills = [];
-            const selectedOptions = [];
+            const pills: Array<Option> = [];
+            const selectedOptions: Array<Option> = [];
             const onInputMock = jest.fn();
             const onPillCreateMock = jest.fn();
             const onSelectMock = jest.fn();
@@ -266,7 +281,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 validateForError: validateForErrorMock,
             });
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             wrapper.setState({ inputValue: '' });
             instance.parsePills = jest.fn().mockReturnValue(pills);
             instance.addPillsFromInput();
@@ -278,7 +293,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should not call props.validateForError if no pills were added, input is empty, and options are selected', () => {
-            const pills = [];
+            const pills: Array<Option> = [];
             const selectedOptions = [{ text: 'a pill', value: 'pill' }];
             const onInputMock = jest.fn();
             const onPillCreateMock = jest.fn();
@@ -293,7 +308,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 validateForError: validateForErrorMock,
             });
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const inputValue = '';
             wrapper.setState({ inputValue });
             instance.parsePills = jest.fn().mockReturnValue(pills);
@@ -316,7 +331,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
             const onInput = jest.fn();
             const initialValue = 'abc';
-            const { addPillsFromInput } = wrapper.instance();
+            const { addPillsFromInput } = getInstance(wrapper);
 
             wrapper.setProps({ onInput, parseItems: () => [] });
             wrapper.setState({ inputValue: initialValue });
@@ -341,7 +356,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test('should update inputValue state when called', () => {
             const wrapper = getWrapper();
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             instance.handleInput({ target: { value: 'test' } });
 
@@ -351,7 +366,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test('should call onInput() with value when called', () => {
             const onInputMock = jest.fn();
             const wrapper = getWrapper({ onInput: onInputMock });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             instance.handleInput({ target: { value: 'test' } });
 
@@ -362,8 +377,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     describe('handleEnter()', () => {
         test('should do nothing when in composition mode', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const event = { preventDefault: jest.fn() };
+            const instance = getInstance(wrapper);
+            const event = { preventDefault: jest.fn() } as const;
             instance.addPillsFromInput = jest.fn();
             instance.handleCompositionStart();
             instance.handleEnter(event);
@@ -375,7 +390,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const wrapper = getWrapper();
             const addPillsFromInputMock = jest.fn();
             const preventDefaultMock = jest.fn();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             instance.addPillsFromInput = addPillsFromInputMock;
 
@@ -400,7 +415,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     },
                 },
                 preventDefault: jest.fn(),
-            };
+            } as const;
             const wrapper = getWrapper({
                 allowCustomPills: true,
                 allowInvalidPills: false,
@@ -408,7 +423,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 onPillCreate: onPillCreateMock,
                 validator: () => false,
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             instance.handlePaste(mockEvent);
 
@@ -427,13 +442,13 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                     },
                 },
                 preventDefault: jest.fn(),
-            };
+            } as const;
             const wrapper = getWrapper({
                 allowCustomPills: true,
                 onInput: onInputMock,
                 onPillCreate: onPillCreateMock,
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             instance.handlePaste(mockEvent);
 
@@ -444,7 +459,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
 
     describe('handleSelect', () => {
         test('should call onSelect() with option and event when called', () => {
-            const option = { text: 'b', value: 'b' };
+            const option = { text: 'b', value: 'b' } as const;
             const options = [{ text: 'a', value: 'a' }, option];
             const onSelectMock = jest.fn();
             const onPillCreateMock = jest.fn();
@@ -453,8 +468,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 onPillCreate: onPillCreateMock,
                 selectorOptions: options,
             });
-            const instance = wrapper.instance();
-            const event = { type: 'click' };
+            const instance = getInstance(wrapper);
+            const event = { type: 'click' } as const;
 
             instance.handleSelect(1, event);
 
@@ -463,8 +478,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         });
 
         test('should call onSelect() with immutable option and event when called', () => {
-            const option = new OptionRecord({ text: 'b', value: 'b' });
-            const options = new List([new OptionRecord({ text: 'a', value: 'a' }), option]);
+            const option = OptionRecord({ text: 'b', value: 'b' });
+            const options = List([OptionRecord({ text: 'a', value: 'a' }), option]);
             const onSelectMock = jest.fn();
             const onPillCreateMock = jest.fn();
             const wrapper = getWrapper({
@@ -472,8 +487,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
                 onPillCreate: onPillCreateMock,
                 selectorOptions: options,
             });
-            const instance = wrapper.instance();
-            const event = { type: 'click' };
+            const instance = getInstance(wrapper);
+            const event = { type: 'click' } as const;
 
             instance.handleSelect(1, event);
 
@@ -485,7 +500,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const options = [{ text: 'a', value: 'a' }];
             const handleInputMock = jest.fn();
             const wrapper = getWrapper({ selectorOptions: options });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleInput = handleInputMock;
             instance.handleSelect(0, {});
             expect(handleInputMock).toBeCalledWith({ target: { value: '' } });
@@ -496,8 +511,8 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
         test('should call onBlur() and addPillsFromInput() when underlying input is blurred', () => {
             const onBlur = jest.fn();
             const wrapper = getWrapper({ onBlur });
-            const instance = wrapper.instance();
-            const event = { type: 'blur' };
+            const instance = getInstance(wrapper);
+            const event = { type: 'blur' } as const;
 
             instance.addPillsFromInput = jest.fn();
             instance.handleBlur(event);
@@ -510,7 +525,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     describe('handleCompositionStart()', () => {
         test('should set composition mode', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleCompositionStart();
             expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: true });
@@ -520,7 +535,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
     describe('handleCompositionEnd()', () => {
         test('should unset composition mode', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleCompositionEnd();
             expect(instance.setState).toHaveBeenCalledWith({ isInCompositionMode: false });

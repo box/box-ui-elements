@@ -1,8 +1,1 @@
-export interface SuggestedPillType {
-    email: string;
-    id: number;
-    name: string;
-    text?: string;
-    type?: string;
-    value?: string;
-}
+export type { SuggestedPill as SuggestedPillType } from './flowTypes';
