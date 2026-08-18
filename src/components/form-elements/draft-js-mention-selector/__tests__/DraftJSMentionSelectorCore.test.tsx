@@ -4,10 +4,13 @@ import { EditorState } from 'draft-js';
 import sinon from 'sinon';
 
 import * as utils from '../utils';
+import type { Mention } from '../utils';
 import DraftJSEditor from '../../../draft-js-editor';
 import DraftJSMentionSelector from '../DraftJSMentionSelectorCore';
 
 const sandbox = sinon.sandbox.create();
+const getInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof DraftJSMentionSelector>;
 
 describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelector', () => {
     afterEach(() => {
@@ -25,14 +28,14 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
 
             expect(wrapper.childAt(0).hasClass('mention-selector-wrapper')).toBe(true);
 
-            expect(wrapper.find(DraftJSEditor).length).toBe(1);
+            expect(wrapper.find(DraftJSEditor)).toHaveLength(1);
         });
 
         test('should correctly render the selector dropdown', () => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
             const dropdown = wrapper.find('SelectorDropdown');
-            expect(dropdown.length).toBe(1);
-            expect(dropdown.prop('onSelect')).toEqual(wrapper.instance().handleContactSelected);
+            expect(dropdown).toHaveLength(1);
+            expect(dropdown.prop('onSelect')).toEqual(getInstance(wrapper).handleContactSelected);
         });
 
         [
@@ -73,11 +76,11 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
 
             if (shouldShowMentionStartState) {
                 test('should show MentionStartState', () => {
-                    expect(wrapper.find('MentionStartState').length).toBe(1);
+                    expect(wrapper.find('MentionStartState')).toHaveLength(1);
                 });
             } else {
                 test('should not show MentionStartState', () => {
-                    expect(wrapper.find('MentionStartState').length).toBe(0);
+                    expect(wrapper.find('MentionStartState')).toHaveLength(0);
                 });
             }
         });
@@ -92,7 +95,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         const wrapper = mount(<DraftJSMentionSelector {...args} />);
 
         test('should show an alert', () => {
-            expect(wrapper.find('[data-testid="accessibility-alert"]').length).toBe(1);
+            expect(wrapper.find('[data-testid="accessibility-alert"]')).toHaveLength(1);
         });
     });
 
@@ -105,7 +108,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         const wrapper = mount(<DraftJSMentionSelector {...args} />);
 
         test('should not render any alert', () => {
-            expect(wrapper.find('[data-testid="accessibility-alert"]').length).toBe(0);
+            expect(wrapper.find('[data-testid="accessibility-alert"]')).toHaveLength(0);
         });
     });
 
@@ -135,7 +138,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} contacts={contacts} />);
             wrapper.setState({ activeMention });
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             if (expected) {
                 test('should return true', () => {
@@ -157,9 +160,11 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
 
             const getMentionStub = sandbox.stub(utils, 'getActiveMentionForEditorState');
 
-            wrapper.instance().getActiveMentionForEditorState('testState');
+            getInstance(wrapper).getActiveMentionForEditorState('testState' as unknown as EditorState);
 
-            expect(getMentionStub.calledWith('testState', 'testPattern')).toBe(true);
+            expect(
+                getMentionStub.calledWith('testState' as unknown as EditorState, 'testPattern' as unknown as RegExp),
+            ).toBe(true);
         });
     });
 
@@ -183,7 +188,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
 
                 wrapper.setState({ activeMention });
 
-                const instance = wrapper.instance();
+                const instance = getInstance(wrapper);
 
                 instance.handleMention();
             });
@@ -198,13 +203,10 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
             />,
         );
 
-        const instance = wrapper.instance();
+        const instance = getInstance(wrapper);
 
         test('should call addMention with the appropriate contact when called', () => {
-            sandbox
-                .mock(instance)
-                .expects('addMention')
-                .withArgs({ name: 'foo' });
+            sandbox.mock(instance).expects('addMention').withArgs({ name: 'foo' });
 
             instance.handleContactSelected(0);
         });
@@ -212,10 +214,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         test('should update state when called', () => {
             sandbox.stub(instance, 'addMention');
 
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({ activeMention: null, isFocused: true });
+            sandbox.mock(instance).expects('setState').withArgs({ activeMention: null, isFocused: true });
 
             instance.handleContactSelected(0);
         });
@@ -237,15 +236,12 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
                 <DraftJSMentionSelector {...requiredProps} onBlur={sandbox.mock().withArgs(event)} />,
             );
 
-            const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({
-                    isFocused: false,
-                });
+            const instance = getInstance(wrapper);
+            sandbox.mock(instance).expects('setState').withArgs({
+                isFocused: false,
+            });
 
-            instance.handleBlur(event);
+            instance.handleBlur(event as unknown as React.SyntheticEvent);
         });
     });
 
@@ -257,15 +253,12 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
                 <DraftJSMentionSelector {...requiredProps} onFocus={sandbox.mock().withArgs(event)} />,
             );
 
-            const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({
-                    isFocused: true,
-                });
+            const instance = getInstance(wrapper);
+            sandbox.mock(instance).expects('setState').withArgs({
+                isFocused: true,
+            });
 
-            instance.handleFocus(event);
+            instance.handleFocus(event as unknown as React.SyntheticEvent);
         });
     });
 
@@ -278,11 +271,11 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
                 <DraftJSMentionSelector {...requiredProps} onChange={sandbox.mock().withArgs(nextEditorState)} />,
             );
 
-            const instance = wrapper.instance();
-            sandbox.stub(instance, 'getActiveMentionForEditorState').returns(activeMention);
+            const instance = getInstance(wrapper);
+            sandbox.stub(instance, 'getActiveMentionForEditorState').returns(activeMention as unknown as Mention);
             const setStateSpy = sandbox.spy(instance, 'setState');
 
-            instance.handleChange(nextEditorState);
+            instance.handleChange(nextEditorState as unknown as EditorState);
             expect(setStateSpy.calledWith({ activeMention })).toBe(true);
         });
 
@@ -292,32 +285,40 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
                 <DraftJSMentionSelector {...requiredProps} onChange={sandbox.mock().withArgs(nextEditorState)} />,
             );
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
-            sandbox.stub(instance, 'getActiveMentionForEditorState').returns(activeMention);
+            sandbox.stub(instance, 'getActiveMentionForEditorState').returns(activeMention as unknown as Mention);
             sandbox.mock(instance).expects('handleMention');
 
-            instance.handleChange(nextEditorState);
+            instance.handleChange(nextEditorState as unknown as EditorState);
         });
     });
 
     describe('addMention()', () => {
         test('should call addMention from utils', () => {
-            const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} editorState="testState" />);
+            const wrapper = shallow(
+                <DraftJSMentionSelector {...requiredProps} editorState={'testState' as unknown as EditorState} />,
+            );
 
             wrapper.setState({
                 activeMention: 'testActiveMention',
             });
 
-            const instance = wrapper.instance();
-            const addMentionStub = sandbox.stub(utils, 'addMention').returns('testReturn');
+            const instance = getInstance(wrapper);
+            const addMentionStub = sandbox.stub(utils, 'addMention').returns('testReturn' as unknown as EditorState);
             const setStateSpy = sandbox.spy(instance, 'setState');
             const handleChangeStub = sandbox.stub(instance, 'handleChange');
 
-            instance.addMention('testMention');
-            expect(addMentionStub.calledWith('testState', 'testActiveMention', 'testMention')).toBe(true);
+            instance.addMention('testMention' as unknown as { id: string; name: string });
+            expect(
+                addMentionStub.calledWith(
+                    'testState' as unknown as EditorState,
+                    'testActiveMention' as unknown as Mention,
+                    'testMention' as unknown as { id: string; name: string },
+                ),
+            ).toBe(true);
             expect(setStateSpy.calledWith({ activeMention: null })).toBe(true);
-            expect(handleChangeStub.calledWith('testReturn')).toBe(true);
+            expect(handleChangeStub.calledWith('testReturn' as unknown as EditorState)).toBe(true);
         });
     });
 
@@ -337,7 +338,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
 
             wrapper.setProps({ contacts: [] });
 
-            expect(wrapper.state('activeMention')).toBe(null);
+            expect(wrapper.state('activeMention')).toBeNull();
         });
     });
 });
