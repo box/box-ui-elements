@@ -1,15 +1,50 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import * as React from 'react';
+// @ts-ignore no types for form-serialize
 import serialize from 'form-serialize';
 
 import { FormContext } from './FormContext';
 
-function getFormValidityState(form) {
+export type FormSerializedData = Record<string, unknown>;
+
+export type FormInputValidityState = ValidityState & {
+    /** Error code stored in validationMessage when customError is set */
+    customErrorCode?: string;
+};
+
+export interface FormFieldValidityState {
+    /** Server-side error code */
+    code?: string;
+    /** Server-side error message */
+    message?: string;
+    /** HTML constraint-validation state from an invalid named input */
+    validityState?: FormInputValidityState;
+}
+
+export type FormValidityStateMap = Record<string, FormFieldValidityState | null | undefined>;
+
+export interface FormProps {
+    /** Form fields and other child content */
+    children?: React.ReactNode;
+    /** An object mapping input names to error messages */
+    formValidityState?: FormValidityStateMap;
+    /** Called when an input in the form changes */
+    onChange?: (formData: FormSerializedData) => void;
+    /** Called when an invalid submit is made */
+    onInvalidSubmit?: (formValidityState: FormValidityStateMap) => void;
+    /** Called when a valid submit is made */
+    onValidSubmit: (formData: FormSerializedData) => void;
+}
+
+interface FormState {
+    registeredInputs: Record<string, (validityState: unknown) => void>;
+}
+
+const getFormValidityState = (form: HTMLFormElement): FormValidityStateMap => {
     // Turn the form.elements HTMLCollection into Array before reducing
-    return [].slice.call(form.elements).reduce((validityObj, inputEl) => {
+    return [].slice.call(form.elements).reduce((validityObj: FormValidityStateMap, inputEl: HTMLInputElement) => {
         // Only serialize inputs that have a name defined
         if (inputEl.name && !inputEl.validity.valid) {
-            const validityState = inputEl.validity;
+            const validityState = inputEl.validity as FormInputValidityState;
 
             if (inputEl.validity.customError) {
                 // If the input is displaying a custom error,
@@ -24,22 +59,10 @@ function getFormValidityState(form) {
         }
         return validityObj;
     }, {});
-}
+};
 
-class Form extends Component {
-    static propTypes = {
-        children: PropTypes.node,
-        /** Called when an input in the form changes */
-        onChange: PropTypes.func,
-        /** Called when a valid submit is made */
-        onValidSubmit: PropTypes.func.isRequired,
-        /** Called when an invalid submit is made */
-        onInvalidSubmit: PropTypes.func,
-        /** An object mapping input names to error messages */
-        formValidityState: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-    };
-
-    constructor(props) {
+class Form extends React.Component<FormProps, FormState> {
+    constructor(props: FormProps) {
         super(props);
 
         this.state = {
@@ -47,11 +70,11 @@ class Form extends Component {
         };
     }
 
-    componentDidUpdate({ formValidityState: prevFormValidityState }) {
+    componentDidUpdate({ formValidityState: prevFormValidityState }: FormProps): void {
         const { formValidityState } = this.props;
         const { registeredInputs } = this.state;
 
-        if (formValidityState !== prevFormValidityState) {
+        if (formValidityState !== prevFormValidityState && formValidityState) {
             Object.keys(formValidityState).forEach(key => {
                 if (registeredInputs[key]) {
                     registeredInputs[key](formValidityState[key]);
@@ -60,7 +83,7 @@ class Form extends Component {
         }
     }
 
-    onChange = ({ currentTarget }) => {
+    onChange = ({ currentTarget }: React.FormEvent<HTMLFormElement>): void => {
         if (this.props.onChange) {
             const formData = serialize(currentTarget, {
                 hash: true,
@@ -70,8 +93,8 @@ class Form extends Component {
         }
     };
 
-    onSubmit = event => {
-        const form = event.target;
+    onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+        const form = event.target as HTMLFormElement;
         event.preventDefault();
         const isValid = form.checkValidity();
         const { onInvalidSubmit, onValidSubmit } = this.props;
@@ -94,7 +117,7 @@ class Form extends Component {
         }
     };
 
-    registerInput = (name, setValidityStateHandler) => {
+    registerInput = (name: string, setValidityStateHandler: (validityState: unknown) => void): void => {
         const { registeredInputs } = this.state;
 
         if (registeredInputs[name]) {
@@ -106,13 +129,13 @@ class Form extends Component {
         this.setState(nextState);
     };
 
-    unregisterInput = name => {
+    unregisterInput = (name: string): void => {
         const nextState = this.state;
         delete nextState.registeredInputs[name];
         this.setState(nextState);
     };
 
-    render() {
+    render(): React.ReactNode {
         const { children } = this.props;
         return (
             <FormContext.Provider
