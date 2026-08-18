@@ -1,5 +1,6 @@
 import { convertFromRaw, ContentState, EditorState } from 'draft-js';
 import { addMention, getActiveMentionForEditorState, getFormattedCommentText } from '../utils';
+import type { Mention } from '../utils';
 
 const noMentionEditorState = EditorState.createWithContent(ContentState.createFromText('No mention here'));
 const oneMentionEditorState = EditorState.createWithContent(ContentState.createFromText('Hey @foo'));
@@ -82,7 +83,11 @@ describe('components/form-elements/draft-js-mention-selector/utils', () => {
         test('should return updated string (plus space)', () => {
             const mention = { id: 1, name: 'Fool Name' };
 
-            const editorStateWithLink = addMention(oneMentionEditorState, oneMentionExpectedMention, mention);
+            const editorStateWithLink = addMention(
+                oneMentionEditorState,
+                oneMentionExpectedMention as Mention,
+                mention,
+            );
 
             expect(editorStateWithLink.getCurrentContent().getPlainText()).toEqual('Hey @Fool Name ');
         });

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import PlainButton from '../plain-button/PlainButton';
-// @ts-ignore flow import
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
 import { Menu, SelectMenuItem } from '../menu';
 import messages from './messages';

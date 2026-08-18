@@ -3,11 +3,12 @@ import { useIntl } from 'react-intl';
 import messages from './messages';
 import './DraftTimestamp.scss';
 
-interface Props {
+export interface DraftTimestampItemProps {
+    /** Decorated timestamp text nodes */
     children: React.ReactNode;
 }
 
-const DraftTimestampItem: React.FC<Props> = ({ children }) => {
+const DraftTimestampItem = ({ children }: DraftTimestampItemProps) => {
     const { formatMessage } = useIntl();
     const videoTimestampLabel = formatMessage(messages.commentTimestampLabel);
     return (
@@ -15,7 +16,7 @@ const DraftTimestampItem: React.FC<Props> = ({ children }) => {
             className="bcs-CommentTimestamp-entity"
             aria-label={videoTimestampLabel}
             contentEditable={false}
-            suppressContentEditableWarning={true}
+            suppressContentEditableWarning
         >
             {children}
         </div>
