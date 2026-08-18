@@ -98,7 +98,7 @@ describe('useMetadataTemplateEventService', () => {
             }),
         );
 
-        expect(withoutOptional.current.onCreateTemplate).toBeUndefined();
+        expect((withoutOptional.current as { onCreateTemplate?: unknown }).onCreateTemplate).toBeUndefined();
         expect((withoutOptional.current as { onTemplateEdit?: unknown }).onTemplateEdit).toBeUndefined();
 
         const { result: withOptional } = renderHook(() =>
@@ -110,7 +110,9 @@ describe('useMetadataTemplateEventService', () => {
             }),
         );
 
-        expect(withOptional.current.onCreateTemplate).toBe(onCreateTemplate);
+        expect((withOptional.current as { onCreateTemplate: typeof onCreateTemplate }).onCreateTemplate).toBe(
+            onCreateTemplate,
+        );
         expect((withOptional.current as { onTemplateEdit: typeof onEditTemplate }).onTemplateEdit).toBe(onEditTemplate);
     });
 });
