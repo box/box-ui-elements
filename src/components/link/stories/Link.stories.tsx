@@ -11,15 +11,12 @@ export const withCustomComponent = () => {
     // import { BrowserRouter as Router, Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 
     const CustomRouterLink = ({ href, children, ...rest }: RouterLinkProps) => (
-        // @ts-ignore TODO: figure out why this is giving a TS error
         <RouterLink to={href} {...rest}>
             {children}
         </RouterLink>
     );
 
     return (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         <Router>
             <Link component={CustomRouterLink} href="/">
                 A link

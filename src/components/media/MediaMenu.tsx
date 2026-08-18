@@ -6,7 +6,6 @@ import messages from './messages';
 import IconEllipsis from '../../icons/general/IconEllipsis';
 import { ButtonType } from '../button';
 import PlainButton, { PlainButtonProps } from '../plain-button';
-// @ts-ignore TODO: migrate DropdownMenu to typescript
 import DropdownMenu from '../dropdown-menu';
 import { Menu } from '../menu';
 import { bdlGray50 } from '../../styles/variables';

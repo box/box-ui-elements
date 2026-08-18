@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import TextAreaCore from '../../text-area';
@@ -6,41 +5,58 @@ import TextAreaCore from '../../text-area';
 import * as messages from '../input-messages';
 import FormInput from '../form/FormInput';
 
-type Props = {
-    autoFocus?: boolean,
+/** Return type for the `validation` callback (`code` required for HTML constraint validation). */
+export interface TextAreaValidationError {
+    code: string;
+    message?: React.ReactNode;
+}
+
+/** Internal error shape in state (optional `code` for externally injected errors). */
+interface TextAreaError {
+    code?: string;
+    message?: React.ReactNode;
+}
+
+export interface TextAreaProps {
+    /** Whether the text area is focused on mount */
+    autoFocus?: boolean;
     /** Add a class to the component */
-    className?: string,
-    isDisabled?: boolean,
-    isReadOnly?: boolean,
-    isRequired?: boolean,
+    className?: string;
+    /** Whether the text area is disabled */
+    isDisabled?: boolean;
+    /** Whether the text area is read-only */
+    isReadOnly?: boolean;
+    /** Whether the text area value is required */
+    isRequired?: boolean;
     /** Is text area resizable */
-    isResizable?: boolean,
+    isResizable?: boolean;
     /** Label displayed for the text area */
-    label: React.Node,
-    maxLength?: number,
+    label: React.ReactNode;
+    /** Maximum number of characters allowed */
+    maxLength?: number;
     /** Name of the text area */
-    name: string,
+    name: string;
     /** Placeholder for the text area */
-    placeholder?: string,
-    /** Validation function that returns an error string or a promise that resolves to an error string */
-    validation?: Function,
+    placeholder?: string;
+    /** Validation function that returns `TextAreaValidationError` or a falsy value when valid */
+    validation?: (value: string) => TextAreaValidationError | null | undefined;
     /** Default value of the text area */
-    value: string,
-};
+    value: string;
+}
 
-type State = {
-    error: Object | null,
-    value: string,
-};
+interface TextAreaState {
+    error: TextAreaError | null | undefined;
+    value: string;
+}
 
-class TextArea extends React.Component<Props, State> {
+class TextArea extends React.Component<TextAreaProps, TextAreaState> {
     static defaultProps = {
         autoFocus: false,
         value: '',
         isReadOnly: false,
     };
 
-    constructor(props: Props) {
+    constructor(props: TextAreaProps) {
         super(props);
         this.state = {
             error: null,
@@ -48,7 +64,7 @@ class TextArea extends React.Component<Props, State> {
         };
     }
 
-    componentDidUpdate({ value: prevValue }: Props) {
+    componentDidUpdate({ value: prevValue }: TextAreaProps): void {
         // If a new value is passed by prop, set it
         if (prevValue !== this.props.value) {
             this.setState({
@@ -57,7 +73,7 @@ class TextArea extends React.Component<Props, State> {
         }
     }
 
-    onChange = ({ currentTarget }: SyntheticEvent<HTMLTextAreaElement>) => {
+    onChange = ({ currentTarget }: React.ChangeEvent<HTMLTextAreaElement>): void => {
         const { value } = currentTarget;
         if (this.state.error) {
             this.setState(
@@ -73,17 +89,17 @@ class TextArea extends React.Component<Props, State> {
         }
     };
 
-    onValidityStateUpdateHandler = (error: Object) => {
-        if (error.valid !== undefined) {
-            this.setErrorFromValidityState(error);
+    onValidityStateUpdateHandler = (error: ValidityState | TextAreaError): void => {
+        if ((error as ValidityState).valid !== undefined) {
+            this.setErrorFromValidityState(error as ValidityState);
         } else {
             this.setState({
-                error,
+                error: error as TextAreaError,
             });
         }
     };
 
-    setErrorFromValidityState(validityState: ValidityState) {
+    setErrorFromValidityState(validityState: ValidityState): void {
         const { badInput, customError, tooLong, valid, valueMissing } = validityState;
 
         const { isRequired, maxLength, validation } = this.props;
@@ -109,10 +125,10 @@ class TextArea extends React.Component<Props, State> {
         });
     }
 
-    textarea: ?HTMLTextAreaElement;
+    textarea: HTMLTextAreaElement | null | undefined;
 
     // Updates component value and validity state
-    checkValidity = () => {
+    checkValidity = (): void => {
         const { isRequired, validation } = this.props;
         const { textarea } = this;
 
@@ -137,7 +153,7 @@ class TextArea extends React.Component<Props, State> {
         }
     };
 
-    render() {
+    render(): React.ReactNode {
         const {
             autoFocus,
             className = '',
@@ -146,6 +162,7 @@ class TextArea extends React.Component<Props, State> {
             isRequired,
             isResizable,
             label,
+            maxLength,
             name,
             placeholder,
         } = this.props;
@@ -162,6 +179,7 @@ class TextArea extends React.Component<Props, State> {
                         label={label}
                         isRequired={isRequired}
                         isResizable={isResizable}
+                        maxLength={maxLength}
                         name={name}
                         onBlur={this.checkValidity}
                         onChange={this.onChange}

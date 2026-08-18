@@ -3,7 +3,6 @@ import * as React from 'react';
 import Avatar from '../../avatar/Avatar';
 import Button from '../../button/Button';
 import MenuItem from '../../menu/MenuItem';
-// @ts-ignore TODO: migrate TextArea to typescript
 import TextArea from '../../text-area';
 
 import Media from '../Media';
