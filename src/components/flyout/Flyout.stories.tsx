@@ -9,7 +9,6 @@ import PrimaryButton from '../primary-button';
 // @ts-ignore JS import
 import TextArea from '../text-area';
 
-// @ts-ignore JS import
 import { Flyout, Overlay } from '.';
 import notes from './Flyout.stories.md';
 
