@@ -340,7 +340,9 @@ function useSidebarMetadataFetcher(
             // Avoid refreshCache: true — File.getFile invokes success twice (cache, then network)
             // which would duplicate the metadata fetch. Cache hit or a single network fetch is enough;
             // missing fields are still requested when not present on the cached file.
-            api.getFileAPI().getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
+            // getFileAPI() defaults to shouldDestroy: true, which aborts in-flight Users/Metadata XHRs
+            // (including GET /users/me from useCurrentUserEnterpriseId in this same component).
+            api.getFileAPI(false).getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
                 fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
             });
         }
