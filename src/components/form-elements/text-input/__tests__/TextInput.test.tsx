@@ -3,9 +3,12 @@ import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
 import TextInput from '..';
+// @ts-ignore flow import
 import { FormContext } from '../../form/FormContext';
 
 const sandbox = sinon.sandbox.create();
+const getTextInputInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof TextInput>;
 
 describe('components/form-elements/text-input/TextInput', () => {
     afterEach(() => {
@@ -15,7 +18,7 @@ describe('components/form-elements/text-input/TextInput', () => {
     test('should correctly render default component', () => {
         const wrapper = shallow(<TextInput label="label" name="input" />);
 
-        expect(wrapper.find('TextInput').length).toEqual(1);
+        expect(wrapper.find('TextInput')).toHaveLength(1);
     });
 
     test('should update state if value prop changes', () => {
@@ -49,7 +52,7 @@ describe('components/form-elements/text-input/TextInput', () => {
 
         wrapper.setProps({ value: 'a' });
         input.simulate('blur');
-        const inputEl = input.getDOMNode();
+        const inputEl = input.getDOMNode() as HTMLInputElement;
         inputEl.value = 'a';
         input.simulate('change', {
             currentTarget: inputEl,
@@ -74,8 +77,8 @@ describe('components/form-elements/text-input/TextInput', () => {
 
     test('should mark url fields invalid when invalid', () => {
         const wrapper = mount(<TextInput label="label" name="input" type="url" value="bob" />);
-        const instance = wrapper.instance();
-        instance.input = { validity: { typeMismatch: true } };
+        const instance = getTextInputInstance(wrapper);
+        instance.input = { validity: { typeMismatch: true } } as HTMLInputElement;
         act(() => {
             instance.checkValidity();
         });
@@ -86,8 +89,8 @@ describe('components/form-elements/text-input/TextInput', () => {
 
     test('should mark url fields valid when valid', () => {
         const wrapper = mount(<TextInput label="label" name="input" type="url" value="http://bob.com" />);
-        const instance = wrapper.instance();
-        instance.input = { validity: { valid: true } };
+        const instance = getTextInputInstance(wrapper);
+        instance.input = { validity: { valid: true } } as HTMLInputElement;
         act(() => {
             instance.checkValidity();
         });
@@ -98,13 +101,15 @@ describe('components/form-elements/text-input/TextInput', () => {
     });
 
     test('should set an input as valid when the validityFn returns an void', () => {
-        function validityFn() {}
+        function validityFn() {
+            return undefined;
+        }
 
         const wrapper = mount(<TextInput label="label" name="input" type="custom" validation={validityFn} />);
         const input = wrapper.find('input');
         input.simulate('blur');
 
-        expect(input.getDOMNode().validity.valid).toBeTruthy();
+        expect((input.getDOMNode() as HTMLInputElement).validity.valid).toBeTruthy();
     });
 
     test('should set an input as invalid when the validityFn returns an error string and input is not empty', () => {
@@ -119,7 +124,7 @@ describe('components/form-elements/text-input/TextInput', () => {
             <TextInput label="label" name="input" type="custom" validation={validityFn} value="yes" />,
         );
         const input = wrapper.find('input');
-        const setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
+        const setCustomValiditySpy = jest.spyOn(input.getDOMNode() as HTMLInputElement, 'setCustomValidity');
         input.simulate('blur');
 
         expect(setCustomValiditySpy).toHaveBeenCalledWith('errCode');
@@ -133,18 +138,18 @@ describe('components/form-elements/text-input/TextInput', () => {
             message: 'errMessage',
         });
 
-        stub.onCall(1).returns();
+        stub.onCall(1).returns(undefined);
 
         const wrapper = mount(<TextInput label="label" name="input" type="custom" validation={stub} value="yes" />);
         let input = wrapper.find('input');
-        let setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
+        let setCustomValiditySpy = jest.spyOn(input.getDOMNode() as HTMLInputElement, 'setCustomValidity');
 
         input.simulate('blur');
         expect(setCustomValiditySpy).toHaveBeenCalledWith('errCode');
 
         // Get the re-rendered input again
         input = wrapper.find('input');
-        setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
+        setCustomValiditySpy = jest.spyOn(input.getDOMNode() as HTMLInputElement, 'setCustomValidity');
 
         input.simulate('blur');
         expect(setCustomValiditySpy).toHaveBeenCalledWith('');
@@ -162,7 +167,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         const input = wrapper.find('input');
         input.simulate('blur');
 
-        expect(input.getDOMNode().validity.valid).toBeTruthy();
+        expect((input.getDOMNode() as HTMLInputElement).validity.valid).toBeTruthy();
     });
 
     test('should set input invalid when the validityFn returns an error string, input is empty and is required', () => {
@@ -177,7 +182,7 @@ describe('components/form-elements/text-input/TextInput', () => {
             <TextInput isRequired label="label" name="input" type="custom" validation={validityFn} />,
         );
         const input = wrapper.find('input');
-        const setCustomValiditySpy = jest.spyOn(input.getDOMNode(), 'setCustomValidity');
+        const setCustomValiditySpy = jest.spyOn(input.getDOMNode() as HTMLInputElement, 'setCustomValidity');
         input.simulate('blur');
 
         expect(setCustomValiditySpy).toHaveBeenCalledWith('errCode');
@@ -193,7 +198,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         wrapper.setProps({ value: 'abba' });
 
         input.simulate('blur');
-        const inputEl = input.getDOMNode();
+        const inputEl = input.getDOMNode() as HTMLInputElement;
         inputEl.value = 'a';
         input.simulate('change', {
             currentTarget: inputEl,
@@ -210,7 +215,7 @@ describe('components/form-elements/text-input/TextInput', () => {
 
         expect(wrapper.find('.text-input-container').hasClass('show-error')).toBeTruthy();
 
-        const inputEl = input.getDOMNode();
+        const inputEl = input.getDOMNode() as HTMLInputElement;
         inputEl.value = 'a';
         input.simulate('change', {
             currentTarget: inputEl,
@@ -241,7 +246,7 @@ describe('components/form-elements/text-input/TextInput', () => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
 
-        expect(component.find('TextInput').first().instance().state.error).toEqual(error);
+        expect(getTextInputInstance(component.find('TextInput').first()).state.error).toEqual(error);
     });
 
     test('should set validity state when set validity state handler is called with ValidityState object', () => {
@@ -264,7 +269,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.find('TextInput').first().instance().state.error.code).toEqual('badInput');
+        expect(getTextInputInstance(component.find('TextInput').first()).state.error?.code).toEqual('badInput');
     });
 
     /**
@@ -291,7 +296,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.find('TextInput').first().instance().state.error.code).toEqual('patternMismatch');
+        expect(getTextInputInstance(component.find('TextInput').first()).state.error?.code).toEqual('patternMismatch');
     });
 
     test('should correctly validate tooLong', () => {
@@ -314,7 +319,7 @@ describe('components/form-elements/text-input/TextInput', () => {
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.find('TextInput').first().instance().state.error.code).toEqual('tooLong');
+        expect(getTextInputInstance(component.find('TextInput').first()).state.error?.code).toEqual('tooLong');
     });
 
     test('should correctly validate tooShort', () => {
@@ -338,6 +343,6 @@ describe('components/form-elements/text-input/TextInput', () => {
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.find('TextInput').first().instance().state.error.code).toEqual('tooShort');
+        expect(getTextInputInstance(component.find('TextInput').first()).state.error?.code).toEqual('tooShort');
     });
 });
