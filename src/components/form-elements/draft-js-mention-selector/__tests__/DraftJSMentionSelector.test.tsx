@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-/* eslint-disable react/jsx-no-comment-textnodes */
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import { ContentState, EditorState, convertToRaw } from 'draft-js';
@@ -9,6 +8,8 @@ import DraftJSMentionSelector from '..';
 import * as messages from '../../input-messages';
 
 const sandbox = sinon.sandbox.create();
+const getInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof DraftJSMentionSelector>;
 
 describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSelector', () => {
     afterEach(() => {
@@ -19,14 +20,17 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         contacts: [],
         label: 'label',
         name: 'name',
-        onMention: () => {},
+        onMention: jest.fn(),
     };
 
     describe('render()', () => {
         beforeEach(() => {
-            jest.spyOn(document, 'querySelector').mockImplementation(() => ({
-                querySelector: () => ({ currentTime: 70 }),
-            }));
+            jest.spyOn(document, 'querySelector').mockImplementation(
+                () =>
+                    ({
+                        querySelector: () => ({ currentTime: 70 }),
+                    }) as unknown as Element,
+            );
         });
 
         afterEach(() => {
@@ -36,36 +40,36 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         test('should correctly render the component', () => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
 
-            expect(wrapper.find('FormInput').length).toBe(1);
+            expect(wrapper.find('FormInput')).toHaveLength(1);
         });
         test('should toggle the time stamp if isRequired and timestampedCommentsEnabled is true', () => {
             const wrapper = shallow(
                 <DraftJSMentionSelector {...requiredProps} isRequired={true} timestampLabel={'Toggle Timestamp'} />,
             );
-            expect(wrapper.find('Toggle').length).toEqual(1);
+            expect(wrapper.find('Toggle')).toHaveLength(1);
         });
 
         test('should not toggle the time stamp if isRequired is false', () => {
             const wrapper = shallow(
                 <DraftJSMentionSelector {...requiredProps} isRequired={false} timestampLabel={'Toggle Timestamp'} />,
             );
-            expect(wrapper.find('Toggle').length).toEqual(0);
+            expect(wrapper.find('Toggle')).toHaveLength(0);
         });
 
         test('should not toggle the time stamp if timestampLabel is undefined', () => {
             const wrapper = shallow(
                 <DraftJSMentionSelector {...requiredProps} isRequired={true} timestampLabel={undefined} />,
             );
-            expect(wrapper.find('Toggle').length).toEqual(0);
+            expect(wrapper.find('Toggle')).toHaveLength(0);
         });
 
         test('should show timestamp toggle on with timestamp if timestamplabel is defined and isRequired is true', () => {
             const props = { ...requiredProps };
             const wrapper = shallow(<DraftJSMentionSelector {...props} />);
             wrapper.setProps({ ...requiredProps, timestampLabel: 'Toggle Timestamp', isRequired: true });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             expect(instance.state.isTimestampToggledOn).toEqual(true);
-            expect(wrapper.find('Toggle').length).toEqual(1);
+            expect(wrapper.find('Toggle')).toHaveLength(1);
             expect(wrapper.find('Toggle').prop('isOn')).toEqual(true);
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
         });
@@ -73,11 +77,15 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
     describe('getDerivedStateFromProps()', () => {
         test('should return contacts from props', () => {
-            expect(DraftJSMentionSelector.getDerivedStateFromProps({ contacts: [] })).toEqual({ contacts: [] });
+            expect(
+                DraftJSMentionSelector.getDerivedStateFromProps({ contacts: [] } as DraftJSMentionSelector['props']),
+            ).toEqual({
+                contacts: [],
+            });
         });
 
         test('should return null if no contacts from props', () => {
-            expect(DraftJSMentionSelector.getDerivedStateFromProps({})).toEqual(null);
+            expect(DraftJSMentionSelector.getDerivedStateFromProps({} as DraftJSMentionSelector['props'])).toBeNull();
         });
     });
 
@@ -89,7 +97,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         const setupInstance = props => {
             const wrapper = shallow(<DraftJSMentionSelector {...props} />);
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             mockGetDerivedStateFromEditorState = jest.fn();
             mockCheckValidityIfAllowed = jest.fn();
@@ -188,7 +196,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         beforeEach(() => {
             wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-            instance = wrapper.instance();
+            instance = getInstance(wrapper);
             mockIsEditorStateEmpty = jest.fn();
             instance.isEditorStateEmpty = mockIsEditorStateEmpty;
         });
@@ -205,7 +213,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should return null if not new editor state nor dirty editor', () => {
             mockIsEditorStateEmpty.mockReturnValueOnce(true).mockReturnValueOnce(true);
-            expect(instance.getDerivedStateFromEditorState()).toEqual(null);
+            expect(instance.getDerivedStateFromEditorState()).toBeNull();
         });
     });
 
@@ -262,7 +270,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                     />,
                 );
 
-                const instance = wrapper.instance();
+                const instance = getInstance(wrapper);
                 const result = instance.getErrorFromValidityState();
 
                 expect(result).toEqual(expected);
@@ -281,12 +289,12 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         ].forEach(({ validateOnBlur }) => {
             const wrapper = mount(<DraftJSMentionSelector {...requiredProps} validateOnBlur={validateOnBlur} />);
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             afterEach(() => {
                 instance.handleBlur({
                     relatedTarget: document.createElement('div'),
-                });
+                } as unknown as React.FocusEvent);
             });
 
             if (validateOnBlur) {
@@ -311,7 +319,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             mockOnChange = jest.fn();
 
             wrapper = shallow(<DraftJSMentionSelector {...props} onChange={mockOnChange} />);
-            instance = wrapper.instance();
+            instance = getInstance(wrapper);
 
             spySetState = jest.spyOn(instance, 'setState');
         };
@@ -326,7 +334,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                     onChange={mockOnChange}
                 />,
             );
-            instance = wrapper.instance();
+            instance = getInstance(wrapper);
         };
 
         test('should call onChange and setState if internal editor state exists', () => {
@@ -402,7 +410,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             beforeEach(() => {
                 wrapper.setState({ isTouched });
@@ -429,7 +437,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         test('should call handleValidityStateUpdateHandler when called', () => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
 
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             sandbox.mock(instance).expects('handleValidityStateUpdateHandler');
 
             instance.checkValidity();
@@ -449,7 +457,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
             ${'has change type'} | ${editorStateWithChangeType} | ${false}
         `('should return whether the editor state is empty or not: $testcase', ({ editorState, expectedResult }) => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             expect(instance.isEditorStateEmpty(editorState)).toEqual(expectedResult);
         });
@@ -461,15 +469,15 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         });
 
         test('should return the correct video timestamp', () => {
-            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation((() => {
                 return {
                     querySelector: () => {
                         return { currentTime: 70 };
                     },
                 };
-            });
+            }) as unknown as typeof document.querySelector);
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
             expect(timestamp).toEqual('0:01:10');
             expect(timestampInMilliseconds).toEqual(70000);
@@ -477,44 +485,44 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should return the correct videoe timestamp if it has not been started yet', () => {
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation((() => {
                 return {
                     querySelector: () => {
                         return <video src="http://dummy.mp4" />;
                     },
                 };
-            });
-            const instance = wrapper.instance();
+            }) as unknown as typeof document.querySelector);
+            const instance = getInstance(wrapper);
             const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
             expect(timestamp).toEqual('0:00:00');
             expect(timestampInMilliseconds).toEqual(0);
         });
 
         test('should return 0:00:00 if the video is not found', () => {
-            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation((() => {
                 return {
                     querySelector: () => {
                         return null;
                     },
                 };
-            });
+            }) as unknown as typeof document.querySelector);
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
             expect(timestamp).toEqual('0:00:00');
             expect(timestampInMilliseconds).toEqual(0);
         });
 
         test('should return the correct precision of the timestamp', () => {
-            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation((() => {
                 return {
                     querySelector: () => {
                         return { currentTime: 176.34 };
                     },
                 };
-            });
+            }) as unknown as typeof document.querySelector);
             const wrapper = shallow(<DraftJSMentionSelector {...requiredProps} />);
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             const { timestamp, timestampInMilliseconds } = instance.getVideoTimestamp();
             expect(timestamp).toEqual('0:02:56');
             expect(timestampInMilliseconds).toEqual(176340);
@@ -532,13 +540,13 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
         };
 
         beforeEach(() => {
-            jest.spyOn(document, 'querySelector').mockImplementation(() => {
+            jest.spyOn(document, 'querySelector').mockImplementation((() => {
                 return {
                     querySelector: () => {
                         return { currentTime: 70 };
                     },
                 };
-            });
+            }) as unknown as typeof document.querySelector);
         });
 
         afterEach(() => {
@@ -547,7 +555,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should add timestamp to the editor state when the toggle is clicked', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
             expect(instance.state.isTimestampToggledOn).toEqual(true);
@@ -555,7 +563,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should remove timestamp from the editor state when the toggle is clicked off', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             wrapper.find('Toggle').simulate('change', { target: { checked: true } });
             expect(instance.state.internalEditorState.getCurrentContent().getPlainText()).toContain('0:01:10');
             wrapper.find('Toggle').simulate('change', { target: { checked: false } });
@@ -565,7 +573,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should add timestamp to the beginning of the editor state when the toggle is clicked on', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
             });
@@ -577,7 +585,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should remove timestamp from the beginning of the editor state when the toggle is clicked off', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
             });
@@ -589,7 +597,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should add an UNEDITABLE_TIMESTAMP_TEXT entity to the editor state when the toggle is clicked on', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
             });
@@ -603,7 +611,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should remove the UNEDITABLE_TIMESTAMP_TEXT entity from the editor state when the toggle is clicked off', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState({
                 internalEditorState: EditorState.createWithContent(ContentState.createFromText('this is coool!!!')),
             });
@@ -615,7 +623,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('decorator should recognize the UNEDITABLE_TIMESTAMP_TEXT entity', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             expect(instance.compositeDecorator).toBeDefined();
             expect(typeof instance.compositeDecorator.getDecorations).toBe('function');
             instance.setState({
@@ -638,14 +646,14 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
                     }
                     return false;
                 },
-                () => {},
+                () => undefined,
             );
             expect(entityFound).toBe(true);
         });
 
         test('should set toggle state to off when all content is deleted from the editor and a timestamp was present', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             // Set up initial content with timestamp
             instance.setState({
@@ -666,7 +674,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should handle mantain content when timetamp is removed', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             // Set up initial content with timestamp
             instance.setState({
@@ -689,7 +697,7 @@ describe('bcomponents/form-elements/draft-js-mention-selector/DraftJSMentionSele
 
         test('should handle backspace deletion of timestamp by user', () => {
             const wrapper = getTimestampedEnableComponent();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
 
             // Set up initial content with timestamp
             instance.setState({
