@@ -1,16 +1,17 @@
 import * as React from 'react';
+import { mount, shallow } from 'enzyme';
 
 import ScrollWrapper from '../ScrollWrapper';
 
 describe('components/scroll-wrapper/ScrollWrapper', () => {
     test('should render with default properties intact', () => {
-        const wrapper = shallow(<ScrollWrapper />);
+        const wrapper = shallow(<ScrollWrapper>{null}</ScrollWrapper>);
 
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should respect custom class names passed in', () => {
-        const wrapper = shallow(<ScrollWrapper className="test-classname" />);
+        const wrapper = shallow(<ScrollWrapper className="test-classname">{null}</ScrollWrapper>);
 
         expect(wrapper).toMatchSnapshot();
     });
