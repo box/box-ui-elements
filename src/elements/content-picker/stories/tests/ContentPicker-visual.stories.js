@@ -133,6 +133,9 @@ export default {
         token: global.TOKEN,
     },
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         msw: {
             handlers: [
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
