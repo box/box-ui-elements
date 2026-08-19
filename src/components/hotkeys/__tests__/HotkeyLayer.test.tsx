@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import { shallow } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
+import type { HotkeyConfig } from '../HotkeyRecord';
 import HotkeyLayer from '../HotkeyLayer';
 import HotkeyService from '../HotkeyService';
 
@@ -12,11 +13,13 @@ jest.mock('../HotkeyService');
 describe('components/hotkeys/HotkeyLayer', () => {
     // This is required to prevent actually invoking HotkeyService, which causes
     // HotkeyService tests to fail
-    HotkeyService.mockImplementation(() => {});
+    (HotkeyService as unknown as jest.Mock).mockImplementation(() => ({}));
+
+    const getInstance = (wrapper: ReturnType<typeof shallow>) => wrapper.instance() as InstanceType<typeof HotkeyLayer>;
 
     afterEach(() => {
         sandbox.verifyAndRestore();
-        HotkeyService.mockClear();
+        (HotkeyService as unknown as jest.Mock).mockClear();
     });
 
     describe('HotkeyContext.Provider', () => {
@@ -28,8 +31,8 @@ describe('components/hotkeys/HotkeyLayer', () => {
             );
 
             const provider = wrapper.find('ContextProvider');
-            expect(provider.length).toBe(1);
-            expect(provider.prop('value')).toEqual(wrapper.instance().hotkeyService);
+            expect(provider).toHaveLength(1);
+            expect(provider.prop('value')).toEqual(getInstance(wrapper).hotkeyService);
         });
     });
 
@@ -43,11 +46,11 @@ describe('components/hotkeys/HotkeyLayer', () => {
                     disableLifecycleMethods: true,
                 },
             );
-            wrapper.instance().hotkeyService = {
+            getInstance(wrapper).hotkeyService = {
                 destroyLayer: sandbox.mock(),
-            };
+            } as unknown as HotkeyService;
 
-            wrapper.instance().componentWillUnmount();
+            getInstance(wrapper).componentWillUnmount();
         });
     });
 
@@ -59,7 +62,7 @@ describe('components/hotkeys/HotkeyLayer', () => {
                 </HotkeyLayer>,
             );
 
-            expect(wrapper.find('div.content').length).toBe(1);
+            expect(wrapper.find('div.content')).toHaveLength(1);
         });
 
         describe('help modal enabled', () => {
@@ -70,8 +73,8 @@ describe('components/hotkeys/HotkeyLayer', () => {
                     </HotkeyLayer>,
                 );
 
-                expect(wrapper.find('Hotkeys').length).toBe(1);
-                expect(wrapper.find('HotkeyHelpModal').length).toBe(1);
+                expect(wrapper.find('Hotkeys')).toHaveLength(1);
+                expect(wrapper.find('HotkeyHelpModal')).toHaveLength(1);
                 expect(wrapper.contains(<div>hi</div>)).toBe(true);
             });
 
@@ -90,8 +93,9 @@ describe('components/hotkeys/HotkeyLayer', () => {
                 );
 
                 const hotkeys = wrapper.find('Hotkeys');
-                expect(hotkeys.prop('configs').length).toBe(2);
-                expect(hotkeys.prop('configs')[0].key).toEqual('?');
+                const configs = hotkeys.prop('configs') as HotkeyConfig[];
+                expect(configs).toHaveLength(2);
+                expect(configs[0].key).toEqual('?');
             });
         });
 
@@ -103,7 +107,7 @@ describe('components/hotkeys/HotkeyLayer', () => {
                     </HotkeyLayer>,
                 );
 
-                expect(wrapper.find('HotkeyHelpModal').length).toBe(0);
+                expect(wrapper.find('HotkeyHelpModal')).toHaveLength(0);
             });
         });
     });
@@ -112,10 +116,10 @@ describe('components/hotkeys/HotkeyLayer', () => {
         test('should return "?" shortcut to open help modal when help modal is enabled', () => {
             const wrapper = shallow(<HotkeyLayer enableHelpModal />);
 
-            sandbox.mock(wrapper.instance()).expects('openHelpModal');
+            sandbox.mock(getInstance(wrapper)).expects('openHelpModal');
 
-            const configs = wrapper.instance().getHotkeyConfigs();
-            configs[0].handler();
+            const configs = getInstance(wrapper).getHotkeyConfigs();
+            configs[0].handler({} as KeyboardEvent);
             expect(configs[0].key).toEqual('?');
         });
 
@@ -126,7 +130,7 @@ describe('components/hotkeys/HotkeyLayer', () => {
                 </HotkeyLayer>,
             );
 
-            const configs = wrapper.instance().getHotkeyConfigs();
+            const configs = getInstance(wrapper).getHotkeyConfigs();
             expect(configs[0].key).toEqual('!');
         });
 
@@ -137,8 +141,8 @@ describe('components/hotkeys/HotkeyLayer', () => {
                 </HotkeyLayer>,
             );
 
-            const configs = wrapper.instance().getHotkeyConfigs();
-            expect(configs.length).toBe(0);
+            const configs = getInstance(wrapper).getHotkeyConfigs();
+            expect(configs).toHaveLength(0);
         });
     });
 
@@ -146,7 +150,7 @@ describe('components/hotkeys/HotkeyLayer', () => {
         test('should set state.isHelpModalOpen to true', () => {
             const wrapper = shallow(<HotkeyLayer enableHelpModal />);
 
-            wrapper.instance().openHelpModal();
+            getInstance(wrapper).openHelpModal();
 
             expect(wrapper.state('isHelpModalOpen')).toBe(true);
         });
@@ -156,7 +160,7 @@ describe('components/hotkeys/HotkeyLayer', () => {
         test('should set state.isHelpModalOpen to false', () => {
             const wrapper = shallow(<HotkeyLayer enableHelpModal />);
 
-            wrapper.instance().closeHelpModal();
+            getInstance(wrapper).closeHelpModal();
 
             expect(wrapper.state('isHelpModalOpen')).toBe(false);
         });
