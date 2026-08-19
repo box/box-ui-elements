@@ -6,26 +6,37 @@ import sinon from 'sinon';
 import Flyout from '../Flyout';
 
 const sandbox = sinon.sandbox.create();
+const getFlyoutInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof Flyout>;
 
-const BOTTOM_CENTER = 'bottom-center';
-const BOTTOM_LEFT = 'bottom-left';
-const BOTTOM_RIGHT = 'bottom-right';
-const MIDDLE_LEFT = 'middle-left';
-const MIDDLE_RIGHT = 'middle-right';
-const TOP_CENTER = 'top-center';
-const TOP_LEFT = 'top-left';
-const TOP_RIGHT = 'top-right';
+const BOTTOM_CENTER = 'bottom-center' as const;
+const BOTTOM_LEFT = 'bottom-left' as const;
+const BOTTOM_RIGHT = 'bottom-right' as const;
+const MIDDLE_LEFT = 'middle-left' as const;
+const MIDDLE_RIGHT = 'middle-right' as const;
+const TOP_CENTER = 'top-center' as const;
+const TOP_LEFT = 'top-left' as const;
+const TOP_RIGHT = 'top-right' as const;
 
 describe('components/flyout/Flyout', () => {
-    const FakeButton = props => (
-        // eslint-disable-next-line react/button-has-type
+    const FakeButton = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
         <button className="fake-button" {...props}>
             Some Button
         </button>
     );
     FakeButton.displayName = 'FakeButton';
     /* eslint-disable */
-    const FakeOverlay = ({ onClick = () => {}, onClose = () => {}, shouldDefaultFocus = false, ...rest }) => (
+    interface FakeOverlayProps extends React.HTMLAttributes<HTMLDivElement> {
+        onClose?: () => void;
+        shouldDefaultFocus?: boolean;
+    }
+
+    const FakeOverlay = ({
+        onClick = () => {},
+        onClose = () => {},
+        shouldDefaultFocus = false,
+        ...rest
+    }: FakeOverlayProps) => (
         <div {...rest} className="overlay-wrapper is-visible">
             <div className="overlay">
                 <input type="text" />
@@ -37,7 +48,7 @@ describe('components/flyout/Flyout', () => {
     FakeOverlay.displayName = 'FakeOverlay';
     /* eslint-enable */
 
-    const getWrapper = (props = {}) => {
+    const getWrapper = (props: Partial<React.ComponentProps<typeof Flyout>> = {}) => {
         return mount(
             <Flyout {...props}>
                 <FakeButton />
@@ -76,7 +87,7 @@ describe('components/flyout/Flyout', () => {
         test('should correctly render a single child button with correct props', () => {
             const wrapper = getWrapper();
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
             const button = wrapper.find(FakeButton);
             expect(button.length).toBe(1);
 
@@ -99,7 +110,7 @@ describe('components/flyout/Flyout', () => {
 
             const button = wrapper.find(FakeButton);
             expect(button.prop('aria-expanded')).toEqual('true');
-            expect(button.prop('aria-controls')).toEqual(wrapper.instance().overlayID);
+            expect(button.prop('aria-controls')).toEqual(getFlyoutInstance(wrapper!).overlayID);
         });
 
         test('should not render child overlay when overlay is closed', () => {
@@ -117,7 +128,7 @@ describe('components/flyout/Flyout', () => {
         test('should correctly render a single child overlay with correct props when overlay is open', () => {
             const wrapper = getWrapper();
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
             act(() => {
                 wrapper.setState({
                     isVisible: true,
@@ -288,14 +299,14 @@ describe('components/flyout/Flyout', () => {
             'should handle clicks within overlay properly %s',
             ({ closeOnClick, hasClickableAncestor, shouldCloseOverlay }) => {
                 const wrapper = getWrapper({ closeOnClick });
-                const instance = wrapper.instance();
+                const instance = getFlyoutInstance(wrapper!);
                 act(() => {
                     instance.setState({
                         isVisible: true,
                     });
                 });
 
-                const event = {};
+                const event: { target?: EventTarget | null } = {};
                 if (hasClickableAncestor) {
                     event.target = document.getElementById('button');
                 } else {
@@ -308,19 +319,19 @@ describe('components/flyout/Flyout', () => {
                     sandbox.mock(instance).expects('handleOverlayClose').never();
                 }
                 act(() => {
-                    instance.handleOverlayClick(event);
+                    instance.handleOverlayClick(event as React.SyntheticEvent);
                 });
             },
         );
     });
 
     describe('handleButtonClick()', () => {
-        let instance;
-        let wrapper = null;
+        let instance: InstanceType<typeof Flyout>;
+        let wrapper: ReturnType<typeof getWrapper> | null = null;
 
         beforeEach(() => {
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = getFlyoutInstance(wrapper!);
         });
 
         afterEach(() => {
@@ -343,7 +354,7 @@ describe('components/flyout/Flyout', () => {
             test('should toggle isVisible state when called', () => {
                 const event = {
                     preventDefault: sandbox.stub(),
-                };
+                } as unknown as React.UIEvent;
                 act(() => {
                     instance.setState({
                         isVisible: currentIsVisible,
@@ -359,41 +370,39 @@ describe('components/flyout/Flyout', () => {
         test('should prevent default when called', () => {
             const event = {
                 preventDefault: sandbox.mock(),
-            };
+            } as unknown as React.UIEvent;
             instance.handleButtonClick(event);
         });
     });
 
     describe('handleButtonHover()', () => {
         test('should call openOverlay() when props.openOnHover is true', () => {
-            const event = {};
             const wrapper = getWrapper({ openOnHover: true });
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
             setTimeout(() => {
                 sandbox.mock(instance).expects('openOverlay');
             }, 310); // default timeout is 300ms
 
-            instance.handleButtonHover(event);
+            instance.handleButtonHover();
         });
 
         test('should not call openOverlay() when props.openOnHover is false', () => {
-            const event = {};
             const wrapper = getWrapper({ openOnHover: false });
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
             setTimeout(() => {
                 sandbox.mock(instance).expects('openOverlay').never();
             }, 310); // default timeout is 300ms
 
-            instance.handleButtonHover(event);
+            instance.handleButtonHover();
         });
 
         test('should be able to set custom timeouts for the openOnHover', () => {
             const timeout = 100;
-            const wrapper = getWrapper({ openOnHover: false, openOnHoverDebounceTimeout: timeout });
+            const wrapper = getWrapper({ openOnHover: false, openOnHoverDelayTimeout: timeout });
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
             setTimeout(() => {
                 sandbox.mock(instance).expects('openOverlay').never();
             }, timeout - 10);
@@ -402,7 +411,7 @@ describe('components/flyout/Flyout', () => {
                 sandbox.mock(instance).expects('openOverlay');
             }, timeout + 10);
 
-            instance.handleButtonHover({});
+            instance.handleButtonHover();
         });
     });
 
@@ -410,13 +419,13 @@ describe('components/flyout/Flyout', () => {
         test('should call closeOverlay', () => {
             const wrapper = getWrapper({ openOnHover: false });
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
 
             setTimeout(() => {
                 sandbox.mock(instance).expects('closeOverlay');
             }, 310);
 
-            instance.handleButtonHoverLeave({});
+            instance.handleButtonHoverLeave();
         });
     });
 
@@ -429,20 +438,21 @@ describe('components/flyout/Flyout', () => {
                 </Flyout>,
             );
 
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
             const openOverlaySpy = sandbox.spy(instance, 'openOverlay');
             const focusButtonSpy = sandbox.spy(instance, 'focusButton');
 
+            const preventDefault = sandbox.spy();
             const event = {
                 key: 'Enter',
-                preventDefault: sandbox.spy(),
-            };
+                preventDefault,
+            } as unknown as React.KeyboardEvent;
 
             instance.handleKeyPress(event);
 
             expect(openOverlaySpy.calledOnce).toBe(true);
             expect(focusButtonSpy.calledOnce).toBe(true);
-            expect(event.preventDefault.calledOnce).toBe(true);
+            expect(preventDefault.calledOnce).toBe(true);
         });
     });
 
@@ -459,17 +469,14 @@ describe('components/flyout/Flyout', () => {
         ].forEach(({ currentIsVisible, isVisibleAfterOverlayClosed }) => {
             test('should toggle isVisible state when called', () => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
-                const event = {
-                    preventDefault: sandbox.stub(),
-                };
+                const instance = getFlyoutInstance(wrapper!);
                 act(() => {
                     instance.setState({
                         isVisible: currentIsVisible,
                     });
                 });
                 act(() => {
-                    instance.closeOverlay(event);
+                    instance.closeOverlay();
                 });
                 expect(instance.state.isVisible).toEqual(isVisibleAfterOverlayClosed);
             });
@@ -478,11 +485,8 @@ describe('components/flyout/Flyout', () => {
         test('should call onClose when closeOverlay gets called', () => {
             const onClose = sandbox.mock();
             const wrapper = getWrapper({ onClose });
-            const instance = wrapper.instance();
-            const event = {
-                preventDefault: sandbox.stub(),
-            };
-            instance.closeOverlay(event);
+            const instance = getFlyoutInstance(wrapper!);
+            instance.closeOverlay();
         });
     });
 
@@ -499,17 +503,14 @@ describe('components/flyout/Flyout', () => {
         ].forEach(({ currentIsVisible, isVisibleAfterOverlayOpened }) => {
             test('should toggle isVisible state when called', () => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
-                const event = {
-                    preventDefault: sandbox.stub(),
-                };
+                const instance = getFlyoutInstance(wrapper!);
                 act(() => {
                     instance.setState({
                         isVisible: currentIsVisible,
                     });
                 });
                 act(() => {
-                    instance.openOverlay(event);
+                    instance.openOverlay();
                 });
                 expect(instance.state.isVisible).toEqual(isVisibleAfterOverlayOpened);
             });
@@ -518,23 +519,20 @@ describe('components/flyout/Flyout', () => {
         test('should call onOpen when openOverlay gets called', () => {
             const onOpen = sandbox.mock();
             const wrapper = getWrapper({ onOpen });
-            const instance = wrapper.instance();
-            const event = {
-                preventDefault: sandbox.stub(),
-            };
-            instance.openOverlay(event);
+            const instance = getFlyoutInstance(wrapper!);
+            instance.openOverlay();
         });
     });
 
     describe('tests requiring body mounting', () => {
-        let attachTo;
-        let wrapper = null;
+        let attachTo: HTMLDivElement;
+        let wrapper: ReturnType<typeof mount> | null = null;
 
         /**
          * Helper method to mount things to the correct DOM element
          * this makes it easier to clean up after ourselves after each test.
          */
-        const mountToBody = component => {
+        const mountToBody = (component: React.ReactElement) => {
             wrapper = mount(component, { attachTo });
         };
 
@@ -565,7 +563,7 @@ describe('components/flyout/Flyout', () => {
                     </Flyout>,
                 );
 
-                const instance = wrapper.instance();
+                const instance = getFlyoutInstance(wrapper!);
                 const overlayButtonEl = document.getElementById(instance.overlayButtonID);
                 sandbox.mock(overlayButtonEl).expects('focus');
 
@@ -736,8 +734,8 @@ describe('components/flyout/Flyout', () => {
                             </Flyout>,
                         );
 
-                        const instance = wrapper.instance();
-                        const event = {};
+                        const instance = getFlyoutInstance(wrapper!);
+                        const event: { target?: EventTarget | null } = {};
 
                         act(() => {
                             instance.setState({
@@ -759,7 +757,7 @@ describe('components/flyout/Flyout', () => {
                             event.target = document.createElement('div');
                         }
 
-                        instance.handleDocumentClickOrWindowBlur(event);
+                        instance.handleDocumentClickOrWindowBlur(event as unknown as MouseEvent);
                     });
                 },
             );
@@ -771,7 +769,7 @@ describe('components/flyout/Flyout', () => {
                         <FakeOverlay />
                     </Flyout>,
                 );
-                const instance = wrapper.instance();
+                const instance = getFlyoutInstance(wrapper!);
                 const el = document.createElement('div');
                 el.innerHTML = '<div class="class"><div class="target"></div></div>';
 
@@ -779,7 +777,7 @@ describe('components/flyout/Flyout', () => {
 
                 instance.handleDocumentClickOrWindowBlur({
                     target: el.querySelector('.target'),
-                });
+                } as unknown as MouseEvent);
             });
 
             test('should close overlay when event target is not inside portaled classes element', () => {
@@ -789,13 +787,13 @@ describe('components/flyout/Flyout', () => {
                         <FakeOverlay />
                     </Flyout>,
                 );
-                const instance = wrapper.instance();
+                const instance = getFlyoutInstance(wrapper!);
 
                 sandbox.mock(instance).expects('closeOverlay');
 
                 instance.handleDocumentClickOrWindowBlur({
                     target: document.createElement('div'),
-                });
+                } as unknown as MouseEvent);
             });
         });
     });
@@ -829,7 +827,7 @@ describe('components/flyout/Flyout', () => {
         ].forEach(({ prevIsVisible, currIsVisible, shouldAddEventListener, shouldRemoveEventListener }) => {
             test('should remove and add event listeners properly', () => {
                 const wrapper = getWrapper({ isVisibleByDefault: prevIsVisible });
-                const instance = wrapper.instance();
+                const instance = getFlyoutInstance(wrapper!);
                 const documentMock = sandbox.mock(document);
 
                 if (shouldAddEventListener) {
@@ -864,7 +862,7 @@ describe('components/flyout/Flyout', () => {
         ].forEach(({ isVisible, shouldRemoveEventListener }) => {
             test('should remove event listeners only when the overlay is visible', () => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
+                const instance = getFlyoutInstance(wrapper!);
                 const documentMock = sandbox.mock(document);
 
                 act(() => {
@@ -888,7 +886,7 @@ describe('components/flyout/Flyout', () => {
     describe('handleOverlayClose()', () => {
         test('should call focusButton() and closeOverlay() when called', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getFlyoutInstance(wrapper!);
 
             sandbox.mock(instance).expects('focusButton');
             sandbox.mock(instance).expects('closeOverlay');

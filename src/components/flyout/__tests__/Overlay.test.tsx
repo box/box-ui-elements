@@ -5,7 +5,9 @@ import sinon from 'sinon';
 import Overlay from '../Overlay';
 
 const sandbox = sinon.sandbox.create();
-let clock;
+let clock: sinon.SinonFakeTimers;
+const getOverlayInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof Overlay>;
 
 describe('components/flyout/Overlay', () => {
     beforeEach(() => {
@@ -44,8 +46,8 @@ describe('components/flyout/Overlay', () => {
                 </Overlay>,
             );
 
-            const instance = wrapper.instance();
-            sandbox.stub(instance, 'focusFirstItem');
+            const instance = getOverlayInstance(wrapper);
+            sandbox.stub(instance, 'focusFirstItem' as keyof InstanceType<typeof Overlay>);
 
             instance.closeOverlay();
             clock.tick(0);
@@ -59,8 +61,8 @@ describe('components/flyout/Overlay', () => {
                 </Overlay>,
             );
 
-            const instance = wrapper.instance();
-            sandbox.stub(instance, 'focusFirstItem');
+            const instance = getOverlayInstance(wrapper);
+            sandbox.stub(instance, 'focusFirstItem' as keyof InstanceType<typeof Overlay>);
 
             instance.closeOverlay();
             clock.tick(0);
@@ -69,7 +71,7 @@ describe('components/flyout/Overlay', () => {
 
     describe('handleKeyDown()', () => {
         const id = 'overlay-0';
-        let wrapper;
+        let wrapper: ReturnType<typeof mount>;
 
         beforeEach(() => {
             wrapper = mount(
@@ -85,20 +87,20 @@ describe('components/flyout/Overlay', () => {
                 stopPropagation: sandbox.mock(),
                 preventDefault: sandbox.mock(),
             };
-            const instance = wrapper.instance();
+            const instance = getOverlayInstance(wrapper);
             sandbox.mock(instance).expects('closeOverlay');
-            instance.handleOverlayKeyDown(event);
+            instance.handleOverlayKeyDown(event as unknown as React.KeyboardEvent);
         });
 
         test('should not prevent default or stop propagation when event.key is not Escape', () => {
-            const instance = wrapper.instance();
+            const instance = getOverlayInstance(wrapper);
             const event = {
                 key: 'LOL',
                 target: { id: 'randomstuff' },
                 stopPropagation: sandbox.mock().never(),
                 preventDefault: sandbox.mock().never(),
             };
-            instance.handleOverlayKeyDown(event);
+            instance.handleOverlayKeyDown(event as unknown as React.KeyboardEvent);
         });
     });
 });
