@@ -1,4 +1,3 @@
-// @flow
 import waitForInputFilter from '../waitForInputFilter';
 
 describe('components/pill-selector-dropdown/filters/waitForInputFilter', () => {

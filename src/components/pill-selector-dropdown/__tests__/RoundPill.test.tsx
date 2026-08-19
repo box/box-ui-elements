@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
+
 import RoundPill from '../RoundPill';
 
 describe('components/RoundPill-selector-dropdown/RoundPill', () => {
@@ -71,9 +73,15 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
 
     test('should do nothing when getPillImageUrl returns a rejected Promise', () => {
         const wrapper = shallow(
-            <RoundPill name="name" id="123" showAvatar getPillImageUrl={() => Promise.reject(new Error())} />,
+            <RoundPill
+                text="name"
+                onRemove={onRemoveStub}
+                id="123"
+                showAvatar
+                getPillImageUrl={() => Promise.reject(new Error())}
+            />,
         );
-        expect(wrapper.state('avatarUrl')).toBe(undefined);
+        expect(wrapper.state('avatarUrl')).toBeUndefined();
         const instance = wrapper.instance();
 
         instance.componentDidMount();
@@ -81,54 +89,76 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         setImmediate(() => {
             wrapper.update();
             expect(wrapper.state('avatarUrl')).toBeUndefined();
-            expect(wrapper.find('LabelPillIcon').length).toBe(2);
-            expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(0);
+            expect(wrapper.find('LabelPillIcon')).toHaveLength(2);
+            expect(wrapper.find('LabelPillIcon[avatarUrl]')).toHaveLength(0);
         });
     });
 
     test.each([
-        [contact => `/test?id=${contact.id}`, '/test?id=123'],
-        [contact => Promise.resolve(`/test?id=${contact.id}`), '/test?id=123'],
-    ])('should use the avatar URL when the prop (and show avatar) are provided', (getPillImageUrl, expected) => {
-        const wrapper = shallow(<RoundPill name="name" id="123" showAvatar getPillImageUrl={getPillImageUrl} />);
-        expect(wrapper.state('avatarUrl')).toBe(undefined);
-        const instance = wrapper.instance();
+        [(contact: { id: string }) => `/test?id=${contact.id}`, '/test?id=123'],
+        [(contact: { id: string }) => Promise.resolve(`/test?id=${contact.id}`), '/test?id=123'],
+    ])(
+        'should use the avatar URL when the prop (and show avatar) are provided',
+        (getPillImageUrl: (contact: { id: string }) => string | Promise<string>, expected: string) => {
+            const wrapper = shallow(
+                <RoundPill text="name" onRemove={onRemoveStub} id="123" showAvatar getPillImageUrl={getPillImageUrl} />,
+            );
+            expect(wrapper.state('avatarUrl')).toBeUndefined();
+            const instance = wrapper.instance();
 
-        instance.componentDidMount();
+            instance.componentDidMount();
 
-        setImmediate(() => {
-            wrapper.update();
-            expect(wrapper.state('avatarUrl')).toBe(expected);
-            expect(wrapper.find('LabelPillIcon').length).toBe(2);
-            expect(wrapper.find('LabelPillIcon[avatarUrl]').props().avatarUrl).toEqual(expected);
-        });
-    });
+            setImmediate(() => {
+                wrapper.update();
+                expect(wrapper.state('avatarUrl')).toBe(expected);
+                expect(wrapper.find('LabelPillIcon')).toHaveLength(2);
+                expect((wrapper.find('LabelPillIcon[avatarUrl]').props() as { avatarUrl?: string }).avatarUrl).toEqual(
+                    expected,
+                );
+            });
+        },
+    );
 
     test('should not have the avatar URL when the id prop is missing', () => {
         const wrapper = shallow(
-            <RoundPill name="name" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
+            <RoundPill
+                text="name"
+                onRemove={onRemoveStub}
+                showAvatar
+                getPillImageUrl={(contact: { id: string }) => `/test?id=${contact.id}`}
+            />,
         );
 
-        expect(wrapper.find('LabelPillIcon').length).toBe(2);
-        expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(0);
+        expect(wrapper.find('LabelPillIcon')).toHaveLength(2);
+        expect(wrapper.find('LabelPillIcon[avatarUrl]')).toHaveLength(0);
     });
 
-    test.each([['user'], [undefined], [null]])('should have avatar URL when the type prop is %s', type => {
-        const contactID = '123';
-        const getPillImageUrlMock = jest.fn().mockImplementation(() => Promise.resolve(`/test?id=${contactID}`));
-        const wrapper = shallow(
-            <RoundPill name="name" id={contactID} type={type} showAvatar getPillImageUrl={getPillImageUrlMock} />,
-        );
-        expect(wrapper.state('avatarUrl')).toBe(undefined);
-        const instance = wrapper.instance();
+    test.each([['user'], [undefined], [null]])(
+        'should have avatar URL when the type prop is %s',
+        (type: string | undefined | null) => {
+            const contactID = '123';
+            const getPillImageUrlMock = jest.fn().mockImplementation(() => Promise.resolve(`/test?id=${contactID}`));
+            const wrapper = shallow(
+                <RoundPill
+                    text="name"
+                    onRemove={onRemoveStub}
+                    id={contactID}
+                    type={type}
+                    showAvatar
+                    getPillImageUrl={getPillImageUrlMock}
+                />,
+            );
+            expect(wrapper.state('avatarUrl')).toBeUndefined();
+            const instance = wrapper.instance();
 
-        instance.componentDidMount();
+            instance.componentDidMount();
 
-        setImmediate(() => {
-            wrapper.update();
-            expect(wrapper.find('LabelPillIcon').length).toBe(2);
-            expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(1);
-            expect(getPillImageUrlMock).toHaveBeenCalledWith({ id: contactID, type });
-        });
-    });
+            setImmediate(() => {
+                wrapper.update();
+                expect(wrapper.find('LabelPillIcon')).toHaveLength(2);
+                expect(wrapper.find('LabelPillIcon[avatarUrl]')).toHaveLength(1);
+                expect(getPillImageUrlMock).toHaveBeenCalledWith({ id: contactID, type });
+            });
+        },
+    );
 });

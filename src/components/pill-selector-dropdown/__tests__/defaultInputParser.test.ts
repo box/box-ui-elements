@@ -1,7 +1,8 @@
 import defaultInputParser from '../defaultInputParser';
+import type { Option } from '../flowTypes';
 
 describe('components/pill-selector-dropdown/defaultInputParser', () => {
-    let options;
+    let options: Array<Option>;
 
     beforeEach(() => {
         options = [
@@ -45,7 +46,7 @@ describe('components/pill-selector-dropdown/defaultInputParser', () => {
     });
 
     test('should only map manual input tokens that are an exact, case insensitive match', () => {
-        let mappedOptions;
+        let mappedOptions: Array<Option>;
         let inputValue = 'Korea';
 
         mappedOptions = defaultInputParser(inputValue, options, []);

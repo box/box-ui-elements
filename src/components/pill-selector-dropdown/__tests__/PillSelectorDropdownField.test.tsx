@@ -1,13 +1,24 @@
-// @flow
-
 import * as React from 'react';
+import { shallow } from 'enzyme';
+
 import defaultInputParser from '../defaultInputParser';
 import PillSelectorDropdownField from '../PillSelectorDropdownField';
 
 jest.mock('../defaultInputParser', () => jest.fn());
 
+const getInstance = (wrapper: { instance: () => React.Component }) =>
+    wrapper.instance() as InstanceType<typeof PillSelectorDropdownField> & {
+        createFakeEventTarget: (name: string, value?: unknown) => { target: { name: string; value?: unknown } };
+        handleBlur: (event?: unknown) => void;
+        handleInput: (text: string, event?: unknown) => void;
+        handleRemove: (option: unknown, index: number) => void;
+        handleSelect: (options: Array<{ displayText?: string; value?: string }>) => void;
+    };
+
 describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
-    const getWrapper = props => shallow(<PillSelectorDropdownField field={{}} form={{}} {...props} />);
+    // Enzyme tests pass partial Formik field/form stubs
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const getWrapper = (props: any = {}): any => shallow(<PillSelectorDropdownField field={{}} form={{}} {...props} />);
 
     test('should render PillSelectorDropdown with default dropdown renderer', () => {
         const wrapper = getWrapper({
@@ -45,7 +56,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
     describe('createFakeEventTarget()', () => {
         test('should return a event target like object', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             expect(instance.createFakeEventTarget('foo', 'bar')).toEqual({
                 target: { name: 'foo', value: 'bar' },
             });
@@ -55,7 +66,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
     describe('handleInput()', () => {
         test('should set input value in state', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleInput('foo');
             expect(instance.setState).toHaveBeenCalledWith({ inputText: 'foo' });
@@ -63,7 +74,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should call handleBlur() when input text is cleared out', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleBlur = jest.fn();
             instance.setState = jest.fn();
             instance.forceUpdate();
@@ -74,7 +85,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should be called when underlying pill selector onInput is called', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleInput = jest.fn();
             instance.forceUpdate();
             wrapper.prop('onInput')();
@@ -84,7 +95,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
         test('should call its onInput prop when provided', () => {
             const onInput = jest.fn();
             const wrapper = getWrapper({ onInput });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleInput('foo');
             expect(onInput).toHaveBeenCalledWith('foo', undefined);
         });
@@ -100,7 +111,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
                     value: [{ displayText: 'foo' }],
                 },
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleSelect([{ displayText: 'bar' }]);
             expect(onChange).toHaveBeenCalledWith({
@@ -117,7 +128,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
                     value: [{ displayText: 'foo' }],
                 },
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleSelect([{ displayText: '   ' }, { displayText: '   ' }]);
             expect(onChange).toHaveBeenCalledWith({
@@ -127,7 +138,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should be called when onSelect is called', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleSelect = jest.fn();
             instance.forceUpdate();
             wrapper.prop('onSelect')();
@@ -145,7 +156,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
                     value: ['foo', 'bar'],
                 },
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleRemove('bar', 1);
             expect(onChange).toHaveBeenCalledWith({ target: { name: 'pill', value: ['foo'] } });
@@ -153,7 +164,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should be called when onRemove is called', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleRemove = jest.fn();
             instance.forceUpdate();
             wrapper.prop('onRemove')();
@@ -168,7 +179,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
                     onChange,
                 },
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleRemove('bar', 1);
             expect(onChange).toHaveBeenCalledWith({ target: { name: 'pill', value: [] } });
@@ -188,10 +199,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
         ];
 
         test('should call default parser when inputParser is not provided', () => {
-            const field = { value: [options[0]] };
+            const field = { value: [options[0]] } as const;
             const wrapper = getWrapper({ inputParser: undefined, options, field });
 
-            wrapper.instance().handleParseItems('abc');
+            getInstance(wrapper).handleParseItems('abc');
 
             expect(defaultInputParser).toHaveBeenCalledTimes(1);
             expect(defaultInputParser).toHaveBeenCalledWith('abc', options, field.value);
@@ -199,10 +210,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should call inputParser with inputValue, options and selectedOptions', () => {
             const inputParser = jest.fn();
-            const field = { value: [options[0]] };
+            const field = { value: [options[0]] } as const;
             const wrapper = getWrapper({ inputParser, options, field });
 
-            wrapper.instance().handleParseItems('abc');
+            getInstance(wrapper).handleParseItems('abc');
 
             expect(inputParser).toHaveBeenCalledTimes(1);
             expect(inputParser).toHaveBeenCalledWith('abc', options, field.value);
@@ -210,10 +221,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should default value to empty array when its not been initialized', () => {
             const inputParser = jest.fn();
-            const field = {};
+            const field: Record<string, unknown> = {} as Record<string, unknown>;
             const wrapper = getWrapper({ inputParser, options, field });
 
-            wrapper.instance().handleParseItems('abc');
+            getInstance(wrapper).handleParseItems('abc');
 
             expect(inputParser).toHaveBeenCalledTimes(1);
             expect(inputParser).toHaveBeenCalledWith('abc', options, []);
@@ -228,7 +239,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
                     onBlur,
                 },
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleBlur('foo');
             expect(onBlur).toHaveBeenCalledWith('foo');
@@ -242,7 +253,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
                     onBlur,
                 },
             });
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.setState = jest.fn();
             instance.handleBlur();
             expect(onBlur).toHaveBeenCalledWith({ target: { name: 'pill' } });
@@ -250,7 +261,7 @@ describe('components/pill-selector-dropdown/PillSelectorDropdownField', () => {
 
         test('should be called when onBlur is called', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = getInstance(wrapper);
             instance.handleBlur = jest.fn();
             instance.forceUpdate();
             wrapper.prop('onBlur')();
