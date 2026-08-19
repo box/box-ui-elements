@@ -1,10 +1,11 @@
-// @flow
-
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import SelectField, { onSelect } from '../SelectField';
+import type { SelectFieldProps } from '../SelectField';
 
 describe('components/select-feild/SelectField', () => {
-    const getWrapper = (props = {}) => shallow(<SelectField {...props} />);
+    const getWrapper = (props: Record<string, unknown> = {}) =>
+        shallow(<SelectField {...(props as unknown as SelectFieldProps)} />);
 
     test('should render properly for single select field', () => {
         const wrapper = getWrapper({
