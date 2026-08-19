@@ -2,22 +2,24 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import { SearchFormBaseIntl as SearchForm } from '../SearchForm';
+import { SearchFormBaseIntl, SearchFormProps } from '../SearchForm';
 
-let clock;
 const sandbox = sinon.sandbox.create();
-const intlShape = {
-    formatMessage: message => message.id,
-};
+const SearchForm = SearchFormBaseIntl as React.ComponentType<Partial<Omit<SearchFormProps, 'intl'>>>;
+
+interface SearchFormInstance extends React.Component<SearchFormProps, { isEmpty: boolean }> {
+    onChangeHandler: (event: { target: { value: string | null } }) => void;
+    onClearHandler: (event?: React.SyntheticEvent<HTMLButtonElement>) => void;
+    searchInput: HTMLInputElement | null;
+    setInputRef: (element: HTMLInputElement | null) => void;
+}
+
+const getSearchFormInstance = (wrapper: { instance: () => React.Component }): SearchFormInstance =>
+    wrapper.instance() as SearchFormInstance;
 
 describe('components/search-form/SearchForm', () => {
-    beforeEach(() => {
-        clock = sinon.useFakeTimers();
-    });
-
     afterEach(() => {
         sandbox.verifyAndRestore();
-        clock.restore();
     });
 
     test('should correctly render default component', () => {
@@ -31,18 +33,8 @@ describe('components/search-form/SearchForm', () => {
         expect(wrapper.find('input').prop('name')).toEqual('search');
         expect(wrapper.find('form').hasClass('search-form')).toBeTruthy();
         expect(wrapper.find('input').hasClass('search-input')).toBeTruthy();
-        expect(
-            wrapper
-                .find('button')
-                .at(0)
-                .hasClass('search-button'),
-        ).toBeTruthy();
-        expect(
-            wrapper
-                .find('button')
-                .at(1)
-                .hasClass('clear-button'),
-        ).toBeTruthy();
+        expect(wrapper.find('button').at(0).hasClass('search-button')).toBeTruthy();
+        expect(wrapper.find('button').at(1).hasClass('clear-button')).toBeTruthy();
     });
 
     test('should render search-button as a div when onSubmit is not present', () => {
@@ -59,7 +51,7 @@ describe('components/search-form/SearchForm', () => {
                     },
                 ],
             },
-        };
+        } as const;
         const onSubmitMock = jest.fn();
 
         afterEach(() => {
@@ -109,8 +101,8 @@ describe('components/search-form/SearchForm', () => {
     test('should generate a hidden input field with correct name and value', () => {
         const queryParams = {
             token: '123',
-            number: 123,
-        };
+            number: '456',
+        } as const;
         const wrapper = mount(<SearchForm name="query" placeholder="search" queryParams={queryParams} />);
         const inputs = wrapper.find('input');
         expect(inputs.at(0).prop('name')).toEqual('query');
@@ -118,25 +110,21 @@ describe('components/search-form/SearchForm', () => {
         expect(inputs.at(1).prop('value')).toEqual('123');
         expect(inputs.at(1).prop('type')).toEqual('hidden');
         expect(inputs.at(2).prop('name')).toEqual('number');
-        expect(inputs.at(2).prop('value')).toEqual(123);
+        expect(inputs.at(2).prop('value')).toEqual('456');
         expect(inputs.at(2).prop('type')).toEqual('hidden');
     });
 
     test('should set the onClearHandler to the clear button onClick prop', () => {
-        const wrapper = shallow(<SearchForm intl={intlShape} />).shallow();
+        const wrapper = shallow(<SearchForm />).shallow();
         // Sift through the nested HOCs to find the correct element
-        const searchActions = wrapper
-            .find('LoadableSearchActions')
-            .dive()
-            .dive()
-            .dive();
-        const { onClearHandler } = wrapper.instance();
+        const searchActions = wrapper.find('LoadableSearchActions').dive().dive().dive();
+        const { onClearHandler } = getSearchFormInstance(wrapper);
         expect(searchActions.find('.clear-button').prop('onClick')).toEqual(onClearHandler);
     });
 
     describe('componentDidUpdate()', () => {
         test('should set isEmpty state to true when controlled input becomes empty', () => {
-            const wrapper = shallow(<SearchForm intl={intlShape} value="test" />).shallow();
+            const wrapper = shallow(<SearchForm value="test" />).shallow();
             wrapper.setState({ isEmpty: false });
 
             wrapper.setProps({ value: '' });
@@ -148,17 +136,20 @@ describe('components/search-form/SearchForm', () => {
     describe('onClearHandler()', () => {
         test('should trigger onChange with empty string', () => {
             const onChange = sandbox.spy();
-            const wrapper = shallow(<SearchForm intl={intlShape} onChange={onChange} />).shallow();
-            wrapper.instance().searchInput = { value: 'abc' };
-            wrapper.instance().onClearHandler();
+            const wrapper = shallow(<SearchForm onChange={onChange} />).shallow();
+            const instance = getSearchFormInstance(wrapper);
+            instance.searchInput = document.createElement('input');
+            instance.searchInput.value = 'abc';
+            instance.onClearHandler();
             sinon.assert.calledWith(onChange, '');
         });
 
         test('should set isEmpty state to true', () => {
-            const wrapper = shallow(<SearchForm intl={intlShape} name="query" />).shallow();
-            const instance = wrapper.instance();
+            const wrapper = shallow(<SearchForm name="query" />).shallow();
+            const instance = getSearchFormInstance(wrapper);
             instance.setState({ isEmpty: false });
-            instance.searchInput = { value: 'abc' };
+            instance.searchInput = document.createElement('input');
+            instance.searchInput.value = 'abc';
 
             instance.onClearHandler();
 
@@ -166,15 +157,16 @@ describe('components/search-form/SearchForm', () => {
         });
 
         test('should stop propagation if stopDefaultEvent param is passed', () => {
-            const wrapper = shallow(
-                <SearchForm intl={intlShape} name="query" shouldPreventClearEventPropagation />,
-            ).shallow();
-            const instance = wrapper.instance();
+            const wrapper = shallow(<SearchForm name="query" shouldPreventClearEventPropagation />).shallow();
+            const instance = getSearchFormInstance(wrapper);
             const stopPropagationStub = sandbox.stub();
             instance.setState({ isEmpty: false });
-            instance.searchInput = { value: 'abc' };
+            instance.searchInput = document.createElement('input');
+            instance.searchInput.value = 'abc';
 
-            instance.onClearHandler({ stopPropagation: stopPropagationStub });
+            instance.onClearHandler({
+                stopPropagation: stopPropagationStub,
+            } as unknown as React.SyntheticEvent<HTMLButtonElement>);
 
             expect(stopPropagationStub.calledOnce).toBe(true);
         });
@@ -208,8 +200,8 @@ describe('components/search-form/SearchForm', () => {
             },
         ].forEach(({ value, isEmpty }) => {
             test('should set isEmpty state correctly', () => {
-                const wrapper = shallow(<SearchForm intl={intlShape} name="query" />).shallow();
-                const instance = wrapper.instance();
+                const wrapper = shallow(<SearchForm name="query" />).shallow();
+                const instance = getSearchFormInstance(wrapper);
 
                 instance.onChangeHandler({
                     target: {
@@ -225,16 +217,16 @@ describe('components/search-form/SearchForm', () => {
     test('should render loading indicator and not search/clear buttons when isLoading is true', () => {
         const wrapper = mount(<SearchForm isLoading placeholder="search" />);
 
-        expect(wrapper.find('.action-button').length).toEqual(0);
-        expect(wrapper.find('.search-form-loading-indicator').hostNodes().length).toEqual(1);
+        expect(wrapper.find('.action-button')).toHaveLength(0);
+        expect(wrapper.find('.search-form-loading-indicator').hostNodes()).toHaveLength(1);
     });
 
     test('should call getSearchInput prop when it exists', () => {
         const getSearchInputSpy = sandbox.spy();
-        const searchInputMock = () => <div className="search-input" />;
+        const searchInputMock = document.createElement('input');
         const wrapper = shallow(<SearchForm getSearchInput={getSearchInputSpy} />).shallow();
 
-        wrapper.instance().setInputRef(searchInputMock);
+        getSearchFormInstance(wrapper).setInputRef(searchInputMock);
 
         expect(getSearchInputSpy.calledOnce).toBe(true);
     });
@@ -244,6 +236,6 @@ describe('components/search-form/SearchForm', () => {
 
         const input = wrapper.find('input');
 
-        expect(input.props().getSearchInput).toBeFalsy();
+        expect(input.props()).not.toHaveProperty('getSearchInput');
     });
 });
