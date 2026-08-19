@@ -73,4 +73,9 @@ export const shareDialogShareAccessSelect = {
 export default {
     title: 'Elements/ContentExplorer/tests/ShareDialog/visual',
     component: ShareDialog,
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };

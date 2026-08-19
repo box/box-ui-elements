@@ -52,8 +52,5 @@ export default {
     component: ReadableTime,
     parameters: {
         notes,
-        chromatic: {
-            disableSnapshot: true,
-        },
     },
 };
