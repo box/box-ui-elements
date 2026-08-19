@@ -1,26 +1,24 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import range from 'lodash/range';
-import sinon from 'sinon';
 
-import SlideCarousel from '../SlideCarousel';
+import SlideCarousel, { type SlideCarouselProps } from '../SlideCarousel';
 import SlideCarouselPrimitive from '../SlideCarouselPrimitive';
 import Slide from '../Slide';
 
-const getSlides = numSlides => range(numSlides).map(i => shallow(<Slide>`Slide ${i}`</Slide>));
+type SlideCarouselInstance = InstanceType<typeof SlideCarousel>;
+
+const getSlides = (numSlides: number) =>
+    range(numSlides).map(i => shallow(<Slide>`Slide ${i}`</Slide>)) as unknown as React.ReactNode;
 
 describe('components/slide-carousel/SlideCarousel', () => {
-    const sandbox = sinon.sandbox.create();
-
-    const defaultProps = {
+    const defaultProps: SlideCarouselProps = {
         children: getSlides(5),
         initialIndex: 1,
     };
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
-    const getWrapper = props => shallow(<SlideCarousel {...defaultProps} {...props} />);
+    const getWrapper = (props: Partial<SlideCarouselProps> = {}) =>
+        shallow(<SlideCarousel {...defaultProps} {...props} />);
 
     describe('construction()', () => {
         test('should initialize selectedIndex as the initialIndex prop', () => {
@@ -64,12 +62,11 @@ describe('components/slide-carousel/SlideCarousel', () => {
         test('should generate ID and pass to child', () => {
             const wrapper = getWrapper();
 
-            expect(wrapper.prop('idPrefix')).toEqual(wrapper.instance().id);
+            expect(wrapper.prop('idPrefix')).toEqual((wrapper.instance() as SlideCarouselInstance).id);
         });
 
         test('should pass to immediate child 0 if the number of children is zero', () => {
             const wrapper = getWrapper({
-                id: undefined,
                 children: getSlides(0),
             });
 
@@ -77,7 +74,7 @@ describe('components/slide-carousel/SlideCarousel', () => {
         });
 
         test('should pass to immediate child 0 if state.selectedIndex is less than 0', () => {
-            const wrapper = getWrapper({ id: undefined });
+            const wrapper = getWrapper();
             wrapper.setState({
                 selectedIndex: -1,
             });
@@ -107,11 +104,12 @@ describe('components/slide-carousel/SlideCarousel', () => {
     describe('setSelectedIndex()', () => {
         test('should update selectedIndex when setSelectedIndex is called', () => {
             const wrapper = getWrapper({ children: getSlides(7) });
-            wrapper.instance().setSelectedIndex(3);
+            const instance = wrapper.instance() as SlideCarouselInstance;
+            instance.setSelectedIndex(3);
 
             expect(wrapper.state('selectedIndex')).toBe(3);
 
-            wrapper.instance().setSelectedIndex(1);
+            instance.setSelectedIndex(1);
 
             expect(wrapper.state('selectedIndex')).toBe(1);
         });

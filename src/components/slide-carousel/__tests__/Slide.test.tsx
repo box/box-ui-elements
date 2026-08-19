@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import Slide from '../Slide';
 
@@ -8,7 +9,7 @@ describe('components/slide-carousel/Slide', () => {
         children: <p>Holla die Waldfee</p>,
     };
 
-    const getWrapper = props => shallow(<Slide {...defaultProps} {...props} />);
+    const getWrapper = (props: Record<string, unknown> = {}) => shallow(<Slide {...defaultProps} {...props} />);
 
     test('should render a container div', () => {
         const wrapper = getWrapper();
