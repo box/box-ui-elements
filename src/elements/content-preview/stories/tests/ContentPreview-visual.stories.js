@@ -243,6 +243,7 @@ export default {
     },
     parameters: {
         chromatic: {
+            disableSnapshot: false,
             ignoreSelectors: ['[class^="bp_avatar_module_avatar--"] > [class^="bp_avatar_module_text--"]'],
         },
         msw: {
