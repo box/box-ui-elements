@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { METADATA_SCOPE_ENTERPRISE } from '../../../constants';
 import { FeatureProvider } from '../../common/feature-checking';
-import { act, renderHook, waitFor } from '../../../test-utils/testing-library';
+import { renderHook, waitFor } from '../../../test-utils/testing-library';
 import useMetadataNamespaceContext from '../hooks/useMetadataNamespaceContext';
 
 describe('useMetadataNamespaceContext', () => {
@@ -10,7 +10,6 @@ describe('useMetadataNamespaceContext', () => {
     const enterpriseId = `${METADATA_SCOPE_ENTERPRISE}_${enterpriseNumericId}`;
 
     let getUser: jest.Mock;
-    let getMetadataNamespaceMode: jest.Mock;
     let api: { getUsersAPI: jest.Mock; getMetadataAPI: jest.Mock };
 
     const renderContextHook = (
@@ -27,10 +26,9 @@ describe('useMetadataNamespaceContext', () => {
 
     beforeEach(() => {
         getUser = jest.fn();
-        getMetadataNamespaceMode = jest.fn().mockResolvedValue('SCOPED');
         api = {
             getUsersAPI: jest.fn().mockReturnValue({ getUser }),
-            getMetadataAPI: jest.fn().mockReturnValue({ getMetadataNamespaceMode }),
+            getMetadataAPI: jest.fn(),
         };
     });
 
@@ -51,78 +49,24 @@ describe('useMetadataNamespaceContext', () => {
         });
     });
 
-    test('should resolve enterprise id and SCOPED mode without enabling template management', async () => {
+    test('should stay SCOPED-equivalent without fetching flags when opt-in is on and host omits mode', async () => {
         getUser.mockImplementation((_id, successCallback) => {
             successCallback({ enterprise: { id: enterpriseNumericId } });
         });
-        getMetadataNamespaceMode.mockResolvedValue('SCOPED');
 
         const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true });
 
         await waitFor(() => {
-            expect(result.current.metadataNamespaceMode).toBe('SCOPED');
+            expect(result.current.enterpriseId).toBe(enterpriseId);
         });
 
         expect(getUser).toHaveBeenCalledWith(fileId, expect.any(Function), expect.any(Function), expect.any(Object));
-        expect(getMetadataNamespaceMode).toHaveBeenCalledWith({ id: fileId }, enterpriseNumericId);
+        expect(api.getMetadataAPI).not.toHaveBeenCalled();
         expect(result.current).toEqual({
             enterpriseId,
-            metadataNamespaceMode: 'SCOPED',
+            metadataNamespaceMode: null,
             isTemplateManagementEnabled: false,
             isLoading: false,
-        });
-    });
-
-    test('should enable template management for MIGRATION mode', async () => {
-        getUser.mockImplementation((_id, successCallback) => {
-            successCallback({ enterprise: { id: enterpriseNumericId } });
-        });
-        getMetadataNamespaceMode.mockResolvedValue('MIGRATION');
-
-        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true });
-
-        await waitFor(() => {
-            expect(result.current).toEqual({
-                enterpriseId,
-                metadataNamespaceMode: 'MIGRATION',
-                isTemplateManagementEnabled: true,
-                isLoading: false,
-            });
-        });
-    });
-
-    test('should enable template management for FINAL mode', async () => {
-        getUser.mockImplementation((_id, successCallback) => {
-            successCallback({ enterprise: { id: enterpriseNumericId } });
-        });
-        getMetadataNamespaceMode.mockResolvedValue('FINAL');
-
-        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true });
-
-        await waitFor(() => {
-            expect(result.current.isTemplateManagementEnabled).toBe(true);
-            expect(result.current.metadataNamespaceMode).toBe('FINAL');
-        });
-    });
-
-    test('should not fetch namespace mode until enterprise id is available', async () => {
-        let resolveUser: (user: { enterprise: { id: string } }) => void = () => undefined;
-        getUser.mockImplementation((_id, successCallback) => {
-            resolveUser = successCallback;
-        });
-
-        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true });
-
-        expect(api.getMetadataAPI).not.toHaveBeenCalled();
-        expect(result.current.enterpriseId).toBeUndefined();
-        expect(result.current.isTemplateManagementEnabled).toBe(false);
-
-        await act(async () => {
-            resolveUser({ enterprise: { id: enterpriseNumericId } });
-        });
-
-        await waitFor(() => {
-            expect(getMetadataNamespaceMode).toHaveBeenCalledWith({ id: fileId }, enterpriseNumericId);
         });
     });
 
@@ -133,7 +77,7 @@ describe('useMetadataNamespaceContext', () => {
         });
 
         expect(api.getUsersAPI).not.toHaveBeenCalled();
-        expect(getMetadataNamespaceMode).not.toHaveBeenCalled();
+        expect(api.getMetadataAPI).not.toHaveBeenCalled();
         expect(result.current).toEqual({
             enterpriseId,
             metadataNamespaceMode: 'MIGRATION',
@@ -142,13 +86,23 @@ describe('useMetadataNamespaceContext', () => {
         });
     });
 
-    test('should not fetch enterprise_configurations while the option mode is still loading', () => {
+    test('should enable template management for host-provided FINAL mode', () => {
+        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true }, fileId, {
+            metadataNamespaceMode: 'FINAL',
+            enterpriseId,
+        });
+
+        expect(result.current.isTemplateManagementEnabled).toBe(true);
+        expect(result.current.metadataNamespaceMode).toBe('FINAL');
+    });
+
+    test('should not fetch flags while the host mode is still loading', () => {
         const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true }, fileId, {
             metadataNamespaceMode: null,
             enterpriseId,
         });
 
-        expect(getMetadataNamespaceMode).not.toHaveBeenCalled();
+        expect(api.getMetadataAPI).not.toHaveBeenCalled();
         expect(result.current).toEqual({
             enterpriseId,
             metadataNamespaceMode: null,
@@ -157,7 +111,7 @@ describe('useMetadataNamespaceContext', () => {
         });
     });
 
-    test('should skip enterprise_configurations when options provide mode only', async () => {
+    test('should skip flag fetches when options provide mode only', async () => {
         getUser.mockImplementation((_id, successCallback) => {
             successCallback({ enterprise: { id: enterpriseNumericId } });
         });
@@ -170,7 +124,7 @@ describe('useMetadataNamespaceContext', () => {
             expect(result.current.enterpriseId).toBe(enterpriseId);
         });
 
-        expect(getMetadataNamespaceMode).not.toHaveBeenCalled();
+        expect(api.getMetadataAPI).not.toHaveBeenCalled();
         expect(result.current.metadataNamespaceMode).toBe('FINAL');
         expect(result.current.isTemplateManagementEnabled).toBe(true);
     });

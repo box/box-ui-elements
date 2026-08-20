@@ -72,8 +72,9 @@ export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
     /**
-     * Optional host-provided migration mode.
-     * When set, skips GET /enterprise_configurations.
+     * Host-provided migration mode.
+     * Hosts resolve this from GraphQL enterprise-configuration flags.
+     * When omitted, the sidebar stays in SCOPED-equivalent UI.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
     /**
@@ -102,10 +103,10 @@ export interface SuccessContextProps {
 
 export interface MetadataSidebarRedesignProps
     extends PropsWithoutContext,
-    ErrorContextProps,
-    SuccessContextProps,
-    WithLoggerProps,
-    RouteComponentProps {
+        ErrorContextProps,
+        SuccessContextProps,
+        WithLoggerProps,
+        RouteComponentProps {
     api: API;
     createSessionRequest?: (
         payload: Record<string, unknown>,

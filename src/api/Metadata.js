@@ -330,16 +330,6 @@ class Metadata extends File {
         return this.getNamespacesAPI().listTemplatesForNamespace(file, namespaceFqn, params);
     }
 
-    /** @see MetadataNamespaces.getEnterpriseConfigurationsUrl */
-    getEnterpriseConfigurationsUrl(enterpriseNumericId: string): string {
-        return this.getNamespacesAPI().getEnterpriseConfigurationsUrl(enterpriseNumericId);
-    }
-
-    /** @see MetadataNamespaces.getMetadataNamespaceMode */
-    getMetadataNamespaceMode(file: BoxItem, enterpriseNumericId: string): Promise<string | null> {
-        return this.getNamespacesAPI().getMetadataNamespaceMode(file, enterpriseNumericId);
-    }
-
     /** @see MetadataNamespaces.createMetadataTemplate */
     createMetadataTemplate(
         file: BoxItem,

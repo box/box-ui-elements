@@ -70,7 +70,7 @@ interface DataFetcher {
 export type MetadataNamespaceFetchContext = {
     /** Enterprise root namespace FQN from the current user (e.g. `enterprise_123`). */
     enterpriseFqn?: string;
-    /** Migration mode from enterprise_configurations (`SCOPED` | `MIGRATION` | `FINAL`). */
+    /** Migration mode from the host (`SCOPED` | `MIGRATION` | `FINAL`). */
     metadataNamespaceMode?: string | null;
 };
 

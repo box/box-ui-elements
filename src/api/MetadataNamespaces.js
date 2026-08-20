@@ -1,10 +1,13 @@
 /**
  * @flow
- * @file Namespace-migration Metadata API surface (list/create/update + mode).
+ * @file Namespace-migration Metadata API surface (list/create/update).
  *
  * Collaborator owned by Metadata.js — keeps mid/post-migration HTTP out of the
  * core scoped metadata flows. Methods are delegated from Metadata for a stable
  * public API (`api.getMetadataAPI().listNamespaces(...)`).
+ *
+ * Migration mode is host-owned (`metadataNamespaceMode` on the API instance).
+ * This class does not fetch enterprise-configuration flags.
  */
 
 import getProp from 'lodash/get';
@@ -12,7 +15,6 @@ import { getTypedFileId } from '../utils/file';
 import {
     ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_UPDATE_METADATA_TEMPLATE,
-    HEADER_BOX_VERSION,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_MODE_FINAL,
     METADATA_SCOPE_MODE_MIGRATION,
@@ -21,7 +23,6 @@ import type { ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import type Xhr from '../utils/Xhr';
-import { getMetadataNamespaceFlagsFromContentAndSharing, resolveMetadataNamespaceMode } from './metadataNamespaceUtils';
 // TODO: remove this import when namespace API is deployed
 import {
     IS_NAMESPACE_API_MOCKED,
@@ -58,10 +59,6 @@ export default class MetadataNamespaces {
 
     getMetadataNamespacesUrl(namespaceFqn: string): string {
         return `${this.host.getBaseApiUrl()}/metadata_namespaces/${namespaceFqn}`;
-    }
-
-    getEnterpriseConfigurationsUrl(enterpriseNumericId: string): string {
-        return `${this.host.getBaseApiUrl()}/enterprise_configurations/${enterpriseNumericId}`;
     }
 
     /**
@@ -108,14 +105,19 @@ export default class MetadataNamespaces {
         options?: { forceMetadataToken?: boolean },
     ): Promise<T> {
         const { accessToken } = await this.resolveNamespacedRequestAuth(file, options);
-        const xhr = this.host.xhr;
+        const { xhr } = this.host;
         const previousToken = xhr.token;
         if (accessToken) {
             xhr.token = accessToken;
         }
         try {
             // TokenService requires a typed id even for a string token.
-            const id = file && file.id ? getTypedFileId(file.id) : accessToken ? 'file_0' : undefined;
+            let id;
+            if (file && file.id) {
+                id = getTypedFileId(file.id);
+            } else if (accessToken) {
+                id = 'file_0';
+            }
             return await fn(id);
         } finally {
             xhr.token = previousToken;
@@ -171,37 +173,6 @@ export default class MetadataNamespaces {
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
             return { entries: [] };
-        }
-    }
-
-    /**
-     * Fetches the metadata namespace migration mode for the given enterprise.
-     * Returns `null` when the request fails so callers can fall back safely.
-     *
-     * Uses a host-provided metadata-service token when available so
-     * file-preview tokens are not sent to this API. Storybook / full-OAuth
-     * hosts omit the getter and use `xhr.token`.
-     */
-    async getMetadataNamespaceMode(file: BoxItem, enterpriseNumericId: string): Promise<string | null> {
-        try {
-            const response = await this.withMetadataServiceToken(
-                file,
-                id =>
-                    this.host.xhr.get({
-                        id,
-                        url: this.getEnterpriseConfigurationsUrl(enterpriseNumericId),
-                        params: { categories: 'content_and_sharing' },
-                        headers: { [HEADER_BOX_VERSION]: '2025.0' },
-                    }),
-                { forceMetadataToken: true },
-            );
-            const contentAndSharing =
-                getProp(response, 'data.content_and_sharing', null) ||
-                getProp(response, 'data.contentAndSharing', {});
-            const { isMigration, isFinal } = getMetadataNamespaceFlagsFromContentAndSharing(contentAndSharing);
-            return resolveMetadataNamespaceMode(isMigration, isFinal);
-        } catch (e) {
-            return null;
         }
     }
 
@@ -282,11 +253,9 @@ export default class MetadataNamespaces {
         }
 
         const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
-        const response = await this.withMetadataServiceToken(
-            file,
-            id => this.host.xhr.get({ url, id }),
-            { forceMetadataToken: true },
-        );
+        const response = await this.withMetadataServiceToken(file, id => this.host.xhr.get({ url, id }), {
+            forceMetadataToken: true,
+        });
         const data = getProp(response, 'data', {});
         return {
             namespace: data.namespace || namespaceFqn,

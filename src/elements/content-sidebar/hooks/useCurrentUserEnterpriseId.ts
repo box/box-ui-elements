@@ -28,9 +28,8 @@ function parseHostEnterpriseId(hostEnterpriseId?: string | number): UseCurrentUs
 /**
  * Resolves the authenticated user's enterprise ID via `GET /users/me?fields=enterprise`.
  *
- * Independent of metadata templates/instances so callers can hit
- * `enterprise_configurations` (and build an `enterprise_<id>` FQN) even when the
- * file has no templates applied yet.
+ * Independent of metadata templates/instances so callers can build an
+ * `enterprise_<id>` FQN even when the file has no templates applied yet.
  *
  * When `isEnabled` is `false` the fetch is skipped.
  * When `hostEnterpriseId` is provided (numeric, numeric string, or

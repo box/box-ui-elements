@@ -82,7 +82,6 @@ export const HEADER_RETRY_AFTER = 'Retry-After';
 export const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 export const HEADER_ACCEPT_LANGUAGE = 'Accept-Language';
-export const HEADER_BOX_VERSION = 'box-version';
 
 /* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
@@ -96,12 +95,6 @@ export const METADATA_NAMESPACE_GLOBAL = 'box.metadata';
 export const METADATA_SCOPE_MODE_SCOPED = 'SCOPED';
 export const METADATA_SCOPE_MODE_MIGRATION = 'MIGRATION';
 export const METADATA_SCOPE_MODE_FINAL = 'FINAL';
-// Field names within enterprise_configurations.content_and_sharing that signal namespace migration stage.
-export const METADATA_NAMESPACE_MIGRATION_FIELD = 'is_scoped_templates_migration_enabled';
-export const METADATA_NAMESPACE_FINAL_FIELD = 'are_namespaced_metadata_templates_enabled';
-// Names used on REST content_and_sharing.configFlags.
-export const METADATA_NAMESPACE_MIGRATION_CONFIG_FLAG = 'scopedTemplatesMigrationEnabled';
-export const METADATA_NAMESPACE_FINAL_CONFIG_FLAG = 'namespacedMetadataTemplatesEnabled';
 export const METADATA_TEMPLATE_FETCH_LIMIT = API_PAGE_LIMIT;
 export const METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = 'experimental';
 export const SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE = 'update_metadata_template_instance_success';
