@@ -36,6 +36,7 @@ const api = {
             write: 'write-token-value',
         }),
     },
+    getMetadataAPI: jest.fn().mockReturnValue({}),
 };
 
 describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
@@ -180,6 +181,21 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent();
 
         expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
+    });
+
+    test('should pass host namespace mode and enterprise id into useMetadataNamespaceContext', () => {
+        renderComponent({ metadataNamespaceMode: 'MIGRATION', enterpriseId: 'enterprise_1' });
+
+        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith(api, 'test-file-id-1', {
+            metadataNamespaceMode: 'MIGRATION',
+            enterpriseId: 'enterprise_1',
+        });
+    });
+
+    test('should not pass namespace options when the host omits them', () => {
+        renderComponent();
+
+        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith(api, 'test-file-id-1', {});
     });
 
     test('should have accessible "All templates" combobox trigger button', () => {
@@ -700,6 +716,15 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         expect(createSessionRequest).not.toHaveBeenCalledTimes(1);
         expect(createSessionRequest).not.toHaveBeenCalledWith({ items: [{ id: undefined }] }, undefined);
+    });
+
+    test('should not fail when createSessionRequest rejects', async () => {
+        const createSessionRequest = jest.fn().mockRejectedValue(new Error('intelligence 404'));
+        renderComponent({ api, createSessionRequest }, { 'metadata.aiSuggestions.enabled': true });
+
+        await waitFor(() => {
+            expect(createSessionRequest).toHaveBeenCalledTimes(1);
+        });
     });
 
     test('should pass getPreview to useMetadataFieldSelection', () => {

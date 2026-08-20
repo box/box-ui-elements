@@ -171,6 +171,11 @@ type Props = {
     staticPath: string,
     theme?: Theme,
     token: Token,
+    /**
+     * Host-provided getter that mints a metadata-service Bearer token.
+     * Forwarded to ContentSidebar's API client. See APIOptions.getMetadataAuthToken.
+     */
+    getMetadataAuthToken?: () => Promise<?string>,
     useHotkeys: boolean,
     /**
      * Optional render function for custom preview content.
@@ -377,6 +382,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileId,
             language,
             loadingIndicatorDelayMs,
+            getMetadataAuthToken,
             metadataApiHost,
             requestInterceptor,
             responseInterceptor,
@@ -391,6 +397,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             apiHost,
             cache,
             clientName: CLIENT_NAME_CONTENT_PREVIEW,
+            getMetadataAuthToken,
             language,
             metadataApiHost,
             requestInterceptor,
@@ -1575,6 +1582,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const {
             apiHost,
             collection,
+            getMetadataAuthToken,
             token,
             language,
             messages,
@@ -1723,6 +1731,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         <LoadableSidebar
                                             {...mergedContentSidebarProps}
                                             apiHost={apiHost}
+                                            getMetadataAuthToken={getMetadataAuthToken}
                                             metadataApiHost={metadataApiHost}
                                             token={token}
                                             cache={this.api.getCache()}

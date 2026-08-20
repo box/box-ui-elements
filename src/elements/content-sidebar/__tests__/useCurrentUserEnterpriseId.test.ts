@@ -140,4 +140,29 @@ describe('useCurrentUserEnterpriseId', () => {
             enterpriseNumericId: undefined,
         });
     });
+
+    test('should use a host-provided numeric enterprise id without fetching', () => {
+        const { result } = renderHook(() =>
+            useCurrentUserEnterpriseId(api as never, mockFile, true, 1262033289),
+        );
+
+        expect(api.getUsersAPI).not.toHaveBeenCalled();
+        expect(result.current).toEqual({
+            enterpriseId: `${METADATA_SCOPE_ENTERPRISE}_1262033289`,
+            enterpriseNumericId: '1262033289',
+        });
+    });
+
+    test('should use a host-provided FQN without fetching', () => {
+        const hostEnterpriseId = `${METADATA_SCOPE_ENTERPRISE}_${enterpriseNumericId}`;
+        const { result } = renderHook(() =>
+            useCurrentUserEnterpriseId(api as never, mockFile, true, hostEnterpriseId),
+        );
+
+        expect(api.getUsersAPI).not.toHaveBeenCalled();
+        expect(result.current).toEqual({
+            enterpriseId: hostEnterpriseId,
+            enterpriseNumericId,
+        });
+    });
 });

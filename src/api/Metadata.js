@@ -103,6 +103,23 @@ class Metadata extends File {
     }
 
     /**
+     * Host-provided metadata-service token, if any. Returns `null` when the
+     * host did not supply a getter or the getter fails, so callers can fall
+     * back to the file-preview token.
+     *
+     * @return {Promise<?string>}
+     */
+    getMetadataAuthToken(): Promise<?string> {
+        const getter = this.options.getMetadataAuthToken;
+        if (typeof getter !== 'function') {
+            return Promise.resolve(null);
+        }
+        return Promise.resolve()
+            .then(() => getter())
+            .catch(() => null);
+    }
+
+    /**
      * Creates a key for the metadata cache
      *
      * @param {string} id - Folder id
@@ -353,8 +370,8 @@ class Metadata extends File {
     }
 
     /** @see MetadataNamespaces.getTemplateSchemaForEditor */
-    getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string): Promise<Object> {
-        return this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey);
+    getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file?: BoxItem): Promise<Object> {
+        return this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
     }
 
     /**
@@ -462,10 +479,11 @@ class Metadata extends File {
                 });
                 return {
                     path: taxonomyPath,
-                    levels: result.data.levels || [],
+                    levels: getProp(result, 'data.levels', []),
                 };
             } catch (error) {
-                throw new Error(`Failed to fetch taxonomy for path: ${taxonomyPath}`);
+                // A missing taxonomy must not fail the whole metadata sidebar.
+                return { path: taxonomyPath, levels: [] };
             }
         });
 

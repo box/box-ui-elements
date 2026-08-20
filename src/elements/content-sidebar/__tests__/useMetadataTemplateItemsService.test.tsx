@@ -117,7 +117,7 @@ describe('useMetadataTemplateItemsService', () => {
                     displayName: 'Child Only',
                     scope: `${enterpriseFqn}.child`,
                     templateKey: 'childOnly',
-                    canEdit: false,
+                    canEdit: true,
                     hidden: false,
                 },
             ],
@@ -161,7 +161,24 @@ describe('useMetadataTemplateItemsService', () => {
         );
 
         await expect(result.current!.getSearchResults('custom', { limit: 10, marker: undefined })).resolves.toEqual({
-            entries: [expect.objectContaining({ id: 'editor-props', displayName: 'Custom Metadata' })],
+            entries: [expect.objectContaining({ id: 'editor-props', displayName: 'Custom Metadata', canEdit: false })],
+            next_marker: undefined,
+        });
+    });
+
+    test('should merge already-loaded enterprise templates when the namespace list is empty', async () => {
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        await expect(result.current!.getTemplates(enterpriseFqn, { limit: 50, marker: undefined })).resolves.toEqual({
+            entries: [
+                expect.objectContaining({
+                    id: 'editor-1',
+                    templateKey: 'myTemplate',
+                    canEdit: true,
+                }),
+            ],
             next_marker: undefined,
         });
     });

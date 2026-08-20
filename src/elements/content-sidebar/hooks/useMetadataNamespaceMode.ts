@@ -25,7 +25,7 @@ interface UseMetadataNamespaceModeReturn {
  *
  * When `isEnabled` is `false` the hook skips the API call entirely and returns
  * `{ mode: null, isLoading: false }`, keeping the UI in legacy SCOPED mode.
- * Pass the `enterprise_metadata_namespaces_opt_in` split treatment result here.
+ * Gate this with `metadata.namespacesOptIn.enabled`.
  *
  * Returns `{ mode: null, isLoading: false }` when `enterpriseNumericId` is
  * undefined — callers should treat this as "not yet known" and keep the UI
@@ -63,7 +63,6 @@ export default function useMetadataNamespaceMode(
                 setIsLoading(false);
             }
         });
-
         return () => {
             isCancelled = true;
         };

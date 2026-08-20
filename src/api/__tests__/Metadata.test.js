@@ -649,6 +649,36 @@ describe('api/Metadata', () => {
             });
             expect(result).toEqual(expected);
         });
+
+        test('should keep templates when a taxonomy fetch fails', async () => {
+            const metadataTemplates = [
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: 'missing' }, { type: 'string' }],
+                },
+            ];
+            metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
+            metadata.xhr.get = jest.fn().mockRejectedValue({ status: 404 });
+
+            const result = await metadata.getTaxonomyLevelsForTemplates(metadataTemplates, 'id');
+
+            expect(result).toEqual([
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [
+                        {
+                            type: 'taxonomy',
+                            namespace: 'namespace1',
+                            taxonomyKey: 'missing',
+                            levels: [],
+                        },
+                        { type: 'string' },
+                    ],
+                },
+            ]);
+        });
     });
 
     describe('getTemplates()', () => {

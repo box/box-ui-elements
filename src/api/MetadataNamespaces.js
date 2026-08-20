@@ -14,14 +14,14 @@ import {
     ERROR_CODE_UPDATE_METADATA_TEMPLATE,
     HEADER_BOX_VERSION,
     HEADER_CONTENT_TYPE,
-    METADATA_NAMESPACE_FINAL_FIELD,
-    METADATA_NAMESPACE_MIGRATION_FIELD,
+    METADATA_SCOPE_MODE_FINAL,
+    METADATA_SCOPE_MODE_MIGRATION,
 } from '../constants';
 import type { ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import type Xhr from '../utils/Xhr';
-import { resolveMetadataNamespaceMode } from './metadataNamespaceUtils';
+import { getMetadataNamespaceFlagsFromContentAndSharing, resolveMetadataNamespaceMode } from './metadataNamespaceUtils';
 // TODO: remove this import when namespace API is deployed
 import {
     IS_NAMESPACE_API_MOCKED,
@@ -36,6 +36,7 @@ import {
 export type MetadataNamespaceHost = {
     // Writable: MetadataNamespaces assigns error codes onto the host.
     errorCode: string,
+    +metadataNamespaceMode: string,
     // Methods/+xhr are covariant so class instances (read-only methods) are assignable.
     +getBaseApiUrl: () => string,
     +getCache: () => APICache,
@@ -43,6 +44,7 @@ export type MetadataNamespaceHost = {
     +getMetadataTemplateSchemaUrl: (templateKey: string, scope?: string) => string,
     +getMetadataTemplateUrl: () => string,
     +getMetadataTemplateUrlForScope: (scope: string) => string,
+    +getMetadataAuthToken?: () => Promise<?string>,
     +isDestroyed: () => boolean,
     +xhr: Xhr,
 };
@@ -63,6 +65,64 @@ export default class MetadataNamespaces {
     }
 
     /**
+     * Auth for namespace / template-schema calls.
+     *
+     * In MIGRATION and FINAL (or when `forceMetadataToken` is set) uses a
+     * host-provided metadata-service token. Falls back to the file-scoped
+     * token when the getter is omitted or returns null (Storybook / full
+     * OAuth hosts).
+     */
+    async resolveNamespacedRequestAuth(
+        file: ?BoxItem,
+        options?: { forceMetadataToken?: boolean },
+    ): Promise<{ accessToken?: string, id?: string }> {
+        const mode = this.host.metadataNamespaceMode;
+        const isNamespacedMode = mode === METADATA_SCOPE_MODE_MIGRATION || mode === METADATA_SCOPE_MODE_FINAL;
+        const shouldUseMetadataToken = !!options?.forceMetadataToken || isNamespacedMode;
+
+        if (shouldUseMetadataToken && typeof this.host.getMetadataAuthToken === 'function') {
+            try {
+                const token = await this.host.getMetadataAuthToken();
+                if (token) {
+                    return { accessToken: token };
+                }
+            } catch (e) {
+                // Fall through to the file-scoped token.
+            }
+        }
+
+        if (file && file.id) {
+            return { id: getTypedFileId(file.id) };
+        }
+        return {};
+    }
+
+    /**
+     * Runs `fn` with Xhr temporarily using a metadata-service string token.
+     * TokenService treats a string token as already-resolved, so the usual
+     * `id: file_…` argument is still passed and no shared Xhr API changes.
+     */
+    async withMetadataServiceToken<T>(
+        file: ?BoxItem,
+        fn: (id: ?string) => Promise<T>,
+        options?: { forceMetadataToken?: boolean },
+    ): Promise<T> {
+        const { accessToken } = await this.resolveNamespacedRequestAuth(file, options);
+        const xhr = this.host.xhr;
+        const previousToken = xhr.token;
+        if (accessToken) {
+            xhr.token = accessToken;
+        }
+        try {
+            // TokenService requires a typed id even for a string token.
+            const id = file && file.id ? getTypedFileId(file.id) : accessToken ? 'file_0' : undefined;
+            return await fn(id);
+        } finally {
+            xhr.token = previousToken;
+        }
+    }
+
+    /**
      * Lists child namespaces under a given namespace FQN.
      */
     async listNamespaces(
@@ -73,14 +133,15 @@ export default class MetadataNamespaces {
         // TODO: remove next line when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) return mockListNamespaces(file, namespaceFqn, params);
 
-        const { id }: BoxItem = file;
         const url = this.getMetadataNamespacesUrl(namespaceFqn);
         try {
-            const response = await this.host.xhr.get({
-                url,
-                id: getTypedFileId(id),
-                params: { limit: params.limit, marker: params.marker },
-            });
+            const response = await this.withMetadataServiceToken(file, id =>
+                this.host.xhr.get({
+                    url,
+                    id,
+                    params: { limit: params.limit, marker: params.marker },
+                }),
+            );
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
             return { entries: [] };
@@ -98,14 +159,15 @@ export default class MetadataNamespaces {
         // TODO: remove next line when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) return mockListTemplatesForNamespace(file, namespaceFqn, params);
 
-        const { id }: BoxItem = file;
         const url = this.host.getMetadataTemplateUrlForScope(namespaceFqn);
         try {
-            const response = await this.host.xhr.get({
-                url,
-                id: getTypedFileId(id),
-                params: { limit: params.limit, marker: params.marker },
-            });
+            const response = await this.withMetadataServiceToken(file, id =>
+                this.host.xhr.get({
+                    url,
+                    id,
+                    params: { limit: params.limit, marker: params.marker },
+                }),
+            );
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
             return { entries: [] };
@@ -115,20 +177,28 @@ export default class MetadataNamespaces {
     /**
      * Fetches the metadata namespace migration mode for the given enterprise.
      * Returns `null` when the request fails so callers can fall back safely.
+     *
+     * Uses a host-provided metadata-service token when available so
+     * file-preview tokens are not sent to this API. Storybook / full-OAuth
+     * hosts omit the getter and use `xhr.token`.
      */
     async getMetadataNamespaceMode(file: BoxItem, enterpriseNumericId: string): Promise<string | null> {
-        const url = this.getEnterpriseConfigurationsUrl(enterpriseNumericId);
-        const { id }: BoxItem = file;
         try {
-            const response = await this.host.xhr.get({
-                id: getTypedFileId(id),
-                url,
-                params: { categories: 'content_and_sharing' },
-                headers: { [HEADER_BOX_VERSION]: '2025.0' },
-            });
-            const contentAndSharing = getProp(response, 'data.content_and_sharing', {});
-            const isMigration = getProp(contentAndSharing, `${METADATA_NAMESPACE_MIGRATION_FIELD}.value`, false);
-            const isFinal = getProp(contentAndSharing, `${METADATA_NAMESPACE_FINAL_FIELD}.value`, false);
+            const response = await this.withMetadataServiceToken(
+                file,
+                id =>
+                    this.host.xhr.get({
+                        id,
+                        url: this.getEnterpriseConfigurationsUrl(enterpriseNumericId),
+                        params: { categories: 'content_and_sharing' },
+                        headers: { [HEADER_BOX_VERSION]: '2025.0' },
+                    }),
+                { forceMetadataToken: true },
+            );
+            const contentAndSharing =
+                getProp(response, 'data.content_and_sharing', null) ||
+                getProp(response, 'data.contentAndSharing', {});
+            const { isMigration, isFinal } = getMetadataNamespaceFlagsFromContentAndSharing(contentAndSharing);
             return resolveMetadataNamespaceMode(isMigration, isFinal);
         } catch (e) {
             return null;
@@ -150,11 +220,12 @@ export default class MetadataNamespaces {
             return;
         }
 
-        const { id }: BoxItem = file;
         this.host.errorCode = ERROR_CODE_CREATE_METADATA_TEMPLATE;
         const url = `${this.host.getMetadataTemplateUrl()}/schema`;
         try {
-            const response = await this.host.xhr.post({ url, id: getTypedFileId(id), data: body });
+            const response = await this.withMetadataServiceToken(file, id =>
+                this.host.xhr.post({ url, id, data: body }),
+            );
             if (!this.host.isDestroyed()) {
                 successCallback(getProp(response, 'data'));
             }
@@ -180,16 +251,17 @@ export default class MetadataNamespaces {
             return;
         }
 
-        const { id }: BoxItem = file;
         this.host.errorCode = ERROR_CODE_UPDATE_METADATA_TEMPLATE;
         const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
         try {
-            const response = await this.host.xhr.put({
-                url,
-                id: getTypedFileId(id),
-                headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
-                data: patchItems,
-            });
+            const response = await this.withMetadataServiceToken(file, id =>
+                this.host.xhr.put({
+                    url,
+                    id,
+                    headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
+                    data: patchItems,
+                }),
+            );
             if (!this.host.isDestroyed()) {
                 this.host.getCache().unset(this.host.getMetadataTemplateSchemaCacheKey(templateKey, namespaceFqn));
                 successCallback(getProp(response, 'data'));
@@ -202,7 +274,7 @@ export default class MetadataNamespaces {
     /**
      * Fetches a template schema in the shape expected by MetadataTemplateEditor.
      */
-    async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string): Promise<Object> {
+    async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file: ?BoxItem): Promise<Object> {
         // TODO: remove the mock block when namespace API is deployed.
         if (IS_NAMESPACE_API_MOCKED) {
             const mockResult = mockGetTemplateSchemaForEditor(namespaceFqn, templateKey);
@@ -210,7 +282,11 @@ export default class MetadataNamespaces {
         }
 
         const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
-        const response = await this.host.xhr.get({ url });
+        const response = await this.withMetadataServiceToken(
+            file,
+            id => this.host.xhr.get({ url, id }),
+            { forceMetadataToken: true },
+        );
         const data = getProp(response, 'data', {});
         return {
             namespace: data.namespace || namespaceFqn,
@@ -218,9 +294,9 @@ export default class MetadataNamespaces {
             displayName: data.displayName,
             fields: (data.fields || []).map(f => ({
                 ...f,
-                isHidden: f.isHidden != null ? f.isHidden : f.hidden ?? false,
+                hidden: f.hidden != null ? f.hidden : f.isHidden ?? false,
             })),
-            isHidden: data.isHidden != null ? data.isHidden : data.hidden ?? false,
+            hidden: data.hidden != null ? data.hidden : data.isHidden ?? false,
         };
     }
 }

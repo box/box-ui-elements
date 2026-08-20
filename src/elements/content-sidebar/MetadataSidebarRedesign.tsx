@@ -51,6 +51,7 @@ import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionS
 import { isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
+    metadataTaxonomyByKeyFetcher,
     metadataTaxonomyFetcher,
     metadataTaxonomyNodeAncestorsFetcher,
     type TaxonomyFieldConfig,
@@ -61,6 +62,7 @@ import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUns
 import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
 import useMetadataTemplateItemsService from './hooks/useMetadataTemplateItemsService';
 import useMetadataNamespaceContext from './hooks/useMetadataNamespaceContext';
+import type { MetadataScopeMode } from './hooks/useMetadataNamespaceMode';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -69,6 +71,16 @@ mark(MARK_NAME_JS_READY);
 export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
+    /**
+     * Host-provided migration mode from current-user app features.
+     * When set, skips GET /enterprise_configurations.
+     */
+    metadataNamespaceMode?: MetadataScopeMode | null;
+    /**
+     * Host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
+     * Current-user REST returns `enterprise.id` as a number. When set, skips GET /users/me.
+     */
+    enterpriseId?: string | number;
 }
 
 interface PropsWithoutContext extends ExternalProps {
@@ -90,10 +102,10 @@ export interface SuccessContextProps {
 
 export interface MetadataSidebarRedesignProps
     extends PropsWithoutContext,
-        ErrorContextProps,
-        SuccessContextProps,
-        WithLoggerProps,
-        RouteComponentProps {
+    ErrorContextProps,
+    SuccessContextProps,
+    WithLoggerProps,
+    RouteComponentProps {
     api: API;
     createSessionRequest?: (
         payload: Record<string, unknown>,
@@ -119,6 +131,8 @@ function MetadataSidebarRedesign({
     isFeatureEnabled,
     createSessionRequest,
     getStructuredTextRep,
+    metadataNamespaceMode: hostMetadataNamespaceMode,
+    enterpriseId: hostEnterpriseId,
     onEditingStateChange,
     registerOpenWarningModalCallback,
     onWarningModalDiscard,
@@ -143,6 +157,10 @@ function MetadataSidebarRedesign({
     const { enterpriseId, metadataNamespaceMode, isTemplateManagementEnabled } = useMetadataNamespaceContext(
         api,
         fileId,
+        {
+            ...(hostMetadataNamespaceMode !== undefined ? { metadataNamespaceMode: hostMetadataNamespaceMode } : {}),
+            ...(hostEnterpriseId !== undefined ? { enterpriseId: hostEnterpriseId } : {}),
+        },
     );
 
     const {
@@ -279,6 +297,13 @@ function MetadataSidebarRedesign({
             }),
         [api, file, onError, refetchMetadata],
     );
+
+    const fetchTaxonomyByKey = useCallback(
+        ({ namespace, taxonomyKey }: { namespace: string; taxonomyKey: string }) =>
+            metadataTaxonomyByKeyFetcher(api, fileId, namespace, taxonomyKey),
+        [api, fileId],
+    );
+
     const handleEditTemplate = useCallback(
         (patchItems: MetadataTemplatePatchItem[], identifier: { namespaceFQN: string; templateKey: string }) =>
             new Promise<void>((resolve, reject) => {
@@ -307,6 +332,7 @@ function MetadataSidebarRedesign({
     } = useMetadataTemplateEditor({
         onCreate: handleCreateTemplate,
         onEdit: handleEditTemplate,
+        fetchTaxonomyByKey,
     });
 
     // Opens the template editor in create mode — also dismisses the dropdown popover.
@@ -328,10 +354,14 @@ function MetadataSidebarRedesign({
                 fetchTemplate: () =>
                     api
                         .getMetadataAPI(false)
-                        .getTemplateSchemaForEditor(namespaceFqn, templateKey) as Promise<MetadataTemplateApiResponse>,
+                        .getTemplateSchemaForEditor(
+                            namespaceFqn,
+                            templateKey,
+                            file,
+                        ) as Promise<MetadataTemplateApiResponse>,
             });
         },
-        [openEdit, api],
+        [openEdit, api, file],
     );
 
     const handleCancel = () => {
@@ -468,14 +498,15 @@ function MetadataSidebarRedesign({
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
             isSessionInitiated.current = true;
-            createSessionRequest({ items: [{ id: fileId }] }, fileId).then(
-                ({ metadata = { is_large_file: false } }) => {
+            createSessionRequest({ items: [{ id: fileId }] }, fileId)
+                .then(({ metadata = { is_large_file: false } }) => {
                     setIsLargeFile(metadata.is_large_file);
-                },
-            );
+                })
+                .catch(() => {
+                    // Autofill session is best-effort; local/dev intelligence 404s must not fail the sidebar.
+                });
         }
     }, [createSessionRequest, fileId]);
-
     return (
         <>
             {templateEditorModal}

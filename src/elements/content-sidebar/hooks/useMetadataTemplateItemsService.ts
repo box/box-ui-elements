@@ -10,16 +10,23 @@ import {
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 
 import API from '../../../api';
-import { METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import { METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
 import type { BoxItem } from '../../../common/types/core';
-import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
+import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName: string): string {
     if (template.templateKey === METADATA_TEMPLATE_PROPERTIES) {
         return customMetadataName;
     }
     return template.displayName || template.templateKey;
+}
+
+function canEditMetadataTemplate(templateKey?: string, scopeOrNamespace?: string): boolean {
+    if (!templateKey || templateKey === METADATA_TEMPLATE_PROPERTIES) {
+        return false;
+    }
+    return scopeOrNamespace !== METADATA_SCOPE_GLOBAL && scopeOrNamespace !== 'global';
 }
 
 /**
@@ -59,7 +66,7 @@ export default function useMetadataTemplateItemsService(
             displayName: resolveDisplayName(t, customMetadataName),
             scope: t.scope,
             templateKey: t.templateKey,
-            canEdit: t.canEdit,
+            canEdit: canEditMetadataTemplate(t.templateKey, getMetadataTemplateNamespaceFqn(t)),
             hidden: t.hidden,
         }));
 
@@ -83,7 +90,7 @@ export default function useMetadataTemplateItemsService(
                     .listTemplatesForNamespace(file, namespaceFQN, { limit: params.limit, marker: params.marker });
                 // Map the raw API response to the browser-expected shape.
                 // The API returns camelCase fields; we normalise displayName and scope/namespace.
-                const entries: BrowserMetadataTemplate[] = (result.entries ?? []).map((t: Record<string, unknown>) => {
+                const listed: BrowserMetadataTemplate[] = (result.entries ?? []).map((t: Record<string, unknown>) => {
                     const templateKey = t.templateKey as string;
                     const templateScope = (t.namespace as string) ?? (t.scope as string) ?? namespaceFQN;
                     // Prefer the editor template's id so that id-based lookups in
@@ -99,11 +106,30 @@ export default function useMetadataTemplateItemsService(
                         displayName: ((t.displayName as string) ?? templateKey) || '',
                         scope: templateScope,
                         templateKey,
-                        canEdit: (t.canEdit as boolean) ?? false,
+                        canEdit: canEditMetadataTemplate(templateKey, templateScope),
                         hidden: (t.hidden as boolean) ?? false,
                     };
                 });
-                return { entries, next_marker: result.next_marker };
+
+                // The namespace list mock only seeds child-namespace fixtures. Merge in
+                // already-loaded enterprise templates so existing schemas can be opened.
+                const listedKeys = new Set(listed.map(t => t.templateKey).filter(Boolean));
+                const fromLoaded: BrowserMetadataTemplate[] = templates
+                    .filter(t => {
+                        const fqn = getMetadataTemplateNamespaceFqn(t);
+                        return !!t.templateKey && fqn === namespaceFQN && !listedKeys.has(t.templateKey);
+                    })
+                    .map(t => ({
+                        id: t.id,
+                        type: t.type ?? 'metadata_template',
+                        displayName: resolveDisplayName(t, customMetadataName),
+                        scope: getMetadataTemplateNamespaceFqn(t) ?? namespaceFQN,
+                        templateKey: t.templateKey,
+                        canEdit: canEditMetadataTemplate(t.templateKey, getMetadataTemplateNamespaceFqn(t)),
+                        hidden: t.hidden ?? false,
+                    }));
+
+                return { entries: [...fromLoaded, ...listed], next_marker: result.next_marker };
             },
 
             getSearchResults: async (

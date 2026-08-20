@@ -13,8 +13,15 @@ describe('useMetadataNamespaceContext', () => {
     let getMetadataNamespaceMode: jest.Mock;
     let api: { getUsersAPI: jest.Mock; getMetadataAPI: jest.Mock };
 
-    const renderContextHook = (features: Record<string, unknown> = {}, hookFileId = fileId) =>
-        renderHook(() => useMetadataNamespaceContext(api as never, hookFileId), {
+    const renderContextHook = (
+        features: Record<string, unknown> = {},
+        hookFileId = fileId,
+        options?: {
+            metadataNamespaceMode?: 'SCOPED' | 'MIGRATION' | 'FINAL' | null;
+            enterpriseId?: string | number;
+        },
+    ) =>
+        renderHook(() => useMetadataNamespaceContext(api as never, hookFileId, options), {
             wrapper: ({ children }) => <FeatureProvider features={features}>{children}</FeatureProvider>,
         });
 
@@ -117,5 +124,54 @@ describe('useMetadataNamespaceContext', () => {
         await waitFor(() => {
             expect(getMetadataNamespaceMode).toHaveBeenCalledWith({ id: fileId }, enterpriseNumericId);
         });
+    });
+
+    test('should use option-provided mode and enterprise id without fetching', () => {
+        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true }, fileId, {
+            metadataNamespaceMode: 'MIGRATION',
+            enterpriseId,
+        });
+
+        expect(api.getUsersAPI).not.toHaveBeenCalled();
+        expect(getMetadataNamespaceMode).not.toHaveBeenCalled();
+        expect(result.current).toEqual({
+            enterpriseId,
+            metadataNamespaceMode: 'MIGRATION',
+            isTemplateManagementEnabled: true,
+            isLoading: false,
+        });
+    });
+
+    test('should not fetch enterprise_configurations while the option mode is still loading', () => {
+        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true }, fileId, {
+            metadataNamespaceMode: null,
+            enterpriseId,
+        });
+
+        expect(getMetadataNamespaceMode).not.toHaveBeenCalled();
+        expect(result.current).toEqual({
+            enterpriseId,
+            metadataNamespaceMode: null,
+            isTemplateManagementEnabled: false,
+            isLoading: true,
+        });
+    });
+
+    test('should skip enterprise_configurations when options provide mode only', async () => {
+        getUser.mockImplementation((_id, successCallback) => {
+            successCallback({ enterprise: { id: enterpriseNumericId } });
+        });
+
+        const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': true }, fileId, {
+            metadataNamespaceMode: 'FINAL',
+        });
+
+        await waitFor(() => {
+            expect(result.current.enterpriseId).toBe(enterpriseId);
+        });
+
+        expect(getMetadataNamespaceMode).not.toHaveBeenCalled();
+        expect(result.current.metadataNamespaceMode).toBe('FINAL');
+        expect(result.current.isTemplateManagementEnabled).toBe(true);
     });
 });

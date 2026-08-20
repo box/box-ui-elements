@@ -126,6 +126,11 @@ type Props = {
     signSidebarProps: SignSidebarProps,
     theme?: Theme,
     token: Token,
+    /**
+     * Host-provided getter that mints a metadata-service Bearer token.
+     * Forwarded to the metadata API client. See APIOptions.getMetadataAuthToken.
+     */
+    getMetadataAuthToken?: () => Promise<?string>,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
     WithLoggerProps;
@@ -181,8 +186,10 @@ class ContentSidebar extends React.Component<Props, State> {
             apiHost,
             cache,
             clientName,
+            getMetadataAuthToken,
             language,
             metadataApiHost,
+            metadataSidebarProps,
             requestInterceptor,
             responseInterceptor,
             sharedLink,
@@ -194,8 +201,10 @@ class ContentSidebar extends React.Component<Props, State> {
             apiHost,
             cache,
             clientName,
+            getMetadataAuthToken,
             language,
             metadataApiHost,
+            metadataNamespaceMode: metadataSidebarProps?.metadataNamespaceMode,
             requestInterceptor,
             responseInterceptor,
             sharedLink,

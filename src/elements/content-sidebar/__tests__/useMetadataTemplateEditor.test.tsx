@@ -14,6 +14,7 @@ jest.mock('@box/metadata-template-editor', () => {
             onEditTemplate,
             onOpenChange,
             fetchTemplate,
+            fetchTaxonomyByKey,
         }: {
             mode: string;
             namespace?: string;
@@ -21,11 +22,13 @@ jest.mock('@box/metadata-template-editor', () => {
             onEditTemplate?: (patch: unknown[], id: unknown) => Promise<void>;
             onOpenChange: (open: boolean) => void;
             fetchTemplate?: () => Promise<unknown>;
+            fetchTaxonomyByKey?: unknown;
         }) => (
             <div data-testid="template-editor-modal">
                 <span data-testid="editor-mode">{mode}</span>
                 {namespace ? <span data-testid="editor-namespace">{namespace}</span> : null}
                 {fetchTemplate ? <span data-testid="editor-has-fetch">true</span> : null}
+                {fetchTaxonomyByKey ? <span data-testid="editor-has-taxonomy-by-key">true</span> : null}
                 <button type="button" onClick={() => onOpenChange(false)}>
                     close
                 </button>
@@ -131,5 +134,30 @@ describe('useMetadataTemplateEditor', () => {
 
         rerender(<>{result.current.modal}</>);
         expect(screen.queryByTestId('template-editor-modal')).not.toBeInTheDocument();
+    });
+
+    test('should forward fetchTaxonomyByKey to create and edit modals', () => {
+        const fetchTaxonomyByKey = jest.fn();
+        const { result } = renderHook(() =>
+            useMetadataTemplateEditor({ onCreate, onEdit, fetchTaxonomyByKey }),
+        );
+
+        act(() => {
+            result.current.openCreate('enterprise_123');
+        });
+
+        const { rerender } = render(<>{result.current.modal}</>);
+        expect(screen.getByTestId('editor-has-taxonomy-by-key')).toHaveTextContent('true');
+
+        act(() => {
+            result.current.openEdit({
+                namespaceFqn: 'enterprise_123',
+                templateKey: 'myTemplate',
+                fetchTemplate: jest.fn(),
+            });
+        });
+
+        rerender(<>{result.current.modal}</>);
+        expect(screen.getByTestId('editor-has-taxonomy-by-key')).toHaveTextContent('true');
     });
 });
