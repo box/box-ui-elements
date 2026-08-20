@@ -32,7 +32,7 @@ function seedNamespace(fqn: string): void {
         // sidebar) so they can be opened in the editor.
         templateStore[fqn] = [];
     } else {
-        // Child namespace: namespace-only templates (MIGRATION mode §1.7.2)
+        // Child namespace: namespace-only templates (MIGRATION mode)
         const childKey = (fqn.split('.').pop(): any);
         const seeds: { [key: string]: Array<Object> } = {
             legal: [

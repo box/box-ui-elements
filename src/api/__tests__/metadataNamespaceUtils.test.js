@@ -39,7 +39,7 @@ describe('api/metadataNamespaceUtils', () => {
     });
 
     describe('getMetadataNamespaceFlagsFromContentAndSharing()', () => {
-        test('should read nested GraphQL field.value shape', () => {
+        test('should read nested field.value shape', () => {
             expect(
                 getMetadataNamespaceFlagsFromContentAndSharing({
                     is_scoped_templates_migration_enabled: { value: true },

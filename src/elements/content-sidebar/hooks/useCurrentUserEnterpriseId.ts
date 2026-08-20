@@ -35,8 +35,6 @@ function parseHostEnterpriseId(hostEnterpriseId?: string | number): UseCurrentUs
  * When `isEnabled` is `false` the fetch is skipped.
  * When `hostEnterpriseId` is provided (numeric, numeric string, or
  * `enterprise_<id>` FQN), skips `/users/me` and uses that value.
- * Current-user REST returns `enterprise.id` as a number. Used by federated
- * hosts (preview-client) and unit tests.
  */
 export default function useCurrentUserEnterpriseId(
     api: API,

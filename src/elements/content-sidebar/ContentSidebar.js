@@ -127,7 +127,7 @@ type Props = {
     theme?: Theme,
     token: Token,
     /**
-     * Host-provided getter that mints a metadata-service Bearer token.
+     * Host-provided getter that returns a metadata-service Bearer token.
      * Forwarded to the metadata API client. See APIOptions.getMetadataAuthToken.
      */
     getMetadataAuthToken?: () => Promise<?string>,

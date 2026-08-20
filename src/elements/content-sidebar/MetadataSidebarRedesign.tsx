@@ -72,13 +72,13 @@ export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
     /**
-     * Host-provided migration mode from current-user app features.
+     * Optional host-provided migration mode.
      * When set, skips GET /enterprise_configurations.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
     /**
-     * Host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
-     * Current-user REST returns `enterprise.id` as a number. When set, skips GET /users/me.
+     * Optional host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
+     * When set, skips GET /users/me.
      */
     enterpriseId?: string | number;
 }

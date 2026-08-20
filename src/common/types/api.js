@@ -100,11 +100,9 @@ type APIOptions = {
      */
     metadataApiHost?: string,
     /**
-     * Host-provided getter that mints a metadata-service Bearer token.
-     * Federated preview-client should mint via
-     * `POST /app-api/enduserapp/tokens` `{ service: 'metadata' }`.
-     * When omitted, namespaced requests fall back to the file-preview
-     * token (Storybook / full OAuth hosts).
+     * Optional host-provided getter that returns a metadata-service Bearer token.
+     * When omitted or when the getter returns null, namespaced requests fall
+     * back to the file-preview token.
      */
     getMetadataAuthToken?: () => Promise<?string>,
     metadataNamespaceMode?: string,
