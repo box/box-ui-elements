@@ -103,9 +103,9 @@ class Metadata extends File {
     }
 
     /**
-     * Host-provided metadata-service token, if any. Returns `null` when the
-     * host did not supply a getter or the getter fails, so callers can fall
-     * back to the file-preview token.
+     * Optional host getter for a user access token used on namespaced template
+     * requests. Returns `null` when omitted so those hosts use `token` as-is.
+     * Getter failures propagate.
      *
      * @return {Promise<?string>}
      */
@@ -114,9 +114,7 @@ class Metadata extends File {
         if (typeof getter !== 'function') {
             return Promise.resolve(null);
         }
-        return Promise.resolve()
-            .then(() => getter())
-            .catch(() => null);
+        return Promise.resolve().then(() => getter());
     }
 
     /**

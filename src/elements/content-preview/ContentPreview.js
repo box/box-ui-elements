@@ -172,8 +172,9 @@ type Props = {
     theme?: Theme,
     token: Token,
     /**
-     * Host-provided getter that returns a metadata-service Bearer token.
-     * Forwarded to ContentSidebar's API client. See APIOptions.getMetadataAuthToken.
+     * Optional getter for a user access token used on namespace / template-schema
+     * requests. Needed only when `token` is a per-file function. Hosts that pass
+     * a developer token or OAuth access token as `token` can omit this.
      */
     getMetadataAuthToken?: () => Promise<?string>,
     useHotkeys: boolean,
