@@ -143,13 +143,13 @@ describe('useCurrentUserEnterpriseId', () => {
 
     test('should use a host-provided numeric enterprise id without fetching', () => {
         const { result } = renderHook(() =>
-            useCurrentUserEnterpriseId(api as never, mockFile, true, 1262033289),
+            useCurrentUserEnterpriseId(api as never, mockFile, true, 123),
         );
 
         expect(api.getUsersAPI).not.toHaveBeenCalled();
         expect(result.current).toEqual({
-            enterpriseId: `${METADATA_SCOPE_ENTERPRISE}_1262033289`,
-            enterpriseNumericId: '1262033289',
+            enterpriseId: `${METADATA_SCOPE_ENTERPRISE}_123`,
+            enterpriseNumericId: '123',
         });
     });
 

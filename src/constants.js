@@ -99,7 +99,7 @@ export const METADATA_SCOPE_MODE_FINAL = 'FINAL';
 // Field names within enterprise_configurations.content_and_sharing that signal namespace migration stage.
 export const METADATA_NAMESPACE_MIGRATION_FIELD = 'is_scoped_templates_migration_enabled';
 export const METADATA_NAMESPACE_FINAL_FIELD = 'are_namespaced_metadata_templates_enabled';
-// Names used on REST content_and_sharing.configFlags (and current-user features).
+// Names used on REST content_and_sharing.configFlags.
 export const METADATA_NAMESPACE_MIGRATION_CONFIG_FLAG = 'scopedTemplatesMigrationEnabled';
 export const METADATA_NAMESPACE_FINAL_CONFIG_FLAG = 'namespacedMetadataTemplatesEnabled';
 export const METADATA_TEMPLATE_FETCH_LIMIT = API_PAGE_LIMIT;

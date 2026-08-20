@@ -66,7 +66,7 @@ function configFlagValue(flags: mixed, name: string): boolean {
 
 /**
  * Reads SCOPED/MIGRATION/FINAL booleans from a content_and_sharing payload.
- * Supports nested `{ field: { value } }` (GraphQL) and `configFlags` (REST).
+ * Supports nested `{ field: { value } }` and `configFlags` array payloads.
  */
 export function getMetadataNamespaceFlagsFromContentAndSharing(contentAndSharing: ?Object): {
     isFinal: boolean,
