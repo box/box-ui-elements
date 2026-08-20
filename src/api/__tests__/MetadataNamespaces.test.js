@@ -1,4 +1,4 @@
-import MetadataNamespaces from '../MetadataNamespaces';
+import MetadataNamespaces, { MetadataAuthTokenRequiredError } from '../MetadataNamespaces';
 import { METADATA_SCOPE_MODE_FINAL, METADATA_SCOPE_MODE_MIGRATION, METADATA_SCOPE_MODE_SCOPED } from '../../constants';
 
 jest.mock('../metadataNamespaceMocks', () => ({
@@ -66,25 +66,48 @@ describe('api/MetadataNamespaces', () => {
             await expect(api.resolveNamespacedRequestAuth(file)).resolves.toEqual({ accessToken: 'meta-token' });
         });
 
-        test('should fall back to the file-scoped id when the getter returns null', async () => {
+        test('should use the string token as-is when the getter returns null', async () => {
             host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
 
             await expect(api.resolveNamespacedRequestAuth(file)).resolves.toEqual({ id: 'file_123' });
         });
 
-        test('should fall back to the file-scoped id when the getter fails', async () => {
+        test('should reject when the getter returns null and token is a per-file function', async () => {
+            host.xhr.token = () => Promise.resolve('file-preview-token');
+            host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
+
+            await expect(api.resolveNamespacedRequestAuth(file)).rejects.toThrow(MetadataAuthTokenRequiredError);
+        });
+
+        test('should reject when the getter fails', async () => {
             host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
             getMetadataAuthToken.mockRejectedValue(new Error('mint failed'));
 
-            await expect(api.resolveNamespacedRequestAuth(file)).resolves.toEqual({ id: 'file_123' });
+            await expect(api.resolveNamespacedRequestAuth(file)).rejects.toThrow('mint failed');
         });
 
-        test('should fall back to the file-scoped id when the host omits the getter', async () => {
+        test('should use the string token as-is when the getter is omitted', async () => {
             host = createHost({ getMetadataAuthToken: undefined });
             host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
             api = new MetadataNamespaces(host);
 
             await expect(api.resolveNamespacedRequestAuth(file)).resolves.toEqual({ id: 'file_123' });
+        });
+
+        test('should reject when token is a per-file function and the getter is omitted', async () => {
+            host = createHost({
+                getMetadataAuthToken: undefined,
+                xhr: {
+                    token: () => Promise.resolve('file-preview-token'),
+                    get: jest.fn(),
+                    post: jest.fn(),
+                    put: jest.fn(),
+                },
+            });
+            host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
+            api = new MetadataNamespaces(host);
+
+            await expect(api.resolveNamespacedRequestAuth(file)).rejects.toThrow(MetadataAuthTokenRequiredError);
         });
     });
 
@@ -107,6 +130,22 @@ describe('api/MetadataNamespaces', () => {
                 data: { displayName: 'Contract' },
             });
             expect(host.xhr.token).toBe('preview-token');
+            expect(successCallback).toHaveBeenCalled();
+        });
+
+        test('should POST with a string token when the getter is omitted in MIGRATION mode', async () => {
+            host = createHost({ getMetadataAuthToken: undefined });
+            host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
+            api = new MetadataNamespaces(host);
+            const successCallback = jest.fn();
+
+            await api.createMetadataTemplate(file, { displayName: 'Contract' }, successCallback, jest.fn());
+
+            expect(host.xhr.post).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_templates/schema',
+                id: 'file_123',
+                data: { displayName: 'Contract' },
+            });
             expect(successCallback).toHaveBeenCalled();
         });
 
@@ -140,8 +179,31 @@ describe('api/MetadataNamespaces', () => {
         });
     });
 
+    describe('listNamespaces()', () => {
+        test('should not swallow a missing getter when token is a per-file function', async () => {
+            host = createHost({
+                getMetadataAuthToken: undefined,
+                xhr: {
+                    token: () => Promise.resolve('file-preview-token'),
+                    get: jest.fn().mockResolvedValue({ data: {} }),
+                    post: jest.fn(),
+                    put: jest.fn(),
+                },
+            });
+            host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
+            api = new MetadataNamespaces(host);
+
+            await expect(api.listNamespaces(file, 'enterprise_1', { limit: 20 })).rejects.toThrow(
+                MetadataAuthTokenRequiredError,
+            );
+            expect(host.xhr.get).not.toHaveBeenCalled();
+        });
+    });
+
     describe('getTemplateSchemaForEditor()', () => {
         test('should map hidden from the live schema response', async () => {
+            host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
+            getMetadataAuthToken.mockResolvedValue('meta-token');
             host.xhr.get.mockResolvedValue({
                 data: {
                     namespace: 'enterprise_1',

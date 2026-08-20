@@ -100,9 +100,9 @@ type APIOptions = {
      */
     metadataApiHost?: string,
     /**
-     * Optional host-provided getter that returns a metadata-service Bearer token.
-     * When omitted or when the getter returns null, namespaced requests fall
-     * back to the file-preview token.
+     * Optional getter for a user access token used on namespace / template-schema
+     * requests. Needed only when `token` is a per-file function. Hosts that pass
+     * a developer token or OAuth access token as `token` can omit this.
      */
     getMetadataAuthToken?: () => Promise<?string>,
     metadataNamespaceMode?: string,

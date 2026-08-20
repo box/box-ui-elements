@@ -23,6 +23,7 @@ import type { ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import type Xhr from '../utils/Xhr';
+import MetadataAuthTokenRequiredError from './MetadataAuthTokenRequiredError';
 // TODO: remove this import when namespace API is deployed
 import {
     IS_NAMESPACE_API_MOCKED,
@@ -32,6 +33,12 @@ import {
     mockUpdateMetadataTemplate,
     mockGetTemplateSchemaForEditor,
 } from './metadataNamespaceMocks';
+
+export { MetadataAuthTokenRequiredError };
+
+function isMetadataAuthTokenRequiredError(error: mixed): boolean {
+    return error instanceof MetadataAuthTokenRequiredError;
+}
 
 /** Minimal host surface MetadataNamespaces needs from Metadata. */
 export type MetadataNamespaceHost = {
@@ -64,10 +71,16 @@ export default class MetadataNamespaces {
     /**
      * Auth for namespace / template-schema calls.
      *
-     * In MIGRATION and FINAL (or when `forceMetadataToken` is set) uses a
-     * host-provided metadata-service token. Falls back to the file-scoped
-     * token when the getter is omitted or returns null (Storybook / full
-     * OAuth hosts).
+     * Template CRUD uses the public metadata template APIs. A user access token
+     * (developer token or OAuth, typically with `root_readwrite`) is enough.
+     *
+     * In MIGRATION/FINAL (or when `forceMetadataToken` is set):
+     * - If `getMetadataAuthToken` is provided, that string is used.
+     * - If it is omitted and `token` is already a string, TokenService sends it as-is.
+     * - If `token` is a per-file function, a getter is required — those tokens cannot
+     *   call template schema APIs.
+     *
+     * SCOPED mode does not swap tokens.
      */
     async resolveNamespacedRequestAuth(
         file: ?BoxItem,
@@ -77,14 +90,18 @@ export default class MetadataNamespaces {
         const isNamespacedMode = mode === METADATA_SCOPE_MODE_MIGRATION || mode === METADATA_SCOPE_MODE_FINAL;
         const shouldUseMetadataToken = !!options?.forceMetadataToken || isNamespacedMode;
 
-        if (shouldUseMetadataToken && typeof this.host.getMetadataAuthToken === 'function') {
-            try {
-                const token = await this.host.getMetadataAuthToken();
+        if (shouldUseMetadataToken) {
+            const getter = this.host.getMetadataAuthToken;
+            if (typeof getter === 'function') {
+                const token = await getter();
                 if (token) {
                     return { accessToken: token };
                 }
-            } catch (e) {
-                // Fall through to the file-scoped token.
+            }
+            // String `token` (developer / OAuth) is sent as-is by TokenService.
+            // Per-file token functions cannot call template schema APIs.
+            if (typeof this.host.xhr.token === 'function') {
+                throw new MetadataAuthTokenRequiredError();
             }
         }
 
@@ -146,6 +163,9 @@ export default class MetadataNamespaces {
             );
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
+            if (isMetadataAuthTokenRequiredError(e)) {
+                throw e;
+            }
             return { entries: [] };
         }
     }
@@ -172,6 +192,9 @@ export default class MetadataNamespaces {
             );
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
+            if (isMetadataAuthTokenRequiredError(e)) {
+                throw e;
+            }
             return { entries: [] };
         }
     }
