@@ -1,0 +1,40 @@
+---
+description: Open-source PR hygiene — no JIRA keys, internal repos, or media in public GitHub surfaces
+alwaysApply: true
+---
+
+# Open-source PR hygiene
+
+This repo is public on GitHub. Keep all agent-generated git and review surfaces free of internal Box references and media.
+
+## Never include JIRA tickets in
+
+- Branch names (e.g. do not use `PREVIEW-1234-...`)
+- PR titles
+- PR descriptions
+- Commit messages
+- Code comments
+
+Use a conventional subject only, e.g. `feat(gallery): add ARIA grid for 2D navigation`.
+
+## Never mention internal repos or systems
+
+Do not name private Box repos, internal services, Conduit/JIRA URLs, or other non-public tooling in commits, PRs, comments, or docs that ship with the open-source tree.
+
+## Never attach screenshots or videos to PRs
+
+Do not embed or link recordings/screenshots in the PR description. Share media privately (e.g. Box) outside the public PR.
+
+## Examples
+
+```text
+# ❌ BAD
+fix(doc): release pdf page memory (PREVIEW-1246)
+Branch: PREVIEW-1548-release-pdf-page-memory
+PR body: See WEBAPP-1234 and preview-client recordings: <box link>
+
+# ✅ GOOD
+fix(doc): release pdf page memory
+Branch: fix/release-pdf-page-memory
+PR body: Summary + test plan only; no ticket keys, internal repos, or media
+```
