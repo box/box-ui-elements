@@ -3,23 +3,23 @@ import API from '../../../api';
 import { METADATA_SCOPE_MODE_SCOPED } from '../../../constants';
 import { useFeatureEnabled } from '../../common/feature-checking';
 import useCurrentUserEnterpriseId from './useCurrentUserEnterpriseId';
-import useMetadataNamespaceMode, { type MetadataScopeMode } from './useMetadataNamespaceMode';
+import { type MetadataScopeMode } from './useMetadataNamespaceMode';
 
 export interface MetadataNamespaceContext {
     /** Enterprise root FQN (e.g. `enterprise_123`), or `undefined` while loading / unavailable. */
     enterpriseId: string | undefined;
-    /** Migration mode from enterprise configurations, or `null` while loading / unavailable. */
+    /** Host-provided migration mode, or `null` while loading / when opt-in is off. */
     metadataNamespaceMode: MetadataScopeMode | null;
     /** True when mode is known and not SCOPED (template browser / management UI). */
     isTemplateManagementEnabled: boolean;
-    /** True while the enterprise-configurations request is in flight. */
+    /** True while the host has passed `metadataNamespaceMode: null` (flags still loading). */
     isLoading: boolean;
 }
 
 export interface MetadataNamespaceContextOptions {
     /**
-     * Optional host-provided migration mode. When provided, skips
-     * GET /enterprise_configurations.
+     * Host-provided migration mode. BUIE does not fetch enterprise-configuration
+     * flags; omitting this keeps the sidebar in SCOPED-equivalent UI.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
     /**
@@ -32,9 +32,9 @@ export interface MetadataNamespaceContextOptions {
 /**
  * Resolves enterprise root namespace + migration mode for the metadata sidebar.
  *
- * Hosts may pass `metadataNamespaceMode` and `enterpriseId` to skip
- * `/users/me` and `GET /enterprise_configurations`. When those props are
- * omitted, this hook fetches them using the host token.
+ * Hosts pass `metadataNamespaceMode` (from GraphQL enterprise-configuration
+ * flags) and optionally `enterpriseId`. When mode is omitted, this hook does
+ * not call the network for flags — it stays in SCOPED-equivalent UI.
  *
  * When opt-in is off, skips network calls and returns the legacy
  * SCOPED-equivalent UI state (`mode: null`, management disabled).
@@ -50,26 +50,29 @@ export default function useMetadataNamespaceContext(
     const enterpriseIdOverride = options.enterpriseId;
     const enterpriseFile = useMemo(() => (fileId ? { id: fileId } : null), [fileId]);
 
-    const { enterpriseId, enterpriseNumericId } = useCurrentUserEnterpriseId(
+    const { enterpriseId } = useCurrentUserEnterpriseId(
         api,
         enterpriseFile,
         isNamespacesOptInEnabled && !enterpriseIdOverride,
         enterpriseIdOverride,
     );
-    const { mode: fetchedMode, isLoading } = useMetadataNamespaceMode(
-        enterpriseFile,
-        api,
-        enterpriseNumericId,
-        isNamespacesOptInEnabled && !hasModeOverride,
-    );
 
-    const metadataNamespaceMode = hasModeOverride ? modeOverride ?? null : fetchedMode;
+    if (!isNamespacesOptInEnabled) {
+        return {
+            enterpriseId: undefined,
+            metadataNamespaceMode: null,
+            isTemplateManagementEnabled: false,
+            isLoading: false,
+        };
+    }
+
+    const metadataNamespaceMode = hasModeOverride ? modeOverride ?? null : null;
     const isTemplateManagementEnabled = !!metadataNamespaceMode && metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED;
 
     return {
         enterpriseId,
         metadataNamespaceMode,
         isTemplateManagementEnabled,
-        isLoading: hasModeOverride ? modeOverride == null : isLoading,
+        isLoading: hasModeOverride && modeOverride == null,
     };
 }
