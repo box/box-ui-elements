@@ -8,7 +8,7 @@
  *
  * The metadata-editor package owns only UI; this file owns the wiring.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { AddMetadataTemplateDropdown, AddMetadataTemplateDropdownWithBrowser } from '@box/metadata-editor';
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 import type { ItemsService } from '@box/metadata-template-browser';
@@ -91,13 +91,40 @@ export default function MetadataTemplateDropdown({
         onEditTemplate: isMetadataTemplateManagementEnabled && onEditTemplate ? handleEditTemplateById : undefined,
     });
 
-    if (isMetadataTemplateManagementEnabled && enterpriseId && itemsService) {
+    // The template browser opens create/edit via ItemsService, not EventService.
+    const browserItemsService = useMemo<ItemsService | undefined>(() => {
+        if (!itemsService) {
+            return undefined;
+        }
+        return {
+            ...itemsService,
+            ...(onCreateTemplate
+                ? {
+                      createTemplate: async (namespaceFqn: string) => {
+                          onCreateTemplate(namespaceFqn);
+                          return undefined;
+                      },
+                  }
+                : {}),
+            ...(onEditTemplate
+                ? {
+                      updateTemplate: async (templateId: string) => {
+                          handleEditTemplateById(templateId);
+                          return undefined;
+                      },
+                  }
+                : {}),
+        };
+    }, [handleEditTemplateById, itemsService, onCreateTemplate, onEditTemplate]);
+
+    if (isMetadataTemplateManagementEnabled && enterpriseId && browserItemsService) {
         return (
             <AddMetadataTemplateDropdownWithBrowser
                 canCreateAtRoot={canCreateAtRoot}
                 enterpriseId={enterpriseId}
                 eventService={eventService}
-                itemsService={itemsService}
+                isNamespacesEnabled
+                itemsService={browserItemsService}
                 onOpenChange={onOpenChange}
                 open={open}
             />

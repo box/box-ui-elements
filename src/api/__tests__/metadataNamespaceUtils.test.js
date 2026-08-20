@@ -1,6 +1,7 @@
 import {
     getEnterpriseNamespaceFromInstances,
     getEnterpriseRootFromScopeOrNamespace,
+    getMetadataNamespaceFlagsFromContentAndSharing,
     isTemplateExternallyOwned,
     resolveMetadataNamespaceMode,
     resolveScopeOrNamespace,
@@ -34,6 +35,43 @@ describe('api/metadataNamespaceUtils', () => {
             expect(
                 getEnterpriseNamespaceFromInstances([{ $scope: 'global' }, { $namespace: 'enterprise_123.legal' }]),
             ).toBe('enterprise_123');
+        });
+    });
+
+    describe('getMetadataNamespaceFlagsFromContentAndSharing()', () => {
+        test('should read nested GraphQL field.value shape', () => {
+            expect(
+                getMetadataNamespaceFlagsFromContentAndSharing({
+                    is_scoped_templates_migration_enabled: { value: true },
+                    are_namespaced_metadata_templates_enabled: { value: false },
+                }),
+            ).toEqual({ isMigration: true, isFinal: false });
+        });
+
+        test('should read REST configFlags by camelCase name', () => {
+            expect(
+                getMetadataNamespaceFlagsFromContentAndSharing({
+                    configFlags: [
+                        { name: 'scopedTemplatesMigrationEnabled', value: true },
+                        { name: 'namespacedMetadataTemplatesEnabled', value: false },
+                    ],
+                }),
+            ).toEqual({ isMigration: true, isFinal: false });
+        });
+
+        test('should treat FINAL configFlags as FINAL even when migration is also true', () => {
+            expect(
+                getMetadataNamespaceFlagsFromContentAndSharing({
+                    configFlags: [{ name: 'namespacedMetadataTemplatesEnabled', value: true }],
+                }),
+            ).toEqual({ isMigration: false, isFinal: true });
+        });
+
+        test('should return both false when payload is empty', () => {
+            expect(getMetadataNamespaceFlagsFromContentAndSharing(null)).toEqual({
+                isMigration: false,
+                isFinal: false,
+            });
         });
     });
 

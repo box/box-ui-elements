@@ -27,46 +27,10 @@ function seedNamespace(fqn: string): void {
     if (templateStore[fqn]) return;
 
     if (!fqn.includes('.')) {
-        // Root namespace: templates have both scope + namespace (MIGRATION mode §1.7.2)
-        templateStore[fqn] = [
-            {
-                id: `${fqn}||productInfo`,
-                type: 'metadata_template',
-                scope: fqn,
-                namespace: fqn,
-                templateKey: 'productInfo',
-                displayName: 'Product Info',
-                hidden: false,
-                canEdit: true,
-                fields: [
-                    { type: 'string', key: 'category', displayName: 'Category', id: `${fqn}_f1` },
-                    { type: 'string', key: 'sku', displayName: 'SKU', id: `${fqn}_f2` },
-                ],
-            },
-            {
-                id: `${fqn}||contractDetails`,
-                type: 'metadata_template',
-                scope: fqn,
-                namespace: fqn,
-                templateKey: 'contractDetails',
-                displayName: 'Contract Details',
-                hidden: false,
-                canEdit: true,
-                fields: [
-                    { type: 'string', key: 'client', displayName: 'Client', id: `${fqn}_f3` },
-                    {
-                        type: 'enum',
-                        key: 'status',
-                        displayName: 'Status',
-                        id: `${fqn}_f4`,
-                        options: [
-                            { key: 'active', id: `${fqn}_o1` },
-                            { key: 'expired', id: `${fqn}_o2` },
-                        ],
-                    },
-                ],
-            },
-        ];
+        // Root namespace: do not seed fake templates. Existing enterprise
+        // templates come from GET /metadata_templates (already loaded by the
+        // sidebar) so they can be opened in the editor.
+        templateStore[fqn] = [];
     } else {
         // Child namespace: namespace-only templates (MIGRATION mode §1.7.2)
         const childKey = (fqn.split('.').pop(): any);
@@ -215,8 +179,8 @@ export function mockGetTemplateSchemaForEditor(namespaceFqn: string, templateKey
         displayName: tmpl.displayName,
         fields: (tmpl.fields || []).map(f => ({
             ...f,
-            isHidden: f.isHidden != null ? f.isHidden : f.hidden ?? false,
+            hidden: f.hidden != null ? f.hidden : f.isHidden ?? false,
         })),
-        isHidden: tmpl.isHidden != null ? tmpl.isHidden : tmpl.hidden ?? false,
+        hidden: tmpl.hidden != null ? tmpl.hidden : tmpl.isHidden ?? false,
     };
 }

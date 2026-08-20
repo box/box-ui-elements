@@ -10,6 +10,21 @@ interface UseCurrentUserEnterpriseIdReturn {
     enterpriseNumericId: string | undefined;
 }
 
+function parseHostEnterpriseId(hostEnterpriseId?: string | number): UseCurrentUserEnterpriseIdReturn | null {
+    if (hostEnterpriseId == null || hostEnterpriseId === '') {
+        return null;
+    }
+    const value = String(hostEnterpriseId);
+    if (value.startsWith(`${METADATA_SCOPE_ENTERPRISE}_`)) {
+        const enterpriseNumericId = value.slice(METADATA_SCOPE_ENTERPRISE.length + 1);
+        return enterpriseNumericId ? { enterpriseId: value, enterpriseNumericId } : null;
+    }
+    return {
+        enterpriseId: `${METADATA_SCOPE_ENTERPRISE}_${value}`,
+        enterpriseNumericId: value,
+    };
+}
+
 /**
  * Resolves the authenticated user's enterprise ID via `GET /users/me?fields=enterprise`.
  *
@@ -18,18 +33,26 @@ interface UseCurrentUserEnterpriseIdReturn {
  * file has no templates applied yet.
  *
  * When `isEnabled` is `false` the fetch is skipped.
+ * When `hostEnterpriseId` is provided (numeric, numeric string, or
+ * `enterprise_<id>` FQN), skips `/users/me` and uses that value.
+ * Current-user REST returns `enterprise.id` as a number. Used by federated
+ * hosts (preview-client) and unit tests.
  */
 export default function useCurrentUserEnterpriseId(
     api: API,
     file: BoxItem | { id: string } | null,
     isEnabled: boolean = true,
+    hostEnterpriseId?: string | number,
 ): UseCurrentUserEnterpriseIdReturn {
+    const hostEnterprise = parseHostEnterpriseId(hostEnterpriseId);
     const [enterpriseNumericId, setEnterpriseNumericId] = useState<string | undefined>(undefined);
     const fileId = file?.id;
 
     useEffect(() => {
-        if (!isEnabled || !fileId) {
-            setEnterpriseNumericId(undefined);
+        if (hostEnterpriseId || !isEnabled || !fileId) {
+            if (!hostEnterpriseId) {
+                setEnterpriseNumericId(undefined);
+            }
             return undefined;
         }
 
@@ -39,7 +62,8 @@ export default function useCurrentUserEnterpriseId(
             fileId,
             (user: User) => {
                 if (!cancelled) {
-                    setEnterpriseNumericId(user?.enterprise?.id);
+                    const id = user?.enterprise?.id;
+                    setEnterpriseNumericId(id == null || id === '' ? undefined : String(id));
                 }
             },
             () => {
@@ -57,7 +81,11 @@ export default function useCurrentUserEnterpriseId(
         return () => {
             cancelled = true;
         };
-    }, [api, fileId, isEnabled]);
+    }, [api, fileId, isEnabled, hostEnterpriseId]);
+
+    if (hostEnterprise) {
+        return hostEnterprise;
+    }
 
     const enterpriseId = enterpriseNumericId ? `${METADATA_SCOPE_ENTERPRISE}_${enterpriseNumericId}` : undefined;
 

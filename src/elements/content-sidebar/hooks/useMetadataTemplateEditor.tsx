@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
     MetadataTemplateEditorMode,
     MetadataTemplateEditorModal,
+    type FetchTaxonomyByKey,
     type MetadataTemplateApiResponse,
     type MetadataTemplateCreateBody,
     type MetadataTemplatePatchItem,
@@ -33,6 +34,12 @@ interface UseMetadataTemplateEditorArgs {
         patchItems: MetadataTemplatePatchItem[],
         identifier: { namespaceFQN: string; templateKey: string },
     ) => void | Promise<void>;
+    /**
+     * Resolves a single taxonomy by namespace + key so existing taxonomy fields
+     * can show display name and levels. Optional — omit it when the host cannot
+     * look up taxonomies (the editor falls back to a placeholder).
+     */
+    fetchTaxonomyByKey?: FetchTaxonomyByKey;
 }
 
 export interface UseMetadataTemplateEditorReturn {
@@ -65,6 +72,7 @@ export interface UseMetadataTemplateEditorReturn {
 export default function useMetadataTemplateEditor({
     onCreate,
     onEdit,
+    fetchTaxonomyByKey,
 }: UseMetadataTemplateEditorArgs): UseMetadataTemplateEditorReturn {
     const [state, setState] = useState<EditorState>({ status: 'closed' });
 
@@ -122,6 +130,7 @@ export default function useMetadataTemplateEditor({
                 namespace={state.namespace}
                 onOpenChange={handleOpenChange}
                 onCreateTemplate={handleCreate}
+                fetchTaxonomyByKey={fetchTaxonomyByKey}
             />
         );
     } else if (state.status === 'edit') {
@@ -132,6 +141,7 @@ export default function useMetadataTemplateEditor({
                 fetchTemplate={state.fetchTemplate}
                 onOpenChange={handleOpenChange}
                 onEditTemplate={handleEdit}
+                fetchTaxonomyByKey={fetchTaxonomyByKey}
             />
         );
     }

@@ -1177,30 +1177,30 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@2.5.3":
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.5.3.tgz#ca64a8198f03cf67cab9fc002e72d320a2c4e85a"
-  integrity sha512-sVMDORv+p5s8vofzraqP3ilvkmi+FufYrDLrEmXlIXX/0V3Keq/OdhCk4xPjy7MPpfpCWv3j6GXBcx9tBDTTxg==
+"@box/metadata-editor@^2.5.11":
+  version "2.5.11"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.5.11.tgz#faa6d3b2ca2e217896352ed20e076d827e4a06cf"
+  integrity sha512-7rS4Efpv1OuYBof43flIG64S1BsgK2X5p+LD9JP9mgfPS6D0C8e4YZVx1E0VvYAQo+1hWxWJruF2xt9dhob3hQ==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
 
-"@box/metadata-taxonomy-picker@3.3.6":
-  version "3.3.6"
-  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.3.6.tgz#1313453df8f1c1344b998a07efe3e5cb698d4ff0"
-  integrity sha512-Y/JjHtdwFscWHVU+uhrTKMRcc2bsoBicnJ+Xi1+WHcalzbk5zkCuqS1Vrlu2S79jVVA8ibQyRfeqx5kXzlSahQ==
+"@box/metadata-taxonomy-picker@^3.3.13":
+  version "3.3.13"
+  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.3.13.tgz#4efeb3c24718223a023273f562e072b010489897"
+  integrity sha512-1b3Tv8k/Fe//8muYiXvbSvepUj1nJ2vlT+ut8JE3nlE6UFjJYIEhBmV05XiTs9ht1hxf4yyVBCIgvmd2MKuCiw==
 
-"@box/metadata-template-browser@2.3.6":
-  version "2.3.6"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-2.3.6.tgz#bf99fb5586bda3eb48f3c5d30dc936ed18eedc6c"
-  integrity sha512-P9FudTVUmX0L1KYoDVVKi2pbk5gTniHfutyqc6vvsXPEe1dMlICa7fPZ5FCmEEOmijp65rR8IrDMCMNde6y/+Q==
+"@box/metadata-template-browser@^2.3.13":
+  version "2.3.13"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-2.3.13.tgz#8f952ddb991415d6de186001e169088c839e2e41"
+  integrity sha512-ZnW8ewgWuXOWkXEsKDMLB+q3oa+H5oaERnYJyOh+mJbkOMpysTOgwaQCw7TZ5NwFCYyJM6p3FReiZuoNwVD66A==
 
-"@box/metadata-template-editor@^2.3.0":
-  version "2.3.17"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.3.17.tgz#cd99c63748dd9e8942bbd6e2e1fd928a091e4362"
-  integrity sha512-heAXhnnACJ4uT9pENFOQDdwE2LtGeepmK6APRxhU2ZoIShlVWmocSMkzTnJKav2WQ6RE1ZclLXeDVeKBi0I8jg==
+"@box/metadata-template-editor@^2.3.35":
+  version "2.3.35"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.3.35.tgz#1826d693816355abccae41de5b07e46327f22d43"
+  integrity sha512-cPI0ireuQm7vuj/AdhU/zyMRSpXqBTdOzpxHF1Nvr4X7Cdu0KfDu+ufHfBprCKN88IOVacDwWcRZ1Catxpxj6g==
 
 "@box/metadata-view@^1.53.26":
   version "1.53.26"

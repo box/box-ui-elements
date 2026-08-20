@@ -71,7 +71,10 @@ const taxonomyTemplateInstance = {
     type: 'metadata_template',
 } as unknown as MetadataTemplateInstance;
 
-const api = { options: { token: jest.fn().mockResolvedValue({ read: 'r', write: 'w' }) } };
+const api = {
+    options: { token: jest.fn().mockResolvedValue({ read: 'r', write: 'w' }) },
+    getMetadataAPI: jest.fn().mockReturnValue({}),
+};
 
 const renderSidebar = (features: Record<string, boolean> = {}) => {
     const history = createMemoryHistory({ initialEntries: ['/metadata'] });
