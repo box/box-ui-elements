@@ -72,14 +72,14 @@ export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
     /**
-     * Host-provided migration mode.
-     * Hosts resolve this from GraphQL enterprise-configuration flags.
-     * When omitted, the sidebar stays in SCOPED-equivalent UI.
+     * Host-provided migration mode (`SCOPED` | `MIGRATION` | `FINAL`).
+     * Ignored when `features.metadata.namespacesOptIn` is off.
+     * When omitted (and opt-in is on), the sidebar stays in SCOPED.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
     /**
-     * Optional host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
-     * When set, skips GET /users/me.
+     * Host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
+     * Required for MIGRATION/FINAL template management. Hosts own this value.
      */
     enterpriseId?: string | number;
 }
@@ -155,14 +155,10 @@ function MetadataSidebarRedesign({
 
     const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
 
-    const { enterpriseId, metadataNamespaceMode, isTemplateManagementEnabled } = useMetadataNamespaceContext(
-        api,
-        fileId,
-        {
-            ...(hostMetadataNamespaceMode !== undefined ? { metadataNamespaceMode: hostMetadataNamespaceMode } : {}),
-            ...(hostEnterpriseId !== undefined ? { enterpriseId: hostEnterpriseId } : {}),
-        },
-    );
+    const { enterpriseId, metadataNamespaceMode, isTemplateManagementEnabled } = useMetadataNamespaceContext({
+        ...(hostMetadataNamespaceMode !== undefined ? { metadataNamespaceMode: hostMetadataNamespaceMode } : {}),
+        ...(hostEnterpriseId !== undefined ? { enterpriseId: hostEnterpriseId } : {}),
+    });
 
     const {
         clearExtractError,
@@ -203,7 +199,7 @@ function MetadataSidebarRedesign({
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
 
-    // Template management — gated behind namespace migration mode (MIGRATION or FINAL).
+    // Template management — gated behind opt-in and non-SCOPED mode.
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean | undefined>(undefined);
 
     // API-backed ItemsService for MetadataTemplateBrowser — only active when template management is enabled.
