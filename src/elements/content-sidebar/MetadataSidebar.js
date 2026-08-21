@@ -49,6 +49,10 @@ type ExternalProps = {
     onWarningModalDiscard?: () => void,
     onWarningModalClose?: () => void,
     trackEvent?: (eventName: string, data?: { [string]: any }) => void,
+    /** Host-provided migration mode. Ignored when namespaces opt-in is off. */
+    metadataNamespaceMode?: string,
+    /** Host-provided enterprise id. Used by the redesigned sidebar. */
+    enterpriseId?: string | number,
 };
 
 type PropsWithoutContext = {

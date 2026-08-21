@@ -30,8 +30,10 @@ import {
     AI_ACCEPTED_PROCESS,
     AI_EXTRACTED_PROCESS,
     HEADER_CONTENT_TYPE,
+    METADATA_SCOPE_MODE_SCOPED,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
+    METADATA_NAMESPACE_GLOBAL,
     METADATA_TEMPLATE_FETCH_LIMIT,
     METADATA_TEMPLATE_PROPERTIES,
     METADATA_TEMPLATE_CLASSIFICATION,
@@ -54,7 +56,7 @@ import {
     ERROR_CODE_FETCH_METADATA_TAXONOMY,
 } from '../constants';
 
-import type { RequestOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
+import type { ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -67,8 +69,53 @@ import type {
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
+import MetadataNamespaces from './MetadataNamespaces';
+import {
+    getEnterpriseNamespaceFromInstances as resolveEnterpriseNamespaceFromInstances,
+    getEnterpriseRootFromScopeOrNamespace as resolveEnterpriseRoot,
+    isTemplateExternallyOwned,
+    resolveScopeOrNamespace,
+} from './metadataNamespaceUtils';
+
+/** Options for getMetadata — cache flags plus namespace-migration context. */
+type MetadataGetOptions = {
+    enterpriseFqn?: string,
+    fields?: Array<string>,
+    forceFetch?: boolean,
+    metadataNamespaceMode?: string,
+    noPagination?: boolean,
+    refreshCache?: boolean,
+};
 
 class Metadata extends File {
+    /**
+     * Namespace migration mode for URL helpers on this Metadata instance.
+     * Defaults to SCOPED. getMetadata updates it from per-call options so
+     * subsequent template/instance URLs match the resolved sidebar mode.
+     *
+     * @property {string}
+     */
+    metadataNamespaceMode: string;
+
+    namespacesAPI: ?MetadataNamespaces;
+
+    constructor(options: Object) {
+        super(options);
+        this.metadataNamespaceMode = this.options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
+    }
+
+    /**
+     * Lazy collaborator for namespace-migration HTTP (list/create/update + mode).
+     *
+     * @return {MetadataNamespaces}
+     */
+    getNamespacesAPI(): MetadataNamespaces {
+        if (!this.namespacesAPI) {
+            this.namespacesAPI = new MetadataNamespaces(this);
+        }
+        return this.namespacesAPI;
+    }
+
     /**
      * Creates a key for the metadata cache
      *
@@ -103,10 +150,28 @@ class Metadata extends File {
      * Creates a key for the metadata template schema cache
      *
      * @param {string} templateKey - template key
+     * @param {string} [scope] - scope or namespace FQN (defaults to `enterprise`)
      * @return {string} key
      */
-    getMetadataTemplateSchemaCacheKey(templateKey: string): string {
-        return `${CACHE_PREFIX_METADATA}template_schema_${templateKey}`;
+    getMetadataTemplateSchemaCacheKey(templateKey: string, scope?: string = METADATA_SCOPE_ENTERPRISE): string {
+        return `${CACHE_PREFIX_METADATA}template_schema_${scope}_${templateKey}`;
+    }
+
+    /**
+     * Resolves the URL path segment for a given scope/namespace, accounting for
+     * the current namespace migration mode.
+     *
+     * - In FINAL mode, the legacy 'global' scope is replaced by 'box.metadata'.
+     * - For namespace-only resources (scope absent), the namespace FQN is used
+     *   directly as the path segment.
+     * - All other scopes are passed through unchanged.
+     *
+     * @param {?string} scope - legacy scope value (e.g. 'global', 'enterprise_123456')
+     * @param {?string} [namespace] - namespace FQN used as fallback when scope is absent
+     * @return {string} resolved URL path segment
+     */
+    getScopeOrNamespace(scope: ?string, namespace?: ?string): string {
+        return resolveScopeOrNamespace(this.metadataNamespaceMode, scope, namespace);
     }
 
     /**
@@ -213,13 +278,20 @@ class Metadata extends File {
     }
 
     /**
-     * API URL for getting metadata template schema by template key
+     * API URL for getting metadata template schema by template key.
+     *
+     * In SCOPED mode the path segment is the `enterprise` shorthand.
+     * In MIGRATION/FINAL mode the API requires the full scope value (e.g.
+     * `enterprise_123456`) or a namespace FQN, so callers should pass the
+     * resolved scope/namespace when operating in those modes.
      *
      * @param {string} templateKey - metadata template key
+     * @param {string} [scope] - scope or namespace FQN; defaults to the
+     *   `enterprise` shorthand for backward compatibility with SCOPED mode
      * @return {string} API url for getting template schema by template key
      */
-    getMetadataTemplateSchemaUrl(templateKey: string): string {
-        return `${this.getMetadataTemplateUrl()}/enterprise/${templateKey}/schema`;
+    getMetadataTemplateSchemaUrl(templateKey: string, scope?: string = METADATA_SCOPE_ENTERPRISE): string {
+        return `${this.getMetadataTemplateUrl()}/${scope}/${templateKey}/schema`;
     }
 
     /**
@@ -232,6 +304,63 @@ class Metadata extends File {
         return `${this.getMetadataTemplateUrl()}/${scope}`;
     }
 
+    /** @see MetadataNamespaces.getMetadataNamespacesUrl */
+    getMetadataNamespacesUrl(namespaceFqn: string): string {
+        return this.getNamespacesAPI().getMetadataNamespacesUrl(namespaceFqn);
+    }
+
+    /** @see MetadataNamespaces.listNamespaces */
+    listNamespaces(
+        file: BoxItem,
+        namespaceFqn: string,
+        params: { limit: number, marker?: string },
+    ): Promise<{ entries: Array<Object>, next_marker?: string }> {
+        return this.getNamespacesAPI().listNamespaces(file, namespaceFqn, params);
+    }
+
+    /** @see MetadataNamespaces.listTemplatesForNamespace */
+    listTemplatesForNamespace(
+        file: BoxItem,
+        namespaceFqn: string,
+        params: { limit: number, marker?: string },
+    ): Promise<{ entries: Array<Object>, next_marker?: string }> {
+        return this.getNamespacesAPI().listTemplatesForNamespace(file, namespaceFqn, params);
+    }
+
+    /** @see MetadataNamespaces.createMetadataTemplate */
+    createMetadataTemplate(
+        file: BoxItem,
+        body: Object,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        return this.getNamespacesAPI().createMetadataTemplate(file, body, successCallback, errorCallback);
+    }
+
+    /** @see MetadataNamespaces.updateMetadataTemplate */
+    updateMetadataTemplate(
+        file: BoxItem,
+        namespaceFqn: string,
+        templateKey: string,
+        patchItems: Array<Object>,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        return this.getNamespacesAPI().updateMetadataTemplate(
+            file,
+            namespaceFqn,
+            templateKey,
+            patchItems,
+            successCallback,
+            errorCallback,
+        );
+    }
+
+    /** @see MetadataNamespaces.getTemplateSchemaForEditor */
+    getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file?: BoxItem): Promise<Object> {
+        return this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+    }
+
     /**
      * Returns the custom properties template
      *
@@ -241,6 +370,7 @@ class Metadata extends File {
         return {
             id: uniqueId('metadata_template_'),
             scope: METADATA_SCOPE_GLOBAL,
+            namespace: METADATA_NAMESPACE_GLOBAL,
             templateKey: METADATA_TEMPLATE_PROPERTIES,
             hidden: false,
             fields: [],
@@ -336,10 +466,11 @@ class Metadata extends File {
                 });
                 return {
                     path: taxonomyPath,
-                    levels: result.data.levels || [],
+                    levels: getProp(result, 'data.levels', []),
                 };
             } catch (error) {
-                throw new Error(`Failed to fetch taxonomy for path: ${taxonomyPath}`);
+                // A missing taxonomy must not fail the whole metadata sidebar.
+                return { path: taxonomyPath, levels: [] };
             }
         });
 
@@ -397,7 +528,6 @@ class Metadata extends File {
         const url = instanceId
             ? this.getMetadataTemplateUrlForInstance(instanceId)
             : this.getMetadataTemplateUrlForScope(scope);
-
         try {
             templates = await this.xhr.get({
                 url,
@@ -423,25 +553,34 @@ class Metadata extends File {
     }
 
     /**
-     * Gets metadata template schema by template key
+     * Gets metadata template schema by template key.
+     *
+     * In MIGRATION/FINAL mode, pass the full scope (e.g. `enterprise_123456`)
+     * or namespace FQN as `scope` so the correct URL path segment is used.
+     * Omitting `scope` falls back to the `enterprise` shorthand (SCOPED mode).
      *
      * @param {string} templateKey - template key
+     * @param {string} [scope] - scope or namespace FQN (defaults to `enterprise`)
      * @return {Promise} Promise object of metadata template
      */
-    async getSchemaByTemplateKey(templateKey: string): Promise<MetadataTemplateSchemaResponse> {
+    async getSchemaByTemplateKey(
+        templateKey: string,
+        scope?: string,
+        fileId?: string,
+    ): Promise<MetadataTemplateSchemaResponse> {
         const cache: APICache = this.getCache();
-        const key = this.getMetadataTemplateSchemaCacheKey(templateKey);
+        const key = this.getMetadataTemplateSchemaCacheKey(templateKey, scope);
 
-        // Return cached value if it exists
         if (cache.has(key)) {
             return cache.get(key);
         }
 
-        // Fetch from API if not cached
-        const url = this.getMetadataTemplateSchemaUrl(templateKey);
-        const response = await this.xhr.get({ url });
+        const url = this.getMetadataTemplateSchemaUrl(templateKey, scope);
+        const response = await this.xhr.get({
+            url,
+            ...(fileId ? { id: getTypedFileId(fileId) } : {}),
+        });
 
-        // Cache the response
         cache.set(key, response);
 
         return response;
@@ -557,32 +696,69 @@ class Metadata extends File {
         return instances;
     }
 
+    /** @see metadataNamespaceUtils.getEnterpriseRootFromScopeOrNamespace */
+    getEnterpriseRootFromScopeOrNamespace(scope: ?string, namespace: ?string): string | null {
+        return resolveEnterpriseRoot(scope, namespace);
+    }
+
     /**
      * Finds template for a given metadata instance.
      *
      * @param {string} id - Box file id
      * @param {Object} instance - metadata instance
      * @param {Array} templates - metadata templates
+     * @param {string} [viewerEnterpriseFqn] - viewer's enterprise root FQN
      * @return {Object|undefined} template for metadata instance
      */
     async getTemplateForInstance(
         id: string,
         instance: MetadataInstanceV2,
         templates: Array<MetadataTemplate>,
+        viewerEnterpriseFqn?: string,
     ): Promise<?{ template: MetadataTemplate, isExternallyOwned: boolean }> {
         const instanceId = instance.$id;
         const templateKey = instance.$template;
         const scope = instance.$scope;
-        const template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
+        const namespace = instance.$namespace;
 
-        // Enterprise scopes are always enterprise_XXXXX
-        if (!template && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-            // Any missing template is likely from another enterprise (e.g. collaborated file);
-            // Templates array has no pagination so we can assume cross-enterprise as it contains all templates.
-            const crossEnterpriseTemplates = await this.getTemplates(id, scope, instanceId, true);
-            // The API always returns an array of at most one item
-            const crossEnterpriseTemplate = crossEnterpriseTemplates[0];
-            return { template: crossEnterpriseTemplate, isExternallyOwned: true };
+        // Primary match: by scope (SCOPED mode; also works for enterprise-scoped
+        // instances in MIGRATION mode where $scope is still populated).
+        // Only run when scope is defined so namespace-only instances (undefined
+        // $scope) do not incorrectly match templates that also lack scope.
+        let template =
+            scope != null ? templates.find(t => t.templateKey === templateKey && t.scope === scope) : undefined;
+
+        // Fallback match: by namespace for namespace-only instances in
+        // MIGRATION/FINAL mode where $scope is absent.
+        if (!template && namespace) {
+            template = templates.find(t => t.templateKey === templateKey && t.namespace === namespace);
+        }
+
+        if (!template && instanceId) {
+            const instanceEnterpriseRoot = resolveEnterpriseRoot(scope, namespace);
+            const hasEnterpriseScope = !!(
+                scope &&
+                (scope === METADATA_SCOPE_ENTERPRISE || scope.startsWith(`${METADATA_SCOPE_ENTERPRISE}_`))
+            );
+
+            // Fetch missing templates for enterprise FQNs and the scoped
+            // shorthand `enterprise`. The shorthand is not an FQN, so it
+            // must not go through getEnterpriseRoot for ownership matching.
+            if (instanceEnterpriseRoot || hasEnterpriseScope) {
+                const isExternallyOwned = instanceEnterpriseRoot
+                    ? isTemplateExternallyOwned(instanceEnterpriseRoot, viewerEnterpriseFqn, hasEnterpriseScope)
+                    : !viewerEnterpriseFqn;
+
+                const fetchedTemplates = await this.getTemplates(
+                    id,
+                    scope || namespace || instanceEnterpriseRoot || '',
+                    instanceId,
+                    isExternallyOwned,
+                );
+                // The API always returns an array of at most one item
+                const fetchedTemplate = fetchedTemplates[0];
+                return fetchedTemplate ? { template: fetchedTemplate, isExternallyOwned } : null;
+            }
         }
         return template ? { template, isExternallyOwned: false } : null;
     }
@@ -605,6 +781,7 @@ class Metadata extends File {
         enterpriseTemplates: Array<MetadataTemplate>,
         globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
+        viewerEnterpriseFqn?: string,
     ): Promise<Array<MetadataEditor>> {
         // All usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -616,7 +793,7 @@ class Metadata extends File {
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
             instances.map(async instance => {
-                const result = await this.getTemplateForInstance(id, instance, templates);
+                const result = await this.getTemplateForInstance(id, instance, templates, viewerEnterpriseFqn);
                 if (result && result.template) {
                     editors.push(this.createEditor(instance, result.template, canEdit));
                 }
@@ -696,6 +873,7 @@ class Metadata extends File {
             id: template.id,
             fields,
             scope: template.scope,
+            namespace: template.namespace,
             templateKey: template.templateKey,
             type: instance.$type,
         };
@@ -720,6 +898,7 @@ class Metadata extends File {
         globalTemplates: Array<MetadataTemplate>,
         canEdit: boolean,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
+        viewerEnterpriseFqn?: string,
     ): Promise<Array<MetadataTemplateInstance>> {
         // Get all usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -732,7 +911,7 @@ class Metadata extends File {
 
         await Promise.all(
             instances.map(async instance => {
-                const result = await this.getTemplateForInstance(id, instance, templates);
+                const result = await this.getTemplateForInstance(id, instance, templates, viewerEnterpriseFqn);
                 if (result && result.template) {
                     templateInstances.push(
                         this.createTemplateInstance(
@@ -748,6 +927,57 @@ class Metadata extends File {
         );
 
         return templateInstances;
+    }
+
+    /** @see metadataNamespaceUtils.getEnterpriseNamespaceFromInstances */
+    getEnterpriseNamespaceFromInstances(instances: Array<MetadataInstanceV2>): string | null {
+        return resolveEnterpriseNamespaceFromInstances(instances);
+    }
+
+    /**
+     * SCOPED mode: fetch instances + global + enterprise templates in parallel.
+     */
+    async fetchTemplatesAndInstancesScoped(
+        id: string,
+        hasMetadataFeature: boolean,
+        isMetadataRedesign: boolean,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean,
+    ): Promise<{
+        instances: Array<MetadataInstanceV2>,
+        globalTemplates: Array<MetadataTemplate>,
+        enterpriseTemplates: Array<MetadataTemplate>,
+    }> {
+        const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
+            this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
+            this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
+            hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
+        ]);
+        return { instances, globalTemplates, enterpriseTemplates };
+    }
+
+    /**
+     * MIGRATION/FINAL mode: `'enterprise'` shorthand is invalid. Prefer the
+     * caller's enterprise root FQN; fall back to deriving it from instances.
+     */
+    async fetchTemplatesAndInstancesNamespaced(
+        id: string,
+        hasMetadataFeature: boolean,
+        isMetadataRedesign: boolean,
+        isBoundingBoxOrConfidenceScoreReviewEnabled: boolean,
+        enterpriseFqn?: string,
+    ): Promise<{
+        instances: Array<MetadataInstanceV2>,
+        globalTemplates: Array<MetadataTemplate>,
+        enterpriseTemplates: Array<MetadataTemplate>,
+    }> {
+        const [instances, globalTemplates] = await Promise.all([
+            this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
+            this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
+        ]);
+        const enterpriseNamespace = enterpriseFqn || resolveEnterpriseNamespaceFromInstances(instances);
+        const enterpriseTemplates =
+            hasMetadataFeature && enterpriseNamespace ? await this.getTemplates(id, enterpriseNamespace) : [];
+        return { instances, globalTemplates, enterpriseTemplates };
     }
 
     /**
@@ -771,7 +1001,7 @@ class Metadata extends File {
         }) => void,
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
-        options: RequestOptions = {},
+        options: MetadataGetOptions = {},
         isMetadataRedesign: boolean = false,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
     ): Promise<void> {
@@ -805,14 +1035,32 @@ class Metadata extends File {
 
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
-            const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
-                this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled),
-                this.getTemplates(id, METADATA_SCOPE_GLOBAL),
-                hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
-            ]);
+
+            // Per-call mode for this fetch; persist on the instance so later
+            // URL helpers (create/update/delete) on the same Metadata client
+            // match. Not stored on Base — File/Users/etc. do not use it.
+            const metadataNamespaceMode = options.metadataNamespaceMode || this.metadataNamespaceMode;
+            this.metadataNamespaceMode = metadataNamespaceMode;
+
+            const { instances, globalTemplates, enterpriseTemplates } =
+                metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED
+                    ? await this.fetchTemplatesAndInstancesNamespaced(
+                          id,
+                          hasMetadataFeature,
+                          isMetadataRedesign,
+                          isBoundingBoxOrConfidenceScoreReviewEnabled,
+                          options.enterpriseFqn,
+                      )
+                    : await this.fetchTemplatesAndInstancesScoped(
+                          id,
+                          hasMetadataFeature,
+                          isMetadataRedesign,
+                          isBoundingBoxOrConfidenceScoreReviewEnabled,
+                      );
 
             // Filter out classification
             const filteredInstances = this.extractClassification(id, instances);
+            const viewerEnterpriseFqn = options.enterpriseFqn;
 
             const templateInstances = isMetadataRedesign
                 ? await this.getTemplateInstances(
@@ -823,6 +1071,7 @@ class Metadata extends File {
                       globalTemplates,
                       !!permissions.can_upload,
                       isBoundingBoxOrConfidenceScoreReviewEnabled,
+                      viewerEnterpriseFqn,
                   )
                 : [];
             const editors = !isMetadataRedesign
@@ -833,6 +1082,7 @@ class Metadata extends File {
                       enterpriseTemplates,
                       globalTemplates,
                       !!permissions.can_upload,
+                      viewerEnterpriseFqn,
                   )
                 : [];
 
@@ -900,7 +1150,11 @@ class Metadata extends File {
         try {
             if (!skills.data) {
                 skills = await this.xhr.get({
-                    url: this.getMetadataUrl(id, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_SKILLS),
+                    url: this.getMetadataUrl(
+                        id,
+                        this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL),
+                        METADATA_TEMPLATE_SKILLS,
+                    ),
                     id: getTypedFileId(id),
                 });
             }
@@ -948,7 +1202,7 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.put({
-                url: this.getMetadataUrl(id, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_SKILLS),
+                url: this.getMetadataUrl(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL), METADATA_TEMPLATE_SKILLS),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
@@ -1010,8 +1264,16 @@ class Metadata extends File {
             const metadata = await this.xhr.put({
                 url:
                     type === 'file'
-                        ? this.getMetadataUrl(id, template.scope, template.templateKey)
-                        : this.getMetadataUrlForFolder(id, template.scope, template.templateKey),
+                        ? this.getMetadataUrl(
+                              id,
+                              this.getScopeOrNamespace(template.scope, template.namespace),
+                              template.templateKey,
+                          )
+                        : this.getMetadataUrlForFolder(
+                              id,
+                              this.getScopeOrNamespace(template.scope, template.namespace),
+                              template.templateKey,
+                          ),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
@@ -1123,7 +1385,11 @@ class Metadata extends File {
 
         try {
             await this.xhr.put({
-                url: this.getMetadataUrl(id, templateInstance.scope, templateInstance.templateKey),
+                url: this.getMetadataUrl(
+                    id,
+                    this.getScopeOrNamespace(templateInstance.scope, templateInstance.namespace),
+                    templateInstance.templateKey,
+                ),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
@@ -1182,7 +1448,8 @@ class Metadata extends File {
 
         const canEdit = !!permissions.can_upload;
         const isProperties =
-            template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
+            template.templateKey === METADATA_TEMPLATE_PROPERTIES &&
+            (template.scope === METADATA_SCOPE_GLOBAL || template.namespace === METADATA_NAMESPACE_GLOBAL);
 
         if (!canEdit || (is_externally_owned && !isProperties)) {
             errorCallback(getBadPermissionsError(), this.errorCode);
@@ -1193,7 +1460,11 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.post({
-                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                url: this.getMetadataUrl(
+                    id,
+                    this.getScopeOrNamespace(template.scope, template.namespace),
+                    template.templateKey,
+                ),
                 id: getTypedFileId(id),
                 data: {},
             });
@@ -1242,7 +1513,8 @@ class Metadata extends File {
 
         const canEdit = !!permissions.can_upload;
         const isProperties =
-            template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
+            template.templateKey === METADATA_TEMPLATE_PROPERTIES &&
+            (template.scope === METADATA_SCOPE_GLOBAL || template.namespace === METADATA_NAMESPACE_GLOBAL);
 
         if (!canEdit || (is_externally_owned && !isProperties)) {
             errorCallback(getBadPermissionsError(), this.errorCode);
@@ -1315,7 +1587,11 @@ class Metadata extends File {
             }
 
             const metadata = await this.xhr.post({
-                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                url: this.getMetadataUrl(
+                    id,
+                    this.getScopeOrNamespace(template.scope, template.namespace),
+                    template.templateKey,
+                ),
                 id: getTypedFileId(id),
                 data: fieldsValues,
             });
@@ -1357,7 +1633,7 @@ class Metadata extends File {
             return;
         }
 
-        const { scope, templateKey }: MetadataTemplate = template;
+        const { scope, namespace, templateKey }: MetadataTemplate = template;
         const { id, permissions }: BoxItem = file;
 
         if (!id || !permissions) {
@@ -1375,7 +1651,7 @@ class Metadata extends File {
 
         try {
             await this.xhr.delete({
-                url: this.getMetadataUrl(id, scope, templateKey),
+                url: this.getMetadataUrl(id, this.getScopeOrNamespace(scope, namespace), templateKey),
                 id: getTypedFileId(id),
             });
             if (!this.isDestroyed()) {
@@ -1385,14 +1661,18 @@ class Metadata extends File {
                 if (isMetadataRedesign) {
                     metadata.templateInstances.splice(
                         metadata.templateInstances.findIndex(
-                            instance => instance.scope === scope && instance.templateKey === templateKey,
+                            instance =>
+                                instance.templateKey === templateKey &&
+                                (scope ? instance.scope === scope : instance.namespace === namespace),
                         ),
                         1,
                     );
                 } else {
                     metadata.editors.splice(
                         metadata.editors.findIndex(
-                            editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
+                            editor =>
+                                editor.template.templateKey === templateKey &&
+                                (scope ? editor.template.scope === scope : editor.template.namespace === namespace),
                         ),
                         1,
                     );
