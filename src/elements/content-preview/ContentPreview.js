@@ -138,6 +138,8 @@ type Props = {
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
+    // Required when useNpmBoxContentPreview is on. Import loadBoxContentPreview from its own file and pass it here.
+    loadPreviewModule?: () => Promise<{ Preview?: any }>,
     loadingIndicatorDelayMs?: number,
     logoUrl?: string,
     measureRef: Function,
@@ -157,6 +159,9 @@ type Props = {
     },
     previewLibraryVersion: string,
     previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
+    // npm path only: URL of the pdfjs worker file, resolved by the consumer's bundler.
+    // Passed to box-content-preview in the show() options as `pdfjs.workerSrc`.
+    pdfjsWorkerSrc?: string,
     resin?: {
         recordAction?: (data: Object) => void,
     },
@@ -280,6 +285,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     state: State;
 
     preview: any;
+
+    npmPreviewModule: ?{ Preview: any };
+
+    npmPreviewLoadFailed: boolean = false;
 
     api: API;
 
@@ -472,10 +481,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        // Always load Box.Preview library assets
+        // Always load preview library assets (npm module or CDN script)
         // Even when children are provided, we need assets ready for transitions
-        this.loadStylesheet();
-        this.loadScript();
+        if (this.shouldUseNpmPreview()) {
+            this.loadNpmPreview();
+        } else {
+            this.loadStylesheet();
+            this.loadScript();
+        }
 
         const { currentFileId } = this.state;
         const { loadingIndicatorDelayMs } = this.props;
@@ -490,6 +503,64 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         this.fetchFile(currentFileId);
         this.focusPreview();
+    }
+
+    shouldUseNpmPreview(): boolean {
+        return isFeatureEnabled(this.props.features, 'useNpmBoxContentPreview');
+    }
+
+    loadNpmPreview = async (): Promise<void> => {
+        if (this.npmPreviewModule) {
+            return;
+        }
+
+        const { loadPreviewModule } = this.props;
+        if (!loadPreviewModule) {
+            this.onNpmPreviewLoadError('loadPreviewModule is required when useNpmBoxContentPreview is enabled');
+            return;
+        }
+
+        let previewModule;
+        try {
+            previewModule = await loadPreviewModule();
+        } catch (error) {
+            this.onNpmPreviewLoadError(
+                `Failed to load the box-content-preview module: ${error?.message || String(error)}`,
+            );
+            return;
+        }
+
+        if (!previewModule.Preview) {
+            this.onNpmPreviewLoadError('box-content-preview module has no Preview export');
+            return;
+        }
+
+        this.npmPreviewModule = previewModule;
+        this.loadPreview();
+    };
+
+    getNpmPreviewLocation(): { baseURI: string, locale: string, staticBaseURI: string, version: string } {
+        const { language, previewLibraryVersion, staticHost, staticPath } = this.props;
+        const trailingSlash = staticHost.endsWith('/') ? '' : '/';
+        const staticBaseURI = `${staticHost}${trailingSlash}${staticPath}/`;
+        return {
+            baseURI: `${staticBaseURI}${previewLibraryVersion}/${language}/`,
+            locale: language,
+            staticBaseURI,
+            version: previewLibraryVersion,
+        };
+    }
+
+    onNpmPreviewLoadError(message: string): void {
+        const { onError } = this.props;
+        const error = {
+            code: ERROR_CODE_UNKNOWN,
+            message,
+        };
+        this.npmPreviewLoadFailed = true;
+        this.endLoadingSession();
+        this.setState({ error });
+        onError(error, ERROR_CODE_UNKNOWN, { error }, ORIGIN_PREVIEW);
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
@@ -628,6 +699,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {boolean} true if preview is loaded
      */
     isPreviewLibraryLoaded(): boolean {
+        if (this.shouldUseNpmPreview()) {
+            return !!this.npmPreviewModule;
+        }
         return !!global.Box && !!global.Box.Preview;
     }
 
@@ -1013,8 +1087,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
             showProgress: false,
             skipServerUpdate: true,
             useHotkeys: false,
+            ...(this.npmPreviewModule && this.props.pdfjsWorkerSrc
+                ? { pdfjs: { workerSrc: this.props.pdfjsWorkerSrc } }
+                : {}),
+            ...(this.npmPreviewModule ? { location: this.getNpmPreviewLocation() } : {}),
         };
-        const { Preview } = global.Box;
+
+        const Preview =
+            this.shouldUseNpmPreview() && this.npmPreviewModule ? this.npmPreviewModule.Preview : global.Box.Preview;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preload', this.endLoadingSession);
@@ -1080,6 +1160,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
         this.fetchFileEndTime = performance.now();
+
+        if (this.npmPreviewLoadFailed) {
+            this.setState({ file });
+            return;
+        }
 
         const { file: currentFile }: State = this.state;
         const isExistingFile = currentFile ? currentFile.id === file.id : false;
