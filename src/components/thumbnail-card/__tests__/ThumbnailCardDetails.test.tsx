@@ -12,7 +12,7 @@ jest.mock('../../../utils/dom', () => ({ useIsContentOverflowed: jest.fn() }));
 
 describe('components/thumbnail-card/ThumbnailCardDetails', () => {
     beforeEach(() => {
-        libDom.useIsContentOverflowed.mockReturnValue(false);
+        (libDom.useIsContentOverflowed as jest.Mock).mockReturnValue(false);
     });
 
     test('should render', () => {
@@ -44,7 +44,7 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
     });
 
     test('should render a Tooltip if text is overflowed', async () => {
-        libDom.useIsContentOverflowed.mockReturnValue(true);
+        (libDom.useIsContentOverflowed as jest.Mock).mockReturnValue(true);
         renderComponent();
 
         await userEvent.tab();
