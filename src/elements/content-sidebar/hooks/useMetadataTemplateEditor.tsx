@@ -2,21 +2,11 @@ import React, { useCallback, useState } from 'react';
 import {
     MetadataTemplateEditorMode,
     MetadataTemplateEditorModal,
+    type FetchTaxonomyByKey,
     type MetadataTemplateApiResponse,
     type MetadataTemplateCreateBody,
     type MetadataTemplatePatchItem,
-    type TaxonomyOption,
 } from '@box/metadata-template-editor';
-
-/** Resolves one taxonomy by namespace + key. Defined locally — older package types omit this export. */
-type FetchTaxonomyByKey = (params: { namespace: string; taxonomyKey: string }) => Promise<TaxonomyOption>;
-
-type TemplateEditorModalProps = React.ComponentProps<typeof MetadataTemplateEditorModal>;
-type TaxonomyFetchKeys = Extract<keyof TemplateEditorModalProps, 'fetchTaxonomies' | 'fetchTaxonomyByKey'>;
-type TaxonomyFetchProps = Pick<TemplateEditorModalProps, TaxonomyFetchKeys>;
-type FetchTaxonomies = 'fetchTaxonomies' extends keyof TemplateEditorModalProps
-    ? NonNullable<TemplateEditorModalProps['fetchTaxonomies']>
-    : never;
 
 type ClosedState = { status: 'closed' };
 type CreateState = { status: 'create'; namespace: string };
@@ -50,12 +40,6 @@ interface UseMetadataTemplateEditorArgs {
      * look up taxonomies (the editor falls back to a placeholder).
      */
     fetchTaxonomyByKey?: FetchTaxonomyByKey;
-    /**
-     * Lazy-loads the taxonomy catalogue for the field picker. Optional — omit it
-     * when the host has no list endpoint (the picker stays empty until by-key
-     * resolution fills individual fields).
-     */
-    fetchTaxonomies?: FetchTaxonomies;
 }
 
 export interface UseMetadataTemplateEditorReturn {
@@ -89,7 +73,6 @@ export default function useMetadataTemplateEditor({
     onCreate,
     onEdit,
     fetchTaxonomyByKey,
-    fetchTaxonomies,
 }: UseMetadataTemplateEditorArgs): UseMetadataTemplateEditorReturn {
     const [state, setState] = useState<EditorState>({ status: 'closed' });
 
@@ -137,11 +120,6 @@ export default function useMetadataTemplateEditor({
         [onEdit, close],
     );
 
-    const taxonomyProps = {
-        ...(fetchTaxonomies ? { fetchTaxonomies } : {}),
-        ...(fetchTaxonomyByKey ? { fetchTaxonomyByKey } : {}),
-    } as TaxonomyFetchProps;
-
     let modal: React.ReactNode = null;
 
     if (state.status === 'create') {
@@ -152,7 +130,7 @@ export default function useMetadataTemplateEditor({
                 namespace={state.namespace}
                 onOpenChange={handleOpenChange}
                 onCreateTemplate={handleCreate}
-                {...taxonomyProps}
+                fetchTaxonomyByKey={fetchTaxonomyByKey}
             />
         );
     } else if (state.status === 'edit') {
@@ -163,7 +141,7 @@ export default function useMetadataTemplateEditor({
                 fetchTemplate={state.fetchTemplate}
                 onOpenChange={handleOpenChange}
                 onEditTemplate={handleEdit}
-                {...taxonomyProps}
+                fetchTaxonomyByKey={fetchTaxonomyByKey}
             />
         );
     }
