@@ -9,6 +9,10 @@ import {
     CreateTaxonomyItemsService,
     TaxonomyOptionsFetcher,
 } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
+import type {
+    FetchAvatarUrls,
+    FetchUsers,
+} from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-user-field/types.js';
 import React, { useContext } from 'react';
 import PreviewContext, { type PreviewContextType } from '../content-preview/PreviewContext';
 import {
@@ -20,6 +24,8 @@ import {
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
     errorCode?: ERROR_CODE_METADATA_AUTOFILL_TIMEOUT | ERROR_CODE_METADATA_PRECONDITION_FAILED | ERROR_CODE_UNKNOWN;
+    fetchAvatarUrls?: FetchAvatarUrls;
+    fetchUsers?: FetchUsers;
     isBetaLanguageEnabled: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
@@ -27,6 +33,7 @@ export interface MetadataInstanceEditorProps {
     isLargeFile: boolean;
     isMetadataMultiLevelTaxonomyFieldEnabled: boolean;
     isMetadataTaxonomyPickerEnabled?: boolean;
+    isMetadataUserFieldEnabled?: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
@@ -49,6 +56,8 @@ export interface MetadataInstanceEditorProps {
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
     errorCode,
+    fetchAvatarUrls,
+    fetchUsers,
     isBetaLanguageEnabled,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
@@ -56,6 +65,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isLargeFile,
     isMetadataMultiLevelTaxonomyFieldEnabled,
     isMetadataTaxonomyPickerEnabled = false,
+    isMetadataUserFieldEnabled = false,
     isUnsavedChangesModalOpen,
     onCancel,
     onDelete,
@@ -82,6 +92,9 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             // TODO investigate if this property should be optional and by default false
             isMultilevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
             isTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
+            isUserFieldEnabled={isMetadataUserFieldEnabled}
+            fetchAvatarUrls={fetchAvatarUrls}
+            fetchUsers={fetchUsers}
             createTaxonomyItemsService={createTaxonomyItemsService}
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             errorCode={errorCode}

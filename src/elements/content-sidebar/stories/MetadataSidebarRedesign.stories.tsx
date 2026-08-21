@@ -1,6 +1,6 @@
 import React, { type ComponentProps } from 'react';
 import { type StoryObj, Meta } from '@storybook/react';
-import { fn, userEvent, within } from 'storybook/test';
+import { expect, fn, screen, userEvent, waitFor, within } from 'storybook/test';
 import { http, HttpResponse } from 'msw';
 import type { HttpHandler } from 'msw';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
@@ -12,6 +12,7 @@ import {
     mockMetadataInstances,
     mockGlobalMetadataTemplates,
 } from './__mocks__/MetadataSidebarRedesignedMocks';
+import { mockMetadataTemplatesWithUserField, userFieldMockHandlers } from './__mocks__/UserFieldMocks';
 
 const mockFeatures = {
     'metadata.redesign.enabled': true,
@@ -79,5 +80,48 @@ export const Basic: StoryObj<typeof MetadataSidebarRedesign> = {
             { container: await canvas.findByRole('tabpanel') },
         );
         await userEvent.click(addTemplateButton);
+    },
+};
+
+const waitForLoadingToComplete = async (canvas: ReturnType<typeof within>) => {
+    await waitFor(
+        () => {
+            expect(canvas.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
+        },
+        { timeout: 10000 },
+    );
+};
+
+export const UserField: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.userField.enabled': true,
+        },
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                ...userFieldMockHandlers,
+                http.get(mockMetadataTemplatesWithUserField.url, () => {
+                    return HttpResponse.json(mockMetadataTemplatesWithUserField.response);
+                }),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitForLoadingToComplete(canvas);
+
+        const editButton = await canvas.findByRole('button', { name: 'Edit User Template' }, { timeout: 10000 });
+        await userEvent.click(editButton);
+
+        const ownerField = await canvas.findByRole('combobox', { name: /Owner/i });
+        await userEvent.click(ownerField);
+        await userEvent.type(ownerField, 'Bob');
+
+        const bobOption = await screen.findByRole('option', { name: /Bob Smith/i });
+        expect(bobOption).toBeInTheDocument();
     },
 };
