@@ -99,12 +99,6 @@ type APIOptions = {
      * a future major version.
      */
     metadataApiHost?: string,
-    /**
-     * Optional getter for a user access token used on namespace / template-schema
-     * requests. Needed only when `token` is a per-file function. Hosts that pass
-     * a developer token or OAuth access token as `token` can omit this.
-     */
-    getMetadataAuthToken?: () => Promise<?string>,
     metadataNamespaceMode?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,

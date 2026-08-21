@@ -103,21 +103,6 @@ class Metadata extends File {
     }
 
     /**
-     * Optional host getter for a user access token used on namespaced template
-     * requests. Returns `null` when omitted so those hosts use `token` as-is.
-     * Getter failures propagate.
-     *
-     * @return {Promise<?string>}
-     */
-    getMetadataAuthToken(): Promise<?string> {
-        const getter = this.options.getMetadataAuthToken;
-        if (typeof getter !== 'function') {
-            return Promise.resolve(null);
-        }
-        return Promise.resolve().then(() => getter());
-    }
-
-    /**
      * Creates a key for the metadata cache
      *
      * @param {string} id - Folder id
