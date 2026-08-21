@@ -88,6 +88,7 @@ export default {
     },
     parameters: {
         chromatic: {
+            delay: 5000,
             disableSnapshot: false,
         },
     },
