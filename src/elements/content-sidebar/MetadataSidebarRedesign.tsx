@@ -19,6 +19,10 @@ import {
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
 import { TreeQueryInput } from '@box/combobox-with-api';
+import type {
+    FetchAvatarUrls,
+    FetchUsers,
+} from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-user-field/types.js';
 
 import type { GetPreviewForMetadataReturnType } from './types/BoxAISidebarTypes';
 import API from '../../api';
@@ -49,6 +53,7 @@ import {
     metadataTaxonomyNodeAncestorsFetcher,
     type TaxonomyFieldConfig,
 } from './fetchers/metadataTaxonomyFetcher';
+import { createFetchAvatarUrls, createFetchUsers } from './fetchers/metadataUserFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
@@ -60,6 +65,10 @@ mark(MARK_NAME_JS_READY);
 export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
+    /** Custom user/group search fetcher (e.g. a session-authenticated contacts endpoint); defaults to enterprise /users + /groups search. */
+    fetchUsers?: FetchUsers;
+    /** Custom avatar URL resolver; defaults to /users/:id/avatar with an access token. */
+    fetchAvatarUrls?: FetchAvatarUrls;
 }
 
 interface PropsWithoutContext extends ExternalProps {
@@ -102,6 +111,8 @@ function MetadataSidebarRedesign({
     elementId,
     fileExtension,
     fileId,
+    fetchAvatarUrls: fetchAvatarUrlsOverride,
+    fetchUsers: fetchUsersOverride,
     filteredTemplateIds = [],
     getPreview,
     history,
@@ -121,6 +132,7 @@ function MetadataSidebarRedesign({
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
     const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
     const isMetadataTaxonomyPickerEnabled: boolean = useFeatureEnabled('metadata.taxonomyPicker.enabled');
+    const isMetadataUserFieldEnabled: boolean = useFeatureEnabled('metadata.userField.enabled');
     const isAdvancedExtractAgentEnabled: boolean = useFeatureEnabled('metadata.extractAdvancedAgents.enabled');
     const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
         'metadata.deleteConfirmationModalCheckbox.enabled',
@@ -354,6 +366,13 @@ function MetadataSidebarRedesign({
         [api, fileId, resolveTaxonomyFieldConfig],
     );
 
+    // Hosts can inject their own user-field fetchers (e.g. a session-authenticated contacts
+    // endpoint); without overrides the sidebar uses the default BUIE API implementations.
+    const defaultFetchUsers = useMemo(() => createFetchUsers(api, fileId), [api, fileId]);
+    const defaultFetchAvatarUrls = useMemo(() => createFetchAvatarUrls(api, fileId), [api, fileId]);
+    const fetchUsers = fetchUsersOverride ?? defaultFetchUsers;
+    const fetchAvatarUrls = fetchAvatarUrlsOverride ?? defaultFetchAvatarUrls;
+
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
             isSessionInitiated.current = true;
@@ -391,6 +410,8 @@ function MetadataSidebarRedesign({
                                 isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
                             }
                             errorCode={extractErrorCode}
+                            fetchAvatarUrls={fetchAvatarUrls}
+                            fetchUsers={fetchUsers}
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
@@ -398,6 +419,7 @@ function MetadataSidebarRedesign({
                             isLargeFile={isLargeFile}
                             isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
                             isMetadataTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
+                            isMetadataUserFieldEnabled={isMetadataUserFieldEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             onCancel={handleCancel}
                             onDelete={handleDeleteInstance}
