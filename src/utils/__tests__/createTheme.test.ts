@@ -57,6 +57,7 @@ describe('components/theme', () => {
     // Expected errors
     test('should generate no colors, missing colorKeys', () => {
         expect(() => {
+            // @ts-expect-error invalid color key
             createTheme({ ratio: 1 }); // no key colors
         }).toThrow();
     });

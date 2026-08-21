@@ -1,5 +1,3 @@
-// @flow
-
 import { domainNameValidator, emailValidator, hostnameValidator, ipv4AddressValidator } from '../validators';
 
 describe('util/validators', () => {
