@@ -70,7 +70,7 @@ interface DataFetcher {
 export type MetadataNamespaceFetchContext = {
     /** Enterprise root namespace FQN from the current user (e.g. `enterprise_123`). */
     enterpriseFqn?: string;
-    /** Migration mode from the host (`SCOPED` | `MIGRATION` | `FINAL`). */
+    /** Resolved migration mode (`null` when opt-in is off or still loading). */
     metadataNamespaceMode?: string | null;
 };
 
@@ -340,16 +340,15 @@ function useSidebarMetadataFetcher(
             // Avoid refreshCache: true — File.getFile invokes success twice (cache, then network)
             // which would duplicate the metadata fetch. Cache hit or a single network fetch is enough;
             // missing fields are still requested when not present on the cached file.
-            // getFileAPI() defaults to shouldDestroy: true, which aborts in-flight Users/Metadata XHRs
-            // (including GET /users/me from useCurrentUserEnterpriseId in this same component).
+            // getFileAPI() defaults to shouldDestroy: true, which aborts in-flight Metadata XHRs.
             api.getFileAPI(false).getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
                 fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
             });
         }
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
-    // When namespace mode + enterprise FQN become available, refetch so getMetadata
-    // uses the non-SCOPED path with the authoritative enterprise root namespace.
+    // When resolved non-SCOPED mode + enterprise FQN become available, refetch
+    // so getMetadata uses the namespaced path with the enterprise root.
     const lastNamespaceFetchKey = React.useRef<string | null>(null);
     React.useEffect(() => {
         if (!file || !enterpriseFqn || !metadataNamespaceMode || metadataNamespaceMode === METADATA_SCOPE_MODE_SCOPED) {

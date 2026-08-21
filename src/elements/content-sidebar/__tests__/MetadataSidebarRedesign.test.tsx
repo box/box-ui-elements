@@ -202,7 +202,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     test('should pass host namespace mode and enterprise id into useMetadataNamespaceContext', () => {
         renderComponent({ metadataNamespaceMode: 'MIGRATION', enterpriseId: 'enterprise_1' });
 
-        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith(api, 'test-file-id-1', {
+        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith({
             metadataNamespaceMode: 'MIGRATION',
             enterpriseId: 'enterprise_1',
         });
@@ -211,7 +211,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     test('should not pass namespace options when the host omits them', () => {
         renderComponent();
 
-        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith(api, 'test-file-id-1', {});
+        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith({});
     });
 
     test('should have accessible "All templates" combobox trigger button', () => {

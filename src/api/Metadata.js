@@ -1016,8 +1016,8 @@ class Metadata extends File {
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
 
-            // Prefer the mode from this call (sidebar) so URL helpers and template
-            // fetches stay in sync with the enterprise configuration API.
+            // Prefer the mode from this call (sidebar, after opt-in) so URL
+            // helpers stay in sync with the resolved host migration mode.
             if (options.metadataNamespaceMode) {
                 this.metadataNamespaceMode = options.metadataNamespaceMode;
             }
