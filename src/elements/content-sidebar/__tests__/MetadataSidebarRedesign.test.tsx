@@ -653,7 +653,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
-            { enterpriseFqn: undefined, metadataNamespaceMode: null },
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -668,7 +668,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
-            { enterpriseFqn: undefined, metadataNamespaceMode: null },
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -683,7 +683,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
-            { enterpriseFqn: undefined, metadataNamespaceMode: null },
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -698,7 +698,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
-            { enterpriseFqn: undefined, metadataNamespaceMode: null },
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 

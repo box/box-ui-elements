@@ -61,8 +61,7 @@ import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
 import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
 import useMetadataTemplateItemsService from './hooks/useMetadataTemplateItemsService';
-import useMetadataNamespaceContext from './hooks/useMetadataNamespaceContext';
-import type { MetadataScopeMode } from './hooks/useMetadataNamespaceMode';
+import useMetadataNamespaceContext, { type MetadataScopeMode } from './hooks/useMetadataNamespaceContext';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -155,7 +154,12 @@ function MetadataSidebarRedesign({
 
     const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
 
-    const { enterpriseId, metadataNamespaceMode, isTemplateManagementEnabled } = useMetadataNamespaceContext({
+    const {
+        enterpriseId,
+        isLoading: isNamespaceContextLoading,
+        metadataNamespaceMode,
+        isTemplateManagementEnabled,
+    } = useMetadataNamespaceContext({
         ...(hostMetadataNamespaceMode !== undefined ? { metadataNamespaceMode: hostMetadataNamespaceMode } : {}),
         ...(hostEnterpriseId !== undefined ? { enterpriseId: hostEnterpriseId } : {}),
     });
@@ -183,6 +187,7 @@ function MetadataSidebarRedesign({
         isBoundingBoxEnabled,
         {
             enterpriseFqn: enterpriseId,
+            isLoading: isNamespaceContextLoading,
             metadataNamespaceMode,
         },
     );

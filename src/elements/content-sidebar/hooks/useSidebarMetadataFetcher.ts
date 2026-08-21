@@ -19,7 +19,6 @@ import {
     ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
-    METADATA_SCOPE_MODE_SCOPED,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
@@ -70,6 +69,8 @@ interface DataFetcher {
 export type MetadataNamespaceFetchContext = {
     /** Enterprise root namespace FQN from the current user (e.g. `enterprise_123`). */
     enterpriseFqn?: string;
+    /** True while opt-in is on and the host has passed `metadataNamespaceMode: null`. */
+    isLoading?: boolean;
     /** Resolved migration mode (`null` when opt-in is off or still loading). */
     metadataNamespaceMode?: string | null;
 };
@@ -84,7 +85,7 @@ function useSidebarMetadataFetcher(
     isBoundingBoxEnabled: boolean = false,
     namespaceContext: MetadataNamespaceFetchContext = {},
 ): DataFetcher {
-    const { enterpriseFqn, metadataNamespaceMode } = namespaceContext;
+    const { enterpriseFqn, isLoading: isNamespaceContextLoading, metadataNamespaceMode } = namespaceContext;
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
@@ -160,17 +161,14 @@ function useSidebarMetadataFetcher(
         ],
     );
 
-    const fetchFileSuccessCallback = React.useCallback(
-        (fetchedFile: BoxItem) => {
-            setFile(fetchedFile);
-            if (fetchedFile) {
-                fetchMetadata(fetchedFile);
-            } else {
-                setStatus(STATUS.SUCCESS);
-            }
-        },
-        [fetchMetadata],
-    );
+    const fetchFileSuccessCallback = React.useCallback((fetchedFile: BoxItem) => {
+        setFile(fetchedFile);
+        if (!fetchedFile) {
+            setStatus(STATUS.SUCCESS);
+        }
+        // Metadata fetch is owned by the effect below so the first load and
+        // later mode/FQN updates share one key and cannot double-fetch.
+    }, []);
 
     const fetchFileErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string) => {
@@ -347,20 +345,21 @@ function useSidebarMetadataFetcher(
         }
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
-    // When resolved non-SCOPED mode + enterprise FQN become available, refetch
-    // so getMetadata uses the namespaced path with the enterprise root.
-    const lastNamespaceFetchKey = React.useRef<string | null>(null);
+    // Single metadata fetch keyed by file + resolved namespace context.
+    // Skips while the host is still loading mode so we do not flash SCOPED
+    // then refetch MIGRATION/FINAL. Re-runs when mode or FQN actually change.
+    const lastMetadataFetchKey = React.useRef<string | null>(null);
     React.useEffect(() => {
-        if (!file || !enterpriseFqn || !metadataNamespaceMode || metadataNamespaceMode === METADATA_SCOPE_MODE_SCOPED) {
+        if (!file || isNamespaceContextLoading) {
             return;
         }
-        const fetchKey = `${file.id}:${enterpriseFqn}:${metadataNamespaceMode}`;
-        if (lastNamespaceFetchKey.current === fetchKey) {
+        const fetchKey = `${file.id}:${enterpriseFqn ?? ''}:${metadataNamespaceMode ?? ''}`;
+        if (lastMetadataFetchKey.current === fetchKey) {
             return;
         }
-        lastNamespaceFetchKey.current = fetchKey;
+        lastMetadataFetchKey.current = fetchKey;
         fetchMetadata(file);
-    }, [enterpriseFqn, fetchMetadata, file, metadataNamespaceMode]);
+    }, [enterpriseFqn, fetchMetadata, file, isNamespaceContextLoading, metadataNamespaceMode]);
 
     const refetchMetadata = React.useCallback(() => {
         if (file) {

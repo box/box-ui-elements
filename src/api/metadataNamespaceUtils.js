@@ -9,31 +9,35 @@ import {
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
     METADATA_SCOPE_MODE_FINAL,
-    METADATA_SCOPE_MODE_MIGRATION,
-    METADATA_SCOPE_MODE_SCOPED,
 } from '../constants';
-import type { MetadataInstanceV2 } from '../common/types/metadata';
+
+const ENTERPRISE_FQN_PREFIX = `${METADATA_SCOPE_ENTERPRISE}_`;
 
 /**
- * Resolves the enterprise root FQN (`enterprise_123`) from a scope and/or
- * namespace value. Child namespaces like `enterprise_123.legal` resolve to
- * `enterprise_123`.
+ * Enterprise root FQN (`enterprise_123`) from a scope or namespace value.
+ * The scoped shorthand `enterprise` is not an FQN and is ignored so it does
+ * not fail to match a viewer FQN like `enterprise_123`.
+ * Child namespaces like `enterprise_123.legal` resolve to `enterprise_123`.
  */
+function getEnterpriseRoot(value: ?string): string | null {
+    if (!value || !value.startsWith(ENTERPRISE_FQN_PREFIX)) {
+        return null;
+    }
+    const root = value.split('.')[0];
+    return root.length > ENTERPRISE_FQN_PREFIX.length ? root : null;
+}
+
 export function getEnterpriseRootFromScopeOrNamespace(scope: ?string, namespace: ?string): string | null {
-    if (scope && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-        return scope;
-    }
-    if (namespace && namespace.startsWith(METADATA_SCOPE_ENTERPRISE)) {
-        return namespace.split('.')[0];
-    }
-    return null;
+    return getEnterpriseRoot(scope) || getEnterpriseRoot(namespace);
 }
 
 /**
  * Extracts the enterprise root namespace FQN from a list of metadata instances.
  * Prefers `$scope`, then the leading segment of `$namespace`.
  */
-export function getEnterpriseNamespaceFromInstances(instances: Array<MetadataInstanceV2>): string | null {
+export function getEnterpriseNamespaceFromInstances(
+    instances: Array<{ $namespace?: ?string, $scope?: ?string }>,
+): string | null {
     for (const inst of instances) {
         const root = getEnterpriseRootFromScopeOrNamespace(inst.$scope, inst.$namespace);
         if (root) {
@@ -41,15 +45,6 @@ export function getEnterpriseNamespaceFromInstances(instances: Array<MetadataIns
         }
     }
     return null;
-}
-
-/**
- * Maps host-provided enterprise-configuration booleans to a migration mode.
- */
-export function resolveMetadataNamespaceMode(isMigration: boolean, isFinal: boolean): string {
-    if (isFinal) return METADATA_SCOPE_MODE_FINAL;
-    if (isMigration) return METADATA_SCOPE_MODE_MIGRATION;
-    return METADATA_SCOPE_MODE_SCOPED;
 }
 
 /**
