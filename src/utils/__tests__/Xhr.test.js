@@ -30,7 +30,7 @@ describe('util/Xhr', () => {
                 })
                 .then(() => {
                     expect(xhrInstance.axios.get).toHaveBeenCalledWith('url', {
-                        cancelToken: xhrInstance.axiosSource.token,
+                        signal: xhrInstance.axiosAbortController.signal,
                         params: {},
                         headers: {},
                         parsedUrl: url,
@@ -283,14 +283,15 @@ describe('util/Xhr', () => {
 
     describe('abort()', () => {
         test('should cancel axios request', () => {
-            const mockSource = {
-                cancel: jest.fn(),
+            const mockAbortController = {
+                signal: jest.fn(),
+                abort: jest.fn(),
             };
-            xhrInstance.axiosSource = mockSource;
+            xhrInstance.axiosAbortController = mockAbortController;
 
             xhrInstance.abort();
 
-            expect(mockSource.cancel).toHaveBeenCalled();
+            expect(mockAbortController.abort).toHaveBeenCalled();
         });
     });
 
