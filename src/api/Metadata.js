@@ -88,7 +88,21 @@ type MetadataGetOptions = {
 };
 
 class Metadata extends File {
+    /**
+     * Namespace migration mode for URL helpers on this Metadata instance.
+     * Defaults to SCOPED. getMetadata updates it from per-call options so
+     * subsequent template/instance URLs match the resolved sidebar mode.
+     *
+     * @property {string}
+     */
+    metadataNamespaceMode: string;
+
     namespacesAPI: ?MetadataNamespaces;
+
+    constructor(options: Object) {
+        super(options);
+        this.metadataNamespaceMode = this.options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
+    }
 
     /**
      * Lazy collaborator for namespace-migration HTTP (list/create/update + mode).
@@ -722,16 +736,22 @@ class Metadata extends File {
 
         if (!template && instanceId) {
             const instanceEnterpriseRoot = resolveEnterpriseRoot(scope, namespace);
-            if (instanceEnterpriseRoot) {
-                const isExternallyOwned = isTemplateExternallyOwned(
-                    instanceEnterpriseRoot,
-                    viewerEnterpriseFqn,
-                    !!(scope && scope.startsWith(METADATA_SCOPE_ENTERPRISE)),
-                );
+            const hasEnterpriseScope = !!(
+                scope &&
+                (scope === METADATA_SCOPE_ENTERPRISE || scope.startsWith(`${METADATA_SCOPE_ENTERPRISE}_`))
+            );
+
+            // Fetch missing templates for enterprise FQNs and the scoped
+            // shorthand `enterprise`. The shorthand is not an FQN, so it
+            // must not go through getEnterpriseRoot for ownership matching.
+            if (instanceEnterpriseRoot || hasEnterpriseScope) {
+                const isExternallyOwned = instanceEnterpriseRoot
+                    ? isTemplateExternallyOwned(instanceEnterpriseRoot, viewerEnterpriseFqn, hasEnterpriseScope)
+                    : !viewerEnterpriseFqn;
 
                 const fetchedTemplates = await this.getTemplates(
                     id,
-                    scope || namespace || instanceEnterpriseRoot,
+                    scope || namespace || instanceEnterpriseRoot || '',
                     instanceId,
                     isExternallyOwned,
                 );
@@ -1016,14 +1036,14 @@ class Metadata extends File {
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
 
-            // Prefer the mode from this call (sidebar, after opt-in) so URL
-            // helpers stay in sync with the resolved host migration mode.
-            if (options.metadataNamespaceMode) {
-                this.metadataNamespaceMode = options.metadataNamespaceMode;
-            }
+            // Per-call mode for this fetch; persist on the instance so later
+            // URL helpers (create/update/delete) on the same Metadata client
+            // match. Not stored on Base — File/Users/etc. do not use it.
+            const metadataNamespaceMode = options.metadataNamespaceMode || this.metadataNamespaceMode;
+            this.metadataNamespaceMode = metadataNamespaceMode;
 
             const { instances, globalTemplates, enterpriseTemplates } =
-                this.metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED
+                metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED
                     ? await this.fetchTemplatesAndInstancesNamespaced(
                           id,
                           hasMetadataFeature,

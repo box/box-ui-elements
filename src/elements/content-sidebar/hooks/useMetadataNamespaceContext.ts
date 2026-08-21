@@ -1,6 +1,8 @@
 import { METADATA_SCOPE_ENTERPRISE, METADATA_SCOPE_MODE_SCOPED } from '../../../constants';
 import { useFeatureEnabled } from '../../common/feature-checking';
-import { type MetadataScopeMode } from './useMetadataNamespaceMode';
+
+/** Mirrors the METADATA_SCOPE_MODE_* constants from constants.js as a strict union. */
+export type MetadataScopeMode = 'SCOPED' | 'MIGRATION' | 'FINAL';
 
 export interface MetadataNamespaceContext {
     /** Enterprise root FQN (e.g. `enterprise_123`), or `undefined` when opt-in is off / host omitted it. */

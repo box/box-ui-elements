@@ -2,15 +2,9 @@ import {
     getEnterpriseNamespaceFromInstances,
     getEnterpriseRootFromScopeOrNamespace,
     isTemplateExternallyOwned,
-    resolveMetadataNamespaceMode,
     resolveScopeOrNamespace,
 } from '../metadataNamespaceUtils';
-import {
-    METADATA_NAMESPACE_GLOBAL,
-    METADATA_SCOPE_MODE_FINAL,
-    METADATA_SCOPE_MODE_MIGRATION,
-    METADATA_SCOPE_MODE_SCOPED,
-} from '../../constants';
+import { METADATA_NAMESPACE_GLOBAL, METADATA_SCOPE_MODE_FINAL, METADATA_SCOPE_MODE_MIGRATION } from '../../constants';
 
 describe('api/metadataNamespaceUtils', () => {
     describe('getEnterpriseRootFromScopeOrNamespace()', () => {
@@ -24,7 +18,15 @@ describe('api/metadataNamespaceUtils', () => {
             expect(getEnterpriseRootFromScopeOrNamespace(undefined, 'enterprise_123.legal')).toBe('enterprise_123');
         });
 
-        test('should return null when neither is an enterprise value', () => {
+        test('should ignore the scoped enterprise shorthand', () => {
+            expect(getEnterpriseRootFromScopeOrNamespace('enterprise', 'box.metadata')).toBeNull();
+        });
+
+        test('should fall through from scoped shorthand to a namespace FQN', () => {
+            expect(getEnterpriseRootFromScopeOrNamespace('enterprise', 'enterprise_123.legal')).toBe('enterprise_123');
+        });
+
+        test('should return null when neither is an enterprise FQN', () => {
             expect(getEnterpriseRootFromScopeOrNamespace('global', 'box.metadata')).toBeNull();
         });
     });
@@ -34,18 +36,6 @@ describe('api/metadataNamespaceUtils', () => {
             expect(
                 getEnterpriseNamespaceFromInstances([{ $scope: 'global' }, { $namespace: 'enterprise_123.legal' }]),
             ).toBe('enterprise_123');
-        });
-    });
-
-    describe('resolveMetadataNamespaceMode()', () => {
-        test.each`
-            isMigration | isFinal  | expected
-            ${false}    | ${false} | ${METADATA_SCOPE_MODE_SCOPED}
-            ${true}     | ${false} | ${METADATA_SCOPE_MODE_MIGRATION}
-            ${true}     | ${true}  | ${METADATA_SCOPE_MODE_FINAL}
-            ${false}    | ${true}  | ${METADATA_SCOPE_MODE_FINAL}
-        `('should resolve $expected', ({ isMigration, isFinal, expected }) => {
-            expect(resolveMetadataNamespaceMode(isMigration, isFinal)).toBe(expected);
         });
     });
 

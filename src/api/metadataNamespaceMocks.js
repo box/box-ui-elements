@@ -4,7 +4,7 @@
 //
 // To remove all mocks when the real API is deployed:
 //   1. Delete this file.
-//   2. Remove the import block from Metadata.js.
+//   2. Remove the import block from MetadataNamespaces.js.
 //   3. Remove the single `if (IS_NAMESPACE_API_MOCKED)` guard from each method.
 //
 // Template ids use the "fqn||templateKey" format so MetadataTemplateDropdown's
