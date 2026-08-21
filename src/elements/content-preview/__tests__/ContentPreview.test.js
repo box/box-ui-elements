@@ -383,6 +383,25 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should omit annotatorToken when token is a string', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            const options = instance.preview.show.mock.calls[0][2];
+            expect(options.annotatorToken).toBeUndefined();
+        });
+
+        test('should forward the host token function as annotatorToken', async () => {
+            const tokenFn = jest.fn();
+            const wrapper = getWrapper({ ...props, token: tokenFn });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            const options = instance.preview.show.mock.calls[0][2];
+            expect(options.annotatorToken).toBe(tokenFn);
+        });
+
         test('should pass enableBoundingBoxHighlights to preview options when enabled', async () => {
             const wrapper = getWrapper({ ...props, enableBoundingBoxHighlights: true });
             wrapper.setState({ file });

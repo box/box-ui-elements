@@ -1112,7 +1112,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.show(file.id, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions)),
-            annotatorToken: tokenOrTokenFunction,
+            annotatorToken: typeof tokenOrTokenFunction === 'function' ? tokenOrTokenFunction : undefined,
         });
         if (advancedContentInsights) {
             this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
