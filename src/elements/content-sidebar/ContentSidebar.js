@@ -126,12 +126,6 @@ type Props = {
     signSidebarProps: SignSidebarProps,
     theme?: Theme,
     token: Token,
-    /**
-     * Optional getter for a user access token used on namespace / template-schema
-     * requests. Needed only when `token` is a per-file function. Hosts that pass
-     * a developer token or OAuth access token as `token` can omit this.
-     */
-    getMetadataAuthToken?: () => Promise<?string>,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
     WithLoggerProps;
@@ -187,7 +181,6 @@ class ContentSidebar extends React.Component<Props, State> {
             apiHost,
             cache,
             clientName,
-            getMetadataAuthToken,
             language,
             metadataApiHost,
             metadataSidebarProps,
@@ -202,7 +195,6 @@ class ContentSidebar extends React.Component<Props, State> {
             apiHost,
             cache,
             clientName,
-            getMetadataAuthToken,
             language,
             metadataApiHost,
             metadataNamespaceMode: metadataSidebarProps?.metadataNamespaceMode,
