@@ -4,6 +4,7 @@ import { createMemoryHistory } from 'history';
 import type { RouteComponentProps } from 'react-router-dom';
 import type { MetadataTemplate, MetadataTemplateInstance } from '@box/metadata-editor';
 import { screen, render } from '../../../test-utils/testing-library';
+import type API from '../../../api';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
@@ -88,7 +89,9 @@ const userFieldTemplateInstance = {
     type: 'metadata_template',
 } as unknown as MetadataTemplateInstance;
 
-const api = { options: { token: jest.fn().mockResolvedValue({ read: 'r', write: 'w' }) } };
+const api = {
+    options: { token: jest.fn().mockResolvedValue({ read: 'r', write: 'w' }) },
+} as unknown as API;
 
 const renderSidebar = (
     features: Record<string, boolean> = {},
