@@ -54,6 +54,7 @@ import {
     TYPE_FILE,
     ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE,
     ERROR_CODE_FETCH_METADATA_TAXONOMY,
+    ERROR_CODE_FETCH_METADATA_TAXONOMIES,
 } from '../constants';
 
 import type { ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
@@ -1882,6 +1883,62 @@ class Metadata extends File {
         const metadataTaxonomy = await this.xhr.get({ url, id: getTypedFileId(id) });
 
         return getProp(metadataTaxonomy, 'data', {});
+    }
+
+    /**
+     * Build URL for listing metadata taxonomies in a namespace.
+     *
+     * @param {string} namespace
+     * @returns {`${string}/metadata_taxonomies/${string}`}
+     */
+    getMetadataTaxonomiesUrl(namespace: string): string {
+        return `${this.getBaseApiUrl()}/metadata_taxonomies/${namespace}`;
+    }
+
+    /**
+     * Lists taxonomies with marker-based pagination.
+     * Mirrors admin-console taxonomy list (`limit` + `marker` → `entries` + `next_marker`).
+     * For now taxonomies are not product-namespaced — pass the enterprise scope
+     * (e.g. `enterprise_123`) as `namespace`.
+     *
+     * @param {string} id - file id (for typed request context)
+     * @param {string} namespace - enterprise scope FQN
+     * @param {{ limit?: number, marker?: string, signal?: AbortSignal }} params
+     * @returns {Promise<{ entries: Array<Object>, next_marker?: string }>}
+     */
+    async getMetadataTaxonomies(
+        id: string,
+        namespace: string,
+        params: { limit?: number, marker?: string, signal?: AbortSignal } = {},
+    ) {
+        this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMIES;
+
+        if (!id) {
+            throw getBadItemError();
+        }
+
+        if (!namespace) {
+            throw new Error('Missing namespace');
+        }
+
+        const { limit = 50, marker, signal } = params;
+        const requestParams: { limit: number, marker?: string } = { limit };
+        if (marker) {
+            requestParams.marker = marker;
+        }
+
+        if (signal) {
+            signal.onabort = () => handleOnAbort(this.xhr);
+        }
+
+        const url = this.getMetadataTaxonomiesUrl(namespace);
+        const response = await this.xhr.get({
+            url,
+            id: getTypedFileId(id),
+            params: requestParams,
+        });
+
+        return getProp(response, 'data', {});
     }
 
     /**

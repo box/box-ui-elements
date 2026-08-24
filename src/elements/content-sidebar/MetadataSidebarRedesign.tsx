@@ -55,6 +55,7 @@ import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionS
 import { isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
+    metadataTaxonomiesListFetcher,
     metadataTaxonomyByKeyFetcher,
     metadataTaxonomyFetcher,
     metadataTaxonomyNodeAncestorsFetcher,
@@ -317,6 +318,15 @@ function MetadataSidebarRedesign({
         [api, fileId],
     );
 
+    // Taxonomies are not namespaced yet — one enterprise-scoped catalogue for the picker.
+    const fetchTaxonomies = useMemo(() => {
+        if (!enterpriseId) {
+            return undefined;
+        }
+
+        return (params = {}) => metadataTaxonomiesListFetcher(api, fileId, enterpriseId, params);
+    }, [api, fileId, enterpriseId]);
+
     const handleEditTemplate = useCallback(
         (patchItems: MetadataTemplatePatchItem[], identifier: { namespaceFQN: string; templateKey: string }) =>
             new Promise<void>((resolve, reject) => {
@@ -346,6 +356,7 @@ function MetadataSidebarRedesign({
         onCreate: handleCreateTemplate,
         onEdit: handleEditTemplate,
         fetchTaxonomyByKey,
+        fetchTaxonomies,
     });
 
     // Opens the template editor in create mode — also dismisses the dropdown popover.

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import {
     MetadataTemplateEditorMode,
     MetadataTemplateEditorModal,
+    type FetchTaxonomies,
     type FetchTaxonomyByKey,
     type MetadataTemplateApiResponse,
     type MetadataTemplateCreateBody,
@@ -40,6 +41,11 @@ interface UseMetadataTemplateEditorArgs {
      * look up taxonomies (the editor falls back to a placeholder).
      */
     fetchTaxonomyByKey?: FetchTaxonomyByKey;
+    /**
+     * Paginated taxonomy catalogue for the picker. Taxonomies are not namespaced
+     * yet — the host supplies one catalogue fetcher (typically enterprise-scoped).
+     */
+    fetchTaxonomies?: FetchTaxonomies;
 }
 
 export interface UseMetadataTemplateEditorReturn {
@@ -73,6 +79,7 @@ export default function useMetadataTemplateEditor({
     onCreate,
     onEdit,
     fetchTaxonomyByKey,
+    fetchTaxonomies,
 }: UseMetadataTemplateEditorArgs): UseMetadataTemplateEditorReturn {
     const [state, setState] = useState<EditorState>({ status: 'closed' });
 
@@ -131,6 +138,7 @@ export default function useMetadataTemplateEditor({
                 onOpenChange={handleOpenChange}
                 onCreateTemplate={handleCreate}
                 fetchTaxonomyByKey={fetchTaxonomyByKey}
+                fetchTaxonomies={fetchTaxonomies}
             />
         );
     } else if (state.status === 'edit') {
@@ -142,6 +150,7 @@ export default function useMetadataTemplateEditor({
                 onOpenChange={handleOpenChange}
                 onEditTemplate={handleEdit}
                 fetchTaxonomyByKey={fetchTaxonomyByKey}
+                fetchTaxonomies={fetchTaxonomies}
             />
         );
     }

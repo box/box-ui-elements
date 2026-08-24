@@ -15,6 +15,7 @@ jest.mock('@box/metadata-template-editor', () => {
             onOpenChange,
             fetchTemplate,
             fetchTaxonomyByKey,
+            fetchTaxonomies,
         }: {
             mode: string;
             namespace?: string;
@@ -23,12 +24,14 @@ jest.mock('@box/metadata-template-editor', () => {
             onOpenChange: (open: boolean) => void;
             fetchTemplate?: () => Promise<unknown>;
             fetchTaxonomyByKey?: unknown;
+            fetchTaxonomies?: unknown;
         }) => (
             <div data-testid="template-editor-modal">
                 <span data-testid="editor-mode">{mode}</span>
                 {namespace ? <span data-testid="editor-namespace">{namespace}</span> : null}
                 {fetchTemplate ? <span data-testid="editor-has-fetch">true</span> : null}
                 {fetchTaxonomyByKey ? <span data-testid="editor-has-taxonomy-by-key">true</span> : null}
+                {fetchTaxonomies ? <span data-testid="editor-has-fetch-taxonomies">true</span> : null}
                 <button type="button" onClick={() => onOpenChange(false)}>
                     close
                 </button>
@@ -138,9 +141,7 @@ describe('useMetadataTemplateEditor', () => {
 
     test('should forward fetchTaxonomyByKey to create and edit modals', () => {
         const fetchTaxonomyByKey = jest.fn();
-        const { result } = renderHook(() =>
-            useMetadataTemplateEditor({ onCreate, onEdit, fetchTaxonomyByKey }),
-        );
+        const { result } = renderHook(() => useMetadataTemplateEditor({ onCreate, onEdit, fetchTaxonomyByKey }));
 
         act(() => {
             result.current.openCreate('enterprise_123');
@@ -159,5 +160,28 @@ describe('useMetadataTemplateEditor', () => {
 
         rerender(<>{result.current.modal}</>);
         expect(screen.getByTestId('editor-has-taxonomy-by-key')).toHaveTextContent('true');
+    });
+
+    test('should forward fetchTaxonomies to create and edit modals', () => {
+        const fetchTaxonomies = jest.fn();
+        const { result } = renderHook(() => useMetadataTemplateEditor({ onCreate, onEdit, fetchTaxonomies }));
+
+        act(() => {
+            result.current.openCreate('enterprise_123');
+        });
+
+        const { rerender } = render(<>{result.current.modal}</>);
+        expect(screen.getByTestId('editor-has-fetch-taxonomies')).toHaveTextContent('true');
+
+        act(() => {
+            result.current.openEdit({
+                namespaceFqn: 'enterprise_999',
+                templateKey: 'myTemplate',
+                fetchTemplate: jest.fn(),
+            });
+        });
+
+        rerender(<>{result.current.modal}</>);
+        expect(screen.getByTestId('editor-has-fetch-taxonomies')).toHaveTextContent('true');
     });
 });

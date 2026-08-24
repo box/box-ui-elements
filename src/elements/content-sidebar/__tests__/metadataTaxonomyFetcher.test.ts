@@ -2,6 +2,7 @@ import type { PaginationQueryInput } from '@box/metadata-editor';
 import type { Level } from '@box/combobox-with-api';
 import {
     createTaxonomyItemsService,
+    metadataTaxonomiesListFetcher,
     metadataTaxonomyByKeyFetcher,
     metadataTaxonomyFetcher,
     metadataTaxonomyNodeAncestorsFetcher,
@@ -536,6 +537,74 @@ describe('metadataTaxonomyNodeAncestorsFetcher (new keys naming convention)', ()
     });
 });
 
+describe('metadataTaxonomiesListFetcher', () => {
+    const fileId = '12345';
+    const namespace = 'enterprise_1';
+    let apiMock: jest.Mocked<API>;
+
+    beforeEach(() => {
+        apiMock = {
+            getMetadataAPI: jest.fn().mockReturnValue({
+                getMetadataTaxonomies: jest.fn(),
+            }),
+        };
+    });
+
+    test('should map entries and next_marker into FetchTaxonomiesResult', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomies.mockResolvedValue({
+            entries: [
+                {
+                    id: 'tax_1',
+                    key: 'geography',
+                    displayName: 'Geography',
+                    namespace: 'enterprise_1',
+                    levels: [{ level: 1, displayName: 'Country' }],
+                },
+            ],
+            next_marker: 'page-2',
+        });
+
+        const result = await metadataTaxonomiesListFetcher(apiMock, fileId, namespace, {
+            limit: 50,
+            marker: undefined,
+        });
+
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomies).toHaveBeenCalledWith(fileId, namespace, {
+            marker: undefined,
+            limit: 50,
+            signal: undefined,
+        });
+        expect(result).toEqual({
+            options: [
+                {
+                    id: 'tax_1',
+                    label: 'Geography',
+                    taxonomyKey: 'geography',
+                    namespace: 'enterprise_1',
+                    levels: [{ name: 'Country', level: 1 }],
+                    selected: false,
+                },
+            ],
+            nextMarker: 'page-2',
+        });
+    });
+
+    test('should pass marker through for load-more', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomies.mockResolvedValue({
+            entries: [],
+            next_marker: null,
+        });
+
+        await metadataTaxonomiesListFetcher(apiMock, fileId, namespace, { marker: 'page-2', limit: 25 });
+
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomies).toHaveBeenCalledWith(fileId, namespace, {
+            marker: 'page-2',
+            limit: 25,
+            signal: undefined,
+        });
+    });
+});
+
 describe('metadataTaxonomyByKeyFetcher', () => {
     const fileId = '12345';
     const namespace = 'enterprise_1';
@@ -566,11 +635,7 @@ describe('metadataTaxonomyByKeyFetcher', () => {
         const result = await metadataTaxonomyByKeyFetcher(apiMock, fileId, namespace, taxonomyKey);
 
         expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
-        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomy).toHaveBeenCalledWith(
-            fileId,
-            namespace,
-            taxonomyKey,
-        );
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomy).toHaveBeenCalledWith(fileId, namespace, taxonomyKey);
         expect(result).toEqual({
             id: 'tax_id',
             label: 'Geography',

@@ -1,5 +1,5 @@
 import { TreeQueryInput, TreeOptionType, FetcherResponse, type Level } from '@box/combobox-with-api';
-import type { TaxonomyOption } from '@box/metadata-template-editor';
+import type { TaxonomyOption, FetchTaxonomiesParams, FetchTaxonomiesResult } from '@box/metadata-template-editor';
 import type {
     FetchParams,
     FetchResponse,
@@ -12,6 +12,64 @@ import type {
 import type { CreateTaxonomyItemsService } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import type API from '../../../api';
 import type { MetadataOptionEntry } from '../../../common/types/metadata';
+
+type MetadataTaxonomyListEntry = {
+    id?: string;
+    key?: string;
+    displayName?: string;
+    display_name?: string;
+    namespace?: string;
+    levels?: Array<{
+        displayName?: string;
+        display_name?: string;
+        level: number;
+    }>;
+};
+
+const mapTaxonomyListEntry = (taxonomy: MetadataTaxonomyListEntry, fallbackNamespace: string): TaxonomyOption => {
+    const taxonomyKey = taxonomy.key || taxonomy.id || '';
+    return {
+        id: taxonomy.id ?? taxonomyKey,
+        label: taxonomy.displayName || taxonomy.display_name || taxonomyKey,
+        taxonomyKey,
+        namespace: taxonomy.namespace || fallbackNamespace,
+        levels: (taxonomy.levels ?? []).map(level => ({
+            name: level.displayName || level.display_name || '',
+            level: level.level,
+        })),
+        selected: false,
+    };
+};
+
+/**
+ * Lists taxonomies with marker-based pagination for the template editor picker.
+ * Public Box API: `GET /metadata_taxonomies/{namespace}?limit=&marker=`.
+ *
+ * Taxonomies are not product-namespaced yet — callers pass the enterprise scope
+ * (e.g. `enterprise_123`) as `namespace`. Search `query` is accepted for API
+ * compatibility with the shared feature but is not sent; the selector still
+ * client-filters loaded pages.
+ */
+export const metadataTaxonomiesListFetcher = async (
+    api: API,
+    fileId: string,
+    namespace: string,
+    params: FetchTaxonomiesParams = {},
+): Promise<FetchTaxonomiesResult> => {
+    const { marker, limit = 50, signal } = params;
+    const response = await api.getMetadataAPI(false).getMetadataTaxonomies(fileId, namespace, {
+        marker,
+        limit,
+        signal,
+    });
+
+    const entries: MetadataTaxonomyListEntry[] = response?.entries ?? [];
+
+    return {
+        options: entries.map(entry => mapTaxonomyListEntry(entry, namespace)),
+        nextMarker: response?.next_marker ?? null,
+    };
+};
 
 export const metadataTaxonomyFetcher = async (
     api: API,
