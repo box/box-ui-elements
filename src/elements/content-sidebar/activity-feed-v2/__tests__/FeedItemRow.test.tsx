@@ -467,7 +467,21 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
 
-            expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055);
+            expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055, undefined);
+        });
+
+        test('should pass getViewer to seekMediaToMs on badge click', () => {
+            const getViewer = jest.fn();
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} getViewer={getViewer} item={timestampedComment} />);
+
+            lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
+
+            expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055, getViewer);
         });
 
         test('should re-prepend timestamp markup when editing a timestamped comment so the badge survives the update', () => {

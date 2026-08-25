@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { formatByTimeFormat, MEDIA_CONTAINER_SELECTOR, MEDIA_ELEMENT_SELECTOR } from './useTimeFormat';
 import type { TimeFormat } from './useTimeFormat';
+import type { ViewerHandle } from './types';
 
 const findMediaElement = (): HTMLMediaElement | null => {
     if (typeof document === 'undefined') {
@@ -18,7 +19,14 @@ const captureCurrentMs = (media: HTMLMediaElement | null): number => {
     return Math.floor(media.currentTime * 1000);
 };
 
-export const seekMediaToMs = (ms: number): void => {
+export const seekMediaToMs = (ms: number, getViewer?: () => ViewerHandle | null): void => {
+    const viewer = getViewer?.();
+    if (viewer?.setMediaTime) {
+        viewer.pause?.();
+        viewer.setMediaTime(ms / 1000);
+        return;
+    }
+
     const media = findMediaElement();
     if (!media) return;
     media.currentTime = ms / 1000;

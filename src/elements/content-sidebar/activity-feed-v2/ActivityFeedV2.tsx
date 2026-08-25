@@ -543,6 +543,7 @@ const ActivityFeedV2 = ({
                                     activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
+                                    getViewer={getViewer}
                                     isDisabled={isDisabled}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}

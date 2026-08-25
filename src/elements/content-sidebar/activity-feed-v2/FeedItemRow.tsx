@@ -24,7 +24,14 @@ import { annotationTargetToBadge } from './transformers';
 import { formatByTimeFormat } from './useTimeFormat';
 import { seekMediaToMs } from './useMediaTimestamp';
 
-import type { OnReplyDelete, OnReplyUpdate, TaskItemProps, TransformedFeedItem, UserSelectorProps } from './types';
+import type {
+    OnReplyDelete,
+    OnReplyUpdate,
+    TaskItemProps,
+    TransformedFeedItem,
+    UserSelectorProps,
+    ViewerHandle,
+} from './types';
 
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -42,6 +49,7 @@ type FeedItemRowProps = {
     activeFeedEntryId?: string;
     currentUserId?: string;
     fps: number;
+    getViewer?: () => ViewerHandle | null;
     isDisabled: boolean;
     item: TransformedFeedItem;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
@@ -95,6 +103,7 @@ const FeedItemRow = ({
     activeFeedEntryId,
     currentUserId,
     fps,
+    getViewer,
     isDisabled,
     item,
     onAnnotationCopyLink,
@@ -170,7 +179,8 @@ const FeedItemRow = ({
                 });
             };
             const timestampMs = item.annotationTimestampMs;
-            const handleBadgeClick = timestampMs !== undefined ? () => seekMediaToMs(timestampMs) : undefined;
+            const handleBadgeClick =
+                timestampMs !== undefined ? () => seekMediaToMs(timestampMs, getViewer) : undefined;
             const commentAnnotationTarget =
                 item.annotationTarget && timestampMs !== undefined
                     ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }

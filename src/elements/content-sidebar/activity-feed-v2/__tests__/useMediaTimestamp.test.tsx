@@ -406,6 +406,60 @@ describe('seekMediaToMs', () => {
             cleanup();
         }
     });
+
+    test('should seek via the viewer when setMediaTime is available', () => {
+        const audio = createMediaElement('audio', 0);
+        const cleanup = mountMediaInDom(audio);
+        const pause = jest.fn();
+        const setMediaTime = jest.fn();
+        const getViewer = jest.fn(() => ({
+            addListener: jest.fn(),
+            emit: jest.fn(),
+            pause,
+            removeListener: jest.fn(),
+            setMediaTime,
+        }));
+        try {
+            seekMediaToMs(8055, getViewer);
+            expect(pause).toHaveBeenCalled();
+            expect(setMediaTime).toHaveBeenCalledWith(8.055);
+            expect(audio.currentTime).toBe(0);
+            expect(audio.pause).not.toHaveBeenCalled();
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should fall back to the media element when the viewer has no setMediaTime', () => {
+        const audio = createMediaElement('audio', 0);
+        Object.defineProperty(audio, 'paused', { configurable: true, value: false, writable: true });
+        const cleanup = mountMediaInDom(audio);
+        const getViewer = jest.fn(() => ({
+            addListener: jest.fn(),
+            emit: jest.fn(),
+            removeListener: jest.fn(),
+        }));
+        try {
+            seekMediaToMs(8055, getViewer);
+            expect(audio.currentTime).toBe(8.055);
+            expect(audio.pause).toHaveBeenCalled();
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should fall back to the media element when getViewer returns null', () => {
+        const audio = createMediaElement('audio', 0);
+        Object.defineProperty(audio, 'paused', { configurable: true, value: false, writable: true });
+        const cleanup = mountMediaInDom(audio);
+        try {
+            seekMediaToMs(8055, () => null);
+            expect(audio.currentTime).toBe(8.055);
+            expect(audio.pause).toHaveBeenCalled();
+        } finally {
+            cleanup();
+        }
+    });
 });
 
 describe('useMediaTimestamp with audio', () => {

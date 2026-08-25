@@ -84,7 +84,9 @@ export type ActivityFeedV2File = {
 export type ViewerHandle = {
     addListener: (event: string, handler: (payload: unknown) => void) => void;
     emit: (event: string, payload: unknown) => void;
+    pause?: () => void;
     removeListener: (event: string, handler: (payload: unknown) => void) => void;
+    setMediaTime?: (time: number) => void;
 };
 
 export type ActivityFeedV2Props = {
