@@ -13,10 +13,16 @@ import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '
 import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 import type { TimeFormat } from './useTimeFormat';
 
-import { dispatchReplyDelete, dispatchReplyEdit, feedItemMatchesEntryId, logEditError, serializeEditorContent } from './helpers';
+import {
+    dispatchReplyDelete,
+    dispatchReplyEdit,
+    feedItemMatchesEntryId,
+    logEditError,
+    serializeEditorContent,
+} from './helpers';
 import { annotationTargetToBadge } from './transformers';
 import { formatByTimeFormat } from './useTimeFormat';
-import { seekVideoToMs } from './useVideoTimestamp';
+import { seekMediaToMs } from './useMediaTimestamp';
 
 import type { OnReplyDelete, OnReplyUpdate, TaskItemProps, TransformedFeedItem, UserSelectorProps } from './types';
 
@@ -164,7 +170,7 @@ const FeedItemRow = ({
                 });
             };
             const timestampMs = item.annotationTimestampMs;
-            const handleBadgeClick = timestampMs !== undefined ? () => seekVideoToMs(timestampMs) : undefined;
+            const handleBadgeClick = timestampMs !== undefined ? () => seekMediaToMs(timestampMs) : undefined;
             const commentAnnotationTarget =
                 item.annotationTarget && timestampMs !== undefined
                     ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }

@@ -21,7 +21,7 @@ import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMappi
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
-import { useVideoTimestamp } from './useVideoTimestamp';
+import { useMediaTimestamp } from './useMediaTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
 import type { ActivityFeedV2Props, TransformedFeedItem } from './types';
@@ -50,8 +50,8 @@ const ActivityFeedV2 = ({
     getTaskCollaborators,
     getViewer,
     hasTasks = true,
-    isDisabled = false,
     isAudioPlayerV2Enabled = false,
+    isDisabled = false,
     isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
@@ -379,9 +379,9 @@ const ActivityFeedV2 = ({
         isPressed: isTimestampPressed,
         onPressedChange,
         timestampMs,
-    } = useVideoTimestamp(allowMediaTimestamps, timeFormat, fps);
+    } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps);
 
-    const editorVideoTimestamp = allowMediaTimestamps
+    const editorMediaTimestamp = allowMediaTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
@@ -577,7 +577,7 @@ const ActivityFeedV2 = ({
                             disableComponent={isDisabled || !currentUser}
                             onPost={handleCommentPost}
                             userSelectorProps={userSelectorProps}
-                            videoTimestamp={editorVideoTimestamp}
+                            videoTimestamp={editorMediaTimestamp}
                         />
                     </div>
                 )}

@@ -1489,8 +1489,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         getMentionAsync={this.getMentionAsync}
                         getTaskCollaborators={this.getTaskCollaborators}
                         hasTasks={this.props.hasTasks}
-                        isDisabled={isDisabled}
                         isAudioPlayerV2Enabled={isAudioPlayerV2Enabled}
+                        isDisabled={isDisabled}
                         isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
                         onAnnotationCopyLink={onAnnotationCopyLink}
                         onAnnotationDelete={this.handleAnnotationDelete}

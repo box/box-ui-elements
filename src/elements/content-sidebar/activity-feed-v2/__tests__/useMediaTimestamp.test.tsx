@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 
-import { seekVideoToMs, useVideoTimestamp } from '../useVideoTimestamp';
+import { seekMediaToMs, useMediaTimestamp } from '../useMediaTimestamp';
 import type { TimeFormat } from '../useTimeFormat';
 
 const createMediaElement = (tag: 'video' | 'audio' = 'video', currentTime: number = 0): HTMLMediaElement => {
@@ -46,7 +46,7 @@ const TestHarness = ({
     fps?: number;
     timeFormat?: TimeFormat;
 }) => {
-    const { formattedTimestamp, isPressed, onPressedChange, timestampMs } = useVideoTimestamp(enabled, timeFormat, fps);
+    const { formattedTimestamp, isPressed, onPressedChange, timestampMs } = useMediaTimestamp(enabled, timeFormat, fps);
     return (
         <div>
             <span data-testid="timestamp">{formattedTimestamp}</span>
@@ -62,7 +62,7 @@ const TestHarness = ({
     );
 };
 
-describe('useVideoTimestamp', () => {
+describe('useMediaTimestamp', () => {
     afterEach(() => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
     });
@@ -91,7 +91,7 @@ describe('useVideoTimestamp', () => {
         }
     });
 
-    test('should capture current time and pause the video when toggled on while playing', () => {
+    test('should capture current time and pause the media when toggled on while playing', () => {
         const video = createVideoElement(43.5);
         Object.defineProperty(video, 'paused', { configurable: true, value: false, writable: true });
         const cleanup = mountVideoInDom(video);
@@ -130,7 +130,7 @@ describe('useVideoTimestamp', () => {
         }
     });
 
-    test('should update captured value when pressed and the video pauses', () => {
+    test('should update captured value when pressed and the media pauses', () => {
         const video = createVideoElement(0);
         const cleanup = mountVideoInDom(video);
         try {
@@ -149,7 +149,7 @@ describe('useVideoTimestamp', () => {
         }
     });
 
-    test('should update captured value when pressed and the video is seeked', () => {
+    test('should update captured value when pressed and the media is seeked', () => {
         const video = createVideoElement(0);
         const cleanup = mountVideoInDom(video);
         try {
@@ -305,7 +305,7 @@ describe('useVideoTimestamp', () => {
     });
 });
 
-describe('useVideoTimestamp time format integration', () => {
+describe('useMediaTimestamp time format integration', () => {
     afterEach(() => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
     });
@@ -372,7 +372,7 @@ describe('useVideoTimestamp time format integration', () => {
     });
 });
 
-describe('seekVideoToMs', () => {
+describe('seekMediaToMs', () => {
     afterEach(() => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
     });
@@ -382,7 +382,7 @@ describe('seekVideoToMs', () => {
         Object.defineProperty(video, 'paused', { configurable: true, value: false, writable: true });
         const cleanup = mountVideoInDom(video);
         try {
-            seekVideoToMs(8055);
+            seekMediaToMs(8055);
             expect(video.currentTime).toBe(8.055);
             expect(video.pause).toHaveBeenCalled();
         } finally {
@@ -390,8 +390,8 @@ describe('seekVideoToMs', () => {
         }
     });
 
-    test('should be a no-op when no video element is present', () => {
-        expect(() => seekVideoToMs(1000)).not.toThrow();
+    test('should be a no-op when no media element is present', () => {
+        expect(() => seekMediaToMs(1000)).not.toThrow();
     });
 
     test('should set currentTime in seconds and pause when an audio element is present', () => {
@@ -399,7 +399,7 @@ describe('seekVideoToMs', () => {
         Object.defineProperty(audio, 'paused', { configurable: true, value: false, writable: true });
         const cleanup = mountMediaInDom(audio);
         try {
-            seekVideoToMs(8055);
+            seekMediaToMs(8055);
             expect(audio.currentTime).toBe(8.055);
             expect(audio.pause).toHaveBeenCalled();
         } finally {
@@ -408,7 +408,7 @@ describe('seekVideoToMs', () => {
     });
 });
 
-describe('useVideoTimestamp with audio', () => {
+describe('useMediaTimestamp with audio', () => {
     afterEach(() => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
     });

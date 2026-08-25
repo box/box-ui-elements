@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { formatByTimeFormat, MEDIA_ELEMENT_SELECTOR, VIDEO_CONTAINER_SELECTOR } from './useTimeFormat';
+import { formatByTimeFormat, MEDIA_CONTAINER_SELECTOR, MEDIA_ELEMENT_SELECTOR } from './useTimeFormat';
 import type { TimeFormat } from './useTimeFormat';
 
 const findMediaElement = (): HTMLMediaElement | null => {
     if (typeof document === 'undefined') {
         return null;
     }
-    const container = document.querySelector(VIDEO_CONTAINER_SELECTOR);
+    const container = document.querySelector(MEDIA_CONTAINER_SELECTOR);
     return container?.querySelector<HTMLMediaElement>(MEDIA_ELEMENT_SELECTOR) ?? null;
 };
 
@@ -18,14 +18,14 @@ const captureCurrentMs = (media: HTMLMediaElement | null): number => {
     return Math.floor(media.currentTime * 1000);
 };
 
-export const seekVideoToMs = (ms: number): void => {
+export const seekMediaToMs = (ms: number): void => {
     const media = findMediaElement();
     if (!media) return;
     media.currentTime = ms / 1000;
     media.pause();
 };
 
-export interface UseVideoTimestampResult {
+export interface UseMediaTimestampResult {
     /** Defaults to "0:00" until the first capture. */
     formattedTimestamp: string;
     isPressed: boolean;
@@ -41,7 +41,7 @@ export interface UseVideoTimestampResult {
  * - Toggle off->on: captures current time and pauses the media if it was playing.
  * - New media src: captured value resets to 0; pressed state persists.
  */
-export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps: number): UseVideoTimestampResult => {
+export const useMediaTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps: number): UseMediaTimestampResult => {
     const [isPressed, setIsPressed] = React.useState(false);
     const [timestampMs, setTimestampMs] = React.useState(0);
     const isPressedRef = React.useRef(isPressed);
