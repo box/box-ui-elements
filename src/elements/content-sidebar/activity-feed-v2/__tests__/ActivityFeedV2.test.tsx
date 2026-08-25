@@ -1583,11 +1583,40 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
         });
 
-        test('should not emit comment_markers when file is audio', () => {
+        test('should not emit comment_markers when file is audio and audio player v2 is disabled', () => {
             renderComponentWithMarkers({
                 file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
             });
             expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
+        });
+
+        test('should emit comment_markers for audio when audio player v2 is enabled', () => {
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
+        });
+
+        test('should emit frame annotation markers for audio when they are present in the feed', () => {
+            renderComponentWithMarkers({
+                feedItems: [frameAnnotation] as ActivityFeedV2Props['feedItems'],
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'frame-ann-1',
+                    time: 10,
+                    type: 'annotation',
+                }),
+            ]);
         });
 
         test('should not emit comment_markers when getViewer returns null', () => {

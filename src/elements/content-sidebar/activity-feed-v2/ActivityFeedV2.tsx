@@ -385,8 +385,10 @@ const ActivityFeedV2 = ({
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
+    const allowCommentMarkers = isVideo || (isAudio && isAudioPlayerV2Enabled);
+
     React.useEffect(() => {
-        if (!getViewer || !isVideo) return undefined;
+        if (!getViewer || !allowCommentMarkers) return undefined;
         const viewer = getViewer();
         if (!viewer) return undefined;
 
@@ -438,7 +440,7 @@ const ActivityFeedV2 = ({
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
             viewer.emit('comment_markers', []);
         };
-    }, [filteredItems, getViewer, isVideo, onCommentSelect]);
+    }, [allowCommentMarkers, filteredItems, getViewer, onCommentSelect]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
