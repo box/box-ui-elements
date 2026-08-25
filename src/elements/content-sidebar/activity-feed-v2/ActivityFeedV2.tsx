@@ -51,6 +51,7 @@ const ActivityFeedV2 = ({
     getViewer,
     hasTasks = true,
     isDisabled = false,
+    isAudioPlayerV2Enabled = false,
     isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
@@ -365,8 +366,12 @@ const ActivityFeedV2 = ({
     }, [currentUserId, filteredItems, scrollHandle]);
 
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
+    const isAudio = file?.extension ? FILE_EXTENSIONS.audio.includes(file.extension) : false;
     const fileVersionId = file?.file_version?.id;
     const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+    const allowAudioTimestamps =
+        isAudio && isTimestampedCommentsEnabled && isAudioPlayerV2Enabled && Boolean(fileVersionId);
+    const allowMediaTimestamps = allowVideoTimestamps || allowAudioTimestamps;
     const { timeFormat, fps } = useTimeFormat(isVideo);
 
     const {
@@ -374,9 +379,9 @@ const ActivityFeedV2 = ({
         isPressed: isTimestampPressed,
         onPressedChange,
         timestampMs,
-    } = useVideoTimestamp(allowVideoTimestamps, timeFormat, fps);
+    } = useVideoTimestamp(allowMediaTimestamps, timeFormat, fps);
 
-    const editorVideoTimestamp = allowVideoTimestamps
+    const editorVideoTimestamp = allowMediaTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
@@ -441,7 +446,7 @@ const ActivityFeedV2 = ({
             const serialized = serializeEditorContent(content);
             if (!serialized || !serialized.text) return;
             const text =
-                allowVideoTimestamps && isTimestampPressed && fileVersionId
+                allowMediaTimestamps && isTimestampPressed && fileVersionId
                     ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
                     : serialized.text;
             try {
@@ -453,7 +458,7 @@ const ActivityFeedV2 = ({
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
+        [allowMediaTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
     );
 
     const handleCreateTask = React.useCallback(

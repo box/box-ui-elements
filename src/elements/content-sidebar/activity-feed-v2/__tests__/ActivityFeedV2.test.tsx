@@ -846,24 +846,29 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
-    describe('video timestamp', () => {
-        const mountVideo = (currentTime: number = 0) => {
+    describe('media timestamp', () => {
+        const mountMedia = (tag: 'video' | 'audio' = 'video', currentTime: number = 0) => {
             const container = document.createElement('div');
             container.className = 'bp-media-container';
-            const video = document.createElement('video');
-            Object.defineProperty(video, 'currentTime', {
+            const media = document.createElement(tag);
+            Object.defineProperty(media, 'currentTime', {
                 configurable: true,
                 value: currentTime,
                 writable: true,
             });
-            Object.defineProperty(video, 'paused', { configurable: true, value: true, writable: true });
-            video.pause = jest.fn();
-            container.appendChild(video);
+            Object.defineProperty(media, 'paused', { configurable: true, value: true, writable: true });
+            media.pause = jest.fn();
+            container.appendChild(media);
             document.body.appendChild(container);
-            return { cleanup: () => container.remove(), video };
+            return { cleanup: () => container.remove(), media };
         };
 
-        test('should not pass videoTimestamp when file is not a video', () => {
+        const mountVideo = (currentTime: number = 0) => {
+            const { cleanup, media } = mountMedia('video', currentTime);
+            return { cleanup, video: media };
+        };
+
+        test('should not pass videoTimestamp when file is not a video or audio', () => {
             const { cleanup } = mountVideo();
             try {
                 render(
@@ -975,6 +980,90 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
                         file={{ extension: 'mp4', permissions: { can_comment: true } }}
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should pass videoTimestamp with default 0:00 for audio when timestamp and audio player flags are enabled', () => {
+            const { cleanup } = mountMedia('audio');
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toEqual({
+                    formattedTimestamp: '0:00',
+                    isPressed: false,
+                    onPressedChange: expect.any(Function),
+                });
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should prepend timestamp markup to posted text when audio toggle is pressed', async () => {
+            const { cleanup, media } = mountMedia('audio');
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great moment' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great moment', false);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not pass videoTimestamp for audio when isTimestampedCommentsEnabled is false', () => {
+            const { cleanup } = mountMedia('audio');
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                        isAudioPlayerV2Enabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not pass videoTimestamp for audio when audio player v2 is disabled', () => {
+            const { cleanup } = mountMedia('audio');
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } }}
                         isTimestampedCommentsEnabled
                     />,
                 );
@@ -1491,6 +1580,13 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should not emit comment_markers when file is not a video', () => {
             renderComponentWithMarkers({ file: { extension: 'pdf', file_version: { id: '1' } } });
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
+        });
+
+        test('should not emit comment_markers when file is audio', () => {
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+            });
             expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
         });
 

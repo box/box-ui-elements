@@ -8,6 +8,7 @@ import {
 import { DEFAULT_VIDEO_FPS } from '../../../constants';
 
 export const VIDEO_CONTAINER_SELECTOR = '.bp-media-container';
+export const MEDIA_ELEMENT_SELECTOR = 'video, audio';
 
 export type TimeFormat = 'standard' | 'timecode' | 'frames';
 

@@ -100,6 +100,7 @@ export type ActivityFeedV2Props = {
     getViewer?: () => ViewerHandle | null;
     hasTasks?: boolean;
     isDisabled?: boolean;
+    isAudioPlayerV2Enabled?: boolean;
     isTimestampedCommentsEnabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;

@@ -4,33 +4,38 @@ import { act, render, screen } from '@testing-library/react';
 import { seekVideoToMs, useVideoTimestamp } from '../useVideoTimestamp';
 import type { TimeFormat } from '../useTimeFormat';
 
-const createVideoElement = (currentTime: number = 0): HTMLVideoElement => {
-    const video = document.createElement('video');
-    Object.defineProperty(video, 'currentTime', {
+const createMediaElement = (tag: 'video' | 'audio' = 'video', currentTime: number = 0): HTMLMediaElement => {
+    const media = document.createElement(tag);
+    Object.defineProperty(media, 'currentTime', {
         configurable: true,
         get: () => currentTime,
         set: (value: number) => {
             currentTime = value;
         },
     });
-    Object.defineProperty(video, 'paused', {
+    Object.defineProperty(media, 'paused', {
         configurable: true,
         value: true,
         writable: true,
     });
-    video.pause = jest.fn(() => {
-        Object.defineProperty(video, 'paused', { configurable: true, value: true, writable: true });
+    media.pause = jest.fn(() => {
+        Object.defineProperty(media, 'paused', { configurable: true, value: true, writable: true });
     });
-    return video;
+    return media;
 };
 
-const mountVideoInDom = (video: HTMLVideoElement) => {
+const createVideoElement = (currentTime: number = 0): HTMLVideoElement =>
+    createMediaElement('video', currentTime) as HTMLVideoElement;
+
+const mountMediaInDom = (media: HTMLMediaElement) => {
     const container = document.createElement('div');
     container.className = 'bp-media-container';
-    container.appendChild(video);
+    container.appendChild(media);
     document.body.appendChild(container);
     return () => container.remove();
 };
+
+const mountVideoInDom = (video: HTMLVideoElement) => mountMediaInDom(video);
 
 const TestHarness = ({
     enabled,
@@ -387,5 +392,60 @@ describe('seekVideoToMs', () => {
 
     test('should be a no-op when no video element is present', () => {
         expect(() => seekVideoToMs(1000)).not.toThrow();
+    });
+
+    test('should set currentTime in seconds and pause when an audio element is present', () => {
+        const audio = createMediaElement('audio', 0);
+        Object.defineProperty(audio, 'paused', { configurable: true, value: false, writable: true });
+        const cleanup = mountMediaInDom(audio);
+        try {
+            seekVideoToMs(8055);
+            expect(audio.currentTime).toBe(8.055);
+            expect(audio.pause).toHaveBeenCalled();
+        } finally {
+            cleanup();
+        }
+    });
+});
+
+describe('useVideoTimestamp with audio', () => {
+    afterEach(() => {
+        document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
+    });
+
+    test('should capture current time and pause the audio when toggled on while playing', () => {
+        const audio = createMediaElement('audio', 43.5);
+        Object.defineProperty(audio, 'paused', { configurable: true, value: false, writable: true });
+        const cleanup = mountMediaInDom(audio);
+        try {
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            expect(audio.pause).toHaveBeenCalled();
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:43');
+            expect(screen.getByTestId('ms').textContent).toBe('43500');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should update captured value when pressed and the audio is seeked', () => {
+        const audio = createMediaElement('audio', 0);
+        const cleanup = mountMediaInDom(audio);
+        try {
+            render(<TestHarness enabled />);
+            act(() => {
+                screen.getByText('press').click();
+            });
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 7, writable: true });
+            act(() => {
+                audio.dispatchEvent(new Event('seeked'));
+            });
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:07');
+        } finally {
+            cleanup();
+        }
     });
 });

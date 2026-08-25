@@ -1,28 +1,28 @@
 import * as React from 'react';
 
-import { formatByTimeFormat, VIDEO_CONTAINER_SELECTOR } from './useTimeFormat';
+import { formatByTimeFormat, MEDIA_ELEMENT_SELECTOR, VIDEO_CONTAINER_SELECTOR } from './useTimeFormat';
 import type { TimeFormat } from './useTimeFormat';
 
-const findVideoElement = (): HTMLVideoElement | null => {
+const findMediaElement = (): HTMLMediaElement | null => {
     if (typeof document === 'undefined') {
         return null;
     }
     const container = document.querySelector(VIDEO_CONTAINER_SELECTOR);
-    return container?.querySelector<HTMLVideoElement>('video') ?? null;
+    return container?.querySelector<HTMLMediaElement>(MEDIA_ELEMENT_SELECTOR) ?? null;
 };
 
-const captureCurrentMs = (video: HTMLVideoElement | null): number => {
-    if (!video) {
+const captureCurrentMs = (media: HTMLMediaElement | null): number => {
+    if (!media) {
         return 0;
     }
-    return Math.floor(video.currentTime * 1000);
+    return Math.floor(media.currentTime * 1000);
 };
 
 export const seekVideoToMs = (ms: number): void => {
-    const video = findVideoElement();
-    if (!video) return;
-    video.currentTime = ms / 1000;
-    video.pause();
+    const media = findMediaElement();
+    if (!media) return;
+    media.currentTime = ms / 1000;
+    media.pause();
 };
 
 export interface UseVideoTimestampResult {
@@ -36,10 +36,10 @@ export interface UseVideoTimestampResult {
 /**
  * Behavior:
  * - Pressed off: captured value never updates.
- * - Pressed on while video is playing: captured value frozen until pause/seek.
- * - Pressed on while video is paused: captured value updates on pause/seek.
- * - Toggle off->on: captures current time and pauses the video if it was playing.
- * - New video src: captured value resets to 0; pressed state persists.
+ * - Pressed on while media is playing: captured value frozen until pause/seek.
+ * - Pressed on while media is paused: captured value updates on pause/seek.
+ * - Toggle off->on: captures current time and pauses the media if it was playing.
+ * - New media src: captured value resets to 0; pressed state persists.
  */
 export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps: number): UseVideoTimestampResult => {
     const [isPressed, setIsPressed] = React.useState(false);
@@ -47,7 +47,7 @@ export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps:
     const isPressedRef = React.useRef(isPressed);
     const isLoadingRef = React.useRef(false);
 
-    // Reset state when disabled (e.g. switching from a video to a non-video file)
+    // Reset state when disabled (e.g. switching from a media file to a non-media file)
     // so a re-enable does not leak the previous file's pressed state or captured ms.
     React.useEffect(() => {
         if (!enabled) {
@@ -68,16 +68,16 @@ export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps:
                 setIsPressed(false);
                 return;
             }
-            const video = findVideoElement();
-            if (!video) {
+            const media = findMediaElement();
+            if (!media) {
                 return;
             }
-            if (!video.paused) {
-                video.pause();
+            if (!media.paused) {
+                media.pause();
             }
             isPressedRef.current = true;
             setIsPressed(true);
-            setTimestampMs(captureCurrentMs(video));
+            setTimestampMs(captureCurrentMs(media));
         },
         [enabled],
     );
@@ -88,7 +88,7 @@ export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps:
         }
 
         let observer: MutationObserver | null = null;
-        let attached: HTMLVideoElement | null = null;
+        let attached: HTMLMediaElement | null = null;
 
         const handlePauseOrSeek = () => {
             // Skip captures during a fresh-src load: currentTime is mid-reset and
@@ -120,28 +120,28 @@ export const useVideoTimestamp = (enabled: boolean, timeFormat: TimeFormat, fps:
         };
 
         const tryAttach = (): boolean => {
-            const video = findVideoElement();
-            if (!video) {
+            const media = findMediaElement();
+            if (!media) {
                 return false;
             }
-            if (video === attached) {
+            if (media === attached) {
                 return true;
             }
             detach();
-            video.addEventListener('pause', handlePauseOrSeek);
-            video.addEventListener('seeked', handlePauseOrSeek);
-            video.addEventListener('loadstart', handleLoadStart);
-            video.addEventListener('loadeddata', handleLoadedData);
-            attached = video;
+            media.addEventListener('pause', handlePauseOrSeek);
+            media.addEventListener('seeked', handlePauseOrSeek);
+            media.addEventListener('loadstart', handleLoadStart);
+            media.addEventListener('loadeddata', handleLoadedData);
+            attached = media;
             return true;
         };
 
-        // Keep observing so listeners migrate when preview replaces the <video>
+        // Keep observing so listeners migrate when preview replaces the media
         // element (different file). Element-replacement is invisible to loadstart,
         // which only fires for src changes on the same element.
         if (typeof MutationObserver !== 'undefined') {
             observer = new MutationObserver(() => {
-                if (findVideoElement() !== attached) {
+                if (findMediaElement() !== attached) {
                     tryAttach();
                 }
             });

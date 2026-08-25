@@ -457,7 +457,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.onAnnotationBadgeClick).toBeUndefined();
         });
 
-        test('should seek the video on badge click when the comment carries a timestamp', () => {
+        test('should seek the media on badge click when the comment carries a timestamp', () => {
             const timestampedComment: TransformedCommentItem = {
                 ...mockComment,
                 annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
@@ -549,9 +549,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             });
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
 
-            rerender(
-                <FeedItemRow {...defaultProps} activeFeedEntryId="annotation-reply-1" item={mockAnnotation} />,
-            );
+            rerender(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-reply-1" item={mockAnnotation} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
 
             act(() => {
