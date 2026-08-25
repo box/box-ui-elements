@@ -156,28 +156,7 @@ describe('MetadataSidebarRedesign user field wiring', () => {
         return firstArg;
     };
 
-    test('passes the flag and fetchers to the editor when the user field flag is on', async () => {
-        renderSidebar({ 'metadata.userField.enabled': true });
-        await enterEditMode();
-
-        const editorProps = lastEditorProps();
-        expect(editorProps.isMetadataUserFieldEnabled).toBe(true);
-        expect(editorProps.fetchUsers).toEqual(expect.any(Function));
-        expect(editorProps.fetchAvatarUrls).toEqual(expect.any(Function));
-    });
-
-    test('keeps the user field disabled when the flag is off', async () => {
-        renderSidebar({ 'metadata.userField.enabled': false });
-        await enterEditMode();
-
-        // Fetchers are always provided; @box/metadata-editor gates rendering on the flag.
-        const editorProps = lastEditorProps();
-        expect(editorProps.isMetadataUserFieldEnabled).toBe(false);
-        expect(editorProps.fetchUsers).toEqual(expect.any(Function));
-        expect(editorProps.fetchAvatarUrls).toEqual(expect.any(Function));
-    });
-
-    test('prefers host-provided fetcher overrides over the default API fetchers', async () => {
+    test('passes host-provided fetchers to the editor when the user field flag is on', async () => {
         const fetchUsers = jest.fn();
         const fetchAvatarUrls = jest.fn();
 
@@ -185,18 +164,31 @@ describe('MetadataSidebarRedesign user field wiring', () => {
         await enterEditMode();
 
         const editorProps = lastEditorProps();
+        expect(editorProps.isMetadataUserFieldEnabled).toBe(true);
         expect(editorProps.fetchUsers).toBe(fetchUsers);
         expect(editorProps.fetchAvatarUrls).toBe(fetchAvatarUrls);
     });
 
-    test('falls back to the default fetcher for any override the host does not provide', async () => {
-        const fetchUsers = jest.fn();
-
-        renderSidebar({ 'metadata.userField.enabled': true }, { fetchUsers });
+    test('does not provide fetchers when the host omits them', async () => {
+        renderSidebar({ 'metadata.userField.enabled': true });
         await enterEditMode();
 
         const editorProps = lastEditorProps();
+        expect(editorProps.isMetadataUserFieldEnabled).toBe(true);
+        expect(editorProps.fetchUsers).toBeUndefined();
+        expect(editorProps.fetchAvatarUrls).toBeUndefined();
+    });
+
+    test('keeps the user field disabled when the flag is off', async () => {
+        const fetchUsers = jest.fn();
+        const fetchAvatarUrls = jest.fn();
+
+        renderSidebar({ 'metadata.userField.enabled': false }, { fetchAvatarUrls, fetchUsers });
+        await enterEditMode();
+
+        const editorProps = lastEditorProps();
+        expect(editorProps.isMetadataUserFieldEnabled).toBe(false);
         expect(editorProps.fetchUsers).toBe(fetchUsers);
-        expect(editorProps.fetchAvatarUrls).toEqual(expect.any(Function));
+        expect(editorProps.fetchAvatarUrls).toBe(fetchAvatarUrls);
     });
 });

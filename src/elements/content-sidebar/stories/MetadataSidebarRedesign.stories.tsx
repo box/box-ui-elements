@@ -91,37 +91,3 @@ const waitForLoadingToComplete = async (canvas: ReturnType<typeof within>) => {
         { timeout: 10000 },
     );
 };
-
-export const UserField: StoryObj<typeof MetadataSidebarRedesign> = {
-    args: {
-        features: {
-            ...mockFeatures,
-            'metadata.userField.enabled': true,
-        },
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                ...userFieldMockHandlers,
-                http.get(mockMetadataTemplatesWithUserField.url, () => {
-                    return HttpResponse.json(mockMetadataTemplatesWithUserField.response);
-                }),
-            ],
-        },
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-
-        await waitForLoadingToComplete(canvas);
-
-        const editButton = await canvas.findByRole('button', { name: 'Edit User Template' }, { timeout: 10000 });
-        await userEvent.click(editButton);
-
-        const ownerField = await canvas.findByRole('combobox', { name: /Owner/i });
-        await userEvent.click(ownerField);
-        await userEvent.type(ownerField, 'Bob');
-
-        const bobOption = await screen.findByRole('option', { name: /Bob Smith/i });
-        expect(bobOption).toBeInTheDocument();
-    },
-};

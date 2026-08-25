@@ -53,7 +53,6 @@ import {
     metadataTaxonomyNodeAncestorsFetcher,
     type TaxonomyFieldConfig,
 } from './fetchers/metadataTaxonomyFetcher';
-import { createFetchAvatarUrls, createFetchUsers } from './fetchers/metadataUserFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
@@ -65,9 +64,9 @@ mark(MARK_NAME_JS_READY);
 export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
-    /** Custom user/group search fetcher (e.g. a session-authenticated contacts endpoint); defaults to enterprise /users + /groups search. */
+    /** Custom user/group search fetcher (e.g. a session-authenticated contacts endpoint). */
     fetchUsers?: FetchUsers;
-    /** Custom avatar URL resolver; defaults to /users/:id/avatar with an access token. */
+    /** Custom avatar URL resolver. */
     fetchAvatarUrls?: FetchAvatarUrls;
 }
 
@@ -111,8 +110,8 @@ function MetadataSidebarRedesign({
     elementId,
     fileExtension,
     fileId,
-    fetchAvatarUrls: fetchAvatarUrlsOverride,
-    fetchUsers: fetchUsersOverride,
+    fetchAvatarUrls,
+    fetchUsers,
     filteredTemplateIds = [],
     getPreview,
     history,
@@ -365,13 +364,6 @@ function MetadataSidebarRedesign({
         () => createTaxonomyItemsService(api, fileId, resolveTaxonomyFieldConfig),
         [api, fileId, resolveTaxonomyFieldConfig],
     );
-
-    // Hosts can inject their own user-field fetchers (e.g. a session-authenticated contacts
-    // endpoint); without overrides the sidebar uses the default BUIE API implementations.
-    const defaultFetchUsers = useMemo(() => createFetchUsers(api, fileId), [api, fileId]);
-    const defaultFetchAvatarUrls = useMemo(() => createFetchAvatarUrls(api, fileId), [api, fileId]);
-    const fetchUsers = fetchUsersOverride ?? defaultFetchUsers;
-    const fetchAvatarUrls = fetchAvatarUrlsOverride ?? defaultFetchAvatarUrls;
 
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
