@@ -11,6 +11,8 @@ import noop from 'lodash/noop';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
+import { isListNode } from '@box/threaded-annotations';
+import type { BlockNodeV2, ParagraphNodeV2 } from '@box/threaded-annotations';
 import type { UserContactType } from '@box/user-selector';
 
 import TaskModalV2 from './task-modal-v2';
@@ -38,6 +40,20 @@ import messages from '../messages';
 
 import './ActivityFeedV2.scss';
 
+const paragraphMentionsUser = (paragraph: ParagraphNodeV2, userId: string): boolean =>
+    (paragraph.content ?? []).some(node => node.type === 'mention' && node.attrs.mentionedUserId === userId);
+
+const blocksMentionUser = (blocks: BlockNodeV2[] | undefined, userId: string): boolean =>
+    (blocks ?? []).some(block => {
+        if (block.type === 'paragraph') {
+            return paragraphMentionsUser(block, userId);
+        }
+        if (!isListNode(block)) {
+            return false;
+        }
+        return (block.content ?? []).some(item => blocksMentionUser(item.content, userId));
+    });
+
 const ActivityFeedV2 = ({
     activeFeedEntryId,
     createTask,
@@ -52,6 +68,7 @@ const ActivityFeedV2 = ({
     hasTasks = true,
     isAudioPlayerV2Enabled = false,
     isDisabled = false,
+    isRichTextEnabled = false,
     isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
@@ -276,13 +293,13 @@ const ActivityFeedV2 = ({
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
         return feedItems.reduce<TransformedFeedItem[]>((acc, item) => {
-            const transformed = transformFeedItem(item, currentUserId, avatarUrls);
+            const transformed = transformFeedItem(item, currentUserId, avatarUrls, isRichTextEnabled);
             if (transformed) {
                 acc.push(transformed);
             }
             return acc;
         }, []);
-    }, [avatarUrls, currentUserId, feedItems]);
+    }, [avatarUrls, currentUserId, feedItems, isRichTextEnabled]);
 
     const filteredItems = React.useMemo(() => {
         const filtered = transformedItems.filter(item => {
@@ -292,12 +309,7 @@ const ActivityFeedV2 = ({
             if (showOnlyMentionsMe && currentUserId) {
                 if (item.type === 'comment' || item.type === 'annotation') {
                     const hasMention = item.messages.some(msg =>
-                        msg.message?.content?.some(
-                            (paragraph: { content?: Array<{ type: string; attrs?: { mentionedUserId?: string } }> }) =>
-                                paragraph.content?.some(
-                                    node => node.type === 'mention' && node.attrs?.mentionedUserId === currentUserId,
-                                ),
-                        ),
+                        blocksMentionUser(msg.message?.content, currentUserId),
                     );
                     if (!hasMention) return false;
                 }
@@ -445,7 +457,7 @@ const ActivityFeedV2 = ({
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
-            const serialized = serializeEditorContent(content);
+            const serialized = serializeEditorContent(content, isRichTextEnabled);
             if (!serialized || !serialized.text) return;
             const text =
                 allowMediaTimestamps && isTimestampPressed && fileVersionId
@@ -460,7 +472,15 @@ const ActivityFeedV2 = ({
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [allowMediaTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
+        [
+            allowMediaTimestamps,
+            filteredItems,
+            fileVersionId,
+            isRichTextEnabled,
+            isTimestampPressed,
+            onCommentCreate,
+            timestampMs,
+        ],
     );
 
     const handleCreateTask = React.useCallback(
@@ -547,6 +567,7 @@ const ActivityFeedV2 = ({
                                     fps={fps}
                                     getViewer={getViewer}
                                     isDisabled={isDisabled}
+                                    isRichTextEnabled={isRichTextEnabled}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}
@@ -578,6 +599,7 @@ const ActivityFeedV2 = ({
                     <div className="bcs-NewActivityFeed-editor">
                         <ActivityFeed.Editor
                             disableComponent={isDisabled || !currentUser}
+                            isRichTextEnabled={isRichTextEnabled}
                             onPost={handleCommentPost}
                             userSelectorProps={userSelectorProps}
                             videoTimestamp={editorMediaTimestamp}
