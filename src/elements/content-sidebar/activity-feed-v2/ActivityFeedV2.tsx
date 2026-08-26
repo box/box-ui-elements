@@ -21,7 +21,7 @@ import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMappi
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
-import { useVideoTimestamp } from './useVideoTimestamp';
+import { useMediaTimestamp } from './useMediaTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
 import type { ActivityFeedV2Props, TransformedFeedItem } from './types';
@@ -50,6 +50,7 @@ const ActivityFeedV2 = ({
     getTaskCollaborators,
     getViewer,
     hasTasks = true,
+    isAudioPlayerV2Enabled = false,
     isDisabled = false,
     isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
@@ -365,8 +366,12 @@ const ActivityFeedV2 = ({
     }, [currentUserId, filteredItems, scrollHandle]);
 
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
+    const isAudio = file?.extension ? FILE_EXTENSIONS.audio.includes(file.extension) : false;
     const fileVersionId = file?.file_version?.id;
     const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+    const allowAudioTimestamps =
+        isAudio && isTimestampedCommentsEnabled && isAudioPlayerV2Enabled && Boolean(fileVersionId);
+    const allowMediaTimestamps = allowVideoTimestamps || allowAudioTimestamps;
     const { timeFormat, fps } = useTimeFormat(isVideo);
 
     const {
@@ -374,14 +379,16 @@ const ActivityFeedV2 = ({
         isPressed: isTimestampPressed,
         onPressedChange,
         timestampMs,
-    } = useVideoTimestamp(allowVideoTimestamps, timeFormat, fps);
+    } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps);
 
-    const editorVideoTimestamp = allowVideoTimestamps
+    const editorMediaTimestamp = allowMediaTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
+    const allowCommentMarkers = isVideo || (isAudio && isAudioPlayerV2Enabled);
+
     React.useEffect(() => {
-        if (!getViewer || !isVideo) return undefined;
+        if (!getViewer || !allowCommentMarkers) return undefined;
         const viewer = getViewer();
         if (!viewer) return undefined;
 
@@ -433,7 +440,7 @@ const ActivityFeedV2 = ({
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
             viewer.emit('comment_markers', []);
         };
-    }, [filteredItems, getViewer, isVideo, onCommentSelect]);
+    }, [allowCommentMarkers, filteredItems, getViewer, onCommentSelect]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -441,7 +448,7 @@ const ActivityFeedV2 = ({
             const serialized = serializeEditorContent(content);
             if (!serialized || !serialized.text) return;
             const text =
-                allowVideoTimestamps && isTimestampPressed && fileVersionId
+                allowMediaTimestamps && isTimestampPressed && fileVersionId
                     ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
                     : serialized.text;
             try {
@@ -453,7 +460,7 @@ const ActivityFeedV2 = ({
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
+        [allowMediaTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
     );
 
     const handleCreateTask = React.useCallback(
@@ -538,6 +545,7 @@ const ActivityFeedV2 = ({
                                     activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
+                                    getViewer={getViewer}
                                     isDisabled={isDisabled}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}
@@ -572,7 +580,7 @@ const ActivityFeedV2 = ({
                             disableComponent={isDisabled || !currentUser}
                             onPost={handleCommentPost}
                             userSelectorProps={userSelectorProps}
-                            videoTimestamp={editorVideoTimestamp}
+                            videoTimestamp={editorMediaTimestamp}
                         />
                     </div>
                 )}

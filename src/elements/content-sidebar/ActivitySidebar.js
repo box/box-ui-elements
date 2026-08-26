@@ -1468,6 +1468,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
             const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
             const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
+            const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
             return (
                 <div
                     aria-labelledby={label}
@@ -1488,6 +1489,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         getMentionAsync={this.getMentionAsync}
                         getTaskCollaborators={this.getTaskCollaborators}
                         hasTasks={this.props.hasTasks}
+                        isAudioPlayerV2Enabled={isAudioPlayerV2Enabled}
                         isDisabled={isDisabled}
                         isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
                         onAnnotationCopyLink={onAnnotationCopyLink}
