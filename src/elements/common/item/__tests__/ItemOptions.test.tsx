@@ -1,7 +1,7 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../../test-utils/testing-library';
-import ItemOptions from '../ItemOptions';
+import ItemOptions, { ItemOptionsProps } from '../ItemOptions';
 
 jest.mock('@box/blueprint-web', () => ({
     ...jest.requireActual('@box/blueprint-web'),
@@ -9,8 +9,8 @@ jest.mock('@box/blueprint-web', () => ({
 }));
 
 describe('elements/common/item/ItemOptions', () => {
-    const renderComponent = (props = {}) => {
-        const defaultProps = {
+    const renderComponent = (props: Partial<ItemOptionsProps> = {}) => {
+        const defaultProps: ItemOptionsProps = {
             canDelete: true,
             canDownload: true,
             canPreview: true,
@@ -90,9 +90,9 @@ describe('elements/common/item/ItemOptions', () => {
 
         renderComponent({
             itemActions: [
-                { label: 'Archive', type: 'folder' }, // Should be filtered since there are no folder items
-                { label: 'Email', type: 'file' },
-                { filter: ({ extension }) => extension === 'pdf', label: 'Export' },
+                { label: 'Archive', onAction, type: 'folder' }, // Should be filtered since there are no folder items
+                { label: 'Email', onAction, type: 'file' },
+                { filter: ({ extension }) => extension === 'pdf', label: 'Export', onAction },
                 { label: 'Favorite', onAction, type: 'file' },
             ],
         });
@@ -118,8 +118,8 @@ describe('elements/common/item/ItemOptions', () => {
             canRename: false,
             canShare: false,
             itemActions: [
-                { label: 'Archive', type: 'folder' },
-                { filter: ({ extension }) => extension === 'csv', label: 'Import' },
+                { label: 'Archive', onAction: jest.fn(), type: 'folder' },
+                { filter: ({ extension }) => extension === 'csv', label: 'Import', onAction: jest.fn() },
             ],
         });
 
@@ -134,8 +134,8 @@ describe('elements/common/item/ItemOptions', () => {
             canRename: false,
             canShare: false,
             itemActions: [
-                { label: 'Archive', type: 'folder' },
-                { filter: ({ extension }) => extension === 'csv', label: 'Import' },
+                { label: 'Archive', onAction: jest.fn(), type: 'folder' },
+                { filter: ({ extension }) => extension === 'csv', label: 'Import', onAction: jest.fn() },
             ],
             viewMode: 'list',
         });

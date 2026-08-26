@@ -11,7 +11,22 @@ import {
     mockOwnerName,
 } from '../__mocks__/ContentSharingV2Mocks';
 
-import type { Collaborations } from '../../../../common/types/core';
+import type { Collaboration, Collaborations } from '../../../../common/types/core';
+
+type CollaborationFixture = Omit<Collaboration, 'accessible_by' | 'expires_at'> & {
+    accessible_by: Partial<Collaboration['accessible_by']> | null;
+    created_by?: { email: string; id: string; name: string };
+    expires_at?: Collaboration['expires_at'];
+};
+
+type CollaborationsFixture = Omit<Collaborations, 'entries'> & {
+    entries: CollaborationFixture[];
+};
+
+const toCollaboration = (collab: CollaborationFixture | null | undefined): Collaboration =>
+    collab as unknown as Collaboration;
+const toCollaborations = (collaborations: CollaborationsFixture): Collaborations =>
+    collaborations as unknown as Collaborations;
 
 const ownerFromApi = {
     id: mockOwnerId,
@@ -23,7 +38,7 @@ const mockCurrentUser = {
     email: mockOwnerEmail,
     emailDomain: mockOwnerEmailDomain,
 };
-const itemOwner = {
+const itemOwner: CollaborationFixture = {
     id: mockOwnerEmail,
     status: STATUS_ACCEPTED,
     role: 'owner',
@@ -31,10 +46,11 @@ const itemOwner = {
         id: mockOwnerId,
         login: mockOwnerEmail,
         name: mockOwnerName,
+        type: 'user',
     },
 };
 
-const mockCollaborationsFromApi: Collaborations = {
+const mockCollaborationsFromApi: CollaborationsFixture = {
     entries: [
         {
             id: '123',
@@ -89,16 +105,17 @@ const mockCollaborationsFromApi: Collaborations = {
             invite_email: 'rrobot@external.example.com',
         },
     ],
+    next_marker: null,
 };
 
-const mockCollaborations = [itemOwner, ...mockCollaborationsFromApi.entries];
+const mockCollaborations: CollaborationFixture[] = [itemOwner, ...mockCollaborationsFromApi.entries];
 
 describe('convertCollaborators', () => {
     describe('convertCollab', () => {
         test('should convert a valid collaboration to Collaborator format', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[1],
+                collab: toCollaboration(mockCollaborations[1]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -121,7 +138,7 @@ describe('convertCollaborators', () => {
         test('should convert pending collaboration with invite_email to a pending collaborator', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[5],
+                collab: toCollaboration(mockCollaborations[5]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -143,7 +160,7 @@ describe('convertCollaborators', () => {
         test('should convert pending collaboration with accessible_by', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[3],
+                collab: toCollaboration(mockCollaborations[3]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -166,7 +183,7 @@ describe('convertCollaborators', () => {
         test.each([undefined, null])('should return null for %s collaboration', collab => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab,
+                collab: toCollaboration(collab),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -177,7 +194,7 @@ describe('convertCollaborators', () => {
         test('should return null for pending collab with accessible_by without collab name', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[4],
+                collab: toCollaboration(mockCollaborations[4]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -188,7 +205,7 @@ describe('convertCollaborators', () => {
         test('should return null for rejected collab', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[6],
+                collab: toCollaboration(mockCollaborations[6]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -199,7 +216,7 @@ describe('convertCollaborators', () => {
         test('should identify current user correctly', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[0],
+                collab: toCollaboration(mockCollaborations[0]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -221,7 +238,7 @@ describe('convertCollaborators', () => {
         test('should identify external user correctly', () => {
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[2],
+                collab: toCollaboration(mockCollaborations[2]),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -233,7 +250,7 @@ describe('convertCollaborators', () => {
             const currentUserWithoutDomain = { id: mockOwnerId, email: mockOwnerEmail };
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: mockCollaborations[2],
+                collab: toCollaboration(mockCollaborations[2]),
                 currentUser: currentUserWithoutDomain,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -246,7 +263,7 @@ describe('convertCollaborators', () => {
             avatarUrlMap => {
                 const result = convertCollab({
                     avatarUrlMap,
-                    collab: mockCollaborations[1],
+                    collab: toCollaboration(mockCollaborations[1]),
                     currentUser: mockCurrentUser,
                     ownerEmailDomain: mockOwnerEmailDomain,
                 });
@@ -264,7 +281,7 @@ describe('convertCollaborators', () => {
 
             const result = convertCollab({
                 avatarUrlMap: mockAvatarUrlMap,
-                collab: collabWithoutExpiration,
+                collab: toCollaboration(collabWithoutExpiration),
                 currentUser: mockCurrentUser,
                 ownerEmailDomain: mockOwnerEmailDomain,
             });
@@ -276,7 +293,7 @@ describe('convertCollaborators', () => {
     describe('convertCollabsResponse', () => {
         test('should convert valid collaborations data to Collaborator array', () => {
             const result = convertCollabsResponse(
-                mockCollaborationsFromApi,
+                toCollaborations(mockCollaborationsFromApi),
                 mockCurrentUser,
                 ownerFromApi,
                 mockAvatarUrlMap,
@@ -352,14 +369,24 @@ describe('convertCollaborators', () => {
         });
 
         test('should return empty array for empty entries', () => {
-            const emptyCollaborations: Collaborations = { entries: [] };
-            const result = convertCollabsResponse(emptyCollaborations, mockCurrentUser, ownerFromApi, mockAvatarUrlMap);
+            const emptyCollaborations: CollaborationsFixture = { entries: [], next_marker: null };
+            const result = convertCollabsResponse(
+                toCollaborations(emptyCollaborations),
+                mockCurrentUser,
+                ownerFromApi,
+                mockAvatarUrlMap,
+            );
 
             expect(result).toEqual([]);
         });
 
         test('should handle null avatar URL map', () => {
-            const collabs = convertCollabsResponse(mockCollaborationsFromApi, mockCurrentUser, ownerFromApi, null);
+            const collabs = convertCollabsResponse(
+                toCollaborations(mockCollaborationsFromApi),
+                mockCurrentUser,
+                ownerFromApi,
+                null,
+            );
 
             collabs.map(collab => {
                 expect(collab.avatarUrl).toBeUndefined();

@@ -1,35 +1,20 @@
+import type { BoxItem } from '../../../common/types/core';
 import { isThumbnailAvailable } from '../utils';
 
 describe('elements/common/theming/utils', () => {
     describe('isThumbnailAvailable()', () => {
-        test('returns `true` when the representation status is `success`', () => {
-            const item = {
+        test.each([
+            { expected: true, state: 'success' },
+            { expected: true, state: 'viewable' },
+            { expected: false, state: 'pending' },
+        ])('returns `$expected` when the representation status is `$state`', ({ expected, state }) => {
+            const item: BoxItem = {
+                id: '1',
                 representations: {
-                    entries: [{ status: { state: 'success' } }],
+                    entries: [{ status: { state } }],
                 },
             };
-            const result = isThumbnailAvailable(item);
-            expect(result).toBe(true);
-        });
-
-        test('returns `true` when the representation status is `viewable`', () => {
-            const item = {
-                representations: {
-                    entries: [{ status: { state: 'viewable' } }],
-                },
-            };
-            const result = isThumbnailAvailable(item);
-            expect(result).toBe(true);
-        });
-
-        test('returns `false` when the representation response is not ready', () => {
-            const item = {
-                representations: {
-                    entries: [{ status: { state: 'pending' } }],
-                },
-            };
-            const result = isThumbnailAvailable(item);
-            expect(result).toBe(false);
+            expect(isThumbnailAvailable(item)).toBe(expected);
         });
     });
 });

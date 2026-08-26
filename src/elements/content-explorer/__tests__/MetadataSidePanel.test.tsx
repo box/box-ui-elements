@@ -2,6 +2,7 @@ import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { Notification } from '@box/blueprint-web';
 import { render, screen, waitFor } from '../../../test-utils/testing-library';
+import type { BoxItem, Collection } from '../../../common/types/core';
 import MetadataSidePanel, { type MetadataSidePanelProps } from '../MetadataSidePanel';
 
 // Mock scrollTo method
@@ -10,7 +11,14 @@ Object.defineProperty(Element.prototype, 'scrollTo', {
     writable: true,
 });
 
-const mockCollection = {
+type MetadataQueryItem = Omit<BoxItem, 'metadata'> & {
+    metadata: Record<string, Record<string, Record<string, string | number | string[]>>>;
+};
+type MetadataQueryCollection = Omit<Collection, 'items'> & { items: MetadataQueryItem[] };
+
+const toCollection = (collection: MetadataQueryCollection): Collection => collection as unknown as Collection;
+
+const mockCollection: MetadataQueryCollection = {
     items: [
         {
             id: '1',
@@ -87,7 +95,7 @@ const TestWrapper = ({
 
 describe('elements/content-explorer/MetadataSidePanel', () => {
     const defaultProps: Omit<MetadataSidePanelProps, 'isEditing' | 'onEditingChange'> = {
-        currentCollection: mockCollection,
+        currentCollection: toCollection(mockCollection),
         metadataTemplate: mockMetadataTemplate,
         onClose: mockOnClose,
         onUpdate: jest.fn(),
@@ -282,7 +290,7 @@ describe('elements/content-explorer/MetadataSidePanel', () => {
         };
 
         renderComponent({
-            currentCollection: collectionWithDifferentValues,
+            currentCollection: toCollection(collectionWithDifferentValues),
             selectedItemIds: new Set(['1', '2']),
         });
 

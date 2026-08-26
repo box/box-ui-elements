@@ -128,7 +128,9 @@ function ContentSharingV2({
             let errorMessage;
             if (error.status) {
                 errorMessage = messages[CONTENT_SHARING_ERRORS[error.status]];
+                // @ts-expect-error -- legacy ElementsXhrError responses may expose a nested response status
             } else if (error.response && error.response.status) {
+                // @ts-expect-error -- legacy ElementsXhrError responses may expose a nested response status
                 errorMessage = messages[CONTENT_SHARING_ERRORS[error.response.status]];
             } else {
                 errorMessage = messages.loadingError;

@@ -57,7 +57,11 @@ const DroppableContentComponent = React.forwardRef<HTMLDivElement, DroppableCont
 
         return (
             <div ref={ref} className="bcu-droppable-content" data-testid="bcu-droppable-content">
-                <ItemList items={items} onClick={onClick} />
+                <ItemList
+                    items={items}
+                    // @ts-expect-error -- legacy ItemList callback receives an upload item instead of a button event
+                    onClick={onClick}
+                />
                 <UploadState
                     canDrop={canDrop}
                     hasItems={hasItems}

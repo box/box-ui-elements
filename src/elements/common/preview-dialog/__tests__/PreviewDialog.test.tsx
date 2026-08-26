@@ -10,7 +10,7 @@ jest.mock('react-modal', () => {
 });
 
 describe('elements/content-explorer/PreviewDialog', () => {
-    const defaultProps = {
+    const defaultProps: PreviewDialogProps = {
         appElement: document.body,
         apiHost: 'https://api.box.com',
         appHost: 'https://app.box.com',

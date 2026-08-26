@@ -3,19 +3,20 @@ import React from 'react';
 import { render, screen } from '../../../../test-utils/testing-library';
 import ItemSubDetails, { ItemSubDetailsProps } from '../ItemSubDetails';
 import { VIEW_RECENTS } from '../../../../constants';
+import type { BoxItem } from '../../../../common/types/core';
 
-const mockItem = {
+const mockItem: BoxItem = {
     id: '1',
     name: 'Test Item',
     modified_at: '2023-10-10T10:00:00Z',
-    modified_by: { name: 'John Doe' },
+    modified_by: { id: '2', name: 'John Doe', type: 'user' },
     interacted_at: '',
     size: 12345,
 };
 
 describe('ItemSubDetails', () => {
     const renderComponent = (props: Partial<ItemSubDetailsProps> = {}) => {
-        const defaultProps = {
+        const defaultProps: ItemSubDetailsProps = {
             item: mockItem,
             view: 'default',
             ...props,

@@ -36,7 +36,14 @@ const ItemRemove = ({ onClick, status }: ItemRemoveProps) => {
     return (
         <div className="bcu-item-action">
             <Tooltip content={tooltipText}>
-                <IconButton aria-label={tooltipText} disabled={isDisabled} onClick={onClick} icon={XMark} {...resin} />
+                <IconButton
+                    aria-label={tooltipText}
+                    disabled={isDisabled}
+                    // @ts-expect-error -- legacy remove callback receives an upload item instead of a button event
+                    onClick={onClick}
+                    icon={XMark}
+                    {...resin}
+                />
             </Tooltip>
         </div>
     );

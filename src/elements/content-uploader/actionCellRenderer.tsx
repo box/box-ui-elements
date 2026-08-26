@@ -11,7 +11,10 @@ export default (
         <ItemAction
             {...rowData}
             isResumableUploadsEnabled={isResumableUploadsEnabled}
-            onClick={() => onClick(rowData)}
+            onClick={() =>
+                // @ts-expect-error -- legacy callback receives the upload item instead of the button event
+                onClick(rowData)
+            }
             onUpgradeCTAClick={onUpgradeCTAClick}
         />
     );

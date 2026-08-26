@@ -77,10 +77,12 @@ export default class MetadataQueryAPIHelper {
         let operation = JSON_PATCH_OP_REPLACE;
 
         if (isEmptyValue(oldValue) && !isEmptyValue(newValue)) {
+            // @ts-expect-error -- Legacy inference narrows operation to "replace" even though runtime also assigns "add".
             operation = JSON_PATCH_OP_ADD;
         }
 
         if (!isEmptyValue(oldValue) && isEmptyValue(newValue)) {
+            // @ts-expect-error -- Legacy inference narrows operation to "replace" even though runtime also assigns "remove".
             operation = JSON_PATCH_OP_REMOVE;
         }
 
@@ -95,10 +97,12 @@ export default class MetadataQueryAPIHelper {
             value: newValue,
         };
 
+        // @ts-expect-error -- The inferred "replace" literal does not reflect the runtime remove branch.
         if (operation === JSON_PATCH_OP_REMOVE) {
             delete patchOp.value;
         }
 
+        // @ts-expect-error -- The inferred "replace" literal does not reflect the runtime add branch.
         return operation === JSON_PATCH_OP_ADD ? [patchOp] : [testOp, patchOp];
     };
 
@@ -155,6 +159,7 @@ export default class MetadataQueryAPIHelper {
         return {
             enterprise: {
                 fields,
+                // @ts-expect-error -- Dynamic metadata instance lookup is inferred as never after the Flow-to-TS migration.
                 id: instance.$id,
             },
         };
@@ -284,6 +289,7 @@ export default class MetadataQueryAPIHelper {
         const operations: JSONPatchOperations = [];
         items.forEach(item => {
             const operation = this.generateOperations(item, templateOldFields, templateNewFields);
+            // @ts-expect-error -- Bulk metadata API preserves the legacy nested patch-operation array shape.
             operations.push(operation);
         });
         return this.api
@@ -390,9 +396,11 @@ export default class MetadataQueryAPIHelper {
             const { query: filterQuery, queryParams: filteredQueryParams } = this.buildMetadataQueryParams(fields);
             const { query: customQuery, query_params: customQueryParams } = clonedQuery;
             const query = this.mergeQuery(customQuery, filterQuery);
+            // @ts-expect-error -- Legacy query-param helpers disagree on boolean versus Date support.
             const queryParams = mergeQueryParams(filteredQueryParams, customQueryParams);
             if (query) {
                 clonedQuery.query = query;
+                // @ts-expect-error -- Legacy query-param helpers disagree on boolean versus Date support.
                 clonedQuery.query_params = queryParams;
             }
         }

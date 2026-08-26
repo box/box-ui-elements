@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
+import type { Collection } from '../../../common/types/core';
 import GridView from '../GridView';
 
 describe('components/grid-view/GridView', () => {
     test('should render()', () => {
-        const collection = { items: [{ type: 'folder', id: '001', name: 'Example Folder' }] } as const;
+        const collection: Collection = { items: [{ type: 'folder', id: '001', name: 'Example Folder' }] };
         const wrapper = shallow(
             <GridView
                 columnCount={5}
