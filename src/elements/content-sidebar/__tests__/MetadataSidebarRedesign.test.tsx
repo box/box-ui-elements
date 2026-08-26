@@ -693,11 +693,43 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         await userEvent.click(screen.getByRole('button', { name: 'Edit Visible Template' }));
 
-        const { calls } = mockEditor.mock;
-        const [editorProps] = calls[calls.length - 1];
-        expect(editorProps.isMetadataUserFieldEnabled).toBe(true);
-        expect(editorProps.fetchUsers).toBe(fetchUsers);
-        expect(editorProps.fetchAvatarUrls).toBe(fetchAvatarUrls);
+        await waitFor(() => {
+            const editorProps = mockEditor.mock.calls.find(([props]) => props)?.[0];
+            expect(editorProps?.isMetadataUserFieldEnabled).toBe(true);
+            expect(editorProps?.fetchUsers).toBe(fetchUsers);
+            expect(editorProps?.fetchAvatarUrls).toBe(fetchAvatarUrls);
+        });
+    });
+
+    test('does not enable user field in the editor when the user field flag is off', async () => {
+        const fetchUsers = jest.fn();
+        const fetchAvatarUrls = jest.fn();
+
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+            extractErrorCode: null,
+        });
+
+        renderComponent({ fetchAvatarUrls, fetchUsers }, { 'metadata.userField.enabled': false });
+
+        await userEvent.click(screen.getByRole('button', { name: 'Edit Visible Template' }));
+
+        await waitFor(() => {
+            const editorProps = mockEditor.mock.calls.find(([props]) => props)?.[0];
+            expect(editorProps?.isMetadataUserFieldEnabled).toBe(false);
+        });
+
+        expect(fetchUsers).not.toHaveBeenCalled();
+        expect(fetchAvatarUrls).not.toHaveBeenCalled();
     });
 
     describe('navigation blocking', () => {
