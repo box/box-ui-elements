@@ -1,4 +1,5 @@
 import { parseMessageMarkdown } from '@box/threaded-annotations';
+import type { DocumentNodeV2 } from '@box/threaded-annotations';
 
 import type { Annotation } from '../../../../common/types/annotations';
 import type { AppActivityItem, Comment, FeedItem } from '../../../../common/types/feed';
@@ -1085,29 +1086,29 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
 
     describe('rich text parsing (isRichTextEnabled)', () => {
         const mentionWithoutAuthor = {
-            type: 'mention',
+            type: 'mention' as const,
             attrs: { mentionId: '456', mentionedUserId: '456', mentionedUserName: 'Jane' },
         };
 
         const paragraphMentionDoc = {
-            type: 'doc',
-            content: [{ type: 'paragraph', content: [mentionWithoutAuthor] }],
-        };
+            type: 'doc' as const,
+            content: [{ type: 'paragraph' as const, content: [mentionWithoutAuthor] }],
+        } as DocumentNodeV2;
 
         const listMentionDoc = {
-            type: 'doc',
+            type: 'doc' as const,
             content: [
                 {
-                    type: 'bulletList',
+                    type: 'bulletList' as const,
                     content: [
                         {
-                            type: 'listItem',
-                            content: [{ type: 'paragraph', content: [mentionWithoutAuthor] }],
+                            type: 'listItem' as const,
+                            content: [{ type: 'paragraph' as const, content: [mentionWithoutAuthor] }],
                         },
                     ],
                 },
             ],
-        };
+        } as DocumentNodeV2;
 
         const comment = {
             created_at: '2024-01-01T00:00:00Z',
@@ -1168,7 +1169,11 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
 
             const result = transformFeedItem(comment as unknown as FeedItem, undefined, undefined, true);
             const list = result!.type === 'comment' ? result.messages[0].message.content[0] : undefined;
-            const mentionNode = list?.content?.[0]?.content?.[0]?.content?.[0];
+            expect(list?.type).toBe('bulletList');
+            if (list?.type !== 'bulletList') {
+                return;
+            }
+            const mentionNode = list.content?.[0]?.content?.[0]?.content?.[0];
 
             expect(mentionNode).toEqual({
                 type: 'mention',
@@ -1238,7 +1243,7 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
 
         test('should parse empty markdown into the document returned by parseMessageMarkdown', () => {
-            mockedParseMessageMarkdown.mockReturnValue({ type: 'doc', content: [] });
+            mockedParseMessageMarkdown.mockReturnValue({ type: 'doc', content: [] } as DocumentNodeV2);
             const emptyComment = { ...comment, tagged_message: '', message: '' };
 
             const result = transformFeedItem(emptyComment as unknown as FeedItem, undefined, undefined, true);

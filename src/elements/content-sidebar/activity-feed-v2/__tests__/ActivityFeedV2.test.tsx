@@ -13,7 +13,7 @@ type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
 };
 
 const mockSerializeMentionMarkup = jest.fn((doc: unknown) => ({ hasMention: false, text: JSON.stringify(doc) }));
-const mockSerializeMessageToMarkdown = jest.fn(() => '');
+const mockSerializeMessageToMarkdown = jest.fn(() => '') as jest.Mock<(doc: unknown) => string>;
 const mockParseMessageMarkdown = jest.fn();
 
 jest.mock('@box/threaded-annotations', () => ({
