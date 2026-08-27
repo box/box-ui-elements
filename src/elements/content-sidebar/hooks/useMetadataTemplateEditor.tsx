@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import {
     MetadataTemplateEditorMode,
     MetadataTemplateEditorModal,
-    type FetchTaxonomies,
     type FetchTaxonomyByKey,
     type MetadataTemplateApiResponse,
     type MetadataTemplateCreateBody,
+    type MetadataTemplateEditorProps,
     type MetadataTemplatePatchItem,
 } from '@box/metadata-template-editor';
 
@@ -42,10 +42,10 @@ interface UseMetadataTemplateEditorArgs {
      */
     fetchTaxonomyByKey?: FetchTaxonomyByKey;
     /**
-     * Paginated taxonomy catalogue for the picker. Taxonomies are not namespaced
-     * yet — the host supplies one catalogue fetcher (typically enterprise-scoped).
+     * Taxonomy catalogue for the picker. Taxonomies are not namespaced yet —
+     * the host supplies one catalogue fetcher (typically enterprise-scoped).
      */
-    fetchTaxonomies?: FetchTaxonomies;
+    fetchTaxonomies?: NonNullable<MetadataTemplateEditorProps['fetchTaxonomies']>;
 }
 
 export interface UseMetadataTemplateEditorReturn {

@@ -550,7 +550,7 @@ describe('metadataTaxonomiesListFetcher', () => {
         };
     });
 
-    test('should map entries and next_marker into FetchTaxonomiesResult', async () => {
+    test('should map entries into TaxonomyOption[]', async () => {
         apiMock.getMetadataAPI(false).getMetadataTaxonomies.mockResolvedValue({
             entries: [
                 {
@@ -564,44 +564,30 @@ describe('metadataTaxonomiesListFetcher', () => {
             next_marker: 'page-2',
         });
 
-        const result = await metadataTaxonomiesListFetcher(apiMock, fileId, namespace, {
-            limit: 50,
-            marker: undefined,
-        });
+        const result = await metadataTaxonomiesListFetcher(apiMock, fileId, namespace);
 
-        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomies).toHaveBeenCalledWith(fileId, namespace, {
-            marker: undefined,
-            limit: 50,
-            signal: undefined,
-        });
-        expect(result).toEqual({
-            options: [
-                {
-                    id: 'tax_1',
-                    label: 'Geography',
-                    taxonomyKey: 'geography',
-                    namespace: 'enterprise_1',
-                    levels: [{ name: 'Country', level: 1 }],
-                    selected: false,
-                },
-            ],
-            nextMarker: 'page-2',
-        });
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomies).toHaveBeenCalledWith(fileId, namespace);
+        expect(result).toEqual([
+            {
+                id: 'tax_1',
+                label: 'Geography',
+                taxonomyKey: 'geography',
+                namespace: 'enterprise_1',
+                levels: [{ name: 'Country', level: 1 }],
+                selected: false,
+            },
+        ]);
     });
 
-    test('should pass marker through for load-more', async () => {
+    test('should return an empty list when there are no entries', async () => {
         apiMock.getMetadataAPI(false).getMetadataTaxonomies.mockResolvedValue({
             entries: [],
             next_marker: null,
         });
 
-        await metadataTaxonomiesListFetcher(apiMock, fileId, namespace, { marker: 'page-2', limit: 25 });
+        const result = await metadataTaxonomiesListFetcher(apiMock, fileId, namespace);
 
-        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomies).toHaveBeenCalledWith(fileId, namespace, {
-            marker: 'page-2',
-            limit: 25,
-            signal: undefined,
-        });
+        expect(result).toEqual([]);
     });
 });
 

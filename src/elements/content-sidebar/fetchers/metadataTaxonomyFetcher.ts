@@ -1,5 +1,5 @@
 import { TreeQueryInput, TreeOptionType, FetcherResponse, type Level } from '@box/combobox-with-api';
-import type { TaxonomyOption, FetchTaxonomiesParams, FetchTaxonomiesResult } from '@box/metadata-template-editor';
+import type { TaxonomyOption } from '@box/metadata-template-editor';
 import type {
     FetchParams,
     FetchResponse,
@@ -42,33 +42,24 @@ const mapTaxonomyListEntry = (taxonomy: MetadataTaxonomyListEntry, fallbackNames
 };
 
 /**
- * Lists taxonomies with marker-based pagination for the template editor picker.
- * Public Box API: `GET /metadata_taxonomies/{namespace}?limit=&marker=`.
+ * Lists taxonomies for the template editor picker.
+ * Public Box API: `GET /metadata_taxonomies/{namespace}`.
  *
  * Taxonomies are not product-namespaced yet — callers pass the enterprise scope
- * (e.g. `enterprise_123`) as `namespace`. Search `query` is accepted for API
- * compatibility with the shared feature but is not sent; the selector still
- * client-filters loaded pages.
+ * (e.g. `enterprise_123`) as `namespace`.
+ *
+ * The editor's `fetchTaxonomies` is `() => Promise<TaxonomyOption[]>` and does
+ * not paginate, so this returns the first page (API default limit 50).
  */
 export const metadataTaxonomiesListFetcher = async (
     api: API,
     fileId: string,
     namespace: string,
-    params: FetchTaxonomiesParams = {},
-): Promise<FetchTaxonomiesResult> => {
-    const { marker, limit = 50, signal } = params;
-    const response = await api.getMetadataAPI(false).getMetadataTaxonomies(fileId, namespace, {
-        marker,
-        limit,
-        signal,
-    });
-
+): Promise<TaxonomyOption[]> => {
+    const response = await api.getMetadataAPI(false).getMetadataTaxonomies(fileId, namespace);
     const entries: MetadataTaxonomyListEntry[] = response?.entries ?? [];
 
-    return {
-        options: entries.map(entry => mapTaxonomyListEntry(entry, namespace)),
-        nextMarker: response?.next_marker ?? null,
-    };
+    return entries.map(entry => mapTaxonomyListEntry(entry, namespace));
 };
 
 export const metadataTaxonomyFetcher = async (

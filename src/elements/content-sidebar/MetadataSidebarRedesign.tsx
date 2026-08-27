@@ -324,7 +324,7 @@ function MetadataSidebarRedesign({
             return undefined;
         }
 
-        return (params = {}) => metadataTaxonomiesListFetcher(api, fileId, enterpriseId, params);
+        return () => metadataTaxonomiesListFetcher(api, fileId, enterpriseId);
     }, [api, fileId, enterpriseId]);
 
     const handleEditTemplate = useCallback(
