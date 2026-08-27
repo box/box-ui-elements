@@ -60,7 +60,7 @@ export default class MetadataNamespaces {
         return `${this.host.getBaseApiUrl()}/metadata_namespaces/${namespaceFqn}`;
     }
 
-    getRequestFileId(file: ?BoxItem): ?string {
+    getRequestFileId(file: ?BoxItem): string | void {
         return file && file.id ? getTypedFileId(file.id) : undefined;
     }
 

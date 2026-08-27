@@ -36,7 +36,7 @@ export function getEnterpriseRootFromScopeOrNamespace(scope: ?string, namespace:
  * Prefers `$scope`, then the leading segment of `$namespace`.
  */
 export function getEnterpriseNamespaceFromInstances(
-    instances: Array<{ $namespace?: ?string, $scope?: ?string }>,
+    instances: $ReadOnlyArray<{ +$namespace?: ?string, +$scope?: ?string }>,
 ): string | null {
     for (const inst of instances) {
         const root = getEnterpriseRootFromScopeOrNamespace(inst.$scope, inst.$namespace);
