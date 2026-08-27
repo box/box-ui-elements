@@ -12,7 +12,10 @@ import {
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
-import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
+import useSidebarMetadataFetcher, {
+    STATUS,
+    type MetadataNamespaceFetchContext,
+} from '../hooks/useSidebarMetadataFetcher';
 
 const mockRateLimitError = {
     status: 429,
@@ -170,7 +173,7 @@ describe('useSidebarMetadataFetcher', () => {
         fileId = '123',
         isConfidenceScoreEnabled = false,
         isBoundingBoxEnabled = false,
-        namespaceContext = {},
+        namespaceContext: MetadataNamespaceFetchContext = {},
     ) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
@@ -1048,7 +1051,7 @@ describe('useSidebarMetadataFetcher', () => {
 
     test('should fetch metadata after namespace context finishes loading', async () => {
         const { result, rerender } = renderHook(
-            ({ namespaceContext }) =>
+            ({ namespaceContext }: { namespaceContext: MetadataNamespaceFetchContext }) =>
                 useSidebarMetadataFetcher(
                     api,
                     '123',
