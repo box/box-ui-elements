@@ -120,7 +120,7 @@ describe('api/MetadataNamespaces', () => {
 
             await expect(api.listNamespaces(file, 'enterprise_1', { limit: 20 })).resolves.toEqual({ entries: [] });
             expect(host.xhr.get).toHaveBeenCalledWith({
-                url: 'https://api.box.com/2.0/metadata_namespaces/enterprise_1',
+                url: 'https://api.box.com/2.0/metadata_namespaces/enterprise_1/children',
                 id: 'file_123',
                 params: { limit: 20, marker: undefined },
             });

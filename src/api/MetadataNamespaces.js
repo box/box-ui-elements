@@ -65,7 +65,8 @@ export default class MetadataNamespaces {
     }
 
     /**
-     * Lists child namespaces under a given namespace FQN.
+     * Lists the immediate child namespaces of a namespace FQN — one level only,
+     * cursor-paginated.
      */
     async listNamespaces(
         file: BoxItem,
@@ -75,7 +76,7 @@ export default class MetadataNamespaces {
         // TODO: remove next line when namespace API is deployed
         if (IS_NAMESPACE_API_MOCKED) return mockListNamespaces(file, namespaceFqn, params);
 
-        const url = this.getMetadataNamespacesUrl(namespaceFqn);
+        const url = `${this.getMetadataNamespacesUrl(namespaceFqn)}/children`;
         try {
             const response = await this.host.xhr.get({
                 url,
