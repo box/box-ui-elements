@@ -177,6 +177,7 @@ const MetadataViewContainer = ({
                     key: ITEM_FILTER_NAME,
                     displayName: formatMessage(messages.name),
                     type: 'string',
+                    // @ts-expect-error -- Local metadata fields retain the legacy shouldRenderChip extension.
                     shouldRenderChip: true,
                 },
                 ...fields,
@@ -263,8 +264,10 @@ const MetadataViewContainer = ({
 
     return (
         <MetadataView
+            // @ts-expect-error -- Legacy filter options omit the metadata-view package's required selected field.
             actionBarProps={transformedActionBarProps}
             columns={newColumns}
+            // @ts-expect-error -- Local BoxItem metadata shape is broader than the metadata-view package Item shape.
             items={items}
             tableProps={newTableProps}
             areSelectionCheckboxesDisabled={isEditing}

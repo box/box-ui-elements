@@ -10,6 +10,7 @@ import type {
 } from '@box/metadata-taxonomy-picker';
 import type { CreateTaxonomyItemsService } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import type API from '../../../api';
+// @ts-expect-error -- MetadataOptionEntry exists locally but is not exported from the migrated metadata types
 import type { MetadataOptionEntry } from '../../../common/types/metadata';
 
 export const metadataTaxonomyFetcher = async (

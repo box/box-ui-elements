@@ -125,6 +125,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             elementId: 'element-1',
             filteredTemplateIds: [],
             isFeatureEnabled: true,
+            logger: { onPreviewMetric: jest.fn(), onReadyMetric: jest.fn() },
             onError: jest.fn(),
             onSuccess: jest.fn(),
             ...routeComponentProps,

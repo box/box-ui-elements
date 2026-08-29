@@ -9,9 +9,7 @@ import {
     VIEW_FOLDER,
     VIEW_RECENTS,
 } from '../../../constants';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Collection } from '../../common/types/core';
+import type { Collection } from '../../../common/types/core';
 
 const mockProps: ContentProps = {
     canDelete: true,
@@ -58,17 +56,17 @@ describe('Content Component', () => {
     });
 
     test('renders MetadataBasedItemList when view is VIEW_METADATA', () => {
-        const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+        const collection: Collection = { boxItem: {}, id: '0', items: [{ id: '1' }], name: 'name' };
         renderComponent({ view: VIEW_METADATA, fieldsToShow: ['id'], currentCollection: collection });
 
         expect(screen.getByTestId('metadata-based-item-list')).toBeInTheDocument();
     });
 
     test('renders ItemList when viewMode is VIEW_MODE_LIST', () => {
-        const collection = {
+        const collection: Collection = {
             boxItem: {},
             id: '0',
-            items: [{ id: 1, name: 'Item 1', size: 1000, modified_at: '2023-10-10T10:00:00Z', type: 'file' }],
+            items: [{ id: '1', name: 'Item 1', size: 1000, modified_at: '2023-10-10T10:00:00Z', type: 'file' }],
             name: 'name',
             percentLoaded: 100,
         };
@@ -81,8 +79,13 @@ describe('Content Component', () => {
     });
 
     test('renders ItemGrid when viewMode is VIEW_MODE_GRID', () => {
-        const item1 = { id: 1, name: 'Item 1', size: 1000, modified_at: '2023-10-10T10:00:00Z', type: 'file' };
-        const collection = { boxItem: {}, id: '0', items: [item1], name: 'name', percentLoaded: 100 };
+        const collection: Collection = {
+            boxItem: {},
+            id: '0',
+            items: [{ id: '1', name: 'Item 1', size: 1000, modified_at: '2023-10-10T10:00:00Z', type: 'file' }],
+            name: 'name',
+            percentLoaded: 100,
+        };
         render(<Content {...mockProps} viewMode={VIEW_MODE_GRID} currentCollection={collection} />);
 
         expect(screen.getByText('Item 1')).toBeInTheDocument();
@@ -94,11 +97,11 @@ describe('Content Component', () => {
         const features = {
             contentExplorer: { metadataViewV2: true },
         };
-        const collection = {
+        const collection: Collection = {
             percentLoaded: 100,
             boxItem: {},
             id: '0',
-            items: [{ id: 1 }],
+            items: [{ id: '1' }],
             name: 'name',
         };
 

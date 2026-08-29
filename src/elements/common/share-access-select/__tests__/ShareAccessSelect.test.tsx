@@ -1,28 +1,31 @@
 import React from 'react';
 import { screen, render, fireEvent } from '../../../../test-utils/testing-library';
-import ShareAccessSelect from '../ShareAccessSelect';
+import type { BoxItem } from '../../../../common/types/core';
+import ShareAccessSelect, { ShareAccessSelectProps } from '../ShareAccessSelect';
 import { ACCESS_NONE, ACCESS_OPEN, ACCESS_COLLAB, ACCESS_COMPANY } from '../../../../constants';
 
 describe('elements/common/share-access-select/ShareAccessSelect', () => {
-    const getDefaultItem = (overrides = {}) => ({
+    const getDefaultItem = (overrides: Partial<BoxItem> = {}): BoxItem => ({
+        id: '1',
         allowed_shared_link_access_levels: [ACCESS_OPEN, ACCESS_COLLAB, ACCESS_COMPANY],
         permissions: {
             can_set_share_access: true,
         },
         shared_link: {
             access: ACCESS_NONE,
+            url: 'https://box.com/shared-link',
         },
         ...overrides,
     });
 
-    const defaultProps = {
+    const defaultProps: ShareAccessSelectProps = {
         canSetShareAccess: true,
         className: 'test-share-access',
         item: getDefaultItem(),
         onChange: jest.fn(),
     };
 
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props: Partial<ShareAccessSelectProps> = {}) => {
         return render(<ShareAccessSelect {...defaultProps} {...props} />);
     };
 
@@ -93,7 +96,7 @@ describe('elements/common/share-access-select/ShareAccessSelect', () => {
 
     test('should show "Remove" text for ACCESS_NONE option when current access is not ACCESS_NONE', () => {
         const item = getDefaultItem({
-            shared_link: { access: ACCESS_OPEN },
+            shared_link: { access: ACCESS_OPEN, url: 'https://box.com/shared-link' },
         });
         renderComponent({ item });
 

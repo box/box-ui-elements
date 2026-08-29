@@ -324,6 +324,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isUploadModalOpen: false,
             markers: [],
             metadataFilters: {},
+            // @ts-expect-error -- Legacy state uses an empty template until metadata loads.
             metadataTemplate: {},
             rootName: '',
             selectedItemIds: new Set(),
@@ -460,6 +461,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
+        // @ts-expect-error -- The optional query intentionally defaults to an empty object before required fields are supplied.
         const { features, metadataQuery = {} }: ContentExplorerProps = this.props;
         const { currentPageNumber, markers, metadataFilters, sortBy, sortDirection }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
@@ -654,6 +656,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 // Fire folder navigation event
                 this.setState({ rootName }, this.finishNavigation);
                 if (boxItem) {
+                    // @ts-expect-error -- Collection boxItem retains the legacy flattened shape with an optional id.
                     onNavigate(cloneDeep(boxItem));
                 }
             } else {
@@ -1080,6 +1083,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const { items = [] } = currentCollection;
         const newCollection = { ...currentCollection } as const;
 
+        // @ts-expect-error -- Preserve the legacy mutation of the cloned collection despite its const assertion.
         newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
 
         this.validateSelectedItemIds(newCollection.items);
@@ -1108,6 +1112,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const selectedItem: BoxItem = { ...item, selected: true };
 
         this.updateCollection(currentCollection, selectedItem, () => {
+            // @ts-expect-error -- The legacy callback contract receives a single-item array at runtime.
             onSelect(cloneDeep([selectedItem]));
             callback(selectedItem);
         });
@@ -1198,6 +1203,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         const openUrl = (url: string) => {
             openUrlInsideIframe(url);
+            // @ts-expect-error -- The legacy callback contract receives a single-item array at runtime.
             onDownload(cloneDeep([selected]));
         };
 
@@ -1251,6 +1257,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         this.api.getAPI(type).deleteItem(
             selected,
             () => {
+                // @ts-expect-error -- The legacy callback contract receives a single-item array at runtime.
                 onDelete(cloneDeep([selected]));
                 this.refreshCollection();
             },
@@ -1268,6 +1275,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     rename = (item: BoxItem): void => {
+        // @ts-expect-error -- Legacy selection invokes the rename callback with the selected item before opening the dialog.
         this.select(item, this.renameCallback);
     };
 

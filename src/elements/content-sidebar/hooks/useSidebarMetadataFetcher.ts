@@ -86,6 +86,7 @@ function useSidebarMetadataFetcher(
             const isValidError = isUserCorrectableError(errorStatus);
             setStatus(STATUS.ERROR);
             setErrorMessage(message);
+            // @ts-expect-error -- ErrorContext accepts runtime ElementsXhrError values that need not extend Error
             onError(error, code, {
                 error,
                 isErrorDisplayed: isValidError,

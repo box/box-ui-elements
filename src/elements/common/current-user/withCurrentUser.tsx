@@ -76,6 +76,7 @@ export default function withCurrentUser<P extends object>(
          * @return {void}
          */
         fetchCurrentUser = (user?: User, shouldDestroy = false): void => {
+            // @ts-expect-error -- API context and file props remain defined by the Flow-era HOC contract
             const { api, file } = this.props;
 
             if (!file) {

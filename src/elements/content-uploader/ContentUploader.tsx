@@ -586,6 +586,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             };
         });
 
+        // @ts-expect-error -- folder queue entries intentionally have no File object
         this.addToQueue(folderUploads, itemUpdateCallback);
     };
 
@@ -639,6 +640,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         this.addToQueue(
             [
                 // $FlowFixMe no file property
+                // @ts-expect-error -- folder queue entries intentionally have no File object
                 {
                     api: folderUpload,
                     extension: '',
@@ -1163,6 +1165,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
             if (!useUploadsManager) {
                 if (shouldFireOnComplete) {
+                    // @ts-expect-error -- completion callback historically receives uploaded Box files here
                     onComplete(cloneDeep(filesToBeUploaded.map(item => item.boxFile)));
                 }
                 // Reset item collection after successful upload
@@ -1177,6 +1180,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
             if (!useUploadsManager) {
                 if (shouldFireOnComplete) {
+                    // @ts-expect-error -- completion callback historically receives uploaded Box files here
                     onComplete(cloneDeep(items.map(item => item.boxFile)));
                 }
                 // Reset item collection after successful upload
@@ -1957,6 +1961,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                             isResumableUploadsEnabled={isResumableUploadsEnabled}
                             isVisible={isVisible}
                             items={uploadsManagerItems}
+                            // @ts-expect-error -- legacy action callback receives an upload item instead of a button event
                             onItemActionClick={this.onClick}
                             onRemoveActionClick={this.removeFileFromUploadQueue}
                             onUpgradeCTAClick={onUpgradeCTAClick}

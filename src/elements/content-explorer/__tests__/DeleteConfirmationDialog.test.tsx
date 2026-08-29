@@ -4,18 +4,18 @@ import { render, screen } from '../../../test-utils/testing-library';
 import DeleteConfirmationDialog, { DeleteConfirmationDialogProps } from '../DeleteConfirmationDialog';
 
 import { TYPE_FOLDER } from '../../../constants';
+import type { BoxItem } from '../../../common/types/core';
 
-const mockItem = { type: 'pdf', name: 'Test File' };
-const mockFolderItem = { type: TYPE_FOLDER, name: 'Test Folder' };
+const mockItem: BoxItem = { id: '1', name: 'Test File' };
+const mockFolderItem: BoxItem = { id: '2', type: TYPE_FOLDER, name: 'Test Folder' };
 
 jest.mock('react-modal', () => {
     return jest.fn(({ children }) => <div aria-label="Delete">{children}</div>);
 });
 
 describe('elements/content-explorer/DeleteConfirmationDialog', () => {
-    const defaultProps = {
+    const defaultProps: DeleteConfirmationDialogProps = {
         appElement: document.body,
-        errorCode: '',
         isLoading: false,
         isOpen: false,
         item: mockItem,

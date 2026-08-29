@@ -84,6 +84,7 @@ const renderSidebar = (features: Record<string, boolean> = {}) => {
         filteredTemplateIds: [],
         getPreview: jest.fn().mockReturnValue({}),
         isFeatureEnabled: true,
+        logger: { onPreviewMetric: jest.fn(), onReadyMetric: jest.fn() },
         onError: jest.fn(),
         onSuccess: jest.fn(),
         ...routerProps,

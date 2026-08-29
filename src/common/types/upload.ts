@@ -1,0 +1,122 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Preserve Flow any and Function contracts. */
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_STAGED,
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+    STATUS_CANCELED,
+} from '../../constants';
+import type MultiputUploadAPI from '../../api/uploads/MultiputUpload';
+import type PlainUploadAPI from '../../api/uploads/PlainUpload';
+import type { Token, BoxItem } from './core';
+
+// TODO: replace with `UploadItemStatus` from @box/uploads-manager once 'inprogress' is aligned to 'uploading'.
+type UploadStatus =
+    | typeof STATUS_PENDING
+    | typeof STATUS_IN_PROGRESS
+    | typeof STATUS_STAGED
+    | typeof STATUS_COMPLETE
+    | typeof STATUS_ERROR
+    | typeof STATUS_CANCELED;
+
+type FileSystemFileEntry = {
+    createReader: any;
+    file: any;
+    isDirectory: boolean;
+    isFile: boolean;
+    name: string;
+};
+
+type UploadFile = File & {
+    lastModifiedDate?: Date;
+    webkitRelativePath?: string;
+};
+
+type UploadItemAPIOptions = {
+    apiHost?: string;
+    fileId?: string;
+    folderId?: string;
+    token?: Token;
+    uploadInitTimestamp?: number;
+};
+
+type UploadDataTransferItemWithAPIOptions = {
+    item: DataTransferItem;
+    options?: UploadItemAPIOptions;
+};
+
+type UploadFileWithAPIOptions = {
+    file: UploadFile;
+    options?: UploadItemAPIOptions;
+};
+
+type DirectoryReader = {
+    readEntries: (arg1: any, arg2: any) => void;
+};
+
+type FolderUploadItem = {
+    boxFile?: BoxItem;
+    error?: any;
+    extension: string;
+    isFolder?: boolean;
+    name: string;
+    options?: UploadItemAPIOptions;
+    progress: number;
+    size: number;
+    status: UploadStatus;
+};
+
+type UploadItem = {
+    api: PlainUploadAPI | MultiputUploadAPI;
+    boxFile?: BoxItem;
+    bytesUploaded?: number;
+    bytesUploadedOnLastResume?: number;
+    dedupeKey?: string;
+    error?: any;
+    extension: string;
+    file: UploadFile;
+    isFolder?: boolean;
+    name: string;
+    options?: UploadItemAPIOptions;
+    progress: number;
+    remainingMs?: number;
+    size: number;
+    status: UploadStatus;
+    totalBytes?: number;
+};
+
+type MultiputConfig = {
+    digestReadahead: number;
+    initialRetryDelayMs: number;
+    maxRetryDelayMs: number;
+    parallelism: number;
+    requestTimeoutMs: number;
+    retries: number;
+};
+
+type MultiputPart = {
+    offset: number;
+    part_id: string;
+    sha1: string;
+    size: number;
+};
+
+type MultiputData = {
+    part?: MultiputPart;
+};
+
+export type {
+    UploadStatus,
+    FileSystemFileEntry,
+    UploadFile,
+    UploadItemAPIOptions,
+    UploadDataTransferItemWithAPIOptions,
+    UploadFileWithAPIOptions,
+    DirectoryReader,
+    FolderUploadItem,
+    UploadItem,
+    MultiputConfig,
+    MultiputPart,
+    MultiputData,
+};

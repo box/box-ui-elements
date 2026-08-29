@@ -59,6 +59,7 @@ const MetadataSidePanel = ({
         selectedItemIds === 'all'
             ? currentCollection.items
             : currentCollection.items.filter(item => selectedItemIds.has(item.id));
+    // @ts-expect-error -- Local metadata templates omit the editor package's required legacy type field.
     const templateInstance = useTemplateInstance(metadataTemplate, selectedItems, isEditing);
 
     const handleMetadataInstanceEdit = () => {
