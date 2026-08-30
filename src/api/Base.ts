@@ -1,0 +1,349 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Preserve explicit Flow `any` contracts. */
+import type { AxiosError } from 'axios';
+import noop from 'lodash/noop';
+import Xhr from '../utils/Xhr';
+import Cache from '../utils/Cache';
+import UploadsReachability from './uploads/UploadsReachability';
+import { getTypedFileId } from '../utils/file';
+import { getBadItemError, getBadPermissionsError } from '../utils/error';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_UPLOAD,
+    HTTP_GET,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE,
+} from '../constants';
+import type { ElementsErrorCallback, APIOptions } from '../common/types/api';
+import type APICache from '../utils/Cache';
+
+type SuccessCallback = (data?: object) => void;
+
+interface DeleteRequest {
+    data?: object;
+    errorCallback: ElementsErrorCallback;
+    id: string;
+    successCallback: Function;
+    url: string;
+}
+
+interface GetRequest {
+    errorCallback: ElementsErrorCallback;
+    id: string;
+    requestData?: object;
+    successCallback: Function;
+    url?: string;
+}
+
+interface WriteRequest {
+    data: object;
+    errorCallback: ElementsErrorCallback;
+    id: string;
+    successCallback: Function;
+    url: string;
+}
+
+class Base {
+    cache: APICache;
+
+    destroyed: boolean;
+
+    xhr: Xhr;
+
+    apiHost: string;
+
+    /**
+     * Optional regional metadata host.
+     *
+     * When set and distinct from `apiHost`, subclasses (currently `Metadata`)
+     * route metadata *instance* endpoints to this host while keeping
+     * templates, taxonomies, suggestions, options, and queries on `apiHost`.
+     * Empty values, or values equal to `apiHost`, are treated as "not set"
+     * and resolve to the same URLs as `apiHost` alone.
+     *
+     * Transitional: this field exists to support the `metadataApiHost`
+     * option while the global `apiHost` is not yet regionalized end-to-end.
+     * It is expected to be retired in a future major version.
+     *
+     * @property {?string}
+     */
+    metadataApiHost: string | null | undefined;
+
+    uploadHost: string;
+
+    options: APIOptions;
+
+    consoleLog: Function;
+
+    consoleError: Function;
+
+    errorCode: string;
+
+    successCallback: SuccessCallback;
+
+    errorCallback: ElementsErrorCallback;
+
+    uploadsReachability: UploadsReachability;
+
+    /**
+     * [constructor]
+     *
+     * @param {Object} options
+     * @param {string} [options.token] - Auth token
+     * @param {string} [options.sharedLink] - Shared link
+     * @param {string} [options.sharedLinkPassword] - Shared link password
+     * @param {string} [options.apiHost] - Api host
+     * @param {string} [options.metadataApiHost] - Regional metadata API host
+     *   used for metadata *instance* endpoints. Templates, taxonomies,
+     *   suggestions, options, and queries continue to use `apiHost`. Falls
+     *   back to `apiHost` when undefined, empty, or equal to `apiHost`.
+     * @param {string} [options.uploadHost] - Upload host name
+     * @return {Base} Base instance
+     */
+    constructor(options: APIOptions) {
+        this.cache = options.cache || new Cache();
+        this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
+        this.metadataApiHost = options.metadataApiHost;
+        this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
+        // @TODO: avoid keeping another copy of data in this.options
+        this.options = {
+            ...options,
+            apiHost: this.apiHost,
+            metadataApiHost: this.metadataApiHost,
+            uploadHost: this.uploadHost,
+            cache: this.cache,
+        };
+        this.xhr = new Xhr(this.options);
+        this.destroyed = false;
+        this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
+        this.consoleError = !!options.consoleError && !!window.console ? window.console.error || noop : noop;
+        this.uploadsReachability = new UploadsReachability();
+    }
+
+    destroy(): void {
+        this.xhr.abort();
+        this.destroyed = true;
+    }
+
+    /**
+     * Asks the API if its destructor has been called
+     *
+     * @return {boolean} Whether the API has been destroyed
+     */
+    isDestroyed(): boolean {
+        return this.destroyed;
+    }
+
+    /**
+     * Checks that our desired API call has sufficient permissions and an item ID
+     *
+     * @param {string} permissionToCheck - Permission to check
+     * @param {Object} permissions - Permissions object
+     * @param {string} id - Item id
+     * @return {void}
+     */
+    checkApiCallValidity(permissionToCheck: string, permissions?: Record<string, unknown>, id?: string): void {
+        if (!id || !permissions) {
+            throw getBadItemError();
+        }
+
+        const permission = permissions[permissionToCheck];
+        if (!permission) {
+            throw getBadPermissionsError();
+        }
+    }
+
+    /**
+     * Builds an API base URL for an arbitrary host, appending the API
+     * version suffix (`/2.0`) and tolerating a trailing slash on the host.
+     *
+     * Shared helper used by `getBaseApiUrl()` and by subclasses that need
+     * to derive a `/2.0` URL from a host other than `this.apiHost` (e.g.
+     * `Metadata` when `metadataApiHost` is configured).
+     *
+     * @param {string} host - api host (e.g. "https://api.box.com")
+     * @return {string} base api url with `/2.0` suffix
+     */
+    buildApiUrl(host: string): string {
+        const suffix: string = host.endsWith('/') ? '2.0' : '/2.0';
+        return `${host}${suffix}`;
+    }
+
+    /**
+     * Base URL for api
+     *
+     * @return {string} base url
+     */
+    getBaseApiUrl(): string {
+        return this.buildApiUrl(this.apiHost);
+    }
+
+    /**
+     * Base URL for api uploads
+     *
+     * @return {string} base url
+     */
+    getBaseUploadUrl(): string {
+        const suffix: string = this.uploadHost.endsWith('/') ? 'api/2.0' : '/api/2.0';
+        return `${this.uploadHost}${suffix}`;
+    }
+
+    /**
+     * Gets the cache instance
+     *
+     * @return {Cache} cache instance
+     */
+    getCache(): APICache {
+        return this.cache;
+    }
+
+    /**
+     * Generic success handler
+     *
+     * @param {Object} data - The response data
+     */
+    successHandler = (data: any): void => {
+        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+            this.successCallback(data);
+        }
+    };
+
+    /**
+     * Generic error handler
+     *
+     * @param {AxiosError} error - The request error
+     */
+    errorHandler = (error: AxiosError<any>): void => {
+        if (!this.isDestroyed() && typeof this.errorCallback === 'function') {
+            const { response } = error;
+
+            if (response?.data) {
+                this.errorCallback(response.data, this.errorCode);
+            } else {
+                this.errorCallback(error, this.errorCode);
+            }
+        }
+    };
+
+    /**
+     * Gets the URL for the API, meant to be overridden
+     * @param {string} id - The item id
+     * @return {string} The API URL
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Subclasses implement this method using the item ID.
+    getUrl(id: string): string {
+        // TODO: Implement this method
+        throw new Error('Implement me!');
+    }
+
+    /**
+     * Formats an API entry for use in components
+     * @param {Object} entry - An API response entry
+     * @return {*} The formatted entry
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Subclasses implement this method using the API entry.
+    format(entry: object): any {
+        // TODO: Implement this method
+        throw new Error('Implement me!');
+    }
+
+    /**
+     * Generic API GET
+     *
+     * @param {string} id - The file id
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     * @param {Object} requestData - additional request data
+     * @param {string} url - API url
+     * @returns {Promise}
+     */
+    get({
+        id,
+        successCallback,
+        errorCallback,
+        requestData, // Note: this is inconsistent, other methods use `data`
+        url,
+    }: GetRequest): Promise<any> {
+        const apiUrl = url || this.getUrl(id);
+        return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, requestData);
+    }
+
+    /**
+     * Generic API POST
+     *
+     * @param {string} id - The file id
+     * @param {string} url - The url to post to
+     * @param {Object} data - The data to post
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     */
+    post({ id, url, data, successCallback, errorCallback }: WriteRequest): Promise<any> {
+        return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API PUT
+     *
+     * @param {string} id - The file id
+     * @param {string} url - The url to put to
+     * @param {Object} data - The data to put
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     */
+    put({ id, url, data, successCallback, errorCallback }: WriteRequest): Promise<any> {
+        return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API DELETE
+     *
+     * @param {string} id - The file id
+     * @param {string} url - The url of the item to delete
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     * @param {Object} data optional data to delete
+     */
+    delete({ id, url, data, successCallback, errorCallback }: DeleteRequest): Promise<any> {
+        return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API CRUD operations
+     *
+     * @param {string} method - which REST method to execute (GET, POST, PUT, DELETE)
+     * @param {string} id - The file id
+     * @param {string} url - The url of the item to operate on
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     * @param {Object} requestData - Optional info to be added to the API call such as params or request body data
+     */
+    async makeRequest(
+        method: string,
+        id: string,
+        url: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        requestData: object = {},
+    ): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.successCallback = successCallback as SuccessCallback;
+        this.errorCallback = errorCallback;
+
+        const xhrMethod: (request: object) => Promise<{ data: any }> = this.xhr[method.toLowerCase()].bind(this.xhr);
+        try {
+            const { data } = await xhrMethod({
+                id: getTypedFileId(id),
+                url,
+                ...requestData,
+            });
+            this.successHandler(data);
+        } catch (error) {
+            this.errorHandler(error);
+        }
+    }
+}
+
+export default Base;
