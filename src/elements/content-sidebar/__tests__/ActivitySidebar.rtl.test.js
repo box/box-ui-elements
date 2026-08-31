@@ -562,6 +562,32 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('render() - richText feature gate', () => {
+        test('should pass isRichTextEnabled=true to ActivityFeedV2 when richText is enabled', () => {
+            renderActivitySidebar({
+                features: {
+                    activityFeed: { richText: { enabled: true }, threadedRepliesV2: { enabled: true } },
+                },
+            });
+
+            expect(ActivityFeedV2).toHaveBeenCalledWith(
+                expect.objectContaining({ isRichTextEnabled: true }),
+                expect.anything(),
+            );
+        });
+
+        test('should pass isRichTextEnabled=false to ActivityFeedV2 when richText is not enabled', () => {
+            renderActivitySidebar({
+                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
+            });
+
+            expect(ActivityFeedV2).toHaveBeenCalledWith(
+                expect.objectContaining({ isRichTextEnabled: false }),
+                expect.anything(),
+            );
+        });
+    });
+
     describe('updateReplies() - Router Disabled', () => {
         test('should disable active item if replies are being hidden and activeFeedEntryId belongs to a reply that is in currently being updated parent', () => {
             const internalSidebarNavigationHandler = jest.fn();
