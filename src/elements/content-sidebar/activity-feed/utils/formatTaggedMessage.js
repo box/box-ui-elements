@@ -58,11 +58,14 @@ const formatTimestamp = (text: string, timestamp: string, intl: IntlShape): Reac
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
-// urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
+// urls: (?<![A-Za-z0-9])((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
+// Use a lookbehind instead of \b so a preceding underscore (a JS word character)
+// still starts a URL. See PREVIEW-1485.
 // NOTE: There are useless escapes in the regex below, should probably remove them when safe
 /* eslint-disable no-useless-escape */
+const urlRegex = /((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)/i;
 const splitRegex =
-    /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
+    /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:(?<![A-Za-z0-9])(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
 // eslint-enable no-useless-escape
 /**
  * Formats a message a string and replaces the following:
@@ -83,7 +86,7 @@ const formatTaggedMessage = (
     getUserProfileUrl?: Function,
     intl: IntlShape,
 ): string | Array<React.Node | string> => {
-    const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
+    const contentItems = tagged_message.split(splitRegex).flatMap((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
         // attempt mention match
         const mentionMatch = text.match(/([@＠﹫])\[([0-9]+):([^\]]+)]/i);
@@ -115,19 +118,17 @@ const formatTaggedMessage = (
         }
 
         if (!shouldReturnString) {
-            // attempt url match
-            // NOTE: There are useless escapes in the regex below, should probably remove them when safe
-            const urlMatch = text.match(
-                // eslint-disable-next-line no-useless-escape
-                /((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)/i,
-            );
-            if (urlMatch) {
+            const urlMatch = text.match(urlRegex);
+            if (urlMatch && urlMatch.index != null) {
                 const [, url] = urlMatch;
-                return (
+                const prefix = text.slice(0, urlMatch.index);
+                const suffix = text.slice(urlMatch.index + url.length);
+                const link = (
                     <Link key={contentKey} href={url}>
                         {url}
                     </Link>
                 );
+                return [prefix, link, suffix].filter(part => part !== '');
             }
         }
 

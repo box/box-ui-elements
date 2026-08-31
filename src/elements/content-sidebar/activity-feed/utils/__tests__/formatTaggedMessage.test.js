@@ -1,4 +1,5 @@
 import formatTaggedMessage, { renderTimestampWithText } from '../formatTaggedMessage';
+import { Link } from '../../../../../components/link';
 import UserLink from '../../common/user-link';
 
 describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () => {
@@ -43,6 +44,47 @@ describe('elements/content-sidebar/ActivityFeed/utils/formatTaggedMessage', () =
         expect(mention.type).toBe(UserLink);
         expect(mention.props.id).toBe('3203255873');
         expect(mention.props.name).toBe('@test user');
+    });
+
+    test('should keep surrounding text when a URL follows an underscore', () => {
+        const taggedMessage = formatTaggedMessage(
+            'Please review_https://example.com/foo extra',
+            123,
+            false,
+            undefined,
+            mockIntl,
+        );
+        expect(taggedMessage[0]).toBe('Please review_');
+        expect(taggedMessage[1].type).toBe(Link);
+        expect(taggedMessage[1].props.href).toBe('https://example.com/foo');
+        expect(taggedMessage[1].props.children).toBe('https://example.com/foo');
+        expect(taggedMessage[2]).toBe(' extra');
+    });
+
+    test('should keep surrounding text when a URL follows a full-width underscore', () => {
+        const taggedMessage = formatTaggedMessage(
+            'Please review＿https://example.com/foo',
+            123,
+            false,
+            undefined,
+            mockIntl,
+        );
+        expect(taggedMessage[0]).toBe('Please review＿');
+        expect(taggedMessage[1].type).toBe(Link);
+        expect(taggedMessage[1].props.href).toBe('https://example.com/foo');
+    });
+
+    test('should keep surrounding text when a URL follows a space', () => {
+        const taggedMessage = formatTaggedMessage(
+            'Please review https://example.com/foo',
+            123,
+            false,
+            undefined,
+            mockIntl,
+        );
+        expect(taggedMessage[0]).toBe('Please review ');
+        expect(taggedMessage[1].type).toBe(Link);
+        expect(taggedMessage[1].props.href).toBe('https://example.com/foo');
     });
 
     describe('renderTimestampWithText', () => {
