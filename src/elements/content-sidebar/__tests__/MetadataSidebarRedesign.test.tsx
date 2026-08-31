@@ -766,6 +766,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent({ fetchAvatarUrls, fetchUsers }, { 'metadata.userField.enabled': true });
@@ -796,6 +797,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent({ fetchAvatarUrls, fetchUsers }, { 'metadata.userField.enabled': false });
