@@ -40,18 +40,18 @@ import messages from '../messages';
 
 import './ActivityFeedV2.scss';
 
-const paragraphHasMentionedUser = (paragraph: ParagraphNodeV2, userId: string): boolean =>
+const hasMentionInParagraph = (paragraph: ParagraphNodeV2, userId: string): boolean =>
     (paragraph.content ?? []).some(node => node.type === 'mention' && node.attrs.mentionedUserId === userId);
 
-const blocksHaveMentionedUser = (blocks: BlockNodeV2[] | undefined, userId: string): boolean =>
+const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): boolean =>
     (blocks ?? []).some(block => {
         if (block.type === 'paragraph') {
-            return paragraphHasMentionedUser(block, userId);
+            return hasMentionInParagraph(block, userId);
         }
         if (!isListNode(block)) {
             return false;
         }
-        return (block.content ?? []).some(item => blocksHaveMentionedUser(item.content, userId));
+        return (block.content ?? []).some(item => hasMentionInBlocks(item.content, userId));
     });
 
 const ActivityFeedV2 = ({
@@ -309,7 +309,7 @@ const ActivityFeedV2 = ({
             if (showOnlyMentionsMe && currentUserId) {
                 if (item.type === 'comment' || item.type === 'annotation') {
                     const hasMention = item.messages.some(msg =>
-                        blocksHaveMentionedUser(msg.message?.content, currentUserId),
+                        hasMentionInBlocks(msg.message?.content, currentUserId),
                     );
                     if (!hasMention) return false;
                 }
