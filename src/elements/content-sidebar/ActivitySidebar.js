@@ -1469,6 +1469,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
             const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
             const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
+            const isRichTextEnabled = isFeatureEnabled(features, 'activityFeed.richText.enabled');
             return (
                 <div
                     aria-labelledby={label}
@@ -1491,6 +1492,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         hasTasks={this.props.hasTasks}
                         isAudioPlayerV2Enabled={isAudioPlayerV2Enabled}
                         isDisabled={isDisabled}
+                        isRichTextEnabled={isRichTextEnabled}
                         isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
                         onAnnotationCopyLink={onAnnotationCopyLink}
                         onAnnotationDelete={this.handleAnnotationDelete}

@@ -49,6 +49,10 @@ type ExternalProps = {
     onWarningModalDiscard?: () => void,
     onWarningModalClose?: () => void,
     trackEvent?: (eventName: string, data?: { [string]: any }) => void,
+    // Redesign path only — optional host overrides for the metadata user field fetchers.
+    // Canonical types (FetchUsers / FetchAvatarUrls) live in @box/metadata-editor (TypeScript).
+    fetchUsers?: (inputValue: string) => Promise<Array<Object>>,
+    fetchAvatarUrls?: (userContacts: Array<Object>) => Promise<{ [key: string]: string }>,
 };
 
 type PropsWithoutContext = {

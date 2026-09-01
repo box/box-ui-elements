@@ -1,4 +1,4 @@
-import { serializeMentionMarkup } from '@box/threaded-annotations';
+import { serializeMentionMarkup, serializeMessageToMarkdown } from '@box/threaded-annotations';
 
 import {
     dispatchReplyDelete,
@@ -14,9 +14,11 @@ import type { TransformedAnnotationItem, TransformedCommentItem, TransformedFeed
 
 jest.mock('@box/threaded-annotations', () => ({
     serializeMentionMarkup: jest.fn(),
+    serializeMessageToMarkdown: jest.fn(),
 }));
 
 const mockedSerialize = jest.mocked(serializeMentionMarkup);
+const mockedSerializeMessageToMarkdown = jest.mocked(serializeMessageToMarkdown);
 
 const messages: TransformedCommentItem['messages'] = [
     {
@@ -49,6 +51,37 @@ describe('elements/content-sidebar/activity-feed-v2/helpers', () => {
             const content = { type: 'doc', content: [] };
             expect(serializeEditorContent(content)).toEqual({ hasMention: false, text: 'serialized-text' });
             expect(mockedSerialize).toHaveBeenCalledWith(content);
+            expect(mockedSerializeMessageToMarkdown).not.toHaveBeenCalled();
+        });
+
+        test('should use serializeMessageToMarkdown for text when isRichTextEnabled is true', () => {
+            const content = { type: 'doc', content: [] };
+            mockedSerialize.mockReturnValue({ hasMention: true, text: 'plain-markup' });
+            mockedSerializeMessageToMarkdown.mockReturnValue('**bold**');
+
+            expect(serializeEditorContent(content, true)).toEqual({ hasMention: true, text: '**bold**' });
+            expect(mockedSerializeMessageToMarkdown).toHaveBeenCalledWith(content);
+            expect(mockedSerialize).toHaveBeenCalledWith(content);
+        });
+
+        test('should trim markdown from serializeMessageToMarkdown', () => {
+            mockedSerializeMessageToMarkdown.mockReturnValue('  \n# heading\n  ');
+
+            expect(serializeEditorContent({}, true)).toEqual({ hasMention: false, text: '# heading' });
+        });
+
+        test('should log via console.error and return null when serializeMessageToMarkdown throws', () => {
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            mockedSerializeMessageToMarkdown.mockImplementation(() => {
+                throw new Error('bad markdown');
+            });
+
+            expect(serializeEditorContent({}, true)).toBeNull();
+            expect(consoleError).toHaveBeenCalledWith(
+                'ActivityFeedV2: failed to serialize editor content',
+                expect.any(Error),
+            );
+            consoleError.mockRestore();
         });
 
         test.each`

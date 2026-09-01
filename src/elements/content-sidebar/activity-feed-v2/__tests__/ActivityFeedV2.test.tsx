@@ -8,9 +8,13 @@ import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
 
-type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor>;
+type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
+    isRichTextEnabled?: boolean;
+};
 
 const mockSerializeMentionMarkup = jest.fn((doc: unknown) => ({ hasMention: false, text: JSON.stringify(doc) }));
+const mockSerializeMessageToMarkdown = jest.fn<string, [unknown]>(() => '');
+const mockParseMessageMarkdown = jest.fn();
 
 jest.mock('@box/threaded-annotations', () => ({
     AnnotationBadgeType: {
@@ -20,7 +24,10 @@ jest.mock('@box/threaded-annotations', () => ({
         Point: 'point',
         Region: 'region',
     },
+    isListNode: (node: { type?: string }) => node.type === 'bulletList' || node.type === 'orderedList',
+    parseMessageMarkdown: (text: string) => mockParseMessageMarkdown(text),
     serializeMentionMarkup: (doc: unknown) => mockSerializeMentionMarkup(doc),
+    serializeMessageToMarkdown: (doc: unknown) => mockSerializeMessageToMarkdown(doc),
 }));
 
 const mockScrollTo = jest.fn<boolean, [string, { block?: string }?]>(() => true);
@@ -212,6 +219,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             hasMention: false,
             text: JSON.stringify(doc),
         }));
+        mockSerializeMessageToMarkdown.mockReset();
+        mockParseMessageMarkdown.mockReset();
     });
 
     afterEach(() => {
@@ -846,6 +855,72 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
+    describe('isRichTextEnabled', () => {
+        test('should pass isRichTextEnabled to ActivityFeed.Editor', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    isRichTextEnabled
+                />,
+            );
+
+            expect(lastEditorProps.isRichTextEnabled).toBe(true);
+        });
+
+        test('should default isRichTextEnabled to false on ActivityFeed.Editor', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
+
+            expect(lastEditorProps.isRichTextEnabled).toBe(false);
+        });
+
+        test('should call onCommentCreate with markdown text when isRichTextEnabled is true', async () => {
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: true, text: 'plain-markup' });
+            mockSerializeMessageToMarkdown.mockReturnValue('  **hello**  ');
+            const onCommentCreate = jest.fn();
+            const content = { type: 'doc', content: [] };
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    isRichTextEnabled
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            await lastEditorProps.onPost?.(content);
+
+            expect(mockSerializeMessageToMarkdown).toHaveBeenCalledWith(content);
+            expect(onCommentCreate).toHaveBeenCalledWith('**hello**', true);
+        });
+
+        test('should skip onCommentCreate when markdown text is whitespace', async () => {
+            mockSerializeMessageToMarkdown.mockReturnValue('  \n\t  ');
+            const onCommentCreate = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    isRichTextEnabled
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+
+            expect(onCommentCreate).not.toHaveBeenCalled();
+        });
+    });
+
     describe('media timestamp', () => {
         const mountMedia = (tag: 'video' | 'audio' = 'video', currentTime: number = 0) => {
             const container = document.createElement('div');
@@ -1156,6 +1231,105 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             expect(onShowOnlyMentionsMeChange).toHaveBeenCalledWith(true);
             expect(onShowOnlyMentionsMeChange).toHaveBeenCalledTimes(1);
+        });
+
+        test('should render a comment that mentions the current user in a paragraph', () => {
+            const mentionComment = { ...mockComment, tagged_message: 'Hello @[123:Current User]' };
+            render(
+                <ActivityFeedV2
+                    currentUser={{ ...mockCurrentUser, id: '123' }}
+                    feedItems={[mentionComment] as ActivityFeedV2Props['feedItems']}
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.getByTestId('threaded-annotation-comment-1')).toBeVisible();
+        });
+
+        test('should hide a comment that does not mention the current user', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.queryByTestId('threaded-annotation-comment-1')).not.toBeInTheDocument();
+        });
+
+        test('should render a comment that mentions the current user inside a bullet list', () => {
+            mockParseMessageMarkdown.mockReturnValue({
+                type: 'doc',
+                content: [
+                    {
+                        type: 'bulletList',
+                        content: [
+                            {
+                                type: 'listItem',
+                                content: [
+                                    {
+                                        type: 'paragraph',
+                                        content: [
+                                            {
+                                                type: 'mention',
+                                                attrs: {
+                                                    mentionId: 'user-1',
+                                                    mentionedUserId: 'user-1',
+                                                    mentionedUserName: 'Current User',
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    isRichTextEnabled
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.getByTestId('threaded-annotation-comment-1')).toBeVisible();
+        });
+
+        test('should hide a comment when the mention is not nested in a paragraph or list', () => {
+            mockParseMessageMarkdown.mockReturnValue({
+                type: 'doc',
+                content: [
+                    {
+                        type: 'heading',
+                        content: [
+                            {
+                                type: 'mention',
+                                attrs: {
+                                    mentionId: 'user-1',
+                                    mentionedUserId: 'user-1',
+                                    mentionedUserName: 'Current User',
+                                },
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    isRichTextEnabled
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.queryByTestId('threaded-annotation-comment-1')).not.toBeInTheDocument();
         });
 
         test('should manage filter state internally when no controlled props are provided', () => {

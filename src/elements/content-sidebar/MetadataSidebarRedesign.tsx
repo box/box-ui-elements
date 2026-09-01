@@ -19,6 +19,10 @@ import {
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
 import { TreeQueryInput } from '@box/combobox-with-api';
+import type {
+    FetchAvatarUrls,
+    FetchUsers,
+} from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-user-field/types.js';
 
 import type { GetPreviewForMetadataReturnType } from './types/BoxAISidebarTypes';
 import API from '../../api';
@@ -60,6 +64,10 @@ mark(MARK_NAME_JS_READY);
 export interface ExternalProps {
     isFeatureEnabled: boolean;
     getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
+    /** Custom user/group search fetcher (e.g. a session-authenticated contacts endpoint). */
+    fetchUsers?: FetchUsers;
+    /** Custom avatar URL resolver. */
+    fetchAvatarUrls?: FetchAvatarUrls;
 }
 
 interface PropsWithoutContext extends ExternalProps {
@@ -102,6 +110,8 @@ function MetadataSidebarRedesign({
     elementId,
     fileExtension,
     fileId,
+    fetchAvatarUrls,
+    fetchUsers,
     filteredTemplateIds = [],
     getPreview,
     history,
@@ -121,6 +131,7 @@ function MetadataSidebarRedesign({
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
     const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
     const isMetadataTaxonomyPickerEnabled: boolean = useFeatureEnabled('metadata.taxonomyPicker.enabled');
+    const isMetadataUserFieldEnabled: boolean = useFeatureEnabled('metadata.userField.enabled');
     const isAdvancedExtractAgentEnabled: boolean = useFeatureEnabled('metadata.extractAdvancedAgents.enabled');
     const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
         'metadata.deleteConfirmationModalCheckbox.enabled',
@@ -391,6 +402,8 @@ function MetadataSidebarRedesign({
                                 isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
                             }
                             errorCode={extractErrorCode}
+                            fetchAvatarUrls={fetchAvatarUrls}
+                            fetchUsers={fetchUsers}
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
@@ -398,6 +411,7 @@ function MetadataSidebarRedesign({
                             isLargeFile={isLargeFile}
                             isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
                             isMetadataTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
+                            isMetadataUserFieldEnabled={isMetadataUserFieldEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             onCancel={handleCancel}
                             onDelete={handleDeleteInstance}
