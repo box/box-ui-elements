@@ -1219,10 +1219,10 @@
   resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-2.2.21.tgz#d7b425f2f42e619d196670e11073764cd73e706b"
   integrity sha512-yh/eUMZidTUfntCiV/7BwW8Pof7rL9Us1HVYYtKcM1rMz7lmMI96xrFHj+JylP5A/tNRoNClTYNX0XuIMDk2zw==
 
-"@box/threaded-annotations@^4.11.0":
-  version "4.11.2"
-  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-4.11.2.tgz#767cceb45b85ab4921349b0318ff88b95bd5be21"
-  integrity sha512-XRgmuv85IGrcptVsVXEEnS3+uAbvZBStna6STITJKtHQ+NDJKgaX32u38Gs5Pd8qDC5m3386cbBrgoQEZo0zZw==
+"@box/threaded-annotations@^4.11.3":
+  version "4.11.3"
+  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-4.11.3.tgz#a31421a57b87100810afdbbb269579c30093b948"
+  integrity sha512-dlv51XHTzDfrh+S13bvgUCbHd9wuxQNAPSef+qNLv6VBuZWlmZMMzmeJOOqTJ/vOVr0jcTEJ/py4znesHmvwEg==
   dependencies:
     "@floating-ui/dom" "^1.6.0"
     "@tanstack/react-virtual" "^3.10.8"
