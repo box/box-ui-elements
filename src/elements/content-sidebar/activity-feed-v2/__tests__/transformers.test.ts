@@ -194,6 +194,51 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             const messages = transformCommentToMessages(editedComment as unknown as Comment);
             expect(messages[0].updatedAt).toBe(new Date('2024-01-02T00:00:00Z').getTime());
         });
+
+        test('should strip wrapping markdown from comment message text', () => {
+            const richComment = { ...mockComment, tagged_message: '**another one**' };
+            const messages = transformCommentToMessages(richComment as unknown as Comment);
+            expect(messages[0].message.content[0].content).toEqual([{ type: 'text', text: 'another one' }]);
+        });
+
+        test('should strip wrapping markdown from replies but leave list markers', () => {
+            const commentWithReplies = {
+                ...mockComment,
+                tagged_message: '',
+                message: '**test**',
+                replies: [
+                    {
+                        ...mockComment,
+                        id: 'reply-1',
+                        tagged_message: '',
+                        message: '- @[456:Jane] dogs',
+                    },
+                    {
+                        ...mockComment,
+                        id: 'reply-2',
+                        tagged_message: '',
+                        message: '@[456:Jane] ++pie++',
+                    },
+                ],
+            };
+            const messages = transformCommentToMessages(commentWithReplies as unknown as Comment);
+            expect(messages[0].message.content[0].content).toEqual([{ type: 'text', text: 'test' }]);
+            expect(messages[1].message.content[0].content).toEqual([
+                { type: 'text', text: '- ' },
+                {
+                    type: 'mention',
+                    attrs: { authorId: '123', mentionId: '456', mentionedUserId: '456', mentionedUserName: 'Jane' },
+                },
+                { type: 'text', text: ' dogs' },
+            ]);
+            expect(messages[2].message.content[0].content).toEqual([
+                {
+                    type: 'mention',
+                    attrs: { authorId: '123', mentionId: '456', mentionedUserId: '456', mentionedUserName: 'Jane' },
+                },
+                { type: 'text', text: ' pie' },
+            ]);
+        });
     });
 
     describe('transformAnnotationToMessages()', () => {
@@ -230,6 +275,15 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 type: 'text',
                 text: 'Annotation text',
             });
+        });
+
+        test('should strip wrapping markdown from annotation description message', () => {
+            const richAnnotation = {
+                ...mockAnnotation,
+                description: { message: '**another one**' },
+            };
+            const messages = transformAnnotationToMessages(richAnnotation as unknown as Annotation);
+            expect(messages[0].message.content[0].content).toEqual([{ type: 'text', text: 'another one' }]);
         });
 
         test('should handle annotation with replies', () => {

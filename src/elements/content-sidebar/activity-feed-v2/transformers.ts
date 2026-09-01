@@ -26,6 +26,15 @@ import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '
 import type { BoxItemVersion, User } from '../../../common/types/core';
 import type { TaskCollabAssignee, TaskNew } from '../../../common/types/tasks';
 
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_APP_ACTIVITY,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+    FEED_ITEM_TYPE_VERSION,
+} from '../../../constants';
+
+import { stripWrappingMarkdown } from './stripWrappingMarkdown';
 import type {
     AnnotationBadgeTargetType,
     AppActivityItemProps,
@@ -34,14 +43,6 @@ import type {
     TransformedFeedItem,
     VersionItemProps,
 } from './types';
-
-import {
-    FEED_ITEM_TYPE_ANNOTATION,
-    FEED_ITEM_TYPE_APP_ACTIVITY,
-    FEED_ITEM_TYPE_COMMENT,
-    FEED_ITEM_TYPE_TASK,
-    FEED_ITEM_TYPE_VERSION,
-} from '../../../constants';
 
 const MENTION_REGEX = /@\[(\d+):([^\]]+)\]/g;
 const TIMESTAMP_MARKUP_REGEX = /^#\[timestamp:(\d+)(?:,versionId:\d+)?\]\s*/;
@@ -206,7 +207,7 @@ const commentToTextMessage = (
         id: comment.id,
         message: isRichTextEnabled
             ? parseRichText(cleanText, comment.created_by?.id ?? '')
-            : textToDocumentNode(cleanText, comment.created_by?.id ?? ''),
+            : textToDocumentNode(stripWrappingMarkdown(cleanText), comment.created_by?.id ?? ''),
         permissions: toPermissions(comment.permissions),
         updatedAt: toUpdatedAt(comment.created_at, comment.modified_at),
     };
@@ -256,7 +257,7 @@ export const transformAnnotationToMessages = (
         id: annotation.id,
         message: isRichTextEnabled
             ? parseRichText(messageText, annotation.created_by?.id ?? '')
-            : textToDocumentNode(messageText, annotation.created_by?.id ?? ''),
+            : textToDocumentNode(stripWrappingMarkdown(messageText), annotation.created_by?.id ?? ''),
         permissions: toPermissions(annotation.permissions),
         updatedAt: toUpdatedAt(annotation.created_at, annotation.modified_at),
     };
