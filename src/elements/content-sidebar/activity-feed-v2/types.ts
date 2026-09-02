@@ -103,6 +103,7 @@ export type ActivityFeedV2Props = {
     hasTasks?: boolean;
     isAudioPlayerV2Enabled?: boolean;
     isDisabled?: boolean;
+    isRichTextEnabled?: boolean;
     isTimestampedCommentsEnabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;

@@ -19,7 +19,7 @@ import type {
     VersionItemProps,
 } from '../types';
 
-let lastThreadedAnnotationProps: Partial<ThreadedAnnotationsPropsV2> = {};
+let lastThreadedAnnotationProps: Partial<ThreadedAnnotationsPropsV2> & { isRichTextEnabled?: boolean } = {};
 let lastTaskProps: Partial<TaskItemProps> = {};
 let lastVersionProps: Partial<VersionItemProps> = {};
 
@@ -227,6 +227,16 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.isAnnotations).toBe(false);
         });
 
+        test('should pass isRichTextEnabled to ThreadedAnnotation', () => {
+            render(<FeedItemRow {...defaultProps} isRichTextEnabled item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isRichTextEnabled).toBe(true);
+        });
+
+        test('should default isRichTextEnabled to false', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isRichTextEnabled).toBe(false);
+        });
+
         test('should pass isHighlighted=true when activeFeedEntryId matches the comment id', () => {
             render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
@@ -336,10 +346,25 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
         test('should call onReplyCreate via onPost with serialized text', async () => {
             const onReplyCreate = jest.fn();
+            const content = { type: 'doc', content: [] };
             render(<FeedItemRow {...defaultProps} item={mockComment} onReplyCreate={onReplyCreate} />);
 
-            await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
+            await lastThreadedAnnotationProps.onPost?.(content);
 
+            expect(mockedSerializeEditorContent).toHaveBeenCalledWith(content, false);
+            expect(onReplyCreate).toHaveBeenCalledWith('comment-1', 'comment', 'serialized-text');
+        });
+
+        test('should serialize editor content with isRichTextEnabled on reply post', async () => {
+            const onReplyCreate = jest.fn();
+            const content = { type: 'doc', content: [] };
+            render(
+                <FeedItemRow {...defaultProps} isRichTextEnabled item={mockComment} onReplyCreate={onReplyCreate} />,
+            );
+
+            await lastThreadedAnnotationProps.onPost?.(content);
+
+            expect(mockedSerializeEditorContent).toHaveBeenCalledWith(content, true);
             expect(onReplyCreate).toHaveBeenCalledWith('comment-1', 'comment', 'serialized-text');
         });
 
@@ -360,6 +385,31 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
 
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                'edited-text',
+                undefined,
+                true,
+                commentPermissions,
+            );
+        });
+
+        test('should serialize editor content with isRichTextEnabled on root edit', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: true, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            const content = { type: 'doc', content: [] };
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    isRichTextEnabled
+                    item={mockComment}
+                    onCommentUpdate={onCommentUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', content);
+
+            expect(mockedSerializeEditorContent).toHaveBeenCalledWith(content, true);
             expect(onCommentUpdate).toHaveBeenCalledWith(
                 'comment-1',
                 'edited-text',
