@@ -1277,5 +1277,49 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
                 type: AnnotationBadgeType.Frame,
             });
         });
+
+        test('should render a range badge when the comment carries an end timestamp', () => {
+            const rangeComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampEndMs: 12000,
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} timeFormat="standard" item={rangeComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '0:08 \u2013 0:12',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should format both bounds of a range badge with the current time format', () => {
+            const rangeComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampEndMs: 12000,
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} fps={24} timeFormat="timecode" item={rangeComment} />);
+
+            expect(lastThreadedAnnotationProps.annotationTarget).toEqual({
+                timestamp: '00:00:08:01 \u2013 00:00:12:00',
+                type: AnnotationBadgeType.Frame,
+            });
+        });
+
+        test('should seek to the start of the range when a range badge is clicked', () => {
+            const rangeComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampEndMs: 12000,
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={rangeComment} />);
+
+            lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
+
+            expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055, undefined);
+        });
     });
 });
