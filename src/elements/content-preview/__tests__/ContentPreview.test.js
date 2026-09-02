@@ -1165,6 +1165,14 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect.any(String),
             );
         });
+
+        test('should set state.error so PreviewMask renders an error state even when onError is nooped', () => {
+            const wrapper = getWrapper({ ...props, onError: noop });
+            const instance = wrapper.instance();
+            const errorPayload = { error: { code: 'some_code', message: 'msg' } };
+            instance.onPreviewError(errorPayload);
+            expect(instance.state.error).toEqual(errorPayload.error);
+        });
     });
 
     describe('onPreviewMetric()', () => {

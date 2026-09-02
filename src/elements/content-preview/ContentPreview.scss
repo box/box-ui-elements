@@ -104,6 +104,10 @@
         .bcpr-body {
             position: static;
             flex-direction: column;
+
+            &--comparing {
+                flex-direction: row;
+            }
         }
 
         .bcpr-container {

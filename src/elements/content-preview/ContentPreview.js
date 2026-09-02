@@ -667,11 +667,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Returns the version metadata displayed above this preview pane.
-     *
-     * @return {Object|void}
-     */
-    /**
      * Returns whether or not preview should be loaded.
      *
      * @param {Props} prevProps - Previous props
@@ -874,7 +869,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { onError } = this.props;
 
         this.endLoadingSession();
-        this.setState({ isThumbnailSidebarOpen: false });
+        this.setState({ error, isThumbnailSidebarOpen: false });
 
         onError(
             error,
@@ -1962,11 +1957,16 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                       <MemoConnectedContentPreview
                           {...rest}
                           key={comparedVersionId}
+                          accessPattern={undefined}
+                          advancedContentInsights={undefined}
                           autoFocus={false}
                           boxAnnotations={undefined}
                           collection={EMPTY_COLLECTION}
                           componentRef={undefined}
                           comparedSlotRef={undefined}
+                          contentAnswersProps={undefined}
+                          contentOpenWithProps={undefined}
+                          contentSidebarProps={undefined}
                           hasHeader={false}
                           hideSidebar
                           isComparing={false}
@@ -1974,16 +1974,19 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           // Hosts defer the indicator to let a preloaded image show through instead.
                           // Nothing preloads the compared version, so deferring leaves this pane blank.
                           loadingIndicatorDelayMs={0}
+                          metadataApiHost={undefined}
+                          onAnnotator={noop}
+                          onAnnotatorEvent={noop}
                           onBeforeNavigate={undefined}
-                          // TODO: strip remaining host callbacks that should not fire for the compared pane:
-                          // onPreviewDestroy, insights, and preloadFromRest should also be nooped/undefined.
+                          onContentInsightsEventReport={noop}
                           onError={noop}
                           onLoad={noop}
-                          onMetric={noop}
                           onNavigate={noop}
+                          onPreviewDestroy={noop}
                           onVersionChange={noop}
-                          resin={undefined}
+                          preloadStatus={undefined}
                           previewVersion={comparedVersion}
+                          resin={undefined}
                           renderCustomPreview={undefined}
                           showAnnotations={false}
                           showAnnotationsControls={false}
