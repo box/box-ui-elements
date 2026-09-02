@@ -9,6 +9,28 @@
         display: flex;
         flex: 1;
         min-height: 0; // Required to prevent overflow of child flex elements
+
+        &--comparing .bcpr-container {
+            flex: 1 1 50%;
+            min-width: 0;
+        }
+    }
+
+    .bcpr-compared-slot {
+        display: none;
+        flex: 1 1 50%;
+        min-width: 0;
+        min-height: 0;
+
+        &:not(:empty) {
+            display: flex;
+        }
+
+        > .be.bcpr {
+            flex: 1;
+            min-width: 0;
+            min-height: 0;
+        }
     }
 
     .bcpr-container {
@@ -36,7 +58,7 @@
         height: 64px;
         transform: translateY(-50%);
         opacity: 0;
-        transition: opacity .5s ease;
+        transition: opacity 0.5s ease;
 
         &:focus,
         &:hover {
@@ -50,7 +72,9 @@
 
     .bcpr-navigate-left {
         left: 0;
-        transition: opacity .5s ease, left .3s cubic-bezier(.4, 0, .2, 1);
+        transition:
+            opacity 0.5s ease,
+            left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .bcpr-nav-is-visible {

@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import * as TokenService from '../../../utils/TokenService';
 import PreviewMask from '../PreviewMask';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
-import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
+import ContentPreviewWithComparison, { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
@@ -188,40 +188,64 @@ describe('elements/content-preview/ContentPreview', () => {
 
         test('should return true if file version ID has changed', () => {
             const oldFile = { id: '123', file_version: { id: '1234' } };
-            expect(instance.shouldLoadPreview({ file: oldFile })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { file: oldFile })).toBe(true);
         });
 
         test('should return true if file object has newly been populated', () => {
             wrapper.setState({ file: { id: '123' } });
-            expect(instance.shouldLoadPreview({ file: undefined })).toBeTruthy();
+            expect(instance.shouldLoadPreview(props, { file: undefined })).toBeTruthy();
         });
 
         test('should return false if file has not changed', () => {
-            expect(instance.shouldLoadPreview({ file })).toBe(false);
+            expect(instance.shouldLoadPreview(props, { file })).toBe(false);
         });
 
         test('should return true if the currently-selected version ID has changed', () => {
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
 
         test('should return true if the selected version is missing and the previous selection was an old version', () => {
             wrapper.setState({ selectedVersion: { id: undefined } });
 
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
 
         test('should return false if the selected version is missing but the previous selection was the current version', () => {
             wrapper.setState({ selectedVersion: { id: undefined } });
 
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '1' } })).toBe(false);
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '1' } })).toBe(false);
         });
 
         test("should return true if the preview library just became available and we haven't loaded preview yet", () => {
             instance.previewLibraryLoaded = false;
             instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
             instance.preview = undefined;
-            expect(instance.shouldLoadPreview({ file })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { file })).toBe(true);
             expect(instance.previewLibraryLoaded).toBe(true);
+        });
+
+        test('should return false when the host manages comparison and the selected version changes', () => {
+            const managedProps = { ...props, isComparisonManaged: true };
+            wrapper = getWrapper(managedProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '12345' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview(managedProps, { file })).toBe(false);
+        });
+
+        test('should return false when comparison ends while a stale selected version is held', () => {
+            const managedProps = { ...props, isComparisonManaged: true };
+            wrapper = getWrapper(managedProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '12345' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview(managedProps, { file, selectedVersion: { id: '12345' } })).toBe(false);
+        });
+
+        test('should return true when the selected version changes and the host does not manage comparison', () => {
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
     });
 
@@ -2563,6 +2587,112 @@ describe('elements/content-preview/ContentPreview', () => {
 
             bodyDiv = wrapper.find('.bcpr-body');
             expect(bodyDiv.children().length).toBe(2);
+        });
+    });
+
+    describe('comparison mode', () => {
+        const collection = ['123', '456', '789'];
+
+        test('should render a compared slot between the viewer and sidebar when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                isComparing: true,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--comparing')).toBe(true);
+            expect(bodyDiv.children().length).toBe(3);
+            expect(bodyDiv.children().at(0).hasClass('bcpr-container')).toBe(true);
+            expect(bodyDiv.children().at(1).hasClass('bcpr-compared-slot')).toBe(true);
+        });
+
+        test('should not add the comparing body class when isComparing is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--comparing')).toBe(false);
+            expect(bodyDiv.children().length).toBe(2);
+            expect(bodyDiv.find('.bcpr-compared-slot').exists()).toBe(false);
+        });
+
+        test('should not render PreviewNavigation when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                isComparing: true,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(false);
+        });
+
+        test('should render PreviewNavigation when isComparing is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(true);
+        });
+
+        test('should render the loading indicator without deferring it when the host sets no delay', () => {
+            const wrapper = getWrapper({ fileId: '123', loadingIndicatorDelayMs: 0 });
+
+            expect(wrapper.find(PreviewMask).props()).toMatchObject({
+                isLoading: true,
+                isLoadingDeferred: false,
+            });
+        });
+
+        test('should render the compared instance with its loading indicator undeferred', () => {
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    loadingIndicatorDelayMs={2000}
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            // The compared instance is portaled into the slot, which exists only once the ref fires.
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().loadingIndicatorDelayMs).toBe(2000);
+            expect(wrapper.childAt(1).props().children.props.loadingIndicatorDelayMs).toBe(0);
+        });
+
+        test('should not navigate when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                isComparing: true,
+            });
+            wrapper.setState({ currentFileId: '456' });
+            const instance = wrapper.instance();
+            instance.navigateToIndex = jest.fn();
+
+            instance.navigateLeft();
+            instance.navigateRight();
+
+            expect(instance.navigateToIndex).not.toHaveBeenCalled();
         });
     });
 
