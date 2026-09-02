@@ -2,17 +2,26 @@ import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../util
 
 describe('metadataTemplateIdentity', () => {
     describe('getMetadataTemplateNamespaceFqn', () => {
-        test('prefers scope when present', () => {
+        test('prefers namespace over scope so child-namespace templates resolve to their own FQN', () => {
             expect(
                 getMetadataTemplateNamespaceFqn({
                     templateKey: 'contract',
                     scope: 'enterprise_123',
                     namespace: 'enterprise_123.legal',
                 }),
+            ).toBe('enterprise_123.legal');
+        });
+
+        test('falls back to scope when namespace is absent', () => {
+            expect(
+                getMetadataTemplateNamespaceFqn({
+                    templateKey: 'contract',
+                    scope: 'enterprise_123',
+                }),
             ).toBe('enterprise_123');
         });
 
-        test('falls back to namespace when scope is absent', () => {
+        test('reads namespace when scope is absent', () => {
             expect(
                 getMetadataTemplateNamespaceFqn({
                     templateKey: 'contract',
@@ -67,9 +76,28 @@ describe('metadataTemplateIdentity', () => {
                     { templateKey: 'contract', namespace: 'enterprise_123.hr' },
                 ),
             ).toBe(false);
+            expect(isSameMetadataTemplate({ templateKey: 'contract' }, { templateKey: 'contract' })).toBe(false);
+        });
+
+        test('does not collapse child-namespace templates that share the enterprise root scope', () => {
+            // MIGRATION mode reports the enterprise root in `scope` on both sides, so the
+            // namespace is the only field that distinguishes them.
             expect(
-                isSameMetadataTemplate({ templateKey: 'contract' }, { templateKey: 'contract' }),
+                isSameMetadataTemplate(
+                    { templateKey: 'contract', scope: 'enterprise_123', namespace: 'enterprise_123.legal' },
+                    { templateKey: 'contract', scope: 'enterprise_123', namespace: 'enterprise_123.hr' },
+                ),
             ).toBe(false);
+        });
+
+        test('matches a namespaced template against a legacy scope-only lookup', () => {
+            // AI-suggestion lookups still pass `{ templateKey, scope }` only.
+            expect(
+                isSameMetadataTemplate(
+                    { templateKey: 'contract', scope: 'enterprise_123', namespace: 'enterprise_123.legal' },
+                    { templateKey: 'contract', scope: 'enterprise_123' },
+                ),
+            ).toBe(true);
         });
 
         test('does not match when either templateKey is missing', () => {
@@ -80,7 +108,10 @@ describe('metadataTemplateIdentity', () => {
                 ),
             ).toBe(false);
             expect(
-                isSameMetadataTemplate({ scope: 'enterprise_123' }, { templateKey: 'contract', scope: 'enterprise_123' }),
+                isSameMetadataTemplate(
+                    { scope: 'enterprise_123' },
+                    { templateKey: 'contract', scope: 'enterprise_123' },
+                ),
             ).toBe(false);
         });
 

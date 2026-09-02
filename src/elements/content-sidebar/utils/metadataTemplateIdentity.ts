@@ -11,36 +11,45 @@ export type MetadataTemplateIdentity = {
     namespace?: string;
 };
 
-/** Read scope or namespace FQN from a template/instance that may only have one. */
+/**
+ * Read the most specific namespace FQN from a template/instance that may carry
+ * either field.
+ *
+ * `namespace` wins over `scope`: in MIGRATION mode a child-namespace template can
+ * report the enterprise root in `scope` (e.g. `enterprise_123`) while `namespace`
+ * holds the real location (`enterprise_123.legal`). Preferring `scope` there would
+ * address the wrong namespace and disagree with `isSameMetadataTemplate`.
+ */
 export function getMetadataTemplateNamespaceFqn(template: MetadataTemplateIdentity): string | undefined {
-    return template.scope ?? template.namespace;
+    return template.namespace ?? template.scope;
+}
+
+/** Every FQN a template/instance identifies itself by, most specific first. */
+function getIdentifiers(template: MetadataTemplateIdentity): string[] {
+    return [template.namespace, template.scope].filter((fqn): fqn is string => fqn != null);
 }
 
 /**
  * Whether two metadata templates/instances refer to the same template.
  *
- * Mirrors `Metadata.getTemplateForInstance` matching:
- * - Prefer `scope` when both sides define it (SCOPED / enterprise-scoped MIGRATION)
- * - Otherwise compare namespace FQNs (including when one side stores the FQN in `scope`
- *   and the other in `namespace`, as the template browser does)
- * - Never treat two missing scopes as a match — that would collapse distinct
- *   child-namespace templates that share a `templateKey`
- *   (e.g. `enterprise_123.legal.contract` vs `enterprise_123.hr.contract`).
+ * - When both sides declare a `namespace`, that is the authoritative comparison.
+ *   Falling back to a shared `scope` here would collapse distinct child-namespace
+ *   templates, since MIGRATION-mode templates in `enterprise_123.legal` and
+ *   `enterprise_123.hr` both report `scope: 'enterprise_123'`.
+ * - When only one side declares a `namespace`, the other side's single FQN is
+ *   ambiguous (it may be stored in `scope`), so a match on any known FQN counts.
+ *   This is what lets a browser-shaped template (FQN in `scope`) match an
+ *   editor-shaped one, and an AI-suggestion lookup by legacy scope still resolve.
+ * - Two missing FQNs never match.
  */
 export function isSameMetadataTemplate(a: MetadataTemplateIdentity, b: MetadataTemplateIdentity): boolean {
     if (a.templateKey == null || b.templateKey == null || a.templateKey !== b.templateKey) {
         return false;
     }
-    // Fast path: both sides still carry a legacy scope and they agree.
-    if (a.scope != null && b.scope != null && a.scope === b.scope) {
-        return true;
+    if (a.namespace != null && b.namespace != null) {
+        return a.namespace === b.namespace;
     }
-    // Otherwise compare resolved FQNs. Prefer `namespace` when present so a
-    // browser-shaped template (FQN in `scope`) can match an editor-shaped
-    // template that only has `namespace` (or has both). Two missing FQNs must
-    // not match — that would collapse distinct child-namespace templates that
-    // share a templateKey.
-    const aFqn = a.namespace ?? a.scope;
-    const bFqn = b.namespace ?? b.scope;
-    return aFqn != null && bFqn != null && aFqn === bFqn;
+    const aIdentifiers = getIdentifiers(a);
+    const bIdentifiers = getIdentifiers(b);
+    return aIdentifiers.some(fqn => bIdentifiers.includes(fqn));
 }

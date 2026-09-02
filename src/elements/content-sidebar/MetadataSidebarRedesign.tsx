@@ -38,6 +38,7 @@ import { useFeatureEnabled } from '../common/feature-checking';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
+    ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
 } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
@@ -66,6 +67,7 @@ import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
 import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
 import useMetadataTemplateItemsService from './hooks/useMetadataTemplateItemsService';
+import { type MetadataTemplateLocator } from './hooks/useMetadataTemplateEventService';
 import useMetadataNamespaceContext, { type MetadataScopeMode } from './hooks/useMetadataNamespaceContext';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
@@ -293,6 +295,42 @@ function MetadataSidebarRedesign({
         }
     };
 
+    // The sidebar only loads templates at the enterprise root, so a template the browser
+    // lists under a child namespace has no entry in `templates` to select. Fetch its
+    // schema on demand instead of dropping the click.
+    const fetchTemplateByLocator = useCallback(
+        async ({ id, namespaceFqn, templateKey }: MetadataTemplateLocator): Promise<MetadataTemplate | null> => {
+            const schema = (await api
+                .getMetadataAPI(false)
+                .getTemplateSchemaForEditor(namespaceFqn, templateKey, file)) as MetadataTemplateApiResponse | null;
+
+            if (!schema) {
+                return null;
+            }
+
+            // `scope` is left unset on purpose: instance URLs resolve `scope` ahead of
+            // `namespace`, so carrying the enterprise root here would write the instance
+            // to the wrong namespace.
+            return {
+                id,
+                type: 'metadata_template',
+                templateKey: schema.templateKey ?? templateKey,
+                displayName: schema.displayName ?? templateKey,
+                namespace: schema.namespace ?? namespaceFqn,
+                hidden: schema.hidden ?? false,
+                fields: schema.fields ?? [],
+            } as unknown as MetadataTemplate;
+        },
+        [api, file],
+    );
+
+    const handleTemplateSelectError = useCallback(
+        (error: Error) => {
+            onError(error, ERROR_CODE_FETCH_METADATA_TEMPLATES, { showNotification: true });
+        },
+        [onError],
+    );
+
     const handleCreateTemplate = useCallback(
         (body: MetadataTemplateCreateBody) =>
             new Promise<void>((resolve, reject) => {
@@ -460,6 +498,8 @@ function MetadataSidebarRedesign({
             templates={templates}
             selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
+            fetchTemplate={fetchTemplateByLocator}
+            onSelectError={handleTemplateSelectError}
             isMetadataTemplateManagementEnabled={isTemplateManagementEnabled}
             enterpriseId={isTemplateManagementEnabled ? enterpriseId : undefined}
             itemsService={isTemplateManagementEnabled ? itemsService : undefined}

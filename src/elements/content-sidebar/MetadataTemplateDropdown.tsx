@@ -13,7 +13,7 @@ import { AddMetadataTemplateDropdown, AddMetadataTemplateDropdownWithBrowser } f
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 import type { ItemsService } from '@box/metadata-template-browser';
 
-import useMetadataTemplateEventService from './hooks/useMetadataTemplateEventService';
+import useMetadataTemplateEventService, { type MetadataTemplateLocator } from './hooks/useMetadataTemplateEventService';
 import { getMetadataTemplateNamespaceFqn } from './utils/metadataTemplateIdentity';
 
 export interface MetadataTemplateDropdownProps {
@@ -22,6 +22,13 @@ export interface MetadataTemplateDropdownProps {
     enterpriseId: string | undefined;
     itemsService: ItemsService | undefined;
     onSelect: (template: EditorMetadataTemplate) => void;
+    /**
+     * Fetches a template that is not in `templates` — child-namespace templates are
+     * listed by the browser but never loaded by the sidebar's root-only fetch.
+     */
+    fetchTemplate?: (locator: MetadataTemplateLocator) => Promise<EditorMetadataTemplate | null>;
+    /** Reports a selection that could not be resolved. */
+    onSelectError?: (error: Error) => void;
     isMetadataTemplateManagementEnabled: boolean;
     /** Opens the template editor modal in create mode for the given namespace FQN. */
     onCreateTemplate?: (namespaceFqn: string) => void;
@@ -46,12 +53,14 @@ export interface MetadataTemplateDropdownProps {
 export default function MetadataTemplateDropdown({
     canCreateAtRoot,
     enterpriseId,
+    fetchTemplate,
     isMetadataTemplateManagementEnabled,
     itemsService,
     onCreateTemplate,
     onEditTemplate,
     onOpenChange,
     onSelect,
+    onSelectError,
     open,
     selectedTemplates,
     templates,
@@ -87,6 +96,8 @@ export default function MetadataTemplateDropdown({
     const eventService = useMetadataTemplateEventService({
         templates,
         onSelect,
+        fetchTemplate: isMetadataTemplateManagementEnabled ? fetchTemplate : undefined,
+        onSelectError,
         onCreateTemplate: isMetadataTemplateManagementEnabled ? onCreateTemplate : undefined,
         onEditTemplate: isMetadataTemplateManagementEnabled && onEditTemplate ? handleEditTemplateById : undefined,
     });
