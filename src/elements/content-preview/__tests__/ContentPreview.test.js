@@ -3,6 +3,7 @@ import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import * as TokenService from '../../../utils/TokenService';
 import PreviewMask from '../PreviewMask';
+import PreviewVersionBar from '../PreviewVersionBar';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import ContentPreviewWithComparison, { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
@@ -2608,6 +2609,55 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(bodyDiv.children().length).toBe(3);
             expect(bodyDiv.children().at(0).hasClass('bcpr-container')).toBe(true);
             expect(bodyDiv.children().at(1).hasClass('bcpr-compared-slot')).toBe(true);
+        });
+
+        test('should render the current version bar when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                isComparing: true,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: {
+                    file_version: { id: '456' },
+                    id: '123',
+                    modified_at: '2026-08-22T18:33:00Z',
+                    modified_by: { name: 'Emily Huang' },
+                    version_number: '12',
+                },
+            });
+
+            expect(wrapper.find(PreviewVersionBar).props()).toEqual({
+                isCurrent: true,
+                version: expect.objectContaining({
+                    id: '456',
+                    modified_at: '2026-08-22T18:33:00Z',
+                    modified_by: { name: 'Emily Huang' },
+                    version_number: '12',
+                }),
+            });
+        });
+
+        test('should render the compared version bar for a pinned preview version', () => {
+            const previewVersion = {
+                id: '456',
+                modified_at: '2026-08-22T18:15:00Z',
+                modified_by: { name: 'Emily Huang' },
+                version_number: '11',
+            };
+            const wrapper = getWrapper({
+                fileId: '123',
+                previewVersion,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123' },
+            });
+
+            expect(wrapper.find(PreviewVersionBar).props()).toEqual({
+                isCurrent: false,
+                version: previewVersion,
+            });
         });
 
         test('should not add the comparing body class when isComparing is omitted', () => {

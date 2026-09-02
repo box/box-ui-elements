@@ -10,7 +10,7 @@
         flex: 1;
         min-height: 0; // Required to prevent overflow of child flex elements
 
-        &--comparing .bcpr-container {
+        &--comparing > .bcpr-container {
             flex: 1 1 50%;
             min-width: 0;
         }
@@ -34,9 +34,17 @@
     }
 
     .bcpr-container {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .bcpr-viewer {
         position: relative;
         display: flex;
         flex: 1;
+        min-height: 0;
     }
 
     .bcpr-content {
