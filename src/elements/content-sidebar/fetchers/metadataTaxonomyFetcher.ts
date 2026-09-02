@@ -1,4 +1,5 @@
 import { TreeQueryInput, TreeOptionType, FetcherResponse, type Level } from '@box/combobox-with-api';
+import type { TaxonomyOption } from '@box/metadata-template-editor';
 import type {
     FetchParams,
     FetchResponse,
@@ -11,6 +12,55 @@ import type {
 import type { CreateTaxonomyItemsService } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import type API from '../../../api';
 import type { MetadataOptionEntry } from '../../../common/types/metadata';
+
+type MetadataTaxonomyListEntry = {
+    id?: string;
+    key?: string;
+    displayName?: string;
+    display_name?: string;
+    namespace?: string;
+    levels?: Array<{
+        displayName?: string;
+        display_name?: string;
+        level: number;
+    }>;
+};
+
+const mapTaxonomyListEntry = (taxonomy: MetadataTaxonomyListEntry, fallbackNamespace: string): TaxonomyOption => {
+    const taxonomyKey = taxonomy.key || taxonomy.id || '';
+    return {
+        id: taxonomy.id ?? taxonomyKey,
+        label: taxonomy.displayName || taxonomy.display_name || taxonomyKey,
+        taxonomyKey,
+        namespace: taxonomy.namespace || fallbackNamespace,
+        levels: (taxonomy.levels ?? []).map(level => ({
+            name: level.displayName || level.display_name || '',
+            level: level.level,
+        })),
+        selected: false,
+    };
+};
+
+/**
+ * Lists taxonomies for the template editor picker.
+ * Public Box API: `GET /metadata_taxonomies/{namespace}`.
+ *
+ * Taxonomies are not product-namespaced yet — callers pass the enterprise scope
+ * (e.g. `enterprise_123`) as `namespace`.
+ *
+ * The editor's `fetchTaxonomies` is `() => Promise<TaxonomyOption[]>` and does
+ * not paginate, so this returns the first page (API default limit 50).
+ */
+export const metadataTaxonomiesListFetcher = async (
+    api: API,
+    fileId: string,
+    namespace: string,
+): Promise<TaxonomyOption[]> => {
+    const response = await api.getMetadataAPI(false).getMetadataTaxonomies(fileId, namespace);
+    const entries: MetadataTaxonomyListEntry[] = response?.entries ?? [];
+
+    return entries.map(entry => mapTaxonomyListEntry(entry, namespace));
+};
 
 export const metadataTaxonomyFetcher = async (
     api: API,
@@ -113,6 +163,52 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
 
     // Return the hydrated levels as an array
     return hydratedLevels;
+};
+
+type MetadataTaxonomyLevel = {
+    level: number;
+    displayName?: string;
+    display_name?: string;
+};
+
+type MetadataTaxonomy = {
+    id?: string;
+    key?: string;
+    namespace?: string;
+    displayName?: string;
+    display_name?: string;
+    levels?: MetadataTaxonomyLevel[];
+};
+
+/**
+ * Looks up a single taxonomy by namespace + key for the template editor.
+ *
+ * Reuses `GET /metadata_taxonomies/:scope/:taxonomyKey` (`getMetadataTaxonomy`),
+ * the same endpoint `metadataTaxonomyNodeAncestorsFetcher` already calls.
+ * Maps the response to `TaxonomyOption` so an existing field can show its
+ * display name and selectable-level chips without loading the full catalogue.
+ */
+export const metadataTaxonomyByKeyFetcher = async (
+    api: API,
+    fileId: string,
+    namespace: string,
+    taxonomyKey: string,
+): Promise<TaxonomyOption> => {
+    const taxonomy: MetadataTaxonomy = await api
+        .getMetadataAPI(false)
+        .getMetadataTaxonomy(fileId, namespace, taxonomyKey);
+
+    return {
+        id: taxonomy.id ?? taxonomyKey,
+        label: taxonomy.displayName || taxonomy.display_name || taxonomyKey,
+        taxonomyKey: taxonomy.key || taxonomyKey,
+        namespace: taxonomy.namespace || namespace,
+        levels: (taxonomy.levels ?? []).map(level => ({
+            name: level.displayName || level.display_name || '',
+            level: level.level,
+        })),
+        selected: false,
+    };
 };
 
 /**

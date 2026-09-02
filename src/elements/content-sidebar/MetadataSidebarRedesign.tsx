@@ -8,7 +8,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
-    AddMetadataTemplateDropdown,
     AutofillContextProvider,
     FilterInstancesDropdown,
     MetadataEmptyState,
@@ -18,6 +17,11 @@ import {
     type MetadataTemplate,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
+import {
+    type MetadataTemplateApiResponse,
+    type MetadataTemplateCreateBody,
+    type MetadataTemplatePatchItem,
+} from '@box/metadata-template-editor';
 import { TreeQueryInput } from '@box/combobox-with-api';
 import type {
     FetchAvatarUrls,
@@ -34,6 +38,7 @@ import { useFeatureEnabled } from '../common/feature-checking';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
+    ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
 } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
@@ -45,10 +50,14 @@ import { type WithLoggerProps } from '../../common/types/logging';
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
+import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
+import { isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
+    metadataTaxonomiesListFetcher,
+    metadataTaxonomyByKeyFetcher,
     metadataTaxonomyFetcher,
     metadataTaxonomyNodeAncestorsFetcher,
     type TaxonomyFieldConfig,
@@ -56,6 +65,10 @@ import {
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
+import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
+import useMetadataTemplateItemsService from './hooks/useMetadataTemplateItemsService';
+import { type MetadataTemplateLocator } from './hooks/useMetadataTemplateEventService';
+import useMetadataNamespaceContext, { type MetadataScopeMode } from './hooks/useMetadataNamespaceContext';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -68,6 +81,17 @@ export interface ExternalProps {
     fetchUsers?: FetchUsers;
     /** Custom avatar URL resolver. */
     fetchAvatarUrls?: FetchAvatarUrls;
+    /**
+     * Host-provided migration mode (`SCOPED` | `MIGRATION` | `FINAL`).
+     * Ignored when `features.metadata.namespacesOptIn` is off.
+     * When omitted (and opt-in is on), the sidebar stays in SCOPED.
+     */
+    metadataNamespaceMode?: MetadataScopeMode | null;
+    /**
+     * Host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
+     * Required for MIGRATION/FINAL template management. Hosts own this value.
+     */
+    enterpriseId?: string | number;
 }
 
 interface PropsWithoutContext extends ExternalProps {
@@ -120,6 +144,8 @@ function MetadataSidebarRedesign({
     isFeatureEnabled,
     createSessionRequest,
     getStructuredTextRep,
+    metadataNamespaceMode: hostMetadataNamespaceMode,
+    enterpriseId: hostEnterpriseId,
     onEditingStateChange,
     registerOpenWarningModalCallback,
     onWarningModalDiscard,
@@ -136,10 +162,21 @@ function MetadataSidebarRedesign({
     const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
         'metadata.deleteConfirmationModalCheckbox.enabled',
     );
+
     const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
     const isBoundingBoxEnabled = useFeatureEnabled('metadata.boundingBox.enabled');
 
     const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
+
+    const {
+        enterpriseId,
+        isLoading: isNamespaceContextLoading,
+        metadataNamespaceMode,
+        isTemplateManagementEnabled,
+    } = useMetadataNamespaceContext({
+        ...(hostMetadataNamespaceMode !== undefined ? { metadataNamespaceMode: hostMetadataNamespaceMode } : {}),
+        ...(hostEnterpriseId !== undefined ? { enterpriseId: hostEnterpriseId } : {}),
+    });
 
     const {
         clearExtractError,
@@ -148,6 +185,7 @@ function MetadataSidebarRedesign({
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
+        refetchMetadata,
         templates,
         extractErrorCode,
         errorMessage,
@@ -161,6 +199,11 @@ function MetadataSidebarRedesign({
         isFeatureEnabled,
         isConfidenceScoreReviewEnabled,
         isBoundingBoxEnabled,
+        {
+            enterpriseFqn: enterpriseId,
+            isLoading: isNamespaceContextLoading,
+            metadataNamespaceMode,
+        },
     );
     const isSessionInitiated = useRef(false);
 
@@ -174,6 +217,18 @@ function MetadataSidebarRedesign({
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
+
+    // Template management — gated behind opt-in and non-SCOPED mode.
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean | undefined>(undefined);
+
+    // API-backed ItemsService for MetadataTemplateBrowser — only active when template management is enabled.
+    const itemsService = useMetadataTemplateItemsService(
+        api,
+        file,
+        isTemplateManagementEnabled ? enterpriseId : undefined,
+        templates ?? [],
+    );
+
     const { handleUnsavedChangesModalOpen, pendingNavLocation, setPendingNavLocation, unblockRouterHistory } =
         useMetadataSidebarUnsavedChangesGuard({
             editingTemplate,
@@ -218,10 +273,7 @@ function MetadataSidebarRedesign({
     useEffect(() => {
         // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
         const isEditingTemplateAlreadyExisting =
-            editingTemplate &&
-            templateInstances.some(
-                t => t.templateKey === editingTemplate.templateKey && t.scope === editingTemplate.scope,
-            );
+            editingTemplate && templateInstances.some(t => isSameMetadataTemplate(t, editingTemplate));
 
         if (!editingTemplate || isEditingTemplateAlreadyExisting) {
             setAppliedTemplateInstances(templateInstances);
@@ -232,6 +284,7 @@ function MetadataSidebarRedesign({
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         clearExtractError();
+        setIsDropdownOpen(false);
 
         if (editingTemplate) {
             setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
@@ -241,6 +294,137 @@ function MetadataSidebarRedesign({
             setIsDeleteButtonDisabled(true);
         }
     };
+
+    // The sidebar only loads templates at the enterprise root, so a template the browser
+    // lists under a child namespace has no entry in `templates` to select. Fetch its
+    // schema on demand instead of dropping the click.
+    const fetchTemplateByLocator = useCallback(
+        async ({ id, namespaceFqn, templateKey }: MetadataTemplateLocator): Promise<MetadataTemplate | null> => {
+            const schema = (await api
+                .getMetadataAPI(false)
+                .getTemplateSchemaForEditor(namespaceFqn, templateKey, file)) as MetadataTemplateApiResponse | null;
+
+            if (!schema) {
+                return null;
+            }
+
+            // `scope` is left unset on purpose: instance URLs resolve `scope` ahead of
+            // `namespace`, so carrying the enterprise root here would write the instance
+            // to the wrong namespace.
+            return {
+                id,
+                type: 'metadata_template',
+                templateKey: schema.templateKey ?? templateKey,
+                displayName: schema.displayName ?? templateKey,
+                namespace: schema.namespace ?? namespaceFqn,
+                hidden: schema.hidden ?? false,
+                fields: schema.fields ?? [],
+            } as unknown as MetadataTemplate;
+        },
+        [api, file],
+    );
+
+    const handleTemplateSelectError = useCallback(
+        (error: Error) => {
+            onError(error, ERROR_CODE_FETCH_METADATA_TEMPLATES, { showNotification: true });
+        },
+        [onError],
+    );
+
+    const handleCreateTemplate = useCallback(
+        (body: MetadataTemplateCreateBody) =>
+            new Promise<void>((resolve, reject) => {
+                api.getMetadataAPI(false).createMetadataTemplate(
+                    file,
+                    body,
+                    () => {
+                        refetchMetadata();
+                        resolve();
+                    },
+                    (error: Error, code: string) => {
+                        onError(error, code);
+                        reject(error);
+                    },
+                );
+            }),
+        [api, file, onError, refetchMetadata],
+    );
+
+    const fetchTaxonomyByKey = useCallback(
+        ({ namespace, taxonomyKey }: { namespace: string; taxonomyKey: string }) =>
+            metadataTaxonomyByKeyFetcher(api, fileId, namespace, taxonomyKey),
+        [api, fileId],
+    );
+
+    // Taxonomies are not namespaced yet — one enterprise-scoped catalogue for the picker.
+    const fetchTaxonomies = useMemo(() => {
+        if (!enterpriseId) {
+            return undefined;
+        }
+
+        return () => metadataTaxonomiesListFetcher(api, fileId, enterpriseId);
+    }, [api, fileId, enterpriseId]);
+
+    const handleEditTemplate = useCallback(
+        (patchItems: MetadataTemplatePatchItem[], identifier: { namespaceFQN: string; templateKey: string }) =>
+            new Promise<void>((resolve, reject) => {
+                api.getMetadataAPI(false).updateMetadataTemplate(
+                    file,
+                    identifier.namespaceFQN,
+                    identifier.templateKey,
+                    patchItems,
+                    () => {
+                        refetchMetadata();
+                        resolve();
+                    },
+                    (error: Error, code: string) => {
+                        onError(error, code);
+                        reject(error);
+                    },
+                );
+            }),
+        [api, file, onError, refetchMetadata],
+    );
+
+    const {
+        openCreate,
+        openEdit,
+        modal: templateEditorModal,
+    } = useMetadataTemplateEditor({
+        onCreate: handleCreateTemplate,
+        onEdit: handleEditTemplate,
+        fetchTaxonomyByKey,
+        fetchTaxonomies,
+    });
+
+    // Opens the template editor in create mode — also dismisses the dropdown popover.
+    const handleOpenCreateEditor = useCallback(
+        (namespaceFqn: string) => {
+            setIsDropdownOpen(false);
+            openCreate(namespaceFqn);
+        },
+        [openCreate],
+    );
+
+    // Opens the template editor in edit mode — also dismisses the dropdown popover.
+    const handleOpenEditEditor = useCallback(
+        ({ namespaceFqn, templateKey }: { namespaceFqn: string; templateKey: string }) => {
+            setIsDropdownOpen(false);
+            openEdit({
+                namespaceFqn,
+                templateKey,
+                fetchTemplate: () =>
+                    api
+                        .getMetadataAPI(false)
+                        .getTemplateSchemaForEditor(
+                            namespaceFqn,
+                            templateKey,
+                            file,
+                        ) as Promise<MetadataTemplateApiResponse>,
+            });
+        },
+        [openEdit, api, file],
+    );
 
     const handleCancel = () => {
         clearExtractError();
@@ -310,10 +494,20 @@ function MetadataSidebarRedesign({
     const canEdit = !!file?.permissions?.can_upload;
 
     const metadataDropdown = canEdit && isSuccess && templates && (
-        <AddMetadataTemplateDropdown
-            availableTemplates={templates}
+        <MetadataTemplateDropdown
+            templates={templates}
             selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
+            fetchTemplate={fetchTemplateByLocator}
+            onSelectError={handleTemplateSelectError}
+            isMetadataTemplateManagementEnabled={isTemplateManagementEnabled}
+            enterpriseId={isTemplateManagementEnabled ? enterpriseId : undefined}
+            itemsService={isTemplateManagementEnabled ? itemsService : undefined}
+            onCreateTemplate={isTemplateManagementEnabled ? handleOpenCreateEditor : undefined}
+            onEditTemplate={isTemplateManagementEnabled ? handleOpenEditEditor : undefined}
+            canCreateAtRoot
+            open={isDropdownOpen}
+            onOpenChange={setIsDropdownOpen}
         />
     );
 
@@ -368,91 +562,97 @@ function MetadataSidebarRedesign({
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
             isSessionInitiated.current = true;
-            createSessionRequest({ items: [{ id: fileId }] }, fileId).then(
-                ({ metadata = { is_large_file: false } }) => {
+            createSessionRequest({ items: [{ id: fileId }] }, fileId)
+                .then(({ metadata = { is_large_file: false } }) => {
                     setIsLargeFile(metadata.is_large_file);
-                },
-            );
+                })
+                .catch(() => {
+                    // Autofill session is best-effort; local/dev intelligence 404s must not fail the sidebar.
+                });
         }
     }, [createSessionRequest, fileId]);
-
     return (
-        <SidebarContent
-            actions={metadataDropdown}
-            className={'bcs-MetadataSidebarRedesign'}
-            elementId={elementId}
-            sidebarView={SIDEBAR_VIEW_METADATA}
-            title={formatMessage(messages.sidebarMetadataTitle)}
-            subheader={filterDropdown}
-        >
-            <div className="bcs-MetadataSidebarRedesign-content">
-                {errorMessageDisplay}
-                {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
-                {showEmptyState && (
-                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
-                )}
-                <AutofillContextProvider
-                    fetchSuggestions={extractSuggestions}
-                    isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                >
-                    {editingTemplate && (
-                        <MetadataInstanceEditor
-                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                            createTaxonomyItemsService={
-                                isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
-                            }
-                            errorCode={extractErrorCode}
-                            fetchAvatarUrls={fetchAvatarUrls}
-                            fetchUsers={fetchUsers}
-                            isBetaLanguageEnabled={isBetaLanguageEnabled}
-                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                            isDeleteButtonDisabled={isDeleteButtonDisabled}
-                            isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
-                            isLargeFile={isLargeFile}
-                            isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
-                            isMetadataTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
-                            isMetadataUserFieldEnabled={isMetadataUserFieldEnabled}
-                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                            onCancel={handleCancel}
-                            onDelete={handleDeleteInstance}
-                            onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
-                            onSubmit={handleSubmit}
-                            onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
-                            setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
-                            shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
-                            taxonomyOptionsFetcher={taxonomyOptionsFetcher}
-                            template={editingTemplate}
-                            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
-                            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
-                            isBoundingBoxEnabled={isBoundingBoxEnabled}
-                            onSelectMetadataField={handleSelectMetadataField}
-                            selectedMetadataFieldId={selectedMetadataFieldId}
-                            trackEvent={trackEvent}
+        <>
+            {templateEditorModal}
+            <SidebarContent
+                actions={metadataDropdown}
+                className={'bcs-MetadataSidebarRedesign'}
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_METADATA}
+                title={formatMessage(messages.sidebarMetadataTitle)}
+                subheader={filterDropdown}
+            >
+                <div className="bcs-MetadataSidebarRedesign-content">
+                    {errorMessageDisplay}
+                    {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
+                    {showEmptyState && (
+                        <MetadataEmptyState
+                            level={'file'}
+                            isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         />
                     )}
-                    {showList && (
-                        <MetadataInstanceList
-                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
-                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                            isBetaLanguageEnabled={isBetaLanguageEnabled}
-                            onEdit={(templateInstance, shouldEnableReviewFilter = false) => {
-                                setEditingTemplate(templateInstance);
-                                setIsDeleteButtonDisabled(false);
-                                setShouldShowOnlyReviewFields(shouldEnableReviewFilter);
-                            }}
-                            onSelectMetadataField={handleSelectMetadataField}
-                            selectedMetadataFieldId={selectedMetadataFieldId}
-                            templateInstances={templateInstancesList}
-                            taxonomyNodeFetcher={taxonomyNodeFetcher}
-                            isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
-                            isBoundingBoxEnabled={isBoundingBoxEnabled}
-                            trackEvent={trackEvent}
-                        />
-                    )}
-                </AutofillContextProvider>
-            </div>
-        </SidebarContent>
+                    <AutofillContextProvider
+                        fetchSuggestions={extractSuggestions}
+                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                    >
+                        {editingTemplate && (
+                            <MetadataInstanceEditor
+                                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                                createTaxonomyItemsService={
+                                    isMetadataTaxonomyPickerEnabled ? taxonomyItemsServiceCreator : undefined
+                                }
+                                errorCode={extractErrorCode}
+                                fetchAvatarUrls={fetchAvatarUrls}
+                                fetchUsers={fetchUsers}
+                                isBetaLanguageEnabled={isBetaLanguageEnabled}
+                                isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                                isDeleteButtonDisabled={isDeleteButtonDisabled}
+                                isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
+                                isLargeFile={isLargeFile}
+                                isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
+                                isMetadataTaxonomyPickerEnabled={isMetadataTaxonomyPickerEnabled}
+                                isMetadataUserFieldEnabled={isMetadataUserFieldEnabled}
+                                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                                onCancel={handleCancel}
+                                onDelete={handleDeleteInstance}
+                                onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
+                                onSubmit={handleSubmit}
+                                onToggleReviewFilter={() => setShouldShowOnlyReviewFields(!shouldShowOnlyReviewFields)}
+                                setIsUnsavedChangesModalOpen={handleUnsavedChangesModalOpen}
+                                shouldShowOnlyReviewFields={shouldShowOnlyReviewFields}
+                                taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+                                template={editingTemplate}
+                                isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+                                isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                                isBoundingBoxEnabled={isBoundingBoxEnabled}
+                                onSelectMetadataField={handleSelectMetadataField}
+                                selectedMetadataFieldId={selectedMetadataFieldId}
+                                trackEvent={trackEvent}
+                            />
+                        )}
+                        {showList && (
+                            <MetadataInstanceList
+                                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                                isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
+                                isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                                isBetaLanguageEnabled={isBetaLanguageEnabled}
+                                onEdit={(templateInstance, shouldEnableReviewFilter = false) => {
+                                    setEditingTemplate(templateInstance);
+                                    setIsDeleteButtonDisabled(false);
+                                    setShouldShowOnlyReviewFields(shouldEnableReviewFilter);
+                                }}
+                                onSelectMetadataField={handleSelectMetadataField}
+                                selectedMetadataFieldId={selectedMetadataFieldId}
+                                templateInstances={templateInstancesList}
+                                taxonomyNodeFetcher={taxonomyNodeFetcher}
+                                isConfidenceScoreReviewEnabled={isConfidenceScoreReviewEnabled}
+                                trackEvent={trackEvent}
+                            />
+                        )}
+                    </AutofillContextProvider>
+                </div>
+            </SidebarContent>
+        </>
     );
 }
 
