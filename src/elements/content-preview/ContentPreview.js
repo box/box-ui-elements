@@ -718,6 +718,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
             return true;
         }
 
+        // When comparison starts, isComparisonManaged flips from false to true, which causes
+        // getVersionToPreview() to switch from state.selectedVersion to previewVersion (current).
+        // That version change is synthetic — the left pane is already showing the right content —
+        // so skip the reload to avoid destroying the current pane on first compare.
+        if (!prevProps?.isComparisonManaged && this.props.isComparisonManaged) {
+            return false;
+        }
+
         if (selectedVersionId !== prevSelectedVersionId) {
             const isPreviousCurrent = fileVersionId === prevSelectedVersionId || !prevSelectedVersionId;
             const isSelectedCurrent = fileVersionId === selectedVersionId || !selectedVersionId;
@@ -1768,7 +1776,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isLoadingDeferred,
             isReloadNotificationVisible,
             isThumbnailSidebarOpen,
-            selectedVersion,
         }: State = this.state;
 
         const hostOnEditingStateChange = contentSidebarProps.metadataSidebarProps?.onEditingStateChange;
@@ -1801,7 +1808,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const errorCode = getProp(error, 'code');
         const currentExtension = getProp(file, 'id') === currentFileId ? getProp(file, 'extension') : '';
         const currentVersionId = getProp(file, 'file_version.id');
-        const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
+        const versionToPreview = this.getVersionToPreview();
+        const selectedVersionId = getProp(versionToPreview, 'id', currentVersionId);
         const versionBarVersion = this.getVersionBarVersion();
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
 
@@ -1833,7 +1841,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         contentAnswersProps={contentAnswersProps}
                                         contentOpenWithProps={contentOpenWithProps}
                                         canAnnotate={this.canAnnotate()}
-                                        selectedVersion={selectedVersion}
+                                        selectedVersion={versionToPreview}
                                     />
                                 )}
                                 <div
@@ -1996,10 +2004,14 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           // Nothing preloads the compared version, so deferring leaves this pane blank.
                           loadingIndicatorDelayMs={0}
                           onBeforeNavigate={undefined}
+                          // TODO: strip remaining host callbacks that should not fire for the compared pane:
+                          // onPreviewDestroy, insights, and preloadFromRest should also be nooped/undefined.
+                          onError={noop}
                           onLoad={noop}
                           onMetric={noop}
                           onNavigate={noop}
                           onVersionChange={noop}
+                          resin={undefined}
                           previewVersion={comparedVersion}
                           renderCustomPreview={undefined}
                           showAnnotations={false}

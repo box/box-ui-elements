@@ -3,6 +3,7 @@ import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import * as TokenService from '../../../utils/TokenService';
 import PreviewMask from '../PreviewMask';
+import PreviewHeader from '../preview-header';
 import PreviewVersionBar from '../PreviewVersionBar';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import ContentPreviewWithComparison, { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
@@ -236,13 +237,38 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return false when comparison ends while a stale selected version is held', () => {
+            // prevProps has isComparisonManaged: true (comparison was already active), current also managed.
+            // The stale selectedVersion should not trigger a reload now that the latch is held.
             const managedProps = { ...props, isComparisonManaged: true };
             wrapper = getWrapper(managedProps);
             instance = wrapper.instance();
             wrapper.setState({ file, selectedVersion: { id: '12345' } });
             instance.preview = new global.Box.Preview();
 
-            expect(instance.shouldLoadPreview(managedProps, { file, selectedVersion: { id: '12345' } })).toBe(false);
+            expect(
+                instance.shouldLoadPreview(
+                    { ...props, isComparisonManaged: true },
+                    { file, selectedVersion: { id: '12345' } },
+                ),
+            ).toBe(false);
+        });
+
+        test('should return false when comparison first starts (isComparisonManaged flips false to true)', () => {
+            // When isComparisonManaged becomes true for the first time, getVersionToPreview() switches
+            // from state.selectedVersion to previewVersion. That version change is synthetic — the pane
+            // is already showing the right content — so a reload must be suppressed.
+            const managedProps = { ...props, isComparisonManaged: true };
+            wrapper = getWrapper(managedProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '12345' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(
+                instance.shouldLoadPreview(
+                    { ...props, isComparisonManaged: false },
+                    { file, selectedVersion: { id: '12345' } },
+                ),
+            ).toBe(false);
         });
 
         test('should return true when the selected version changes and the host does not manage comparison', () => {
@@ -1216,6 +1242,41 @@ describe('elements/content-preview/ContentPreview', () => {
                 fileId: null,
             });
             expect(wrapper.getElement()).toBe(null);
+        });
+
+        test('should pass getVersionToPreview() to PreviewHeader, not raw state.selectedVersion', () => {
+            const currentVersion = { id: '1' };
+            const selectedVersion = { id: '99' };
+            const wrapper = getWrapper({
+                fileId: '123',
+                hasHeader: true,
+                isComparisonManaged: true,
+                previewVersion: currentVersion,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', file_version: currentVersion },
+                selectedVersion,
+            });
+
+            // isComparisonManaged is true, so getVersionToPreview() returns previewVersion (current),
+            // not state.selectedVersion. PreviewHeader must reflect the actually-previewed version.
+            expect(wrapper.find(PreviewHeader).prop('selectedVersion')).toEqual(currentVersion);
+        });
+
+        test('should not remount the main pane when comparedVersion changes', () => {
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+            const mainPaneKeyBefore = wrapper.childAt(0).key();
+
+            wrapper.setProps({ comparedVersion: { id: '789' } });
+
+            expect(wrapper.childAt(0).key()).toBe(mainPaneKeyBefore);
         });
     });
 
