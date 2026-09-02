@@ -409,9 +409,13 @@ const ActivityFeedV2 = ({
             colorIndex?: number;
             id: string;
             initial?: string;
+            isSelected?: boolean;
             time: number;
             type: 'annotation' | 'comment';
         }> = [];
+        const selectedFeedItemId = activeFeedEntryId
+            ? resolveFeedItemIdForEntry(filteredItems, activeFeedEntryId) ?? activeFeedEntryId
+            : null;
         for (const item of filteredItems) {
             if (item.type === 'comment' && item.annotationTimestampMs != null) {
                 const author = item.messages[0]?.author;
@@ -420,6 +424,7 @@ const ActivityFeedV2 = ({
                     colorIndex: author?.id ?? 0,
                     id: item.id,
                     initial: author?.name?.[0] ?? undefined,
+                    isSelected: item.id === selectedFeedItemId,
                     time: item.annotationTimestampMs / 1000,
                     type: 'comment',
                 });
@@ -432,6 +437,7 @@ const ActivityFeedV2 = ({
                         colorIndex: author?.id ?? 0,
                         id: item.id,
                         initial: author?.name?.[0] ?? undefined,
+                        isSelected: item.id === selectedFeedItemId,
                         time: loc.value / 1000,
                         type: 'annotation',
                     });
@@ -452,7 +458,7 @@ const ActivityFeedV2 = ({
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
             viewer.emit('comment_markers', []);
         };
-    }, [allowCommentMarkers, filteredItems, getViewer, onCommentSelect]);
+    }, [activeFeedEntryId, allowCommentMarkers, filteredItems, getViewer, onCommentSelect]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -576,6 +582,7 @@ const ActivityFeedV2 = ({
                                     onAnnotationStatusChange={onAnnotationStatusChange}
                                     onCommentCopyLink={onCommentCopyLink}
                                     onCommentDelete={onCommentDelete}
+                                    onCommentSelect={onCommentSelect}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
                                     onReplyDelete={onReplyDelete}
