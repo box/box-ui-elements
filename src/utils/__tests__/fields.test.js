@@ -99,6 +99,9 @@ describe('util/fields', () => {
             FIELD_WATERMARK_INFO,
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
             FIELD_IS_DOWNLOAD_AVAILABLE,
+            FIELD_MODIFIED_AT,
+            FIELD_MODIFIED_BY,
+            FIELD_VERSION_NUMBER,
         ]);
     });
 

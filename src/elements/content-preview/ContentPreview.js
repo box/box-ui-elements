@@ -51,6 +51,7 @@ import APIContext from '../common/api-context';
 import PreviewHeader from './preview-header';
 import PreviewMask from './PreviewMask';
 import PreviewNavigation from './PreviewNavigation';
+import PreviewVersionBar from './PreviewVersionBar';
 import Providers from '../common/Providers';
 import {
     DEFAULT_HOSTNAME_API,
@@ -664,6 +665,34 @@ class ContentPreview extends React.PureComponent<Props, State> {
     getVersionToPreview(props: Props = this.props, state: State = this.state): ?BoxItemVersion {
         const { isComparisonManaged, previewVersion } = props;
         return isComparisonManaged ? previewVersion : state.selectedVersion || previewVersion;
+    }
+
+    /**
+     * Returns the version metadata displayed above this preview pane.
+     *
+     * @return {Object|void}
+     */
+    getVersionBarVersion(): ?Object {
+        const { previewVersion } = this.props;
+        const { file } = this.state;
+
+        if (previewVersion) {
+            return previewVersion;
+        }
+
+        if (!file) {
+            return undefined;
+        }
+
+        // The file's own fields describe its current version and are more complete than the
+        // version stub embedded in it, so they win wherever the file provides them.
+        const fileVersion = file.file_version || {};
+        return {
+            ...fileVersion,
+            modified_at: file.modified_at || fileVersion.modified_at,
+            modified_by: file.modified_by || fileVersion.modified_by,
+            version_number: file.version_number || fileVersion.version_number,
+        };
     }
 
     /**
@@ -1727,6 +1756,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             resin,
             responseInterceptor,
             theme,
+            previewVersion,
         }: Props = this.props;
 
         const {
@@ -1772,6 +1802,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const currentExtension = getProp(file, 'id') === currentFileId ? getProp(file, 'extension') : '';
         const currentVersionId = getProp(file, 'file_version.id');
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
+        const versionBarVersion = this.getVersionBarVersion();
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -1811,49 +1842,54 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     })}
                                     ref={this.previewBodyRef}
                                 >
-                                    <div
-                                        className="bcpr-container"
-                                        onMouseMove={this.onMouseMove}
-                                        ref={this.containerRef}
-                                    >
-                                        {file && (
-                                            <Measure bounds onResize={this.onResize}>
-                                                {({ measureRef: previewRef }) => {
-                                                    const { renderCustomPreview, logger } = this.props;
+                                    <div className="bcpr-container">
+                                        {(isComparing || previewVersion) && (
+                                            <PreviewVersionBar isCurrent={isComparing} version={versionBarVersion} />
+                                        )}
+                                        <div
+                                            className="bcpr-viewer"
+                                            onMouseMove={this.onMouseMove}
+                                            ref={this.containerRef}
+                                        >
+                                            {file && (
+                                                <Measure bounds onResize={this.onResize}>
+                                                    {({ measureRef: previewRef }) => {
+                                                        const { renderCustomPreview, logger } = this.props;
 
-                                                    return (
-                                                        <div ref={previewRef} className="bcpr-content">
-                                                            {renderCustomPreview ? (
-                                                                <CustomPreviewWrapper
-                                                                    renderCustomPreview={renderCustomPreview}
-                                                                    fileId={currentFileId}
-                                                                    token={token}
-                                                                    apiHost={apiHost}
-                                                                    file={file}
-                                                                    logger={logger}
-                                                                    onPreviewError={this.onPreviewError}
-                                                                    onPreviewLoad={this.onPreviewLoad}
-                                                                />
-                                                            ) : null}
-                                                        </div>
-                                                    );
-                                                }}
-                                            </Measure>
-                                        )}
-                                        <PreviewMask
-                                            errorCode={errorCode}
-                                            extension={currentExtension}
-                                            isLoading={isLoading}
-                                            isLoadingDeferred={isLoadingDeferred}
-                                        />
-                                        {!isComparing && (
-                                            <PreviewNavigation
-                                                collection={collection}
-                                                currentIndex={this.getFileIndex()}
-                                                onNavigateLeft={this.navigateLeft}
-                                                onNavigateRight={this.navigateRight}
+                                                        return (
+                                                            <div ref={previewRef} className="bcpr-content">
+                                                                {renderCustomPreview ? (
+                                                                    <CustomPreviewWrapper
+                                                                        renderCustomPreview={renderCustomPreview}
+                                                                        fileId={currentFileId}
+                                                                        token={token}
+                                                                        apiHost={apiHost}
+                                                                        file={file}
+                                                                        logger={logger}
+                                                                        onPreviewError={this.onPreviewError}
+                                                                        onPreviewLoad={this.onPreviewLoad}
+                                                                    />
+                                                                ) : null}
+                                                            </div>
+                                                        );
+                                                    }}
+                                                </Measure>
+                                            )}
+                                            <PreviewMask
+                                                errorCode={errorCode}
+                                                extension={currentExtension}
+                                                isLoading={isLoading}
+                                                isLoadingDeferred={isLoadingDeferred}
                                             />
-                                        )}
+                                            {!isComparing && (
+                                                <PreviewNavigation
+                                                    collection={collection}
+                                                    currentIndex={this.getFileIndex()}
+                                                    onNavigateLeft={this.navigateLeft}
+                                                    onNavigateRight={this.navigateRight}
+                                                />
+                                            )}
+                                        </div>
                                     </div>
                                     {isComparing && <div className="bcpr-compared-slot" ref={comparedSlotRef} />}
                                     {file && !hideSidebar && (
