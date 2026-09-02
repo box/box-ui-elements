@@ -135,6 +135,8 @@ type Props = {
     hasHeader?: boolean,
     hasProviders?: boolean,
     hideSidebar?: boolean,
+    // When true, selectedVersion changes do not reload this viewer (host owns version display).
+    disableVersionChangeReload?: boolean,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -144,6 +146,8 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
+    // Rendered between the current viewer and the sidebar inside .bcpr-body.
+    middlePanel?: React.Node,
     onAnnotator: Function,
     onAnnotatorEvent: Function,
     onBeforeNavigate?: (targetFileId: string) => boolean | Promise<boolean>,
@@ -341,6 +345,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableBoundingBoxHighlights: false,
         hasHeader: false,
         hideSidebar: false,
+        disableVersionChangeReload: false,
         language: DEFAULT_LOCALE,
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
@@ -649,6 +654,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevState: State): boolean {
+        const { disableVersionChangeReload } = this.props;
         const { file, selectedVersion }: State = this.state;
         const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
         const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
@@ -665,6 +671,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         if (selectedVersionId !== prevSelectedVersionId) {
+            if (disableVersionChangeReload) {
+                return false;
+            }
+
             const isPreviousCurrent = fileVersionId === prevSelectedVersionId || !prevSelectedVersionId;
             const isSelectedCurrent = fileVersionId === selectedVersionId || !selectedVersionId;
 
@@ -1671,6 +1681,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             hasHeader,
             hasProviders,
             hideSidebar,
+            middlePanel,
             history,
             isLarge,
             isVeryLarge,
@@ -1761,7 +1772,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         selectedVersion={selectedVersion}
                                     />
                                 )}
-                                <div className="bcpr-body" ref={this.previewBodyRef}>
+                                <div
+                                    className={classNames('bcpr-body', {
+                                        'bcpr-body--with-middle-panel': !!middlePanel,
+                                    })}
+                                    ref={this.previewBodyRef}
+                                >
                                     <div
                                         className="bcpr-container"
                                         onMouseMove={this.onMouseMove}
@@ -1804,6 +1820,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             onNavigateRight={this.navigateRight}
                                         />
                                     </div>
+                                    {middlePanel}
                                     {file && !hideSidebar && (
                                         <LoadableSidebar
                                             {...mergedContentSidebarProps}

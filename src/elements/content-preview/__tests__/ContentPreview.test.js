@@ -223,6 +223,15 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.shouldLoadPreview({ file })).toBe(true);
             expect(instance.previewLibraryLoaded).toBe(true);
         });
+
+        test('should return false on selectedVersion change when disableVersionChangeReload is true', () => {
+            wrapper.setProps({ disableVersionChangeReload: true });
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(false);
+        });
+
+        test('should still return true on selectedVersion change when disableVersionChangeReload is omitted', () => {
+            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+        });
     });
 
     describe('canDownload()', () => {
@@ -2562,6 +2571,41 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.setProps({ hideSidebar: false });
 
             bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.children().length).toBe(2);
+        });
+    });
+
+    describe('middlePanel prop', () => {
+        const middlePanel = <div className="middle-panel-content">compared pane</div>;
+
+        test('should render middlePanel between the viewer and sidebar', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                middlePanel,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--with-middle-panel')).toBe(true);
+            expect(bodyDiv.children().length).toBe(3);
+            expect(bodyDiv.children().at(0).hasClass('bcpr-container')).toBe(true);
+            expect(bodyDiv.children().at(1).hasClass('middle-panel-content')).toBe(true);
+        });
+
+        test('should not add the middle-panel body class when middlePanel is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--with-middle-panel')).toBe(false);
             expect(bodyDiv.children().length).toBe(2);
         });
     });
