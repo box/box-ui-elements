@@ -223,15 +223,6 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.shouldLoadPreview({ file })).toBe(true);
             expect(instance.previewLibraryLoaded).toBe(true);
         });
-
-        test('should return false on selectedVersion change when disableVersionChangeReload is true', () => {
-            wrapper.setProps({ disableVersionChangeReload: true });
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(false);
-        });
-
-        test('should still return true on selectedVersion change when disableVersionChangeReload is omitted', () => {
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
-        });
     });
 
     describe('canDownload()', () => {

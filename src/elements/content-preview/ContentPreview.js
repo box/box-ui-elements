@@ -135,8 +135,6 @@ type Props = {
     hasHeader?: boolean,
     hasProviders?: boolean,
     hideSidebar?: boolean,
-    // When true, selectedVersion changes do not reload this viewer (host owns version display).
-    disableVersionChangeReload?: boolean,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -344,7 +342,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableBoundingBoxHighlights: false,
         hasHeader: false,
         hideSidebar: false,
-        disableVersionChangeReload: false,
         language: DEFAULT_LOCALE,
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
@@ -653,7 +650,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevState: State): boolean {
-        const { disableVersionChangeReload } = this.props;
         const { file, selectedVersion }: State = this.state;
         const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
         const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
@@ -670,10 +666,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         if (selectedVersionId !== prevSelectedVersionId) {
-            if (disableVersionChangeReload) {
-                return false;
-            }
-
             const isPreviousCurrent = fileVersionId === prevSelectedVersionId || !prevSelectedVersionId;
             const isSelectedCurrent = fileVersionId === selectedVersionId || !selectedVersionId;
 
@@ -1028,7 +1020,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             features,
             fileOptions,
             comparedPanel,
-            disableVersionChangeReload,
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
