@@ -620,7 +620,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         } else if (this.shouldLoadPreview(prevProps, prevState)) {
             this.destroyPreview(false);
             if (!renderCustomPreview) {
-                this.setState({ isLoading: true });
+                this.setState({ error: this.npmPreviewLoadFailed ? this.state.error : undefined, isLoading: true });
                 this.loadPreview();
             }
         } else if (hasTokenChanged) {
@@ -690,11 +690,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         // When comparison starts, isComparisonManaged flips from false to true, which causes
-        // getVersionToPreview() to switch from state.selectedVersion to previewVersion (current).
-        // That version change is synthetic — the left pane is already showing the right content —
-        // so skip the reload to avoid destroying the current pane on first compare.
+        // getVersionToPreview() to switch from state.selectedVersion to previewVersion. Only
+        // suppress the reload when the effective version hasn't actually changed — i.e. the pane
+        // is already showing the right content. If the user was on a historical version before
+        // comparison started, the IDs differ and we must reload to current.
         if (!prevProps?.isComparisonManaged && this.props.isComparisonManaged) {
-            return false;
+            return prevSelectedVersionId !== selectedVersionId;
         }
 
         if (selectedVersionId !== prevSelectedVersionId) {

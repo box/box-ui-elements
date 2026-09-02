@@ -252,10 +252,21 @@ describe('elements/content-preview/ContentPreview', () => {
             ).toBe(false);
         });
 
-        test('should return false when comparison first starts (isComparisonManaged flips false to true)', () => {
-            // When isComparisonManaged becomes true for the first time, getVersionToPreview() switches
-            // from state.selectedVersion to previewVersion. That version change is synthetic — the pane
-            // is already showing the right content — so a reload must be suppressed.
+        test('should return false when comparison first starts and the effective version has not changed', () => {
+            // User was on the current version with no selectedVersion set; previewVersion is also
+            // undefined (current). Both resolve to the same ID so no reload is needed.
+            const managedProps = { ...props, isComparisonManaged: true };
+            wrapper = getWrapper(managedProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview({ ...props, isComparisonManaged: false }, { file })).toBe(false);
+        });
+
+        test('should return true when comparison first starts and the pane was on a historical version', () => {
+            // User was on v12345 (non-current); comparison pins the left pane to previewVersion
+            // (current, undefined). IDs differ so a real reload is required to show current.
             const managedProps = { ...props, isComparisonManaged: true };
             wrapper = getWrapper(managedProps);
             instance = wrapper.instance();
@@ -267,7 +278,7 @@ describe('elements/content-preview/ContentPreview', () => {
                     { ...props, isComparisonManaged: false },
                     { file, selectedVersion: { id: '12345' } },
                 ),
-            ).toBe(false);
+            ).toBe(true);
         });
 
         test('should return true when the selected version changes and the host does not manage comparison', () => {
@@ -1406,6 +1417,18 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.loadPreview).toHaveBeenCalled();
             expect(instance.destroyPreview).toHaveBeenCalledWith(false);
             expect(wrapper.state('isLoading')).toBe(true);
+        });
+
+        test('should clear a previous error when a version change triggers a reload', () => {
+            // Simulate a prior preview error followed by the user selecting a new version.
+            // The error must be cleared before the reload so a successful load does not
+            // retain the stale error in PreviewMask.
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            wrapper.setState({ error: { code: 'some_error' } });
+
+            wrapper.setProps({ foo: 'bar' });
+
+            expect(wrapper.state('error')).toBeUndefined();
         });
 
         test('should update the preview with the new token if it changes', () => {
