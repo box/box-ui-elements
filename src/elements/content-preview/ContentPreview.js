@@ -16,6 +16,7 @@ import omit from 'lodash/omit';
 import setProp from 'lodash/set';
 import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
+import { createPortal } from 'react-dom';
 import Measure from 'react-measure';
 import { withRouter } from 'react-router-dom';
 import type { ContextRouter } from 'react-router-dom';
@@ -135,6 +136,9 @@ type Props = {
     hasHeader?: boolean,
     hasProviders?: boolean,
     hideSidebar?: boolean,
+    isComparing?: boolean,
+    isComparisonManaged?: boolean,
+    comparedSlotRef?: (?HTMLDivElement) => mixed,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -159,6 +163,7 @@ type Props = {
     },
     previewLibraryVersion: string,
     previewMode?: 'default' | 'shared_file' | 'shared_folder' | 'editable_shared_file' | 'inline_feed',
+    previewVersion?: BoxItemVersion,
     // npm path only: URL of the pdfjs worker file, resolved by the consumer's bundler.
     // Passed to box-content-preview in the show() options as `pdfjs.workerSrc`.
     pdfjsWorkerSrc?: string,
@@ -277,6 +282,8 @@ const LoadableSidebar = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
 });
 
+const EMPTY_COLLECTION = [];
+
 class ContentPreview extends React.PureComponent<Props, State> {
     id: string;
 
@@ -341,6 +348,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         enableBoundingBoxHighlights: false,
         hasHeader: false,
         hideSidebar: false,
+        isComparing: false,
+        isComparisonManaged: false,
         language: DEFAULT_LOCALE,
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
@@ -608,7 +617,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 this.setState({ isLoading: true, selectedVersion: undefined });
             }
             this.fetchFile(currentFileId);
-        } else if (this.shouldLoadPreview(prevState)) {
+        } else if (this.shouldLoadPreview(prevProps, prevState)) {
             this.destroyPreview(false);
             if (!renderCustomPreview) {
                 this.setState({ isLoading: true });
@@ -643,16 +652,32 @@ class ContentPreview extends React.PureComponent<Props, State> {
     }
 
     /**
+     * Returns the version this instance previews.
+     *
+     * Under a comparison-managed host the compared instance renders whichever version the user
+     * selects, so this instance ignores its own selection and stays on the file's current version.
+     *
+     * @param {Props} props - Props to derive the version from
+     * @param {State} state - State to derive the version from
+     * @return {BoxItemVersion | void}
+     */
+    getVersionToPreview(props: Props = this.props, state: State = this.state): ?BoxItemVersion {
+        const { isComparisonManaged, previewVersion } = props;
+        return isComparisonManaged ? previewVersion : state.selectedVersion || previewVersion;
+    }
+
+    /**
      * Returns whether or not preview should be loaded.
      *
+     * @param {Props} prevProps - Previous props
      * @param {State} prevState - Previous state
      * @return {boolean}
      */
-    shouldLoadPreview(prevState: State): boolean {
-        const { file, selectedVersion }: State = this.state;
-        const { file: prevFile, selectedVersion: prevSelectedVersion }: State = prevState;
-        const prevSelectedVersionId = getProp(prevSelectedVersion, 'id');
-        const selectedVersionId = getProp(selectedVersion, 'id');
+    shouldLoadPreview(prevProps: Props, prevState: State): boolean {
+        const { file }: State = this.state;
+        const { file: prevFile }: State = prevState;
+        const prevSelectedVersionId = getProp(this.getVersionToPreview(prevProps, prevState), 'id');
+        const selectedVersionId = getProp(this.getVersionToPreview(), 'id');
         const prevFileVersionId = getProp(prevFile, 'file_version.id');
         const fileVersionId = getProp(file, 'file_version.id');
         let loadPreview = false;
@@ -1018,18 +1043,23 @@ class ContentPreview extends React.PureComponent<Props, State> {
             enableBoundingBoxHighlights,
             features,
             fileOptions,
+            comparedSlotRef,
+            isComparing,
+            isComparisonManaged,
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
             preloadStatus,
             previewExperiences,
             previewMode,
+            previewVersion,
             sharedLinkAuth,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
             ...rest
         }: Props = this.props;
-        const { file, selectedVersion, startAt }: State = this.state;
+        const { file, startAt }: State = this.state;
+        const versionToPreview = this.getVersionToPreview();
 
         // Early return: Box.Preview initialization not needed when using custom render function.
         // Custom content will be rendered directly in the Measure block (see render method)
@@ -1052,8 +1082,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const fileOpts = { ...fileOptions };
         const token = typedId => TokenService.getReadTokens(typedId, tokenOrTokenFunction);
 
-        if (selectedVersion) {
-            setProp(fileOpts, [fileId, 'fileVersionId'], selectedVersion.id);
+        if (versionToPreview) {
+            setProp(fileOpts, [fileId, 'fileVersionId'], versionToPreview.id);
             setProp(fileOpts, [fileId, 'currentFileVersionId'], getProp(file, 'file_version.id'));
         }
 
@@ -1375,6 +1405,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     navigateLeft = () => {
+        if (this.props.isComparing) {
+            return;
+        }
+
         const currentIndex = this.getFileIndex();
         const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
         if (newIndex !== currentIndex) {
@@ -1389,7 +1423,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     navigateRight = () => {
-        const { collection }: Props = this.props;
+        const { collection, isComparing }: Props = this.props;
+        if (isComparing) {
+            return;
+        }
+
         const currentIndex = this.getFileIndex();
         const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
         if (newIndex !== currentIndex) {
@@ -1465,7 +1503,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys, renderCustomPreview }: Props = this.props;
+        const { isComparing, useHotkeys, renderCustomPreview }: Props = this.props;
 
         // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
         // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
@@ -1491,12 +1529,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (!consumed) {
             switch (key) {
                 case 'ArrowLeft':
-                    this.navigateLeft();
-                    consumed = true;
+                    if (!isComparing) {
+                        this.navigateLeft();
+                        consumed = true;
+                    }
                     break;
                 case 'ArrowRight':
-                    this.navigateRight();
-                    consumed = true;
+                    if (!isComparing) {
+                        this.navigateRight();
+                        consumed = true;
+                    }
                     break;
                 default:
                 // no-op
@@ -1560,10 +1602,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload: boolean = false) => {
         const { location = {} } = target;
-        const { file, selectedVersion } = this.state;
+        const { file } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');
         const currentFileVersionId = getProp(file, 'file_version.id');
-        const currentPreviewFileVersionId = getProp(selectedVersion, 'id', currentFileVersionId);
+        const currentPreviewFileVersionId = getProp(this.getVersionToPreview(), 'id', currentFileVersionId);
         const unit = startAtTypes[location.type];
         const viewer = this.getViewer();
 
@@ -1671,6 +1713,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             hasHeader,
             hasProviders,
             hideSidebar,
+            comparedSlotRef,
+            isComparing,
             history,
             isLarge,
             isVeryLarge,
@@ -1761,7 +1805,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         selectedVersion={selectedVersion}
                                     />
                                 )}
-                                <div className="bcpr-body" ref={this.previewBodyRef}>
+                                <div
+                                    className={classNames('bcpr-body', {
+                                        'bcpr-body--comparing': isComparing,
+                                    })}
+                                    ref={this.previewBodyRef}
+                                >
                                     <div
                                         className="bcpr-container"
                                         onMouseMove={this.onMouseMove}
@@ -1797,13 +1846,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             isLoading={isLoading}
                                             isLoadingDeferred={isLoadingDeferred}
                                         />
-                                        <PreviewNavigation
-                                            collection={collection}
-                                            currentIndex={this.getFileIndex()}
-                                            onNavigateLeft={this.navigateLeft}
-                                            onNavigateRight={this.navigateRight}
-                                        />
+                                        {!isComparing && (
+                                            <PreviewNavigation
+                                                collection={collection}
+                                                currentIndex={this.getFileIndex()}
+                                                onNavigateLeft={this.navigateLeft}
+                                                onNavigateRight={this.navigateRight}
+                                            />
+                                        )}
                                     </div>
+                                    {isComparing && <div className="bcpr-compared-slot" ref={comparedSlotRef} />}
                                     {file && !hideSidebar && (
                                         <LoadableSidebar
                                             {...mergedContentSidebarProps}
@@ -1845,10 +1897,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
     }
 }
 
-export type ContentPreviewProps = Props;
+export type ContentPreviewProps = Props & {
+    comparedVersion?: BoxItemVersion,
+};
 export type { ContentPreviewChildProps };
 export { ContentPreview as ContentPreviewComponent };
-export default flow([
+
+const ConnectedContentPreview = flow([
     makeResponsive,
     withAnnotatorContext,
     withAnnotations,
@@ -1861,3 +1916,64 @@ export default flow([
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
 ])(ContentPreview);
+
+const MemoConnectedContentPreview = React.memo(ConnectedContentPreview);
+
+function ContentPreviewWithComparison(props: ContentPreviewProps) {
+    const { comparedVersion, ...rest } = props;
+    const [comparedSlot, setComparedSlot] = React.useState<?HTMLDivElement>(null);
+    const comparedVersionId = comparedVersion && comparedVersion.id;
+    const isComparing = comparedVersionId != null && comparedVersionId !== '';
+
+    // Latched, because comparison ending does not hand version selection back: once a host compares,
+    // every selection belongs to the compared instance. Without the latch the current instance would
+    // reload for the selection it still holds once isComparing goes back to false.
+    const hasComparedRef = React.useRef(false);
+    if (isComparing) {
+        hasComparedRef.current = true;
+    }
+
+    return (
+        <React.Fragment>
+            <MemoConnectedContentPreview
+                {...rest}
+                collection={isComparing ? EMPTY_COLLECTION : rest.collection}
+                comparedSlotRef={setComparedSlot}
+                isComparing={isComparing}
+                isComparisonManaged={hasComparedRef.current}
+            />
+            {comparedSlot && isComparing
+                ? createPortal(
+                      <MemoConnectedContentPreview
+                          {...rest}
+                          key={comparedVersionId}
+                          autoFocus={false}
+                          boxAnnotations={undefined}
+                          collection={EMPTY_COLLECTION}
+                          componentRef={undefined}
+                          comparedSlotRef={undefined}
+                          hasHeader={false}
+                          hideSidebar
+                          isComparing={false}
+                          isComparisonManaged={false}
+                          // Hosts defer the indicator to let a preloaded image show through instead.
+                          // Nothing preloads the compared version, so deferring leaves this pane blank.
+                          loadingIndicatorDelayMs={0}
+                          onBeforeNavigate={undefined}
+                          onLoad={noop}
+                          onMetric={noop}
+                          onNavigate={noop}
+                          onVersionChange={noop}
+                          previewVersion={comparedVersion}
+                          renderCustomPreview={undefined}
+                          showAnnotations={false}
+                          showAnnotationsControls={false}
+                      />,
+                      comparedSlot,
+                  )
+                : null}
+        </React.Fragment>
+    );
+}
+
+export default ContentPreviewWithComparison;
