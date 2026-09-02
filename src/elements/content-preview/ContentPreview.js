@@ -51,7 +51,6 @@ import APIContext from '../common/api-context';
 import PreviewHeader from './preview-header';
 import PreviewMask from './PreviewMask';
 import PreviewNavigation from './PreviewNavigation';
-import PreviewVersionBar from './PreviewVersionBar';
 import Providers from '../common/Providers';
 import {
     DEFAULT_HOSTNAME_API,
@@ -672,29 +671,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
      *
      * @return {Object|void}
      */
-    getVersionBarVersion(): ?Object {
-        const { previewVersion } = this.props;
-        const { file } = this.state;
-
-        if (previewVersion) {
-            return previewVersion;
-        }
-
-        if (!file) {
-            return undefined;
-        }
-
-        // The file's own fields describe its current version and are more complete than the
-        // version stub embedded in it, so they win wherever the file provides them.
-        const fileVersion = file.file_version || {};
-        return {
-            ...fileVersion,
-            modified_at: file.modified_at || fileVersion.modified_at,
-            modified_by: file.modified_by || fileVersion.modified_by,
-            version_number: file.version_number || fileVersion.version_number,
-        };
-    }
-
     /**
      * Returns whether or not preview should be loaded.
      *
@@ -1764,7 +1740,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             resin,
             responseInterceptor,
             theme,
-            previewVersion,
         }: Props = this.props;
 
         const {
@@ -1810,7 +1785,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const currentVersionId = getProp(file, 'file_version.id');
         const versionToPreview = this.getVersionToPreview();
         const selectedVersionId = getProp(versionToPreview, 'id', currentVersionId);
-        const versionBarVersion = this.getVersionBarVersion();
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -1851,9 +1825,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     ref={this.previewBodyRef}
                                 >
                                     <div className="bcpr-container">
-                                        {(isComparing || previewVersion) && (
-                                            <PreviewVersionBar isCurrent={isComparing} version={versionBarVersion} />
-                                        )}
                                         <div
                                             className="bcpr-viewer"
                                             onMouseMove={this.onMouseMove}
