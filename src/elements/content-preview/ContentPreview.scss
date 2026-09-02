@@ -10,8 +10,8 @@
         flex: 1;
         min-height: 0; // Required to prevent overflow of child flex elements
 
-        // When a middle panel is injected, share space equally between viewer and that panel
-        &--with-middle-panel .bcpr-container {
+        // When a compared panel is present, give the current viewer a 50% flex-basis and allow shrink
+        &--with-compared-panel .bcpr-container {
             flex: 1 1 50%;
             min-width: 0;
         }
