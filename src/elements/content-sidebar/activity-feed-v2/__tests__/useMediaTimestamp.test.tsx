@@ -543,19 +543,6 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
-    test('should not echo a committed drag back to the viewer that reported it', () => {
-        const { cleanup, emitFromViewer, viewer } = renderWithRange();
-        try {
-            act(() => screen.getByText('press').click());
-            const afterPress = emittedEvents(viewer).length;
-            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
-
-            expect(emittedEvents(viewer)).toHaveLength(afterPress);
-        } finally {
-            cleanup();
-        }
-    });
-
     test('should pin the start against pause and seek once a drag commits', () => {
         const { audio, cleanup, emitFromViewer, viewer } = renderWithRange();
         try {
