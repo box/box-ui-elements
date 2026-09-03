@@ -625,6 +625,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.updatePreviewToken();
         }
 
+        // The click that starts comparison writes selectedVersion while isComparing is still
+        // false. Drop it so the left pane stays on current when comparison ends.
+        if (!prevProps.isComparing && this.props.isComparing && this.state.selectedVersion) {
+            this.setState({ selectedVersion: undefined });
+        }
+
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
         }
@@ -1561,9 +1567,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
         onVersionChange(version, additionalVersionInfo);
-        this.setState({
-            selectedVersion: version,
-        });
+        // Host still gets the event so the compared pane can follow comparedVersion.
+        // The left pane stays on current for the whole comparison session.
+        if (!this.props.isComparing) {
+            this.setState({
+                selectedVersion: version,
+            });
+        }
     };
 
     emitScrollToAnnotation = (id: string, target: Target) => {

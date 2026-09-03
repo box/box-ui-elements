@@ -246,6 +246,15 @@ describe('elements/content-preview/ContentPreview', () => {
             ).toBe(true);
         });
 
+        test('should return false when comparison ends after selectedVersion was cleared', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview({ ...props, isComparing: true }, { file })).toBe(false);
+        });
+
         test('should return false when comparison first starts and the effective version has not changed', () => {
             // User was on the current version with no selectedVersion set; previewVersion is also
             // undefined (current). Both resolve to the same ID so no reload is needed.
@@ -1455,6 +1464,15 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(instance.preview.updateExperiences).toBeCalledTimes(1);
         });
+
+        test('should clear selectedVersion when comparison starts', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+            wrapper.setState({ selectedVersion: { id: '12345' } });
+
+            wrapper.setProps({ isComparing: true });
+
+            expect(wrapper.state('selectedVersion')).toBeUndefined();
+        });
     });
 
     describe('getDerivedStateFromProps()', () => {
@@ -1696,6 +1714,32 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.componentWillUnmount();
             expect(instance.api.destroy).toHaveBeenCalledWith(false);
             expect(instance.destroyPreview).toHaveBeenCalled();
+        });
+    });
+
+    describe('onVersionChange()', () => {
+        test('should update selectedVersion when not comparing', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ onVersionChange });
+            const instance = wrapper.instance();
+            const version = { id: '12345' };
+
+            instance.onVersionChange(version);
+
+            expect(onVersionChange).toHaveBeenCalledWith(version, {});
+            expect(wrapper.state('selectedVersion')).toEqual(version);
+        });
+
+        test('should notify the host but not update selectedVersion when comparing', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ isComparing: true, onVersionChange });
+            const instance = wrapper.instance();
+            const version = { id: '12345' };
+
+            instance.onVersionChange(version);
+
+            expect(onVersionChange).toHaveBeenCalledWith(version, {});
+            expect(wrapper.state('selectedVersion')).toBeUndefined();
         });
     });
 
