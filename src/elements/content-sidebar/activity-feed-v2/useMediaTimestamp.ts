@@ -82,12 +82,12 @@ export const useMediaTimestamp = (
 ): UseMediaTimestampResult => {
     const [isPressed, setIsPressed] = React.useState(false);
     const [timestampMs, setTimestampMs] = React.useState(0);
-    const [timestampEndMs, setTimestampEndMs] = React.useState<number | undefined>(undefined);
     const isPressedRef = React.useRef(isPressed);
     const isLoadingRef = React.useRef(false);
 
-    const isRangePinnedRef = React.useRef(false);
     const isRangeEnabled = enabled && isAudioPlayerV2;
+    const isRangePinnedRef = React.useRef(false);
+    const [timestampEndMs, setTimestampEndMs] = React.useState<number | undefined>(undefined);
 
     /** Tells the viewer to show range handles at these positions. An absent end draws them collapsed. */
     const emitDraft = React.useCallback(
@@ -180,8 +180,7 @@ export const useMediaTimestamp = (
             if (isPressedRef.current && attached) {
                 const capturedMs = captureCurrentMs(attached);
                 setTimestampMs(capturedMs);
-                // Update the position of handles to the current time.
-                emitDraft(capturedMs);
+                emitDraft(capturedMs); // Update position of handles to the current paused/seeked time.
             }
         };
 
@@ -262,8 +261,7 @@ export const useMediaTimestamp = (
             if (!change || !isPressedRef.current) {
                 return;
             }
-            isRangePinnedRef.current = true;
-            // Nothing is emitted back: the viewer reported this range, so it is already drawing it.
+            isRangePinnedRef.current = change.endMs !== undefined;
             setTimestampMs(change.startMs);
             setTimestampEndMs(change.endMs);
         };
