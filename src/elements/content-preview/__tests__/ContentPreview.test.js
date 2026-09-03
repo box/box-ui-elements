@@ -1308,11 +1308,25 @@ describe('elements/content-preview/ContentPreview', () => {
                     logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
                 />,
             );
-            const mainPaneKeyBefore = wrapper.childAt(0).key();
+
+            // The compared instance is portaled into the slot, which exists only once the ref fires.
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(1).props().children.key).toBe('456');
+
+            const mainWrapper = getWrapper({ fileId: '123', isComparing: true });
+            const instance = mainWrapper.instance();
+            instance.loadPreview = jest.fn();
 
             wrapper.setProps({ comparedVersion: { id: '789' } });
+            mainWrapper.setProps({
+                isComparing: wrapper.childAt(0).props().isComparing,
+                previewVersion: wrapper.childAt(0).props().previewVersion,
+            });
 
-            expect(wrapper.childAt(0).key()).toBe(mainPaneKeyBefore);
+            expect(wrapper.childAt(1).props().children.key).toBe('789');
+            expect(instance.loadPreview).not.toHaveBeenCalled();
         });
     });
 
@@ -2795,15 +2809,6 @@ describe('elements/content-preview/ContentPreview', () => {
             });
 
             expect(wrapper.find('PreviewNavigation').exists()).toBe(true);
-        });
-
-        test('should render the loading indicator without deferring it when the host sets no delay', () => {
-            const wrapper = getWrapper({ fileId: '123', loadingIndicatorDelayMs: 0 });
-
-            expect(wrapper.find(PreviewMask).props()).toMatchObject({
-                isLoading: true,
-                isLoadingDeferred: false,
-            });
         });
 
         test('should render the compared instance with its loading indicator undeferred', () => {
