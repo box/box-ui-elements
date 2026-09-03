@@ -11,6 +11,8 @@ import noop from 'lodash/noop';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
+import { isListNode } from '@box/threaded-annotations';
+import type { BlockNodeV2, ParagraphNodeV2 } from '@box/threaded-annotations';
 import type { UserContactType } from '@box/user-selector';
 
 import TaskModalV2 from './task-modal-v2';
@@ -18,10 +20,11 @@ import TaskModalV2 from './task-modal-v2';
 import FeedItemRow from './FeedItemRow';
 import { resolveFeedItemIdForEntry, serializeEditorContent } from './helpers';
 import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
+import { buildTimestampMarkup } from './timestampMarkup';
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useTimeFormat } from './useTimeFormat';
-import { useVideoTimestamp } from './useVideoTimestamp';
+import { useMediaTimestamp } from './useMediaTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
 import type { ActivityFeedV2Props, TransformedFeedItem } from './types';
@@ -38,6 +41,20 @@ import messages from '../messages';
 
 import './ActivityFeedV2.scss';
 
+const hasMentionInParagraph = (paragraph: ParagraphNodeV2, userId: string): boolean =>
+    (paragraph.content ?? []).some(node => node.type === 'mention' && node.attrs.mentionedUserId === userId);
+
+const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): boolean =>
+    (blocks ?? []).some(block => {
+        if (block.type === 'paragraph') {
+            return hasMentionInParagraph(block, userId);
+        }
+        if (!isListNode(block)) {
+            return false;
+        }
+        return (block.content ?? []).some(item => hasMentionInBlocks(item.content, userId));
+    });
+
 const ActivityFeedV2 = ({
     activeFeedEntryId,
     createTask,
@@ -50,7 +67,9 @@ const ActivityFeedV2 = ({
     getTaskCollaborators,
     getViewer,
     hasTasks = true,
+    isAudioPlayerV2Enabled = false,
     isDisabled = false,
+    isRichTextEnabled = false,
     isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
@@ -275,13 +294,13 @@ const ActivityFeedV2 = ({
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
         return feedItems.reduce<TransformedFeedItem[]>((acc, item) => {
-            const transformed = transformFeedItem(item, currentUserId, avatarUrls);
+            const transformed = transformFeedItem(item, currentUserId, avatarUrls, isRichTextEnabled);
             if (transformed) {
                 acc.push(transformed);
             }
             return acc;
         }, []);
-    }, [avatarUrls, currentUserId, feedItems]);
+    }, [avatarUrls, currentUserId, feedItems, isRichTextEnabled]);
 
     const filteredItems = React.useMemo(() => {
         const filtered = transformedItems.filter(item => {
@@ -291,12 +310,7 @@ const ActivityFeedV2 = ({
             if (showOnlyMentionsMe && currentUserId) {
                 if (item.type === 'comment' || item.type === 'annotation') {
                     const hasMention = item.messages.some(msg =>
-                        msg.message?.content?.some(
-                            (paragraph: { content?: Array<{ type: string; attrs?: { mentionedUserId?: string } }> }) =>
-                                paragraph.content?.some(
-                                    node => node.type === 'mention' && node.attrs?.mentionedUserId === currentUserId,
-                                ),
-                        ),
+                        hasMentionInBlocks(msg.message?.content, currentUserId),
                     );
                     if (!hasMention) return false;
                 }
@@ -365,23 +379,30 @@ const ActivityFeedV2 = ({
     }, [currentUserId, filteredItems, scrollHandle]);
 
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
+    const isAudio = file?.extension ? FILE_EXTENSIONS.audio.includes(file.extension) : false;
     const fileVersionId = file?.file_version?.id;
     const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+    const allowAudioTimestamps =
+        isAudio && isTimestampedCommentsEnabled && isAudioPlayerV2Enabled && Boolean(fileVersionId);
+    const allowMediaTimestamps = allowVideoTimestamps || allowAudioTimestamps;
     const { timeFormat, fps } = useTimeFormat(isVideo);
 
     const {
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
+        timestampEndMs,
         timestampMs,
-    } = useVideoTimestamp(allowVideoTimestamps, timeFormat, fps);
+    } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps);
 
-    const editorVideoTimestamp = allowVideoTimestamps
+    const editorMediaTimestamp = allowMediaTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
+    const allowCommentMarkers = isVideo || (isAudio && isAudioPlayerV2Enabled);
+
     React.useEffect(() => {
-        if (!getViewer || !isVideo) return undefined;
+        if (!getViewer || !allowCommentMarkers) return undefined;
         const viewer = getViewer();
         if (!viewer) return undefined;
 
@@ -433,16 +454,20 @@ const ActivityFeedV2 = ({
             viewer.removeListener('comment_marker_select', handleMarkerSelect);
             viewer.emit('comment_markers', []);
         };
-    }, [filteredItems, getViewer, isVideo, onCommentSelect]);
+    }, [allowCommentMarkers, filteredItems, getViewer, onCommentSelect]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
-            const serialized = serializeEditorContent(content);
+            const serialized = serializeEditorContent(content, isRichTextEnabled);
             if (!serialized || !serialized.text) return;
             const text =
-                allowVideoTimestamps && isTimestampPressed && fileVersionId
-                    ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
+                allowMediaTimestamps && isTimestampPressed && fileVersionId
+                    ? `${buildTimestampMarkup({
+                          endMs: timestampEndMs,
+                          startMs: timestampMs,
+                          versionId: fileVersionId,
+                      })} ${serialized.text}`
                     : serialized.text;
             try {
                 const snapshot = new Set(filteredItems.map(item => item.id));
@@ -453,7 +478,16 @@ const ActivityFeedV2 = ({
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
+        [
+            allowMediaTimestamps,
+            filteredItems,
+            fileVersionId,
+            isRichTextEnabled,
+            isTimestampPressed,
+            onCommentCreate,
+            timestampEndMs,
+            timestampMs,
+        ],
     );
 
     const handleCreateTask = React.useCallback(
@@ -538,7 +572,9 @@ const ActivityFeedV2 = ({
                                     activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
+                                    getViewer={getViewer}
                                     isDisabled={isDisabled}
+                                    isRichTextEnabled={isRichTextEnabled}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}
@@ -570,9 +606,10 @@ const ActivityFeedV2 = ({
                     <div className="bcs-NewActivityFeed-editor">
                         <ActivityFeed.Editor
                             disableComponent={isDisabled || !currentUser}
+                            isRichTextEnabled={isRichTextEnabled}
                             onPost={handleCommentPost}
                             userSelectorProps={userSelectorProps}
-                            videoTimestamp={editorVideoTimestamp}
+                            videoTimestamp={editorMediaTimestamp}
                         />
                     </div>
                 )}

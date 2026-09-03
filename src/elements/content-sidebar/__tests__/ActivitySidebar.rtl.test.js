@@ -5,6 +5,7 @@ import { render, screen } from '../../../test-utils/testing-library';
 import { ActivitySidebarComponent } from '../ActivitySidebar';
 import { formattedReplies } from '../fixtures';
 import ActivityFeed from '../activity-feed';
+import ActivityFeedV2 from '../activity-feed-v2';
 import { ViewType, FeedEntryType } from '../../common/types/SidebarNavigation';
 
 // Mock generatePath from react-router-dom
@@ -535,6 +536,55 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             renderActivitySidebar();
             expect(screen.getByTestId('activity-feed-mock')).toBeInTheDocument();
             expect(screen.queryByTestId('activity-feed-adapter-v2')).not.toBeInTheDocument();
+        });
+
+        test('should pass isAudioPlayerV2Enabled to ActivityFeedV2 when audioPlayerV2 is enabled', () => {
+            renderActivitySidebar({
+                features: {
+                    activityFeed: { threadedRepliesV2: { enabled: true } },
+                    audioPlayerV2: { enabled: true },
+                },
+            });
+            expect(ActivityFeedV2).toHaveBeenCalledWith(
+                expect.objectContaining({ isAudioPlayerV2Enabled: true }),
+                expect.anything(),
+            );
+        });
+
+        test('should pass isAudioPlayerV2Enabled false to ActivityFeedV2 when audioPlayerV2 is not set', () => {
+            renderActivitySidebar({
+                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
+            });
+            expect(ActivityFeedV2).toHaveBeenCalledWith(
+                expect.objectContaining({ isAudioPlayerV2Enabled: false }),
+                expect.anything(),
+            );
+        });
+    });
+
+    describe('render() - richText feature gate', () => {
+        test('should pass isRichTextEnabled=true to ActivityFeedV2 when richText is enabled', () => {
+            renderActivitySidebar({
+                features: {
+                    activityFeed: { richText: { enabled: true }, threadedRepliesV2: { enabled: true } },
+                },
+            });
+
+            expect(ActivityFeedV2).toHaveBeenCalledWith(
+                expect.objectContaining({ isRichTextEnabled: true }),
+                expect.anything(),
+            );
+        });
+
+        test('should pass isRichTextEnabled=false to ActivityFeedV2 when richText is not enabled', () => {
+            renderActivitySidebar({
+                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
+            });
+
+            expect(ActivityFeedV2).toHaveBeenCalledWith(
+                expect.objectContaining({ isRichTextEnabled: false }),
+                expect.anything(),
+            );
         });
     });
 

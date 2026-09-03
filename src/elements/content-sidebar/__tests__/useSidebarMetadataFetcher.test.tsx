@@ -12,7 +12,10 @@ import {
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
-import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
+import useSidebarMetadataFetcher, {
+    STATUS,
+    type MetadataNamespaceFetchContext,
+} from '../hooks/useSidebarMetadataFetcher';
 
 const mockRateLimitError = {
     status: 429,
@@ -166,7 +169,12 @@ describe('useSidebarMetadataFetcher', () => {
     const onSuccessMock = jest.fn();
     const isFeatureEnabledMock = true;
 
-    const setupHook = (fileId = '123', isConfidenceScoreEnabled = false, isBoundingBoxEnabled = false) =>
+    const setupHook = (
+        fileId = '123',
+        isConfidenceScoreEnabled = false,
+        isBoundingBoxEnabled = false,
+        namespaceContext: MetadataNamespaceFetchContext = {},
+    ) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
                 api,
@@ -176,6 +184,7 @@ describe('useSidebarMetadataFetcher', () => {
                 isFeatureEnabledMock,
                 isConfidenceScoreEnabled,
                 isBoundingBoxEnabled,
+                namespaceContext,
             ),
         );
 
@@ -1011,5 +1020,63 @@ describe('useSidebarMetadataFetcher', () => {
 
             expect(suggestions[0].targetLocation).toEqual([{ itemId: 'file_123', page: 1, text: 'some text' }]);
         });
+    });
+
+    test('should fetch metadata once when namespaced mode is available from the start', async () => {
+        const { result } = setupHook('123', false, false, {
+            enterpriseFqn: 'enterprise_123',
+            metadataNamespaceMode: 'MIGRATION',
+        });
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledTimes(1);
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true, enterpriseFqn: 'enterprise_123', metadataNamespaceMode: 'MIGRATION' },
+            true,
+            false,
+        );
+    });
+
+    test('should not fetch metadata while namespace context is loading', async () => {
+        setupHook('123', false, false, { isLoading: true });
+
+        await waitFor(() => expect(mockAPI.getFile).toHaveBeenCalled());
+        expect(mockAPI.getMetadata).not.toHaveBeenCalled();
+    });
+
+    test('should fetch metadata after namespace context finishes loading', async () => {
+        const { result, rerender } = renderHook(
+            ({ namespaceContext }: { namespaceContext: MetadataNamespaceFetchContext }) =>
+                useSidebarMetadataFetcher(
+                    api,
+                    '123',
+                    onErrorMock,
+                    onSuccessMock,
+                    isFeatureEnabledMock,
+                    false,
+                    false,
+                    namespaceContext,
+                ),
+            { initialProps: { namespaceContext: { isLoading: true } } },
+        );
+
+        await waitFor(() => expect(mockAPI.getFile).toHaveBeenCalled());
+        expect(mockAPI.getMetadata).not.toHaveBeenCalled();
+
+        rerender({
+            namespaceContext: {
+                enterpriseFqn: 'enterprise_123',
+                isLoading: false,
+                metadataNamespaceMode: 'MIGRATION',
+            },
+        });
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+        expect(mockAPI.getMetadata).toHaveBeenCalledTimes(1);
     });
 });

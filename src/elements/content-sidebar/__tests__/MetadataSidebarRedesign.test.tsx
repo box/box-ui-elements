@@ -11,6 +11,23 @@ import {
 } from '../MetadataSidebarRedesign';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
+import useMetadataNamespaceContext from '../hooks/useMetadataNamespaceContext';
+import type { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
+
+// Records props passed to the editor so wiring tests can assert on them
+// without replacing the real editor used by the rest of this suite.
+const mockEditor = jest.fn<null, [MetadataInstanceEditorProps]>(() => null);
+jest.mock('../MetadataInstanceEditor', () => {
+    const actual = jest.requireActual('../MetadataInstanceEditor') as typeof import('../MetadataInstanceEditor');
+
+    return {
+        __esModule: true,
+        default: (props: MetadataInstanceEditorProps) => {
+            mockEditor(props);
+            return actual.default(props);
+        },
+    };
+});
 
 jest.mock('../hooks/useSidebarMetadataFetcher');
 const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFunction<
@@ -22,6 +39,11 @@ const mockUseMetadataFieldSelection = useMetadataFieldSelection as jest.MockedFu
     typeof useMetadataFieldSelection
 >;
 
+jest.mock('../hooks/useMetadataNamespaceContext');
+const mockUseMetadataNamespaceContext = useMetadataNamespaceContext as jest.MockedFunction<
+    typeof useMetadataNamespaceContext
+>;
+
 const getStructuredTextRep = jest.fn().mockResolvedValue('structured-text-rep');
 const api = {
     options: {
@@ -30,6 +52,7 @@ const api = {
             write: 'write-token-value',
         }),
     },
+    getMetadataAPI: jest.fn().mockReturnValue({}),
 };
 
 describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
@@ -143,6 +166,13 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             handleSelectMetadataField: jest.fn(),
         });
 
+        mockUseMetadataNamespaceContext.mockReturnValue({
+            enterpriseId: undefined,
+            metadataNamespaceMode: null,
+            isTemplateManagementEnabled: false,
+            isLoading: false,
+        });
+
         mockUseSidebarMetadataFetcher.mockReturnValue({
             clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
@@ -155,6 +185,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
     });
 
@@ -166,6 +197,21 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent();
 
         expect(screen.getByRole('heading', { level: 2, name: 'Metadata' })).toBeInTheDocument();
+    });
+
+    test('should pass host namespace mode and enterprise id into useMetadataNamespaceContext', () => {
+        renderComponent({ metadataNamespaceMode: 'MIGRATION', enterpriseId: 'enterprise_1' });
+
+        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith({
+            metadataNamespaceMode: 'MIGRATION',
+            enterpriseId: 'enterprise_1',
+        });
+    });
+
+    test('should not pass namespace options when the host omits them', () => {
+        renderComponent();
+
+        expect(mockUseMetadataNamespaceContext).toHaveBeenCalledWith({});
     });
 
     test('should have accessible "All templates" combobox trigger button', () => {
@@ -181,6 +227,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -196,6 +243,28 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(screen.getByRole('button', { name: 'Add template' })).toBeInTheDocument();
     });
 
+    // Regression: templates is null while the fetcher is loading. Reading templates.find
+    // without optional chaining crashed the sidebar before the Add button could mount.
+    test('should not crash while metadata templates are still loading', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
+            templateInstances: [],
+            templates: null,
+            errorMessage: null,
+            status: STATUS.LOADING,
+            file: null,
+            extractErrorCode: null,
+        });
+
+        expect(() => renderComponent()).not.toThrow();
+        expect(screen.queryByRole('button', { name: 'Add template' })).not.toBeInTheDocument();
+    });
+
     test('should render "Add template" button when user has can_upload permission', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             clearExtractError: jest.fn(),
@@ -203,6 +272,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
             templateInstances: [],
             templates: mockTemplates,
             errorMessage: null,
@@ -223,6 +293,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
             templateInstances: [],
             templates: mockTemplates,
             errorMessage: null,
@@ -243,6 +314,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
             templateInstances: [],
             templates: mockTemplates,
             errorMessage: null,
@@ -285,6 +357,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -310,6 +383,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.ERROR,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
@@ -332,6 +406,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.LOADING,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -378,6 +453,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -402,6 +478,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -428,6 +505,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent({}, { 'metadata.deleteConfirmationModalCheckbox.enabled': true });
@@ -458,6 +536,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         renderComponent();
@@ -486,6 +565,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
                 status: STATUS.SUCCESS,
                 file: mockFile,
                 extractErrorCode: null,
+                refetchMetadata: jest.fn(),
             });
 
             renderComponent();
@@ -507,6 +587,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         const filteredTemplateIds = [mockVisibleTemplateInstance.id];
@@ -531,6 +612,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             status: STATUS.SUCCESS,
             file: mockFile,
             extractErrorCode: null,
+            refetchMetadata: jest.fn(),
         });
 
         const filteredTemplateIds = ['non-existing-template-id'];
@@ -587,6 +669,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -601,6 +684,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -615,6 +699,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -629,6 +714,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
         );
     });
 
@@ -648,11 +734,83 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(createSessionRequest).not.toHaveBeenCalledWith({ items: [{ id: undefined }] }, undefined);
     });
 
+    test('should not fail when createSessionRequest rejects', async () => {
+        const createSessionRequest = jest.fn().mockRejectedValue(new Error('intelligence 404'));
+        renderComponent({ api, createSessionRequest }, { 'metadata.aiSuggestions.enabled': true });
+
+        await waitFor(() => {
+            expect(createSessionRequest).toHaveBeenCalledTimes(1);
+        });
+    });
+
     test('should pass getPreview to useMetadataFieldSelection', () => {
         const getPreview = jest.fn();
         renderComponent({ getPreview });
 
         expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview);
+    });
+
+    test('passes host-provided fetchers to the editor when the user field flag is on', async () => {
+        const fetchUsers = jest.fn();
+        const fetchAvatarUrls = jest.fn();
+
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+            extractErrorCode: null,
+            refetchMetadata: jest.fn(),
+        });
+
+        renderComponent({ fetchAvatarUrls, fetchUsers }, { 'metadata.userField.enabled': true });
+
+        await userEvent.click(screen.getByRole('button', { name: 'Edit Visible Template' }));
+
+        await waitFor(() => {
+            const editorProps = mockEditor.mock.calls.find(([props]) => props)?.[0];
+            expect(editorProps?.isMetadataUserFieldEnabled).toBe(true);
+            expect(editorProps?.fetchUsers).toBe(fetchUsers);
+            expect(editorProps?.fetchAvatarUrls).toBe(fetchAvatarUrls);
+        });
+    });
+
+    test('does not enable user field in the editor when the user field flag is off', async () => {
+        const fetchUsers = jest.fn();
+        const fetchAvatarUrls = jest.fn();
+
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+            extractErrorCode: null,
+            refetchMetadata: jest.fn(),
+        });
+
+        renderComponent({ fetchAvatarUrls, fetchUsers }, { 'metadata.userField.enabled': false });
+
+        await userEvent.click(screen.getByRole('button', { name: 'Edit Visible Template' }));
+
+        await waitFor(() => {
+            const editorProps = mockEditor.mock.calls.find(([props]) => props)?.[0];
+            expect(editorProps?.isMetadataUserFieldEnabled).toBe(false);
+        });
+
+        expect(fetchUsers).not.toHaveBeenCalled();
+        expect(fetchAvatarUrls).not.toHaveBeenCalled();
     });
 
     describe('navigation blocking', () => {
@@ -671,6 +829,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
                 status: STATUS.SUCCESS,
                 file: mockFile,
                 extractErrorCode: null,
+                refetchMetadata: jest.fn(),
             });
         };
 

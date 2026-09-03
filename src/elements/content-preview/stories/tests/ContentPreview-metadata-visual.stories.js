@@ -169,4 +169,9 @@ export default {
             },
         },
     },
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };

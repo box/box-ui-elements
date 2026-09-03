@@ -7,7 +7,7 @@ import { act, render, screen } from '../../../../test-utils/testing-library';
 import FeedItemRow from '../FeedItemRow';
 import { dispatchReplyDelete, dispatchReplyEdit, logEditError, serializeEditorContent } from '../helpers';
 import { annotationTargetToBadge } from '../transformers';
-import { seekVideoToMs } from '../useVideoTimestamp';
+import { seekMediaToMs } from '../useMediaTimestamp';
 
 import type { TaskNew } from '../../../../common/types/tasks';
 import type {
@@ -19,7 +19,7 @@ import type {
     VersionItemProps,
 } from '../types';
 
-let lastThreadedAnnotationProps: Partial<ThreadedAnnotationsPropsV2> = {};
+let lastThreadedAnnotationProps: Partial<ThreadedAnnotationsPropsV2> & { isRichTextEnabled?: boolean } = {};
 let lastTaskProps: Partial<TaskItemProps> = {};
 let lastVersionProps: Partial<VersionItemProps> = {};
 
@@ -54,15 +54,15 @@ jest.mock('../transformers', () => ({
     annotationTargetToBadge: jest.fn(),
 }));
 
-jest.mock('../useVideoTimestamp', () => ({
-    seekVideoToMs: jest.fn(),
+jest.mock('../useMediaTimestamp', () => ({
+    seekMediaToMs: jest.fn(),
 }));
 
 const mockedSerializeEditorContent = jest.mocked(serializeEditorContent);
 const mockedDispatchReplyDelete = jest.mocked(dispatchReplyDelete);
 const mockedDispatchReplyEdit = jest.mocked(dispatchReplyEdit);
 const mockedAnnotationTargetToBadge = jest.mocked(annotationTargetToBadge);
-const mockedSeekVideoToMs = jest.mocked(seekVideoToMs);
+const mockedSeekMediaToMs = jest.mocked(seekMediaToMs);
 
 const userSelectorProps: UserSelectorProps = {
     ariaRoleDescription: 'user selector',
@@ -227,6 +227,16 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.isAnnotations).toBe(false);
         });
 
+        test('should pass isRichTextEnabled to ThreadedAnnotation', () => {
+            render(<FeedItemRow {...defaultProps} isRichTextEnabled item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isRichTextEnabled).toBe(true);
+        });
+
+        test('should default isRichTextEnabled to false', () => {
+            render(<FeedItemRow {...defaultProps} item={mockComment} />);
+            expect(lastThreadedAnnotationProps.isRichTextEnabled).toBe(false);
+        });
+
         test('should pass isHighlighted=true when activeFeedEntryId matches the comment id', () => {
             render(<FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" item={mockComment} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
@@ -336,10 +346,25 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
         test('should call onReplyCreate via onPost with serialized text', async () => {
             const onReplyCreate = jest.fn();
+            const content = { type: 'doc', content: [] };
             render(<FeedItemRow {...defaultProps} item={mockComment} onReplyCreate={onReplyCreate} />);
 
-            await lastThreadedAnnotationProps.onPost?.({ type: 'doc', content: [] });
+            await lastThreadedAnnotationProps.onPost?.(content);
 
+            expect(mockedSerializeEditorContent).toHaveBeenCalledWith(content, false);
+            expect(onReplyCreate).toHaveBeenCalledWith('comment-1', 'comment', 'serialized-text');
+        });
+
+        test('should serialize editor content with isRichTextEnabled on reply post', async () => {
+            const onReplyCreate = jest.fn();
+            const content = { type: 'doc', content: [] };
+            render(
+                <FeedItemRow {...defaultProps} isRichTextEnabled item={mockComment} onReplyCreate={onReplyCreate} />,
+            );
+
+            await lastThreadedAnnotationProps.onPost?.(content);
+
+            expect(mockedSerializeEditorContent).toHaveBeenCalledWith(content, true);
             expect(onReplyCreate).toHaveBeenCalledWith('comment-1', 'comment', 'serialized-text');
         });
 
@@ -360,6 +385,31 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
 
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                'edited-text',
+                undefined,
+                true,
+                commentPermissions,
+            );
+        });
+
+        test('should serialize editor content with isRichTextEnabled on root edit', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: true, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            const content = { type: 'doc', content: [] };
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    isRichTextEnabled
+                    item={mockComment}
+                    onCommentUpdate={onCommentUpdate}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', content);
+
+            expect(mockedSerializeEditorContent).toHaveBeenCalledWith(content, true);
             expect(onCommentUpdate).toHaveBeenCalledWith(
                 'comment-1',
                 'edited-text',
@@ -457,7 +507,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.onAnnotationBadgeClick).toBeUndefined();
         });
 
-        test('should seek the video on badge click when the comment carries a timestamp', () => {
+        test('should seek the media on badge click when the comment carries a timestamp', () => {
             const timestampedComment: TransformedCommentItem = {
                 ...mockComment,
                 annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
@@ -467,10 +517,24 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
 
             lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
 
-            expect(mockedSeekVideoToMs).toHaveBeenCalledWith(8055);
+            expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055, undefined);
         });
 
-        test('should re-prepend timestamp markup when editing a video comment so the badge survives the update', () => {
+        test('should pass getViewer to seekMediaToMs on badge click', () => {
+            const getViewer = jest.fn();
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} getViewer={getViewer} item={timestampedComment} />);
+
+            lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
+
+            expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055, getViewer);
+        });
+
+        test('should re-prepend timestamp markup when editing a timestamped comment so the badge survives the update', () => {
             mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
             const onCommentUpdate = jest.fn();
             const timestampedComment: TransformedCommentItem = {
@@ -486,6 +550,29 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(onCommentUpdate).toHaveBeenCalledWith(
                 'comment-1',
                 '#[timestamp:8055,versionId:2390295731268] edited-text',
+                undefined,
+                false,
+                commentPermissions,
+            );
+        });
+
+        test('should preserve both range boundaries when editing a range-timestamped comment', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            const rangeComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampEndMs: 12000,
+                annotationTimestampMarkup: '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268]',
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={rangeComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268] edited-text',
                 undefined,
                 false,
                 commentPermissions,
@@ -549,9 +636,7 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             });
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
 
-            rerender(
-                <FeedItemRow {...defaultProps} activeFeedEntryId="annotation-reply-1" item={mockAnnotation} />,
-            );
+            rerender(<FeedItemRow {...defaultProps} activeFeedEntryId="annotation-reply-1" item={mockAnnotation} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
 
             act(() => {
