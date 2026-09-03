@@ -1970,6 +1970,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           onContentInsightsEventReport={noop}
                           onError={noop}
                           onLoad={noop}
+                          onMetric={noop}
                           onNavigate={noop}
                           onPreviewDestroy={noop}
                           onVersionChange={noop}

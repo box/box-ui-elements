@@ -2824,6 +2824,24 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.childAt(1).props().children.props.loadingIndicatorDelayMs).toBe(0);
         });
 
+        test('should not forward the host onMetric to the compared instance', () => {
+            const onMetric = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    onMetric={onMetric}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().onMetric).toBe(onMetric);
+            expect(wrapper.childAt(1).props().children.props.onMetric).not.toBe(onMetric);
+        });
+
         test('should not navigate when isComparing', () => {
             const wrapper = getWrapper({
                 fileId: '456',
