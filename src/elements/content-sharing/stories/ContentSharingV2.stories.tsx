@@ -25,9 +25,4 @@ export default {
             control: { type: 'select' },
         },
     },
-    parameters: {
-        chromatic: {
-            disableSnapshot: true,
-        },
-    },
 };

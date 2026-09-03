@@ -175,6 +175,9 @@ export default {
         token: global.TOKEN,
     },
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         msw: {
             handlers: [
                 http.options(`${DEFAULT_HOSTNAME_API}/2.0/files/content`, () => {

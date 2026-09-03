@@ -26,7 +26,9 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
     },
 };
 
-const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
+const meta: Meta<typeof ContentSidebar> & {
+    parameters: { chromatic: { disableSnapshot: boolean }; msw: { handlers: HttpHandler[] } };
+} = {
     title: 'Elements/ContentSidebar/BoxAISidebar/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -78,6 +80,9 @@ const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpH
         },
     },
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         msw: {
             handlers: [
                 http.get(mockUserRequest.url, () => {

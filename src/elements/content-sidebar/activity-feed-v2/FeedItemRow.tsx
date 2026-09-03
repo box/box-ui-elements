@@ -13,12 +13,25 @@ import type { BoxCommentPermission, CommentFeedItemType, FeedItemStatus } from '
 import type { TaskCollabStatus, TaskNew } from '../../../common/types/tasks';
 import type { TimeFormat } from './useTimeFormat';
 
-import { dispatchReplyDelete, dispatchReplyEdit, feedItemMatchesEntryId, logEditError, serializeEditorContent } from './helpers';
+import {
+    dispatchReplyDelete,
+    dispatchReplyEdit,
+    feedItemMatchesEntryId,
+    logEditError,
+    serializeEditorContent,
+} from './helpers';
 import { annotationTargetToBadge } from './transformers';
 import { formatByTimeFormat } from './useTimeFormat';
-import { seekVideoToMs } from './useVideoTimestamp';
+import { seekMediaToMs } from './useMediaTimestamp';
 
-import type { OnReplyDelete, OnReplyUpdate, TaskItemProps, TransformedFeedItem, UserSelectorProps } from './types';
+import type {
+    OnReplyDelete,
+    OnReplyUpdate,
+    TaskItemProps,
+    TransformedFeedItem,
+    UserSelectorProps,
+    ViewerHandle,
+} from './types';
 
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -36,7 +49,9 @@ type FeedItemRowProps = {
     activeFeedEntryId?: string;
     currentUserId?: string;
     fps: number;
+    getViewer?: () => ViewerHandle | null;
     isDisabled: boolean;
+    isRichTextEnabled?: boolean;
     item: TransformedFeedItem;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
@@ -76,11 +91,12 @@ const buildReplyPost =
         parentId: string,
         parentType: CommentFeedItemType,
         isDisabled: boolean,
+        isRichTextEnabled: boolean,
         onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     ) =>
     async (content: unknown) => {
         if (isDisabled || !onReplyCreate) return;
-        const serialized = serializeEditorContent(content);
+        const serialized = serializeEditorContent(content, isRichTextEnabled);
         if (!serialized || !serialized.text.trim()) return;
         onReplyCreate(parentId, parentType, serialized.text);
     };
@@ -89,7 +105,9 @@ const FeedItemRow = ({
     activeFeedEntryId,
     currentUserId,
     fps,
+    getViewer,
     isDisabled,
+    isRichTextEnabled = false,
     item,
     onAnnotationCopyLink,
     onAnnotationDelete,
@@ -146,7 +164,7 @@ const FeedItemRow = ({
             };
             const handleEdit = (id: string, content: unknown) => {
                 if (isDisabled) return;
-                const serialized = serializeEditorContent(content);
+                const serialized = serializeEditorContent(content, isRichTextEnabled);
                 if (!serialized || !serialized.text.trim()) return;
                 if (id === item.id) {
                     const text = item.annotationTimestampMarkup
@@ -164,7 +182,8 @@ const FeedItemRow = ({
                 });
             };
             const timestampMs = item.annotationTimestampMs;
-            const handleBadgeClick = timestampMs !== undefined ? () => seekVideoToMs(timestampMs) : undefined;
+            const handleBadgeClick =
+                timestampMs !== undefined ? () => seekMediaToMs(timestampMs, getViewer) : undefined;
             const commentAnnotationTarget =
                 item.annotationTarget && timestampMs !== undefined
                     ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
@@ -177,6 +196,7 @@ const FeedItemRow = ({
                     isEditDisabled={isDisabled || item.isResolved}
                     isHighlighted={isHighlighted}
                     isResolved={item.isResolved}
+                    isRichTextEnabled={isRichTextEnabled}
                     messages={item.messages}
                     onAnnotationBadgeClick={handleBadgeClick}
                     onAvatarClick={noop}
@@ -184,7 +204,13 @@ const FeedItemRow = ({
                     onDelete={handleDelete}
                     onEdit={handleEdit}
                     onEditError={logEditError}
-                    onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_COMMENT, isDisabled, onReplyCreate)}
+                    onPost={buildReplyPost(
+                        item.id,
+                        FEED_ITEM_TYPE_COMMENT,
+                        isDisabled,
+                        isRichTextEnabled,
+                        onReplyCreate,
+                    )}
                     onResolve={handleStatusChange('resolved')}
                     onThreadDelete={() => handleDelete(item.id)}
                     onUnresolve={handleStatusChange('open')}
@@ -212,7 +238,7 @@ const FeedItemRow = ({
             };
             const handleEdit = (id: string, content: unknown) => {
                 if (isDisabled) return;
-                const serialized = serializeEditorContent(content);
+                const serialized = serializeEditorContent(content, isRichTextEnabled);
                 if (!serialized || !serialized.text.trim()) return;
                 if (id === item.id) {
                     onAnnotationEdit?.({ id, permissions, text: serialized.text });
@@ -242,6 +268,7 @@ const FeedItemRow = ({
                     isEditDisabled={isDisabled || item.isResolved}
                     isHighlighted={isHighlighted}
                     isResolved={item.isResolved}
+                    isRichTextEnabled={isRichTextEnabled}
                     messages={item.messages}
                     onAnnotationBadgeClick={() => onAnnotationSelect?.(item.annotation)}
                     onAvatarClick={noop}
@@ -253,7 +280,13 @@ const FeedItemRow = ({
                     onDelete={handleDelete}
                     onEdit={handleEdit}
                     onEditError={logEditError}
-                    onPost={buildReplyPost(item.id, FEED_ITEM_TYPE_ANNOTATION, isDisabled, onReplyCreate)}
+                    onPost={buildReplyPost(
+                        item.id,
+                        FEED_ITEM_TYPE_ANNOTATION,
+                        isDisabled,
+                        isRichTextEnabled,
+                        onReplyCreate,
+                    )}
                     onResolve={handleStatusChange('resolved')}
                     onThreadDelete={() => handleDelete(item.id)}
                     onUnresolve={handleStatusChange('open')}

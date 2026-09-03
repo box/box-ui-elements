@@ -2,11 +2,14 @@ import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
-import TextInputWithCopyButton from '..';
+import TextInputWithCopyButton, { type TextInputWithCopyButtonProps } from '..';
+import Button from '../../button';
 
 const sandbox = sinon.sandbox.create();
+type TextInputWithCopyButtonInstance = InstanceType<typeof TextInputWithCopyButton>;
+const createInputRef = (select: () => void) => ({ select, scrollLeft: 0 }) as HTMLInputElement;
 
-document.execCommand = () => {};
+document.execCommand = jest.fn(() => true);
 document.queryCommandSupported = () => false;
 
 describe('components/text-input-with-copy-button/TextInputWithCopyButton', () => {
@@ -17,8 +20,8 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
     const buttonDefaultText = 'copy';
     const buttonSuccessText = 'copied';
 
-    const renderComponent = props =>
-        shallow(
+    const renderComponent = (props: Partial<TextInputWithCopyButtonProps> = {}) =>
+        shallow<TextInputWithCopyButtonInstance>(
             <TextInputWithCopyButton
                 buttonDefaultText={buttonDefaultText}
                 buttonSuccessText={buttonSuccessText}
@@ -45,7 +48,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
 
             expect(wrapper.hasClass('text-input-with-copy-button-container')).toBe(true);
             expect(wrapper.hasClass('copy-success')).toBe(true);
-            expect(textInputComponent.length).toBe(1);
+            expect(textInputComponent).toHaveLength(1);
             expect(textInputComponent.prop('readOnly')).toBe(true);
             expect(typeof textInputComponent.prop('inputRef')).toBe('function');
             expect(textInputComponent.prop('hideOptionalLabel')).toBe(true);
@@ -61,7 +64,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const textInputComponent = wrapper.find('TextInput');
 
             expect(wrapper.hasClass('text-input-with-copy-button-container')).toBe(false);
-            expect(textInputComponent.length).toBe(1);
+            expect(textInputComponent).toHaveLength(1);
             expect(textInputComponent.prop('readOnly')).toBe(true);
             expect(textInputComponent.prop('inputRef')).not.toBeDefined();
         });
@@ -72,9 +75,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
                 autofocus: true,
             });
             const instance = wrapper.instance();
-            instance.copyInputRef = {
-                select: selectMock,
-            };
+            instance.copyInputRef = createInputRef(selectMock);
 
             instance.componentDidMount();
 
@@ -89,7 +90,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
                 autofocus: true,
             });
             const instance = wrapper.instance();
-            instance.copyInputRef = { select: selectMock };
+            instance.copyInputRef = createInputRef(selectMock);
 
             instance.componentDidMount();
 
@@ -97,7 +98,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
                 value: 'http://example.com/',
             });
 
-            expect(selectMock.mock.calls.length).toBe(1);
+            expect(selectMock.mock.calls).toHaveLength(1);
         });
 
         test('should not autofocus if autofocus is enabled, but there is no value', () => {
@@ -109,9 +110,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             });
 
             const instance = wrapper.instance();
-            instance.copyInputRef = {
-                select: selectMock,
-            };
+            instance.copyInputRef = createInputRef(selectMock);
 
             instance.componentDidMount();
 
@@ -129,7 +128,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
                     value={1}
                 />,
             );
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as TextInputWithCopyButtonInstance;
             instance.clearCopySuccessTimeout = sandbox.mock();
 
             wrapper.unmount();
@@ -157,13 +156,12 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const instance = wrapper.instance();
             instance.isCopyCommandSupported = true;
 
-            const copyButton = wrapper.wrap(instance.renderCopyButton());
-            const button = copyButton.find('Button');
+            const copyButton = instance.renderCopyButton() as React.ReactElement<React.ComponentProps<typeof Button>>;
 
-            expect(button.length).toBe(1);
-            expect(typeof button.prop('onClick')).toBe('function');
-            expect(button.prop('type')).toEqual('button');
-            expect(button.prop('children')).toEqual(buttonDefaultText);
+            expect(copyButton.type).toBe(Button);
+            expect(typeof copyButton.props.onClick).toBe('function');
+            expect(copyButton.props.type).toEqual('button');
+            expect(copyButton.props.children).toEqual(buttonDefaultText);
         });
 
         test('should not render a copy button when copy command is not supported', () => {
@@ -181,9 +179,8 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const instance = wrapper.instance();
             instance.isCopyCommandSupported = true;
 
-            const copyButton = wrapper.wrap(instance.renderCopyButton());
-            const button = copyButton.find('Button');
-            expect(button.prop('isDisabled')).toBe(true);
+            const copyButton = instance.renderCopyButton() as React.ReactElement<React.ComponentProps<typeof Button>>;
+            expect(copyButton.props.isDisabled).toBe(true);
         });
     });
 
@@ -192,9 +189,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const wrapper = renderComponent();
             const instance = wrapper.instance();
 
-            instance.copyInputRef = {
-                select: sandbox.mock(),
-            };
+            instance.copyInputRef = createInputRef(sandbox.mock());
             instance.copySelectedText = sandbox.mock();
             wrapper.setProps({});
 
@@ -205,9 +200,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const wrapper = renderComponent();
             const instance = wrapper.instance();
 
-            instance.copyInputRef = {
-                select: sandbox.stub(),
-            };
+            instance.copyInputRef = createInputRef(sandbox.stub());
             instance.clearCopySuccessTimeout = sandbox.mock();
 
             instance.handleCopyButtonClick();
@@ -219,9 +212,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const instance = wrapper.instance();
             let callback;
             let data;
-            instance.copyInputRef = {
-                select: sandbox.stub(),
-            };
+            instance.copyInputRef = createInputRef(sandbox.stub());
             instance.setState = (obj, cb) => {
                 data = obj;
                 callback = cb;
@@ -245,9 +236,9 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             const wrapper = renderComponent();
             const instance = wrapper.instance();
 
-            sinon.mock(instance, 'animateCopyButton');
+            sandbox.mock(instance).expects('animateCopyButton');
 
-            instance.handleCopyEvent();
+            instance.handleCopyEvent({} as React.ClipboardEvent<HTMLDivElement>);
         });
 
         test('should call correct callback', () => {
@@ -256,7 +247,7 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             });
             const instance = wrapper.instance();
 
-            instance.handleCopyEvent();
+            instance.handleCopyEvent({} as React.ClipboardEvent<HTMLDivElement>);
         });
     });
 
@@ -280,11 +271,9 @@ describe('components/text-input-with-copy-button/TextInputWithCopyButton', () =>
             });
             const instance = wrapper.instance();
 
-            instance.copyInputRef = {
-                select: sandbox.mock(),
-            };
+            instance.copyInputRef = createInputRef(sandbox.mock());
 
-            instance.handleFocus({});
+            instance.handleFocus({} as React.FocusEvent<HTMLInputElement>);
         });
     });
 });

@@ -32,4 +32,9 @@ export { EnabledCascadePolicyOptionsFieldsOnly, DisabledCascadePolicyOptionsFiel
 export default {
     title: 'Features/Metadata Instance Editor/CascadePolicy/Visual',
     component: CascadePolicy,
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };

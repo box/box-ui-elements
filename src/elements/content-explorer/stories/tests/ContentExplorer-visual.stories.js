@@ -155,6 +155,9 @@ export default {
         token: global.TOKEN,
     },
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         msw: {
             handlers: defaultHandlers,
         },

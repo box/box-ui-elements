@@ -46,6 +46,8 @@ type ResolvedInfo = {
 
 export type TransformedCommentItem = {
     annotationTarget?: AnnotationBadgeTargetType;
+    // End of a comment's time range. Undefined for single-timestamp comments.
+    annotationTimestampEndMs?: number;
     annotationTimestampMarkup?: string;
     annotationTimestampMs?: number;
     id: string;
@@ -84,7 +86,9 @@ export type ActivityFeedV2File = {
 export type ViewerHandle = {
     addListener: (event: string, handler: (payload: unknown) => void) => void;
     emit: (event: string, payload: unknown) => void;
+    pause?: () => void;
     removeListener: (event: string, handler: (payload: unknown) => void) => void;
+    setMediaTime?: (time: number) => void;
 };
 
 export type ActivityFeedV2Props = {
@@ -99,7 +103,9 @@ export type ActivityFeedV2Props = {
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     getViewer?: () => ViewerHandle | null;
     hasTasks?: boolean;
+    isAudioPlayerV2Enabled?: boolean;
     isDisabled?: boolean;
+    isRichTextEnabled?: boolean;
     isTimestampedCommentsEnabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;

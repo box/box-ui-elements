@@ -29,6 +29,7 @@ import messages from '../../common/messages';
 import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
+import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -57,10 +58,22 @@ interface DataFetcher {
         JSONPatch: Array<Object>,
         successCallback: () => void,
     ) => Promise<void>;
+    /** Re-fetches metadata (templates + instances) using the current file. */
+    refetchMetadata: () => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
 }
+
+/** Namespace migration context forwarded into Metadata.getMetadata options. */
+export type MetadataNamespaceFetchContext = {
+    /** Enterprise root namespace FQN from the current user (e.g. `enterprise_123`). */
+    enterpriseFqn?: string;
+    /** True while opt-in is on and the host has passed `metadataNamespaceMode: null`. */
+    isLoading?: boolean;
+    /** Resolved migration mode (`null` when opt-in is off or still loading). */
+    metadataNamespaceMode?: string | null;
+};
 
 function useSidebarMetadataFetcher(
     api: API,
@@ -70,7 +83,9 @@ function useSidebarMetadataFetcher(
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
     isConfidenceScoreEnabled: boolean = false,
     isBoundingBoxEnabled: boolean = false,
+    namespaceContext: MetadataNamespaceFetchContext = {},
 ): DataFetcher {
+    const { enterpriseFqn, isLoading: isNamespaceContextLoading, metadataNamespaceMode } = namespaceContext;
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
@@ -126,31 +141,34 @@ function useSidebarMetadataFetcher(
                 fetchMetadataSuccessCallback,
                 fetchMetadataErrorCallback,
                 isFeatureEnabled,
-                { refreshCache: true },
+                {
+                    refreshCache: true,
+                    ...(enterpriseFqn ? { enterpriseFqn } : {}),
+                    ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
+                },
                 true,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
         [
             api,
+            enterpriseFqn,
             fetchMetadataErrorCallback,
             fetchMetadataSuccessCallback,
             isFeatureEnabled,
             isBoundingBoxOrConfidenceScoreReviewEnabled,
+            metadataNamespaceMode,
         ],
     );
 
-    const fetchFileSuccessCallback = React.useCallback(
-        (fetchedFile: BoxItem) => {
-            setFile(fetchedFile);
-            if (fetchedFile) {
-                fetchMetadata(fetchedFile);
-            } else {
-                setStatus(STATUS.SUCCESS);
-            }
-        },
-        [fetchMetadata],
-    );
+    const fetchFileSuccessCallback = React.useCallback((fetchedFile: BoxItem) => {
+        setFile(fetchedFile);
+        if (!fetchedFile) {
+            setStatus(STATUS.SUCCESS);
+        }
+        // Metadata fetch is owned by the effect below so the first load and
+        // later mode/FQN updates share one key and cannot double-fetch.
+    }, []);
 
     const fetchFileErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string) => {
@@ -275,7 +293,9 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templates.find(template => template.templateKey === templateKey && template.scope);
+            const templateInstance = templates.find(template =>
+                isSameMetadataTemplate(template, { templateKey, scope }),
+            );
             const fields = templateInstance?.fields || [];
 
             return fields.map(field => {
@@ -318,11 +338,34 @@ function useSidebarMetadataFetcher(
             // Avoid refreshCache: true — File.getFile invokes success twice (cache, then network)
             // which would duplicate the metadata fetch. Cache hit or a single network fetch is enough;
             // missing fields are still requested when not present on the cached file.
-            api.getFileAPI().getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
+            // getFileAPI() defaults to shouldDestroy: true, which aborts in-flight Metadata XHRs.
+            api.getFileAPI(false).getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
                 fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
             });
         }
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
+
+    // Single metadata fetch keyed by file + resolved namespace context.
+    // Skips while the host is still loading mode so we do not flash SCOPED
+    // then refetch MIGRATION/FINAL. Re-runs when mode or FQN actually change.
+    const lastMetadataFetchKey = React.useRef<string | null>(null);
+    React.useEffect(() => {
+        if (!file || isNamespaceContextLoading) {
+            return;
+        }
+        const fetchKey = `${file.id}:${enterpriseFqn ?? ''}:${metadataNamespaceMode ?? ''}`;
+        if (lastMetadataFetchKey.current === fetchKey) {
+            return;
+        }
+        lastMetadataFetchKey.current = fetchKey;
+        fetchMetadata(file);
+    }, [enterpriseFqn, fetchMetadata, file, isNamespaceContextLoading, metadataNamespaceMode]);
+
+    const refetchMetadata = React.useCallback(() => {
+        if (file) {
+            fetchMetadata(file);
+        }
+    }, [file, fetchMetadata]);
 
     return {
         clearExtractError: () => setExtractErrorCode(null),
@@ -330,6 +373,7 @@ function useSidebarMetadataFetcher(
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
+        refetchMetadata,
         extractErrorCode,
         errorMessage,
         file,
