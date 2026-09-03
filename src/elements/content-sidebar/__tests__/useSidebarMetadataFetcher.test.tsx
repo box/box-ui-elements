@@ -174,6 +174,7 @@ describe('useSidebarMetadataFetcher', () => {
         isConfidenceScoreEnabled = false,
         isBoundingBoxEnabled = false,
         namespaceContext: MetadataNamespaceFetchContext = {},
+        shouldFetchDetailedExtractMeta = false,
     ) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
@@ -185,6 +186,7 @@ describe('useSidebarMetadataFetcher', () => {
                 isConfidenceScoreEnabled,
                 isBoundingBoxEnabled,
                 namespaceContext,
+                shouldFetchDetailedExtractMeta,
             ),
         );
 
@@ -410,6 +412,7 @@ describe('useSidebarMetadataFetcher', () => {
             { refreshCache: true },
             true,
             true,
+            false,
         );
     });
 
@@ -426,6 +429,7 @@ describe('useSidebarMetadataFetcher', () => {
             { refreshCache: true },
             true,
             false,
+            false,
         );
     });
 
@@ -441,6 +445,24 @@ describe('useSidebarMetadataFetcher', () => {
             isFeatureEnabledMock,
             { refreshCache: true },
             true,
+            true,
+            false,
+        );
+    });
+
+    test('should pass shouldFetchDetailedExtractMeta=true to getMetadata when enabled', async () => {
+        const { result } = setupHook('123', false, false, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            false,
             true,
         );
     });

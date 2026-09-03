@@ -670,6 +670,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            false, // shouldFetchDetailedExtractMeta
         );
     });
 
@@ -685,6 +686,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             false,
             false,
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            false,
         );
     });
 
@@ -700,6 +702,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            false, // shouldFetchDetailedExtractMeta
         );
     });
 
@@ -715,6 +718,37 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             false,
             false,
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            false,
+        );
+    });
+
+    test('should pass shouldFetchDetailedExtractMeta to useSidebarMetadataFetcher', () => {
+        renderComponent({}, { 'metadata.fetchDetailedExtractMeta.enabled': true });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            false, // isConfidenceScoreReviewEnabled
+            false, // isBoundingBoxEnabled
+            true, // shouldFetchDetailedExtractMeta
+        );
+    });
+
+    test('should pass shouldFetchDetailedExtractMeta=false when feature flag is off', () => {
+        renderComponent({}, { 'metadata.fetchDetailedExtractMeta.enabled': false });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            false,
+            false,
+            false,
         );
     });
 

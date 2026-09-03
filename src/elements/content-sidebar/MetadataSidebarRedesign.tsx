@@ -165,6 +165,7 @@ function MetadataSidebarRedesign({
 
     const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
     const isBoundingBoxEnabled = useFeatureEnabled('metadata.boundingBox.enabled');
+    const shouldFetchDetailedExtractMeta: boolean = useFeatureEnabled('metadata.fetchDetailedExtractMeta.enabled');
 
     const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
 
@@ -204,6 +205,7 @@ function MetadataSidebarRedesign({
             isLoading: isNamespaceContextLoading,
             metadataNamespaceMode,
         },
+        shouldFetchDetailedExtractMeta,
     );
     const isSessionInitiated = useRef(false);
 

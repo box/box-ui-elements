@@ -84,6 +84,7 @@ function useSidebarMetadataFetcher(
     isConfidenceScoreEnabled: boolean = false,
     isBoundingBoxEnabled: boolean = false,
     namespaceContext: MetadataNamespaceFetchContext = {},
+    shouldFetchDetailedExtractMeta: boolean = false,
 ): DataFetcher {
     const { enterpriseFqn, isLoading: isNamespaceContextLoading, metadataNamespaceMode } = namespaceContext;
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
@@ -148,6 +149,7 @@ function useSidebarMetadataFetcher(
                 },
                 true,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
+                shouldFetchDetailedExtractMeta,
             );
         },
         [
@@ -158,6 +160,7 @@ function useSidebarMetadataFetcher(
             isFeatureEnabled,
             isBoundingBoxOrConfidenceScoreReviewEnabled,
             metadataNamespaceMode,
+            shouldFetchDetailedExtractMeta,
         ],
     );
 
