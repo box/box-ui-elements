@@ -1186,12 +1186,12 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
-        test('should set state.error so PreviewMask renders an error state even when onError is nooped', () => {
+        test('should leave state.error unset so the preview library renders its own error screen', () => {
             const wrapper = getWrapper({ ...props, onError: noop });
             const instance = wrapper.instance();
             const errorPayload = { error: { code: 'some_code', message: 'msg' } };
             instance.onPreviewError(errorPayload);
-            expect(instance.state.error).toEqual(errorPayload.error);
+            expect(instance.state.error).toBeUndefined();
         });
     });
 

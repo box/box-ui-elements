@@ -652,8 +652,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     /**
      * Returns the version this instance previews.
      *
-     * Under comparison the compared instance renders whichever version the user
-     * selects, so this instance ignores its own selection and stays on the file's current version.
+     * When isComparing is true (the main pane while comparedVersion is set), this ignores
+     * state.selectedVersion and returns previewVersion. Unset previewVersion means the
+     * file's current version. The compared pane is a separate instance with isComparing
+     * false and previewVersion set to comparedVersion, so it uses the branch below.
      *
      * @param {Props} props - Props to derive the version from
      * @param {State} state - State to derive the version from
@@ -859,7 +861,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { onError } = this.props;
 
         this.endLoadingSession();
-        this.setState({ error, isThumbnailSidebarOpen: false });
+        this.setState({ isThumbnailSidebarOpen: false });
 
         onError(
             error,
