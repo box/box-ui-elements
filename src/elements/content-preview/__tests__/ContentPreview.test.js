@@ -225,63 +225,72 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.previewLibraryLoaded).toBe(true);
         });
 
-        test('should return false when the host manages comparison and the selected version changes', () => {
-            const managedProps = { ...props, isComparisonManaged: true };
-            wrapper = getWrapper(managedProps);
+        test('should return false when comparing and the selected version changes', () => {
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
             instance = wrapper.instance();
             wrapper.setState({ file, selectedVersion: { id: '12345' } });
             instance.preview = new global.Box.Preview();
 
-            expect(instance.shouldLoadPreview(managedProps, { file })).toBe(false);
+            expect(instance.shouldLoadPreview(comparingProps, { file })).toBe(false);
         });
 
-        test('should return false when comparison ends while a stale selected version is held', () => {
-            // prevProps has isComparisonManaged: true (comparison was already active), current also managed.
-            // The stale selectedVersion should not trigger a reload now that the latch is held.
-            const managedProps = { ...props, isComparisonManaged: true };
-            wrapper = getWrapper(managedProps);
+        test('should return true when comparison ends while a stale selected version is held', () => {
+            wrapper = getWrapper(props);
             instance = wrapper.instance();
             wrapper.setState({ file, selectedVersion: { id: '12345' } });
             instance.preview = new global.Box.Preview();
 
             expect(
-                instance.shouldLoadPreview(
-                    { ...props, isComparisonManaged: true },
-                    { file, selectedVersion: { id: '12345' } },
-                ),
-            ).toBe(false);
+                instance.shouldLoadPreview({ ...props, isComparing: true }, { file, selectedVersion: { id: '12345' } }),
+            ).toBe(true);
         });
 
         test('should return false when comparison first starts and the effective version has not changed', () => {
             // User was on the current version with no selectedVersion set; previewVersion is also
             // undefined (current). Both resolve to the same ID so no reload is needed.
-            const managedProps = { ...props, isComparisonManaged: true };
-            wrapper = getWrapper(managedProps);
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
             instance = wrapper.instance();
             wrapper.setState({ file });
             instance.preview = new global.Box.Preview();
 
-            expect(instance.shouldLoadPreview({ ...props, isComparisonManaged: false }, { file })).toBe(false);
+            expect(instance.shouldLoadPreview({ ...props, isComparing: false }, { file })).toBe(false);
+        });
+
+        test('should return false when comparison first starts from an explicitly selected current version', () => {
+            // Opening the versions panel selects the current version explicitly, so
+            // state.selectedVersion is set even though the pane already shows current.
+            // Comparison pins the pane to previewVersion, which is undefined — also current.
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '1' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(
+                instance.shouldLoadPreview({ ...props, isComparing: false }, { file, selectedVersion: { id: '1' } }),
+            ).toBe(false);
         });
 
         test('should return true when comparison first starts and the pane was on a historical version', () => {
             // User was on v12345 (non-current); comparison pins the left pane to previewVersion
             // (current, undefined). IDs differ so a real reload is required to show current.
-            const managedProps = { ...props, isComparisonManaged: true };
-            wrapper = getWrapper(managedProps);
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
             instance = wrapper.instance();
             wrapper.setState({ file, selectedVersion: { id: '12345' } });
             instance.preview = new global.Box.Preview();
 
             expect(
                 instance.shouldLoadPreview(
-                    { ...props, isComparisonManaged: false },
+                    { ...props, isComparing: false },
                     { file, selectedVersion: { id: '12345' } },
                 ),
             ).toBe(true);
         });
 
-        test('should return true when the selected version changes and the host does not manage comparison', () => {
+        test('should return true when the selected version changes and the host is not comparing', () => {
             expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
     });
@@ -1268,7 +1277,7 @@ describe('elements/content-preview/ContentPreview', () => {
             const wrapper = getWrapper({
                 fileId: '123',
                 hasHeader: true,
-                isComparisonManaged: true,
+                isComparing: true,
                 previewVersion: currentVersion,
             });
             wrapper.setState({
@@ -1277,7 +1286,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 selectedVersion,
             });
 
-            // isComparisonManaged is true, so getVersionToPreview() returns previewVersion (current),
+            // isComparing is true, so getVersionToPreview() returns previewVersion (current),
             // not state.selectedVersion. PreviewHeader must reflect the actually-previewed version.
             expect(wrapper.find(PreviewHeader).prop('selectedVersion')).toEqual(currentVersion);
         });

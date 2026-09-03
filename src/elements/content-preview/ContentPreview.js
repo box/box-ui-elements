@@ -137,7 +137,6 @@ type Props = {
     hasProviders?: boolean,
     hideSidebar?: boolean,
     isComparing?: boolean,
-    isComparisonManaged?: boolean,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
     isLarge: boolean,
     isVeryLarge?: boolean,
@@ -349,7 +348,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         hasHeader: false,
         hideSidebar: false,
         isComparing: false,
-        isComparisonManaged: false,
         language: DEFAULT_LOCALE,
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
@@ -654,7 +652,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     /**
      * Returns the version this instance previews.
      *
-     * Under a comparison-managed host the compared instance renders whichever version the user
+     * Under comparison the compared instance renders whichever version the user
      * selects, so this instance ignores its own selection and stays on the file's current version.
      *
      * @param {Props} props - Props to derive the version from
@@ -662,8 +660,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {BoxItemVersion | void}
      */
     getVersionToPreview(props: Props = this.props, state: State = this.state): ?BoxItemVersion {
-        const { isComparisonManaged, previewVersion } = props;
-        return isComparisonManaged ? previewVersion : state.selectedVersion || previewVersion;
+        const { isComparing, previewVersion } = props;
+        return isComparing ? previewVersion : state.selectedVersion || previewVersion;
     }
 
     /**
@@ -687,15 +685,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (!this.previewLibraryLoaded && this.isPreviewLibraryLoaded() && file && !this.preview) {
             this.previewLibraryLoaded = true;
             return true;
-        }
-
-        // When comparison starts, isComparisonManaged flips from false to true, which causes
-        // getVersionToPreview() to switch from state.selectedVersion to previewVersion. Only
-        // suppress the reload when the effective version hasn't actually changed — i.e. the pane
-        // is already showing the right content. If the user was on a historical version before
-        // comparison started, the IDs differ and we must reload to current.
-        if (!prevProps?.isComparisonManaged && this.props.isComparisonManaged) {
-            return prevSelectedVersionId !== selectedVersionId;
         }
 
         if (selectedVersionId !== prevSelectedVersionId) {
@@ -1054,7 +1043,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions,
             comparedSlotRef,
             isComparing,
-            isComparisonManaged,
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
@@ -1936,14 +1924,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
     const comparedVersionId = comparedVersion && comparedVersion.id;
     const isComparing = comparedVersionId != null && comparedVersionId !== '';
 
-    // Latched, because comparison ending does not hand version selection back: once a host compares,
-    // every selection belongs to the compared instance. Without the latch the current instance would
-    // reload for the selection it still holds once isComparing goes back to false.
-    const hasComparedRef = React.useRef(false);
-    if (isComparing) {
-        hasComparedRef.current = true;
-    }
-
     return (
         <React.Fragment>
             <MemoConnectedContentPreview
@@ -1951,7 +1931,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                 collection={isComparing ? EMPTY_COLLECTION : rest.collection}
                 comparedSlotRef={setComparedSlot}
                 isComparing={isComparing}
-                isComparisonManaged={hasComparedRef.current}
             />
             {comparedSlot && isComparing
                 ? createPortal(
@@ -1971,7 +1950,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           hasHeader={false}
                           hideSidebar
                           isComparing={false}
-                          isComparisonManaged={false}
                           // Hosts defer the indicator to let a preloaded image show through instead.
                           // Nothing preloads the compared version, so deferring leaves this pane blank.
                           loadingIndicatorDelayMs={0}
