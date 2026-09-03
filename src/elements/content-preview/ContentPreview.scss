@@ -34,17 +34,9 @@
     }
 
     .bcpr-container {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        min-height: 0;
-    }
-
-    .bcpr-viewer {
         position: relative;
         display: flex;
         flex: 1;
-        min-height: 0;
     }
 
     .bcpr-content {
@@ -110,7 +102,10 @@
             }
         }
 
-        .bcpr-viewer {
+        // Nav arrows anchor to .bcpr here. Comparison is excluded because it has no
+        // arrows, and a static container would let the left pane's mask stretch across
+        // the compared pane.
+        .bcpr-body:not(.bcpr-body--comparing) .bcpr-container {
             position: static;
         }
 

@@ -1810,51 +1810,49 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     })}
                                     ref={this.previewBodyRef}
                                 >
-                                    <div className="bcpr-container">
-                                        <div
-                                            className="bcpr-viewer"
-                                            onMouseMove={this.onMouseMove}
-                                            ref={this.containerRef}
-                                        >
-                                            {file && (
-                                                <Measure bounds onResize={this.onResize}>
-                                                    {({ measureRef: previewRef }) => {
-                                                        const { renderCustomPreview, logger } = this.props;
+                                    <div
+                                        className="bcpr-container"
+                                        onMouseMove={this.onMouseMove}
+                                        ref={this.containerRef}
+                                    >
+                                        {file && (
+                                            <Measure bounds onResize={this.onResize}>
+                                                {({ measureRef: previewRef }) => {
+                                                    const { renderCustomPreview, logger } = this.props;
 
-                                                        return (
-                                                            <div ref={previewRef} className="bcpr-content">
-                                                                {renderCustomPreview ? (
-                                                                    <CustomPreviewWrapper
-                                                                        renderCustomPreview={renderCustomPreview}
-                                                                        fileId={currentFileId}
-                                                                        token={token}
-                                                                        apiHost={apiHost}
-                                                                        file={file}
-                                                                        logger={logger}
-                                                                        onPreviewError={this.onPreviewError}
-                                                                        onPreviewLoad={this.onPreviewLoad}
-                                                                    />
-                                                                ) : null}
-                                                            </div>
-                                                        );
-                                                    }}
-                                                </Measure>
-                                            )}
-                                            <PreviewMask
-                                                errorCode={errorCode}
-                                                extension={currentExtension}
-                                                isLoading={isLoading}
-                                                isLoadingDeferred={isLoadingDeferred}
+                                                    return (
+                                                        <div ref={previewRef} className="bcpr-content">
+                                                            {renderCustomPreview ? (
+                                                                <CustomPreviewWrapper
+                                                                    renderCustomPreview={renderCustomPreview}
+                                                                    fileId={currentFileId}
+                                                                    token={token}
+                                                                    apiHost={apiHost}
+                                                                    file={file}
+                                                                    logger={logger}
+                                                                    onPreviewError={this.onPreviewError}
+                                                                    onPreviewLoad={this.onPreviewLoad}
+                                                                />
+                                                            ) : null}
+                                                        </div>
+                                                    );
+                                                }}
+                                            </Measure>
+                                        )}
+                                        <PreviewMask
+                                            errorCode={errorCode}
+                                            extension={currentExtension}
+                                            isLoading={isLoading}
+                                            isLoadingDeferred={isLoadingDeferred}
+                                        />
+                                        {!isComparing && (
+                                            <PreviewNavigation
+                                                collection={collection}
+                                                currentIndex={this.getFileIndex()}
+                                                onNavigateLeft={this.navigateLeft}
+                                                onNavigateRight={this.navigateRight}
                                             />
-                                            {!isComparing && (
-                                                <PreviewNavigation
-                                                    collection={collection}
-                                                    currentIndex={this.getFileIndex()}
-                                                    onNavigateLeft={this.navigateLeft}
-                                                    onNavigateRight={this.navigateRight}
-                                                />
-                                            )}
-                                        </div>
+                                        )}
                                     </div>
                                     {isComparing && <div className="bcpr-compared-slot" ref={comparedSlotRef} />}
                                     {file && !hideSidebar && (
