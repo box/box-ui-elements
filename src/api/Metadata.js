@@ -950,10 +950,14 @@ class Metadata extends File {
         instances: Array<MetadataInstanceV2>,
         globalTemplates: Array<MetadataTemplate>,
         enterpriseTemplates: Array<MetadataTemplate>,
-        shouldFetchDetailedExtractMeta: boolean,
     }> {
         const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
-            this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled, shouldFetchDetailedExtractMeta),
+            this.getInstances(
+                id,
+                isMetadataRedesign,
+                isBoundingBoxOrConfidenceScoreReviewEnabled,
+                shouldFetchDetailedExtractMeta,
+            ),
             this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
             hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
         ]);
@@ -975,10 +979,14 @@ class Metadata extends File {
         instances: Array<MetadataInstanceV2>,
         globalTemplates: Array<MetadataTemplate>,
         enterpriseTemplates: Array<MetadataTemplate>,
-        shouldFetchDetailedExtractMeta: boolean,
     }> {
         const [instances, globalTemplates] = await Promise.all([
-            this.getInstances(id, isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled, shouldFetchDetailedExtractMeta),
+            this.getInstances(
+                id,
+                isMetadataRedesign,
+                isBoundingBoxOrConfidenceScoreReviewEnabled,
+                shouldFetchDetailedExtractMeta,
+            ),
             this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
         ]);
         const enterpriseNamespace = enterpriseFqn || resolveEnterpriseNamespaceFromInstances(instances);

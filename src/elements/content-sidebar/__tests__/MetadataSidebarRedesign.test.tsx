@@ -733,6 +733,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             true, // shouldFetchDetailedExtractMeta
         );
     });
@@ -748,6 +749,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             false,
             false,
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             false,
         );
     });

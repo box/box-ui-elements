@@ -451,7 +451,7 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should pass shouldFetchDetailedExtractMeta=true to getMetadata when enabled', async () => {
-        const { result } = setupHook('123', false, false, true);
+        const { result } = setupHook('123', false, false, {}, true);
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
 
@@ -1060,6 +1060,7 @@ describe('useSidebarMetadataFetcher', () => {
             isFeatureEnabledMock,
             { refreshCache: true, enterpriseFqn: 'enterprise_123', metadataNamespaceMode: 'MIGRATION' },
             true,
+            false,
             false,
         );
     });
