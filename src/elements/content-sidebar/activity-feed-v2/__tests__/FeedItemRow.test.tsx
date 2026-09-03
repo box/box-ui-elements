@@ -556,6 +556,29 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             );
         });
 
+        test('should preserve both range boundaries when editing a range-timestamped comment', () => {
+            mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
+            const onCommentUpdate = jest.fn();
+            const rangeComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampEndMs: 12000,
+                annotationTimestampMarkup: '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268]',
+                annotationTimestampMs: 8055,
+            };
+            render(<FeedItemRow {...defaultProps} item={rangeComment} onCommentUpdate={onCommentUpdate} />);
+
+            lastThreadedAnnotationProps.onEdit?.('comment-1', { type: 'doc', content: [] });
+
+            expect(onCommentUpdate).toHaveBeenCalledWith(
+                'comment-1',
+                '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268] edited-text',
+                undefined,
+                false,
+                commentPermissions,
+            );
+        });
+
         test('should not modify edit text for a regular comment without timestamp markup', () => {
             mockedSerializeEditorContent.mockReturnValue({ hasMention: false, text: 'edited-text' });
             const onCommentUpdate = jest.fn();
