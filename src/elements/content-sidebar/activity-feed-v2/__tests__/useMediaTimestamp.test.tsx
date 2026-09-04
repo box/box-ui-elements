@@ -767,7 +767,6 @@ describe('useMediaTimestamp range selection', () => {
             expect(hasListener('comment_range_draft_change')).toBe(false);
             expect(screen.getByTestId('ms').textContent).toBe('43500');
         } finally {
-            ``;
             cleanup();
         }
     });
