@@ -5,7 +5,7 @@ import type { TransformedFeedItem } from './types';
 
 const UNSET = Symbol('unset');
 
-const commentsRevision = (items: readonly TransformedFeedItem[]): string =>
+const feedContentKey = (items: readonly TransformedFeedItem[]): string =>
     items
         .map(item => {
             if (item.type === 'comment') {
@@ -27,23 +27,23 @@ export const useCommentMarkerSelectedId = (
     activeFeedEntryId: string | undefined,
     filteredItems: readonly TransformedFeedItem[],
 ): string | null => {
-    const revision = commentsRevision(filteredItems);
+    const contentKey = feedContentKey(filteredItems);
     const resolvedId = activeFeedEntryId
         ? resolveFeedItemIdForEntry(filteredItems, activeFeedEntryId) ?? activeFeedEntryId
         : null;
 
     const lastEntryIdRef = React.useRef<string | undefined | typeof UNSET>(UNSET);
-    const lastRevisionRef = React.useRef(revision);
+    const lastContentKeyRef = React.useRef(contentKey);
     const emittedSelectedIdRef = React.useRef<string | null>(null);
     const selectedIdRef = React.useRef<string | null>(resolvedId);
 
     if (lastEntryIdRef.current === UNSET || activeFeedEntryId !== lastEntryIdRef.current) {
         lastEntryIdRef.current = activeFeedEntryId;
-        lastRevisionRef.current = revision;
+        lastContentKeyRef.current = contentKey;
         emittedSelectedIdRef.current = null;
         selectedIdRef.current = resolvedId;
-    } else if (revision !== lastRevisionRef.current) {
-        lastRevisionRef.current = revision;
+    } else if (contentKey !== lastContentKeyRef.current) {
+        lastContentKeyRef.current = contentKey;
         const alreadyEmitted = Boolean(resolvedId && emittedSelectedIdRef.current === resolvedId);
         selectedIdRef.current = alreadyEmitted ? null : resolvedId;
     }

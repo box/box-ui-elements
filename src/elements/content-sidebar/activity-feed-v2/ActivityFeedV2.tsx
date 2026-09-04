@@ -69,7 +69,7 @@ type CommentMarkerPayload = {
 /** ContentPreview.getViewer() waits for playable. The waveform shell exists earlier. */
 const COMMENT_MARKERS_VIEWER_POLL_MS = 100;
 
-const toCommentMarkers = (
+const buildCommentMarkers = (
     items: readonly TransformedFeedItem[],
     selectedFeedItemId: string | null,
 ): CommentMarkerPayload[] => {
@@ -486,24 +486,24 @@ const ActivityFeedV2 = ({
             return current;
         };
 
-        const attach = (viewer: ViewerHandle) => {
+        const attachMarkerViewer = (viewer: ViewerHandle) => {
             attachedViewerRef.current = viewer;
-            viewer.emit('comment_markers', toCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current));
+            viewer.emit('comment_markers', buildCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current));
             viewer.addListener('comment_marker_select', handleMarkerSelect);
         };
 
-        const tryAttach = (): boolean => {
+        const attachMarkerViewerIfReady = (): boolean => {
             const viewer = resolveViewer();
             if (!viewer) {
                 return false;
             }
-            attach(viewer);
+            attachMarkerViewer(viewer);
             return true;
         };
 
-        if (!tryAttach()) {
+        if (!attachMarkerViewerIfReady()) {
             pollId = window.setInterval(() => {
-                if (tryAttach()) {
+                if (attachMarkerViewerIfReady()) {
                     window.clearInterval(pollId);
                     pollId = 0;
                 }
@@ -529,7 +529,7 @@ const ActivityFeedV2 = ({
         if (!viewer) {
             return;
         }
-        viewer.emit('comment_markers', toCommentMarkers(filteredItems, markerSelectedId));
+        viewer.emit('comment_markers', buildCommentMarkers(filteredItems, markerSelectedId));
     }, [filteredItems, markerSelectedId]);
 
     const handleCommentPost = React.useCallback(
