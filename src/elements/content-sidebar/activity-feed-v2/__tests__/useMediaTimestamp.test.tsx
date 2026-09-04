@@ -3,6 +3,7 @@ import { act, render, screen } from '@testing-library/react';
 
 import { seekMediaToMs, useMediaTimestamp } from '../useMediaTimestamp';
 import type { TimeFormat } from '../useTimeFormat';
+import type { ViewerHandle } from '../types';
 
 const createMediaElement = (tag: 'video' | 'audio' = 'video', currentTime: number = 0): HTMLMediaElement => {
     const media = document.createElement(tag);
@@ -40,17 +41,23 @@ const mountVideoInDom = (video: HTMLVideoElement) => mountMediaInDom(video);
 const TestHarness = ({
     enabled,
     fps = 24,
+    getViewer,
+    isAudioPlayerV2 = false,
     timeFormat = 'standard',
 }: {
     enabled: boolean;
     fps?: number;
+    getViewer?: () => ViewerHandle | null;
+    isAudioPlayerV2?: boolean;
     timeFormat?: TimeFormat;
 }) => {
-    const { formattedTimestamp, isPressed, onPressedChange, timestampMs } = useMediaTimestamp(enabled, timeFormat, fps);
+    const { formattedTimestamp, isPressed, onPressedChange, resetRange, timestampEndMs, timestampMs } =
+        useMediaTimestamp(enabled, timeFormat, fps, { getViewer, isAudioPlayerV2 });
     return (
         <div>
             <span data-testid="timestamp">{formattedTimestamp}</span>
             <span data-testid="ms">{String(timestampMs)}</span>
+            <span data-testid="end-ms">{String(timestampEndMs)}</span>
             <span data-testid="pressed">{String(isPressed)}</span>
             <button onClick={() => onPressedChange(true)} type="button">
                 press
@@ -58,9 +65,35 @@ const TestHarness = ({
             <button onClick={() => onPressedChange(false)} type="button">
                 unpress
             </button>
+            <button onClick={() => resetRange()} type="button">
+                reset
+            </button>
         </div>
     );
 };
+
+type ViewerListeners = Record<string, ((payload: unknown) => void) | undefined>;
+
+const createViewer = () => {
+    const listeners: ViewerListeners = {};
+    const viewer: ViewerHandle = {
+        addListener: (event, handler) => {
+            listeners[event] = handler;
+        },
+        emit: jest.fn(),
+        removeListener: event => {
+            delete listeners[event];
+        },
+    };
+    return {
+        emitFromViewer: (event: string, payload: unknown) => listeners[event]?.(payload),
+        getViewer: () => viewer,
+        hasListener: (event: string) => Boolean(listeners[event]),
+        viewer,
+    };
+};
+
+const emittedEvents = (viewer: ViewerHandle) => (viewer.emit as jest.Mock).mock.calls;
 
 describe('useMediaTimestamp', () => {
     afterEach(() => {
@@ -456,6 +489,283 @@ describe('seekMediaToMs', () => {
             seekMediaToMs(8055, () => null);
             expect(audio.currentTime).toBe(8.055);
             expect(audio.pause).toHaveBeenCalled();
+        } finally {
+            cleanup();
+        }
+    });
+});
+
+describe('useMediaTimestamp range selection', () => {
+    afterEach(() => {
+        document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
+    });
+
+    const renderWithRange = (currentTime = 43.5) => {
+        const audio = createMediaElement('audio', currentTime);
+        const cleanup = mountMediaInDom(audio);
+        const harness = createViewer();
+        const view = render(<TestHarness enabled getViewer={harness.getViewer} isAudioPlayerV2 />);
+        return { audio, cleanup, ...harness, ...view };
+    };
+
+    test('should emit a collapsed draft when the toggle is pressed', () => {
+        const { cleanup, viewer } = renderWithRange();
+        try {
+            expect(emittedEvents(viewer)).toHaveLength(0);
+            act(() => screen.getByText('press').click());
+            expect(emittedEvents(viewer)).toEqual([['comment_range_draft', { endMs: null, startMs: 43500 }]]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should clear the draft when the toggle is released', () => {
+        const { cleanup, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => screen.getByText('unpress').click());
+            expect(emittedEvents(viewer)[1]).toEqual(['comment_range_draft_clear', undefined]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should hold the range reported by a committed drag', () => {
+        const { cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('ms').textContent).toBe('44000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should pin the start against pause and seek once a drag commits', () => {
+        const { audio, cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            const afterDrag = emittedEvents(viewer).length;
+
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 90, writable: true });
+            act(() => {
+                audio.dispatchEvent(new Event('seeked'));
+                audio.dispatchEvent(new Event('pause'));
+            });
+
+            expect(screen.getByTestId('ms').textContent).toBe('44000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+            // Scrubbing to re-listen must not drag the user's chosen boundaries along with it.
+            expect(emittedEvents(viewer)).toHaveLength(afterDrag);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should let the start follow pause and seek before any drag', () => {
+        const { audio, cleanup, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 12, writable: true });
+            act(() => audio.dispatchEvent(new Event('pause')));
+
+            expect(screen.getByTestId('ms').textContent).toBe('12000');
+            // The handles have to be told: they stayed put while the media played.
+            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 12000 }]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should ignore a drag reported while the toggle is off', () => {
+        const { cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            expect(screen.getByTestId('ms').textContent).toBe('0');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test.each([
+        ['a malformed payload', undefined],
+        ['a non-numeric start', { endMs: 50000, startMs: 'nope' }],
+        ['a negative start', { endMs: 50000, startMs: -1 }],
+    ])('should ignore %s', (_label, payload) => {
+        const { cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', payload));
+
+            expect(screen.getByTestId('ms').textContent).toBe('43500');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test.each([
+        ['an end before the start', 40000],
+        ['an end equal to the start', 44000],
+    ])('should drop %s back to a single timestamp', (_label, endMs) => {
+        const { cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs, startMs: 44000 }));
+
+            expect(screen.getByTestId('ms').textContent).toBe('44000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should stay a single timestamp when the viewer never reports a drag', () => {
+        const { cleanup, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+            expect(emittedEvents(viewer)).toEqual([['comment_range_draft', { endMs: null, startMs: 43500 }]]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should drop back to a collapsed draft after the range is reset', () => {
+        const { cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            act(() => screen.getByText('reset').click());
+
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 44000 }]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should let the start follow playback again after the range is reset', () => {
+        const { audio, cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            act(() => screen.getByText('reset').click());
+
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 61, writable: true });
+            act(() => audio.dispatchEvent(new Event('pause')));
+
+            expect(screen.getByTestId('ms').textContent).toBe('61000');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should keep a dragged range across a new src on the same element', () => {
+        // Same element, new src means a token refresh, which is meant to be invisible to the user.
+        const { audio, cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            const afterDrag = emittedEvents(viewer).length;
+
+            act(() => audio.dispatchEvent(new Event('loadstart')));
+            act(() => audio.dispatchEvent(new Event('loadeddata')));
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 44, writable: true });
+            act(() => audio.dispatchEvent(new Event('seeked')));
+
+            expect(screen.getByTestId('ms').textContent).toBe('44000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+            expect(emittedEvents(viewer)).toHaveLength(afterDrag);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should reset an undragged start when a new media src loads', () => {
+        const { audio, cleanup } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => audio.dispatchEvent(new Event('loadstart')));
+
+            expect(screen.getByTestId('ms').textContent).toBe('0');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should clear the draft on unmount', () => {
+        const { cleanup, unmount, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            unmount();
+
+            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft_clear', undefined]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should pick up drags from a viewer that only becomes available after mount', () => {
+        // Preview loads its media well after the sidebar mounts, so the handle starts out null.
+        jest.useFakeTimers();
+        const audio = createMediaElement('audio', 43.5);
+        const cleanup = mountMediaInDom(audio);
+        const harness = createViewer();
+        let isPreviewLoaded = false;
+        try {
+            render(<TestHarness enabled getViewer={() => (isPreviewLoaded ? harness.viewer : null)} isAudioPlayerV2 />);
+            expect(harness.hasListener('comment_range_draft_change')).toBe(false);
+
+            isPreviewLoaded = true;
+            act(() => jest.advanceTimersByTime(500));
+
+            act(() => screen.getByText('press').click());
+            act(() => harness.emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+        } finally {
+            cleanup();
+            jest.useRealTimers();
+        }
+    });
+
+    test('should stop polling once the viewer is found', () => {
+        jest.useFakeTimers();
+        const audio = createMediaElement('audio', 43.5);
+        const cleanup = mountMediaInDom(audio);
+        const harness = createViewer();
+        const getViewer = jest.fn(() => harness.viewer);
+        try {
+            render(<TestHarness enabled getViewer={getViewer} isAudioPlayerV2 />);
+            expect(getViewer).toHaveBeenCalledTimes(1);
+
+            act(() => jest.advanceTimersByTime(5000));
+
+            expect(getViewer).toHaveBeenCalledTimes(1);
+        } finally {
+            cleanup();
+            jest.useRealTimers();
+        }
+    });
+
+    test('should not touch the viewer when range selection is disabled', () => {
+        const audio = createMediaElement('audio', 43.5);
+        const cleanup = mountMediaInDom(audio);
+        const { getViewer, hasListener, viewer } = createViewer();
+        try {
+            render(<TestHarness enabled getViewer={getViewer} />);
+            act(() => screen.getByText('press').click());
+
+            expect(emittedEvents(viewer)).toHaveLength(0);
+            expect(hasListener('comment_range_draft_change')).toBe(false);
+            expect(screen.getByTestId('ms').textContent).toBe('43500');
         } finally {
             cleanup();
         }
