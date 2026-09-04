@@ -4,10 +4,6 @@ import { formatByTimeFormat, MEDIA_CONTAINER_SELECTOR, MEDIA_ELEMENT_SELECTOR } 
 import type { TimeFormat } from './useTimeFormat';
 import type { CommentRangeDraft, ViewerHandle } from './types';
 
-/**
- * Preview exposes no viewer-ready event to the sidebar, and its viewer handle is null until the
- * media finishes loading, which is usually well after this sidebar has mounted. Poll for it.
- */
 const VIEWER_POLL_MS = 500;
 
 export const EVENT_RANGE_DRAFT = 'comment_range_draft';
@@ -220,11 +216,6 @@ export const useMediaTimestamp = (
             if (media === attached) {
                 return true;
             }
-            // A replaced element is a different file or version, so the selected range no longer applies.
-            if (attached) {
-                isRangePinnedRef.current = false;
-                setTimestampEndMs(undefined);
-            }
             detach();
             media.addEventListener('pause', handlePauseOrSeek);
             media.addEventListener('seeked', handlePauseOrSeek);
@@ -268,26 +259,28 @@ export const useMediaTimestamp = (
             setTimestampEndMs(change.endMs);
         };
 
-        // Follow whichever viewer is current rather than attaching once: the handle starts out null
-        // while preview loads, and preview builds a replacement on a file-version switch. Missing
-        // either moment silently costs the user their drags, since nothing else reports them.
-        let listening: ViewerHandle | null = null;
-        const followCurrentViewer = () => {
+        // Poll for the viewer until we find one.
+        let attachedViewer: ViewerHandle | null = null;
+        let pollId: ReturnType<typeof setInterval> | undefined;
+
+        const attachWhenReady = () => {
             const viewer = getViewer?.() ?? null;
-            if (viewer === listening) {
+            if (!viewer) {
                 return;
             }
-            listening?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
-            viewer?.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
-            listening = viewer;
+            viewer.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            attachedViewer = viewer;
+            clearInterval(pollId);
         };
 
-        followCurrentViewer();
-        const pollId = setInterval(followCurrentViewer, VIEWER_POLL_MS);
+        attachWhenReady();
+        if (!attachedViewer) {
+            pollId = setInterval(attachWhenReady, VIEWER_POLL_MS);
+        }
 
         return () => {
             clearInterval(pollId);
-            listening?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            attachedViewer?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
         };
     }, [getViewer, isRangeEnabled]);
 

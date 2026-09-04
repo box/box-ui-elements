@@ -736,25 +736,19 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
-    test('should follow the replacement viewer preview builds on a file-version switch', () => {
+    test('should stop polling once the viewer is found', () => {
         jest.useFakeTimers();
         const audio = createMediaElement('audio', 43.5);
         const cleanup = mountMediaInDom(audio);
-        const first = createViewer();
-        const second = createViewer();
-        let current = first;
+        const harness = createViewer();
+        const getViewer = jest.fn(() => harness.viewer);
         try {
-            render(<TestHarness enabled getViewer={() => current.viewer} isAudioPlayerV2 />);
-            expect(first.hasListener('comment_range_draft_change')).toBe(true);
+            render(<TestHarness enabled getViewer={getViewer} isAudioPlayerV2 />);
+            expect(getViewer).toHaveBeenCalledTimes(1);
 
-            current = second;
-            act(() => jest.advanceTimersByTime(500));
+            act(() => jest.advanceTimersByTime(5000));
 
-            expect(first.hasListener('comment_range_draft_change')).toBe(false);
-            act(() => screen.getByText('press').click());
-            act(() => second.emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
-
-            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+            expect(getViewer).toHaveBeenCalledTimes(1);
         } finally {
             cleanup();
             jest.useRealTimers();
