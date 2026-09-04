@@ -1933,8 +1933,6 @@ const ConnectedContentPreview = flow([
 const MemoConnectedContentPreview = React.memo(ConnectedContentPreview);
 
 function ContentPreviewWithComparison(props: ContentPreviewProps) {
-    // eslint-disable-next-line no-console
-    console.log('zwdebug ContentPreviewWithComparison', new Date().toISOString());
     const { comparedVersion, ...rest } = props;
     const [comparedSlot, setComparedSlot] = React.useState<?HTMLDivElement>(null);
     const comparedVersionId = comparedVersion && comparedVersion.id;
