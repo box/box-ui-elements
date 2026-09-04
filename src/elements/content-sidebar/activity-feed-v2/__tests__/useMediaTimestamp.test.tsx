@@ -712,6 +712,55 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
+    test('should pick up drags from a viewer that only becomes available after mount', () => {
+        // Preview loads its media well after the sidebar mounts, so the handle starts out null.
+        jest.useFakeTimers();
+        const audio = createMediaElement('audio', 43.5);
+        const cleanup = mountMediaInDom(audio);
+        const harness = createViewer();
+        let isPreviewLoaded = false;
+        try {
+            render(<TestHarness enabled getViewer={() => (isPreviewLoaded ? harness.viewer : null)} isAudioPlayerV2 />);
+            expect(harness.hasListener('comment_range_draft_change')).toBe(false);
+
+            isPreviewLoaded = true;
+            act(() => jest.advanceTimersByTime(500));
+
+            act(() => screen.getByText('press').click());
+            act(() => harness.emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+        } finally {
+            cleanup();
+            jest.useRealTimers();
+        }
+    });
+
+    test('should follow the replacement viewer preview builds on a file-version switch', () => {
+        jest.useFakeTimers();
+        const audio = createMediaElement('audio', 43.5);
+        const cleanup = mountMediaInDom(audio);
+        const first = createViewer();
+        const second = createViewer();
+        let current = first;
+        try {
+            render(<TestHarness enabled getViewer={() => current.viewer} isAudioPlayerV2 />);
+            expect(first.hasListener('comment_range_draft_change')).toBe(true);
+
+            current = second;
+            act(() => jest.advanceTimersByTime(500));
+
+            expect(first.hasListener('comment_range_draft_change')).toBe(false);
+            act(() => screen.getByText('press').click());
+            act(() => second.emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+        } finally {
+            cleanup();
+            jest.useRealTimers();
+        }
+    });
+
     test('should not touch the viewer when range selection is disabled', () => {
         const audio = createMediaElement('audio', 43.5);
         const cleanup = mountMediaInDom(audio);

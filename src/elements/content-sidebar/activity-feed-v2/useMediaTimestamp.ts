@@ -4,6 +4,12 @@ import { formatByTimeFormat, MEDIA_CONTAINER_SELECTOR, MEDIA_ELEMENT_SELECTOR } 
 import type { TimeFormat } from './useTimeFormat';
 import type { CommentRangeDraft, ViewerHandle } from './types';
 
+/**
+ * Preview exposes no viewer-ready event to the sidebar, and its viewer handle is null until the
+ * media finishes loading, which is usually well after this sidebar has mounted. Poll for it.
+ */
+const VIEWER_POLL_MS = 500;
+
 export const EVENT_RANGE_DRAFT = 'comment_range_draft';
 export const EVENT_RANGE_DRAFT_CHANGE = 'comment_range_draft_change';
 export const EVENT_RANGE_DRAFT_CLEAR = 'comment_range_draft_clear';
@@ -252,11 +258,6 @@ export const useMediaTimestamp = (
         if (!isRangeEnabled) {
             return undefined;
         }
-        const viewer = getViewer?.();
-        if (!viewer) {
-            return undefined;
-        }
-
         const handleRangeChange = (payload: unknown) => {
             const change = readRangeChange(payload);
             if (!change || !isPressedRef.current) {
@@ -267,8 +268,27 @@ export const useMediaTimestamp = (
             setTimestampEndMs(change.endMs);
         };
 
-        viewer.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
-        return () => viewer.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+        // Follow whichever viewer is current rather than attaching once: the handle starts out null
+        // while preview loads, and preview builds a replacement on a file-version switch. Missing
+        // either moment silently costs the user their drags, since nothing else reports them.
+        let listening: ViewerHandle | null = null;
+        const followCurrentViewer = () => {
+            const viewer = getViewer?.() ?? null;
+            if (viewer === listening) {
+                return;
+            }
+            listening?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            viewer?.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            listening = viewer;
+        };
+
+        followCurrentViewer();
+        const pollId = setInterval(followCurrentViewer, VIEWER_POLL_MS);
+
+        return () => {
+            clearInterval(pollId);
+            listening?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+        };
     }, [getViewer, isRangeEnabled]);
 
     // Take down any handles still up for a composer that is going away.
