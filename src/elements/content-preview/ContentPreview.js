@@ -138,6 +138,7 @@ type Props = {
     hideSidebar?: boolean,
     isComparing?: boolean,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
+    comparedVersion?: BoxItemVersion,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -1910,9 +1911,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     }
 }
 
-export type ContentPreviewProps = Props & {
-    comparedVersion?: BoxItemVersion,
-};
+export type ContentPreviewProps = Props;
 export type { ContentPreviewChildProps };
 export { ContentPreview as ContentPreviewComponent };
 
