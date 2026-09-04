@@ -1,3 +1,4 @@
+// @ts-nocheck -- Blueprint Text/InlineNotice typings reject mixed ReactNode children used in this demo
 import * as React from 'react';
 
 import { Card, Text, InlineNotice } from '@box/blueprint-web';

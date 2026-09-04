@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import HotkeyFriendlyModal from '../HotkeyFriendlyModal';
 
@@ -11,10 +12,10 @@ describe('components/hotkeys/HotkeyFriendlyModal', () => {
         );
 
         const hotkeyLayer = wrapper.find('HotkeyLayer');
-        expect(hotkeyLayer.length).toBe(1);
+        expect(hotkeyLayer).toHaveLength(1);
         expect(hotkeyLayer.prop('enableHelpModal')).toBeFalsy();
 
-        expect(wrapper.find('Modal').length).toBe(1);
+        expect(wrapper.find('Modal')).toHaveLength(1);
     });
 
     test('should render null when isOpen is falsy', () => {
