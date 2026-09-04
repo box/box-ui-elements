@@ -1,10 +1,14 @@
 import React, { act } from 'react';
 import { shallow, mount } from 'enzyme';
+import type { ReactWrapper } from 'enzyme';
 import sinon from 'sinon';
 
 import { Tab, TabView } from '..';
 
 const sandbox = sinon.sandbox.create();
+type TabViewInstance = InstanceType<typeof TabView>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Enzyme tests replace class internals with Sinon mocks
+type TabViewWrapper = ReactWrapper<any, any, any>;
 
 describe('components/tab-view/TabView', () => {
     afterEach(() => {
@@ -19,9 +23,9 @@ describe('components/tab-view/TabView', () => {
             </TabView>,
         );
 
-        expect(component.find('TabViewPrimitive').length).toEqual(1);
+        expect(component.find('TabViewPrimitive')).toHaveLength(1);
         expect(component.props().selectedIndex).toEqual(0);
-        expect(component.props().onTabSelect).toEqual(component.instance().handleOnTabSelect);
+        expect(component.props().onTabSelect).toEqual((component.instance() as TabViewInstance).handleOnTabSelect);
         expect(typeof component.props().resetActiveTab).toBe('function');
     });
 
@@ -33,7 +37,7 @@ describe('components/tab-view/TabView', () => {
             </TabView>,
         );
 
-        component.instance().handleOnTabSelect(100);
+        (component.instance() as TabViewInstance).handleOnTabSelect(100);
 
         expect(component.state('selectedIndex')).toEqual(100);
     });
@@ -49,7 +53,7 @@ describe('components/tab-view/TabView', () => {
 
         const selectedTabId = 100;
 
-        component.instance().handleOnTabSelect(selectedTabId);
+        (component.instance() as TabViewInstance).handleOnTabSelect(selectedTabId);
         expect(cb).toHaveBeenCalledWith(selectedTabId);
     });
 
@@ -61,7 +65,7 @@ describe('components/tab-view/TabView', () => {
             </TabView>,
         );
 
-        component.instance().handleOnTabFocus(100);
+        (component.instance() as TabViewInstance).handleOnTabFocus(100);
 
         expect(component.state('focusedIndex')).toEqual(100);
     });
@@ -74,7 +78,7 @@ describe('components/tab-view/TabView', () => {
             </TabView>,
         );
 
-        expect(component.find('TabViewPrimitive').length).toEqual(1);
+        expect(component.find('TabViewPrimitive')).toHaveLength(1);
         expect(component.props().selectedIndex).toEqual(1);
         expect(component.props().focusedIndex).toEqual(1);
     });
@@ -90,7 +94,7 @@ describe('components/tab-view/TabView', () => {
         const selectedIndex = 1;
         component.setState({ selectedIndex, focusedIndex: 2 });
         expect(component.props().selectedIndex).toEqual(selectedIndex);
-        component.instance().resetFocusedTab();
+        (component.instance() as TabViewInstance).resetFocusedTab();
         component.update();
         expect(component.props().focusedIndex).toEqual(selectedIndex);
     });
@@ -105,7 +109,7 @@ describe('components/tab-view/TabView', () => {
 
         component.setState({ selectedIndex: 1 });
         expect(component.props().selectedIndex).toEqual(1);
-        component.instance().resetActiveTab();
+        (component.instance() as TabViewInstance).resetActiveTab();
         component.update();
         expect(component.props().selectedIndex).toEqual(0);
     });
@@ -121,22 +125,12 @@ describe('components/tab-view/TabView', () => {
                 </Tab>
             </TabView>,
         );
-        expect(
-            component
-                .find('button')
-                .at(0)
-                .prop('data-resin-tag'),
-        ).toEqual('test1');
-        expect(
-            component
-                .find('button')
-                .at(1)
-                .prop('data-resin-tag'),
-        ).toEqual('test2');
+        expect(component.find('button').at(0).prop('data-resin-tag')).toEqual('test1');
+        expect(component.find('button').at(1).prop('data-resin-tag')).toEqual('test2');
     });
 
     describe('life cycle methods', () => {
-        let component;
+        let component: TabViewWrapper;
         beforeEach(() => {
             component = mount(
                 <TabView defaultSelectedIndex={0}>
@@ -168,7 +162,7 @@ describe('components/tab-view/TabView', () => {
     });
 
     describe('handleKeyUp', () => {
-        let component;
+        let component: TabViewWrapper;
 
         beforeEach(() => {
             component = mount(

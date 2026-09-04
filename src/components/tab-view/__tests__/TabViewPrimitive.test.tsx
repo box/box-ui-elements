@@ -1,17 +1,32 @@
 import React, { act } from 'react';
 import { shallow, mount } from 'enzyme';
+import type { ReactWrapper } from 'enzyme';
 import sinon from 'sinon';
 
 import { Tab, TabViewPrimitive } from '..';
 
 const sandbox = sinon.sandbox.create();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Enzyme tests replace class internals and DOM refs
+type TabViewPrimitiveWrapper = ReactWrapper<any, any, any>;
+
+interface RenderCase {
+    tabsContainerOffsetLeft: number;
+    isDynamic: boolean;
+    style: React.CSSProperties;
+}
+
 describe('components/tab-view/TabViewPrimitive', () => {
     afterEach(() => {
         sandbox.verifyAndRestore();
     });
 
-    const simulateKeyDown = (comp, key, shouldStopEvent = false, isShiftKey = false) => {
+    const simulateKeyDown = (
+        comp: TabViewPrimitiveWrapper,
+        key: string,
+        shouldStopEvent = false,
+        isShiftKey = false,
+    ) => {
         // conveniently ensuring that the keydown event is attached to the tablist element,
         // not the entire container
         comp.find('[role="tablist"]')
@@ -25,15 +40,15 @@ describe('components/tab-view/TabViewPrimitive', () => {
     };
 
     test('should render tabview ui with tabs', () => {
-        const onTabFocus = () => {};
-        const onTabSelect = () => {};
+        const onTabFocus = jest.fn();
+        const onTabSelect = jest.fn();
         const component = shallow(
             <TabViewPrimitive
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={0}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -42,21 +57,25 @@ describe('components/tab-view/TabViewPrimitive', () => {
         );
 
         expect(component.hasClass('tab-view')).toBe(true);
-        expect(component.instance().handleKeyDown).toEqual(component.instance().handleKeyDown);
-        expect(component.find('.tabs').find('button').length).toEqual(2);
-        expect(component.find({ tabIndex: 0 }).toBeFalsy);
+        expect(component.find('.tabs').find('button')).toHaveLength(2);
+        expect(
+            component
+                .find('.tabs')
+                .find('button')
+                .filterWhere(tab => tab.prop('tabIndex') === 0),
+        ).toHaveLength(1);
     });
 
     test('should render tabview ui with link tabs', () => {
-        const onTabFocus = () => {};
-        const onTabSelect = () => {};
+        const onTabFocus = jest.fn();
+        const onTabSelect = jest.fn();
         const component = shallow(
             <TabViewPrimitive
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={0}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -64,20 +83,20 @@ describe('components/tab-view/TabViewPrimitive', () => {
             </TabViewPrimitive>,
         );
 
-        expect(component.find('.tabs').find('button').length).toEqual(1);
-        expect(component.find('.tabs').find('LinkButton').length).toEqual(1);
+        expect(component.find('.tabs').find('button')).toHaveLength(1);
+        expect(component.find('.tabs').find('LinkButton')).toHaveLength(1);
     });
 
     test('should select appropriate tab when passed selectedIndex', () => {
-        const onTabFocus = () => {};
-        const onTabSelect = () => {};
+        const onTabFocus = jest.fn();
+        const onTabSelect = jest.fn();
         const component = shallow(
             <TabViewPrimitive
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={1}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -93,25 +112,21 @@ describe('components/tab-view/TabViewPrimitive', () => {
     test('should call onTabSelect when tab selected', () => {
         const onTabFocus = sinon.spy();
         const onTabSelect = sinon.spy();
-        const event = { type: 'click' };
+        const event = { type: 'click' } as const;
         const component = shallow(
             <TabViewPrimitive
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={1}
             >
                 <Tab title="tab1">Tab 1</Tab>
                 <Tab title="tab2">Tab 2</Tab>
             </TabViewPrimitive>,
         );
-        const tabTwoButton = component
-            .find('.tabs')
-            .find('button')
-            .at(1)
-            .find('button');
+        const tabTwoButton = component.find('.tabs').find('button').at(1).find('button');
         tabTwoButton.simulate('click', event);
         expect(onTabSelect.calledWith(1)).toBe(true);
         expect(onTabFocus.calledWith(1)).toBe(true);
@@ -125,8 +140,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={0}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -145,8 +160,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={1}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -165,8 +180,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 focusedIndex={1}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={1}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -185,8 +200,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 focusedIndex={0}
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
-                resetActiveTab={() => {}}
-                resetFocusedTab={() => {}}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={0}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -208,7 +223,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 onTabFocus={onTabFocus}
                 onTabSelect={onTabSelect}
                 resetActiveTab={resetActiveTab}
-                resetFocusedTab={() => {}}
+                resetFocusedTab={jest.fn()}
                 selectedIndex={0}
             >
                 <Tab title="tab1">Tab 1</Tab>
@@ -220,7 +235,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
     });
 
     describe('render()', () => {
-        [
+        const renderCases: RenderCase[] = [
             {
                 tabsContainerOffsetLeft: 1,
                 isDynamic: true,
@@ -231,7 +246,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                 isDynamic: false,
                 style: {},
             },
-        ].forEach(({ tabsContainerOffsetLeft, isDynamic, style }) => {
+        ];
+
+        renderCases.forEach(({ tabsContainerOffsetLeft, isDynamic, style }) => {
             test('should render tabs with correct style', () => {
                 const component = shallow(
                     <TabViewPrimitive
@@ -257,7 +274,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
 
     describe('Dynamic Tabs', () => {
         describe('scrollToTab', () => {
-            let component;
+            let component: TabViewPrimitiveWrapper;
             beforeEach(() => {
                 const onTabFocus = sinon.mock();
                 const onTabSelect = sinon.mock();
@@ -267,8 +284,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
-                        resetActiveTab={() => {}}
-                        resetFocusedTab={() => {}}
+                        resetActiveTab={jest.fn()}
+                        resetFocusedTab={jest.fn()}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -287,10 +304,10 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     <TabViewPrimitive
                         focusedIndex={0}
                         isDynamic
-                        onTabFocus={() => {}}
-                        onTabSelect={() => {}}
-                        resetActiveTab={() => {}}
-                        resetFocusedTab={() => {}}
+                        onTabFocus={jest.fn()}
+                        onTabSelect={jest.fn()}
+                        resetActiveTab={jest.fn()}
+                        resetFocusedTab={jest.fn()}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -357,7 +374,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
         });
 
         describe('life cycle methods', () => {
-            let component;
+            let component: TabViewPrimitiveWrapper;
             beforeEach(() => {
                 const onTabFocus = sinon.mock();
                 const onTabSelect = sinon.mock();
@@ -367,8 +384,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
-                        resetActiveTab={() => {}}
-                        resetFocusedTab={() => {}}
+                        resetActiveTab={jest.fn()}
+                        resetFocusedTab={jest.fn()}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -460,8 +477,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
         });
 
         describe('arrows', () => {
-            let component;
-            let onTabFocus;
+            let component: TabViewPrimitiveWrapper;
+            let onTabFocus: sinon.SinonExpectation;
 
             beforeEach(() => {
                 onTabFocus = sinon.mock();
@@ -472,8 +489,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
-                        resetActiveTab={() => {}}
-                        resetFocusedTab={() => {}}
+                        resetActiveTab={jest.fn()}
+                        resetFocusedTab={jest.fn()}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
@@ -500,7 +517,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const lastElementIsInsideOfTabsContainer = {
                         offsetLeft: 0,
                         offsetWidth: 50,
-                    };
+                    } as const;
                     instance.tabsElements = [lastElementIsInsideOfTabsContainer];
 
                     instance.tabsContainer = {
@@ -521,7 +538,7 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const lastElementIsOutsideOfTabsContainer = {
                         offsetLeft: 100,
                         offsetWidth: 100,
-                    };
+                    } as const;
                     instance.tabsElements = [lastElementIsOutsideOfTabsContainer];
 
                     instance.tabsContainer = {
@@ -607,9 +624,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     <TabViewPrimitive
                         focusedIndex={0}
                         isDynamic
-                        onTabFocus={() => {}}
-                        onTabSelect={() => {}}
-                        resetActiveTab={() => {}}
+                        onTabFocus={jest.fn()}
+                        onTabSelect={jest.fn()}
+                        resetActiveTab={jest.fn()}
                         resetFocusedTab={resetFocusedTab}
                         selectedIndex={1}
                     >
@@ -624,9 +641,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
         });
 
         describe('focusOnTabElement', () => {
-            let onTabFocus;
-            let onTabSelect;
-            let component;
+            let onTabFocus: sinon.SinonExpectation;
+            let onTabSelect: sinon.SinonExpectation;
+            let component: TabViewPrimitiveWrapper;
 
             beforeEach(() => {
                 onTabFocus = sinon.mock().withArgs(1);
@@ -637,8 +654,8 @@ describe('components/tab-view/TabViewPrimitive', () => {
                         isDynamic
                         onTabFocus={onTabFocus}
                         onTabSelect={onTabSelect}
-                        resetActiveTab={() => {}}
-                        resetFocusedTab={() => {}}
+                        resetActiveTab={jest.fn()}
+                        resetFocusedTab={jest.fn()}
                         selectedIndex={0}
                     >
                         <Tab title="tab1">Tab 1</Tab>
