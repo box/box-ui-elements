@@ -3,8 +3,6 @@ import * as React from 'react';
 import { resolveFeedItemIdForEntry } from './helpers';
 import type { TransformedFeedItem } from './types';
 
-const UNSET = Symbol('unset');
-
 const feedContentKey = (items: readonly TransformedFeedItem[]): string =>
     items
         .map(item => {
@@ -18,6 +16,65 @@ const feedContentKey = (items: readonly TransformedFeedItem[]): string =>
         })
         .join('|');
 
+type MarkerSelectionSnapshot = {
+    activeFeedEntryId: string | undefined;
+    contentKey: string;
+    emittedSelectedId: string | null;
+    selectedId: string | null;
+};
+
+const resolveSelectedId = (
+    activeFeedEntryId: string | undefined,
+    filteredItems: readonly TransformedFeedItem[],
+): string | null =>
+    activeFeedEntryId ? resolveFeedItemIdForEntry(filteredItems, activeFeedEntryId) ?? activeFeedEntryId : null;
+
+const markEmitted = (
+    selectedId: string | null,
+    filteredItems: readonly TransformedFeedItem[],
+    emittedSelectedId: string | null,
+): string | null => (selectedId && filteredItems.some(item => item.id === selectedId) ? selectedId : emittedSelectedId);
+
+const createSnapshot = (
+    activeFeedEntryId: string | undefined,
+    filteredItems: readonly TransformedFeedItem[],
+): MarkerSelectionSnapshot => {
+    const selectedId = resolveSelectedId(activeFeedEntryId, filteredItems);
+    return {
+        activeFeedEntryId,
+        contentKey: feedContentKey(filteredItems),
+        emittedSelectedId: markEmitted(selectedId, filteredItems, null),
+        selectedId,
+    };
+};
+
+const reduceSnapshot = (
+    previous: MarkerSelectionSnapshot,
+    activeFeedEntryId: string | undefined,
+    filteredItems: readonly TransformedFeedItem[],
+): MarkerSelectionSnapshot => {
+    const contentKey = feedContentKey(filteredItems);
+    const resolvedId = resolveSelectedId(activeFeedEntryId, filteredItems);
+
+    let selectedId: string | null;
+    let {emittedSelectedId} = previous;
+
+    if (activeFeedEntryId !== previous.activeFeedEntryId) {
+        selectedId = resolvedId;
+        emittedSelectedId = null;
+    } else {
+        const alreadyEmitted = Boolean(resolvedId && previous.emittedSelectedId === resolvedId);
+        selectedId = alreadyEmitted ? null : resolvedId;
+    }
+
+    return {
+        activeFeedEntryId,
+        contentKey,
+        emittedSelectedId: markEmitted(selectedId, filteredItems, emittedSelectedId),
+        selectedId,
+    };
+};
+
 /**
  * Send `isSelected` once for the current `activeFeedEntryId` (click / deep link).
  * Add, delete, and edit refresh the marker list without re-asserting selection,
@@ -27,30 +84,14 @@ export const useCommentMarkerSelectedId = (
     activeFeedEntryId: string | undefined,
     filteredItems: readonly TransformedFeedItem[],
 ): string | null => {
+    const [snapshot, setSnapshot] = React.useState(() => createSnapshot(activeFeedEntryId, filteredItems));
     const contentKey = feedContentKey(filteredItems);
-    const resolvedId = activeFeedEntryId
-        ? resolveFeedItemIdForEntry(filteredItems, activeFeedEntryId) ?? activeFeedEntryId
-        : null;
 
-    const lastEntryIdRef = React.useRef<string | undefined | typeof UNSET>(UNSET);
-    const lastContentKeyRef = React.useRef(contentKey);
-    const emittedSelectedIdRef = React.useRef<string | null>(null);
-    const selectedIdRef = React.useRef<string | null>(resolvedId);
-
-    if (lastEntryIdRef.current === UNSET || activeFeedEntryId !== lastEntryIdRef.current) {
-        lastEntryIdRef.current = activeFeedEntryId;
-        lastContentKeyRef.current = contentKey;
-        emittedSelectedIdRef.current = null;
-        selectedIdRef.current = resolvedId;
-    } else if (contentKey !== lastContentKeyRef.current) {
-        lastContentKeyRef.current = contentKey;
-        const alreadyEmitted = Boolean(resolvedId && emittedSelectedIdRef.current === resolvedId);
-        selectedIdRef.current = alreadyEmitted ? null : resolvedId;
+    if (activeFeedEntryId !== snapshot.activeFeedEntryId || contentKey !== snapshot.contentKey) {
+        const nextSnapshot = reduceSnapshot(snapshot, activeFeedEntryId, filteredItems);
+        setSnapshot(nextSnapshot);
+        return nextSnapshot.selectedId;
     }
 
-    if (selectedIdRef.current && filteredItems.some(item => item.id === selectedIdRef.current)) {
-        emittedSelectedIdRef.current = selectedIdRef.current;
-    }
-
-    return selectedIdRef.current;
+    return snapshot.selectedId;
 };

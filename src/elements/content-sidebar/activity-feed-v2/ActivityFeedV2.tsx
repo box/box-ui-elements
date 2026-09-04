@@ -457,9 +457,12 @@ const ActivityFeedV2 = ({
     const markerSelectedIdRef = React.useRef(markerSelectedId);
     const onCommentSelectRef = React.useRef(onCommentSelect);
     const attachedViewerRef = React.useRef<ViewerHandle | null>(null);
-    filteredItemsRef.current = filteredItems;
-    markerSelectedIdRef.current = markerSelectedId;
-    onCommentSelectRef.current = onCommentSelect;
+
+    React.useLayoutEffect(() => {
+        filteredItemsRef.current = filteredItems;
+        markerSelectedIdRef.current = markerSelectedId;
+        onCommentSelectRef.current = onCommentSelect;
+    }, [filteredItems, markerSelectedId, onCommentSelect]);
 
     React.useEffect(() => {
         if ((!getViewer && !getPreview) || !allowCommentMarkers) return undefined;
