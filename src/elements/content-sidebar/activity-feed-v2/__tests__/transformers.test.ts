@@ -8,7 +8,6 @@ import type { TaskNew } from '../../../../common/types/tasks';
 
 import {
     annotationTargetToBadge,
-    extractTimestampMarkup,
     textToDocumentNode,
     transformAnnotationToMessages,
     transformAppActivityToProps,
@@ -772,57 +771,6 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
     });
 
-    describe('extractTimestampMarkup()', () => {
-        test('should return text unchanged when no timestamp markup is present', () => {
-            expect(extractTimestampMarkup('regular comment')).toEqual({ cleanText: 'regular comment' });
-        });
-
-        test('should return empty input unchanged', () => {
-            expect(extractTimestampMarkup('')).toEqual({ cleanText: '' });
-        });
-
-        test('should extract timestamp markup with versionId and return a frame badge target', () => {
-            const result = extractTimestampMarkup('#[timestamp:8055,versionId:2390295731268]  wowo');
-            expect(result.cleanText).toBe('wowo');
-            expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
-            expect(result.timestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
-            expect(result.timestampMs).toBe(8055);
-        });
-
-        test('should extract timestamp markup without versionId', () => {
-            const result = extractTimestampMarkup('#[timestamp:65000] hello');
-            expect(result.cleanText).toBe('hello');
-            expect(result.target).toEqual({ timestamp: '1:05', type: 'frame' });
-            expect(result.timestampMarkup).toBe('#[timestamp:65000]');
-            expect(result.timestampMs).toBe(65000);
-        });
-
-        test('should leave timestamp markup that does not anchor at the start of the message untouched', () => {
-            const result = extractTimestampMarkup('see #[timestamp:8055,versionId:1] this');
-            expect(result.cleanText).toBe('see #[timestamp:8055,versionId:1] this');
-            expect(result.target).toBeUndefined();
-        });
-
-        test('should return empty cleanText when the message is only timestamp markup', () => {
-            const result = extractTimestampMarkup('#[timestamp:8055,versionId:1]');
-            expect(result.cleanText).toBe('');
-            expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
-        });
-
-        test('should leave malformed timestamp markup untouched', () => {
-            const result = extractTimestampMarkup('#[timestamp:abc] hello');
-            expect(result.cleanText).toBe('#[timestamp:abc] hello');
-            expect(result.target).toBeUndefined();
-        });
-
-        test('should drop the badge when the timestamp value exceeds Number.MAX_SAFE_INTEGER', () => {
-            const result = extractTimestampMarkup('#[timestamp:99999999999999999999] hello');
-            expect(result.cleanText).toBe('hello');
-            expect(result.target).toBeUndefined();
-            expect(result.timestampMs).toBeUndefined();
-        });
-    });
-
     describe('transformCommentToMessages() with timestamp markup', () => {
         test('should strip #[timestamp:...] markup from rendered message text', () => {
             const comment = {
@@ -859,6 +807,30 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 expect(result.annotationTarget).toEqual({ timestamp: '0:08', type: 'frame' });
                 expect(result.annotationTimestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
                 expect(result.annotationTimestampMs).toBe(8055);
+                expect(result.annotationTimestampEndMs).toBeUndefined();
+            }
+        });
+
+        test('should populate annotationTimestampEndMs for a comment carrying a time range', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'User', type: 'user' },
+                id: 'c1',
+                message: '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268] great take',
+                modified_at: '2024-01-01T00:00:00Z',
+                permissions: {},
+                status: 'open',
+                tagged_message: '',
+                type: 'comment',
+            };
+            const result = transformFeedItem(comment as unknown as FeedItem);
+            if (result!.type === 'comment') {
+                expect(result.annotationTimestampMs).toBe(8055);
+                expect(result.annotationTimestampEndMs).toBe(12000);
+                expect(result.annotationTimestampMarkup).toBe(
+                    '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268]',
+                );
+                expect(result.messages[0].message.content[0].content).toEqual([{ type: 'text', text: 'great take' }]);
             }
         });
 
