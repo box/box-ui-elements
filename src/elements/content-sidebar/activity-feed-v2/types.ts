@@ -83,6 +83,15 @@ export type ActivityFeedV2File = {
     };
 };
 
+/**
+ * Draft range the composer is holding, sent to the viewer so it can draw handles on the waveform.
+ * A null end means the composer still holds a single timestamp and the handles sit collapsed at the start.
+ */
+export type CommentRangeDraft = {
+    endMs: number | null;
+    startMs: number;
+};
+
 export type ViewerHandle = {
     addListener: (event: string, handler: (payload: unknown) => void) => void;
     emit: (event: string, payload: unknown) => void;

@@ -1149,6 +1149,169 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
+    describe('audio comment ranges', () => {
+        const mountAudio = (currentTime: number = 0) => {
+            const container = document.createElement('div');
+            container.className = 'bp-media-container';
+            const media = document.createElement('audio');
+            Object.defineProperty(media, 'currentTime', { configurable: true, value: currentTime, writable: true });
+            Object.defineProperty(media, 'paused', { configurable: true, value: true, writable: true });
+            media.pause = jest.fn();
+            container.appendChild(media);
+            document.body.appendChild(container);
+            return { cleanup: () => container.remove(), media };
+        };
+
+        const createRangeViewer = () => {
+            const listeners: Record<string, ((payload: unknown) => void) | undefined> = {};
+            const viewer = {
+                addListener: jest.fn((event: string, handler: (payload: unknown) => void) => {
+                    listeners[event] = handler;
+                }),
+                emit: jest.fn(),
+                removeListener: jest.fn((event: string) => {
+                    delete listeners[event];
+                }),
+            };
+            return {
+                commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
+                getViewer: () => viewer,
+                rangeEmits: () =>
+                    viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
+                viewer,
+            };
+        };
+
+        const audioFile = { extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } };
+        const videoFile = { extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } };
+
+        test('should ask the viewer for handles when the audio toggle is pressed', async () => {
+            const { cleanup, media } = mountAudio();
+            const { getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+
+                expect(rangeEmits()).toEqual([['comment_range_draft', { endMs: null, startMs: 8055 }]]);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should never ask for handles on a video file', async () => {
+            const { cleanup, media } = mountAudio();
+            const { getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={videoFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+
+                expect(rangeEmits()).toEqual([]);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should post range markup after a handle drag commits', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, getViewer } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(onCommentCreate).toHaveBeenCalledWith(
+                    '#[timestamp:8055,endTimestamp:12000,versionId:99] great take',
+                    false,
+                );
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should drop the range back to a single timestamp after a successful post', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, getViewer, rangeEmits } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+                onCommentCreate.mockClear();
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 8055 }]);
+                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great take', false);
+            } finally {
+                cleanup();
+            }
+        });
+    });
+
     describe('filter controls', () => {
         test('should default showResolved and showOnlyMentionsMe to false in the filter menu', () => {
             render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);

@@ -432,9 +432,9 @@ const ActivityFeedV2 = ({
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
     const isAudio = file?.extension ? FILE_EXTENSIONS.audio.includes(file.extension) : false;
     const fileVersionId = file?.file_version?.id;
+    const isAudioPlayerV2 = isAudio && isAudioPlayerV2Enabled;
     const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
-    const allowAudioTimestamps =
-        isAudio && isTimestampedCommentsEnabled && isAudioPlayerV2Enabled && Boolean(fileVersionId);
+    const allowAudioTimestamps = isAudioPlayerV2 && isTimestampedCommentsEnabled && Boolean(fileVersionId);
     const allowMediaTimestamps = allowVideoTimestamps || allowAudioTimestamps;
     const { timeFormat, fps } = useTimeFormat(isVideo);
 
@@ -442,15 +442,19 @@ const ActivityFeedV2 = ({
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
+        resetRange,
         timestampEndMs,
         timestampMs,
-    } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps);
+    } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps, {
+        getViewer,
+        isAudioPlayerV2,
+    });
 
     const editorMediaTimestamp = allowMediaTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
-    const allowCommentMarkers = isVideo || (isAudio && isAudioPlayerV2Enabled);
+    const allowCommentMarkers = isVideo || isAudioPlayerV2;
     const markerSelectedId = useCommentMarkerSelectedId(activeFeedEntryId, filteredItems);
 
     const filteredItemsRef = React.useRef(filteredItems);
@@ -552,6 +556,7 @@ const ActivityFeedV2 = ({
                 const snapshot = new Set(filteredItems.map(item => item.id));
                 await onCommentCreate(text, serialized.hasMention);
                 knownIdsBeforePostRef.current = snapshot;
+                resetRange();
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('ActivityFeedV2: failed to post comment', error);
@@ -564,6 +569,7 @@ const ActivityFeedV2 = ({
             isRichTextEnabled,
             isTimestampPressed,
             onCommentCreate,
+            resetRange,
             timestampEndMs,
             timestampMs,
         ],
