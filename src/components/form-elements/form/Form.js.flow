@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
 import serialize from 'form-serialize';
 
 import { FormContext } from './FormContext';
 
-function getFormValidityState(form) {
+function getFormValidityState(form: any) {
     // Turn the form.elements HTMLCollection into Array before reducing
     return [].slice.call(form.elements).reduce((validityObj, inputEl) => {
         // Only serialize inputs that have a name defined
@@ -26,20 +26,8 @@ function getFormValidityState(form) {
     }, {});
 }
 
-class Form extends Component {
-    static propTypes = {
-        children: PropTypes.node,
-        /** Called when an input in the form changes */
-        onChange: PropTypes.func,
-        /** Called when a valid submit is made */
-        onValidSubmit: PropTypes.func.isRequired,
-        /** Called when an invalid submit is made */
-        onInvalidSubmit: PropTypes.func,
-        /** An object mapping input names to error messages */
-        formValidityState: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
-    };
-
-    constructor(props) {
+class Form extends React.Component<any, any> {
+    constructor(props: any) {
         super(props);
 
         this.state = {
@@ -47,7 +35,7 @@ class Form extends Component {
         };
     }
 
-    componentDidUpdate({ formValidityState: prevFormValidityState }) {
+    componentDidUpdate({ formValidityState: prevFormValidityState }: any) {
         const { formValidityState } = this.props;
         const { registeredInputs } = this.state;
 
@@ -60,7 +48,7 @@ class Form extends Component {
         }
     }
 
-    onChange = ({ currentTarget }) => {
+    onChange = ({ currentTarget }: any) => {
         if (this.props.onChange) {
             const formData = serialize(currentTarget, {
                 hash: true,
@@ -70,7 +58,7 @@ class Form extends Component {
         }
     };
 
-    onSubmit = event => {
+    onSubmit = (event: any) => {
         const form = event.target;
         event.preventDefault();
         const isValid = form.checkValidity();
@@ -94,7 +82,7 @@ class Form extends Component {
         }
     };
 
-    registerInput = (name, setValidityStateHandler) => {
+    registerInput = (name: string, setValidityStateHandler: Function) => {
         const { registeredInputs } = this.state;
 
         if (registeredInputs[name]) {
@@ -106,7 +94,7 @@ class Form extends Component {
         this.setState(nextState);
     };
 
-    unregisterInput = name => {
+    unregisterInput = (name: string) => {
         const nextState = this.state;
         delete nextState.registeredInputs[name];
         this.setState(nextState);
