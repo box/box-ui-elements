@@ -20,6 +20,7 @@ import type {
 } from '@box/threaded-annotations';
 
 import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
+import { extractTimestampMarkup } from './timestampMarkup';
 
 import type { Annotation, Target } from '../../../common/types/annotations';
 import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '../../../common/types/feed';
@@ -44,31 +45,6 @@ import {
 } from '../../../constants';
 
 const MENTION_REGEX = /@\[(\d+):([^\]]+)\]/g;
-const TIMESTAMP_MARKUP_REGEX = /^#\[timestamp:(\d+)(?:,versionId:\d+)?\]\s*/;
-
-export const extractTimestampMarkup = (
-    text: string,
-): {
-    cleanText: string;
-    target?: AnnotationBadgeTargetType;
-    timestampMarkup?: string;
-    timestampMs?: number;
-} => {
-    if (!text) return { cleanText: '' };
-    const match = text.match(TIMESTAMP_MARKUP_REGEX);
-    if (!match) return { cleanText: text };
-
-    const [fullMatch, timestampMs] = match;
-    const cleanText = text.slice(fullMatch.length);
-    const ms = Number(timestampMs);
-    if (!Number.isSafeInteger(ms) || ms < 0) return { cleanText };
-
-    const target: AnnotationBadgeTargetType = {
-        timestamp: convertMillisecondsToTimestamp(ms),
-        type: AnnotationBadgeType.Frame,
-    };
-    return { cleanText, target, timestampMarkup: fullMatch.trimEnd(), timestampMs: ms };
-};
 
 const parseLine = (line: string, authorId: string): (MentionNode | TextNode)[] => {
     const nodes: (MentionNode | TextNode)[] = [];
@@ -375,6 +351,7 @@ export const transformFeedItem = (
             const {
                 cleanText,
                 target: annotationTarget,
+                timestampEndMs,
                 timestampMarkup,
                 timestampMs,
             } = extractTimestampMarkup(rawText);
@@ -384,6 +361,7 @@ export const transformFeedItem = (
             );
             return {
                 annotationTarget,
+                annotationTimestampEndMs: timestampEndMs,
                 annotationTimestampMarkup: timestampMarkup,
                 annotationTimestampMs: timestampMs,
                 id: comment.id,

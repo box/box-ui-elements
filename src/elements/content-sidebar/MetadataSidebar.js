@@ -53,6 +53,10 @@ type ExternalProps = {
     // Canonical types (FetchUsers / FetchAvatarUrls) live in @box/metadata-editor (TypeScript).
     fetchUsers?: (inputValue: string) => Promise<Array<Object>>,
     fetchAvatarUrls?: (userContacts: Array<Object>) => Promise<{ [key: string]: string }>,
+    /** Host-provided migration mode. Ignored when namespaces opt-in is off. */
+    metadataNamespaceMode?: string,
+    /** Host-provided enterprise id. Used by the redesigned sidebar. */
+    enterpriseId?: string | number,
 };
 
 type PropsWithoutContext = {

@@ -7,7 +7,7 @@ import { TYPE_DEFAULT, TYPE_INFO, TYPE_WARN, TYPE_ERROR } from '../constants';
 import { Notification } from '..';
 
 const sandbox = sinon.sandbox.create();
-let clock;
+let clock: ReturnType<typeof sinon.useFakeTimers>;
 
 describe('components/notification/Notification', () => {
     beforeEach(() => {
@@ -22,7 +22,7 @@ describe('components/notification/Notification', () => {
     test('should render a notification when initialized', () => {
         const wrapper = mount(<Notification>test</Notification>);
 
-        expect(wrapper.find('div.notification').length).toBe(1);
+        expect(wrapper.find('div.notification')).toHaveLength(1);
         expect(wrapper.find('span').text()).toEqual('test');
     });
 
@@ -53,13 +53,13 @@ describe('components/notification/Notification', () => {
             const XBadge16Count = type === TYPE_ERROR ? 1 : 0;
             const TriangleAlert16Count = type === TYPE_WARN ? 1 : 0;
 
-            expect(component.find('InfoBadge16').length).toBe(infoBadge16Count);
-            expect(component.find('XBadge16').length).toBe(XBadge16Count);
-            expect(component.find('CircleCheck16').length).toBe(CircleCheck16Count);
-            expect(component.find('TriangleAlert16').length).toBe(TriangleAlert16Count);
+            expect(component.find('InfoBadge16')).toHaveLength(infoBadge16Count);
+            expect(component.find('XBadge16')).toHaveLength(XBadge16Count);
+            expect(component.find('CircleCheck16')).toHaveLength(CircleCheck16Count);
+            expect(component.find('TriangleAlert16')).toHaveLength(TriangleAlert16Count);
 
             // Does not render v2 icons
-            expect(component.find(`svg[role="img"]`).length).toBe(0);
+            expect(component.find(`svg[role="img"]`)).toHaveLength(0);
         });
 
         test('should render v2 icons when useV2Icons is true', () => {
@@ -70,30 +70,32 @@ describe('components/notification/Notification', () => {
             );
 
             // Type icon and Close button
-            expect(component.find(`svg[role="img"]`).length).toBe(2);
+            expect(component.find(`svg[role="img"]`)).toHaveLength(2);
 
             // Does not render local icons
-            expect(component.find('InfoBadge16').length).toBe(0);
-            expect(component.find('XBadge16').length).toBe(0);
-            expect(component.find('CircleCheck16').length).toBe(0);
-            expect(component.find('TriangleAlert16').length).toBe(0);
+            expect(component.find('InfoBadge16')).toHaveLength(0);
+            expect(component.find('XBadge16')).toHaveLength(0);
+            expect(component.find('CircleCheck16')).toHaveLength(0);
+            expect(component.find('TriangleAlert16')).toHaveLength(0);
         });
     });
 
-    [
-        {
-            overflowOption: undefined,
-            expectedClass: 'wrap',
-        },
-        {
-            overflowOption: 'wrap',
-            expectedClass: 'wrap',
-        },
-        {
-            overflowOption: 'ellipsis',
-            expectedClass: 'ellipsis',
-        },
-    ].forEach(({ overflowOption, expectedClass }) => {
+    (
+        [
+            {
+                overflowOption: undefined,
+                expectedClass: 'wrap',
+            },
+            {
+                overflowOption: 'wrap',
+                expectedClass: 'wrap',
+            },
+            {
+                overflowOption: 'ellipsis',
+                expectedClass: 'ellipsis',
+            },
+        ] as const
+    ).forEach(({ overflowOption, expectedClass }) => {
         test(`should render a notification with ${expectedClass} styling when passed the ${overflowOption} overflow option`, () => {
             const component = mount(<Notification overflow={overflowOption}>test</Notification>);
 
@@ -188,6 +190,21 @@ describe('components/notification/Notification', () => {
         );
 
         clock.tick(50);
+
+        expect(closeMock.called).toBe(false);
+    });
+
+    test('should not call onClose after unmount when the duration later expires', () => {
+        const closeMock = sinon.spy();
+
+        const component = mount(
+            <Notification duration="short" onClose={closeMock}>
+                test
+            </Notification>,
+        );
+
+        component.unmount();
+        clock.tick(5000 + 10);
 
         expect(closeMock.called).toBe(false);
     });

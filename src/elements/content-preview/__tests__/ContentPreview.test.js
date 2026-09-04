@@ -3,8 +3,9 @@ import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import * as TokenService from '../../../utils/TokenService';
 import PreviewMask from '../PreviewMask';
+import PreviewHeader from '../preview-header';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
-import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
+import ContentPreviewWithComparison, { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
@@ -188,40 +189,118 @@ describe('elements/content-preview/ContentPreview', () => {
 
         test('should return true if file version ID has changed', () => {
             const oldFile = { id: '123', file_version: { id: '1234' } };
-            expect(instance.shouldLoadPreview({ file: oldFile })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { file: oldFile })).toBe(true);
         });
 
         test('should return true if file object has newly been populated', () => {
             wrapper.setState({ file: { id: '123' } });
-            expect(instance.shouldLoadPreview({ file: undefined })).toBeTruthy();
+            expect(instance.shouldLoadPreview(props, { file: undefined })).toBeTruthy();
         });
 
         test('should return false if file has not changed', () => {
-            expect(instance.shouldLoadPreview({ file })).toBe(false);
+            expect(instance.shouldLoadPreview(props, { file })).toBe(false);
         });
 
         test('should return true if the currently-selected version ID has changed', () => {
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
 
         test('should return true if the selected version is missing and the previous selection was an old version', () => {
             wrapper.setState({ selectedVersion: { id: undefined } });
 
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '12345' } })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
 
         test('should return false if the selected version is missing but the previous selection was the current version', () => {
             wrapper.setState({ selectedVersion: { id: undefined } });
 
-            expect(instance.shouldLoadPreview({ selectedVersion: { id: '1' } })).toBe(false);
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '1' } })).toBe(false);
         });
 
         test("should return true if the preview library just became available and we haven't loaded preview yet", () => {
             instance.previewLibraryLoaded = false;
             instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
             instance.preview = undefined;
-            expect(instance.shouldLoadPreview({ file })).toBe(true);
+            expect(instance.shouldLoadPreview(props, { file })).toBe(true);
             expect(instance.previewLibraryLoaded).toBe(true);
+        });
+
+        test('should return false when comparing and the selected version changes', () => {
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '12345' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview(comparingProps, { file })).toBe(false);
+        });
+
+        test('should return true when comparison ends while a stale selected version is held', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '12345' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(
+                instance.shouldLoadPreview({ ...props, isComparing: true }, { file, selectedVersion: { id: '12345' } }),
+            ).toBe(true);
+        });
+
+        test('should return false when comparison ends after selectedVersion was cleared', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview({ ...props, isComparing: true }, { file })).toBe(false);
+        });
+
+        test('should return false when comparison first starts and the effective version has not changed', () => {
+            // User was on the current version with no selectedVersion set; previewVersion is also
+            // undefined (current). Both resolve to the same ID so no reload is needed.
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.preview = new global.Box.Preview();
+
+            expect(instance.shouldLoadPreview({ ...props, isComparing: false }, { file })).toBe(false);
+        });
+
+        test('should return false when comparison first starts from an explicitly selected current version', () => {
+            // Opening the versions panel selects the current version explicitly, so
+            // state.selectedVersion is set even though the pane already shows current.
+            // Comparison pins the pane to previewVersion, which is undefined — also current.
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '1' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(
+                instance.shouldLoadPreview({ ...props, isComparing: false }, { file, selectedVersion: { id: '1' } }),
+            ).toBe(false);
+        });
+
+        test('should return true when comparison first starts and the pane was on a historical version', () => {
+            // User was on v12345 (non-current); comparison pins the left pane to previewVersion
+            // (current, undefined). IDs differ so a real reload is required to show current.
+            const comparingProps = { ...props, isComparing: true };
+            wrapper = getWrapper(comparingProps);
+            instance = wrapper.instance();
+            wrapper.setState({ file, selectedVersion: { id: '12345' } });
+            instance.preview = new global.Box.Preview();
+
+            expect(
+                instance.shouldLoadPreview(
+                    { ...props, isComparing: false },
+                    { file, selectedVersion: { id: '12345' } },
+                ),
+            ).toBe(true);
+        });
+
+        test('should return true when the selected version changes and the host is not comparing', () => {
+            expect(instance.shouldLoadPreview(props, { selectedVersion: { id: '12345' } })).toBe(true);
         });
     });
 
@@ -1115,6 +1194,14 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect.any(String),
             );
         });
+
+        test('should leave state.error unset so the preview library renders its own error screen', () => {
+            const wrapper = getWrapper({ ...props, onError: noop });
+            const instance = wrapper.instance();
+            const errorPayload = { error: { code: 'some_code', message: 'msg' } };
+            instance.onPreviewError(errorPayload);
+            expect(instance.state.error).toBeUndefined();
+        });
     });
 
     describe('onPreviewMetric()', () => {
@@ -1191,6 +1278,55 @@ describe('elements/content-preview/ContentPreview', () => {
                 fileId: null,
             });
             expect(wrapper.getElement()).toBe(null);
+        });
+
+        test('should pass getVersionToPreview() to PreviewHeader, not raw state.selectedVersion', () => {
+            const currentVersion = { id: '1' };
+            const selectedVersion = { id: '99' };
+            const wrapper = getWrapper({
+                fileId: '123',
+                hasHeader: true,
+                isComparing: true,
+                previewVersion: currentVersion,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', file_version: currentVersion },
+                selectedVersion,
+            });
+
+            // isComparing is true, so getVersionToPreview() returns previewVersion (current),
+            // not state.selectedVersion. PreviewHeader must reflect the actually-previewed version.
+            expect(wrapper.find(PreviewHeader).prop('selectedVersion')).toEqual(currentVersion);
+        });
+
+        test('should not remount the main pane when comparedVersion changes', () => {
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            // The compared instance is portaled into the slot, which exists only once the ref fires.
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(1).props().children.key).toBe('456');
+
+            const mainWrapper = getWrapper({ fileId: '123', isComparing: true });
+            const instance = mainWrapper.instance();
+            instance.loadPreview = jest.fn();
+
+            wrapper.setProps({ comparedVersion: { id: '789' } });
+            mainWrapper.setProps({
+                isComparing: wrapper.childAt(0).props().isComparing,
+                previewVersion: wrapper.childAt(0).props().previewVersion,
+            });
+
+            expect(wrapper.childAt(1).props().children.key).toBe('789');
+            expect(instance.loadPreview).not.toHaveBeenCalled();
         });
     });
 
@@ -1315,6 +1451,18 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('isLoading')).toBe(true);
         });
 
+        test('should clear a previous error when a version change triggers a reload', () => {
+            // Simulate a prior preview error followed by the user selecting a new version.
+            // The error must be cleared before the reload so a successful load does not
+            // retain the stale error in PreviewMask.
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            wrapper.setState({ error: { code: 'some_error' } });
+
+            wrapper.setProps({ foo: 'bar' });
+
+            expect(wrapper.state('error')).toBeUndefined();
+        });
+
         test('should update the preview with the new token if it changes', () => {
             wrapper.setProps({
                 token: 'bar',
@@ -1329,6 +1477,15 @@ describe('elements/content-preview/ContentPreview', () => {
             });
 
             expect(instance.preview.updateExperiences).toBeCalledTimes(1);
+        });
+
+        test('should clear selectedVersion when comparison starts', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+            wrapper.setState({ selectedVersion: { id: '12345' } });
+
+            wrapper.setProps({ isComparing: true });
+
+            expect(wrapper.state('selectedVersion')).toBeUndefined();
         });
     });
 
@@ -1574,6 +1731,32 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('onVersionChange()', () => {
+        test('should update selectedVersion when not comparing', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ onVersionChange });
+            const instance = wrapper.instance();
+            const version = { id: '12345' };
+
+            instance.onVersionChange(version);
+
+            expect(onVersionChange).toHaveBeenCalledWith(version, {});
+            expect(wrapper.state('selectedVersion')).toEqual(version);
+        });
+
+        test('should notify the host but not update selectedVersion when comparing', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ isComparing: true, onVersionChange });
+            const instance = wrapper.instance();
+            const version = { id: '12345' };
+
+            instance.onVersionChange(version);
+
+            expect(onVersionChange).toHaveBeenCalledWith(version, {});
+            expect(wrapper.state('selectedVersion')).toBeUndefined();
+        });
+    });
+
     describe('handleAnnotationSelect', () => {
         test.each`
             annotationFileVersionId | selectedVersionId | locationType | setStateCount
@@ -1755,6 +1938,24 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(scrollToFrameAnnotation).not.toBeCalled();
             expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
             expect(instance.dynamicOnPreviewLoadAction).toBeNull();
+        });
+
+        test('should not write startAt or scroll when comparing', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '456' },
+                target: { location: { type: 'page', value: 5 } },
+            };
+            const wrapper = getWrapper({ isComparing: true });
+            const instance = wrapper.instance();
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            instance.setState = jest.fn();
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(instance.setState).not.toHaveBeenCalled();
+            expect(emit).not.toHaveBeenCalled();
         });
     });
 
@@ -2563,6 +2764,121 @@ describe('elements/content-preview/ContentPreview', () => {
 
             bodyDiv = wrapper.find('.bcpr-body');
             expect(bodyDiv.children().length).toBe(2);
+        });
+    });
+
+    describe('comparison mode', () => {
+        const collection = ['123', '456', '789'];
+
+        test('should render a compared slot between the viewer and sidebar when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                isComparing: true,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--comparing')).toBe(true);
+            expect(bodyDiv.children().length).toBe(3);
+            expect(bodyDiv.children().at(0).hasClass('bcpr-container')).toBe(true);
+            expect(bodyDiv.children().at(1).hasClass('bcpr-compared-slot')).toBe(true);
+        });
+
+        test('should not add the comparing body class when isComparing is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--comparing')).toBe(false);
+            expect(bodyDiv.children().length).toBe(2);
+            expect(bodyDiv.find('.bcpr-compared-slot').exists()).toBe(false);
+        });
+
+        test('should not render PreviewNavigation when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                isComparing: true,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(false);
+        });
+
+        test('should render PreviewNavigation when isComparing is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(true);
+        });
+
+        test('should render the compared instance with its loading indicator undeferred', () => {
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    loadingIndicatorDelayMs={2000}
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            // The compared instance is portaled into the slot, which exists only once the ref fires.
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().loadingIndicatorDelayMs).toBe(2000);
+            expect(wrapper.childAt(1).props().children.props.loadingIndicatorDelayMs).toBe(0);
+        });
+
+        test('should not forward the host onMetric to the compared instance', () => {
+            const onMetric = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    onMetric={onMetric}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().onMetric).toBe(onMetric);
+            expect(wrapper.childAt(1).props().children.props.onMetric).not.toBe(onMetric);
+        });
+
+        test('should not navigate when isComparing', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                isComparing: true,
+            });
+            wrapper.setState({ currentFileId: '456' });
+            const instance = wrapper.instance();
+            instance.navigateToIndex = jest.fn();
+
+            instance.navigateLeft();
+            instance.navigateRight();
+
+            expect(instance.navigateToIndex).not.toHaveBeenCalled();
         });
     });
 

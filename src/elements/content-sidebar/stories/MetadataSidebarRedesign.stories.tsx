@@ -29,6 +29,7 @@ const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign
     isDeleteConfirmationModalCheckboxEnabled: false,
     isMetadataMultiLevelTaxonomyFieldEnabled: false,
     isFeatureEnabled: true,
+    metadataNamespaceMode: 'SCOPED',
     onError: fn(),
     onSuccess: fn(),
 };

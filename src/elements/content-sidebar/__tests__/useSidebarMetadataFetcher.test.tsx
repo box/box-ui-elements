@@ -12,7 +12,10 @@ import {
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
-import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
+import useSidebarMetadataFetcher, {
+    STATUS,
+    type MetadataNamespaceFetchContext,
+} from '../hooks/useSidebarMetadataFetcher';
 
 const mockRateLimitError = {
     status: 429,
@@ -166,7 +169,13 @@ describe('useSidebarMetadataFetcher', () => {
     const onSuccessMock = jest.fn();
     const isFeatureEnabledMock = true;
 
-    const setupHook = (fileId = '123', isConfidenceScoreEnabled = false, isBoundingBoxEnabled = false) =>
+    const setupHook = (
+        fileId = '123',
+        isConfidenceScoreEnabled = false,
+        isBoundingBoxEnabled = false,
+        namespaceContext: MetadataNamespaceFetchContext = {},
+        shouldFetchDetailedMetadata = false,
+    ) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
                 api,
@@ -176,6 +185,8 @@ describe('useSidebarMetadataFetcher', () => {
                 isFeatureEnabledMock,
                 isConfidenceScoreEnabled,
                 isBoundingBoxEnabled,
+                namespaceContext,
+                shouldFetchDetailedMetadata,
             ),
         );
 
@@ -401,6 +412,7 @@ describe('useSidebarMetadataFetcher', () => {
             { refreshCache: true },
             true,
             true,
+            false,
         );
     });
 
@@ -417,6 +429,7 @@ describe('useSidebarMetadataFetcher', () => {
             { refreshCache: true },
             true,
             false,
+            false,
         );
     });
 
@@ -431,6 +444,58 @@ describe('useSidebarMetadataFetcher', () => {
             expect.any(Function),
             isFeatureEnabledMock,
             { refreshCache: true },
+            true,
+            true,
+            false,
+        );
+    });
+
+    test('should pass shouldFetchDetailedMetadata=true to getMetadata when enabled', async () => {
+        const { result } = setupHook('123', false, false, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            false,
+            true,
+        );
+    });
+
+    test('should pass true to getMetadata when isBoundingBoxEnabled and shouldFetchDetailedMetadata are true', async () => {
+        const { result } = setupHook('123', false, true, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            true,
+            true,
+        );
+    });
+
+    test('should pass true to getMetadata when isConfidenceScoreEnabled and shouldFetchDetailedMetadata are true', async () => {
+        const { result } = setupHook('123', true, false, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
             true,
             true,
         );
@@ -1011,5 +1076,64 @@ describe('useSidebarMetadataFetcher', () => {
 
             expect(suggestions[0].targetLocation).toEqual([{ itemId: 'file_123', page: 1, text: 'some text' }]);
         });
+    });
+
+    test('should fetch metadata once when namespaced mode is available from the start', async () => {
+        const { result } = setupHook('123', false, false, {
+            enterpriseFqn: 'enterprise_123',
+            metadataNamespaceMode: 'MIGRATION',
+        });
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledTimes(1);
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true, enterpriseFqn: 'enterprise_123', metadataNamespaceMode: 'MIGRATION' },
+            true,
+            false,
+            false,
+        );
+    });
+
+    test('should not fetch metadata while namespace context is loading', async () => {
+        setupHook('123', false, false, { isLoading: true });
+
+        await waitFor(() => expect(mockAPI.getFile).toHaveBeenCalled());
+        expect(mockAPI.getMetadata).not.toHaveBeenCalled();
+    });
+
+    test('should fetch metadata after namespace context finishes loading', async () => {
+        const { result, rerender } = renderHook(
+            ({ namespaceContext }: { namespaceContext: MetadataNamespaceFetchContext }) =>
+                useSidebarMetadataFetcher(
+                    api,
+                    '123',
+                    onErrorMock,
+                    onSuccessMock,
+                    isFeatureEnabledMock,
+                    false,
+                    false,
+                    namespaceContext,
+                ),
+            { initialProps: { namespaceContext: { isLoading: true } } },
+        );
+
+        await waitFor(() => expect(mockAPI.getFile).toHaveBeenCalled());
+        expect(mockAPI.getMetadata).not.toHaveBeenCalled();
+
+        rerender({
+            namespaceContext: {
+                enterpriseFqn: 'enterprise_123',
+                isLoading: false,
+                metadataNamespaceMode: 'MIGRATION',
+            },
+        });
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+        expect(mockAPI.getMetadata).toHaveBeenCalledTimes(1);
     });
 });

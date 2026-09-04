@@ -20,6 +20,7 @@ import TaskModalV2 from './task-modal-v2';
 import FeedItemRow from './FeedItemRow';
 import { resolveFeedItemIdForEntry, serializeEditorContent } from './helpers';
 import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
+import { buildTimestampMarkup } from './timestampMarkup';
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useCommentMarkerSelectedId } from './useCommentMarkerSelectedId';
@@ -441,6 +442,7 @@ const ActivityFeedV2 = ({
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
+        timestampEndMs,
         timestampMs,
     } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps);
 
@@ -537,7 +539,11 @@ const ActivityFeedV2 = ({
             if (!serialized || !serialized.text) return;
             const text =
                 allowMediaTimestamps && isTimestampPressed && fileVersionId
-                    ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
+                    ? `${buildTimestampMarkup({
+                          endMs: timestampEndMs,
+                          startMs: timestampMs,
+                          versionId: fileVersionId,
+                      })} ${serialized.text}`
                     : serialized.text;
             try {
                 const snapshot = new Set(filteredItems.map(item => item.id));
@@ -555,6 +561,7 @@ const ActivityFeedV2 = ({
             isRichTextEnabled,
             isTimestampPressed,
             onCommentCreate,
+            timestampEndMs,
             timestampMs,
         ],
     );
