@@ -46,6 +46,8 @@ type ResolvedInfo = {
 
 export type TransformedCommentItem = {
     annotationTarget?: AnnotationBadgeTargetType;
+    // End of a comment's time range. Undefined for single-timestamp comments.
+    annotationTimestampEndMs?: number;
     annotationTimestampMarkup?: string;
     annotationTimestampMs?: number;
     id: string;

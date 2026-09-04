@@ -38,6 +38,8 @@ export interface UseMediaTimestampResult {
     formattedTimestamp: string;
     isPressed: boolean;
     onPressedChange: (pressed: boolean) => void;
+    /** End of the composer's selected range. Undefined until the user drags a waveform handle. */
+    timestampEndMs?: number;
     timestampMs: number;
 }
 
