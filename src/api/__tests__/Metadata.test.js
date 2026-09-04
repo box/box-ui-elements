@@ -979,6 +979,48 @@ describe('api/Metadata', () => {
                 id: 'file_id',
             });
         });
+
+        test('should make both detailed and hydrated calls when isMetadataRedesign and shouldFetchDetailedMetadata are true', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.getDetailedInstancesWithHydratedTaxonomy = jest.fn().mockResolvedValueOnce([]);
+            await metadata.getInstances('id', true, false, true);
+            expect(metadata.getDetailedInstancesWithHydratedTaxonomy).toHaveBeenCalledWith('metadata_url', 'file_id');
+        });
+
+        test('should not fetch detailed view when isMetadataRedesign is false even if shouldFetchDetailedMetadata is true', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    entries: [],
+                },
+            });
+            await metadata.getInstances('id', false, false, true);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url',
+                id: 'file_id',
+            });
+        });
+
+        test('should fetch detailed view when isMetadataRedesign, isBoundingBoxOrConfidenceScoreReviewEnabled and shouldFetchDetailedMetadata are all true', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.getDetailedInstancesWithHydratedTaxonomy = jest.fn().mockResolvedValueOnce([]);
+            await metadata.getInstances('id', true, true, true);
+            expect(metadata.getDetailedInstancesWithHydratedTaxonomy).toHaveBeenCalledWith('metadata_url', 'file_id');
+        });
+
+        test('should not fetch detailed view when isMetadataRedesign is false even if isBoundingBoxOrConfidenceScoreReviewEnabled and shouldFetchDetailedMetadata are true', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    entries: [],
+                },
+            });
+            await metadata.getInstances('id', false, true, true);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url',
+                id: 'file_id',
+            });
+        });
     });
 
     describe('getUserAddableTemplates()', () => {
@@ -1444,7 +1486,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1544,7 +1586,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1598,7 +1640,7 @@ describe('api/Metadata', () => {
             // isMetadataRedesign=true, isConfidenceScoreEnabled=true
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true, true);
 
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, true);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, true, false);
             expect(metadata.getTemplateInstances).toHaveBeenCalledWith(
                 file.id,
                 'filteredInstances',
@@ -1609,6 +1651,60 @@ describe('api/Metadata', () => {
                 true,
                 undefined,
             );
+        });
+
+        test('should pass shouldFetchDetailedMetadata to getInstances when true', async () => {
+            const file = {
+                id: 'id',
+                is_externally_owned: false,
+                permissions: { can_upload: true },
+            };
+
+            const cache = new Cache();
+
+            metadata.errorHandler = jest.fn();
+            metadata.successHandler = jest.fn();
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
+            metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
+            metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
+            metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
+            metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
+
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true, false, true);
+
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, false, true);
+        });
+
+        test('should pass isBoundingBoxOrConfidenceScoreReviewEnabled and shouldFetchDetailedMetadata to getInstances when both are true', async () => {
+            const file = {
+                id: 'id',
+                is_externally_owned: false,
+                permissions: { can_upload: true },
+            };
+
+            const cache = new Cache();
+
+            metadata.errorHandler = jest.fn();
+            metadata.successHandler = jest.fn();
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
+            metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
+            metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
+            metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
+            metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
+
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true, true, true);
+
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true, true, true);
         });
 
         test('should make request and update cache and call success handler after returning cached value when refreshCache is true', async () => {
@@ -1641,7 +1737,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1700,7 +1796,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1758,7 +1854,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1814,7 +1910,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).not.toHaveBeenCalled();
@@ -1854,7 +1950,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false, false, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
