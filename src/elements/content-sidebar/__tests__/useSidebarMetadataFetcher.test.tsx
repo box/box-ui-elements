@@ -467,6 +467,40 @@ describe('useSidebarMetadataFetcher', () => {
         );
     });
 
+    test('should pass true to getMetadata when isBoundingBoxEnabled and shouldFetchDetailedMetadata are true', async () => {
+        const { result } = setupHook('123', false, true, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            true,
+            true,
+        );
+    });
+
+    test('should pass true to getMetadata when isConfidenceScoreEnabled and shouldFetchDetailedMetadata are true', async () => {
+        const { result } = setupHook('123', true, false, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            true,
+            true,
+        );
+    });
+
     describe('extractSuggestions', () => {
         test('should extract suggestions successfully', async () => {
             mockAPI.extractStructured.mockResolvedValue({

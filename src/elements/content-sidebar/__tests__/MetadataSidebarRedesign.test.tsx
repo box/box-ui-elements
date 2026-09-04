@@ -754,6 +754,41 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         );
     });
 
+    test('should pass isBoundingBoxEnabled and shouldFetchDetailedMetadata to useSidebarMetadataFetcher when both flags are on', () => {
+        renderComponent({}, { 'metadata.boundingBox.enabled': true, 'metadata.fetchDetailedMetadata.enabled': true });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            false, // isConfidenceScoreReviewEnabled
+            true, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            true, // shouldFetchDetailedMetadata
+        );
+    });
+
+    test('should pass isConfidenceScoreReviewEnabled and shouldFetchDetailedMetadata to useSidebarMetadataFetcher when both flags are on', () => {
+        renderComponent(
+            {},
+            { 'metadata.confidenceScore.enabled': true, 'metadata.fetchDetailedMetadata.enabled': true },
+        );
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            true, // isConfidenceScoreReviewEnabled
+            false, // isBoundingBoxEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            true, // shouldFetchDetailedMetadata
+        );
+    });
+
     test('should call createSessionRequest once', async () => {
         const createSessionRequest = jest.fn().mockResolvedValue({});
         renderComponent({ api, createSessionRequest }, { 'metadata.aiSuggestions.enabled': true });
