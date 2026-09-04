@@ -622,21 +622,21 @@ class Metadata extends File {
      * @param {string} id - file id
      * @param {boolean} isMetadataRedesign - feature flag
      * @param {boolean} isBoundingBoxOrConfidenceScoreReviewEnabled - whether to fetch detailed view
-     * @param {boolean} shouldFetchDetailedExtractMeta - whether to fetch detailed view for extract metadata
+     * @param {boolean} shouldFetchDetailedMetadata - whether to fetch the detailed metadata view
      * @return {Object} array of metadata instances
      */
     async getInstances(
         id: string,
         isMetadataRedesign: boolean = false,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
-        shouldFetchDetailedExtractMeta: boolean = false,
+        shouldFetchDetailedMetadata: boolean = false,
     ): Promise<Array<MetadataInstanceV2>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
 
         const baseUrl = this.getMetadataUrl(id);
         const requestId = getTypedFileId(id);
 
-        if (isMetadataRedesign && (isBoundingBoxOrConfidenceScoreReviewEnabled || shouldFetchDetailedExtractMeta)) {
+        if (isMetadataRedesign && (isBoundingBoxOrConfidenceScoreReviewEnabled || shouldFetchDetailedMetadata)) {
             return this.getDetailedInstancesWithHydratedTaxonomy(baseUrl, requestId);
         }
 
@@ -945,7 +945,7 @@ class Metadata extends File {
         hasMetadataFeature: boolean,
         isMetadataRedesign: boolean,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean,
-        shouldFetchDetailedExtractMeta: boolean = false,
+        shouldFetchDetailedMetadata: boolean = false,
     ): Promise<{
         instances: Array<MetadataInstanceV2>,
         globalTemplates: Array<MetadataTemplate>,
@@ -956,7 +956,7 @@ class Metadata extends File {
                 id,
                 isMetadataRedesign,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
-                shouldFetchDetailedExtractMeta,
+                shouldFetchDetailedMetadata,
             ),
             this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
             hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
@@ -974,7 +974,7 @@ class Metadata extends File {
         isMetadataRedesign: boolean,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean,
         enterpriseFqn?: string,
-        shouldFetchDetailedExtractMeta: boolean = false,
+        shouldFetchDetailedMetadata: boolean = false,
     ): Promise<{
         instances: Array<MetadataInstanceV2>,
         globalTemplates: Array<MetadataTemplate>,
@@ -985,7 +985,7 @@ class Metadata extends File {
                 id,
                 isMetadataRedesign,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
-                shouldFetchDetailedExtractMeta,
+                shouldFetchDetailedMetadata,
             ),
             this.getTemplates(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL)),
         ]);
@@ -1005,7 +1005,7 @@ class Metadata extends File {
      * @param {Object} options - fetch options
      * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
      * @param {boolean} isBoundingBoxOrConfidenceScoreReviewEnabled - whether to include bounding box or confidence score details in the payload
-     * @param {boolean} shouldFetchDetailedExtractMeta - whether to fetch detailed view for extract metadata
+     * @param {boolean} shouldFetchDetailedMetadata - whether to fetch the detailed metadata view
      * @return {Promise}
      */
     async getMetadata(
@@ -1020,7 +1020,7 @@ class Metadata extends File {
         options: MetadataGetOptions = {},
         isMetadataRedesign: boolean = false,
         isBoundingBoxOrConfidenceScoreReviewEnabled: boolean = false,
-        shouldFetchDetailedExtractMeta: boolean = false,
+        shouldFetchDetailedMetadata: boolean = false,
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
         this.errorCode = ERROR_CODE_FETCH_METADATA;
@@ -1067,14 +1067,14 @@ class Metadata extends File {
                           isMetadataRedesign,
                           isBoundingBoxOrConfidenceScoreReviewEnabled,
                           options.enterpriseFqn,
-                          shouldFetchDetailedExtractMeta,
+                          shouldFetchDetailedMetadata,
                       )
                     : await this.fetchTemplatesAndInstancesScoped(
                           id,
                           hasMetadataFeature,
                           isMetadataRedesign,
                           isBoundingBoxOrConfidenceScoreReviewEnabled,
-                          shouldFetchDetailedExtractMeta,
+                          shouldFetchDetailedMetadata,
                       );
 
             // Filter out classification

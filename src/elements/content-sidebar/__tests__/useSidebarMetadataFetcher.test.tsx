@@ -174,7 +174,7 @@ describe('useSidebarMetadataFetcher', () => {
         isConfidenceScoreEnabled = false,
         isBoundingBoxEnabled = false,
         namespaceContext: MetadataNamespaceFetchContext = {},
-        shouldFetchDetailedExtractMeta = false,
+        shouldFetchDetailedMetadata = false,
     ) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
@@ -186,7 +186,7 @@ describe('useSidebarMetadataFetcher', () => {
                 isConfidenceScoreEnabled,
                 isBoundingBoxEnabled,
                 namespaceContext,
-                shouldFetchDetailedExtractMeta,
+                shouldFetchDetailedMetadata,
             ),
         );
 
@@ -450,7 +450,7 @@ describe('useSidebarMetadataFetcher', () => {
         );
     });
 
-    test('should pass shouldFetchDetailedExtractMeta=true to getMetadata when enabled', async () => {
+    test('should pass shouldFetchDetailedMetadata=true to getMetadata when enabled', async () => {
         const { result } = setupHook('123', false, false, {}, true);
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));

@@ -165,7 +165,7 @@ function MetadataSidebarRedesign({
 
     const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
     const isBoundingBoxEnabled = useFeatureEnabled('metadata.boundingBox.enabled');
-    const shouldFetchDetailedExtractMeta: boolean = useFeatureEnabled('metadata.fetchDetailedExtractMeta.enabled');
+    const shouldFetchDetailedMetadata: boolean = useFeatureEnabled('metadata.fetchDetailedMetadata.enabled');
 
     const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
 
@@ -205,7 +205,7 @@ function MetadataSidebarRedesign({
             isLoading: isNamespaceContextLoading,
             metadataNamespaceMode,
         },
-        shouldFetchDetailedExtractMeta,
+        shouldFetchDetailedMetadata,
     );
     const isSessionInitiated = useRef(false);
 

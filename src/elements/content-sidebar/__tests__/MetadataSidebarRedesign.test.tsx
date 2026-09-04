@@ -670,7 +670,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
-            false, // shouldFetchDetailedExtractMeta
+            false, // shouldFetchDetailedMetadata
         );
     });
 
@@ -702,7 +702,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
-            false, // shouldFetchDetailedExtractMeta
+            false, // shouldFetchDetailedMetadata
         );
     });
 
@@ -722,8 +722,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         );
     });
 
-    test('should pass shouldFetchDetailedExtractMeta to useSidebarMetadataFetcher', () => {
-        renderComponent({}, { 'metadata.fetchDetailedExtractMeta.enabled': true });
+    test('should pass shouldFetchDetailedMetadata to useSidebarMetadataFetcher', () => {
+        renderComponent({}, { 'metadata.fetchDetailedMetadata.enabled': true });
 
         expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
             expect.anything(), // api
@@ -734,12 +734,12 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             false, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
-            true, // shouldFetchDetailedExtractMeta
+            true, // shouldFetchDetailedMetadata
         );
     });
 
-    test('should pass shouldFetchDetailedExtractMeta=false when feature flag is off', () => {
-        renderComponent({}, { 'metadata.fetchDetailedExtractMeta.enabled': false });
+    test('should pass shouldFetchDetailedMetadata=false when feature flag is off', () => {
+        renderComponent({}, { 'metadata.fetchDetailedMetadata.enabled': false });
 
         expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
             expect.anything(),

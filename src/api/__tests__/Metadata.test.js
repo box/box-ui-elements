@@ -980,14 +980,14 @@ describe('api/Metadata', () => {
             });
         });
 
-        test('should make both detailed and hydrated calls when isMetadataRedesign and shouldFetchDetailedExtractMeta are true', async () => {
+        test('should make both detailed and hydrated calls when isMetadataRedesign and shouldFetchDetailedMetadata are true', async () => {
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
             metadata.getDetailedInstancesWithHydratedTaxonomy = jest.fn().mockResolvedValueOnce([]);
             await metadata.getInstances('id', true, false, true);
             expect(metadata.getDetailedInstancesWithHydratedTaxonomy).toHaveBeenCalledWith('metadata_url', 'file_id');
         });
 
-        test('should not fetch detailed view when isMetadataRedesign is false even if shouldFetchDetailedExtractMeta is true', async () => {
+        test('should not fetch detailed view when isMetadataRedesign is false even if shouldFetchDetailedMetadata is true', async () => {
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce({
                 data: {
@@ -1632,7 +1632,7 @@ describe('api/Metadata', () => {
             );
         });
 
-        test('should pass shouldFetchDetailedExtractMeta to getInstances when true', async () => {
+        test('should pass shouldFetchDetailedMetadata to getInstances when true', async () => {
             const file = {
                 id: 'id',
                 is_externally_owned: false,
