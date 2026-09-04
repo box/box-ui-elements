@@ -174,6 +174,7 @@ describe('useSidebarMetadataFetcher', () => {
         isConfidenceScoreEnabled = false,
         isBoundingBoxEnabled = false,
         namespaceContext: MetadataNamespaceFetchContext = {},
+        shouldFetchDetailedMetadata = false,
     ) =>
         renderHook(() =>
             useSidebarMetadataFetcher(
@@ -185,6 +186,7 @@ describe('useSidebarMetadataFetcher', () => {
                 isConfidenceScoreEnabled,
                 isBoundingBoxEnabled,
                 namespaceContext,
+                shouldFetchDetailedMetadata,
             ),
         );
 
@@ -410,6 +412,7 @@ describe('useSidebarMetadataFetcher', () => {
             { refreshCache: true },
             true,
             true,
+            false,
         );
     });
 
@@ -426,6 +429,7 @@ describe('useSidebarMetadataFetcher', () => {
             { refreshCache: true },
             true,
             false,
+            false,
         );
     });
 
@@ -440,6 +444,58 @@ describe('useSidebarMetadataFetcher', () => {
             expect.any(Function),
             isFeatureEnabledMock,
             { refreshCache: true },
+            true,
+            true,
+            false,
+        );
+    });
+
+    test('should pass shouldFetchDetailedMetadata=true to getMetadata when enabled', async () => {
+        const { result } = setupHook('123', false, false, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            false,
+            true,
+        );
+    });
+
+    test('should pass true to getMetadata when isBoundingBoxEnabled and shouldFetchDetailedMetadata are true', async () => {
+        const { result } = setupHook('123', false, true, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
+            true,
+            true,
+        );
+    });
+
+    test('should pass true to getMetadata when isConfidenceScoreEnabled and shouldFetchDetailedMetadata are true', async () => {
+        const { result } = setupHook('123', true, false, {}, true);
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(mockAPI.getMetadata).toHaveBeenCalledWith(
+            mockFile,
+            expect.any(Function),
+            expect.any(Function),
+            isFeatureEnabledMock,
+            { refreshCache: true },
+            true,
             true,
             true,
         );
@@ -1038,6 +1094,7 @@ describe('useSidebarMetadataFetcher', () => {
             isFeatureEnabledMock,
             { refreshCache: true, enterpriseFqn: 'enterprise_123', metadataNamespaceMode: 'MIGRATION' },
             true,
+            false,
             false,
         );
     });

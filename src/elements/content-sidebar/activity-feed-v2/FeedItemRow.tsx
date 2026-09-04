@@ -64,6 +64,7 @@ type FeedItemRowProps = {
     }) => void;
     onCommentCopyLink?: (params: { id: string }) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
+    onCommentSelect?: (commentId: string) => void;
     onCommentUpdate?: (
         id: string,
         text: string | undefined,
@@ -116,6 +117,7 @@ const FeedItemRow = ({
     onAnnotationStatusChange,
     onCommentCopyLink,
     onCommentDelete,
+    onCommentSelect,
     onCommentUpdate,
     onReplyCreate,
     onReplyDelete,
@@ -183,7 +185,12 @@ const FeedItemRow = ({
             };
             const timestampMs = item.annotationTimestampMs;
             const handleBadgeClick =
-                timestampMs !== undefined ? () => seekMediaToMs(timestampMs, getViewer) : undefined;
+                timestampMs !== undefined
+                    ? () => {
+                          seekMediaToMs(timestampMs, getViewer);
+                          onCommentSelect?.(item.id);
+                      }
+                    : undefined;
             const commentAnnotationTarget =
                 item.annotationTarget && timestampMs !== undefined
                     ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
