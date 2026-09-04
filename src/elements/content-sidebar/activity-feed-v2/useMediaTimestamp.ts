@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { formatByTimeFormat, MEDIA_CONTAINER_SELECTOR, MEDIA_ELEMENT_SELECTOR } from './useTimeFormat';
+import { formatByTimeFormat, formatTimeRange, MEDIA_CONTAINER_SELECTOR, MEDIA_ELEMENT_SELECTOR } from './useTimeFormat';
 import type { TimeFormat } from './useTimeFormat';
 import type { CommentRangeDraft, ViewerHandle } from './types';
 
@@ -295,7 +295,10 @@ export const useMediaTimestamp = (
     );
 
     return {
-        formattedTimestamp: formatByTimeFormat(timestampMs, timeFormat, fps),
+        formattedTimestamp:
+            timestampEndMs !== undefined
+                ? formatTimeRange(timestampMs, timestampEndMs, timeFormat, fps)
+                : formatByTimeFormat(timestampMs, timeFormat, fps),
         isPressed,
         onPressedChange,
         resetRange,
