@@ -1,6 +1,8 @@
+// @ts-nocheck Enzyme instance() is untyped for this HOC class component
 import * as React from 'react';
 import { Set } from 'immutable';
 import sinon from 'sinon';
+import { shallow } from 'enzyme';
 
 import isEqual from 'lodash/isEqual';
 
@@ -35,7 +37,7 @@ describe('components/table/makeSelectable', () => {
         const instance = wrapper.instance();
         const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
         shortcut.handler({ preventDefault: sandbox.stub() });
-        expect(wrapper.state('focusedIndex')).toEqual(undefined);
+        expect(wrapper.state('focusedIndex')).toBeUndefined();
     };
 
     afterEach(() => {
@@ -750,7 +752,7 @@ describe('components/table/makeSelectable', () => {
                     const instance = wrapper.instance();
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler({ preventDefault: sandbox.stub() });
-                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                    expect(wrapper.state('focusedIndex')).toBeUndefined();
                 });
             });
 
@@ -956,7 +958,7 @@ describe('components/table/makeSelectable', () => {
                     const instance = wrapper.instance();
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler({ target: { role: 'slider' } });
-                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                    expect(wrapper.state('focusedIndex')).toBeUndefined();
                 });
 
                 test('should call event.preventDefault() and set focus to next item', () => {
@@ -1006,7 +1008,7 @@ describe('components/table/makeSelectable', () => {
                     const instance = wrapper.instance();
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler({ target: { role: 'slider' } });
-                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                    expect(wrapper.state('focusedIndex')).toBeUndefined();
                 });
 
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
@@ -1081,7 +1083,7 @@ describe('components/table/makeSelectable', () => {
                     const instance = wrapper.instance();
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler({ target: { role: 'slider' } });
-                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                    expect(wrapper.state('focusedIndex')).toBeUndefined();
                 });
 
                 test('should call event.preventDefault() and set focus to next row item', () => {
@@ -1131,7 +1133,7 @@ describe('components/table/makeSelectable', () => {
                     const instance = wrapper.instance();
                     const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
                     shortcut.handler({ target: { role: 'slider' } });
-                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                    expect(wrapper.state('focusedIndex')).toBeUndefined();
                 });
 
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
