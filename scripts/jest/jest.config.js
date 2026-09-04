@@ -14,6 +14,7 @@ module.exports = {
         '^uuid$': require.resolve('uuid'),
         '^react-markdown$': '<rootDir>/scripts/jest/mocks/reactMarkdownMock.js',
         '^remark-gfm$': '<rootDir>/scripts/jest/mocks/remarkGfmMock.js',
+        '^sanitize-html$': '<rootDir>/scripts/jest/mocks/sanitizeHtmlMock.js',
     },
     restoreMocks: true,
     rootDir: '../../',
