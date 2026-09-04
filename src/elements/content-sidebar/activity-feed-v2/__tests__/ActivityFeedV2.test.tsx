@@ -1803,8 +1803,19 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
                 expect.objectContaining({
                     id: 'ts-comment-1',
+                    isSelected: false,
                     time: 5,
                     type: 'comment',
+                }),
+            ]);
+        });
+
+        test('should mark the active feed entry as selected on comment_markers', () => {
+            renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
                 }),
             ]);
         });
