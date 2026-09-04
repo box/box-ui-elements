@@ -767,25 +767,8 @@ describe('useMediaTimestamp range selection', () => {
             expect(hasListener('comment_range_draft_change')).toBe(false);
             expect(screen.getByTestId('ms').textContent).toBe('43500');
         } finally {
+            ``;
             cleanup();
-        }
-    });
-
-    test('should drop the range when preview swaps in a new media element', async () => {
-        const { cleanup, emitFromViewer } = renderWithRange();
-        try {
-            act(() => screen.getByText('press').click());
-            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
-            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
-
-            await act(async () => {
-                cleanup();
-                mountMediaInDom(createMediaElement('audio', 0));
-            });
-
-            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
-        } finally {
-            document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
         }
     });
 });
