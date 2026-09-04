@@ -2239,6 +2239,49 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
         });
 
+        test('should re-attach comment markers when the file version changes', () => {
+            const oldViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                removeListener: jest.fn(),
+            };
+            const newViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                removeListener: jest.fn(),
+            };
+            const getViewer = jest.fn(() => oldViewer);
+            const { rerender } = renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getViewer,
+                isAudioPlayerV2Enabled: true,
+            });
+
+            expect(oldViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+
+            oldViewer.isDestroyed.mockReturnValue(true);
+            getViewer.mockReturnValue(newViewer);
+            rerender(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp3', file_version: { id: '2' }, permissions: { can_comment: true } }}
+                    getViewer={getViewer}
+                    isAudioPlayerV2Enabled
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(oldViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+            expect(oldViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(newViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1' }),
+            ]);
+            expect(newViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+        });
+
         test('should not include non-timestamped comments in markers', () => {
             renderComponentWithMarkers({ feedItems: [mockComment] as ActivityFeedV2Props['feedItems'] });
             expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);

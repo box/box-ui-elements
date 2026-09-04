@@ -527,9 +527,11 @@ const ActivityFeedV2 = ({
                 return;
             }
             attachedViewer.removeListener('comment_marker_select', handleMarkerSelect);
-            attachedViewer.emit('comment_markers', []);
+            if (!attachedViewer.isDestroyed?.()) {
+                attachedViewer.emit('comment_markers', []);
+            }
         };
-    }, [allowCommentMarkers, getPreview, getViewer]);
+    }, [allowCommentMarkers, fileVersionId, getPreview, getViewer]);
 
     React.useEffect(() => {
         const viewer = attachedViewerRef.current;
