@@ -116,6 +116,7 @@ type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
     getViewer?: Function,
+    getPreview?: Function,
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
@@ -1483,6 +1484,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         createTask={this.createTask}
                         currentUser={currentUser}
                         feedItems={this.getFilteredFeedItems()}
+                        getPreview={this.props.getPreview}
                         getViewer={this.props.getViewer}
                         file={file}
                         getApproverAsync={this.getApproverAsync}

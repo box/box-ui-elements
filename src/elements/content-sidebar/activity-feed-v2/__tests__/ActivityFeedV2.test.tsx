@@ -1957,8 +1957,58 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
 
         test('should not emit comment_markers when getViewer returns null', () => {
-            renderComponentWithMarkers({ getViewer: jest.fn(() => null) });
+            jest.useFakeTimers();
+            const { unmount } = renderComponentWithMarkers({ getViewer: jest.fn(() => null) });
+            act(() => {
+                jest.advanceTimersByTime(1000);
+            });
             expect(mockViewer.emit).not.toHaveBeenCalled();
+            unmount();
+            expect(mockViewer.emit).not.toHaveBeenCalled();
+            jest.useRealTimers();
+        });
+
+        test('should emit comment_markers once getViewer becomes available after the feed has loaded', () => {
+            jest.useFakeTimers();
+            const getViewer = jest.fn(() => null);
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getViewer,
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).not.toHaveBeenCalled();
+
+            getViewer.mockReturnValue(mockViewer);
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
+            expect(mockViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+            jest.useRealTimers();
+        });
+
+        test('should emit comment_markers on the waveform shell before the file is playable', () => {
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getPreview: () => ({ getCurrentViewer: () => mockViewer }),
+                getViewer: jest.fn(() => null),
+                isAudioPlayerV2Enabled: true,
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
         });
 
         test('should emit comment_markers with timestamped comment data', () => {
@@ -1980,6 +2030,178 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     id: 'ts-comment-1',
                     isSelected: true,
                 }),
+            ]);
+        });
+
+        test('should not clear comment_markers when the feed refreshes without a comment revision change', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+            mockViewer.addListener.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[{ ...timestampedComment }] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+            expect(mockViewer.addListener).not.toHaveBeenCalled();
+        });
+
+        test('should keep marker isSelected when a reply is added', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={
+                        [
+                            {
+                                ...timestampedComment,
+                                replies: [
+                                    {
+                                        created_at: '2024-01-02T00:00:00Z',
+                                        created_by: { id: '9', name: 'Replier', type: 'user' },
+                                        id: 'reply-1',
+                                        message: 'reply',
+                                        modified_at: '2024-01-02T00:00:00Z',
+                                        tagged_message: 'reply',
+                                        type: 'comment',
+                                    },
+                                ],
+                            },
+                        ] as ActivityFeedV2Props['feedItems']
+                    }
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+        });
+
+        test('should clear marker isSelected when a later comment is added without changing the active entry', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+
+            const laterComment = {
+                ...timestampedComment,
+                id: 'ts-comment-2',
+                tagged_message: '#[timestamp:9000,versionId:123] Later',
+            };
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment, laterComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1', isSelected: false }),
+                expect.objectContaining({ id: 'ts-comment-2', isSelected: false }),
+            ]);
+        });
+
+        test('should keep marker isSelected when the deep-linked comment first appears in the feed', () => {
+            const { rerender } = renderComponentWithMarkers({
+                activeFeedEntryId: 'ts-comment-1',
+                feedItems: [],
+            });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+        });
+
+        test('should not send isSelected after a comment is deleted', () => {
+            const otherComment = {
+                ...timestampedComment,
+                id: 'ts-comment-2',
+                tagged_message: '#[timestamp:9000,versionId:123] Later',
+            };
+            const { rerender } = renderComponentWithMarkers({
+                activeFeedEntryId: 'ts-comment-1',
+                feedItems: [timestampedComment, otherComment] as ActivityFeedV2Props['feedItems'],
+            });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1', isSelected: false }),
+            ]);
+        });
+
+        test('should not send isSelected after a comment is edited', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={
+                        [
+                            { ...timestampedComment, tagged_message: '#[timestamp:5000,versionId:123] Edited' },
+                        ] as ActivityFeedV2Props['feedItems']
+                    }
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1', isSelected: false }),
             ]);
         });
 
@@ -2015,6 +2237,49 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             unmount();
             expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);
             expect(mockViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+        });
+
+        test('should re-attach comment markers when the file version changes', () => {
+            const oldViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                removeListener: jest.fn(),
+            };
+            const newViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                removeListener: jest.fn(),
+            };
+            const getViewer = jest.fn(() => oldViewer);
+            const { rerender } = renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getViewer,
+                isAudioPlayerV2Enabled: true,
+            });
+
+            expect(oldViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+
+            oldViewer.isDestroyed.mockReturnValue(true);
+            getViewer.mockReturnValue(newViewer);
+            rerender(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp3', file_version: { id: '2' }, permissions: { can_comment: true } }}
+                    getViewer={getViewer}
+                    isAudioPlayerV2Enabled
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(oldViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+            expect(oldViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(newViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1' }),
+            ]);
+            expect(newViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
         });
 
         test('should not include non-timestamped comments in markers', () => {

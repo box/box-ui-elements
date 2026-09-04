@@ -435,6 +435,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     currentUser={currentUser}
                                     currentUserError={currentUserError}
                                     file={file}
+                                    getPreview={getPreview}
                                     getViewer={getViewer}
                                     hasSidebarInitialized={isInitialized}
                                     onAnnotationSelect={onAnnotationSelect}

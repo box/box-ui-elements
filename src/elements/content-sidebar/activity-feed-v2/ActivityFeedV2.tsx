@@ -23,11 +23,12 @@ import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMappi
 import { buildTimestampMarkup } from './timestampMarkup';
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
+import { useCommentMarkerSelectedId } from './useCommentMarkerSelectedId';
 import { useTimeFormat } from './useTimeFormat';
 import { useMediaTimestamp } from './useMediaTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
-import type { ActivityFeedV2Props, TransformedFeedItem } from './types';
+import type { ActivityFeedV2Props, TransformedFeedItem, ViewerHandle } from './types';
 import type { ElementsXhrError } from '../../../common/types/api';
 import type { GroupMini, SelectorItem, UserMini } from '../../../common/types/core';
 import type { TaskAssigneeCollection, TaskNew, TaskType, TaskUpdatePayload } from '../../../common/types/tasks';
@@ -55,6 +56,55 @@ const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): 
         return (block.content ?? []).some(item => hasMentionInBlocks(item.content, userId));
     });
 
+type CommentMarkerPayload = {
+    avatarUrl?: string;
+    colorIndex?: number;
+    id: string;
+    initial?: string;
+    isSelected?: boolean;
+    time: number;
+    type: 'annotation' | 'comment';
+};
+
+/** ContentPreview.getViewer() waits for playable. The waveform shell exists earlier. */
+const COMMENT_MARKERS_VIEWER_POLL_MS = 100;
+
+const buildCommentMarkers = (
+    items: readonly TransformedFeedItem[],
+    selectedFeedItemId: string | null,
+): CommentMarkerPayload[] => {
+    const markers: CommentMarkerPayload[] = [];
+    for (const item of items) {
+        if (item.type === 'comment' && item.annotationTimestampMs != null) {
+            const author = item.messages[0]?.author;
+            markers.push({
+                avatarUrl: author?.avatarUrl ?? undefined,
+                colorIndex: author?.id ?? 0,
+                id: item.id,
+                initial: author?.name?.[0] ?? undefined,
+                isSelected: item.id === selectedFeedItemId,
+                time: item.annotationTimestampMs / 1000,
+                type: 'comment',
+            });
+        } else if (item.type === 'annotation') {
+            const loc = item.annotation?.target?.location;
+            if (loc?.type === 'frame' && loc.value != null) {
+                const author = item.messages[0]?.author;
+                markers.push({
+                    avatarUrl: author?.avatarUrl ?? undefined,
+                    colorIndex: author?.id ?? 0,
+                    id: item.id,
+                    initial: author?.name?.[0] ?? undefined,
+                    isSelected: item.id === selectedFeedItemId,
+                    time: loc.value / 1000,
+                    type: 'annotation',
+                });
+            }
+        }
+    }
+    return markers;
+};
+
 const ActivityFeedV2 = ({
     activeFeedEntryId,
     createTask,
@@ -64,6 +114,7 @@ const ActivityFeedV2 = ({
     getApproverAsync,
     getAvatarUrl,
     getMentionAsync,
+    getPreview,
     getTaskCollaborators,
     getViewer,
     hasTasks = true,
@@ -404,67 +455,91 @@ const ActivityFeedV2 = ({
         : undefined;
 
     const allowCommentMarkers = isVideo || isAudioPlayerV2;
+    const markerSelectedId = useCommentMarkerSelectedId(activeFeedEntryId, filteredItems);
+
+    const filteredItemsRef = React.useRef(filteredItems);
+    const markerSelectedIdRef = React.useRef(markerSelectedId);
+    const onCommentSelectRef = React.useRef(onCommentSelect);
+    const attachedViewerRef = React.useRef<ViewerHandle | null>(null);
+
+    React.useLayoutEffect(() => {
+        filteredItemsRef.current = filteredItems;
+        markerSelectedIdRef.current = markerSelectedId;
+        onCommentSelectRef.current = onCommentSelect;
+    }, [filteredItems, markerSelectedId, onCommentSelect]);
 
     React.useEffect(() => {
-        if (!getViewer || !allowCommentMarkers) return undefined;
-        const viewer = getViewer();
-        if (!viewer) return undefined;
+        if ((!getViewer && !getPreview) || !allowCommentMarkers) return undefined;
 
-        const markers: Array<{
-            avatarUrl?: string;
-            colorIndex?: number;
-            id: string;
-            initial?: string;
-            isSelected?: boolean;
-            time: number;
-            type: 'annotation' | 'comment';
-        }> = [];
-        const selectedFeedItemId = activeFeedEntryId
-            ? resolveFeedItemIdForEntry(filteredItems, activeFeedEntryId) ?? activeFeedEntryId
-            : null;
-        for (const item of filteredItems) {
-            if (item.type === 'comment' && item.annotationTimestampMs != null) {
-                const author = item.messages[0]?.author;
-                markers.push({
-                    avatarUrl: author?.avatarUrl ?? undefined,
-                    colorIndex: author?.id ?? 0,
-                    id: item.id,
-                    initial: author?.name?.[0] ?? undefined,
-                    isSelected: item.id === selectedFeedItemId,
-                    time: item.annotationTimestampMs / 1000,
-                    type: 'comment',
-                });
-            } else if (item.type === 'annotation') {
-                const loc = item.annotation?.target?.location;
-                if (loc?.type === 'frame' && loc.value != null) {
-                    const author = item.messages[0]?.author;
-                    markers.push({
-                        avatarUrl: author?.avatarUrl ?? undefined,
-                        colorIndex: author?.id ?? 0,
-                        id: item.id,
-                        initial: author?.name?.[0] ?? undefined,
-                        isSelected: item.id === selectedFeedItemId,
-                        time: loc.value / 1000,
-                        type: 'annotation',
-                    });
-                }
-            }
-        }
-        viewer.emit('comment_markers', markers);
+        let pollId = 0;
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
-            const item = filteredItems.find(filteredItem => filteredItem.id === id);
+            const item = filteredItemsRef.current.find(filteredItem => filteredItem.id === id);
             // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
-            if (item?.type === 'comment' && onCommentSelect) {
-                onCommentSelect(id);
+            if (item?.type === 'comment' && onCommentSelectRef.current) {
+                onCommentSelectRef.current(id);
             }
         };
-        viewer.addListener('comment_marker_select', handleMarkerSelect);
-        return () => {
-            viewer.removeListener('comment_marker_select', handleMarkerSelect);
-            viewer.emit('comment_markers', []);
+
+        const resolveViewer = (): ViewerHandle | null => {
+            const loaded = getViewer?.() ?? null;
+            if (loaded) {
+                return loaded;
+            }
+            const current = getPreview?.()?.getCurrentViewer?.() ?? null;
+            if (!current || current.isDestroyed?.()) {
+                return null;
+            }
+            return current;
         };
-    }, [activeFeedEntryId, allowCommentMarkers, filteredItems, getViewer, onCommentSelect]);
+
+        const attachMarkerViewer = (viewer: ViewerHandle) => {
+            attachedViewerRef.current = viewer;
+            viewer.emit('comment_markers', buildCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current));
+            viewer.addListener('comment_marker_select', handleMarkerSelect);
+        };
+
+        const attachMarkerViewerIfReady = (): boolean => {
+            const viewer = resolveViewer();
+            if (!viewer) {
+                return false;
+            }
+            attachMarkerViewer(viewer);
+            return true;
+        };
+
+        if (!attachMarkerViewerIfReady()) {
+            pollId = window.setInterval(() => {
+                if (attachMarkerViewerIfReady()) {
+                    window.clearInterval(pollId);
+                    pollId = 0;
+                }
+            }, COMMENT_MARKERS_VIEWER_POLL_MS);
+        }
+
+        return () => {
+            if (pollId) {
+                window.clearInterval(pollId);
+            }
+            const attachedViewer = attachedViewerRef.current;
+            attachedViewerRef.current = null;
+            if (!attachedViewer) {
+                return;
+            }
+            attachedViewer.removeListener('comment_marker_select', handleMarkerSelect);
+            if (!attachedViewer.isDestroyed?.()) {
+                attachedViewer.emit('comment_markers', []);
+            }
+        };
+    }, [allowCommentMarkers, fileVersionId, getPreview, getViewer]);
+
+    React.useEffect(() => {
+        const viewer = attachedViewerRef.current;
+        if (!viewer) {
+            return;
+        }
+        viewer.emit('comment_markers', buildCommentMarkers(filteredItems, markerSelectedId));
+    }, [filteredItems, markerSelectedId]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
