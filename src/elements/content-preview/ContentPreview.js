@@ -1610,6 +1610,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload: boolean = false) => {
+        if (this.props.isComparing) {
+            return;
+        }
+
         const { location = {} } = target;
         const { file } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');

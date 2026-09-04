@@ -1939,6 +1939,24 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(emit).toBeCalledWith('scrolltoannotation', { id: annotation.id, target: annotation.target });
             expect(instance.dynamicOnPreviewLoadAction).toBeNull();
         });
+
+        test('should not write startAt or scroll when comparing', () => {
+            const annotation = {
+                id: '123',
+                file_version: { id: '456' },
+                target: { location: { type: 'page', value: 5 } },
+            };
+            const wrapper = getWrapper({ isComparing: true });
+            const instance = wrapper.instance();
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            instance.setState = jest.fn();
+
+            instance.handleAnnotationSelect(annotation);
+
+            expect(instance.setState).not.toHaveBeenCalled();
+            expect(emit).not.toHaveBeenCalled();
+        });
     });
 
     describe('getThumbnail()', () => {
