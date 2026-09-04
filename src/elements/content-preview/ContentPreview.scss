@@ -96,10 +96,6 @@
         .bcpr-body {
             position: static;
             flex-direction: column;
-
-            &--comparing {
-                flex-direction: row;
-            }
         }
 
         // Nav arrows anchor to .bcpr here. Comparison is excluded because it has no
