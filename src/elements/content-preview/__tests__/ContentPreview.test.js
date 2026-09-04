@@ -2566,6 +2566,99 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('comparedPanel prop', () => {
+        const collection = ['123', '456', '789'];
+        const comparedPanel = <div className="compared-panel-content">compared pane</div>;
+
+        test('should render comparedPanel between the viewer and sidebar', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+                comparedPanel,
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--with-compared-panel')).toBe(true);
+            expect(bodyDiv.children().length).toBe(3);
+            expect(bodyDiv.children().at(0).hasClass('bcpr-container')).toBe(true);
+            expect(bodyDiv.children().at(1).hasClass('compared-panel-content')).toBe(true);
+        });
+
+        test('should not add the compared-panel body class when comparedPanel is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const bodyDiv = wrapper.find('.bcpr-body');
+            expect(bodyDiv.hasClass('bcpr-body--with-compared-panel')).toBe(false);
+            expect(bodyDiv.children().length).toBe(2);
+        });
+
+        test('should not render PreviewNavigation when comparedPanel is provided', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                comparedPanel,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(false);
+        });
+
+        test('should not render PreviewNavigation when comparedPanel is null', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                comparedPanel: null,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(false);
+        });
+
+        test('should render PreviewNavigation when comparedPanel is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+            });
+            wrapper.setState({
+                currentFileId: '456',
+                file: { id: '456', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('PreviewNavigation').exists()).toBe(true);
+        });
+
+        test('should not navigate when comparedPanel is provided', () => {
+            const wrapper = getWrapper({
+                fileId: '456',
+                collection,
+                comparedPanel,
+            });
+            wrapper.setState({ currentFileId: '456' });
+            const instance = wrapper.instance();
+            instance.navigateToIndex = jest.fn();
+
+            instance.navigateLeft();
+            instance.navigateRight();
+
+            expect(instance.navigateToIndex).not.toHaveBeenCalled();
+        });
+    });
+
     describe('npm preview load path (useNpmBoxContentPreview)', () => {
         const createPreviewModule = () => ({
             Preview: function Preview() {

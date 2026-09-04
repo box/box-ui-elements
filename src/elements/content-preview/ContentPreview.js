@@ -144,6 +144,7 @@ type Props = {
     logoUrl?: string,
     measureRef: Function,
     messages?: StringMap,
+    comparedPanel?: React.Node,
     onAnnotator: Function,
     onAnnotatorEvent: Function,
     onBeforeNavigate?: (targetFileId: string) => boolean | Promise<boolean>,
@@ -1018,6 +1019,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             enableBoundingBoxHighlights,
             features,
             fileOptions,
+            comparedPanel,
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
@@ -1375,6 +1377,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     navigateLeft = () => {
+        if (this.props.comparedPanel !== undefined) {
+            return;
+        }
+
         const currentIndex = this.getFileIndex();
         const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
         if (newIndex !== currentIndex) {
@@ -1389,7 +1395,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     navigateRight = () => {
-        const { collection }: Props = this.props;
+        const { collection, comparedPanel }: Props = this.props;
+        if (comparedPanel !== undefined) {
+            return;
+        }
+
         const currentIndex = this.getFileIndex();
         const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
         if (newIndex !== currentIndex) {
@@ -1465,7 +1475,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { useHotkeys, renderCustomPreview }: Props = this.props;
+        const { comparedPanel, useHotkeys, renderCustomPreview }: Props = this.props;
 
         // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
         // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
@@ -1491,12 +1501,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (!consumed) {
             switch (key) {
                 case 'ArrowLeft':
-                    this.navigateLeft();
-                    consumed = true;
+                    if (comparedPanel === undefined) {
+                        this.navigateLeft();
+                        consumed = true;
+                    }
                     break;
                 case 'ArrowRight':
-                    this.navigateRight();
-                    consumed = true;
+                    if (comparedPanel === undefined) {
+                        this.navigateRight();
+                        consumed = true;
+                    }
                     break;
                 default:
                 // no-op
@@ -1671,6 +1685,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             hasHeader,
             hasProviders,
             hideSidebar,
+            comparedPanel,
             history,
             isLarge,
             isVeryLarge,
@@ -1729,6 +1744,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const currentVersionId = getProp(file, 'file_version.id');
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
+        const isComparedPanelMode = comparedPanel !== undefined;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1761,7 +1777,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         selectedVersion={selectedVersion}
                                     />
                                 )}
-                                <div className="bcpr-body" ref={this.previewBodyRef}>
+                                <div
+                                    className={classNames('bcpr-body', {
+                                        'bcpr-body--with-compared-panel': isComparedPanelMode,
+                                    })}
+                                    ref={this.previewBodyRef}
+                                >
                                     <div
                                         className="bcpr-container"
                                         onMouseMove={this.onMouseMove}
@@ -1797,13 +1818,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             isLoading={isLoading}
                                             isLoadingDeferred={isLoadingDeferred}
                                         />
-                                        <PreviewNavigation
-                                            collection={collection}
-                                            currentIndex={this.getFileIndex()}
-                                            onNavigateLeft={this.navigateLeft}
-                                            onNavigateRight={this.navigateRight}
-                                        />
+                                        {!isComparedPanelMode && (
+                                            <PreviewNavigation
+                                                collection={collection}
+                                                currentIndex={this.getFileIndex()}
+                                                onNavigateLeft={this.navigateLeft}
+                                                onNavigateRight={this.navigateRight}
+                                            />
+                                        )}
                                     </div>
+                                    {comparedPanel}
                                     {file && !hideSidebar && (
                                         <LoadableSidebar
                                             {...mergedContentSidebarProps}
