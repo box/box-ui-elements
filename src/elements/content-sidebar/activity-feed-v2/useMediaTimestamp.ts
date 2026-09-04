@@ -111,8 +111,9 @@ export const useMediaTimestamp = (
     const resetRange = React.useCallback(() => {
         isRangePinnedRef.current = false;
         setTimestampEndMs(undefined);
-        // The message editor retains checkbox state after a post, so we emit another event to keep handles up.
-        emitDraft(timestampMs);
+        if (isPressedRef.current) {
+            emitDraft(timestampMs);
+        }
     }, [emitDraft, timestampMs]);
 
     // Reset state when disabled (e.g. switching from a media file to a non-media file)
