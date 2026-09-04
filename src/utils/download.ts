@@ -1,23 +1,19 @@
 /**
- * @flow
- * @file Utility for copying and downloading
- * @author Box
- */
-
-/**
  * Function to download string as txt file
  *
  * @private
- * @param {String} string - string to download
- * @param {String} name - file name to use
- * @return {void}
+ * @param {string} string - string to download
+ * @param {string} name - file name to use
  */
-function download(string: string, name: string) {
+function download(string: string, name: string): void {
     const blob = new Blob([string], { type: 'text/plain;charset=utf-8' });
 
     // IE11
-    if (window.navigator.msSaveBlob) {
-        window.navigator.msSaveBlob(blob, name);
+    const navigatorWithMsSave = window.navigator as Navigator & {
+        msSaveBlob?: (blob: Blob, defaultName?: string) => boolean;
+    };
+    if (navigatorWithMsSave.msSaveBlob) {
+        navigatorWithMsSave.msSaveBlob(blob, name);
         return;
     }
 
@@ -46,10 +42,9 @@ function download(string: string, name: string) {
  * Function to copy string to the clipboard
  *
  * @private
- * @param {String} string - string to copy
- * @return {void}
+ * @param {string} string - string to copy
  */
-function copy(string: string) {
+function copy(string: string): void {
     const textarea = document.createElement('textarea');
     const { body } = document;
 

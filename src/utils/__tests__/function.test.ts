@@ -49,7 +49,7 @@ describe('util/function', () => {
 
             setTimeout(() => {
                 promise.catch(sandbox.mock());
-                expect(inner.callCount).to.equal(2);
+                expect(inner.callCount).toBe(2);
             }, 100);
         });
 
@@ -62,7 +62,7 @@ describe('util/function', () => {
 
             setTimeout(() => {
                 promise.catch(sandbox.mock());
-                expect(inner.callCount).to.equal(1);
+                expect(inner.callCount).toBe(1);
             }, 100);
         });
     });
