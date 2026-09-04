@@ -84,9 +84,14 @@ export type ActivityFeedV2File = {
 export type ViewerHandle = {
     addListener: (event: string, handler: (payload: unknown) => void) => void;
     emit: (event: string, payload: unknown) => void;
+    isDestroyed?: () => boolean;
     pause?: () => void;
     removeListener: (event: string, handler: (payload: unknown) => void) => void;
     setMediaTime?: (time: number) => void;
+};
+
+export type PreviewHandle = {
+    getCurrentViewer?: () => ViewerHandle | null;
 };
 
 export type ActivityFeedV2Props = {
@@ -100,6 +105,7 @@ export type ActivityFeedV2Props = {
     getMentionAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     getViewer?: () => ViewerHandle | null;
+    getPreview?: () => PreviewHandle | null;
     hasTasks?: boolean;
     isAudioPlayerV2Enabled?: boolean;
     isDisabled?: boolean;
