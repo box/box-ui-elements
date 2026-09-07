@@ -83,6 +83,8 @@ function useSidebarMetadataFetcher(
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
     isConfidenceScoreEnabled: boolean = false,
     isBoundingBoxEnabled: boolean = false,
+    isConfidenceScoreApiEnabled: boolean = false,
+    isBoundingBoxApiEnabled: boolean = false,
     namespaceContext: MetadataNamespaceFetchContext = {},
     shouldFetchDetailedMetadata: boolean = false,
 ): DataFetcher {
@@ -250,8 +252,8 @@ function useSidebarMetadataFetcher(
             let response = null;
             const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
 
-            const confidenceScoreParams = isConfidenceScoreEnabled ? { include_confidence_score: true } : {};
-            const boundingBoxParams = isBoundingBoxEnabled ? { include_reference: true } : {};
+            const confidenceScoreParams = isConfidenceScoreApiEnabled ? { include_confidence_score: true } : {};
+            const boundingBoxParams = isBoundingBoxApiEnabled ? { include_reference: true } : {};
 
             const requestBody: AiExtractStructured = {
                 items: [{ id: file.id, type: file.type }],
@@ -332,7 +334,7 @@ function useSidebarMetadataFetcher(
                 return result;
             });
         },
-        [api, file, isConfidenceScoreEnabled, isBoundingBoxEnabled, onError, templates],
+        [api, file, isConfidenceScoreApiEnabled, isBoundingBoxApiEnabled, onError, templates],
     );
 
     React.useEffect(() => {
