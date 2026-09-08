@@ -866,11 +866,12 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         });
     });
 
-    test('should pass getPreview to useMetadataFieldSelection', () => {
+    test('should pass getPreview and trackEvent to useMetadataFieldSelection', () => {
         const getPreview = jest.fn();
-        renderComponent({ getPreview });
+        const trackEvent = jest.fn();
+        renderComponent({ getPreview, trackEvent });
 
-        expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview);
+        expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview, trackEvent);
     });
 
     test('passes host-provided fetchers to the editor when the user field flag is on', async () => {
