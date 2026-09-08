@@ -500,11 +500,13 @@ describe('useMediaTimestamp range selection', () => {
         document.querySelectorAll('.bp-media-container').forEach(node => node.remove());
     });
 
-    const renderWithRange = (currentTime = 43.5) => {
+    const renderWithRange = (currentTime = 43.5, timeFormat: TimeFormat = 'standard') => {
         const audio = createMediaElement('audio', currentTime);
         const cleanup = mountMediaInDom(audio);
         const harness = createViewer();
-        const view = render(<TestHarness enabled getViewer={harness.getViewer} isAudioPlayerV2 />);
+        const view = render(
+            <TestHarness enabled getViewer={harness.getViewer} isAudioPlayerV2 timeFormat={timeFormat} />,
+        );
         return { audio, cleanup, ...harness, ...view };
     };
 
@@ -538,6 +540,55 @@ describe('useMediaTimestamp range selection', () => {
 
             expect(screen.getByTestId('ms').textContent).toBe('44000');
             expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should label a collapsed draft with a single time', () => {
+        const { cleanup } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:43');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should label the draft as a range once a drag commits', () => {
+        const { cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:44 \u2013 0:50');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should label both bounds of the range with the active time format', () => {
+        const { cleanup, emitFromViewer } = renderWithRange(43.5, 'timecode');
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('timestamp').textContent).toBe('00:00:44:00 \u2013 00:00:50:00');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should return the label to a single time after the range is reset', () => {
+        const { cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            act(() => screen.getByText('reset').click());
+
+            // The reset drops the end, keeping the dragged start rather than recapturing playback.
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:44');
         } finally {
             cleanup();
         }

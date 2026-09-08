@@ -21,7 +21,7 @@ import {
     serializeEditorContent,
 } from './helpers';
 import { annotationTargetToBadge } from './transformers';
-import { formatByTimeFormat } from './useTimeFormat';
+import { formatByTimeFormat, formatTimeRange } from './useTimeFormat';
 import { seekMediaToMs } from './useMediaTimestamp';
 
 import type {
@@ -184,6 +184,8 @@ const FeedItemRow = ({
                 });
             };
             const timestampMs = item.annotationTimestampMs;
+            const timestampEndMs = item.annotationTimestampEndMs;
+            // A range badge seeks to its start, same as a single timestamp.
             const handleBadgeClick =
                 timestampMs !== undefined
                     ? () => {
@@ -193,7 +195,13 @@ const FeedItemRow = ({
                     : undefined;
             const commentAnnotationTarget =
                 item.annotationTarget && timestampMs !== undefined
-                    ? { ...item.annotationTarget, timestamp: formatByTimeFormat(timestampMs, timeFormat, fps) }
+                    ? {
+                          ...item.annotationTarget,
+                          timestamp:
+                              timestampEndMs !== undefined
+                                  ? formatTimeRange(timestampMs, timestampEndMs, timeFormat, fps)
+                                  : formatByTimeFormat(timestampMs, timeFormat, fps),
+                      }
                     : item.annotationTarget;
             return (
                 <ActivityFeed.List.ThreadedAnnotation
