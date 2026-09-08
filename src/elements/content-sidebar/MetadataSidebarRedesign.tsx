@@ -166,6 +166,8 @@ function MetadataSidebarRedesign({
     const isConfidenceScoreReviewEnabled: boolean = useFeatureEnabled('metadata.confidenceScore.enabled');
     const isBoundingBoxEnabled = useFeatureEnabled('metadata.boundingBox.enabled');
     const shouldFetchDetailedMetadata: boolean = useFeatureEnabled('metadata.fetchDetailedMetadata.enabled');
+    const isConfidenceScoreApiEnabled: boolean = useFeatureEnabled('metadata.confidenceScoreApi.enabled');
+    const isBoundingBoxApiEnabled: boolean = useFeatureEnabled('metadata.boundingBoxApi.enabled');
 
     const isBoundingBoxOrConfidenceScoreReviewEnabled = isBoundingBoxEnabled || isConfidenceScoreReviewEnabled;
 
@@ -200,6 +202,8 @@ function MetadataSidebarRedesign({
         isFeatureEnabled,
         isConfidenceScoreReviewEnabled,
         isBoundingBoxEnabled,
+        isConfidenceScoreApiEnabled,
+        isBoundingBoxApiEnabled,
         {
             enterpriseFqn: enterpriseId,
             isLoading: isNamespaceContextLoading,
@@ -215,7 +219,7 @@ function MetadataSidebarRedesign({
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState<boolean>(false);
     const [shouldShowOnlyReviewFields, setShouldShowOnlyReviewFields] = useState<boolean>(false);
-    const { selectedMetadataFieldId, handleSelectMetadataField } = useMetadataFieldSelection(getPreview);
+    const { selectedMetadataFieldId, handleSelectMetadataField } = useMetadataFieldSelection(getPreview, trackEvent);
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
