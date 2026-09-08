@@ -219,7 +219,7 @@ function MetadataSidebarRedesign({
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState<boolean>(false);
     const [shouldShowOnlyReviewFields, setShouldShowOnlyReviewFields] = useState<boolean>(false);
-    const { selectedMetadataFieldId, handleSelectMetadataField } = useMetadataFieldSelection(getPreview);
+    const { selectedMetadataFieldId, handleSelectMetadataField } = useMetadataFieldSelection(getPreview, trackEvent);
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
