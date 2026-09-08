@@ -1,13 +1,16 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import range from 'lodash/range';
 import sinon from 'sinon';
 
 import SlidePanels from '../SlidePanels';
 import Slide from '../Slide';
 
+type SlidePanelsInstance = InstanceType<typeof SlidePanels>;
+
 const sandbox = sinon.sandbox.create();
 
-const getSlides = numSlides => range(numSlides).map(i => shallow(<Slide>`Slide ${i}`</Slide>));
+const getSlides = (numSlides: number) => range(numSlides).map(i => shallow(<Slide>`Slide ${i}`</Slide>));
 
 describe('components/slide-carousel/SlidePanels', () => {
     afterEach(() => {
@@ -15,14 +18,14 @@ describe('components/slide-carousel/SlidePanels', () => {
     });
 
     const defaultProps = {
-        getPanelIdFromValue: val => `panel-${val}`,
-        onSelection: i => `blah${i}`,
+        getPanelIdFromValue: (value: number) => `panel-${value}`,
+        onSelection: (index: number) => `blah${index}`,
         selectedIndex: 0,
     };
 
-    const getNode = props => <SlidePanels {...defaultProps} {...props} />;
+    const getNode = (props: Record<string, unknown> = {}) => <SlidePanels {...defaultProps} {...props} />;
 
-    const getWrapper = props => shallow(getNode(props));
+    const getWrapper = (props: Record<string, unknown> = {}) => shallow(getNode(props));
 
     describe('handleKeyDown', () => {
         [
@@ -67,9 +70,10 @@ describe('components/slide-carousel/SlidePanels', () => {
                     selectedIndex: currIndex,
                     children: getSlides(numSlides),
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.instance() as SlidePanelsInstance;
 
-                instance.handleSelection = sandbox.spy();
+                const handleSelectionSpy = sandbox.spy();
+                instance.handleSelection = handleSelectionSpy;
                 const shouldStopEvent = ['ArrowLeft', 'ArrowRight'].includes(key);
                 const onKeyEvent = {
                     key,
@@ -77,12 +81,12 @@ describe('components/slide-carousel/SlidePanels', () => {
                     stopPropagation: shouldStopEvent ? sandbox.mock() : sandbox.mock().never(),
                 };
 
-                instance.handleKeyDown(onKeyEvent);
+                instance.handleKeyDown(onKeyEvent as unknown as React.KeyboardEvent<HTMLDivElement>);
 
                 if (expectedSelection === null) {
-                    sinon.assert.notCalled(instance.handleSelection);
+                    sinon.assert.notCalled(handleSelectionSpy);
                 } else {
-                    sinon.assert.calledWithExactly(instance.handleSelection, expectedSelection);
+                    sinon.assert.calledWithExactly(handleSelectionSpy, expectedSelection);
                 }
             });
         });
@@ -94,7 +98,7 @@ describe('components/slide-carousel/SlidePanels', () => {
 
         const wrapperInstance = getWrapper({
             onSelection: onSelectionSpy,
-        }).instance();
+        }).instance() as SlidePanelsInstance;
         wrapperInstance.focusOnContainerElement = focusOnContainerElementSpy;
 
         const index = 2;
@@ -106,7 +110,7 @@ describe('components/slide-carousel/SlidePanels', () => {
 
     test('should render a div for every child', () => {
         const wrapper = getWrapper({ children: getSlides(5) });
-        expect(wrapper.find('div.slide-panel').length).toBe(5);
+        expect(wrapper.find('div.slide-panel')).toHaveLength(5);
     });
 
     test('should only show the selected slide', () => {
@@ -114,20 +118,17 @@ describe('components/slide-carousel/SlidePanels', () => {
             children: getSlides(5),
             selectedIndex: 3,
         });
-        expect(
-            wrapper.children().everyWhere((el, i) => {
-                const isHidden = el.prop('aria-hidden');
-                return i === 3 ? !isHidden : isHidden;
-            }),
-        ).toBe(true);
+        const hiddenStates = wrapper.children().map(element => element.prop('aria-hidden'));
+        expect(hiddenStates.every((isHidden, index) => (index === 3 ? !isHidden : isHidden))).toBe(true);
     });
 
     test('should use the getPanelIdFromValue prop to generate ids for slides', () => {
-        const getPanelIdFromValue = i => `unique${i}`;
+        const getPanelIdFromValue = (index: number) => `unique${index}`;
         const wrapper = getWrapper({
             children: getSlides(5),
             getPanelIdFromValue,
         });
-        expect(wrapper.children().everyWhere((el, i) => el.prop('id') === getPanelIdFromValue(i))).toBe(true);
+        const panelIds = wrapper.children().map(element => element.prop('id'));
+        expect(panelIds.every((id, index) => id === getPanelIdFromValue(index))).toBe(true);
     });
 });

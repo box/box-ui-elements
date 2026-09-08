@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import CarouselHeader from '../CarouselHeader';
 
@@ -7,7 +8,8 @@ describe('components/slide-carousel/CarouselHeader', () => {
         title: 'Blah',
     };
 
-    const getWrapper = props => shallow(<CarouselHeader {...defaultProps} {...props} />);
+    const getWrapper = (props: Record<string, unknown> = {}) =>
+        shallow(<CarouselHeader {...defaultProps} {...props} />);
 
     test('should render a title', () => {
         const testTitle = 'LoveAndHappiness';

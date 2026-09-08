@@ -1,8 +1,11 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import SlideButton from '../SlideButton';
 import SlideNavigator from '../SlideNavigator';
+
+type SlideNavigatorInstance = InstanceType<typeof SlideNavigator>;
 
 const sandbox = sinon.sandbox.create();
 
@@ -12,14 +15,15 @@ describe('components/slide-carousel/SlideNavigator', () => {
     });
 
     const defaultProps = {
-        getButtonIdFromValue: val => `button-${val}`,
-        getPanelIdFromValue: val => `panel-${val}`,
-        onSelection: i => `blah${i}`,
+        getButtonIdFromValue: (value: number) => `button-${value}`,
+        getPanelIdFromValue: (value: number) => `panel-${value}`,
+        onSelection: (index: number) => `blah${index}`,
         numOptions: 5,
         selectedIndex: 0,
     };
 
-    const getWrapper = props => shallow(<SlideNavigator {...defaultProps} {...props} />);
+    const getWrapper = (props: Record<string, unknown> = {}) =>
+        shallow(<SlideNavigator {...defaultProps} {...props} />);
 
     describe('handleKeyDown', () => {
         [
@@ -64,9 +68,10 @@ describe('components/slide-carousel/SlideNavigator', () => {
                     selectedIndex: currIndex,
                     numOptions,
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.instance() as SlideNavigatorInstance;
 
-                instance.handleSelection = sandbox.spy();
+                const handleSelectionSpy = sandbox.spy();
+                instance.handleSelection = handleSelectionSpy;
                 const shouldStopEvent = ['ArrowLeft', 'ArrowRight'].includes(key);
                 const onKeyEvent = {
                     key,
@@ -74,12 +79,12 @@ describe('components/slide-carousel/SlideNavigator', () => {
                     stopPropagation: shouldStopEvent ? sandbox.mock() : sandbox.mock().never(),
                 };
 
-                instance.handleKeyDown(onKeyEvent);
+                instance.handleKeyDown(onKeyEvent as unknown as React.KeyboardEvent<HTMLElement>);
 
                 if (expectedSelection === null) {
-                    sinon.assert.notCalled(instance.handleSelection);
+                    sinon.assert.notCalled(handleSelectionSpy);
                 } else {
-                    sinon.assert.calledWithExactly(instance.handleSelection, expectedSelection);
+                    sinon.assert.calledWithExactly(handleSelectionSpy, expectedSelection);
                 }
             });
         });
@@ -92,7 +97,7 @@ describe('components/slide-carousel/SlideNavigator', () => {
 
             const wrapperInstance = getWrapper({
                 onSelection: onSelectionSpy,
-            }).instance();
+            }).instance() as SlideNavigatorInstance;
             wrapperInstance.focusOnButtonElement = focusOnButtonElementSpy;
 
             const index = 2;
@@ -105,52 +110,51 @@ describe('components/slide-carousel/SlideNavigator', () => {
 
     test('should create as many buttons as the given number of options', () => {
         const wrapper = getWrapper({ numOptions: 7 });
-        expect(wrapper.children().filter(SlideButton).length).toBe(7);
+        expect(wrapper.children().filter(SlideButton)).toHaveLength(7);
     });
 
     test('should call handleKeyDown on key press', () => {
         const wrapper = getWrapper();
-        sandbox.spy(wrapper.instance(), 'handleKeyDown');
+        const instance = wrapper.instance() as SlideNavigatorInstance;
+        const handleKeyDownSpy = sandbox.spy(instance, 'handleKeyDown');
         wrapper.setProps({});
 
         wrapper.simulate('keyDown', { key: 'A' });
 
-        sinon.assert.calledOnce(wrapper.instance().handleKeyDown);
+        sinon.assert.calledOnce(handleKeyDownSpy);
     });
 
     test('should use the getButtonIdFromValue prop to generate ids for slide buttons', () => {
-        const getButtonIdFromValue = i => `unique${i}`;
+        const getButtonIdFromValue = (index: number) => `unique${index}`;
         const wrapper = getWrapper({
             numOptions: 6,
             getButtonIdFromValue,
         });
-        expect(wrapper.find(SlideButton).everyWhere((el, i) => el.prop('id') === getButtonIdFromValue(i))).toBe(true);
+        const buttonIds = wrapper.find(SlideButton).map(element => element.prop('id'));
+        expect(buttonIds.every((id, index) => id === getButtonIdFromValue(index))).toBe(true);
     });
 
     test('should use the getPanelIdFromValue prop to set ids on aria-controls', () => {
-        const getPanelIdFromValue = i => `unique${i}`;
+        const getPanelIdFromValue = (index: number) => `unique${index}`;
         const wrapper = getWrapper({
             numOptions: 6,
             getPanelIdFromValue,
         });
-        expect(
-            wrapper.find(SlideButton).everyWhere((el, i) => el.prop('aria-controls') === getPanelIdFromValue(i)),
-        ).toBe(true);
+        const controlledPanelIds = wrapper.find(SlideButton).map(element => element.prop('aria-controls'));
+        expect(controlledPanelIds.every((id, index) => id === getPanelIdFromValue(index))).toBe(true);
     });
 
     test('should only mark the button associated to the current selection as selected', () => {
         const testIndex = 4;
         const wrapper = getWrapper({ numOptions: 6, selectedIndex: testIndex });
-        expect(wrapper.find(SlideButton).everyWhere((el, i) => el.prop('isSelected') === (i === testIndex))).toBe(true);
+        const selectedStates = wrapper.find(SlideButton).map(element => element.prop('isSelected'));
+        expect(selectedStates.every((isSelected, index) => isSelected === (index === testIndex))).toBe(true);
     });
 
     test('should remove all but the button associated to the selected slide from tabbing order', () => {
         const testIndex = 2;
         const wrapper = getWrapper({ numOptions: 6, selectedIndex: testIndex });
-        expect(
-            wrapper
-                .find(SlideButton)
-                .everyWhere((el, i) => (i === testIndex ? el.prop('tabIndex') === '0' : el.prop('tabIndex') === '-1')),
-        ).toBe(true);
+        const tabIndexes = wrapper.find(SlideButton).map(element => element.prop('tabIndex') as unknown as string);
+        expect(tabIndexes.every((tabIndex, index) => tabIndex === (index === testIndex ? '0' : '-1'))).toBe(true);
     });
 });
