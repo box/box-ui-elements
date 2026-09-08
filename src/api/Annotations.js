@@ -207,6 +207,7 @@ export default class Annotations extends MarkerBasedApi {
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
         shouldFetchReplies?: boolean,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ANNOTATION;
 
@@ -217,7 +218,11 @@ export default class Annotations extends MarkerBasedApi {
             return;
         }
 
-        const requestData = shouldFetchReplies ? { params: { fields: 'replies' } } : undefined;
+        const params = {
+            ...(shouldFetchReplies ? { fields: 'replies' } : {}),
+            ...(shouldEnableRichText ? { enable_rich_text: true } : {}),
+        };
+        const requestData = Object.keys(params).length ? { params } : undefined;
 
         this.get({
             id: fileId,
@@ -237,6 +242,7 @@ export default class Annotations extends MarkerBasedApi {
         limit?: number,
         shouldFetchAll?: boolean,
         shouldFetchReplies?: boolean,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ANNOTATIONS;
 
@@ -251,6 +257,7 @@ export default class Annotations extends MarkerBasedApi {
             file_id: fileId,
             file_version_id: fileVersionId,
             ...(shouldFetchReplies ? { fields: 'replies' } : null),
+            ...(shouldEnableRichText ? { enable_rich_text: true } : null),
         };
 
         this.markerGet({
@@ -269,6 +276,7 @@ export default class Annotations extends MarkerBasedApi {
         permissions: BoxItemPermission,
         successCallback: (comments: ThreadedComments) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
 
@@ -284,6 +292,7 @@ export default class Annotations extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(annotationId),
+            ...(shouldEnableRichText ? { requestData: { params: { enable_rich_text: true } } } : {}),
         });
     }
 

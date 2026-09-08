@@ -220,6 +220,32 @@ describe('api/ThreadedComments', () => {
             });
         });
 
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+            const url = 'http://test-url.com';
+
+            threadedComments.getUrlForId = jest.fn().mockImplementationOnce(() => url);
+
+            threadedComments.getComment({
+                commentId: '123',
+                fileId: '12345',
+                permissions,
+                shouldEnableRichText: true,
+                successCallback,
+                errorCallback,
+            });
+
+            expect(threadedComments.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback,
+                url,
+                requestData: { params: { enable_rich_text: true } },
+            });
+        });
+
         test('should reject with an error code for calls with invalid permissions', () => {
             const permissions = {
                 can_comment: false,
