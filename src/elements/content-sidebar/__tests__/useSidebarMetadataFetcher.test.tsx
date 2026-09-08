@@ -713,6 +713,28 @@ describe('useSidebarMetadataFetcher', () => {
             );
         });
 
+        test('should not include include_confidence_score when only the confidence score review flag is enabled', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true, false, false, false);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+            });
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_confidence_score: expect.anything(),
+                }),
+            );
+        });
+
         test('should include include_confidence_score and include_reference when both flags are true', async () => {
             mockAPI.extractStructured.mockResolvedValue({
                 answer: { field1: 'value1' },
@@ -769,6 +791,28 @@ describe('useSidebarMetadataFetcher', () => {
             expect(mockAPI.extractStructured).toHaveBeenCalledWith(
                 expect.not.objectContaining({
                     include_confidence_score: expect.anything(),
+                }),
+            );
+        });
+
+        test('should not include include_reference when only the bounding box review flag is enabled', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', false, true, false, false);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+            });
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_reference: expect.anything(),
                 }),
             );
         });
