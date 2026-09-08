@@ -1,29 +1,42 @@
 import * as React from 'react';
 import { act } from 'react';
 import sinon from 'sinon';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
-import HotkeyHelpModal from '../HotkeyHelpModal';
+import HotkeyHelpModal, { HotkeyHelpModalProps } from '../HotkeyHelpModal';
 import { HotkeyContext } from '../HotkeyContext';
+import type HotkeyService from '../HotkeyService';
 import { HotkeyTestWrapper } from './HotkeyTestWrapper';
 
 const sandbox = sinon.sandbox.create();
 
-describe('components/hotkeys/components/HotkeyHelpModal', () => {
-    let HotkeyServiceMock;
+type HotkeyServiceStub = {
+    getActiveHotkeys: sinon.SinonStub;
+    getActiveTypes: sinon.SinonStub;
+};
 
-    const getWrapper = (props = {}, contextValue = HotkeyServiceMock) => {
-        let wrapper;
+type HelpModalOpenState = {
+    isOpen: boolean;
+};
+
+describe('components/hotkeys/components/HotkeyHelpModal', () => {
+    let HotkeyServiceMock: HotkeyServiceStub;
+
+    const getWrapper = (
+        props: Partial<HotkeyHelpModalProps> = {},
+        contextValue: HotkeyServiceStub = HotkeyServiceMock,
+    ) => {
+        let wrapper: ReactWrapper;
         act(() => {
             wrapper = mount(
-                <HotkeyContext.Provider value={contextValue}>
+                <HotkeyContext.Provider value={contextValue as unknown as HotkeyService}>
                     <HotkeyHelpModal onRequestClose={sandbox.stub()} {...props} />
                 </HotkeyContext.Provider>,
             );
         });
         wrapper.update();
-        const hotkeyHelpModal = wrapper.find('HotkeyHelpModal');
+        const hotkeyHelpModal = wrapper.find(HotkeyHelpModal);
         return { wrapper, hotkeyHelpModal };
     };
 
@@ -43,10 +56,10 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             const { wrapper, hotkeyHelpModal } = getWrapper({ isOpen: true });
 
             const modal = hotkeyHelpModal.find('HotkeyFriendlyModal');
-            expect(modal.length).toBe(1);
+            expect(modal).toHaveLength(1);
             expect(modal.prop('onRequestClose')).toBeTruthy();
             expect(modal.prop('isOpen')).toBeTruthy();
-            expect(wrapper.find('ModalActions').length).toBe(1);
+            expect(wrapper.find('ModalActions')).toHaveLength(1);
         });
 
         test('should pass isOpen prop to modal when modal is open', () => {
@@ -57,7 +70,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
         });
 
         test('should return null when no hotkeys exist', () => {
-            const emptyContext = {
+            const emptyContext: HotkeyServiceStub = {
                 getActiveHotkeys: sandbox.stub().returns({}),
                 getActiveTypes: sandbox.stub().returns([]),
             };
@@ -70,34 +83,34 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
     describe('componentDidUpdate()', () => {
         test('should set state.currentType when state.currentType is null', () => {
             const wrapper = mount(
-                <HotkeyTestWrapper
-                    contextValue={HotkeyServiceMock}
+                <HotkeyTestWrapper<HelpModalOpenState>
+                    contextValue={HotkeyServiceMock as unknown as HotkeyService}
                     initialState={{ isOpen: false }}
                     renderChild={state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />}
                 />,
             );
-            const hotkeyHelpModal = wrapper.find('HotkeyHelpModal');
-            const instance = hotkeyHelpModal.instance();
+            const hotkeyHelpModal = wrapper.find(HotkeyHelpModal);
+            const instance = hotkeyHelpModal.instance() as InstanceType<typeof HotkeyHelpModal>;
 
             // Verify that currentType was set to the first available type
             expect(instance.state.currentType).toBe('other');
         });
 
         test('should not call setState when no types are available', () => {
-            const emptyContext = {
+            const emptyContext: HotkeyServiceStub = {
                 getActiveHotkeys: sandbox.stub().returns({}),
                 getActiveTypes: sandbox.stub().returns([]),
             };
 
             const wrapper = mount(
-                <HotkeyTestWrapper
-                    contextValue={emptyContext}
+                <HotkeyTestWrapper<HelpModalOpenState>
+                    contextValue={emptyContext as unknown as HotkeyService}
                     initialState={{ isOpen: false }}
                     renderChild={state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />}
                 />,
             );
 
-            const instance = wrapper.find('HotkeyHelpModal').instance();
+            const instance = wrapper.find(HotkeyHelpModal).instance() as InstanceType<typeof HotkeyHelpModal>;
             const setStateSpy = sandbox.spy(instance, 'setState');
 
             act(() => {
@@ -111,8 +124,8 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
 
         test('should refresh hotkey and hotkey types from hotkeyService when modal is opened', () => {
             const wrapper = mount(
-                <HotkeyTestWrapper
-                    contextValue={HotkeyServiceMock}
+                <HotkeyTestWrapper<HelpModalOpenState>
+                    contextValue={HotkeyServiceMock as unknown as HotkeyService}
                     initialState={{ isOpen: false }}
                     renderChild={state => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={state.isOpen} />}
                 />,
@@ -130,7 +143,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
 
     describe('renderDropdownMenu()', () => {
         test('should render DropdownMenu with correct items', () => {
-            const customMock = {
+            const customMock: HotkeyServiceStub = {
                 getActiveHotkeys: sandbox.stub().returns({
                     hello: [new HotkeyRecord()],
                     hi: [new HotkeyRecord()],
@@ -140,24 +153,24 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             };
 
             const { hotkeyHelpModal } = getWrapper({ isOpen: true }, customMock);
-            const instance = hotkeyHelpModal.instance();
+            const instance = hotkeyHelpModal.instance() as InstanceType<typeof HotkeyHelpModal>;
 
             // Verify that the component has the correct types
             expect(instance.types).toEqual(['hello', 'hi', 'hey']);
 
             // Verify DropdownMenu is rendered
             const dropdown = hotkeyHelpModal.find('DropdownMenu');
-            expect(dropdown.length).toBe(1);
+            expect(dropdown).toHaveLength(1);
 
             // Verify the dropdown container exists
             const dropdownContainer = hotkeyHelpModal.find('.hotkey-dropdown');
-            expect(dropdownContainer.length).toBe(1);
+            expect(dropdownContainer).toHaveLength(1);
         });
     });
 
     describe('renderHotkeyList()', () => {
         test('should render hotkeys for currently selected type', () => {
-            const customMock = {
+            const customMock: HotkeyServiceStub = {
                 getActiveHotkeys: sandbox.stub().returns({
                     navigation: [
                         {
@@ -189,13 +202,13 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
 
             const wrapper = mount(
                 <HotkeyTestWrapper
-                    contextValue={customMock}
+                    contextValue={customMock as unknown as HotkeyService}
                     initialState={{}}
-                    renderChild={() => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen={true} />}
+                    renderChild={() => <HotkeyHelpModal onRequestClose={sandbox.stub()} isOpen />}
                 />,
             );
 
-            const instance = wrapper.find('HotkeyHelpModal').instance();
+            const instance = wrapper.find(HotkeyHelpModal).instance() as InstanceType<typeof HotkeyHelpModal>;
 
             act(() => {
                 instance.setState({ currentType: 'navigation' });
@@ -203,7 +216,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             wrapper.update();
 
             // should render the two 'navigation' hotkeys
-            expect(wrapper.find('.hotkey-item').length).toBe(2);
+            expect(wrapper.find('.hotkey-item')).toHaveLength(2);
 
             act(() => {
                 instance.setState({ currentType: 'other' });
@@ -211,7 +224,7 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             wrapper.update();
 
             // should render the three 'other' hotkeys
-            expect(wrapper.find('.hotkey-item').length).toBe(3);
+            expect(wrapper.find('.hotkey-item')).toHaveLength(3);
         });
     });
 
@@ -230,10 +243,10 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             const { hotkeyHelpModal } = getWrapper({ isOpen: true });
 
             // should render one hotkey
-            expect(hotkeyHelpModal.find('.hotkey-key').children().length).toBe(1);
+            expect(hotkeyHelpModal.find('.hotkey-key').children()).toHaveLength(1);
 
             // kbd elements should be [ "shift", "a", "b", "c" ]
-            expect(hotkeyHelpModal.find('kbd').length).toBe(4);
+            expect(hotkeyHelpModal.find('kbd')).toHaveLength(4);
         });
 
         test('should render all keys when a hotkey has multiple hotkeys', () => {
@@ -250,10 +263,10 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
             const { hotkeyHelpModal } = getWrapper({ isOpen: true });
 
             // elements should be [ "shift+a", "/", "alt+a" ] (i.e. length 3)
-            expect(hotkeyHelpModal.find('.hotkey-key').children().length).toBe(3);
+            expect(hotkeyHelpModal.find('.hotkey-key').children()).toHaveLength(3);
 
             // kbd elements should be [ "shift", "a", "alt", "a" ]
-            expect(hotkeyHelpModal.find('.hotkey-key kbd').length).toBe(4);
+            expect(hotkeyHelpModal.find('.hotkey-key kbd')).toHaveLength(4);
         });
     });
 });

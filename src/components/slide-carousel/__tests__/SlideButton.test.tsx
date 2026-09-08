@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
 import SlideButton from '../SlideButton';
@@ -14,7 +15,7 @@ describe('components/slide-carousel/SlideButton', () => {
         isSelected: true,
     };
 
-    const getWrapper = props => shallow(<SlideButton {...defaultProps} {...props} />);
+    const getWrapper = (props: Record<string, unknown> = {}) => shallow(<SlideButton {...defaultProps} {...props} />);
 
     test('should have the is-selected class when selected', () => {
         const wrapper = getWrapper({ isSelected: true });
