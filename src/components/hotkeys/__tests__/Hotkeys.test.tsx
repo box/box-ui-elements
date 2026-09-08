@@ -4,12 +4,18 @@ import sinon from 'sinon';
 import { mount, shallow } from 'enzyme';
 
 import HotkeyRecord from '../HotkeyRecord';
+import type { HotkeyConfig } from '../HotkeyRecord';
 import { HotkeyContext } from '../HotkeyContext';
+import type HotkeyService from '../HotkeyService';
 import { HotkeyTestWrapper } from './HotkeyTestWrapper';
 
 import Hotkeys from '../Hotkeys';
 
 const sandbox = sinon.sandbox.create();
+
+type HotkeysUpdateState = {
+    configs: HotkeyConfig[];
+};
 
 describe('components/hotkeys/Hotkeys', () => {
     afterEach(() => {
@@ -20,7 +26,7 @@ describe('components/hotkeys/Hotkeys', () => {
         test('should call hotkeyLayer.registerHotkey for each hotkey config', () => {
             const mockHotkeyLayer = {
                 registerHotkey: sandbox.mock().thrice(),
-            };
+            } as unknown as HotkeyService;
 
             mount(
                 <HotkeyContext.Provider value={mockHotkeyLayer}>
@@ -64,10 +70,10 @@ describe('components/hotkeys/Hotkeys', () => {
             const mockHotkeyLayer = {
                 registerHotkey: sandbox.stub(),
                 deregisterHotkey: sandbox.mock().twice(),
-            };
+            } as unknown as HotkeyService;
 
             const wrapper = mount(
-                <HotkeyTestWrapper
+                <HotkeyTestWrapper<HotkeysUpdateState>
                     contextValue={mockHotkeyLayer}
                     initialState={{ configs }}
                     renderChild={state => (
@@ -103,7 +109,7 @@ describe('components/hotkeys/Hotkeys', () => {
 
             // componentDidUpdate would throw when trying to add hotkeys if context is null
             expect(() => {
-                wrapper.instance().componentDidUpdate({
+                (wrapper.instance() as InstanceType<typeof Hotkeys>).componentDidUpdate({
                     configs: [new HotkeyRecord({ key: 'a' })],
                 });
             }).toThrow();
@@ -115,7 +121,7 @@ describe('components/hotkeys/Hotkeys', () => {
             const mockHotkeyLayer = {
                 registerHotkey: sandbox.stub(),
                 deregisterHotkey: sandbox.mock().thrice(),
-            };
+            } as unknown as HotkeyService;
 
             const wrapper = mount(
                 <HotkeyContext.Provider value={mockHotkeyLayer}>
@@ -139,7 +145,7 @@ describe('components/hotkeys/Hotkeys', () => {
         test('should render children', () => {
             const mockHotkeyLayer = {
                 registerHotkey: sandbox.stub(),
-            };
+            } as unknown as HotkeyService;
 
             const wrapper = mount(
                 <HotkeyContext.Provider value={mockHotkeyLayer}>
@@ -155,7 +161,7 @@ describe('components/hotkeys/Hotkeys', () => {
         test('should render null when no children', () => {
             const mockHotkeyLayer = {
                 registerHotkey: sandbox.stub(),
-            };
+            } as unknown as HotkeyService;
 
             const wrapper = mount(
                 <HotkeyContext.Provider value={mockHotkeyLayer}>
@@ -163,7 +169,7 @@ describe('components/hotkeys/Hotkeys', () => {
                 </HotkeyContext.Provider>,
             );
 
-            expect(wrapper.find('Hotkeys').children().length).toBe(0);
+            expect(wrapper.find('Hotkeys').children()).toHaveLength(0);
         });
     });
 });

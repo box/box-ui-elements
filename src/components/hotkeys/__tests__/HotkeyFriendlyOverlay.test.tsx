@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
-import HotkeyFriendlyOverlay from '../HotkeyFriendlyOverlay';
+import HotkeyFriendlyOverlay, { HotkeyFriendlyOverlayProps } from '../HotkeyFriendlyOverlay';
 
 describe('components/hotkeys/HotkeyFriendlyOverlay', () => {
     test('should render a HotkeyLayer and an Overlay', () => {
@@ -22,7 +23,7 @@ describe('components/hotkeys/HotkeyFriendlyOverlay', () => {
 
         const overlay = wrapper.find('Overlay');
 
-        expect(overlay.props().shouldDefaultFocus).toBe(true);
-        expect(overlay.props().className).toBe('test-class');
+        expect((overlay.props() as HotkeyFriendlyOverlayProps).shouldDefaultFocus).toBe(true);
+        expect((overlay.props() as HotkeyFriendlyOverlayProps).className).toBe('test-class');
     });
 });

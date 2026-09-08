@@ -1,10 +1,11 @@
-import { OrderedSet } from 'immutable';
+import { OrderedMap, OrderedSet } from 'immutable';
 import sinon from 'sinon';
 
 import Mousetrap from 'mousetrap';
 
 import HotkeyService from '../HotkeyService';
 import HotkeyRecord from '../HotkeyRecord';
+import type { HotkeyConfig } from '../HotkeyRecord';
 import HotkeyManager from '../HotkeyManager';
 
 jest.mock('../HotkeyManager', () => ({
@@ -17,13 +18,13 @@ jest.mock('mousetrap');
 const sandbox = sinon.sandbox.create();
 
 describe('components/hotkeys/HotkeyService', () => {
-    let instance;
-    let callbackSpy;
+    let instance: HotkeyService;
+    let callbackSpy: jest.Mock;
 
     beforeEach(() => {
         callbackSpy = jest.fn();
 
-        const MousetrapMock = el => {
+        const MousetrapMock = (el: { addEventListener: (type: string, callback: EventListener) => void }) => {
             el.addEventListener('keydown', callbackSpy);
             return {
                 bind: sandbox.spy(),
@@ -32,7 +33,7 @@ describe('components/hotkeys/HotkeyService', () => {
             };
         };
 
-        Mousetrap.mockImplementation(MousetrapMock);
+        (Mousetrap as unknown as jest.Mock).mockImplementation(MousetrapMock);
 
         instance = new HotkeyService();
     });
@@ -50,10 +51,7 @@ describe('components/hotkeys/HotkeyService', () => {
         });
 
         test('should add event listeners', () => {
-            sandbox
-                .mock(window)
-                .expects('addEventListener')
-                .thrice();
+            sandbox.mock(window).expects('addEventListener').thrice();
 
             instance = new HotkeyService();
         });
@@ -65,20 +63,20 @@ describe('components/hotkeys/HotkeyService', () => {
 
     describe('mousetrapEventHandler()', () => {
         test('should call stopPropagation and callback when this layer is currently active', () => {
-            HotkeyManager.getActiveLayerID.mockReturnValueOnce(instance.layerID);
+            (HotkeyManager.getActiveLayerID as jest.Mock).mockReturnValueOnce(instance.layerID);
 
             const stopPropagation = jest.fn();
-            instance.mousetrapEventHandler({ stopPropagation });
+            instance.mousetrapEventHandler({ stopPropagation } as unknown as KeyboardEvent);
 
             expect(stopPropagation).toHaveBeenCalled();
             expect(callbackSpy).toHaveBeenCalled();
         });
 
         test('should immediately return when this layer is not currently active', () => {
-            HotkeyManager.getActiveLayerID.mockReturnValueOnce(`${instance.layerID}-not-this-layer`);
+            (HotkeyManager.getActiveLayerID as jest.Mock).mockReturnValueOnce(`${instance.layerID}-not-this-layer`);
 
             const stopPropagation = jest.fn();
-            instance.mousetrapEventHandler({ stopPropagation });
+            instance.mousetrapEventHandler({ stopPropagation } as unknown as KeyboardEvent);
 
             expect(stopPropagation).not.toHaveBeenCalled();
         });
@@ -86,10 +84,7 @@ describe('components/hotkeys/HotkeyService', () => {
 
     describe('destroyLayer()', () => {
         test('should remove event listeners', () => {
-            sandbox
-                .mock(window)
-                .expects('removeEventListener')
-                .thrice();
+            sandbox.mock(window).expects('removeEventListener').thrice();
             instance.destroyLayer();
         });
 
@@ -102,13 +97,14 @@ describe('components/hotkeys/HotkeyService', () => {
 
     describe('reset()', () => {
         test('should reset hotkeys and call mousetrap.reset() when called', () => {
-            instance.hotkeys = new OrderedSet(['hi', 'hello']);
+            // Test only cares that reset() clears the collection; OrderedSet stands in for OrderedMap
+            instance.hotkeys = OrderedSet(['hi', 'hello']) as unknown as OrderedMap<string, HotkeyConfig>;
 
             instance.reset();
 
             expect(instance.hotkeys.size).toEqual(0);
             // called twice bc this.reset() is called in the constructor
-            expect(instance.mousetrap.reset.calledTwice).toBe(true);
+            expect((instance.mousetrap.reset as sinon.SinonSpy).calledTwice).toBe(true);
         });
     });
 
@@ -126,9 +122,9 @@ describe('components/hotkeys/HotkeyService', () => {
                 key: 'c',
                 type: 'preview',
             });
-            const hotkeys = new OrderedSet([navigationHotkey, otherHotkey, previewHotkey]);
+            const hotkeys = OrderedSet([navigationHotkey, otherHotkey, previewHotkey]);
 
-            instance.hotkeys = hotkeys;
+            instance.hotkeys = hotkeys as unknown as OrderedMap<string, HotkeyConfig>;
 
             const expected = {
                 navigation: [navigationHotkey],
@@ -154,9 +150,9 @@ describe('components/hotkeys/HotkeyService', () => {
                 key: 'c',
                 type: 'preview',
             });
-            const hotkeys = new OrderedSet([navigationHotkey, otherHotkey, previewHotkey, navigationHotkey]);
+            const hotkeys = OrderedSet([navigationHotkey, otherHotkey, previewHotkey, navigationHotkey]);
 
-            instance.hotkeys = hotkeys;
+            instance.hotkeys = hotkeys as unknown as OrderedMap<string, HotkeyConfig>;
 
             const expected = ['navigation', 'other', 'preview'];
 
@@ -173,7 +169,7 @@ describe('components/hotkeys/HotkeyService', () => {
             instance.registerHotkey(config);
 
             expect(instance.hotkeys.contains(config)).toBe(true);
-            expect(instance.mousetrap.bind.calledOnce).toBe(true);
+            expect((instance.mousetrap.bind as sinon.SinonSpy).calledOnce).toBe(true);
         });
 
         test('should ignore the request to register if the config was already registered', () => {
@@ -184,7 +180,7 @@ describe('components/hotkeys/HotkeyService', () => {
             instance.registerHotkey(config);
             instance.registerHotkey(config);
 
-            expect(instance.mousetrap.bind.calledOnce).toBe(true);
+            expect((instance.mousetrap.bind as sinon.SinonSpy).calledOnce).toBe(true);
         });
 
         test('should throw an exception if a key is already in use by another config', () => {
@@ -204,9 +200,9 @@ describe('components/hotkeys/HotkeyService', () => {
     });
 
     describe('deregisterHotkey()', () => {
-        let hotkeyConfigA;
-        let hotkeyConfigB;
-        let hotkeyConfigC;
+        let hotkeyConfigA: HotkeyConfig;
+        let hotkeyConfigB: HotkeyConfig;
+        let hotkeyConfigC: HotkeyConfig;
 
         beforeEach(() => {
             hotkeyConfigA = new HotkeyRecord({
