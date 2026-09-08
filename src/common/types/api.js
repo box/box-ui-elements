@@ -99,6 +99,7 @@ type APIOptions = {
      * a future major version.
      */
     metadataApiHost?: string,
+    metadataNamespaceMode?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     retryableStatusCodes?: Array<number>,

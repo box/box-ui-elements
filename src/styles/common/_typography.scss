@@ -79,6 +79,17 @@ em {
     font-style: italic;
 }
 
+// Nested tags do not inherit both properties; the inner tag only has italic or bold.
+.strong em,
+.strong .em,
+strong em,
+.em strong,
+.em .strong,
+em strong {
+    font-weight: bold;
+    font-style: italic;
+}
+
 small {
     font-size: 85%;
 }

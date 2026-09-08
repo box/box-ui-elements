@@ -14,6 +14,7 @@ module.exports = {
         '@box/metadata-filter',
         '@box/metadata-taxonomy-picker',
         '@box/metadata-template-browser',
+        '@box/metadata-template-editor',
         '@box/metadata-view',
         '@box/readable-time',
         '@box/threaded-annotations',

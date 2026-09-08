@@ -8,9 +8,13 @@ import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
 
-type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor>;
+type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
+    isRichTextEnabled?: boolean;
+};
 
 const mockSerializeMentionMarkup = jest.fn((doc: unknown) => ({ hasMention: false, text: JSON.stringify(doc) }));
+const mockSerializeMessageToMarkdown = jest.fn<string, [unknown]>(() => '');
+const mockParseMessageMarkdown = jest.fn();
 
 jest.mock('@box/threaded-annotations', () => ({
     AnnotationBadgeType: {
@@ -20,7 +24,10 @@ jest.mock('@box/threaded-annotations', () => ({
         Point: 'point',
         Region: 'region',
     },
+    isListNode: (node: { type?: string }) => node.type === 'bulletList' || node.type === 'orderedList',
+    parseMessageMarkdown: (text: string) => mockParseMessageMarkdown(text),
     serializeMentionMarkup: (doc: unknown) => mockSerializeMentionMarkup(doc),
+    serializeMessageToMarkdown: (doc: unknown) => mockSerializeMessageToMarkdown(doc),
 }));
 
 const mockScrollTo = jest.fn<boolean, [string, { block?: string }?]>(() => true);
@@ -212,6 +219,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             hasMention: false,
             text: JSON.stringify(doc),
         }));
+        mockSerializeMessageToMarkdown.mockReset();
+        mockParseMessageMarkdown.mockReset();
     });
 
     afterEach(() => {
@@ -234,11 +243,11 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
     });
 
     test.each`
-        description                      | file
-        ${'can_comment is false'}        | ${{ id: '12345', permissions: { can_comment: false } }}
-        ${'file is missing'}             | ${undefined}
-        ${'permissions are missing'}     | ${{ id: '12345' }}
-        ${'can_comment is undefined'}    | ${{ id: '12345', permissions: {} }}
+        description                   | file
+        ${'can_comment is false'}     | ${{ id: '12345', permissions: { can_comment: false } }}
+        ${'file is missing'}          | ${undefined}
+        ${'permissions are missing'}  | ${{ id: '12345' }}
+        ${'can_comment is undefined'} | ${{ id: '12345', permissions: {} }}
     `('should replace the editor with CommentsDisabled when $description', ({ file }) => {
         render(
             <ActivityFeedV2
@@ -618,23 +627,6 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         expect(screen.getByTestId('activity-feed-root')).toBeVisible();
     });
 
-    test('should return empty array from fetchUsers when getMentionAsync is not provided', async () => {
-        render(<ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[] as ActivityFeedV2Props['feedItems']} />);
-        expect(screen.getByTestId('activity-feed-root')).toBeVisible();
-    });
-
-    test('should return empty array from fetchUsers when getMentionAsync rejects', async () => {
-        const getMentionAsync = jest.fn().mockRejectedValue(new Error('API error'));
-        render(
-            <ActivityFeedV2
-                currentUser={mockCurrentUser}
-                feedItems={[] as ActivityFeedV2Props['feedItems']}
-                getMentionAsync={getMentionAsync}
-            />,
-        );
-        expect(screen.getByTestId('activity-feed-root')).toBeVisible();
-    });
-
     describe('mention popover behavior', () => {
         test('should pass allowEmptyQuery=true so the popover opens on @ before any character is typed', () => {
             render(
@@ -663,8 +655,37 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             );
         });
 
+        test('should return an empty array from fetchUsers when getMentionAsync is not provided', async () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
+
+            await expect(lastEditorProps.userSelectorProps?.fetchUsers?.('alice')).resolves.toEqual([]);
+        });
+
+        test('should return an empty array from fetchUsers when getMentionAsync rejects', async () => {
+            const getMentionAsync = jest.fn().mockRejectedValue(new Error('API error'));
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            await expect(lastEditorProps.userSelectorProps?.fetchUsers?.('alice')).resolves.toEqual([]);
+            expect(getMentionAsync).toHaveBeenCalledWith('alice');
+        });
+
         test('should skip the API call when fetchUsers is invoked with an empty query', async () => {
-            const getMentionAsync = jest.fn().mockResolvedValue([{ id: '1', name: 'foo' }]);
+            const getMentionAsync = jest
+                .fn()
+                .mockResolvedValue([{ id: '1', item: { id: '1', name: 'foo', type: 'user' }, name: 'foo' }]);
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
@@ -681,7 +702,9 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
 
         test('should skip the API call when fetchUsers is invoked with a whitespace-only query', async () => {
-            const getMentionAsync = jest.fn().mockResolvedValue([{ id: '1', name: 'foo' }]);
+            const getMentionAsync = jest
+                .fn()
+                .mockResolvedValue([{ id: '1', item: { id: '1', name: 'foo', type: 'user' }, name: 'foo' }]);
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
@@ -697,10 +720,18 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(result).toEqual([]);
         });
 
-        test('should call getMentionAsync with the trimmed value and shape results for a non-empty query', async () => {
+        test('should call getMentionAsync with the trimmed value and map SelectorItem.item email into contacts', async () => {
             const getMentionAsync = jest.fn().mockResolvedValue([
-                { email: 'a@b.com', id: '7', name: 'Alice' },
-                { id: '8', login: 'bob@b.com', name: 'Bob' },
+                {
+                    id: '7',
+                    item: { email: 'a@b.com', id: '7', login: 'a@b.com', name: 'Alice', type: 'user' },
+                    name: 'Alice',
+                },
+                {
+                    id: '8',
+                    item: { email: 'bob@b.com', id: '8', login: 'bob@b.com', name: 'Bob', type: 'user' },
+                    name: 'Bob',
+                },
             ]);
             render(
                 <ActivityFeedV2
@@ -715,9 +746,31 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             expect(getMentionAsync).toHaveBeenCalledWith('al');
             expect(result).toEqual([
-                { email: 'a@b.com', id: 7, name: 'Alice', value: '7' },
-                { email: 'bob@b.com', id: 8, name: 'Bob', value: '8' },
+                { email: 'a@b.com', id: 7, name: 'Alice', type: 'user', value: '7' },
+                { email: 'bob@b.com', id: 8, name: 'Bob', type: 'user', value: '8' },
             ]);
+        });
+
+        test('should map mention contacts with empty email when SelectorItem.item.email is missing', async () => {
+            const getMentionAsync = jest.fn().mockResolvedValue([
+                {
+                    id: '11',
+                    item: { id: '11', login: 'login-only@b.com', name: 'Carol', type: 'user' },
+                    name: 'Carol',
+                },
+            ]);
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    getMentionAsync={getMentionAsync}
+                />,
+            );
+
+            const result = await lastEditorProps.userSelectorProps?.fetchUsers?.('car');
+
+            expect(result).toEqual([{ email: '', id: 11, name: 'Carol', type: 'user', value: '11' }]);
         });
 
         test('should render the V1-style start prompt via renderEmpty when value is empty', () => {
@@ -802,24 +855,95 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
-    describe('video timestamp', () => {
-        const mountVideo = (currentTime: number = 0) => {
+    describe('isRichTextEnabled', () => {
+        test('should pass isRichTextEnabled to ActivityFeed.Editor', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    isRichTextEnabled
+                />,
+            );
+
+            expect(lastEditorProps.isRichTextEnabled).toBe(true);
+        });
+
+        test('should default isRichTextEnabled to false on ActivityFeed.Editor', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                />,
+            );
+
+            expect(lastEditorProps.isRichTextEnabled).toBe(false);
+        });
+
+        test('should call onCommentCreate with markdown text when isRichTextEnabled is true', async () => {
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: true, text: 'plain-markup' });
+            mockSerializeMessageToMarkdown.mockReturnValue('  **hello**  ');
+            const onCommentCreate = jest.fn();
+            const content = { type: 'doc', content: [] };
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    isRichTextEnabled
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            await lastEditorProps.onPost?.(content);
+
+            expect(mockSerializeMessageToMarkdown).toHaveBeenCalledWith(content);
+            expect(onCommentCreate).toHaveBeenCalledWith('**hello**', true);
+        });
+
+        test('should skip onCommentCreate when markdown text is whitespace', async () => {
+            mockSerializeMessageToMarkdown.mockReturnValue('  \n\t  ');
+            const onCommentCreate = jest.fn();
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[] as ActivityFeedV2Props['feedItems']}
+                    file={mockFileWithCommentPermission}
+                    isRichTextEnabled
+                    onCommentCreate={onCommentCreate}
+                />,
+            );
+
+            await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+
+            expect(onCommentCreate).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('media timestamp', () => {
+        const mountMedia = (tag: 'video' | 'audio' = 'video', currentTime: number = 0) => {
             const container = document.createElement('div');
             container.className = 'bp-media-container';
-            const video = document.createElement('video');
-            Object.defineProperty(video, 'currentTime', {
+            const media = document.createElement(tag);
+            Object.defineProperty(media, 'currentTime', {
                 configurable: true,
                 value: currentTime,
                 writable: true,
             });
-            Object.defineProperty(video, 'paused', { configurable: true, value: true, writable: true });
-            video.pause = jest.fn();
-            container.appendChild(video);
+            Object.defineProperty(media, 'paused', { configurable: true, value: true, writable: true });
+            media.pause = jest.fn();
+            container.appendChild(media);
             document.body.appendChild(container);
-            return { cleanup: () => container.remove(), video };
+            return { cleanup: () => container.remove(), media };
         };
 
-        test('should not pass videoTimestamp when file is not a video', () => {
+        const mountVideo = (currentTime: number = 0) => {
+            const { cleanup, media } = mountMedia('video', currentTime);
+            return { cleanup, video: media };
+        };
+
+        test('should not pass videoTimestamp when file is not a video or audio', () => {
             const { cleanup } = mountVideo();
             try {
                 render(
@@ -939,6 +1063,253 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 cleanup();
             }
         });
+
+        test('should pass videoTimestamp with default 0:00 for audio when timestamp and audio player flags are enabled', () => {
+            const { cleanup } = mountMedia('audio');
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toEqual({
+                    formattedTimestamp: '0:00',
+                    isPressed: false,
+                    onPressedChange: expect.any(Function),
+                });
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should prepend timestamp markup to posted text when audio toggle is pressed', async () => {
+            const { cleanup, media } = mountMedia('audio');
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great moment' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great moment', false);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not pass videoTimestamp for audio when isTimestampedCommentsEnabled is false', () => {
+            const { cleanup } = mountMedia('audio');
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                        isAudioPlayerV2Enabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not pass videoTimestamp for audio when audio player v2 is disabled', () => {
+            const { cleanup } = mountMedia('audio');
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                expect(lastEditorProps.videoTimestamp).toBeUndefined();
+            } finally {
+                cleanup();
+            }
+        });
+    });
+
+    describe('audio comment ranges', () => {
+        const mountAudio = (currentTime: number = 0) => {
+            const container = document.createElement('div');
+            container.className = 'bp-media-container';
+            const media = document.createElement('audio');
+            Object.defineProperty(media, 'currentTime', { configurable: true, value: currentTime, writable: true });
+            Object.defineProperty(media, 'paused', { configurable: true, value: true, writable: true });
+            media.pause = jest.fn();
+            container.appendChild(media);
+            document.body.appendChild(container);
+            return { cleanup: () => container.remove(), media };
+        };
+
+        const createRangeViewer = () => {
+            const listeners: Record<string, ((payload: unknown) => void) | undefined> = {};
+            const viewer = {
+                addListener: jest.fn((event: string, handler: (payload: unknown) => void) => {
+                    listeners[event] = handler;
+                }),
+                emit: jest.fn(),
+                removeListener: jest.fn((event: string) => {
+                    delete listeners[event];
+                }),
+            };
+            return {
+                commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
+                getViewer: () => viewer,
+                rangeEmits: () =>
+                    viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
+                viewer,
+            };
+        };
+
+        const audioFile = { extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } };
+        const videoFile = { extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } };
+
+        test('should ask the viewer for handles when the audio toggle is pressed', async () => {
+            const { cleanup, media } = mountAudio();
+            const { getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+
+                expect(rangeEmits()).toEqual([['comment_range_draft', { endMs: null, startMs: 8055 }]]);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should never ask for handles on a video file', async () => {
+            const { cleanup, media } = mountAudio();
+            const { getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={videoFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+
+                expect(rangeEmits()).toEqual([]);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should post range markup after a handle drag commits', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, getViewer } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(onCommentCreate).toHaveBeenCalledWith(
+                    '#[timestamp:8055,endTimestamp:12000,versionId:99] great take',
+                    false,
+                );
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should drop the range back to a single timestamp after a successful post', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, getViewer, rangeEmits } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+                onCommentCreate.mockClear();
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 8055 }]);
+                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great take', false);
+            } finally {
+                cleanup();
+            }
+        });
     });
 
     describe('filter controls', () => {
@@ -1023,6 +1394,105 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             expect(onShowOnlyMentionsMeChange).toHaveBeenCalledWith(true);
             expect(onShowOnlyMentionsMeChange).toHaveBeenCalledTimes(1);
+        });
+
+        test('should render a comment that mentions the current user in a paragraph', () => {
+            const mentionComment = { ...mockComment, tagged_message: 'Hello @[123:Current User]' };
+            render(
+                <ActivityFeedV2
+                    currentUser={{ ...mockCurrentUser, id: '123' }}
+                    feedItems={[mentionComment] as ActivityFeedV2Props['feedItems']}
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.getByTestId('threaded-annotation-comment-1')).toBeVisible();
+        });
+
+        test('should hide a comment that does not mention the current user', () => {
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.queryByTestId('threaded-annotation-comment-1')).not.toBeInTheDocument();
+        });
+
+        test('should render a comment that mentions the current user inside a bullet list', () => {
+            mockParseMessageMarkdown.mockReturnValue({
+                type: 'doc',
+                content: [
+                    {
+                        type: 'bulletList',
+                        content: [
+                            {
+                                type: 'listItem',
+                                content: [
+                                    {
+                                        type: 'paragraph',
+                                        content: [
+                                            {
+                                                type: 'mention',
+                                                attrs: {
+                                                    mentionId: 'user-1',
+                                                    mentionedUserId: 'user-1',
+                                                    mentionedUserName: 'Current User',
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    isRichTextEnabled
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.getByTestId('threaded-annotation-comment-1')).toBeVisible();
+        });
+
+        test('should hide a comment when the mention is not nested in a paragraph or list', () => {
+            mockParseMessageMarkdown.mockReturnValue({
+                type: 'doc',
+                content: [
+                    {
+                        type: 'heading',
+                        content: [
+                            {
+                                type: 'mention',
+                                attrs: {
+                                    mentionId: 'user-1',
+                                    mentionedUserId: 'user-1',
+                                    mentionedUserName: 'Current User',
+                                },
+                            },
+                        ],
+                    },
+                ],
+            });
+
+            render(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
+                    isRichTextEnabled
+                    showOnlyMentionsMe
+                />,
+            );
+
+            expect(screen.queryByTestId('threaded-annotation-comment-1')).not.toBeInTheDocument();
         });
 
         test('should manage filter state internally when no controlled props are provided', () => {
@@ -1267,8 +1737,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment] as ActivityFeedV2Props['feedItems']}
-                file={mockFileWithCommentPermission}
-                    />,
+                    file={mockFileWithCommentPermission}
+                />,
             );
             mockScrollTo.mockClear();
 
@@ -1276,8 +1746,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 <ActivityFeedV2
                     currentUser={numericCurrentUser}
                     feedItems={[mockComment, strangerComment] as ActivityFeedV2Props['feedItems']}
-                file={mockFileWithCommentPermission}
-                    />,
+                    file={mockFileWithCommentPermission}
+                />,
             );
 
             expect(mockScrollTo).not.toHaveBeenCalled();
@@ -1450,9 +1920,95 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
         });
 
+        test('should not emit comment_markers when file is audio and audio player v2 is disabled', () => {
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+            });
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', expect.anything());
+        });
+
+        test('should emit comment_markers for audio when audio player v2 is enabled', () => {
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
+        });
+
+        test('should emit frame annotation markers for audio when they are present in the feed', () => {
+            renderComponentWithMarkers({
+                feedItems: [frameAnnotation] as ActivityFeedV2Props['feedItems'],
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'frame-ann-1',
+                    time: 10,
+                    type: 'annotation',
+                }),
+            ]);
+        });
+
         test('should not emit comment_markers when getViewer returns null', () => {
-            renderComponentWithMarkers({ getViewer: jest.fn(() => null) });
+            jest.useFakeTimers();
+            const { unmount } = renderComponentWithMarkers({ getViewer: jest.fn(() => null) });
+            act(() => {
+                jest.advanceTimersByTime(1000);
+            });
             expect(mockViewer.emit).not.toHaveBeenCalled();
+            unmount();
+            expect(mockViewer.emit).not.toHaveBeenCalled();
+            jest.useRealTimers();
+        });
+
+        test('should emit comment_markers once getViewer becomes available after the feed has loaded', () => {
+            jest.useFakeTimers();
+            const getViewer = jest.fn(() => null);
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getViewer,
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).not.toHaveBeenCalled();
+
+            getViewer.mockReturnValue(mockViewer);
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
+            expect(mockViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+            jest.useRealTimers();
+        });
+
+        test('should emit comment_markers on the waveform shell before the file is playable', () => {
+            renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getPreview: () => ({ getCurrentViewer: () => mockViewer }),
+                getViewer: jest.fn(() => null),
+                isAudioPlayerV2Enabled: true,
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    time: 5,
+                    type: 'comment',
+                }),
+            ]);
         });
 
         test('should emit comment_markers with timestamped comment data', () => {
@@ -1460,9 +2016,192 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
                 expect.objectContaining({
                     id: 'ts-comment-1',
+                    isSelected: false,
                     time: 5,
                     type: 'comment',
                 }),
+            ]);
+        });
+
+        test('should mark the active feed entry as selected on comment_markers', () => {
+            renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+        });
+
+        test('should not clear comment_markers when the feed refreshes without a comment revision change', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+            mockViewer.addListener.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[{ ...timestampedComment }] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+            expect(mockViewer.addListener).not.toHaveBeenCalled();
+        });
+
+        test('should keep marker isSelected when a reply is added', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={
+                        [
+                            {
+                                ...timestampedComment,
+                                replies: [
+                                    {
+                                        created_at: '2024-01-02T00:00:00Z',
+                                        created_by: { id: '9', name: 'Replier', type: 'user' },
+                                        id: 'reply-1',
+                                        message: 'reply',
+                                        modified_at: '2024-01-02T00:00:00Z',
+                                        tagged_message: 'reply',
+                                        type: 'comment',
+                                    },
+                                ],
+                            },
+                        ] as ActivityFeedV2Props['feedItems']
+                    }
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+        });
+
+        test('should clear marker isSelected when a later comment is added without changing the active entry', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+
+            const laterComment = {
+                ...timestampedComment,
+                id: 'ts-comment-2',
+                tagged_message: '#[timestamp:9000,versionId:123] Later',
+            };
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment, laterComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1', isSelected: false }),
+                expect.objectContaining({ id: 'ts-comment-2', isSelected: false }),
+            ]);
+        });
+
+        test('should keep marker isSelected when the deep-linked comment first appears in the feed', () => {
+            const { rerender } = renderComponentWithMarkers({
+                activeFeedEntryId: 'ts-comment-1',
+                feedItems: [],
+            });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                }),
+            ]);
+        });
+
+        test('should not send isSelected after a comment is deleted', () => {
+            const otherComment = {
+                ...timestampedComment,
+                id: 'ts-comment-2',
+                tagged_message: '#[timestamp:9000,versionId:123] Later',
+            };
+            const { rerender } = renderComponentWithMarkers({
+                activeFeedEntryId: 'ts-comment-1',
+                feedItems: [timestampedComment, otherComment] as ActivityFeedV2Props['feedItems'],
+            });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1', isSelected: false }),
+            ]);
+        });
+
+        test('should not send isSelected after a comment is edited', () => {
+            const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
+            mockViewer.emit.mockClear();
+
+            rerender(
+                <ActivityFeedV2
+                    activeFeedEntryId="ts-comment-1"
+                    currentUser={mockCurrentUser}
+                    feedItems={
+                        [
+                            { ...timestampedComment, tagged_message: '#[timestamp:5000,versionId:123] Edited' },
+                        ] as ActivityFeedV2Props['feedItems']
+                    }
+                    file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
+                    getViewer={mockGetViewer}
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1', isSelected: false }),
             ]);
         });
 
@@ -1498,6 +2237,49 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             unmount();
             expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', []);
             expect(mockViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+        });
+
+        test('should re-attach comment markers when the file version changes', () => {
+            const oldViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                removeListener: jest.fn(),
+            };
+            const newViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                removeListener: jest.fn(),
+            };
+            const getViewer = jest.fn(() => oldViewer);
+            const { rerender } = renderComponentWithMarkers({
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                getViewer,
+                isAudioPlayerV2Enabled: true,
+            });
+
+            expect(oldViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+
+            oldViewer.isDestroyed.mockReturnValue(true);
+            getViewer.mockReturnValue(newViewer);
+            rerender(
+                <ActivityFeedV2
+                    currentUser={mockCurrentUser}
+                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    file={{ extension: 'mp3', file_version: { id: '2' }, permissions: { can_comment: true } }}
+                    getViewer={getViewer}
+                    isAudioPlayerV2Enabled
+                    isTimestampedCommentsEnabled
+                />,
+            );
+
+            expect(oldViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+            expect(oldViewer.emit).not.toHaveBeenCalledWith('comment_markers', []);
+            expect(newViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({ id: 'ts-comment-1' }),
+            ]);
+            expect(newViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
         });
 
         test('should not include non-timestamped comments in markers', () => {

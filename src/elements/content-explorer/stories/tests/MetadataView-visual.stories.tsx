@@ -317,6 +317,9 @@ const meta: Meta<typeof ContentExplorer> = {
         token: global.TOKEN,
     },
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         msw: {
             handlers: [
                 // Note that the Metadata API backend normally handles the sorting. The mocks below simulate the sorting for specific cases, but may not 100% accurately reflect the backend behavior.

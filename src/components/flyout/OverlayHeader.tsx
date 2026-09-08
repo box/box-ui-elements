@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 import CloseButton from '../close-button/CloseButton';
-// @ts-ignore flow
 import FlyoutContext from './FlyoutContext';
 
 import './OverlayHeader.scss';
@@ -23,7 +22,6 @@ const OverlayHeader = ({ children, className, isOverlayHeaderActionEnabled = fal
             event.stopPropagation();
         }
     };
-    // @ts-ignore TODO: figure out why this is giving a TS error
     const { closeOverlay } = React.useContext(FlyoutContext);
 
     return (

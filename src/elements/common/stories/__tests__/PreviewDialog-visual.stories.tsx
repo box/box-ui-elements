@@ -86,4 +86,9 @@ export default {
     args: {
         token: global.TOKEN,
     },
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };

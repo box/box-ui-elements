@@ -2,27 +2,30 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
-import Tooltip, { TooltipTheme } from '../tooltip';
+import Tooltip, { TooltipTheme, type TooltipProps } from '../tooltip';
 import Button from '../button';
-// @ts-ignore flow import
 import messages from './messages';
 
 import './GuideTooltip.scss';
 
-type TooltipProps = Omit<JSX.LibraryManagedAttributes<typeof Tooltip, Tooltip['props']>, 'text' | 'theme'>;
+type ButtonComponentProps = JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
 
-type Props = TooltipProps & {
+export interface GuideTooltipProps extends Omit<TooltipProps, 'text' | 'theme'> {
+    /** Main content displayed in the guide tooltip body */
     body: React.ReactNode;
+    /** Optional title displayed above the body */
     title?: React.ReactNode;
-    /** 32px x 32px */
+    /** Optional 32px x 32px icon displayed to the left of the content */
     icon?: React.ReactNode;
-    /** A React component representing the image, cannot be used together with icon */
+    /** Optional image content; cannot be used together with icon */
     image?: React.ReactNode;
-    /** displays guide progress e.g. 1 of 4 */
+    /** Displays guide progress, e.g. 1 of 4 */
     steps?: [number, number];
-    primaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
-    secondaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
-};
+    /** Props forwarded to the primary (next) Button */
+    primaryButtonProps?: ButtonComponentProps;
+    /** Props forwarded to the secondary (previous) Button */
+    secondaryButtonProps?: ButtonComponentProps;
+}
 
 function GuideTooltip({
     body,
@@ -37,7 +40,7 @@ function GuideTooltip({
     showCloseButton = true,
     title,
     ...rest
-}: Props) {
+}: GuideTooltipProps) {
     return (
         <Tooltip
             {...rest}

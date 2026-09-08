@@ -7,7 +7,8 @@ import {
 } from '../../../utils/timestamp';
 import { DEFAULT_VIDEO_FPS } from '../../../constants';
 
-export const VIDEO_CONTAINER_SELECTOR = '.bp-media-container';
+export const MEDIA_CONTAINER_SELECTOR = '.bp-media-container';
+export const MEDIA_ELEMENT_SELECTOR = 'video, audio';
 
 export type TimeFormat = 'standard' | 'timecode' | 'frames';
 
@@ -69,7 +70,7 @@ export const useTimeFormat = (enabled: boolean): UseTimeFormatResult => {
         };
 
         const tryObserve = (): void => {
-            const container = document.querySelector(VIDEO_CONTAINER_SELECTOR);
+            const container = document.querySelector(MEDIA_CONTAINER_SELECTOR);
             if (container) {
                 observeContainer(container);
             }
@@ -80,7 +81,7 @@ export const useTimeFormat = (enabled: boolean): UseTimeFormatResult => {
         // Watch for late-appearing container
         if (typeof MutationObserver !== 'undefined') {
             bodyObserver = new MutationObserver(() => {
-                const container = document.querySelector(VIDEO_CONTAINER_SELECTOR);
+                const container = document.querySelector(MEDIA_CONTAINER_SELECTOR);
                 if (container && container !== observedContainer) {
                     observeContainer(container);
                 }

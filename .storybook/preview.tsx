@@ -47,6 +47,7 @@ const preview: Preview = {
             cropToViewport: true,
             delay: 500,
             diffThreshold: 0.1,
+            disableSnapshot: true,
             modes: {
                 specific: {
                     viewport: {

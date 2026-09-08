@@ -942,7 +942,9 @@ export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     },
 };
 
-const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
+const meta: Meta<typeof ContentSidebar> & {
+    parameters: { chromatic: { disableSnapshot: boolean }; msw: { handlers: HttpHandler[] } };
+} = {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -956,6 +958,9 @@ const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpH
         logger: mockLogger,
     },
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         msw: {
             handlers: defaultMockHandlers,
         },

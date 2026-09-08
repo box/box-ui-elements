@@ -59,6 +59,9 @@ const config: StorybookConfig = {
             ...webpack.resolve.alias,
             'box-ui-elements-locale-data': path.resolve(`i18n/bundles/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
+            // box-content-preview (devDependency) imports its box-ui-elements peer via
+            // es/ paths; inside this repo those resolve to the src/ they are built from.
+            'box-ui-elements/es': path.resolve('src'),
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
 

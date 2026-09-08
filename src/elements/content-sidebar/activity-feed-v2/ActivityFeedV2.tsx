@@ -11,6 +11,8 @@ import noop from 'lodash/noop';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ActivityFeed, useActivityFeedScroll } from '@box/activity-feed';
+import { isListNode } from '@box/threaded-annotations';
+import type { BlockNodeV2, ParagraphNodeV2 } from '@box/threaded-annotations';
 import type { UserContactType } from '@box/user-selector';
 
 import TaskModalV2 from './task-modal-v2';
@@ -18,13 +20,15 @@ import TaskModalV2 from './task-modal-v2';
 import FeedItemRow from './FeedItemRow';
 import { resolveFeedItemIdForEntry, serializeEditorContent } from './helpers';
 import { mapCollaboratorToUserContact } from './task-modal-v2/utils/contactMapping';
+import { buildTimestampMarkup } from './timestampMarkup';
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
+import { useCommentMarkerSelectedId } from './useCommentMarkerSelectedId';
 import { useTimeFormat } from './useTimeFormat';
-import { useVideoTimestamp } from './useVideoTimestamp';
+import { useMediaTimestamp } from './useMediaTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
-import type { ActivityFeedV2Props, TransformedFeedItem, UserContact } from './types';
+import type { ActivityFeedV2Props, TransformedFeedItem, ViewerHandle } from './types';
 import type { ElementsXhrError } from '../../../common/types/api';
 import type { GroupMini, SelectorItem, UserMini } from '../../../common/types/core';
 import type { TaskAssigneeCollection, TaskNew, TaskType, TaskUpdatePayload } from '../../../common/types/tasks';
@@ -38,6 +42,69 @@ import messages from '../messages';
 
 import './ActivityFeedV2.scss';
 
+const hasMentionInParagraph = (paragraph: ParagraphNodeV2, userId: string): boolean =>
+    (paragraph.content ?? []).some(node => node.type === 'mention' && node.attrs.mentionedUserId === userId);
+
+const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): boolean =>
+    (blocks ?? []).some(block => {
+        if (block.type === 'paragraph') {
+            return hasMentionInParagraph(block, userId);
+        }
+        if (!isListNode(block)) {
+            return false;
+        }
+        return (block.content ?? []).some(item => hasMentionInBlocks(item.content, userId));
+    });
+
+type CommentMarkerPayload = {
+    avatarUrl?: string;
+    colorIndex?: number;
+    id: string;
+    initial?: string;
+    isSelected?: boolean;
+    time: number;
+    type: 'annotation' | 'comment';
+};
+
+/** ContentPreview.getViewer() waits for playable. The waveform shell exists earlier. */
+const COMMENT_MARKERS_VIEWER_POLL_MS = 100;
+
+const buildCommentMarkers = (
+    items: readonly TransformedFeedItem[],
+    selectedFeedItemId: string | null,
+): CommentMarkerPayload[] => {
+    const markers: CommentMarkerPayload[] = [];
+    for (const item of items) {
+        if (item.type === 'comment' && item.annotationTimestampMs != null) {
+            const author = item.messages[0]?.author;
+            markers.push({
+                avatarUrl: author?.avatarUrl ?? undefined,
+                colorIndex: author?.id ?? 0,
+                id: item.id,
+                initial: author?.name?.[0] ?? undefined,
+                isSelected: item.id === selectedFeedItemId,
+                time: item.annotationTimestampMs / 1000,
+                type: 'comment',
+            });
+        } else if (item.type === 'annotation') {
+            const loc = item.annotation?.target?.location;
+            if (loc?.type === 'frame' && loc.value != null) {
+                const author = item.messages[0]?.author;
+                markers.push({
+                    avatarUrl: author?.avatarUrl ?? undefined,
+                    colorIndex: author?.id ?? 0,
+                    id: item.id,
+                    initial: author?.name?.[0] ?? undefined,
+                    isSelected: item.id === selectedFeedItemId,
+                    time: loc.value / 1000,
+                    type: 'annotation',
+                });
+            }
+        }
+    }
+    return markers;
+};
+
 const ActivityFeedV2 = ({
     activeFeedEntryId,
     createTask,
@@ -47,10 +114,13 @@ const ActivityFeedV2 = ({
     getApproverAsync,
     getAvatarUrl,
     getMentionAsync,
+    getPreview,
     getTaskCollaborators,
     getViewer,
     hasTasks = true,
+    isAudioPlayerV2Enabled = false,
     isDisabled = false,
+    isRichTextEnabled = false,
     isTimestampedCommentsEnabled = false,
     onAnnotationCopyLink,
     onAnnotationDelete,
@@ -86,19 +156,14 @@ const ActivityFeedV2 = ({
     const knownIdsBeforePostRef = React.useRef<Set<string> | null>(null);
 
     const fetchUsers = React.useCallback(
-        async (inputValue: string): Promise<UserContact[]> => {
+        async (inputValue: string): Promise<UserContactType[]> => {
             const trimmed = inputValue.trim();
             if (!trimmed || !getMentionAsync) {
                 return [];
             }
             try {
                 const entries = await getMentionAsync(trimmed);
-                return entries.map((c: Record<string, unknown>) => ({
-                    email: (c.email as string) ?? (c.login as string) ?? '',
-                    id: Number(c.id) || 0,
-                    name: (c.name as string) ?? '',
-                    value: String(c.id),
-                }));
+                return entries.map(mapCollaboratorToUserContact);
             } catch {
                 return [];
             }
@@ -123,7 +188,7 @@ const ActivityFeedV2 = ({
     );
 
     const fetchAvatarUrls = React.useCallback(
-        async (userContacts: UserContact[]) => {
+        async (userContacts: UserContactType[]) => {
             const urls: Record<string, string> = {};
             if (getAvatarUrl) {
                 await Promise.all(
@@ -280,13 +345,13 @@ const ActivityFeedV2 = ({
     const transformedItems: TransformedFeedItem[] = React.useMemo(() => {
         if (!feedItems) return [];
         return feedItems.reduce<TransformedFeedItem[]>((acc, item) => {
-            const transformed = transformFeedItem(item, currentUserId, avatarUrls);
+            const transformed = transformFeedItem(item, currentUserId, avatarUrls, isRichTextEnabled);
             if (transformed) {
                 acc.push(transformed);
             }
             return acc;
         }, []);
-    }, [avatarUrls, currentUserId, feedItems]);
+    }, [avatarUrls, currentUserId, feedItems, isRichTextEnabled]);
 
     const filteredItems = React.useMemo(() => {
         const filtered = transformedItems.filter(item => {
@@ -296,12 +361,7 @@ const ActivityFeedV2 = ({
             if (showOnlyMentionsMe && currentUserId) {
                 if (item.type === 'comment' || item.type === 'annotation') {
                     const hasMention = item.messages.some(msg =>
-                        msg.message?.content?.some(
-                            (paragraph: { content?: Array<{ type: string; attrs?: { mentionedUserId?: string } }> }) =>
-                                paragraph.content?.some(
-                                    node => node.type === 'mention' && node.attrs?.mentionedUserId === currentUserId,
-                                ),
-                        ),
+                        hasMentionInBlocks(msg.message?.content, currentUserId),
                     );
                     if (!hasMention) return false;
                 }
@@ -370,95 +430,151 @@ const ActivityFeedV2 = ({
     }, [currentUserId, filteredItems, scrollHandle]);
 
     const isVideo = file?.extension ? FILE_EXTENSIONS.video.includes(file.extension) : false;
+    const isAudio = file?.extension ? FILE_EXTENSIONS.audio.includes(file.extension) : false;
     const fileVersionId = file?.file_version?.id;
+    const isAudioPlayerV2 = isAudio && isAudioPlayerV2Enabled;
     const allowVideoTimestamps = isVideo && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+    const allowAudioTimestamps = isAudioPlayerV2 && isTimestampedCommentsEnabled && Boolean(fileVersionId);
+    const allowMediaTimestamps = allowVideoTimestamps || allowAudioTimestamps;
     const { timeFormat, fps } = useTimeFormat(isVideo);
 
     const {
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
+        resetRange,
+        timestampEndMs,
         timestampMs,
-    } = useVideoTimestamp(allowVideoTimestamps, timeFormat, fps);
+    } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps, {
+        getViewer,
+        isAudioPlayerV2,
+    });
 
-    const editorVideoTimestamp = allowVideoTimestamps
+    const editorMediaTimestamp = allowMediaTimestamps
         ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
         : undefined;
 
-    React.useEffect(() => {
-        if (!getViewer || !isVideo) return undefined;
-        const viewer = getViewer();
-        if (!viewer) return undefined;
+    const allowCommentMarkers = isVideo || isAudioPlayerV2;
+    const markerSelectedId = useCommentMarkerSelectedId(activeFeedEntryId, filteredItems);
 
-        const markers: Array<{
-            avatarUrl?: string;
-            colorIndex?: number;
-            id: string;
-            initial?: string;
-            time: number;
-            type: 'annotation' | 'comment';
-        }> = [];
-        for (const item of filteredItems) {
-            if (item.type === 'comment' && item.annotationTimestampMs != null) {
-                const author = item.messages[0]?.author;
-                markers.push({
-                    avatarUrl: author?.avatarUrl ?? undefined,
-                    colorIndex: author?.id ?? 0,
-                    id: item.id,
-                    initial: author?.name?.[0] ?? undefined,
-                    time: item.annotationTimestampMs / 1000,
-                    type: 'comment',
-                });
-            } else if (item.type === 'annotation') {
-                const loc = item.annotation?.target?.location;
-                if (loc?.type === 'frame' && loc.value != null) {
-                    const author = item.messages[0]?.author;
-                    markers.push({
-                        avatarUrl: author?.avatarUrl ?? undefined,
-                        colorIndex: author?.id ?? 0,
-                        id: item.id,
-                        initial: author?.name?.[0] ?? undefined,
-                        time: loc.value / 1000,
-                        type: 'annotation',
-                    });
-                }
-            }
-        }
-        viewer.emit('comment_markers', markers);
+    const filteredItemsRef = React.useRef(filteredItems);
+    const markerSelectedIdRef = React.useRef(markerSelectedId);
+    const onCommentSelectRef = React.useRef(onCommentSelect);
+    const attachedViewerRef = React.useRef<ViewerHandle | null>(null);
+
+    React.useLayoutEffect(() => {
+        filteredItemsRef.current = filteredItems;
+        markerSelectedIdRef.current = markerSelectedId;
+        onCommentSelectRef.current = onCommentSelect;
+    }, [filteredItems, markerSelectedId, onCommentSelect]);
+
+    React.useEffect(() => {
+        if ((!getViewer && !getPreview) || !allowCommentMarkers) return undefined;
+
+        let pollId = 0;
 
         const handleMarkerSelect = ({ id }: { id: string }) => {
-            const item = filteredItems.find(filteredItem => filteredItem.id === id);
+            const item = filteredItemsRef.current.find(filteredItem => filteredItem.id === id);
             // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
-            if (item?.type === 'comment' && onCommentSelect) {
-                onCommentSelect(id);
+            if (item?.type === 'comment' && onCommentSelectRef.current) {
+                onCommentSelectRef.current(id);
             }
         };
-        viewer.addListener('comment_marker_select', handleMarkerSelect);
-        return () => {
-            viewer.removeListener('comment_marker_select', handleMarkerSelect);
-            viewer.emit('comment_markers', []);
+
+        const resolveViewer = (): ViewerHandle | null => {
+            const loaded = getViewer?.() ?? null;
+            if (loaded) {
+                return loaded;
+            }
+            const current = getPreview?.()?.getCurrentViewer?.() ?? null;
+            if (!current || current.isDestroyed?.()) {
+                return null;
+            }
+            return current;
         };
-    }, [filteredItems, getViewer, isVideo, onCommentSelect]);
+
+        const attachMarkerViewer = (viewer: ViewerHandle) => {
+            attachedViewerRef.current = viewer;
+            viewer.emit('comment_markers', buildCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current));
+            viewer.addListener('comment_marker_select', handleMarkerSelect);
+        };
+
+        const attachMarkerViewerIfReady = (): boolean => {
+            const viewer = resolveViewer();
+            if (!viewer) {
+                return false;
+            }
+            attachMarkerViewer(viewer);
+            return true;
+        };
+
+        if (!attachMarkerViewerIfReady()) {
+            pollId = window.setInterval(() => {
+                if (attachMarkerViewerIfReady()) {
+                    window.clearInterval(pollId);
+                    pollId = 0;
+                }
+            }, COMMENT_MARKERS_VIEWER_POLL_MS);
+        }
+
+        return () => {
+            if (pollId) {
+                window.clearInterval(pollId);
+            }
+            const attachedViewer = attachedViewerRef.current;
+            attachedViewerRef.current = null;
+            if (!attachedViewer) {
+                return;
+            }
+            attachedViewer.removeListener('comment_marker_select', handleMarkerSelect);
+            if (!attachedViewer.isDestroyed?.()) {
+                attachedViewer.emit('comment_markers', []);
+            }
+        };
+    }, [allowCommentMarkers, fileVersionId, getPreview, getViewer]);
+
+    React.useEffect(() => {
+        const viewer = attachedViewerRef.current;
+        if (!viewer) {
+            return;
+        }
+        viewer.emit('comment_markers', buildCommentMarkers(filteredItems, markerSelectedId));
+    }, [filteredItems, markerSelectedId]);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
-            const serialized = serializeEditorContent(content);
+            const serialized = serializeEditorContent(content, isRichTextEnabled);
             if (!serialized || !serialized.text) return;
             const text =
-                allowVideoTimestamps && isTimestampPressed && fileVersionId
-                    ? `#[timestamp:${timestampMs},versionId:${fileVersionId}] ${serialized.text}`
+                allowMediaTimestamps && isTimestampPressed && fileVersionId
+                    ? `${buildTimestampMarkup({
+                          endMs: timestampEndMs,
+                          startMs: timestampMs,
+                          versionId: fileVersionId,
+                      })} ${serialized.text}`
                     : serialized.text;
             try {
                 const snapshot = new Set(filteredItems.map(item => item.id));
                 await onCommentCreate(text, serialized.hasMention);
                 knownIdsBeforePostRef.current = snapshot;
+                resetRange();
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('ActivityFeedV2: failed to post comment', error);
             }
         },
-        [allowVideoTimestamps, filteredItems, fileVersionId, isTimestampPressed, onCommentCreate, timestampMs],
+        [
+            allowMediaTimestamps,
+            filteredItems,
+            fileVersionId,
+            isRichTextEnabled,
+            isTimestampPressed,
+            onCommentCreate,
+            resetRange,
+            timestampEndMs,
+            timestampMs,
+        ],
     );
 
     const handleCreateTask = React.useCallback(
@@ -543,7 +659,9 @@ const ActivityFeedV2 = ({
                                     activeFeedEntryId={activeFeedEntryId}
                                     currentUserId={currentUserId}
                                     fps={fps}
+                                    getViewer={getViewer}
                                     isDisabled={isDisabled}
+                                    isRichTextEnabled={isRichTextEnabled}
                                     item={item}
                                     onAnnotationCopyLink={onAnnotationCopyLink}
                                     onAnnotationDelete={onAnnotationDelete}
@@ -552,6 +670,7 @@ const ActivityFeedV2 = ({
                                     onAnnotationStatusChange={onAnnotationStatusChange}
                                     onCommentCopyLink={onCommentCopyLink}
                                     onCommentDelete={onCommentDelete}
+                                    onCommentSelect={onCommentSelect}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
                                     onReplyDelete={onReplyDelete}
@@ -575,9 +694,10 @@ const ActivityFeedV2 = ({
                     <div className="bcs-NewActivityFeed-editor">
                         <ActivityFeed.Editor
                             disableComponent={isDisabled || !currentUser}
+                            isRichTextEnabled={isRichTextEnabled}
                             onPost={handleCommentPost}
                             userSelectorProps={userSelectorProps}
-                            videoTimestamp={editorVideoTimestamp}
+                            videoTimestamp={editorMediaTimestamp}
                         />
                     </div>
                 )}

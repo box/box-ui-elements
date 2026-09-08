@@ -9,6 +9,9 @@ const meta: Meta<typeof InteractiveTaskModal> = {
     title: 'Elements/ContentSidebar/TaskModalV2/tests/visual-regression-tests',
     component: InteractiveTaskModal,
     parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
         docs: { story: { iframeHeight: 640, inline: false } },
     },
 };

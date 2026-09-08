@@ -10,6 +10,20 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const license = require('./license');
 const packageJson = require('../package.json');
 
+// Alias a missing optional box-content-preview peer to an empty stub so webpack
+// can resolve loadBoxContentPreview's literal dynamic import at build time.
+const getBoxContentPreviewAliases = () => {
+    try {
+        require.resolve('box-content-preview');
+        return {};
+    } catch (error) {
+        return {
+            'box-content-preview': path.resolve('src/elements/content-preview/boxContentPreviewStub.ts'),
+            'box-content-preview/styles.css': path.resolve('src/elements/content-preview/boxContentPreviewStub.css'),
+        };
+    }
+};
+
 const isDevBuild = process.env.NODE_ENV === 'development';
 const isProdBuild = process.env.NODE_ENV === 'production';
 const version = isProdBuild ? packageJson.version : 'dev';
@@ -50,6 +64,10 @@ const getConfig = isReactBundle => {
             alias: {
                 'box-ui-elements-locale-data': path.resolve(`i18n/bundles/${language}`),
                 'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
+                // box-content-preview (devDependency) imports its box-ui-elements peer via
+                // es/ paths; inside this repo those resolve to the src/ they are built from.
+                'box-ui-elements/es': path.resolve('src'),
+                ...getBoxContentPreviewAliases(),
             },
         },
 
@@ -72,8 +90,10 @@ const getConfig = isReactBundle => {
                 {
                     test: /\.(js|mjs|ts|tsx)$/,
                     // Exclude node_modules in development mode to improve build performance
+                    // box-content-preview ships a pre-bundled dist with class private methods
+                    // that this babel config cannot parse; it needs no transpilation.
                     exclude: hasAllBrowserSupport
-                        ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
+                        ? /@babel(?:\/|\\{1,2})runtime|box-content-preview|pikaday|core-js/
                         : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for i18n
                     loader: 'babel-loader',
                 },

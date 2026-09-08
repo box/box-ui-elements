@@ -79,4 +79,9 @@ export const withCollaborators = {
 export default {
     title: 'Elements/ContentSharingV2/tests/visual-regression-tests',
     component: ContentSharingV2Template,
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };

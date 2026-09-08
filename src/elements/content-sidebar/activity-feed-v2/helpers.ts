@@ -3,7 +3,7 @@
  * @author Box
  */
 
-import { serializeMentionMarkup } from '@box/threaded-annotations';
+import { serializeMentionMarkup, serializeMessageToMarkdown } from '@box/threaded-annotations';
 
 import type { BoxCommentPermission } from '../../../common/types/feed';
 
@@ -11,10 +11,14 @@ import type { OnReplyDelete, OnReplyUpdate, TransformedCommentItem, TransformedF
 
 type EditorContent = Parameters<typeof serializeMentionMarkup>[0];
 
-export const serializeEditorContent = (content: unknown): ReturnType<typeof serializeMentionMarkup> | null => {
+export const serializeEditorContent = (
+    content: unknown,
+    isRichTextEnabled = false,
+): ReturnType<typeof serializeMentionMarkup> | null => {
     try {
         const serialized = serializeMentionMarkup(content as EditorContent);
-        return { ...serialized, text: serialized.text.trim() };
+        const text = isRichTextEnabled ? serializeMessageToMarkdown(content as EditorContent) : serialized.text;
+        return { ...serialized, text: text.trim() };
     } catch (error) {
         // eslint-disable-next-line no-console
         console.error('ActivityFeedV2: failed to serialize editor content', error);

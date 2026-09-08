@@ -28,4 +28,9 @@ export const deleteDialogIsLoading = {
 export default {
     title: 'Elements/ContentExplorer/tests/DeleteConfirmationDialog/visual',
     component: DeleteConfirmationDialog,
+    parameters: {
+        chromatic: {
+            disableSnapshot: false,
+        },
+    },
 };

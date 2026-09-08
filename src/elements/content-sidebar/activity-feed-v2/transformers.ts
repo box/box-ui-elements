@@ -7,8 +7,9 @@
  */
 
 import { TaskCompletionRule, TaskType } from '@box/activity-feed';
-import { AnnotationBadgeType } from '@box/threaded-annotations';
+import { AnnotationBadgeType, parseMessageMarkdown } from '@box/threaded-annotations';
 import type {
+    BlockNodeV2 as BlockNode,
     DocumentNodeV2 as DocumentNode,
     MentionNodeV2 as MentionNode,
     ParagraphNodeV2 as ParagraphNode,
@@ -19,6 +20,7 @@ import type {
 } from '@box/threaded-annotations';
 
 import { convertMillisecondsToTimestamp } from '../../../utils/timestamp';
+import { extractTimestampMarkup } from './timestampMarkup';
 
 import type { Annotation, Target } from '../../../common/types/annotations';
 import type { AppActivityItem as BUIEAppActivityItem, Comment, FeedItem } from '../../../common/types/feed';
@@ -43,31 +45,6 @@ import {
 } from '../../../constants';
 
 const MENTION_REGEX = /@\[(\d+):([^\]]+)\]/g;
-const TIMESTAMP_MARKUP_REGEX = /^#\[timestamp:(\d+)(?:,versionId:\d+)?\]\s*/;
-
-export const extractTimestampMarkup = (
-    text: string,
-): {
-    cleanText: string;
-    target?: AnnotationBadgeTargetType;
-    timestampMarkup?: string;
-    timestampMs?: number;
-} => {
-    if (!text) return { cleanText: '' };
-    const match = text.match(TIMESTAMP_MARKUP_REGEX);
-    if (!match) return { cleanText: text };
-
-    const [fullMatch, timestampMs] = match;
-    const cleanText = text.slice(fullMatch.length);
-    const ms = Number(timestampMs);
-    if (!Number.isSafeInteger(ms) || ms < 0) return { cleanText };
-
-    const target: AnnotationBadgeTargetType = {
-        timestamp: convertMillisecondsToTimestamp(ms),
-        type: AnnotationBadgeType.Frame,
-    };
-    return { cleanText, target, timestampMarkup: fullMatch.trimEnd(), timestampMs: ms };
-};
 
 const parseLine = (line: string, authorId: string): (MentionNode | TextNode)[] => {
     const nodes: (MentionNode | TextNode)[] = [];
@@ -122,6 +99,30 @@ export const textToDocumentNode = (text: string, authorId: string): DocumentNode
     return { type: 'doc', content };
 };
 
+/** Mentions arrive from the wire without an author, so stamp every one with the message author's id. */
+const setMentionAuthor = (block: BlockNode, authorId: string): BlockNode => {
+    if (block.type === 'paragraph') {
+        return {
+            ...block,
+            content: block.content?.map(node =>
+                node.type === 'mention' ? { ...node, attrs: { ...node.attrs, authorId } } : node,
+            ),
+        };
+    }
+    return {
+        ...block,
+        content: block.content?.map(item => ({
+            ...item,
+            content: item.content?.map(child => setMentionAuthor(child, authorId)),
+        })),
+    };
+};
+
+const parseRichText = (text: string, authorId: string): DocumentNode => {
+    const document = parseMessageMarkdown(text);
+    return { ...document, content: document.content.map(block => setMentionAuthor(block, authorId)) };
+};
+
 const toUnixMs = (isoDate?: string | null): number | undefined => {
     if (!isoDate) return undefined;
     const ms = new Date(isoDate).getTime();
@@ -171,6 +172,7 @@ const commentToTextMessage = (
     comment: Comment,
     prebuiltCleanText?: string,
     avatarUrls?: AvatarUrlMap,
+    isRichTextEnabled = false,
 ): TextMessageType => {
     const cleanText =
         prebuiltCleanText ?? extractTimestampMarkup(comment.tagged_message || comment.message || '').cleanText;
@@ -178,7 +180,9 @@ const commentToTextMessage = (
         author: toUserAuthor(comment.created_by, avatarUrls),
         createdAt: toUnixMs(comment.created_at) ?? 0,
         id: comment.id,
-        message: textToDocumentNode(cleanText, comment.created_by?.id ?? ''),
+        message: isRichTextEnabled
+            ? parseRichText(cleanText, comment.created_by?.id ?? '')
+            : textToDocumentNode(cleanText, comment.created_by?.id ?? ''),
         permissions: toPermissions(comment.permissions),
         updatedAt: toUpdatedAt(comment.created_at, comment.modified_at),
     };
@@ -216,17 +220,25 @@ export const annotationTargetToBadge = (target?: Target): AnnotationBadgeTargetT
     }
 };
 
-export const transformAnnotationToMessages = (annotation: Annotation, avatarUrls?: AvatarUrlMap): TextMessageType[] => {
+export const transformAnnotationToMessages = (
+    annotation: Annotation,
+    avatarUrls?: AvatarUrlMap,
+    isRichTextEnabled = false,
+): TextMessageType[] => {
     const messageText = annotation.description?.message ?? '';
     const root: TextMessageType = {
         author: toUserAuthor(annotation.created_by, avatarUrls),
         createdAt: toUnixMs(annotation.created_at) ?? 0,
         id: annotation.id,
-        message: textToDocumentNode(messageText, annotation.created_by?.id ?? ''),
+        message: isRichTextEnabled
+            ? parseRichText(messageText, annotation.created_by?.id ?? '')
+            : textToDocumentNode(messageText, annotation.created_by?.id ?? ''),
         permissions: toPermissions(annotation.permissions),
         updatedAt: toUpdatedAt(annotation.created_at, annotation.modified_at),
     };
-    const replies = (annotation.replies ?? []).map(reply => commentToTextMessage(reply, undefined, avatarUrls));
+    const replies = (annotation.replies ?? []).map(reply =>
+        commentToTextMessage(reply, undefined, avatarUrls, isRichTextEnabled),
+    );
     return [root, ...replies];
 };
 
@@ -329,6 +341,7 @@ export const transformFeedItem = (
     item: FeedItem,
     currentUserId?: string,
     avatarUrls?: AvatarUrlMap,
+    isRichTextEnabled = false,
 ): TransformedFeedItem | null => {
     switch (item.type) {
         case FEED_ITEM_TYPE_COMMENT: {
@@ -338,13 +351,17 @@ export const transformFeedItem = (
             const {
                 cleanText,
                 target: annotationTarget,
+                timestampEndMs,
                 timestampMarkup,
                 timestampMs,
             } = extractTimestampMarkup(rawText);
-            const root = commentToTextMessage(comment, cleanText, avatarUrls);
-            const replies = (comment.replies ?? []).map(reply => commentToTextMessage(reply, undefined, avatarUrls));
+            const root = commentToTextMessage(comment, cleanText, avatarUrls, isRichTextEnabled);
+            const replies = (comment.replies ?? []).map(reply =>
+                commentToTextMessage(reply, undefined, avatarUrls, isRichTextEnabled),
+            );
             return {
                 annotationTarget,
+                annotationTimestampEndMs: timestampEndMs,
                 annotationTimestampMarkup: timestampMarkup,
                 annotationTimestampMs: timestampMs,
                 id: comment.id,
@@ -365,7 +382,7 @@ export const transformFeedItem = (
                 annotation,
                 id: annotation.id,
                 isResolved: annotationIsResolved,
-                messages: transformAnnotationToMessages(annotation, avatarUrls),
+                messages: transformAnnotationToMessages(annotation, avatarUrls, isRichTextEnabled),
                 permissions: annotation.permissions ?? {},
                 resolvedAt: annotationIsResolved ? toUnixMs(annotation.resolution?.resolved_at) : undefined,
                 resolvedBy: annotationIsResolved ? annotation.resolution?.resolved_by?.name : undefined,

@@ -22,6 +22,7 @@ import {
     FIELD_TYPE_DATE,
     FIELD_TYPE_MULTISELECT,
     FIELD_TYPE_TAXONOMY,
+    FIELD_TYPE_USER,
 } from './constants';
 
 type Props = {
@@ -173,7 +174,15 @@ const MetadataField = ({
                     type={type}
                 />
             );
-
+        case FIELD_TYPE_USER:
+            return (
+                <ReadOnlyMetadataField
+                    dataValue={dataValue}
+                    description={description}
+                    displayName={displayName}
+                    type={type}
+                />
+            );
         default:
             return (
                 <InlineError title={type}>

@@ -3,20 +3,18 @@ import classNames from 'classnames';
 
 import './ImageTooltipContent.scss';
 
-type OnImageLoad = () => void;
-
-export type ImageTooltipContentProps = {
+interface ImageTooltipContentProps {
     /** A React component representing the image used in the visual tooltip */
     children: React.ReactElement;
     /** A string to be used in the tooltip's paragraph content */
     content: string;
     /** A callback triggered onLoad for the image element */
-    onImageLoad: OnImageLoad;
+    onImageLoad: () => void;
     /** A string to be used in the tooltip's title heading */
     title: string;
-};
+}
 
-function cloneTooltipChildWithNewProps(child: React.ReactElement, onImageLoad: OnImageLoad): React.ReactElement {
+const cloneTooltipChildWithNewProps = (child: React.ReactElement, onImageLoad: () => void): React.ReactElement => {
     const {
         props: { className: existingClasses },
     } = child;
@@ -26,7 +24,7 @@ function cloneTooltipChildWithNewProps(child: React.ReactElement, onImageLoad: O
         className,
         onLoad: onImageLoad,
     });
-}
+};
 
 const ImageTooltipContent = ({ children, content, onImageLoad, title }: ImageTooltipContentProps) => (
     <div className="bdl-ImageTooltipContent">

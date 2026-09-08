@@ -1,3 +1,6 @@
+import { parseMessageMarkdown } from '@box/threaded-annotations';
+import type { DocumentNodeV2 } from '@box/threaded-annotations';
+
 import type { Annotation } from '../../../../common/types/annotations';
 import type { AppActivityItem, Comment, FeedItem } from '../../../../common/types/feed';
 import type { BoxItemVersion } from '../../../../common/types/core';
@@ -5,7 +8,6 @@ import type { TaskNew } from '../../../../common/types/tasks';
 
 import {
     annotationTargetToBadge,
-    extractTimestampMarkup,
     textToDocumentNode,
     transformAnnotationToMessages,
     transformAppActivityToProps,
@@ -14,6 +16,13 @@ import {
     transformTaskToProps,
     transformVersionToProps,
 } from '../transformers';
+
+jest.mock('@box/threaded-annotations', () => ({
+    ...jest.requireActual('@box/threaded-annotations'),
+    parseMessageMarkdown: jest.fn(),
+}));
+
+const mockedParseMessageMarkdown = jest.mocked(parseMessageMarkdown);
 
 describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
     describe('textToDocumentNode()', () => {
@@ -762,57 +771,6 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
         });
     });
 
-    describe('extractTimestampMarkup()', () => {
-        test('should return text unchanged when no timestamp markup is present', () => {
-            expect(extractTimestampMarkup('regular comment')).toEqual({ cleanText: 'regular comment' });
-        });
-
-        test('should return empty input unchanged', () => {
-            expect(extractTimestampMarkup('')).toEqual({ cleanText: '' });
-        });
-
-        test('should extract timestamp markup with versionId and return a frame badge target', () => {
-            const result = extractTimestampMarkup('#[timestamp:8055,versionId:2390295731268]  wowo');
-            expect(result.cleanText).toBe('wowo');
-            expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
-            expect(result.timestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
-            expect(result.timestampMs).toBe(8055);
-        });
-
-        test('should extract timestamp markup without versionId', () => {
-            const result = extractTimestampMarkup('#[timestamp:65000] hello');
-            expect(result.cleanText).toBe('hello');
-            expect(result.target).toEqual({ timestamp: '1:05', type: 'frame' });
-            expect(result.timestampMarkup).toBe('#[timestamp:65000]');
-            expect(result.timestampMs).toBe(65000);
-        });
-
-        test('should leave timestamp markup that does not anchor at the start of the message untouched', () => {
-            const result = extractTimestampMarkup('see #[timestamp:8055,versionId:1] this');
-            expect(result.cleanText).toBe('see #[timestamp:8055,versionId:1] this');
-            expect(result.target).toBeUndefined();
-        });
-
-        test('should return empty cleanText when the message is only timestamp markup', () => {
-            const result = extractTimestampMarkup('#[timestamp:8055,versionId:1]');
-            expect(result.cleanText).toBe('');
-            expect(result.target).toEqual({ timestamp: '0:08', type: 'frame' });
-        });
-
-        test('should leave malformed timestamp markup untouched', () => {
-            const result = extractTimestampMarkup('#[timestamp:abc] hello');
-            expect(result.cleanText).toBe('#[timestamp:abc] hello');
-            expect(result.target).toBeUndefined();
-        });
-
-        test('should drop the badge when the timestamp value exceeds Number.MAX_SAFE_INTEGER', () => {
-            const result = extractTimestampMarkup('#[timestamp:99999999999999999999] hello');
-            expect(result.cleanText).toBe('hello');
-            expect(result.target).toBeUndefined();
-            expect(result.timestampMs).toBeUndefined();
-        });
-    });
-
     describe('transformCommentToMessages() with timestamp markup', () => {
         test('should strip #[timestamp:...] markup from rendered message text', () => {
             const comment = {
@@ -849,6 +807,30 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
                 expect(result.annotationTarget).toEqual({ timestamp: '0:08', type: 'frame' });
                 expect(result.annotationTimestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
                 expect(result.annotationTimestampMs).toBe(8055);
+                expect(result.annotationTimestampEndMs).toBeUndefined();
+            }
+        });
+
+        test('should populate annotationTimestampEndMs for a comment carrying a time range', () => {
+            const comment = {
+                created_at: '2024-01-01T00:00:00Z',
+                created_by: { id: '1', name: 'User', type: 'user' },
+                id: 'c1',
+                message: '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268] great take',
+                modified_at: '2024-01-01T00:00:00Z',
+                permissions: {},
+                status: 'open',
+                tagged_message: '',
+                type: 'comment',
+            };
+            const result = transformFeedItem(comment as unknown as FeedItem);
+            if (result!.type === 'comment') {
+                expect(result.annotationTimestampMs).toBe(8055);
+                expect(result.annotationTimestampEndMs).toBe(12000);
+                expect(result.annotationTimestampMarkup).toBe(
+                    '#[timestamp:8055,endTimestamp:12000,versionId:2390295731268]',
+                );
+                expect(result.messages[0].message.content[0].content).toEqual([{ type: 'text', text: 'great take' }]);
             }
         });
 
@@ -1071,6 +1053,185 @@ describe('elements/content-sidebar/activity-feed-v2/transformers', () => {
             };
             const result = transformVersionToProps(version as unknown as BoxItemVersion, { '300': 'a://300' });
             expect(result.avatarUrl).toBe('a://300');
+        });
+    });
+
+    describe('rich text parsing (isRichTextEnabled)', () => {
+        const mentionWithoutAuthor = {
+            type: 'mention' as const,
+            attrs: { mentionId: '456', mentionedUserId: '456', mentionedUserName: 'Jane' },
+        };
+
+        const paragraphMentionDoc = {
+            type: 'doc' as const,
+            content: [{ type: 'paragraph' as const, content: [mentionWithoutAuthor] }],
+        } as DocumentNodeV2;
+
+        const listMentionDoc = {
+            type: 'doc' as const,
+            content: [
+                {
+                    type: 'bulletList' as const,
+                    content: [
+                        {
+                            type: 'listItem' as const,
+                            content: [{ type: 'paragraph' as const, content: [mentionWithoutAuthor] }],
+                        },
+                    ],
+                },
+            ],
+        } as DocumentNodeV2;
+
+        const comment = {
+            created_at: '2024-01-01T00:00:00Z',
+            created_by: { id: '123', name: 'User', type: 'user' },
+            id: 'c1',
+            message: '',
+            modified_at: '2024-01-01T00:00:00Z',
+            permissions: {},
+            status: 'open',
+            tagged_message: 'Hello @[456:Jane]',
+            type: 'comment',
+        };
+
+        const annotation = {
+            created_at: '2024-02-01T00:00:00Z',
+            created_by: { id: '123', name: 'Annotator', type: 'user' },
+            description: { message: 'Annotation @[456:Jane]' },
+            file_version: { id: 'fv-1', type: 'version', version_number: '1' },
+            id: 'a1',
+            modified_at: '2024-02-01T00:00:00Z',
+            modified_by: { id: '123', name: 'Annotator', type: 'user' },
+            permissions: {},
+            target: { location: { type: 'page', value: 1 }, type: 'point', x: 0, y: 0 },
+            type: 'annotation',
+        };
+
+        beforeEach(() => {
+            mockedParseMessageMarkdown.mockReturnValue(paragraphMentionDoc);
+        });
+
+        afterEach(() => {
+            mockedParseMessageMarkdown.mockReset();
+        });
+
+        test('should call parseMessageMarkdown for comment text when rich text is enabled', () => {
+            transformFeedItem(comment as unknown as FeedItem, undefined, undefined, true);
+
+            expect(mockedParseMessageMarkdown).toHaveBeenCalledWith('Hello @[456:Jane]');
+        });
+
+        test('should stamp authorId on mentions returned by parseMessageMarkdown', () => {
+            const result = transformFeedItem(comment as unknown as FeedItem, undefined, undefined, true);
+            const [mentionNode] = result!.type === 'comment' ? result.messages[0].message.content[0].content : [];
+
+            expect(mentionNode).toEqual({
+                type: 'mention',
+                attrs: {
+                    authorId: '123',
+                    mentionId: '456',
+                    mentionedUserId: '456',
+                    mentionedUserName: 'Jane',
+                },
+            });
+        });
+
+        test('should stamp authorId on mentions nested inside bullet lists', () => {
+            mockedParseMessageMarkdown.mockReturnValue(listMentionDoc);
+
+            const result = transformFeedItem(comment as unknown as FeedItem, undefined, undefined, true);
+            const list = result!.type === 'comment' ? result.messages[0].message.content[0] : undefined;
+            expect(list?.type).toBe('bulletList');
+            if (list?.type !== 'bulletList') {
+                return;
+            }
+            const mentionNode = list.content?.[0]?.content?.[0]?.content?.[0];
+
+            expect(mentionNode).toEqual({
+                type: 'mention',
+                attrs: {
+                    authorId: '123',
+                    mentionId: '456',
+                    mentionedUserId: '456',
+                    mentionedUserName: 'Jane',
+                },
+            });
+        });
+
+        test('should parse annotation markdown when isRichTextEnabled is true', () => {
+            const messages = transformAnnotationToMessages(annotation as unknown as Annotation, undefined, true);
+
+            expect(mockedParseMessageMarkdown).toHaveBeenCalledWith('Annotation @[456:Jane]');
+            expect(messages[0].message.content[0].content[0]).toEqual({
+                type: 'mention',
+                attrs: {
+                    authorId: '123',
+                    mentionId: '456',
+                    mentionedUserId: '456',
+                    mentionedUserName: 'Jane',
+                },
+            });
+        });
+
+        test('should parse annotation replies when isRichTextEnabled is true', () => {
+            const annotationWithReply = {
+                ...annotation,
+                replies: [
+                    {
+                        created_at: '2024-02-02T00:00:00Z',
+                        created_by: { id: '789', name: 'Replier', type: 'user' },
+                        id: 'reply-1',
+                        message: 'Reply markdown',
+                        modified_at: '2024-02-02T00:00:00Z',
+                        permissions: {},
+                        tagged_message: 'Reply markdown',
+                        type: 'comment',
+                    },
+                ],
+            };
+
+            transformAnnotationToMessages(annotationWithReply as unknown as Annotation, undefined, true);
+
+            expect(mockedParseMessageMarkdown).toHaveBeenCalledWith('Annotation @[456:Jane]');
+            expect(mockedParseMessageMarkdown).toHaveBeenCalledWith('Reply markdown');
+        });
+
+        test('should fall back to textToDocumentNode when isRichTextEnabled is false', () => {
+            const result = transformFeedItem(comment as unknown as FeedItem);
+
+            expect(mockedParseMessageMarkdown).not.toHaveBeenCalled();
+            expect(result!.type === 'comment' && result.messages[0].message.content[0].content).toEqual([
+                { type: 'text', text: 'Hello ' },
+                {
+                    type: 'mention',
+                    attrs: {
+                        authorId: '123',
+                        mentionId: '456',
+                        mentionedUserId: '456',
+                        mentionedUserName: 'Jane',
+                    },
+                },
+            ]);
+        });
+
+        test('should parse empty markdown into the document returned by parseMessageMarkdown', () => {
+            mockedParseMessageMarkdown.mockReturnValue({ type: 'doc', content: [] } as DocumentNodeV2);
+            const emptyComment = { ...comment, tagged_message: '', message: '' };
+
+            const result = transformFeedItem(emptyComment as unknown as FeedItem, undefined, undefined, true);
+
+            expect(mockedParseMessageMarkdown).toHaveBeenCalledWith('');
+            expect(result!.type === 'comment' && result.messages[0].message).toEqual({ type: 'doc', content: [] });
+        });
+
+        test('should throw when parseMessageMarkdown throws', () => {
+            mockedParseMessageMarkdown.mockImplementation(() => {
+                throw new Error('bad markdown');
+            });
+
+            expect(() => transformFeedItem(comment as unknown as FeedItem, undefined, undefined, true)).toThrow(
+                'bad markdown',
+            );
         });
     });
 });
