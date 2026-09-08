@@ -669,6 +669,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
+            false, // isConfidenceScoreApiEnabled
+            false, // isBoundingBoxApiEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             false, // shouldFetchDetailedMetadata
         );
@@ -683,6 +685,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             expect.anything(),
             expect.anything(),
+            false,
+            false,
             false,
             false,
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
@@ -701,6 +705,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
+            false, // isConfidenceScoreApiEnabled
+            false, // isBoundingBoxApiEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             false, // shouldFetchDetailedMetadata
         );
@@ -715,6 +721,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             expect.anything(),
             expect.anything(),
+            false,
+            false,
             false,
             false,
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
@@ -733,6 +741,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
+            false, // isConfidenceScoreApiEnabled
+            false, // isBoundingBoxApiEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             true, // shouldFetchDetailedMetadata
         );
@@ -747,6 +757,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(),
             expect.anything(),
             expect.anything(),
+            false,
+            false,
             false,
             false,
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
@@ -765,6 +777,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             false, // isConfidenceScoreReviewEnabled
             true, // isBoundingBoxEnabled
+            false, // isConfidenceScoreApiEnabled
+            false, // isBoundingBoxApiEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             true, // shouldFetchDetailedMetadata
         );
@@ -784,8 +798,46 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect.anything(), // isFeatureEnabled
             true, // isConfidenceScoreReviewEnabled
             false, // isBoundingBoxEnabled
+            false, // isConfidenceScoreApiEnabled
+            false, // isBoundingBoxApiEnabled
             { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
             true, // shouldFetchDetailedMetadata
+        );
+    });
+
+    test('should pass isConfidenceScoreApiEnabled to useSidebarMetadataFetcher independently of the review flag', () => {
+        renderComponent({}, { 'metadata.confidenceScoreApi.enabled': true });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            false, // isConfidenceScoreReviewEnabled
+            false, // isBoundingBoxEnabled
+            true, // isConfidenceScoreApiEnabled
+            false, // isBoundingBoxApiEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            false, // shouldFetchDetailedMetadata
+        );
+    });
+
+    test('should pass isBoundingBoxApiEnabled to useSidebarMetadataFetcher independently of the review flag', () => {
+        renderComponent({}, { 'metadata.boundingBoxApi.enabled': true });
+
+        expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+            expect.anything(), // api
+            expect.anything(), // fileId
+            expect.anything(), // onError
+            expect.anything(), // onSuccess
+            expect.anything(), // isFeatureEnabled
+            false, // isConfidenceScoreReviewEnabled
+            false, // isBoundingBoxEnabled
+            false, // isConfidenceScoreApiEnabled
+            true, // isBoundingBoxApiEnabled
+            { enterpriseFqn: undefined, isLoading: false, metadataNamespaceMode: null },
+            false, // shouldFetchDetailedMetadata
         );
     });
 
@@ -814,11 +866,12 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         });
     });
 
-    test('should pass getPreview to useMetadataFieldSelection', () => {
+    test('should pass getPreview and trackEvent to useMetadataFieldSelection', () => {
         const getPreview = jest.fn();
-        renderComponent({ getPreview });
+        const trackEvent = jest.fn();
+        renderComponent({ getPreview, trackEvent });
 
-        expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview);
+        expect(mockUseMetadataFieldSelection).toHaveBeenCalledWith(getPreview, trackEvent);
     });
 
     test('passes host-provided fetchers to the editor when the user field flag is on', async () => {

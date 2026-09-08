@@ -173,6 +173,8 @@ describe('useSidebarMetadataFetcher', () => {
         fileId = '123',
         isConfidenceScoreEnabled = false,
         isBoundingBoxEnabled = false,
+        isConfidenceScoreApiEnabled = false,
+        isBoundingBoxApiEnabled = false,
         namespaceContext: MetadataNamespaceFetchContext = {},
         shouldFetchDetailedMetadata = false,
     ) =>
@@ -185,6 +187,8 @@ describe('useSidebarMetadataFetcher', () => {
                 isFeatureEnabledMock,
                 isConfidenceScoreEnabled,
                 isBoundingBoxEnabled,
+                isConfidenceScoreApiEnabled,
+                isBoundingBoxApiEnabled,
                 namespaceContext,
                 shouldFetchDetailedMetadata,
             ),
@@ -451,7 +455,7 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should pass shouldFetchDetailedMetadata=true to getMetadata when enabled', async () => {
-        const { result } = setupHook('123', false, false, {}, true);
+        const { result } = setupHook('123', false, false, false, false, {}, true);
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
 
@@ -468,7 +472,7 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should pass true to getMetadata when isBoundingBoxEnabled and shouldFetchDetailedMetadata are true', async () => {
-        const { result } = setupHook('123', false, true, {}, true);
+        const { result } = setupHook('123', false, true, false, false, {}, true);
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
 
@@ -485,7 +489,7 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should pass true to getMetadata when isConfidenceScoreEnabled and shouldFetchDetailedMetadata are true', async () => {
-        const { result } = setupHook('123', true, false, {}, true);
+        const { result } = setupHook('123', true, false, false, false, {}, true);
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
 
@@ -686,14 +690,14 @@ describe('useSidebarMetadataFetcher', () => {
             );
         });
 
-        test('should include only include_confidence_score when only isConfidenceScoreEnabled is true', async () => {
+        test('should include only include_confidence_score when only isConfidenceScoreApiEnabled is true', async () => {
             mockAPI.extractStructured.mockResolvedValue({
                 answer: { field1: 'value1' },
                 created_at: '2026-03-27T08:10:14.106-07:00',
                 completion_reason: 'done',
             });
 
-            const { result } = setupHook('123', true);
+            const { result } = setupHook('123', false, false, true, false);
 
             await result.current.extractSuggestions('templateKey', 'global');
 
@@ -705,6 +709,28 @@ describe('useSidebarMetadataFetcher', () => {
             expect(mockAPI.extractStructured).toHaveBeenCalledWith(
                 expect.not.objectContaining({
                     include_reference: expect.anything(),
+                }),
+            );
+        });
+
+        test('should not include include_confidence_score when only the confidence score review flag is enabled', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', true, false, false, false);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+            });
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_confidence_score: expect.anything(),
                 }),
             );
         });
@@ -716,7 +742,7 @@ describe('useSidebarMetadataFetcher', () => {
                 completion_reason: 'done',
             });
 
-            const { result } = setupHook('123', true, true);
+            const { result } = setupHook('123', false, false, true, true);
 
             await result.current.extractSuggestions('templateKey', 'global');
 
@@ -728,13 +754,13 @@ describe('useSidebarMetadataFetcher', () => {
             });
         });
 
-        test('should not include include_confidence_score and include_reference when isConfidenceScoreEnabled is false', async () => {
+        test('should not include include_confidence_score and include_reference when API flags are false', async () => {
             mockAPI.extractStructured.mockResolvedValue({
                 answer: { field1: 'value1' },
                 created_at: '2026-03-27T08:10:14.106-07:00',
             });
 
-            const { result } = setupHook('123', false);
+            const { result } = setupHook('123', false, false, false, false);
 
             await result.current.extractSuggestions('templateKey', 'global');
 
@@ -746,14 +772,14 @@ describe('useSidebarMetadataFetcher', () => {
             );
         });
 
-        test('should include only include_reference when only isBoundingBoxEnabled is true', async () => {
+        test('should include only include_reference when only isBoundingBoxApiEnabled is true', async () => {
             mockAPI.extractStructured.mockResolvedValue({
                 answer: { field1: 'value1' },
                 created_at: '2026-03-27T08:10:14.106-07:00',
                 completion_reason: 'done',
             });
 
-            const { result } = setupHook('123', false, true);
+            const { result } = setupHook('123', false, false, false, true);
 
             await result.current.extractSuggestions('templateKey', 'global');
 
@@ -765,6 +791,28 @@ describe('useSidebarMetadataFetcher', () => {
             expect(mockAPI.extractStructured).toHaveBeenCalledWith(
                 expect.not.objectContaining({
                     include_confidence_score: expect.anything(),
+                }),
+            );
+        });
+
+        test('should not include include_reference when only the bounding box review flag is enabled', async () => {
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'value1' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+                completion_reason: 'done',
+            });
+
+            const { result } = setupHook('123', false, true, false, false);
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+            });
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    include_reference: expect.anything(),
                 }),
             );
         });
@@ -1079,7 +1127,7 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should fetch metadata once when namespaced mode is available from the start', async () => {
-        const { result } = setupHook('123', false, false, {
+        const { result } = setupHook('123', false, false, false, false, {
             enterpriseFqn: 'enterprise_123',
             metadataNamespaceMode: 'MIGRATION',
         });
@@ -1100,7 +1148,7 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should not fetch metadata while namespace context is loading', async () => {
-        setupHook('123', false, false, { isLoading: true });
+        setupHook('123', false, false, false, false, { isLoading: true });
 
         await waitFor(() => expect(mockAPI.getFile).toHaveBeenCalled());
         expect(mockAPI.getMetadata).not.toHaveBeenCalled();
@@ -1115,6 +1163,8 @@ describe('useSidebarMetadataFetcher', () => {
                     onErrorMock,
                     onSuccessMock,
                     isFeatureEnabledMock,
+                    false,
+                    false,
                     false,
                     false,
                     namespaceContext,
