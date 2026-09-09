@@ -14,7 +14,7 @@ const messages = defineMessages({
     },
     shiftXDescription: {
         defaultMessage: 'Select current item',
-        description: 'Description for keyboard shortcut to select previous item in the file list',
+        description: 'Description for keyboard shortcut to select current item in the file list',
         id: 'boxui.core.selection.shiftXDescription',
     },
     shiftUpDescription: {
