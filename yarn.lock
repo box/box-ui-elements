@@ -7380,12 +7380,13 @@ bottleneck@^2.15.3:
   resolved "https://registry.yarnpkg.com/bottleneck/-/bottleneck-2.19.5.tgz#5df0b90f59fd47656ebe63c78a98419205cadd91"
   integrity sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==
 
-box-content-preview@3.79.0:
-  version "3.79.0"
-  resolved "https://registry.yarnpkg.com/box-content-preview/-/box-content-preview-3.79.0.tgz#4888779a5c79bcb40e242544f274b734170f1b24"
-  integrity sha512-xOuVmxVnCOySzWCE7eTpV5Mud/qdJCy0Q0cPGwdfjU2nY+zd5ZjlmYzjU66mT8usiRgBoANNM4rOgc6LaQWMDw==
+box-content-preview@3.90.0:
+  version "3.90.0"
+  resolved "https://registry.yarnpkg.com/box-content-preview/-/box-content-preview-3.90.0.tgz#11293ed2e3898b6f884d36bd34287eb78f033f69"
+  integrity sha512-/TLCDYhelKr7+NLkVPJQQA2MyyxAy+T8OBWXPktl9JtHi6uouBAt2pOfExMRt9jkfTUo/xs0HpsfDiF2kR+XLA==
   dependencies:
     pdfjs-dist "4.3.136"
+    wavesurfer.js "7.12.11"
 
 brace-expansion@^1.1.7:
   version "1.1.16"
@@ -19793,6 +19794,11 @@ watchpack@^2.5.1:
   dependencies:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
+
+wavesurfer.js@7.12.11:
+  version "7.12.11"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.12.11.tgz#e82811da84d3796c3dbe41f440fdc6177304febe"
+  integrity sha512-Sx0yZIz7jRJ9J9p7UL+pl9y0UQBB6UN/XNo+R7Gy4tCR5xZI9jMyA0dnt1R8TMVSQ4LZ10SeB2HJYQ+dV2dPSA==
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
