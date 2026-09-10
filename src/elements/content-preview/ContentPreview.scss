@@ -15,7 +15,7 @@
             min-width: 0;
 
             // Hosts set --bcpr-*-pane-background (e.g. preview-client).
-            // Do not paint over .bp-dark (video / 3D); those stay black.
+            // Do not paint over .bp-dark (video). 3D is .bp-box3d and gets the host fill.
             .bp:not(.bp-dark),
             .bp-doc,
             .bp-document-preload-wrapper {
@@ -140,6 +140,11 @@
         // the compared pane.
         .bcpr-body:not(.bcpr-body--comparing) .bcpr-container {
             position: static;
+        }
+
+        // Compared instance is not --comparing. Keep the banner's containing block.
+        .bcpr-body:not(.bcpr-body--comparing) .bcpr-container:has(.bcpr-banner) {
+            position: relative;
         }
 
         &.bcpr-thumbnails-open .bcpr-navigate-left {
