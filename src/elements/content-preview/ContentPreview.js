@@ -137,7 +137,12 @@ type Props = {
     hasProviders?: boolean,
     hideSidebar?: boolean,
     isComparing?: boolean,
+    // Arbitrary host content rendered at the top of this pane, above the viewer.
+    // ContentPreview renders it verbatim; consumers own its markup and behavior.
+    banner?: React.Node,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
+    // Host content for the compared pane's banner; forwarded as that pane's `banner`.
+    comparedBanner?: React.Node,
     comparedVersion?: BoxItemVersion,
     isLarge: boolean,
     isVeryLarge?: boolean,
@@ -1727,6 +1732,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             hasHeader,
             hasProviders,
             hideSidebar,
+            banner,
             comparedSlotRef,
             isComparing,
             history,
@@ -1830,6 +1836,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         onMouseMove={this.onMouseMove}
                                         ref={this.containerRef}
                                     >
+                                        {banner && <div className="bcpr-banner">{banner}</div>}
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
                                                 {({ measureRef: previewRef }) => {
@@ -1932,7 +1939,7 @@ const ConnectedContentPreview = flow([
 const MemoConnectedContentPreview = React.memo(ConnectedContentPreview);
 
 function ContentPreviewWithComparison(props: ContentPreviewProps) {
-    const { comparedVersion, ...rest } = props;
+    const { comparedBanner, comparedVersion, ...rest } = props;
     const [comparedSlot, setComparedSlot] = React.useState<?HTMLDivElement>(null);
     const comparedVersionId = comparedVersion && comparedVersion.id;
     const isComparing = comparedVersionId != null && comparedVersionId !== '';
@@ -1953,6 +1960,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           accessPattern={undefined}
                           advancedContentInsights={undefined}
                           autoFocus={false}
+                          banner={comparedBanner}
                           boxAnnotations={undefined}
                           collection={EMPTY_COLLECTION}
                           componentRef={undefined}

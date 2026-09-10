@@ -13,6 +13,14 @@
         &--comparing > .bcpr-container {
             flex: 1 1 50%;
             min-width: 0;
+
+            // Hosts set --bcpr-*-pane-background (e.g. preview-client).
+            // Do not paint over .bp-dark (video / 3D); those stay black.
+            .bp:not(.bp-dark),
+            .bp-doc,
+            .bp-document-preload-wrapper {
+                background-color: var(--bcpr-current-pane-background, #f5f5f5);
+            }
         }
     }
 
@@ -21,6 +29,7 @@
         flex: 1 1 50%;
         min-width: 0;
         min-height: 0;
+        background-color: var(--bcpr-compared-pane-background, transparent);
 
         &:not(:empty) {
             display: flex;
@@ -31,16 +40,46 @@
             min-width: 0;
             min-height: 0;
         }
+
+        .bp:not(.bp-dark),
+        .bp-doc,
+        .bp-document-preload-wrapper {
+            background-color: var(--bcpr-compared-pane-background, #f5f5f5);
+        }
     }
 
     .bcpr-container {
         position: relative;
         display: flex;
         flex: 1;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .bcpr-banner {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    // Overlay banners cover the top of the viewer. Add scroll room so the first
+    // page / thumbnail can sit below the banner. `.pdfViewer` is PDF.js;
+    // `.bp-vs-list` is box-content-preview's thumbnail VirtualScroller.
+    .bcpr-container:has(.bcpr-banner) {
+        .pdfViewer {
+            padding-top: 4.5rem;
+        }
+
+        .bp-vs-list {
+            margin-top: 4.5rem;
+        }
     }
 
     .bcpr-content {
         flex: 1;
+        min-height: 0;
     }
 
     .bp-navigate {
