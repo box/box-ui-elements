@@ -19,7 +19,7 @@
             .bp:not(.bp-dark),
             .bp-doc,
             .bp-document-preload-wrapper {
-                background-color: var(--bcpr-current-pane-background, #f5f5f5);
+                background-color: var(--bcpr-current-pane-background);
             }
         }
     }
@@ -29,7 +29,7 @@
         flex: 1 1 50%;
         min-width: 0;
         min-height: 0;
-        background-color: var(--bcpr-compared-pane-background, transparent);
+        background-color: var(--bcpr-compared-pane-background);
 
         &:not(:empty) {
             display: flex;
@@ -44,7 +44,7 @@
         .bp:not(.bp-dark),
         .bp-doc,
         .bp-document-preload-wrapper {
-            background-color: var(--bcpr-compared-pane-background, transparent);
+            background-color: var(--bcpr-compared-pane-background);
         }
     }
 
@@ -64,10 +64,7 @@
         z-index: 1;
     }
 
-    // Overlay banners cover the top of the viewer. Hosts must set
-    // --bcpr-banner-height to the overlay height so the first page /
-    // thumbnail can sit below it. `.pdfViewer` is PDF.js; `.bp-vs-list`
-    // is box-content-preview's thumbnail VirtualScroller.
+    // Hosts set --bcpr-banner-height so the overlay does not cover the first page or thumbnail.
     .bcpr-container:has(.bcpr-banner) {
         .pdfViewer {
             padding-top: var(--bcpr-banner-height);

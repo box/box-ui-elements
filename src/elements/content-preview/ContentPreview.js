@@ -137,11 +137,8 @@ type Props = {
     hasProviders?: boolean,
     hideSidebar?: boolean,
     isComparing?: boolean,
-    // Arbitrary host content rendered at the top of this pane, above the viewer.
-    // ContentPreview renders it verbatim; consumers own its markup and behavior.
     banner?: React.Node,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
-    // Host content for the compared pane's banner; forwarded as that pane's `banner`.
     comparedBanner?: React.Node,
     comparedVersion?: BoxItemVersion,
     isLarge: boolean,
