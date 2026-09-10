@@ -64,16 +64,17 @@
         z-index: 1;
     }
 
-    // Overlay banners cover the top of the viewer. Add scroll room so the first
-    // page / thumbnail can sit below the banner. `.pdfViewer` is PDF.js;
-    // `.bp-vs-list` is box-content-preview's thumbnail VirtualScroller.
+    // Overlay banners cover the top of the viewer. Hosts must set
+    // --bcpr-banner-height to the overlay height so the first page /
+    // thumbnail can sit below it. `.pdfViewer` is PDF.js; `.bp-vs-list`
+    // is box-content-preview's thumbnail VirtualScroller.
     .bcpr-container:has(.bcpr-banner) {
         .pdfViewer {
-            padding-top: 4.5rem;
+            padding-top: var(--bcpr-banner-height);
         }
 
         .bp-vs-list {
-            margin-top: 4.5rem;
+            margin-top: var(--bcpr-banner-height);
         }
     }
 
