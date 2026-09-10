@@ -44,7 +44,7 @@
         .bp:not(.bp-dark),
         .bp-doc,
         .bp-document-preload-wrapper {
-            background-color: var(--bcpr-compared-pane-background, #f5f5f5);
+            background-color: var(--bcpr-compared-pane-background, transparent);
         }
     }
 
