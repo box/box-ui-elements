@@ -1,9 +1,3 @@
-/**
- * @flow strict
- * @file Helper for throwing errors
- * @author Box
- */
-
 import getProp from 'lodash/get';
 import {
     TYPED_ID_FILE_PREFIX,
@@ -23,45 +17,27 @@ const FILE_EXT_REGEX = /\.([0-9a-z]+)$/i; // Case insensitive regex to extract f
  * Returns typed id for file. Useful for when
  * making file based XHRs where auth token
  * can be per file as used by Preview.
- * @param {id} id the file id
- * @return {string} typed id for file
  */
 export function getTypedFileId(id: string): string {
     return `${TYPED_ID_FILE_PREFIX}${id}`;
 }
 
-/**
- * Returns typed id for folder.
- * @param {id} id the folder id
- * @return {string} typed id for folder
- */
+/** Returns typed id for folder. */
 export function getTypedFolderId(id: string): string {
     return `${TYPED_ID_FOLDER_PREFIX}${id}`;
 }
 
-/**
- * Determines if the file is a box note
- * @param {Object} file a box file
- * @return boolean true if it is a box note
- */
+/** Determines if the file is a box note. */
 export function isBoxNote(file: BoxItem): boolean {
     return file.extension === FILE_EXTENSION_BOX_NOTE;
 }
 
-/**
- * Determines if the file is box canvas
- * @param {Object} file a box file
- * @return boolean true if it is box canvas
- */
+/** Determines if the file is box canvas. */
 export function isBoxCanvas(file: BoxItem): boolean {
     return file.extension === FILE_EXTENSION_BOX_CANVAS;
 }
 
-/**
- * Determines whether a file extension is associated with a G Suite file.
- * @param {string} extension
- * @return boolean true if the extension is a valid G Suite extension
- */
+/** Determines whether a file extension is associated with a G Suite file. */
 export function isGSuiteExtension(extension: string): boolean {
     return (
         extension === FILE_EXTENSION_GOOGLE_DOC ||
@@ -71,12 +47,8 @@ export function isGSuiteExtension(extension: string): boolean {
     );
 }
 
-/**
- * Returns the extension from the file name
- * @param {string} filename a Box file
- * @return {string} typed id for file
- */
-export function getFileExtension(filename: string | void): string {
+/** Returns the extension from the file name. */
+export function getFileExtension(filename?: string): string {
     if (typeof filename !== 'string') {
         return '';
     }

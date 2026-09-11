@@ -6,6 +6,17 @@ import { annotation as mockAnnotation } from '../../__mocks__/annotations';
 let cache;
 let item;
 
+const getThrownError = (callback: () => unknown): Error => {
+    try {
+        callback();
+    } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        return error as Error;
+    }
+
+    throw new Error('Expected callback to throw');
+};
+
 describe('util/sorter', () => {
     beforeEach(() => {
         item = {
@@ -144,7 +155,7 @@ describe('util/sorter', () => {
         ]);
     });
 
-    test('should sort with interacted date desc', () => {
+    test('should sort by interacted at with interacted date desc', () => {
         item.item_collection.entries = ['fo3', 'f1', 'f2', 'w1', 'w2', 'fo1', 'fo2', 'f3', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'interacted_at', SORT_DESC, cache);
@@ -217,7 +228,7 @@ describe('util/sorter', () => {
         expect(sorted.item_collection.entries).toEqual(['f7', 'f6']);
     });
 
-    test('should sort with default name when name is missing', () => {
+    test('should sort by interacted at with default name when name is missing', () => {
         item.item_collection.entries = ['f7', 'f6'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'interacted_at', SORT_ASC, cache);
@@ -246,23 +257,27 @@ describe('util/sorter', () => {
     test('should throw with a bad sortBy', () => {
         item.item_collection.entries = ['w1', 'w3', 'fo1', 'fo4', 'f1', 'w2', 'w4', 'f3', 'f2', 'fo2', 'fo3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_DESC }];
-        expect(sort.bind(sort, item, 'foobar', SORT_ASC, cache)).toThrow(Error, /sort field/);
+        const error = getThrownError(sort.bind(sort, item, 'foobar', SORT_ASC, cache));
+        expect(error.message).toMatch(/sort field/);
     });
 
     test('should throw with a bad type', () => {
         item.item_collection.entries = ['w1', 'w3', 'fo1', 'foo'];
         item.item_collection.order = [{ by: 'name', direction: SORT_DESC }];
-        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /sort comparator/);
+        const error = getThrownError(sort.bind(sort, item, 'name', SORT_ASC, cache));
+        expect(error.message).toMatch(/sort comparator/);
     });
 
     test('should throw with a bad item when no item_collection', () => {
         item.item_collection = null;
-        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /Bad box item/);
+        const error = getThrownError(sort.bind(sort, item, 'name', SORT_ASC, cache));
+        expect(error.message).toMatch(/Bad box item/);
     });
 
     test('should throw with a bad item when no entries', () => {
         item.item_collection.entries = null;
-        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /Bad box item/);
+        const error = getThrownError(sort.bind(sort, item, 'name', SORT_ASC, cache));
+        expect(error.message).toMatch(/Bad box item/);
     });
 
     describe('sortFeedItems()', () => {

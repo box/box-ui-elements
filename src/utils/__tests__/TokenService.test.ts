@@ -1,4 +1,5 @@
 import Tokenservice from '../TokenService';
+import type { Token } from '../../common/types/core';
 
 const readWriteTokenGenerator = () => Promise.resolve({ read: 'read_token', write: 'write_token' });
 const readTokenGenerator = () => Promise.resolve({ read: 'read_token' });
@@ -37,7 +38,7 @@ describe('util/Tokenservice', () => {
             expect(Tokenservice.getToken('123')).rejects.toThrow(/Bad id or auth token/));
 
         test('should reject when not given proper token function', () =>
-            expect(Tokenservice.getToken('file_123', {})).rejects.toThrow(/Bad id or auth token/));
+            expect(Tokenservice.getToken('file_123', {} as unknown as Token)).rejects.toThrow(/Bad id or auth token/));
 
         test('should reject when token generator returns junk', () =>
             expect(Tokenservice.getToken('file_123', junkTokenGenerator)).rejects.toThrow(/Bad id or auth token/));
@@ -78,7 +79,9 @@ describe('util/Tokenservice', () => {
             expect(Tokenservice.getWriteToken('123')).rejects.toThrow(/Bad id or auth token/));
 
         test('should reject when not given proper token function', () =>
-            expect(Tokenservice.getWriteToken('file_123', {})).rejects.toThrow(/Bad id or auth token/));
+            expect(Tokenservice.getWriteToken('file_123', {} as unknown as Token)).rejects.toThrow(
+                /Bad id or auth token/,
+            ));
 
         test('should reject when token generator returns junk', () =>
             expect(Tokenservice.getWriteToken('file_123', junkTokenGenerator)).rejects.toThrow(/Bad id or auth token/));
@@ -119,7 +122,9 @@ describe('util/Tokenservice', () => {
             expect(Tokenservice.getReadToken('123')).rejects.toThrow(/Bad id or auth token/));
 
         test('should reject when not given proper token function', () =>
-            expect(Tokenservice.getReadToken('file_123', {})).rejects.toThrow(/Bad id or auth token/));
+            expect(Tokenservice.getReadToken('file_123', {} as unknown as Token)).rejects.toThrow(
+                /Bad id or auth token/,
+            ));
 
         test('should reject when token generator returns junk', () =>
             expect(Tokenservice.getReadToken('file_123', junkTokenGenerator)).rejects.toThrow(/Bad id or auth token/));
@@ -153,6 +158,8 @@ describe('util/Tokenservice', () => {
             expect(Tokenservice.cacheTokens(['123', 'folder_123'])).rejects.toThrow(/Bad id or auth token/));
 
         test('should reject when not given proper token function', () =>
-            expect(Tokenservice.cacheTokens(['file_123', 'folder_123'], {})).rejects.toThrow(/Bad id or auth token/));
+            expect(Tokenservice.cacheTokens(['file_123', 'folder_123'], {} as unknown as Token)).rejects.toThrow(
+                /Bad id or auth token/,
+            ));
     });
 });

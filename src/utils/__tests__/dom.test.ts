@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react';
+import * as React from 'react';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import { isActivateKey, isFocusableElement, isLeftClick, scrollIntoView, useIsContentOverflowed } from '../dom';
 
@@ -7,30 +8,30 @@ jest.mock('scroll-into-view-if-needed');
 describe('util/dom', () => {
     describe('isActivateKey', () => {
         test('should return true for enter and space keys', () => {
-            expect(isActivateKey({ key: 'Enter' })).toBe(true);
-            expect(isActivateKey({ key: ' ' })).toBe(true);
+            expect(isActivateKey({ key: 'Enter' } as unknown as React.KeyboardEvent)).toBe(true);
+            expect(isActivateKey({ key: ' ' } as unknown as React.KeyboardEvent)).toBe(true);
         });
 
         test('should return false for all other keys', () => {
-            expect(isActivateKey({ key: 'Ctrl' })).toBe(false);
-            expect(isActivateKey({ key: 'Tab' })).toBe(false);
+            expect(isActivateKey({ key: 'Ctrl' } as unknown as React.KeyboardEvent)).toBe(false);
+            expect(isActivateKey({ key: 'Tab' } as unknown as React.KeyboardEvent)).toBe(false);
         });
     });
 
     describe('isLeftClick', () => {
         test('should return true for unmodified left click events', () => {
-            expect(isLeftClick({ button: 0 })).toBe(true);
+            expect(isLeftClick({ button: 0 } as unknown as React.MouseEvent)).toBe(true);
         });
 
         test('should return false for modified left click events', () => {
-            expect(isLeftClick({ button: 0, altKey: true })).toBe(false);
-            expect(isLeftClick({ button: 0, ctrlKey: true })).toBe(false);
-            expect(isLeftClick({ button: 0, metaKey: true })).toBe(false);
-            expect(isLeftClick({ button: 0, shiftKey: true })).toBe(false);
+            expect(isLeftClick({ button: 0, altKey: true } as unknown as React.MouseEvent)).toBe(false);
+            expect(isLeftClick({ button: 0, ctrlKey: true } as unknown as React.MouseEvent)).toBe(false);
+            expect(isLeftClick({ button: 0, metaKey: true } as unknown as React.MouseEvent)).toBe(false);
+            expect(isLeftClick({ button: 0, shiftKey: true } as unknown as React.MouseEvent)).toBe(false);
         });
 
         test('should return false for unmodified right click events', () => {
-            expect(isLeftClick({ button: 1 })).toBe(false);
+            expect(isLeftClick({ button: 1 } as unknown as React.MouseEvent)).toBe(false);
         });
     });
 
@@ -45,7 +46,7 @@ describe('util/dom', () => {
         });
 
         test('should call scrollIntoViewIfNeeded when parent element is found', () => {
-            const itemEl = document.querySelector('.button');
+            const itemEl = document.querySelector('.button') as HTMLElement | null;
             const parentEl = document.querySelector('.modal');
             scrollIntoView(itemEl);
             expect(scrollIntoViewIfNeeded).toHaveBeenCalledWith(itemEl, {
@@ -55,7 +56,7 @@ describe('util/dom', () => {
         });
 
         test('should not call scrollIntoViewIfNeeded when parent element is evaluated as null', () => {
-            const itemEl = document.querySelector('.input');
+            const itemEl = document.querySelector('.input') as HTMLElement | null;
             scrollIntoView(itemEl);
             expect(scrollIntoViewIfNeeded).not.toHaveBeenCalled();
         });

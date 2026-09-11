@@ -1,5 +1,8 @@
 import browser from '../Browser';
 
+type WindowWithExternalHost = Window & { externalHost?: unknown };
+type TestNavigator = Omit<Navigator, 'clipboard'> & { clipboard?: unknown };
+
 describe('util/Browser/isMobile()', () => {
     test('should return false if not mobile', () => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce('foobar');
@@ -104,22 +107,22 @@ describe('util/Browser/canDownload()', () => {
 
     test('should return false if browser is mobile and externalHost is present', () => {
         browser.isMobile = jest.fn().mockReturnValue(true);
-        window.externalHost = {};
+        (window as WindowWithExternalHost).externalHost = {};
         expect(browser.canDownload()).toBe(false);
-        window.externalHost = undefined;
+        (window as WindowWithExternalHost).externalHost = undefined;
     });
 
     test("should return false if browser is mobile and doesn't support downloads", () => {
         browser.isMobile = jest.fn().mockReturnValue(true);
-        window.externalHost = undefined;
-        global.document.createElement = jest.fn().mockReturnValue({});
+        (window as WindowWithExternalHost).externalHost = undefined;
+        document.createElement = jest.fn().mockReturnValue({});
         expect(browser.canDownload()).toBe(false);
     });
 
     test('should return true if browser is mobile and supports downloads', () => {
         browser.isMobile = jest.fn().mockReturnValue(true);
-        window.externalHost = undefined;
-        global.document.createElement = jest.fn().mockReturnValue({ download: true });
+        (window as WindowWithExternalHost).externalHost = undefined;
+        document.createElement = jest.fn().mockReturnValue({ download: true });
         expect(browser.canDownload()).toBe(true);
     });
 });
@@ -129,12 +132,12 @@ describe('util/Browser/canPlayDash()', () => {
         expect(browser.canPlayDash()).toBeFalsy();
     });
     test('should return false when isTypeSupported is not a function', () => {
-        global.MediaSource = { isTypeSupported: 'string' };
+        (globalThis as unknown as { MediaSource?: unknown }).MediaSource = { isTypeSupported: 'string' };
         expect(browser.canPlayDash(true)).toBeFalsy();
     });
     test('should return true when h264 is supported', () => {
         const isTypeSupportedMock = jest.fn();
-        global.MediaSource = {
+        (globalThis as unknown as { MediaSource?: unknown }).MediaSource = {
             isTypeSupported: isTypeSupportedMock.mockReturnValueOnce(true),
         };
 
@@ -146,7 +149,7 @@ describe('util/Browser/canPlayDash()', () => {
 describe('Browser clipboard API', () => {
     // @see https://caniuse.com/#search=clipboard
     afterEach(() => {
-        global.navigator.clipboard = undefined;
+        (navigator as TestNavigator).clipboard = undefined;
     });
 
     test('should return false when clipboard is unavailable', () => {
@@ -155,7 +158,7 @@ describe('Browser clipboard API', () => {
     });
 
     test('should return false when clipboard is partially available', () => {
-        global.navigator.clipboard = {
+        (navigator as TestNavigator).clipboard = {
             read: jest.fn(),
             write: jest.fn(),
         };
@@ -165,7 +168,7 @@ describe('Browser clipboard API', () => {
     });
 
     test('should return true when clipboard is fully available', () => {
-        global.navigator.clipboard = {
+        (navigator as TestNavigator).clipboard = {
             read: jest.fn(),
             write: jest.fn(),
             readText: jest.fn(),

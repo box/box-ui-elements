@@ -61,10 +61,10 @@ describe('utils/timestamp', () => {
         });
 
         test('should return 0 if the timestamp is not a number', () => {
-            expect(convertTimestampToSeconds('abc123def')).toBe(0);
-            expect(convertTimestampToSeconds('456xyz789')).toBe(0);
-            expect(convertTimestampToSeconds('')).toBe(0);
-            expect(convertTimestampToSeconds('abc')).toBe(0);
+            expect(convertTimestampToSeconds('abc123def' as unknown as number)).toBe(0);
+            expect(convertTimestampToSeconds('456xyz789' as unknown as number)).toBe(0);
+            expect(convertTimestampToSeconds('' as unknown as number)).toBe(0);
+            expect(convertTimestampToSeconds('abc' as unknown as number)).toBe(0);
             expect(convertTimestampToSeconds(undefined)).toBe(0);
         });
     });
