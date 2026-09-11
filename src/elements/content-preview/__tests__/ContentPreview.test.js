@@ -2843,6 +2843,57 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(bodyDiv.find('.bcpr-compared-slot').exists()).toBe(false);
         });
 
+        test('should render the banner above the viewer content when provided', () => {
+            const wrapper = getWrapper({
+                banner: <div className="test-banner">v12</div>,
+                fileId: '123',
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            const container = wrapper.find('.bcpr-container');
+            const bannerDiv = container.children().at(0);
+            expect(bannerDiv.hasClass('bcpr-banner')).toBe(true);
+            expect(bannerDiv.find('.test-banner').exists()).toBe(true);
+        });
+
+        test('should not render a banner element when the banner prop is omitted', () => {
+            const wrapper = getWrapper({
+                fileId: '123',
+            });
+            wrapper.setState({
+                currentFileId: '123',
+                file: { id: '123', name: 'test.pdf' },
+            });
+
+            expect(wrapper.find('.bcpr-banner').exists()).toBe(false);
+        });
+
+        test('should forward comparedBanner as the compared instance banner only', () => {
+            const banner = <div className="main-banner" />;
+            const comparedBanner = <div className="compared-banner" />;
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    banner={banner}
+                    comparedBanner={comparedBanner}
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            const mainProps = wrapper.childAt(0).props();
+            const comparedProps = wrapper.childAt(1).props().children.props;
+            expect(mainProps.banner).toBe(banner);
+            expect(mainProps.comparedBanner).toBeUndefined();
+            expect(comparedProps.banner).toBe(comparedBanner);
+        });
+
         test('should not render PreviewNavigation when isComparing', () => {
             const wrapper = getWrapper({
                 fileId: '456',
