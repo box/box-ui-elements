@@ -762,6 +762,11 @@ const messages = defineMessages({
         description: 'Error message shown when attempting to upload a file which name already exists',
         defaultMessage: 'A file with this name already exists.',
     },
+    uploadsItemLockedErrorMessage: {
+        id: 'be.uploadsItemLockedErrorMessage',
+        description: 'Error message shown when attempting to upload a new version of a locked file',
+        defaultMessage: 'File is locked',
+    },
     uploadsProvidedFolderNameInvalidMessage: {
         id: 'be.uploadsProvidedFolderNameInvalidMessage',
         description: 'Error message shown when pending folder upload contains invalid characters',
