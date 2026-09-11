@@ -13,15 +13,6 @@
         &--comparing > .bcpr-container {
             flex: 1 1 50%;
             min-width: 0;
-
-            // Hosts set --bcpr-*-pane-background (e.g. preview-client).
-            // Unset vars keep BCP's .bp default (#f5f5f5). Skip .bp-dark (video).
-            // 3D is .bp-box3d and gets the host fill.
-            .bp:not(.bp-dark),
-            .bp-doc,
-            .bp-document-preload-wrapper {
-                background-color: var(--bcpr-current-pane-background, #f5f5f5);
-            }
         }
     }
 
@@ -30,7 +21,6 @@
         flex: 1 1 50%;
         min-width: 0;
         min-height: 0;
-        background-color: var(--bcpr-compared-pane-background, #f5f5f5);
 
         &:not(:empty) {
             display: flex;
@@ -41,20 +31,12 @@
             min-width: 0;
             min-height: 0;
         }
-
-        .bp:not(.bp-dark),
-        .bp-doc,
-        .bp-document-preload-wrapper {
-            background-color: var(--bcpr-compared-pane-background, #f5f5f5);
-        }
     }
 
     .bcpr-container {
         position: relative;
         display: flex;
         flex: 1;
-        flex-direction: column;
-        min-height: 0;
     }
 
     .bcpr-banner {
@@ -65,20 +47,8 @@
         z-index: 1;
     }
 
-    // Hosts set --bcpr-banner-height so the overlay does not cover the first page or thumbnail.
-    .bcpr-container:has(.bcpr-banner) {
-        .pdfViewer {
-            padding-top: var(--bcpr-banner-height);
-        }
-
-        .bp-vs-list {
-            margin-top: var(--bcpr-banner-height);
-        }
-    }
-
     .bcpr-content {
         flex: 1;
-        min-height: 0;
     }
 
     .bp-navigate {
