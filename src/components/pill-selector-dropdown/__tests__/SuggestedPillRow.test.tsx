@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import SuggestedPillsRow from '../SuggestedPillsRow';
 
@@ -11,19 +12,19 @@ describe('components/pill-selector-dropdown/SuggestedPillsRow', () => {
             id: collabID1,
             email: 'foo@box.com',
             name: 'Foo',
-        };
+        } as const;
 
         const collabID2 = 987;
         const collab2 = {
             ...collab1,
             id: collabID2,
-        };
+        } as const;
 
         const collabID3 = 456;
         const collab3 = {
             ...collab1,
             id: collabID3,
-        };
+        } as const;
 
         test('should render the SuggestedCollabPill', () => {
             const wrapper = getWrapper({
