@@ -293,6 +293,39 @@ describe('api/Annotations', () => {
             });
         });
 
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+                can_view_annotations: true,
+            };
+
+            annotations.getAnnotations(
+                '12345',
+                '67890',
+                permissions,
+                successCallback,
+                errorCallback,
+                100,
+                false,
+                true,
+                true,
+            );
+
+            expect(annotations.markerGet).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback: expect.any(Function),
+                limit: 100,
+                shouldFetchAll: false,
+                requestData: {
+                    file_id: '12345',
+                    file_version_id: '67890',
+                    fields: 'replies',
+                    enable_rich_text: true,
+                },
+            });
+        });
+
         test.each([
             { can_create_annotations: true, can_view_annotations: false },
             { can_create_annotations: false, can_view_annotations: false },

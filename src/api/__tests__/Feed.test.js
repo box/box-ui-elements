@@ -529,7 +529,7 @@ describe('api/Feed', () => {
                     shouldShowAnnotations: true,
                     shouldShowReplies,
                 });
-                expect(feed.fetchAnnotations).toBeCalledWith(expect.anything(), expected);
+                expect(feed.fetchAnnotations).toBeCalledWith(expect.anything(), expected, false);
             },
         );
 
@@ -544,7 +544,7 @@ describe('api/Feed', () => {
         test('should use the threaded comments api if shouldShowReplies is true', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowReplies: true });
             setImmediate(() => {
-                expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions);
+                expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions, false);
                 done();
             });
         });
@@ -631,6 +631,7 @@ describe('api/Feed', () => {
                     ],
                     true,
                     false,
+                    false,
                 );
                 expect(feed.fetchComments).not.toBeCalled();
                 expect(feed.fetchThreadedComments).not.toBeCalled();
@@ -665,6 +666,7 @@ describe('api/Feed', () => {
                     ],
                     true,
                     true,
+                    false,
                 );
                 done();
             });
@@ -695,6 +697,7 @@ describe('api/Feed', () => {
                 undefined,
                 undefined,
                 true,
+                false,
             );
         });
     });
@@ -736,6 +739,7 @@ describe('api/Feed', () => {
                 errorCallback,
                 fileId: file.id,
                 permissions: file.permissions,
+                shouldEnableRichText: false,
                 successCallback: boundFetchThreadedCommentSuccessCallback,
             });
             expect(feed.fetchThreadedCommentSuccessCallback.bind).toBeCalledWith(
@@ -773,6 +777,7 @@ describe('api/Feed', () => {
                 errorCallback: expect.any(Function),
                 fileId: feed.file.id,
                 permissions,
+                shouldEnableRichText: false,
                 successCallback: expect.any(Function),
             });
         });
@@ -802,6 +807,7 @@ describe('api/Feed', () => {
                 fileId: feed.file.id,
                 commentId,
                 permissions: feed.file.permissions,
+                shouldEnableRichText: false,
                 successCallback: expect.any(Function),
                 errorCallback: expect.any(Function),
             });
@@ -820,6 +826,7 @@ describe('api/Feed', () => {
                 feed.file.permissions,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(feed.updateFeedItem).toHaveBeenNthCalledWith(1, { isRepliesLoading: true }, annotationId);
             expect(feed.updateFeedItem).toHaveBeenNthCalledWith(
@@ -912,6 +919,7 @@ describe('api/Feed', () => {
                     permissions,
                     shouldShowReplies: false,
                     shouldUseEnhancedActivities: false,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                 });
                 expect(fileActivityItems).resolves.toEqual({ entries: mockFileActivities });

@@ -24,6 +24,7 @@ const getFileActivityQueryParams = (
     activityTypes?: FileActivityTypes[] = [],
     shouldShowReplies?: boolean = false,
     shouldUseEnhancedActivities?: boolean = false,
+    shouldEnableRichText?: boolean = false,
 ) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
@@ -31,8 +32,9 @@ const getFileActivityQueryParams = (
     const replyLimit = shouldUseEnhancedActivities ? V2_REPLY_LIMIT : V1_REPLY_LIMIT;
     const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${replyLimit}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
+    const richTextQueryParam = shouldEnableRichText ? '&enable_rich_text=true' : '';
 
-    return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
+    return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}${richTextQueryParam}`;
 };
 
 class FileActivities extends Base {
@@ -49,8 +51,9 @@ class FileActivities extends Base {
         activityTypes?: FileActivityTypes[],
         shouldShowReplies?: boolean,
         shouldUseEnhancedActivities?: boolean,
+        shouldEnableRichText?: boolean,
     ): string {
-        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes, shouldShowReplies, shouldUseEnhancedActivities)}`;
+        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes, shouldShowReplies, shouldUseEnhancedActivities, shouldEnableRichText)}`;
     }
 
     /**
@@ -73,6 +76,7 @@ class FileActivities extends Base {
         repliesCount,
         shouldShowReplies,
         shouldUseEnhancedActivities,
+        shouldEnableRichText,
         successCallback,
     }: {
         activityTypes: FileActivityTypes[],
@@ -82,6 +86,7 @@ class FileActivities extends Base {
         repliesCount?: number,
         shouldShowReplies?: boolean,
         shouldUseEnhancedActivities?: boolean,
+        shouldEnableRichText?: boolean,
         successCallback: (activity: FileActivity) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_ACTIVITY;
@@ -108,7 +113,13 @@ class FileActivities extends Base {
             requestData: {
                 ...(repliesCount ? { replies_count: repliesCount } : null),
             },
-            url: this.getFilteredUrl(fileID, activityTypes, shouldShowReplies, shouldUseEnhancedActivities),
+            url: this.getFilteredUrl(
+                fileID,
+                activityTypes,
+                shouldShowReplies,
+                shouldUseEnhancedActivities,
+                shouldEnableRichText,
+            ),
         });
     }
 }

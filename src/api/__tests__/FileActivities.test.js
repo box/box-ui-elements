@@ -56,6 +56,12 @@ describe('api/FileActivities', () => {
                 'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1',
             );
         });
+
+        test('should append enable_rich_text=true when shouldEnableRichText is true', () => {
+            expect(fileActivities.getFilteredUrl('1', ['comment'], true, true, true)).toBe(
+                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1000&enable_rich_text=true',
+            );
+        });
     });
 
     describe('getActivities()', () => {
