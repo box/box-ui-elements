@@ -1,9 +1,13 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import { FormattedMessage } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import { scrollIntoView } from '../../../utils/dom';
 import { BaseSelectFieldBase as BaseSelectField } from '../BaseSelectField';
+import type { BaseSelectFieldProps } from '../BaseSelectField';
+import { TooltipPosition } from '../../tooltip';
 import { OVERLAY_SCROLLABLE_CLASS } from '../SelectFieldDropdown';
 import { ARROW_DOWN, ARROW_UP, ENTER, ESCAPE, SPACE, TAB } from '../../../common/keyboard-events';
 import CLEAR from '../constants';
@@ -24,7 +28,7 @@ describe('components/select-field/BaseSelectField', () => {
 
     const intl = {
         formatMessage: jest.fn(),
-    };
+    } as unknown as IntlShape;
 
     const options = [
         { displayText: 'Any Type', value: '' },
@@ -33,12 +37,12 @@ describe('components/select-field/BaseSelectField', () => {
         { displayText: 'Videos', value: 'video' },
     ];
     const onOptionSelectSpy = sandbox.stub();
-    const shallowRenderSelectField = props =>
-        shallow(
+    const shallowRenderSelectField = (props: Partial<BaseSelectFieldProps> = {}) =>
+        shallow<InstanceType<typeof BaseSelectField>>(
             <BaseSelectField
                 intl={intl}
                 isDisabled={false}
-                onChange={() => {}}
+                onChange={jest.fn()}
                 onOptionSelect={onOptionSelectSpy}
                 options={options}
                 shouldShowClearOption={false}
@@ -93,7 +97,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
-            expect(buttonWrapper.prop('aria-activedescendant')).toEqual(null);
+            expect(buttonWrapper.prop('aria-activedescendant')).toBeNull();
             expect(buttonWrapper.prop('aria-autocomplete')).toEqual('list');
             expect(buttonWrapper.prop('aria-expanded')).toBe(false);
             expect(buttonWrapper.prop('aria-owns')).toEqual(instance.selectFieldID);
@@ -109,7 +113,7 @@ describe('components/select-field/BaseSelectField', () => {
             });
 
             const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
-            expect(buttonWrapper.length).toBe(1);
+            expect(buttonWrapper).toHaveLength(1);
             expect(buttonWrapper.prop('aria-activedescendant')).toEqual('datalistitem-123');
             expect(buttonWrapper.prop('aria-expanded')).toBe(true);
         });
@@ -139,7 +143,7 @@ describe('components/select-field/BaseSelectField', () => {
         test('should send error tooltip positon to select button when errorTooltipPosition prop has some value', () => {
             const wrapper = shallowRenderSelectField({
                 error: 'error',
-                errorTooltipPosition: 'middle-left',
+                errorTooltipPosition: TooltipPosition.MIDDLE_LEFT,
             });
             const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper.prop('errorTooltipPosition')).toBe('middle-left');
@@ -154,7 +158,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             const searchForm = wrapper.find('SearchForm');
 
-            expect(searchForm.length).toBe(1);
+            expect(searchForm).toHaveLength(1);
         });
     });
 
@@ -183,7 +187,7 @@ describe('components/select-field/BaseSelectField', () => {
             const itemsWrapper = wrapper.find('DatalistItem');
             const option = itemsWrapper.at(0);
 
-            expect(itemsWrapper.length).toBe(1);
+            expect(itemsWrapper).toHaveLength(1);
             expect(option.find('.bdl-SelectField-optionText').props().title).toEqual(searchText);
         });
 
@@ -191,7 +195,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             const itemsWrapper = wrapper.find('DatalistItem');
 
-            expect(itemsWrapper.length).toBe(4);
+            expect(itemsWrapper).toHaveLength(4);
             // Spot check that props are correct
             expect(itemsWrapper.at(0).prop('className')).toEqual('select-option');
             expect(itemsWrapper.at(0).key()).toEqual('0');
@@ -203,10 +207,10 @@ describe('components/select-field/BaseSelectField', () => {
                 selectedValues: ['audio', 'document'],
             });
             const itemsWrapper = wrapper.find('DatalistItem');
-            expect(itemsWrapper.at(0).find('IconCheck').length).toBe(0);
-            expect(itemsWrapper.at(1).find('IconCheck').length).toBe(1);
-            expect(itemsWrapper.at(2).find('IconCheck').length).toBe(1);
-            expect(itemsWrapper.at(3).find('IconCheck').length).toBe(0);
+            expect(itemsWrapper.at(0).find('IconCheck')).toHaveLength(0);
+            expect(itemsWrapper.at(1).find('IconCheck')).toHaveLength(1);
+            expect(itemsWrapper.at(2).find('IconCheck')).toHaveLength(1);
+            expect(itemsWrapper.at(3).find('IconCheck')).toHaveLength(0);
         });
 
         test('should set isActive prop on current active index item', () => {
@@ -283,13 +287,9 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             // Dive past the ForwardRef and SelectFieldDropdown
-            const overlay = wrapper
-                .find('PopperComponent')
-                .childAt(1)
-                .dive()
-                .dive();
+            const overlay = wrapper.find('PopperComponent').childAt(1).dive().dive();
 
-            expect(overlay.length).toBe(1);
+            expect(overlay).toHaveLength(1);
             expect(overlay.is('ul')).toBe(true);
             expect(overlay.prop('role')).toEqual('listbox');
             expect(overlay.prop('id')).toEqual(instance.selectFieldID);
@@ -300,11 +300,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField({ multiple: true });
 
             // Dive past the ForwardRef and SelectFieldDropdown
-            const overlay = wrapper
-                .find('PopperComponent')
-                .childAt(1)
-                .dive()
-                .dive();
+            const overlay = wrapper.find('PopperComponent').childAt(1).dive().dive();
 
             expect(overlay.prop('aria-multiselectable')).toBe(true);
         });
@@ -317,11 +313,7 @@ describe('components/select-field/BaseSelectField', () => {
             (isScrollable, result) => {
                 const wrapper = shallowRenderSelectField({ isScrollable });
                 // Dive past the ForwardRef and SelectFieldDropdown
-                const overlay = wrapper
-                    .find('PopperComponent')
-                    .childAt(1)
-                    .dive()
-                    .dive();
+                const overlay = wrapper.find('PopperComponent').childAt(1).dive().dive();
                 expect(overlay.hasClass(OVERLAY_SCROLLABLE_CLASS)).toBe(result);
             },
         );
@@ -329,14 +321,18 @@ describe('components/select-field/BaseSelectField', () => {
         test('should apply preventOverflow modifier when isEscapedWithReference is true', () => {
             const wrapper = shallowRenderSelectField({ isEscapedWithReference: true });
 
-            const props = wrapper.find('PopperComponent').props();
+            const props = wrapper.find('PopperComponent').props() as {
+                modifiers?: { preventOverflow?: { escapeWithReference?: boolean } };
+            };
             expect(props.modifiers.preventOverflow).toEqual({ escapeWithReference: true });
         });
 
         test('should not apply preventOverflow modifier when isEscapedWithReference is not set', () => {
             const wrapper = shallowRenderSelectField();
 
-            const props = wrapper.find('PopperComponent').props();
+            const props = wrapper.find('PopperComponent').props() as {
+                modifiers?: { preventOverflow?: { escapeWithReference?: boolean } };
+            };
             expect(props.modifiers.preventOverflow).toBeUndefined();
         });
     });
@@ -347,10 +343,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ isOpen: false });
 
-            sandbox
-                .mock(instance)
-                .expects('closeDropdown')
-                .never();
+            sandbox.mock(instance).expects('closeDropdown').never();
 
             wrapper.simulate('blur');
         });
@@ -366,7 +359,7 @@ describe('components/select-field/BaseSelectField', () => {
             };
 
             targetWithClassName.relatedTarget.className = 'not-select-button';
-            instance.handleBlur(targetWithClassName);
+            instance.handleBlur(targetWithClassName as unknown as React.FocusEvent);
 
             expect(spy).toHaveBeenCalled();
         });
@@ -388,7 +381,7 @@ describe('components/select-field/BaseSelectField', () => {
                 };
 
                 targetWithClassName.relatedTarget.className = className;
-                instance.handleBlur(targetWithClassName);
+                instance.handleBlur(targetWithClassName as unknown as React.FocusEvent);
 
                 expect(spy).not.toHaveBeenCalled();
             },
@@ -406,7 +399,7 @@ describe('components/select-field/BaseSelectField', () => {
             };
 
             targetWithClassName.relatedTarget.className = exception;
-            instance.handleBlur(targetWithClassName);
+            instance.handleBlur(targetWithClassName as unknown as React.FocusEvent);
 
             expect(spy).not.toHaveBeenCalled();
         });
@@ -427,10 +420,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(0);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(0);
 
             wrapper.simulate('keyDown', event);
         });
@@ -440,10 +430,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ activeItemIndex: 3, isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(-1);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(-1);
 
             wrapper.simulate('keyDown', event);
         });
@@ -474,10 +461,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ activeItemIndex: 0, isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(-1);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(-1);
 
             wrapper.simulate('keyDown', event);
         });
@@ -487,10 +471,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('setActiveItem')
-                .withArgs(3);
+            sandbox.mock(instance).expects('setActiveItem').withArgs(3);
 
             wrapper.simulate('keyDown', event);
         });
@@ -512,10 +493,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .never();
+            sandbox.mock(instance).expects('selectOption').never();
 
             wrapper.simulate('keyDown', {
                 key: ENTER,
@@ -529,10 +507,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ activeItemIndex: 0, isOpen: false });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .never();
+            sandbox.mock(instance).expects('selectOption').never();
 
             wrapper.simulate('keyDown', {
                 key: ENTER,
@@ -547,10 +522,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ activeItemIndex, isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .withArgs(activeItemIndex);
+            sandbox.mock(instance).expects('selectOption').withArgs(activeItemIndex);
             sandbox.mock(instance).expects('closeDropdown');
 
             wrapper.simulate('keyDown', {
@@ -613,10 +585,7 @@ describe('components/select-field/BaseSelectField', () => {
             });
             wrapper.setState({ isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .never();
+            sandbox.mock(instance).expects('selectOption').never();
 
             wrapper.simulate('keyDown', {
                 key: SPACE,
@@ -630,10 +599,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .never();
+            sandbox.mock(instance).expects('selectOption').never();
 
             wrapper.simulate('keyDown', {
                 key: SPACE,
@@ -647,10 +613,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ activeItemIndex: 0, isOpen: false });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .never();
+            sandbox.mock(instance).expects('selectOption').never();
 
             wrapper.simulate('keyDown', {
                 key: SPACE,
@@ -665,10 +628,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             wrapper.setState({ activeItemIndex, isOpen: true });
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .withArgs(activeItemIndex);
+            sandbox.mock(instance).expects('selectOption').withArgs(activeItemIndex);
 
             wrapper.simulate('keyDown', {
                 key: SPACE,
@@ -784,7 +744,7 @@ describe('components/select-field/BaseSelectField', () => {
             wrapper.setProps({
                 onChange: sandbox.mock().withArgs(['what', 'is', 'up']),
             });
-            wrapper.instance().handleChange(['what', 'is', 'up']);
+            wrapper.instance().handleChange(['what', 'is', 'up'] as never);
         });
     });
 
@@ -793,10 +753,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            sandbox
-                .mock(instance)
-                .expects('handleChange')
-                .withArgs([]);
+            sandbox.mock(instance).expects('handleChange').withArgs([]);
 
             instance.handleClearClick();
         });
@@ -808,7 +765,7 @@ describe('components/select-field/BaseSelectField', () => {
             wrapper.setProps({
                 onOptionSelect: sandbox.mock().withArgs('up'),
             });
-            wrapper.instance().handleOptionSelect('up');
+            wrapper.instance().handleOptionSelect('up' as never);
         });
     });
 
@@ -820,10 +777,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             sandbox.mock(instance).expects('openDropdown');
 
-            wrapper
-                .find('PopperComponent')
-                .childAt(0)
-                .simulate('click');
+            wrapper.find('PopperComponent').childAt(0).simulate('click');
         });
 
         test('should close dropdown when it is open', () => {
@@ -833,10 +787,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             sandbox.mock(instance).expects('closeDropdown');
 
-            wrapper
-                .find('PopperComponent')
-                .childAt(0)
-                .simulate('click');
+            wrapper.find('PopperComponent').childAt(0).simulate('click');
         });
     });
 
@@ -853,28 +804,22 @@ describe('components/select-field/BaseSelectField', () => {
                 const wrapper = shallowRenderSelectField();
                 wrapper.setState({ isOpen: true, activeItemIndex: 2 });
 
-                wrapper
-                    .find('PopperComponent')
-                    .childAt(0)
-                    .simulate('keyDown', {
-                        key,
-                        preventDefault: sandbox.mock(),
-                        stopPropagation: sandbox.mock().never(),
-                    });
+                wrapper.find('PopperComponent').childAt(0).simulate('keyDown', {
+                    key,
+                    preventDefault: sandbox.mock(),
+                    stopPropagation: sandbox.mock().never(),
+                });
             });
 
             test('should not preventDefault() when key is space or enter and activeItemIndex == -1', () => {
                 const wrapper = shallowRenderSelectField();
                 wrapper.setState({ isOpen: true, activeItemIndex: -1 });
 
-                wrapper
-                    .find('PopperComponent')
-                    .childAt(0)
-                    .simulate('keyDown', {
-                        key,
-                        preventDefault: sandbox.mock().never(),
-                        stopPropagation: sandbox.mock().never(),
-                    });
+                wrapper.find('PopperComponent').childAt(0).simulate('keyDown', {
+                    key,
+                    preventDefault: sandbox.mock().never(),
+                    stopPropagation: sandbox.mock().never(),
+                });
             });
         });
 
@@ -882,14 +827,11 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             wrapper.setState({ isOpen: true, activeItemIndex: 2 });
 
-            wrapper
-                .find('PopperComponent')
-                .childAt(0)
-                .simulate('keyDown', {
-                    key: ARROW_DOWN,
-                    preventDefault: sandbox.mock().never(),
-                    stopPropagation: sandbox.mock().never(),
-                });
+            wrapper.find('PopperComponent').childAt(0).simulate('keyDown', {
+                key: ARROW_DOWN,
+                preventDefault: sandbox.mock().never(),
+                stopPropagation: sandbox.mock().never(),
+            });
         });
     });
 
@@ -906,29 +848,20 @@ describe('components/select-field/BaseSelectField', () => {
 
             sandbox.mock(instance).expects('handleClearClick');
 
-            wrapper
-                .find('DatalistItem')
-                .at(0)
-                .simulate('click', {
-                    preventDefault: sandbox.mock(),
-                });
+            wrapper.find('DatalistItem').at(0).simulate('click', {
+                preventDefault: sandbox.mock(),
+            });
         });
 
         test('should select item and close dropdown when item is clicked', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            sandbox
-                .mock(instance)
-                .expects('selectOption')
-                .withArgs(1);
+            sandbox.mock(instance).expects('selectOption').withArgs(1);
 
-            wrapper
-                .find('DatalistItem')
-                .at(1)
-                .simulate('click', {
-                    preventDefault: sandbox.mock(),
-                });
+            wrapper.find('DatalistItem').at(1).simulate('click', {
+                preventDefault: sandbox.mock(),
+            });
         });
     });
 
@@ -936,10 +869,7 @@ describe('components/select-field/BaseSelectField', () => {
         test('should set correct active item index when hovering over item', () => {
             const wrapper = shallowRenderSelectField();
 
-            wrapper
-                .find('DatalistItem')
-                .at(2)
-                .simulate('mouseEnter');
+            wrapper.find('DatalistItem').at(2).simulate('mouseEnter');
 
             expect(wrapper.state('activeItemIndex')).toEqual(2);
         });
@@ -948,10 +878,7 @@ describe('components/select-field/BaseSelectField', () => {
             const wrapper = shallowRenderSelectField();
             wrapper.setState({ shouldScrollIntoView: true });
 
-            wrapper
-                .find('DatalistItem')
-                .at(2)
-                .simulate('mouseEnter');
+            wrapper.find('DatalistItem').at(2).simulate('mouseEnter');
 
             expect(wrapper.state('shouldScrollIntoView')).toBe(false);
         });
@@ -963,19 +890,13 @@ describe('components/select-field/BaseSelectField', () => {
 
         test('should update activeItemIndex state when called', () => {
             const index = 1;
-            sandbox
-                .mock(instance)
-                .expects('setActiveItemID')
-                .never();
+            sandbox.mock(instance).expects('setActiveItemID').never();
             instance.setActiveItem(index);
             expect(wrapper.state('activeItemIndex')).toEqual(index);
         });
 
         test('should reset active item ID when index is -1', () => {
-            sandbox
-                .mock(instance)
-                .expects('setActiveItemID')
-                .withArgs(null);
+            sandbox.mock(instance).expects('setActiveItemID').withArgs(null);
             instance.setActiveItem(-1);
         });
 
@@ -1035,7 +956,7 @@ describe('components/select-field/BaseSelectField', () => {
                 focus: jest.fn(),
             };
             const instance = wrapper.instance();
-            instance.searchInputRef = mockSearchInputRef;
+            instance.searchInputRef = mockSearchInputRef as unknown as HTMLInputElement;
 
             instance.openDropdown();
 
@@ -1079,10 +1000,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             const index = 1;
-            sandbox
-                .mock(instance)
-                .expects('selectMultiOption')
-                .withArgs(index);
+            sandbox.mock(instance).expects('selectMultiOption').withArgs(index);
 
             instance.selectOption(index);
         });
@@ -1092,10 +1010,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             const index = 1;
-            sandbox
-                .mock(instance)
-                .expects('selectSingleOption')
-                .withArgs(index);
+            sandbox.mock(instance).expects('selectSingleOption').withArgs(index);
             sandbox.mock(instance).expects('closeDropdown');
 
             instance.selectOption(index);
@@ -1137,7 +1052,7 @@ describe('components/select-field/BaseSelectField', () => {
             });
 
             const filteredOptions = instance.getFilteredOptions();
-            expect(filteredOptions.length).toBe(0);
+            expect(filteredOptions).toHaveLength(0);
         });
 
         test('should not filter out the clear option if searchText is empty string', () => {
@@ -1147,7 +1062,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             const filteredOptions = instance.getFilteredOptions();
-            expect(filteredOptions.length).toBe(1);
+            expect(filteredOptions).toHaveLength(1);
         });
     });
 
@@ -1157,10 +1072,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             const index = 1;
-            sandbox
-                .mock(instance)
-                .expects('handleChange')
-                .withArgs([options[index]]);
+            sandbox.mock(instance).expects('handleChange').withArgs([options[index]]);
 
             instance.selectSingleOption(index);
         });
@@ -1187,10 +1099,7 @@ describe('components/select-field/BaseSelectField', () => {
             });
             const instance = wrapper.instance();
 
-            sandbox
-                .mock(instance)
-                .expects('handleChange')
-                .never();
+            sandbox.mock(instance).expects('handleChange').never();
 
             instance.selectSingleOption(index);
         });
@@ -1235,10 +1144,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
 
             const index = 0;
-            sandbox
-                .mock(instance)
-                .expects('selectSingleOption')
-                .withArgs(index);
+            sandbox.mock(instance).expects('selectSingleOption').withArgs(index);
 
             instance.selectMultiOption(index);
         });
@@ -1253,10 +1159,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             const index = 3; // Matches video option
 
-            sandbox
-                .mock(instance)
-                .expects('selectSingleOption')
-                .withArgs(defaultIndex);
+            sandbox.mock(instance).expects('selectSingleOption').withArgs(defaultIndex);
 
             instance.selectMultiOption(index);
         });
@@ -1270,10 +1173,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             const index = 3; // Matches video option
 
-            sandbox
-                .mock(instance)
-                .expects('handleChange')
-                .withArgs([options[index]]);
+            sandbox.mock(instance).expects('handleChange').withArgs([options[index]]);
 
             instance.selectMultiOption(index);
         });
@@ -1287,10 +1187,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             const index = 3; // Matches video option
 
-            sandbox
-                .mock(instance)
-                .expects('handleChange')
-                .withArgs([options[1], options[index]]); // audio + video
+            sandbox.mock(instance).expects('handleChange').withArgs([options[1], options[index]]); // audio + video
 
             instance.selectMultiOption(index);
         });
@@ -1304,10 +1201,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             const index = 3; // Matches video option
 
-            sandbox
-                .mock(instance)
-                .expects('handleOptionSelect')
-                .withArgs(options[index]); // audio + video
+            sandbox.mock(instance).expects('handleOptionSelect').withArgs(options[index]); // audio + video
 
             instance.selectMultiOption(index);
         });
@@ -1371,7 +1265,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             instance.handleDocumentClick({
                 target: document.createElement('div'),
-            });
+            } as unknown as MouseEvent);
 
             expect(instance.closeDropdown).toHaveBeenCalled();
         });
@@ -1395,7 +1289,7 @@ describe('components/select-field/BaseSelectField', () => {
 
             instance.handleDocumentClick({
                 target: document.getElementById(instance.selectFieldID),
-            });
+            } as unknown as MouseEvent);
 
             expect(instance.closeDropdown).not.toHaveBeenCalled();
         });
