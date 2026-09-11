@@ -393,6 +393,7 @@ const X_REP_HINT_IMAGE = '[webp?dimensions=1024x1024][jpg?dimensions=2048x2048,p
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
 const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
+export const X_REP_HINT_WAVEFORM = '[waveform]';
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
 
 /* ------------------ Uploader ---------------------- */

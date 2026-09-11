@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { shallow } from 'enzyme';
 
 import SuggestedPill from '../SuggestedPill';
 
 describe('components/pill-selector-dropdown/SuggestedPill', () => {
     const preventDefaultStub = jest.fn();
-    const basicEvent = { preventDefault: preventDefaultStub };
+    const basicEvent = { preventDefault: preventDefaultStub } as const;
     const getWrapper = (params = {}) =>
         shallow(<SuggestedPill email="foo@bar.com" id={123} name="Foo" onAdd={jest.fn()} {...params} />);
 
@@ -32,7 +33,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
                 onAdd,
             });
 
-            const fakeEvent = { ...basicEvent, key: 'Enter' };
+            const fakeEvent = { ...basicEvent, key: 'Enter' } as const;
             wrapper.find('.suggested-pill-invisible-button').simulate('keyDown', fakeEvent);
 
             expect(onAdd).toHaveBeenCalled();
@@ -44,7 +45,7 @@ describe('components/pill-selector-dropdown/SuggestedPill', () => {
                 onAdd,
             });
 
-            const fakeEvent = { ...basicEvent, key: 'foo' };
+            const fakeEvent = { ...basicEvent, key: 'foo' } as const;
             wrapper.find('.suggested-pill-invisible-button').simulate('keyDown', fakeEvent);
 
             expect(onAdd).not.toHaveBeenCalled();

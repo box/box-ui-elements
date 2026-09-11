@@ -1,13 +1,19 @@
-// @flow
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
-import type { Option } from 'components/pill-selector-dropdown/flowTypes';
 
 import ContactDatalistItem from '../contact-datalist-item';
 import PillSelectorDropdown from './PillSelectorDropdown';
+import type { Option } from './types';
 import notes from './PillSelectorDropdown.notes.md';
 
 import './PillSelectorDropdown.stories.scss';
+
+const LegacyContactDatalistItem = ContactDatalistItem as React.ComponentType<
+    Omit<React.ComponentProps<typeof ContactDatalistItem>, 'name'> & {
+        children?: React.ReactNode;
+        name?: Option['value'];
+    }
+>;
 
 const users = [
     { id: 0, name: 'bob@foo.bar' },
@@ -20,9 +26,21 @@ const users = [
     { id: 7, name: 'ccc@foo.bar' },
 ];
 
-function generateProps({ setError, selectedOptions, setSelectedOptions, selectorOptions, setSelectorOptions }) {
-    const handleInput = value => {
-        const newSelectorOptions = [];
+const generateProps = ({
+    setError,
+    selectedOptions,
+    setSelectedOptions,
+    selectorOptions,
+    setSelectorOptions,
+}: {
+    setError: (error: string) => void;
+    selectedOptions: Option[];
+    setSelectedOptions: (options: Option[]) => void;
+    selectorOptions: Option[];
+    setSelectorOptions: (options: Option[]) => void;
+}) => {
+    const handleInput = (value: string) => {
+        const newSelectorOptions: Option[] = [];
         if (value !== '') {
             users.forEach(user => {
                 if (user.name.toLowerCase().indexOf(value.toLowerCase()) !== -1) {
@@ -38,23 +56,23 @@ function generateProps({ setError, selectedOptions, setSelectedOptions, selector
         setError('');
     };
 
-    const handleSelect = pills => {
+    const handleSelect = (pills: Option[]) => {
         setSelectedOptions([...selectedOptions, ...pills]);
     };
 
-    const handleRemove = (option, index) => {
+    const handleRemove = (option: Option, index: number) => {
         const newSelectedOptions = [...selectedOptions];
         newSelectedOptions.splice(index, 1);
         setSelectedOptions(newSelectedOptions);
     };
 
-    const validator = text => {
+    const validator = (text: Option | string | number | null) => {
         // email input validation
         const pattern = /^[^\s<>@,]+@[^\s<>@,/\\]+\.[^\s<>@,]+$/i;
-        return pattern.test(((text: any): string));
+        return pattern.test(text as string);
     };
 
-    const validateForError = text => {
+    const validateForError = (text: string) => {
         const count = selectedOptions.length;
         let error = '';
 
@@ -73,12 +91,12 @@ function generateProps({ setError, selectedOptions, setSelectedOptions, selector
         validator,
         validateForError,
     };
-}
+};
 
 export const empty = () => {
     const [error, setError] = React.useState('');
-    const [selectedOptions, setSelectedOptions] = React.useState<SelectedOptions>([]);
-    const [selectorOptions, setSelectorOptions] = React.useState<Array<Object>>([]);
+    const [selectedOptions, setSelectedOptions] = React.useState<Option[]>([]);
+    const [selectorOptions, setSelectorOptions] = React.useState<Option[]>([]);
     const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps({
         setError,
         selectedOptions,
@@ -101,9 +119,9 @@ export const empty = () => {
             validator={validator}
         >
             {selectorOptions.map(option => (
-                <ContactDatalistItem key={option.value} name={option.displayText}>
+                <LegacyContactDatalistItem key={option.value as React.Key} name={option.displayText}>
                     {option.displayText}
-                </ContactDatalistItem>
+                </LegacyContactDatalistItem>
             ))}
         </PillSelectorDropdown>
     );
@@ -111,7 +129,7 @@ export const empty = () => {
 
 export const withPills = () => {
     const [error, setError] = React.useState('');
-    const [selectedOptions, setSelectedOptions] = React.useState<SelectedOptions>([
+    const [selectedOptions, setSelectedOptions] = React.useState<Option[]>([
         {
             displayText: users[2].name,
             value: users[2].name,
@@ -126,7 +144,7 @@ export const withPills = () => {
         },
     ]);
 
-    const [selectorOptions, setSelectorOptions] = React.useState<Array<Object>>([]);
+    const [selectorOptions, setSelectorOptions] = React.useState<Option[]>([]);
 
     const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps({
         setError,
@@ -150,9 +168,9 @@ export const withPills = () => {
             validator={validator}
         >
             {selectorOptions.map(option => (
-                <ContactDatalistItem key={option.value} name={option.value}>
+                <LegacyContactDatalistItem key={option.value as React.Key} name={option.value}>
                     {option.displayText}
-                </ContactDatalistItem>
+                </LegacyContactDatalistItem>
             ))}
         </PillSelectorDropdown>
     );
@@ -160,7 +178,7 @@ export const withPills = () => {
 
 export const showRoundedPills = () => {
     const [error, setError] = React.useState('');
-    const [selectedOptions, setSelectedOptions] = React.useState([
+    const [selectedOptions, setSelectedOptions] = React.useState<Option[]>([
         {
             displayText: users[2].name,
             value: users[2].name,
@@ -174,7 +192,7 @@ export const showRoundedPills = () => {
             value: users[4].name,
         },
     ]);
-    const [selectorOptions, setSelectorOptions] = React.useState([]);
+    const [selectorOptions, setSelectorOptions] = React.useState<Option[]>([]);
     const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps({
         setError,
         selectedOptions,
@@ -198,9 +216,9 @@ export const showRoundedPills = () => {
             validator={validator}
         >
             {selectorOptions.map(option => (
-                <ContactDatalistItem key={option.value} name={option.value}>
+                <LegacyContactDatalistItem key={option.value as React.Key} name={option.value}>
                     {option.displayText}
-                </ContactDatalistItem>
+                </LegacyContactDatalistItem>
             ))}
         </PillSelectorDropdown>
     );
@@ -208,7 +226,7 @@ export const showRoundedPills = () => {
 
 export const showAvatars = () => {
     const [error, setError] = React.useState('');
-    const [selectedOptions, setSelectedOptions] = React.useState([
+    const [selectedOptions, setSelectedOptions] = React.useState<Option[]>([
         {
             text: users[2].name,
             value: users[2].name,
@@ -226,7 +244,7 @@ export const showAvatars = () => {
             id: users[3].id,
         },
     ]);
-    const [selectorOptions, setSelectorOptions] = React.useState([]);
+    const [selectorOptions, setSelectorOptions] = React.useState<Option[]>([]);
     const { handleInput, handleRemove, handleSelect, validator, validateForError } = generateProps({
         setError,
         selectedOptions,
@@ -251,9 +269,9 @@ export const showAvatars = () => {
             validator={validator}
         >
             {selectorOptions.map(option => (
-                <ContactDatalistItem key={option.value} name={option.value}>
+                <LegacyContactDatalistItem key={option.value as React.Key} name={option.value}>
                     {option.displayText}
-                </ContactDatalistItem>
+                </LegacyContactDatalistItem>
             ))}
         </PillSelectorDropdown>
     );
@@ -273,13 +291,12 @@ export const customPillStyles = () => {
      *
      *
      */
-    const getPillClassName = ({ value }) => {
-        switch (value) {
-            case '2':
-                return 'is-custom';
-            default:
-                return '';
+    const getPillClassName = ({ value }: Option) => {
+        if (value === '2') {
+            return 'is-custom';
         }
+
+        return '';
     };
 
     const [error, setError] = React.useState('');
@@ -318,9 +335,9 @@ export const customPillStyles = () => {
             validator={validator}
         >
             {selectorOptions.map(option => (
-                <ContactDatalistItem key={option.value} name={option.displayText}>
+                <LegacyContactDatalistItem key={option.value as React.Key} name={option.displayText}>
                     {option.displayText}
-                </ContactDatalistItem>
+                </LegacyContactDatalistItem>
             ))}
         </PillSelectorDropdown>
     );

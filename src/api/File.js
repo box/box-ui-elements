@@ -231,7 +231,7 @@ class File extends Item {
         const xhrOptions: Object = {
             id: getTypedFileId(id),
             url: this.getUrl(id),
-            headers: { 'X-Rep-Hints': X_REP_HINTS },
+            headers: { 'X-Rep-Hints': `${X_REP_HINTS}${options.repHints || ''}` },
         };
         this.errorCode = ERROR_CODE_FETCH_FILE;
         this.successCallback = successCallback;

@@ -804,6 +804,47 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should append waveform rep hint when audio player v2 is enabled', () => {
+            const wrapper = getWrapper({
+                ...props,
+                features: { audioPlayerV2: { enabled: true } },
+            });
+            const v2Instance = wrapper.instance();
+            v2Instance.api = instance.api;
+            v2Instance.fetchFileSuccessCallback = jest.fn();
+            v2Instance.fetchFileErrorCallback = jest.fn();
+            v2Instance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                v2Instance.fetchFileSuccessCallback,
+                v2Instance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                    repHints: '[waveform]',
+                },
+            );
+        });
+
+        test('should not append waveform rep hint when audio player v2 is disabled', () => {
+            const wrapper = getWrapper({
+                ...props,
+                features: { audioPlayerV2: { enabled: false } },
+            });
+            const v2Instance = wrapper.instance();
+            v2Instance.api = instance.api;
+            v2Instance.fetchFileSuccessCallback = jest.fn();
+            v2Instance.fetchFileErrorCallback = jest.fn();
+            v2Instance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                v2Instance.fetchFileSuccessCallback,
+                v2Instance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                },
+            );
+        });
+
         test('should fetch the file without sidebar fields', () => {
             instance.fetchFileSuccessCallback = jest.fn();
             instance.fetchFileErrorCallback = jest.fn();
