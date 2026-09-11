@@ -250,7 +250,7 @@ function useSidebarMetadataFetcher(
             const aiAPI = api.getIntelligenceAPI();
             setExtractErrorCode(null);
             let response = null;
-            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
+            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id' as const, id: agentId } } : {};
 
             const confidenceScoreParams = isConfidenceScoreApiEnabled ? { include_confidence_score: true } : {};
             const boundingBoxParams = isBoundingBoxApiEnabled ? { include_reference: true } : {};
