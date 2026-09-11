@@ -15,7 +15,7 @@ describe('components/form-elements/text-area/TextArea', () => {
     test('should correctly render default component', () => {
         const wrapper = shallow(<TextArea label="label" name="textarea" />);
 
-        expect(wrapper.find('TextArea').length).toEqual(1);
+        expect(wrapper.find('TextArea')).toHaveLength(1);
     });
 
     test('should update state if value prop changes', () => {
@@ -59,13 +59,15 @@ describe('components/form-elements/text-area/TextArea', () => {
     });
 
     test('should set an textarea as valid when the validityFn returns an void', () => {
-        function validityFn() {}
+        function validityFn() {
+            return undefined;
+        }
 
-        const wrapper = mount(<TextArea label="label" name="textarea" type="custom" validation={validityFn} />);
+        const wrapper = mount(<TextArea label="label" name="textarea" validation={validityFn} />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(textarea.instance().validity.valid).toBeTruthy();
+        expect((textarea.instance() as unknown as HTMLTextAreaElement).validity.valid).toBeTruthy();
     });
 
     test('should set an textarea as invalid when the validityFn returns an error string and input is not empty', () => {
@@ -76,13 +78,11 @@ describe('components/form-elements/text-area/TextArea', () => {
             };
         }
 
-        const wrapper = mount(
-            <TextArea label="label" name="textarea" type="custom" validation={validityFn} value="yes" />,
-        );
+        const wrapper = mount(<TextArea label="label" name="textarea" validation={validityFn} value="yes" />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(textarea.instance().validity.valid).toBeFalsy();
+        expect((textarea.instance() as unknown as HTMLTextAreaElement).validity.valid).toBeFalsy();
     });
 
     test('should set an textarea as valid when intially then fixed when using validityFn', () => {
@@ -93,19 +93,19 @@ describe('components/form-elements/text-area/TextArea', () => {
             message: 'errMessage',
         });
 
-        stub.onCall(1).returns();
+        stub.onCall(1).returns(undefined);
 
-        const wrapper = mount(<TextArea label="label" name="textarea" type="custom" validation={stub} value="yes" />);
+        const wrapper = mount(<TextArea label="label" name="textarea" validation={stub} value="yes" />);
         let textarea = wrapper.find('textarea');
 
         textarea.simulate('blur');
-        expect(textarea.instance().validity.valid).toBeFalsy();
+        expect((textarea.instance() as unknown as HTMLTextAreaElement).validity.valid).toBeFalsy();
 
         // Get the re-rendered textarea again
         textarea = wrapper.find('textarea');
 
         textarea.simulate('blur');
-        expect(textarea.instance().validity.valid).toBeTruthy();
+        expect((textarea.instance() as unknown as HTMLTextAreaElement).validity.valid).toBeTruthy();
     });
 
     test('should not set textarea invalid when the validityFn returns an error string and textarea is empty and not required', () => {
@@ -116,11 +116,11 @@ describe('components/form-elements/text-area/TextArea', () => {
             };
         }
 
-        const wrapper = mount(<TextArea label="label" name="textarea" type="custom" validation={validityFn} />);
+        const wrapper = mount(<TextArea label="label" name="textarea" validation={validityFn} />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(textarea.instance().validity.valid).toBeTruthy();
+        expect((textarea.instance() as unknown as HTMLTextAreaElement).validity.valid).toBeTruthy();
     });
 
     test('should set textarea invalid when the validityFn returns an error string, textarea is empty and is required', () => {
@@ -131,13 +131,11 @@ describe('components/form-elements/text-area/TextArea', () => {
             };
         }
 
-        const wrapper = mount(
-            <TextArea isRequired label="label" name="textarea" type="custom" validation={validityFn} />,
-        );
+        const wrapper = mount(<TextArea isRequired label="label" name="textarea" validation={validityFn} />);
         const textarea = wrapper.find('textarea');
         textarea.simulate('blur');
 
-        expect(textarea.instance().validity.valid).toBeFalsy();
+        expect((textarea.instance() as unknown as HTMLTextAreaElement).validity.valid).toBeFalsy();
     });
 
     test('should re-validate when textarea is set via props programaticallly', () => {
@@ -150,7 +148,7 @@ describe('components/form-elements/text-area/TextArea', () => {
         wrapper.setProps({ value: 'abba' });
 
         textarea.simulate('blur');
-        const textareaEl = textarea.getDOMNode();
+        const textareaEl = textarea.getDOMNode() as HTMLTextAreaElement;
         textareaEl.value = 'a';
         textarea.simulate('change', {
             currentTarget: textareaEl,
@@ -167,7 +165,7 @@ describe('components/form-elements/text-area/TextArea', () => {
 
         expect(wrapper.find('.text-area-container').hasClass('show-error')).toBeTruthy();
 
-        const textareaEl = textarea.getDOMNode();
+        const textareaEl = textarea.getDOMNode() as HTMLTextAreaElement;
         textareaEl.value = 'a';
         textarea.simulate('change', {
             currentTarget: textareaEl,
@@ -198,7 +196,9 @@ describe('components/form-elements/text-area/TextArea', () => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
 
-        expect(component.find('TextArea').first().instance().state.error).toEqual(error);
+        expect((component.find('TextArea').first().instance() as InstanceType<typeof TextArea>).state.error).toEqual(
+            error,
+        );
     });
 
     test('should set validity state when set validity state handler is called with ValidityState object', () => {
@@ -221,6 +221,8 @@ describe('components/form-elements/text-area/TextArea', () => {
         act(() => {
             validityStateHandlerSpy.callArgWith(1, error);
         });
-        expect(component.find('TextArea').first().instance().state.error.code).toEqual('badInput');
+        expect(
+            (component.find('TextArea').first().instance() as InstanceType<typeof TextArea>).state.error.code,
+        ).toEqual('badInput');
     });
 });
