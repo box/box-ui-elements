@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import TextInput from './TextInput';
@@ -17,7 +16,7 @@ export const basic = () => (
 export const urlInput = () => <TextInput label="Url" name="url" placeholder="https://box.com" type="url" />;
 
 export const withCustomValidation = () => {
-    const customValidationFunc = value => {
+    const customValidationFunc = (value: string) => {
         if (value !== 'box') {
             return {
                 code: 'notbox',
