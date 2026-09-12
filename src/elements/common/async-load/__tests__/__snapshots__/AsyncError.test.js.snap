@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`elements/common/async-load/AsyncError should render the children components if there is no error 1`] = `"Test!"`;
-
-exports[`elements/common/async-load/AsyncError should render the error component if there is an error 1`] = `
-<Component
-  error={[Error: foo]}
-/>
-`;

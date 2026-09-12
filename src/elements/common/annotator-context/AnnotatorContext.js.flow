@@ -1,3 +1,0 @@
-import * as React from "react";
-import { AnnotatorState } from "./types";
-declare export default typeof /* NO PRINT IMPLEMENTED: CallExpression */ any;

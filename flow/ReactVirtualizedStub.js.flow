@@ -1,7 +1,0 @@
-// @flow
-import { Component } from 'react'
-declare export var Column: typeof Component
-declare export var Table: typeof Component
-declare export var CellMeasurer: typeof Component
-declare export var CellMeasurerCache: any
-declare export default typeof Component
