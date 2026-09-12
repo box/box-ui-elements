@@ -6,7 +6,6 @@ import * as vars from '../../styles/variables';
 import PrimaryButton from '../primary-button';
 import Icon from '../../icon/line/Plus16';
 import Icon2 from '../../icons/general/IconEllipsis';
-// @ts-ignore flow import
 import InlineNotice from '../inline-notice';
 
 import Button from './Button';
