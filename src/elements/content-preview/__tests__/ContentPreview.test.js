@@ -462,6 +462,36 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should tell BCP the current pane is in a comparison session', async () => {
+            const wrapper = getWrapper({ ...props, isComparing: true });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    isComparing: true,
+                    isComparedPreview: false,
+                }),
+            );
+        });
+
+        test('should tell BCP the compared pane is the older version', async () => {
+            const wrapper = getWrapper({ ...props, isComparedPreview: true });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    isComparing: true,
+                    isComparedPreview: true,
+                }),
+            );
+        });
+
         test('should omit annotatorToken when token is a string', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -1527,6 +1557,36 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.setProps({ isComparing: true });
 
             expect(wrapper.state('selectedVersion')).toBeUndefined();
+        });
+
+        test('should stamp comparison flags on the live preview when comparison starts without a reload', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+            instance.preview = {
+                setComparisonMode: jest.fn(),
+                updateExperiences: jest.fn(),
+            };
+
+            wrapper.setProps({ isComparing: true });
+
+            expect(instance.preview.setComparisonMode).toHaveBeenCalledWith({
+                isComparing: true,
+                isComparedPreview: false,
+            });
+        });
+
+        test('should not stamp comparison flags when the preview is reloading anyway', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            const livePreview = {
+                destroy: jest.fn(),
+                removeAllListeners: jest.fn(),
+                setComparisonMode: jest.fn(),
+                updateExperiences: jest.fn(),
+            };
+            instance.preview = livePreview;
+
+            wrapper.setProps({ isComparing: true });
+
+            expect(livePreview.setComparisonMode).not.toHaveBeenCalled();
         });
     });
 
@@ -2904,6 +2964,24 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.childAt(0).props().onMetric).toBe(onMetric);
             expect(wrapper.childAt(1).props().children.props.onMetric).not.toBe(onMetric);
+        });
+
+        test('should stamp isComparedPreview only on the compared instance', () => {
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().isComparing).toBe(true);
+            expect(wrapper.childAt(0).props().isComparedPreview).toBeUndefined();
+            expect(wrapper.childAt(1).props().children.props.isComparing).toBe(false);
+            expect(wrapper.childAt(1).props().children.props.isComparedPreview).toBe(true);
         });
 
         test('should not navigate when isComparing', () => {

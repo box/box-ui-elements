@@ -138,6 +138,8 @@ type Props = {
     hasProviders?: boolean,
     hideSidebar?: boolean,
     isComparing?: boolean,
+    // Compared pane only. Do not also set isComparing — that flag drives the host layout slot.
+    isComparedPreview?: boolean,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
     comparedVersion?: BoxItemVersion,
     isLarge: boolean,
@@ -633,6 +635,22 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.setState({ selectedVersion: undefined });
         }
 
+        // Comparison can start on an already-open current pane; stamp BCP without reloading.
+        const comparisonFlagsChanged =
+            !!prevProps.isComparing !== !!this.props.isComparing ||
+            !!prevProps.isComparedPreview !== !!this.props.isComparedPreview;
+        if (
+            comparisonFlagsChanged &&
+            this.preview &&
+            this.preview.setComparisonMode &&
+            !this.shouldLoadPreview(prevProps, prevState)
+        ) {
+            this.preview.setComparisonMode({
+                isComparing: !!(this.props.isComparing || this.props.isComparedPreview),
+                isComparedPreview: !!this.props.isComparedPreview,
+            });
+        }
+
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
         }
@@ -1053,6 +1071,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions,
             comparedSlotRef,
             isComparing,
+            isComparedPreview,
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
@@ -1113,6 +1132,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
+            isComparing: !!(isComparing || isComparedPreview),
+            isComparedPreview: !!isComparedPreview,
             experiences: previewExperiences,
             preloadStatus,
             previewMode,
@@ -1968,6 +1989,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           hasHeader={false}
                           hideSidebar
                           isComparing={false}
+                          isComparedPreview
                           // Hosts defer the indicator to let a preloaded image show through instead.
                           // Nothing preloads the compared version, so deferring leaves this pane blank.
                           loadingIndicatorDelayMs={0}
