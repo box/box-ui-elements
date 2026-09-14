@@ -1,23 +1,22 @@
-// @flow
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
 
-import Button from '../../button/Button';
+import Button, { ButtonType } from '../../button/Button';
 import Select from '../../select/Select';
 import TextArea from '../text-area/TextArea';
 import TextInput from '../text-input/TextInput';
 import Toggle from '../../toggle/Toggle';
 
-import Form from './Form';
+import Form, { FormSerializedData, FormValidityStateMap } from './Form';
 import notes from './Form.stories.md';
 
 export const basic = () => {
-    const [formData, setFormData] = React.useState({
+    const [formData, setFormData] = React.useState<FormSerializedData>({
         showtextareatoggle: '',
     });
-    const [formValidityState, setFormValidityState] = React.useState({});
+    const [formValidityState, setFormValidityState] = React.useState<FormValidityStateMap>({});
 
-    const customValidationFunc = value => {
+    const customValidationFunc = (value: string) => {
         if (value !== 'box') {
             return {
                 code: 'notbox',
@@ -91,7 +90,7 @@ export const basic = () => {
                 ) : null}
             </div>
 
-            <Button type="submit">Submit</Button>
+            <Button type={ButtonType.SUBMIT}>Submit</Button>
         </Form>
     );
 };
