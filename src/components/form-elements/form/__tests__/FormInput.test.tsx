@@ -35,7 +35,7 @@ describe('components/form-elements/form/FormInput', () => {
 
         const component = mount(
             <FormContext.Provider value={{ form: mockForm }}>
-                <FormInput label="label" name="input" onValidityStateUpdate={sinon.stub()} value="">
+                <FormInput name="input" onValidityStateUpdate={sinon.stub()}>
                     Children
                 </FormInput>
             </FormContext.Provider>,

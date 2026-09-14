@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
+import noop from 'lodash/noop';
 import sinon from 'sinon';
 
 import Form from '..';
@@ -13,12 +14,12 @@ describe('components/form-elements/form/Form', () => {
 
     test('should correctly render default component', () => {
         const wrapper = shallow(
-            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+            <Form onInvalidSubmit={noop} onValidSubmit={noop}>
                 <input type="text" />
             </Form>,
         );
 
-        expect(wrapper.find('form').length).toEqual(1);
+        expect(wrapper.find('form')).toHaveLength(1);
         expect(wrapper.find('form').prop('noValidate')).toBeTruthy();
     });
 
@@ -55,7 +56,7 @@ describe('components/form-elements/form/Form', () => {
         );
 
         const form = wrapper.find('form');
-        const formEl = form.getDOMNode();
+        const formEl = form.getDOMNode() as HTMLFormElement;
         formEl.checkValidity = () => true;
 
         form.simulate('submit', { target: formEl });
@@ -74,7 +75,7 @@ describe('components/form-elements/form/Form', () => {
         );
 
         const form = wrapper.find('form');
-        const formEl = form.getDOMNode();
+        const formEl = form.getDOMNode() as HTMLFormElement;
         formEl.checkValidity = () => false;
 
         form.simulate('submit', { target: formEl });
@@ -99,7 +100,7 @@ describe('components/form-elements/form/Form', () => {
         );
 
         const form = wrapper.find('form');
-        const formEl = form.getDOMNode();
+        const formEl = form.getDOMNode() as HTMLFormElement;
         formEl.checkValidity = () => true;
         form.simulate('submit', { target: formEl });
     });
@@ -119,19 +120,19 @@ describe('components/form-elements/form/Form', () => {
         );
 
         const form = wrapper.find('form');
-        const formEl = form.getDOMNode();
+        const formEl = form.getDOMNode() as HTMLFormElement;
         formEl.checkValidity = () => false;
         form.simulate('submit', { target: formEl });
     });
 
     test('should expose form register/unregister function on the context', () => {
         const wrapper = mount(
-            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+            <Form onInvalidSubmit={noop} onValidSubmit={noop}>
                 <div />
             </Form>,
         );
 
-        const instance = wrapper.find('Form').instance();
+        const instance = wrapper.find('Form').instance() as Form;
 
         expect(instance.registerInput).toBeTruthy();
         expect(instance.unregisterInput).toBeTruthy();
@@ -139,26 +140,26 @@ describe('components/form-elements/form/Form', () => {
 
     test('should register an input when registerInput is called', () => {
         const wrapper = mount(
-            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+            <Form onInvalidSubmit={noop} onValidSubmit={noop}>
                 <div />
             </Form>,
         );
 
         const inputHandlerSpy = sinon.spy();
-        const instance = wrapper.find('Form').instance();
+        const instance = wrapper.find('Form').instance() as Form;
         instance.registerInput('testinput', inputHandlerSpy);
         expect(instance.state.registeredInputs.testinput).toBe(inputHandlerSpy);
     });
 
     test('should correctly register multiple inputs when registerInput is called', () => {
         const wrapper = mount(
-            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+            <Form onInvalidSubmit={noop} onValidSubmit={noop}>
                 <div />
             </Form>,
         );
 
         const inputHandlerSpy = sinon.spy();
-        const instance = wrapper.find('Form').instance();
+        const instance = wrapper.find('Form').instance() as Form;
         instance.registerInput('testinput1', inputHandlerSpy);
         instance.registerInput('testinput2', inputHandlerSpy);
         expect(instance.state.registeredInputs.testinput1).toBe(inputHandlerSpy);
@@ -167,31 +168,31 @@ describe('components/form-elements/form/Form', () => {
 
     test('should throw an error if registerInput is called for already registered input', done => {
         const wrapper = mount(
-            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+            <Form onInvalidSubmit={noop} onValidSubmit={noop}>
                 <div />
             </Form>,
         );
 
-        const instance = wrapper.find('Form').instance();
-        instance.registerInput('testinput', () => {});
+        const instance = wrapper.find('Form').instance() as Form;
+        instance.registerInput('testinput', noop);
 
         try {
-            instance.registerInput('testinput', () => {});
+            instance.registerInput('testinput', noop);
         } catch (e) {
-            expect(e.message).toEqual("Input 'testinput' is already registered.");
+            expect((e as Error).message).toEqual("Input 'testinput' is already registered.");
             done();
         }
     });
 
     test('should unregister an input when unregisterInput is called', () => {
         const wrapper = mount(
-            <Form onInvalidSubmit={() => {}} onValidSubmit={() => {}}>
+            <Form onInvalidSubmit={noop} onValidSubmit={noop}>
                 <div />
             </Form>,
         );
 
         const inputHandlerSpy = sinon.spy();
-        const instance = wrapper.find('Form').instance();
+        const instance = wrapper.find('Form').instance() as Form;
         instance.registerInput('testinput', inputHandlerSpy);
         expect(instance.state.registeredInputs.testinput).toBe(inputHandlerSpy);
         instance.unregisterInput('testinput');
