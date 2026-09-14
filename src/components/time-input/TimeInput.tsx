@@ -4,7 +4,6 @@ import debounce from 'lodash/debounce';
 import { defineMessages, injectIntl, FormattedMessage, WrappedComponentProps } from 'react-intl';
 import { TooltipPosition } from '../tooltip';
 import { parseTimeFromString } from './TimeInputUtils';
-// @ts-ignore flow import
 import TextInput from '../text-input';
 import ClockBadge16 from '../../icon/line/ClockBadge16';
 // @ts-ignore flow import
