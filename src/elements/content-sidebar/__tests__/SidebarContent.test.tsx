@@ -29,7 +29,7 @@ describe('elements/content-sidebar/SidebarContent', () => {
             </SidebarContent>,
         );
 
-    test('should render sidebar content with a titleLarge heading', () => {
+    test('should render sidebar content with a titleMedium heading', () => {
         renderComponent({ title: 'title' });
 
         const tabpanel = screen.getByRole('tabpanel');
@@ -39,7 +39,7 @@ describe('elements/content-sidebar/SidebarContent', () => {
 
         const heading = screen.getByRole('heading', { level: 2, name: 'title' });
         expect(heading).toHaveClass('bcs-title');
-        expect(heading).toHaveAttribute('data-variant', 'titleLarge');
+        expect(heading).toHaveAttribute('data-variant', 'titleMedium');
         expect(screen.getByText('children')).toBeVisible();
     });
 
