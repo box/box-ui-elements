@@ -8,6 +8,19 @@ import MetricSummary from '../MetricSummary';
 import { METRIC, PERIOD } from '../constants';
 import { GraphData } from '../types';
 
+jest.mock('@box/blueprint-web', () => ({
+    Text: ({
+        as: Component = 'p',
+        children,
+        variant,
+        ...rest
+    }: React.ComponentPropsWithoutRef<'span'> & { as?: React.ElementType; variant?: string }) => (
+        <Component data-variant={variant} {...rest}>
+            {children}
+        </Component>
+    ),
+}));
+
 const mockPreviewData = [
     { start: 1, previewsCount: 0 },
     { start: 2, previewsCount: 0 },
@@ -28,7 +41,7 @@ const mockDownloadData = [
     { start: 7, downloadsCount: 1 },
 ] as GraphData;
 
-const mockUserData = ([
+const mockUserData = [
     { start: 1, users: [] },
     { start: 2, users: [] },
     { start: 3, users: [] },
@@ -36,7 +49,7 @@ const mockUserData = ([
     { start: 5, users: [] },
     { start: 6, users: [1, 2] },
     { start: 7, users: [] },
-] as unknown) as GraphData;
+] as unknown as GraphData;
 
 describe('features/content-insights/MetricSummary', () => {
     const downloadHeaderMessage = localize(messages.downloadGraphType.id);
@@ -83,6 +96,13 @@ describe('features/content-insights/MetricSummary', () => {
             expect(screen.getByText(header)).toBeVisible();
             expect(screen.getByText('20')).toBeVisible();
             expect(screen.getByText('-80%')).toBeVisible();
+        });
+
+        test('should render period count as titleXLarge Text when isRedesignEnabled', () => {
+            getWrapper({ isRedesignEnabled: true });
+
+            expect(screen.getByText(previewHeaderMessage)).toHaveAttribute('data-variant', 'captionBold');
+            expect(screen.getByText('2')).toHaveAttribute('data-variant', 'titleXLarge');
         });
     });
 });

@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import { Text } from '@box/blueprint-web';
 import './SidebarContent.scss';
 
 export interface SidebarContentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -38,7 +39,11 @@ const SidebarContent = ({
             {...rest}
         >
             <div className="bcs-content-header">
-                {title && <h2 className="bcs-title">{title}</h2>}
+                {title && (
+                    <Text as="h2" className="bcs-title" variant="titleLarge">
+                        {title}
+                    </Text>
+                )}
                 {actions}
             </div>
             {subheader && <div className="bcs-content-subheader">{subheader}</div>}

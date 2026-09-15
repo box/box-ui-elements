@@ -3,6 +3,19 @@ import { render } from '@testing-library/react';
 
 import HeaderWithCount from '../HeaderWithCount';
 
+jest.mock('@box/blueprint-web', () => ({
+    Text: ({
+        as: Component = 'p',
+        children,
+        variant,
+        ...rest
+    }: React.ComponentPropsWithoutRef<'span'> & { as?: React.ElementType; variant?: string }) => (
+        <Component data-variant={variant} {...rest}>
+            {children}
+        </Component>
+    ),
+}));
+
 describe('features/content-insights/HeaderWithCount', () => {
     const getWrapper = (props = {}) => {
         return render(<HeaderWithCount title="Title type" totalCount={3} {...props} />);
@@ -21,6 +34,13 @@ describe('features/content-insights/HeaderWithCount', () => {
 
             expect(wrapper.getByText('Title type')).toBeVisible();
             expect(wrapper.container.querySelector('.HeaderWithCount-titleCount')).toBeNull();
+        });
+
+        test('should render title and count as captionBold Text when isRedesignEnabled', () => {
+            const wrapper = getWrapper({ isRedesignEnabled: true });
+
+            expect(wrapper.getByText('Title type')).toHaveAttribute('data-variant', 'captionBold');
+            expect(wrapper.getByText('3')).toHaveAttribute('data-variant', 'captionBold');
         });
     });
 });

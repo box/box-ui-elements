@@ -3,6 +3,20 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import CompactCount from '../CompactCount';
 
+jest.mock('@box/blueprint-web', () => ({
+    Text: ({
+        as: Component = 'p',
+        children,
+        color,
+        variant,
+        ...rest
+    }: React.ComponentPropsWithoutRef<'span'> & { as?: React.ElementType; color?: string; variant?: string }) => (
+        <Component data-color={color} data-variant={variant} {...rest}>
+            {children}
+        </Component>
+    ),
+}));
+
 describe('features/content-insights/CompactCount', () => {
     const getWrapper = (props = {}) => render(<CompactCount count={0} {...props} />);
 
@@ -35,6 +49,30 @@ describe('features/content-insights/CompactCount', () => {
             const wrapper = getWrapper({ count });
 
             expect(wrapper.getByText(expectedCount)).toBeVisible();
+        });
+
+        test('should render captionBold Text by default when isRedesignEnabled', () => {
+            getWrapper({ count: 3, isRedesignEnabled: true });
+
+            expect(screen.getByText('3')).toHaveAttribute('data-variant', 'captionBold');
+        });
+
+        test('should render the provided Text variant when isRedesignEnabled', () => {
+            getWrapper({ count: 3, isRedesignEnabled: true, variant: 'bodyLargeBold' });
+
+            expect(screen.getByText('3')).toHaveAttribute('data-variant', 'bodyLargeBold');
+        });
+
+        test('should render textOnLightSecondary by default when isRedesignEnabled', () => {
+            getWrapper({ count: 3, isRedesignEnabled: true });
+
+            expect(screen.getByText('3')).toHaveAttribute('data-color', 'textOnLightSecondary');
+        });
+
+        test('should render the provided Text color when isRedesignEnabled', () => {
+            getWrapper({ color: 'textOnLightDefault', count: 3, isRedesignEnabled: true });
+
+            expect(screen.getByText('3')).toHaveAttribute('data-color', 'textOnLightDefault');
         });
 
         test('should call mouseenter and mouseleave callbacks', () => {
