@@ -235,6 +235,14 @@ describe('api/utils', () => {
             expect(checkIsExtractedProcessFieldValue(fieldValue)).toBe(true);
         });
 
+        test('should return true when process is the legacy AI Extract value', () => {
+            const fieldValue = {
+                values: 'California',
+                details: { process: 'AI Extract' },
+            };
+            expect(checkIsExtractedProcessFieldValue(fieldValue)).toBe(true);
+        });
+
         test('should return false when process is not AI_EXTRACTED', () => {
             const fieldValue = {
                 values: 'California',

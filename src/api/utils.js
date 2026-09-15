@@ -17,7 +17,7 @@ import type {
 } from '../common/types/metadata';
 import { FIELD_TYPE_TAXONOMY } from '../features/metadata-instance-fields/constants';
 
-import { AI_EXTRACTED_PROCESS, AI_ACCEPTED_PROCESS } from '../constants';
+import { AI_EXTRACTED_PROCESS, AI_EXTRACTED_PROCESS_LEGACY, AI_ACCEPTED_PROCESS } from '../constants';
 
 /**
  * Formats comment data (including replies) for use in components.
@@ -104,7 +104,11 @@ const checkIsExtractedProcessFieldValue = (fieldValue: any): boolean => {
 
     const { details } = ((fieldValue: any): MetadataDetailedFieldValue);
 
-    return details != null && typeof details.process === 'string' && details.process === AI_EXTRACTED_PROCESS;
+    return (
+        details != null &&
+        typeof details.process === 'string' &&
+        (details.process === AI_EXTRACTED_PROCESS || details.process === AI_EXTRACTED_PROCESS_LEGACY)
+    );
 };
 
 const mergeDetailedAndHydratedInstances = (

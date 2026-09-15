@@ -463,6 +463,34 @@ describe('api/Metadata', () => {
             expect(result.fields[0].isExtracted).toBe(true);
         });
 
+        test('should set isExtracted when process is the legacy AI Extract value and isBoundingBoxOrConfidenceScoreReviewEnabled is true', () => {
+            const instance = {
+                $id: '321',
+                $template: '',
+                $canEdit: true,
+                testStringField: {
+                    values: 'California',
+                    details: {
+                        process: 'AI Extract',
+                    },
+                },
+            };
+            const template = {
+                displayName: 'Test template',
+                fields: [
+                    { description: 'Test', displayName: 'Test field', id: '1', key: 'testStringField', type: 'string' },
+                ],
+                id: '123456',
+                templateKey: 'instance_from_template',
+                scope: 'enterprise',
+            };
+
+            const result = metadata.createTemplateInstance(instance, template, true, false, true);
+
+            expect(result.fields[0].value).toBe('California');
+            expect(result.fields[0].isExtracted).toBe(true);
+        });
+
         test('should not set isExtracted when process is not AI_EXTRACTED', () => {
             const instance = {
                 $id: '321',
