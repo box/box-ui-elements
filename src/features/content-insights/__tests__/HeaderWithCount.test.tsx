@@ -22,5 +22,12 @@ describe('features/content-insights/HeaderWithCount', () => {
             expect(wrapper.getByText('Title type')).toBeVisible();
             expect(wrapper.container.querySelector('.HeaderWithCount-titleCount')).toBeNull();
         });
+
+        test('should render title and count when isRedesignEnabled', () => {
+            const wrapper = getWrapper({ isRedesignEnabled: true });
+
+            expect(wrapper.getByText('Title type')).toBeVisible();
+            expect(wrapper.getByText('3')).toBeVisible();
+        });
     });
 });
