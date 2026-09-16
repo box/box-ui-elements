@@ -91,7 +91,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
                         onClick={this.toggleVisibility}
                         type="button"
                     >
-                        <Text as="span" variant="bodyDefaultBold">
+                        <Text as="span" variant="bodyDefault">
                             {title}
                         </Text>
                         <IconCaretDown color={COLOR_999} width={8} />

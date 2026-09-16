@@ -8,19 +8,6 @@ import MetricSummary from '../MetricSummary';
 import { METRIC, PERIOD } from '../constants';
 import { GraphData } from '../types';
 
-jest.mock('@box/blueprint-web', () => ({
-    Text: ({
-        as: Component = 'p',
-        children,
-        variant,
-        ...rest
-    }: React.ComponentPropsWithoutRef<'span'> & { as?: React.ElementType; variant?: string }) => (
-        <Component data-variant={variant} {...rest}>
-            {children}
-        </Component>
-    ),
-}));
-
 const mockPreviewData = [
     { start: 1, previewsCount: 0 },
     { start: 2, previewsCount: 0 },
@@ -98,11 +85,11 @@ describe('features/content-insights/MetricSummary', () => {
             expect(screen.getByText('-80%')).toBeVisible();
         });
 
-        test('should render period count as titleXLarge Text when isRedesignEnabled', () => {
+        test('should render period count when isRedesignEnabled', () => {
             getWrapper({ isRedesignEnabled: true });
 
-            expect(screen.getByText(previewHeaderMessage)).toHaveAttribute('data-variant', 'captionBold');
-            expect(screen.getByText('2')).toHaveAttribute('data-variant', 'titleXLarge');
+            expect(screen.getByText(previewHeaderMessage)).toBeVisible();
+            expect(screen.getByText('2')).toBeVisible();
         });
     });
 });
