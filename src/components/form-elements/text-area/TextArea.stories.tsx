@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import TextArea from './TextArea';
@@ -7,7 +6,7 @@ import notes from './TextArea.stories.md';
 export const basic = () => <TextArea name="textarea" label="Your story" placeholder="Once upon a time" />;
 
 export const withValidation = () => {
-    const textAreaValidator = value => {
+    const textAreaValidator = (value: string) => {
         if (!value.includes('www')) {
             return {
                 code: 'nowww',
