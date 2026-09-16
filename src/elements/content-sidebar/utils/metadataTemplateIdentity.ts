@@ -24,6 +24,31 @@ export function getMetadataTemplateNamespaceFqn(template: MetadataTemplateIdenti
     return template.namespace ?? template.scope;
 }
 
+/**
+ * Derives an API-acceptable `templateKey` from a display name.
+ *
+ * `@box/metadata-template-editor` has no template-key input and submits an empty
+ * string, which metadata-api rejects with `Invalid template-key value:`. Until the
+ * editor owns this, the sidebar fills the gap before POSTing.
+ */
+export function deriveMetadataTemplateKey(displayName: string): string {
+    const words = displayName
+        .replace(/[^a-zA-Z0-9]+/gu, ' ')
+        .trim()
+        .split(' ')
+        .filter(Boolean);
+
+    if (words.length === 0) {
+        return '';
+    }
+
+    return words
+        .map((word, index) =>
+            index === 0 ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1).toLowerCase()}`,
+        )
+        .join('');
+}
+
 /** Every FQN a template/instance identifies itself by, most specific first. */
 function getIdentifiers(template: MetadataTemplateIdentity): string[] {
     return [template.namespace, template.scope].filter((fqn): fqn is string => fqn != null);
