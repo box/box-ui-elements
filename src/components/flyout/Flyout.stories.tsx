@@ -2,11 +2,9 @@ import * as React from 'react';
 
 import Button from '../button';
 import IconHelp from '../../icons/general/IconHelp';
-// @ts-ignore JS import
 import TextInput from '../text-input';
 import PlainButton from '../plain-button';
 import PrimaryButton from '../primary-button';
-// @ts-ignore JS import
 import TextArea from '../text-area';
 
 import { Flyout, Overlay } from '.';
