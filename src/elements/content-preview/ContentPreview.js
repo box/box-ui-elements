@@ -1134,7 +1134,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.shouldUseNpmPreview() && this.npmPreviewModule ? this.npmPreviewModule.Preview : global.Box.Preview;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
-        this.preview.addListener('mediaendplaynext', this.navigateRight);
+        this.preview.addListener('mediaEndPlayNext', this.navigateRight);
         this.preview.addListener('preload', this.endLoadingSession);
 
         this.preview.addListener('preview_error', this.onPreviewError);
