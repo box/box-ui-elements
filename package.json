@@ -89,9 +89,10 @@
         "test": "NODE_ENV=test BABEL_ENV=test yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start cy:open",
-        "test:vrt": "yarn build:i18n && yarn build:prod:storybook && yarn test:vrt:playwright",
+        "test:vrt": "yarn build:i18n && yarn build:prod:storybook && yarn test:vrt:docker",
+        "test:vrt:docker": "node scripts/run-vrt-docker.js",
         "test:vrt:playwright": "playwright test",
-        "test:vrt:update": "yarn build:i18n && yarn build:prod:storybook && playwright test --update-snapshots",
+        "test:vrt:update": "yarn build:i18n && yarn build:prod:storybook && yarn test:vrt:docker --update-snapshots",
         "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
     },
     "browserslist": {

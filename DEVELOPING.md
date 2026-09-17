@@ -76,8 +76,9 @@ To test the Box UI Elements with your own project use local Yarn linking.
 - `yarn test` to launch tests with jest.
 - `yarn test --watch` to launch tests with jest in watch mode.
 - `yarn test --coverage` to launch tests with jest with coverage.
-- `yarn test:vrt` to build Storybook and run Playwright visual tests.
-- `yarn test:vrt:update` to rebuild Storybook and refresh Playwright screenshot baselines.
+- `yarn test:vrt` to build Storybook and run Playwright visual tests in Docker.
+- `yarn test:vrt:docker` to rerun visual tests against an existing Storybook build.
+- `yarn test:vrt:update` to rebuild Storybook and refresh Linux screenshot baselines in Docker.
 - `yarn release` to run a release.
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
@@ -161,19 +162,35 @@ ContentPicker Chromatic visual stories also have an additive Playwright screensh
 
 The Playwright tests serve the same static Storybook production build Chromatic uses (`yarn build:prod:storybook`, output directory `storybook/`), open each story at `iframe.html?id=…&viewMode=story`, wait until Storybook (including any `play` function) has finished, then screenshot `#storybook-root`.
 
+Committed screenshots are **Linux Chromium only** (`*-linux.png`). They are captured in:
+
+`mcr.microsoft.com/playwright:v1.63.0-jammy`
+
+That image is pinned to match `@playwright/test` `^1.63.0`. Do not commit `*-darwin.png` or `*-win32.png` — font rendering differs across OS (and even across Ubuntu versions), so macOS host runs are not a source of baselines.
+
 ### Prerequisites
 
 1. Install dependencies with `yarn install`.
-2. Install the Chromium browser used by Playwright: `yarn playwright install chromium`.
+2. Install [Docker](https://docs.docker.com/get-docker/) (Docker Desktop on macOS). Visual tests must run in the Playwright Jammy image above, not in the host browser.
+3. Build Storybook before the Docker run (`yarn test:vrt` does this). You do not need `yarn playwright install` on the host; Chromium comes from the image.
 
 ### Commands
 
-- `yarn test:vrt` builds Storybook and runs the Playwright visual suite. Use this for a CI-like local run.
-- `yarn test:vrt:playwright` runs Playwright against an existing `storybook/` build (faster iteration after the first build).
-- `yarn test:vrt:update` rebuilds Storybook and updates committed screenshot baselines.
+- `yarn test:vrt` builds Storybook, then runs the suite in the pinned Docker image. This is the command to use on macOS and Linux.
+- `yarn test:vrt:docker` runs Playwright in that image against an existing `storybook/` build (faster iteration after the first build). Same result as `CI=true npx playwright test` inside `mcr.microsoft.com/playwright:v1.63.0-jammy`.
+- `yarn test:vrt:update` rebuilds Storybook and refreshes Linux baselines **inside Docker**. Never update snapshots on the Mac host.
+- `yarn test:vrt:playwright` invokes Playwright on the current machine. It is intended only inside the Jammy image (or with `PLAYWRIGHT_VRT_ALLOW_HOST=1` for experiments). On macOS it exits with an error rather than writing darwin snapshots.
 - `yarn serve:storybook` serves `storybook/` at `http://127.0.0.1:6061` if you want to inspect the static build yourself.
 
-Screenshot baselines live next to the spec in `test/visual/content-picker.visual.spec.ts-snapshots/`. They were captured on Linux/Chromium; other platforms may need `--update-snapshots` or a Linux CI runner for stable comparisons.
+### macOS vs Docker
+
+| How you run                                                                                     | Expected result                                                                         |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `yarn test:vrt` or `yarn test:vrt:docker` with Docker running                                   | 12/12 pass against committed `*-linux.png`                                              |
+| `yarn test:vrt:playwright` on the Mac host                                                      | Error: use Docker. Host Chromium would look for `*-darwin.png`, which are not committed |
+| `npx playwright test` in `mcr.microsoft.com/playwright:v1.63.0-jammy` with `storybook/` present | 12/12 pass (this is what `test:vrt:docker` wraps)                                       |
+
+Override the image with `PLAYWRIGHT_VRT_IMAGE` only when bumping Playwright; keep the tag in lockstep with `@playwright/test` (for 1.63.x use `v1.63.0-jammy`).
 
 Chromatic config and the original visual stories are unchanged. CI wiring and retiring Chromatic are follow-ups.
 

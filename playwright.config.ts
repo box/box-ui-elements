@@ -1,8 +1,24 @@
+import fs from 'fs';
 import { defineConfig } from '@playwright/test';
 
 const PORT = Number(process.env.STORYBOOK_VRT_PORT || 6061);
 const HOST = process.env.STORYBOOK_VRT_HOST || '127.0.0.1';
 const BASE_URL = process.env.STORYBOOK_VRT_URL || `http://${HOST}:${PORT}`;
+const PLAYWRIGHT_VRT_IMAGE = 'mcr.microsoft.com/playwright:v1.63.0-jammy';
+
+function isPinnedLinuxRunner(): boolean {
+    return (
+        process.platform === 'linux' && (process.env.PLAYWRIGHT_VRT_DOCKER === '1' || fs.existsSync('/ms-playwright'))
+    );
+}
+
+if (!isPinnedLinuxRunner() && process.env.PLAYWRIGHT_VRT_ALLOW_HOST !== '1') {
+    throw new Error(
+        `ContentPicker visual tests compare against Linux Chromium baselines from ${PLAYWRIGHT_VRT_IMAGE}. ` +
+            'Run `yarn test:vrt` or `yarn test:vrt:docker` (Docker required on macOS). ' +
+            'Do not commit darwin/win32 snapshots. Set PLAYWRIGHT_VRT_ALLOW_HOST=1 only for local experiments.',
+    );
+}
 
 /**
  * Playwright visual regression config for Storybook stories.
