@@ -146,7 +146,7 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
         });
 
         expect(wrapper.exists(Link)).toBe(false);
-        expect(wrapper.text()).toContain('here');
+        expect(wrapper.find(Media.Body).contains('here')).toBe(true);
     });
 
     test('should use noreferrer noopener on app activity links', () => {
@@ -159,7 +159,7 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
         const link = wrapper.find(Link);
 
         expect(link.prop('rel')).toEqual('noreferrer noopener');
-        expect(link.prop('href')).toEqual('https://example.com');
+        expect(link.prop('href')).toEqual('https://example.com/');
         expect(link.prop('target')).toEqual('_blank');
     });
 });
