@@ -27,7 +27,7 @@ describe('openUrlInsideIframe', () => {
             expect(iframe.src).toEqual(safeUrl);
 
             openUrlInsideIframe(unsafeUrl);
-            expect(iframe.src).toEqual(safeUrl);
+            expect(iframe.src).toEqual('about:blank');
         },
     );
 });

@@ -43,6 +43,9 @@ export default function openUrlInsideIframe(url: string): HTMLIFrameElement {
     const iframe: HTMLIFrameElement = createDownloadIframe();
     if (isSafeHref(url)) {
         iframe.src = url;
+    } else {
+        // Reused #boxdownloadiframe must not keep a previous download URL loaded.
+        iframe.src = 'about:blank';
     }
     return iframe;
 }

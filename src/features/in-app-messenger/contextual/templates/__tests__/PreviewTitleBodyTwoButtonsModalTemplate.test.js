@@ -3,6 +3,10 @@ import * as React from 'react';
 
 import PreviewTitleBodyTwoButtonsModalTemplate from '../PreviewTitleBodyTwoButtonsModalTemplate';
 
+// Override the identity Jest mapper for sanitize-html so these assertions prove
+// title/body go through sanitizeHTML (a distinct transformed value is rendered).
+jest.mock('sanitize-html', () => html => `sanitized:${html}`);
+
 describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButtonsModalTemplate', () => {
     const onAction = jest.fn();
 
@@ -63,11 +67,31 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
             expect(wrapper.find('PrimaryButton').length).toEqual(1);
             expect(
                 wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-title').prop('dangerouslySetInnerHTML'),
-            ).toEqual({ __html: params.title });
+            ).toEqual({ __html: `sanitized:${params.title}` });
             expect(
                 wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-body').prop('dangerouslySetInnerHTML'),
-            ).toEqual({ __html: params.body });
+            ).toEqual({ __html: `sanitized:${params.body}` });
         });
+    });
+
+    test('does not pass raw script/on* payloads through to dangerouslySetInnerHTML', () => {
+        const params = {
+            ...paramsConfigs.all.params,
+            title: '<script>alert(1)</script>Safe title',
+            body: '<img src=x onerror=alert(1)>Safe body',
+        };
+        const wrapper = getWrapper(params);
+        const titleHtml = wrapper
+            .find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-title')
+            .prop('dangerouslySetInnerHTML');
+        const bodyHtml = wrapper
+            .find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-body')
+            .prop('dangerouslySetInnerHTML');
+
+        expect(titleHtml).not.toEqual({ __html: params.title });
+        expect(bodyHtml).not.toEqual({ __html: params.body });
+        expect(titleHtml).toEqual({ __html: `sanitized:${params.title}` });
+        expect(bodyHtml).toEqual({ __html: `sanitized:${params.body}` });
     });
 
     function checkClickElement(findElement, expectCalled, ...expectCalledWith) {

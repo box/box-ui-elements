@@ -32,6 +32,7 @@ function isSafeHref(href: ?string): boolean {
 
     try {
         // Dummy base lets relative paths and hashes parse without changing absolute URLs.
+        // Protocol-relative `//…` resolving as https via this dummy base is intentional (CDN-style hrefs).
         const parsed = new URL(trimmed, 'https://box.invalid');
         return !!SAFE_URL_PROTOCOLS[parsed.protocol];
     } catch (error) {
