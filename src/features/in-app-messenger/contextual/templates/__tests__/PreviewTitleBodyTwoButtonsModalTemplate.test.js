@@ -61,6 +61,12 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
             expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-body').length).toEqual(1);
             expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-previewContainer').length).toEqual(1);
             expect(wrapper.find('PrimaryButton').length).toEqual(1);
+            expect(
+                wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-title').prop('dangerouslySetInnerHTML'),
+            ).toEqual({ __html: params.title });
+            expect(
+                wrapper.find('.bdl-PreviewTitleBodyTwoButtonsModalTemplate-body').prop('dangerouslySetInnerHTML'),
+            ).toEqual({ __html: params.body });
         });
     });
 

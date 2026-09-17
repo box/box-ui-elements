@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../common/messages';
+import { openUrlSafely } from '../../utils/url';
 import './BoxToolsInstallMessage.scss';
 
 const DEFAULT_BOX_TOOLS_INSTALLATION_URL = 'https://cloud.box.com/v/installboxtools';
@@ -23,7 +24,7 @@ const BoxToolsInstallMessage = ({
 }: Props) => {
     const onLinkClick = () => {
         // Manually open the URL since disabled menu items are blocked from clickable actions by default
-        window.open(boxToolsInstallUrl);
+        openUrlSafely(boxToolsInstallUrl);
     };
 
     return (

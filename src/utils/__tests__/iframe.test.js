@@ -1,3 +1,4 @@
+/* eslint-disable no-script-url -- javascript: payloads assert iframe URL sanitization */
 import openUrlInsideIframe from '../iframe';
 
 describe('openUrlInsideIframe', () => {
@@ -13,5 +14,11 @@ describe('openUrlInsideIframe', () => {
         expect(secondIframe.src).toEqual(url2);
 
         expect(secondIframe).toEqual(firstIframe);
+    });
+
+    test('should not assign javascript: URLs to the iframe', () => {
+        const iframe = openUrlInsideIframe('javascript:alert(1)');
+        expect(iframe.src).not.toEqual('javascript:alert(1)');
+        expect(iframe.src.startsWith('javascript:')).toBe(false);
     });
 });

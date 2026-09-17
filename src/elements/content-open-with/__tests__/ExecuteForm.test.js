@@ -1,3 +1,4 @@
+/* eslint-disable no-script-url -- javascript: payloads assert URL sanitization */
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import ExecuteForm from '../ExecuteForm';
@@ -28,5 +29,18 @@ describe('elements/content-open-with/ExecuteForm', () => {
             expect(input).toBeInTheDocument();
             expect(input).toHaveAttribute('name', key);
         });
+    });
+
+    test('does not submit javascript: form actions', () => {
+        render(
+            <ExecuteForm
+                executePostData={{ url: 'javascript:alert(1)', params: [] }}
+                id="unsafeForm"
+                onSubmit={onSubmitMock}
+            />,
+        );
+
+        expect(onSubmitMock).not.toHaveBeenCalled();
+        expect(document.getElementById('bcow-execute-form-unsafeForm')).not.toHaveAttribute('action');
     });
 });
