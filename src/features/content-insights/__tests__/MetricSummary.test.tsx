@@ -28,7 +28,7 @@ const mockDownloadData = [
     { start: 7, downloadsCount: 1 },
 ] as GraphData;
 
-const mockUserData = ([
+const mockUserData = [
     { start: 1, users: [] },
     { start: 2, users: [] },
     { start: 3, users: [] },
@@ -36,7 +36,7 @@ const mockUserData = ([
     { start: 5, users: [] },
     { start: 6, users: [1, 2] },
     { start: 7, users: [] },
-] as unknown) as GraphData;
+] as unknown as GraphData;
 
 describe('features/content-insights/MetricSummary', () => {
     const downloadHeaderMessage = localize(messages.downloadGraphType.id);
@@ -83,6 +83,13 @@ describe('features/content-insights/MetricSummary', () => {
             expect(screen.getByText(header)).toBeVisible();
             expect(screen.getByText('20')).toBeVisible();
             expect(screen.getByText('-80%')).toBeVisible();
+        });
+
+        test('should render period count when isRedesignEnabled', () => {
+            getWrapper({ isRedesignEnabled: true });
+
+            expect(screen.getByText(previewHeaderMessage)).toBeVisible();
+            expect(screen.getByText('2')).toBeVisible();
         });
     });
 });

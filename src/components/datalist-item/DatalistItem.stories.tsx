@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-// @ts-ignore JS Import
 import DatalistItem from './DatalistItem';
 import notes from './DatalistItem.stories.md';
 

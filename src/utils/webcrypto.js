@@ -1,9 +1,10 @@
-import sha1 from 'js-sha1';
 /**
  * @flow
  * @file Wrapper to provide a consistent interface for the webcrypto API
  * @author Box
  */
+
+import sha1 from 'js-sha1';
 
 /**
  * Returns the correct crypto library based on browser implementation

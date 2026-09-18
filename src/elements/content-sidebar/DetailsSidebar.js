@@ -57,6 +57,7 @@ type ExternalProps = {
     hasRetentionPolicy?: boolean,
     hasSidebarInitialized?: boolean,
     hasVersions?: boolean,
+    isRedesignEnabled?: boolean,
     onAccessStatsClick?: Function,
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
     onContentInsightsClick?: () => void,
@@ -352,6 +353,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             hasContentInsights,
             hasRetentionPolicy,
             hasVersions,
+            isRedesignEnabled,
             onAccessStatsClick,
             onVersionHistoryClick,
             onClassificationClick,
@@ -389,6 +391,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                 {file && hasContentInsights && (
                     <SidebarContentInsights
                         contentInsights={contentInsights}
+                        isRedesignEnabled={isRedesignEnabled}
                         onContentInsightsClick={onContentInsightsClick}
                     />
                 )}

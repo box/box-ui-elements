@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import TextInputCore from '../../text-input';
@@ -6,44 +5,60 @@ import TextInputCore from '../../text-input';
 import * as messages from '../input-messages';
 import FormInput from '../form/FormInput';
 
-type Props = {
+export interface TextInputValidationError {
+    /** Error code used with HTML constraint validation */
+    code: string;
+    /** Message displayed in the error tooltip */
+    message: React.ReactNode;
+}
+
+export type TextInputValidationResult = TextInputValidationError | null | undefined | false;
+
+export interface TextInputProps {
     /** Whether to automatically focus the input */
-    autoFocus?: boolean,
+    autoFocus?: boolean;
     /** Add a class to the component */
-    className?: string,
-    hideLabel?: boolean,
-    isDisabled?: boolean,
-    isLoading?: boolean,
-    isReadOnly?: boolean,
+    className?: string;
+    /** Hides the visible label (label remains accessible) */
+    hideLabel?: boolean;
+    /** Whether the input is disabled */
+    isDisabled?: boolean;
+    /** Whether to show a loading indicator */
+    isLoading?: boolean;
+    /** Whether the input is read-only */
+    isReadOnly?: boolean;
     /** Is input required */
-    isRequired?: boolean,
+    isRequired?: boolean;
     /** Label displayed for the text input */
-    label: React.Node,
-    labelTooltip?: React.Node,
-    maxLength?: number,
-    minLength?: number,
+    label: React.ReactNode;
+    /** Tooltip shown on the label */
+    labelTooltip?: React.ReactNode;
+    /** Maximum character length */
+    maxLength?: number;
+    /** Minimum character length */
+    minLength?: number;
     /** Name of the text input */
-    name: string,
+    name: string;
     /** Called when the text input is focused */
-    onFocus?: Function,
+    onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
     /** html5 regex pattern for validation */
-    pattern?: string,
+    pattern?: string;
     /** Placeholder for the text input */
-    placeholder?: string,
+    placeholder?: string;
     /** html input types (email, url, text, number), defaults to 'text' */
-    type?: string,
-    /** Function that should either return an error string when inValid and an empty string when valid. It can also return a Promise that resolves to an error string or empty string for server validations. */
-    validation?: Function,
+    type?: string;
+    /** Custom validation. Returns `{ code, message }` when invalid, or a falsy value when valid. */
+    validation?: (value: string) => TextInputValidationResult;
     /** Value of the text input */
-    value: string,
-};
+    value: string;
+}
 
-type State = {
-    error: Object | null,
-    value: string,
-};
+interface TextInputState {
+    error: TextInputValidationResult;
+    value: string;
+}
 
-class TextInput extends React.Component<Props, State> {
+class TextInput extends React.Component<TextInputProps, TextInputState> {
     static defaultProps = {
         autoFocus: false,
         value: '',
@@ -52,7 +67,7 @@ class TextInput extends React.Component<Props, State> {
         isLoading: false,
     };
 
-    constructor(props: Props) {
+    constructor(props: TextInputProps) {
         super(props);
         this.state = {
             error: null,
@@ -60,7 +75,7 @@ class TextInput extends React.Component<Props, State> {
         };
     }
 
-    componentDidUpdate(prevProps: Props) {
+    componentDidUpdate(prevProps: TextInputProps): void {
         // If a new value is passed by prop, set it
         if (prevProps.value !== this.props.value) {
             this.setState({
@@ -69,7 +84,7 @@ class TextInput extends React.Component<Props, State> {
         }
     }
 
-    onChange = ({ currentTarget }: SyntheticEvent<HTMLInputElement>) => {
+    onChange = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>): void => {
         const { value } = currentTarget;
         if (this.state.error) {
             this.setState(
@@ -85,33 +100,25 @@ class TextInput extends React.Component<Props, State> {
         }
     };
 
-    onValidityStateUpdateHandler = (error: Object) => {
-        if (error.valid !== undefined) {
-            this.setErrorFromValidityState(error);
+    onValidityStateUpdateHandler = (error: ValidityState | TextInputValidationError): void => {
+        if ('valid' in error) {
+            this.setErrorFromValidityState(error as ValidityState);
         } else {
             this.setState({
-                error,
+                error: error as TextInputValidationResult,
             });
         }
     };
 
-    setErrorFromValidityState(validityState: ValidityState) {
-        const {
-            badInput,
-            customError,
-            patternMismatch,
-            tooLong,
-            tooShort,
-            typeMismatch,
-            valid,
-            valueMissing,
-        } = validityState;
+    setErrorFromValidityState(validityState: ValidityState): void {
+        const { badInput, customError, patternMismatch, tooLong, tooShort, typeMismatch, valid, valueMissing } =
+            validityState;
 
         const { isRequired, minLength, maxLength, type, validation } = this.props;
 
         const { value } = this.state;
 
-        let error;
+        let error: TextInputValidationResult;
 
         if (valid) {
             error = null;
@@ -138,10 +145,10 @@ class TextInput extends React.Component<Props, State> {
         });
     }
 
-    input: ?HTMLInputElement;
+    input: HTMLInputElement | null | undefined;
 
     // Updates component value and validity state
-    checkValidity = () => {
+    checkValidity = (): void => {
         const { isRequired, validation } = this.props;
         const { input } = this;
         if (!input) {
@@ -165,7 +172,7 @@ class TextInput extends React.Component<Props, State> {
         }
     };
 
-    render() {
+    render(): React.ReactNode {
         const {
             autoFocus,
             className = '',
