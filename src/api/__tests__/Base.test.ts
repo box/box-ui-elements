@@ -4,7 +4,9 @@ import { getBadItemError, getBadPermissionsError } from '../../utils/error';
 import Base from '../Base';
 import { HTTP_GET, HTTP_POST, HTTP_PUT } from '../../constants';
 
-let base;
+type BaseError = Parameters<Base['errorHandler']>[0];
+
+let base: Base;
 
 describe('api/Base', () => {
     const baseResponse = { total_count: 0, entries: [] };
@@ -15,7 +17,7 @@ describe('api/Base', () => {
         base.errorCode = errorCode;
     });
 
-    test('should should have correct defaults on construct', () => {
+    test('should have correct defaults on construct', () => {
         expect(base.options.apiHost).toBe('https://api.box.com');
         expect(base.options.uploadHost).toBe('https://upload.box.com');
         expect(base.cache).toBeInstanceOf(Cache);
@@ -25,7 +27,7 @@ describe('api/Base', () => {
         expect(base.destroyed).toBeFalsy();
     });
 
-    test('should should have correct values on construct', () => {
+    test('should have correct values on construct', () => {
         const options = {
             cache: 'cache',
             apiHost: 'apiHost',
@@ -42,7 +44,7 @@ describe('api/Base', () => {
 
     describe('destroy()', () => {
         beforeEach(() => {
-            base.xhr = { abort: jest.fn() };
+            base.xhr = { abort: jest.fn() } as unknown as Xhr;
         });
 
         test('should return false when no destroyed', () => {
@@ -59,26 +61,20 @@ describe('api/Base', () => {
     describe('checkApiCallValidity()', () => {
         const badItemError = getBadItemError();
         const permissionsError = getBadPermissionsError();
+
         test('should throw a bad item error for a missing file ID or permissions object', () => {
-            try {
-                base.checkApiCallValidity('can_edit', undefined, 'id');
-            } catch (error) {
-                expect(error.message).toBe(badItemError.message);
-            }
-
-            try {
-                base.checkApiCallValidity('can_edit', { permissions: { can_edit: false } }, null);
-            } catch (error) {
-                expect(error.message).toBe(badItemError.message);
-            }
-
-            try {
-                base.checkApiCallValidity('can_edit', { permissions: {} }, 'id');
-            } catch (error) {
-                expect(error.message).toBe(permissionsError.message);
-            }
+            expect(() => base.checkApiCallValidity('can_edit', undefined, 'id')).toThrow(badItemError.message);
+            expect(() => base.checkApiCallValidity('can_edit', { can_edit: false }, null)).toThrow(
+                badItemError.message,
+            );
         });
-        test('should throw a bad permissions error if the given permission is missing or false', () => {});
+
+        test('should throw a bad permissions error if the given permission is missing or false', () => {
+            expect(() => base.checkApiCallValidity('can_edit', {}, 'id')).toThrow(permissionsError.message);
+            expect(() => base.checkApiCallValidity('can_edit', { can_edit: false }, 'id')).toThrow(
+                permissionsError.message,
+            );
+        });
     });
 
     describe('getBaseApiUrl()', () => {
@@ -113,7 +109,7 @@ describe('api/Base', () => {
 
     describe('getCache()', () => {
         test('should return correct cache', () => {
-            base.cache = 'foo';
+            base.cache = 'foo' as unknown as Cache;
             expect(base.getCache()).toBe('foo');
         });
     });
@@ -122,12 +118,12 @@ describe('api/Base', () => {
         beforeEach(() => {
             base.errorCallback = jest.fn();
             base.isDestroyed = jest.fn().mockReturnValue(false);
-            base.errorCode = 1;
+            base.errorCode = '1';
         });
 
         test('should do nothing if destroyed', () => {
             base.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            base.errorHandler(new Error());
+            base.errorHandler(new Error() as BaseError);
             expect(base.errorCallback).not.toBeCalled();
         });
         test('should call the error callback with the response data if present', () => {
@@ -138,8 +134,8 @@ describe('api/Base', () => {
                 },
             };
 
-            base.errorHandler(error);
-            expect(base.errorCallback).toBeCalledWith('foo', 1);
+            base.errorHandler(error as unknown as BaseError);
+            expect(base.errorCallback).toBeCalledWith('foo', '1');
         });
         test('should call the error callback with the whole error if the response data is not present', () => {
             base.errorCallback = jest.fn();
@@ -149,8 +145,8 @@ describe('api/Base', () => {
                 },
             };
 
-            base.errorHandler(error);
-            expect(base.errorCallback).toBeCalledWith(error, 1);
+            base.errorHandler(error as unknown as BaseError);
+            expect(base.errorCallback).toBeCalledWith(error, '1');
         });
     });
 
@@ -180,23 +176,23 @@ describe('api/Base', () => {
 
     describe('makeRequest()', () => {
         const url = 'https://foo.bar';
-        test('should not do anything if destroyed', () => {
+        test('should not do anything if destroyed', async () => {
             base.isDestroyed = jest.fn().mockReturnValueOnce(true);
             base.xhr = null;
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base.makeRequest(HTTP_GET, 'id', url, successCb, errorCb).catch(() => {
-                expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).not.toHaveBeenCalled();
-            });
+            await base.makeRequest(HTTP_GET, 'id', url, successCb, errorCb);
+
+            expect(successCb).not.toHaveBeenCalled();
+            expect(errorCb).not.toHaveBeenCalled();
         });
 
         test('should make xhr to get base and call success callback', () => {
             base.xhr = {
                 post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
-            };
+            } as unknown as Xhr;
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
@@ -214,7 +210,7 @@ describe('api/Base', () => {
             const error = new Error('error');
             base.xhr = {
                 put: jest.fn().mockReturnValueOnce(Promise.reject(error)),
-            };
+            } as unknown as Xhr;
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
@@ -241,7 +237,7 @@ describe('api/Base', () => {
             };
             base.xhr = {
                 post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
-            };
+            } as unknown as Xhr;
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
