@@ -9,6 +9,7 @@ const VIEWER_POLL_MS = 500;
 export const EVENT_RANGE_DRAFT = 'comment_range_draft';
 export const EVENT_RANGE_DRAFT_CHANGE = 'comment_range_draft_change';
 export const EVENT_RANGE_DRAFT_CLEAR = 'comment_range_draft_clear';
+export const EVENT_RANGE_DRAFT_DISMISS = 'comment_range_draft_dismiss';
 
 const findMediaElement = (): HTMLMediaElement | null => {
     if (typeof document === 'undefined') {
@@ -72,6 +73,7 @@ const readRangeChange = (payload: unknown): { endMs?: number; startMs: number } 
  * - Pressed on while media is playing: captured value frozen until pause/seek.
  * - Pressed on while media is paused: captured value updates on pause/seek.
  * - Toggle off->on: captures current time and pauses the media if it was playing.
+ * - Viewer dismisses the draft: same as the user toggling off.
  * - New media src: captured value resets to 0; pressed state persists. A dragged range survives
  *   untouched, since a src change on the same element is a token refresh, not different content.
  * - New media element: any selected range is dropped.
@@ -131,17 +133,21 @@ export const useMediaTimestamp = (
         }
     }, [enabled]);
 
+    const uncheckTimestamp = React.useCallback(() => {
+        isPressedRef.current = false;
+        setIsPressed(false);
+        isRangePinnedRef.current = false;
+        setTimestampEndMs(undefined);
+        emitClear();
+    }, [emitClear]);
+
     const onPressedChange = React.useCallback(
         (pressed: boolean) => {
             if (!enabled) {
                 return;
             }
             if (!pressed) {
-                isPressedRef.current = false;
-                setIsPressed(false);
-                isRangePinnedRef.current = false;
-                setTimestampEndMs(undefined);
-                emitClear();
+                uncheckTimestamp();
                 return;
             }
             const media = findMediaElement();
@@ -159,7 +165,7 @@ export const useMediaTimestamp = (
             setTimestampEndMs(undefined);
             emitDraft(capturedMs);
         },
-        [emitClear, emitDraft, enabled],
+        [emitDraft, enabled, uncheckTimestamp],
     );
 
     React.useEffect(() => {
@@ -259,6 +265,15 @@ export const useMediaTimestamp = (
             setTimestampEndMs(change.endMs);
         };
 
+        // Click-outside on the waveform. The viewer has already taken its handles down, so the
+        // clear this echoes back is a no-op there, and there is nothing to echo with no draft up.
+        const handleRangeDismiss = () => {
+            if (!isPressedRef.current) {
+                return;
+            }
+            uncheckTimestamp();
+        };
+
         // Poll for the viewer until we find one.
         let attachedViewer: ViewerHandle | null = null;
         let pollId: ReturnType<typeof setInterval> | undefined;
@@ -269,6 +284,7 @@ export const useMediaTimestamp = (
                 return;
             }
             viewer.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            viewer.addListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
             attachedViewer = viewer;
             clearInterval(pollId);
         };
@@ -281,8 +297,9 @@ export const useMediaTimestamp = (
         return () => {
             clearInterval(pollId);
             attachedViewer?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            attachedViewer?.removeListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
         };
-    }, [getViewer, isRangeEnabled]);
+    }, [getViewer, isRangeEnabled, uncheckTimestamp]);
 
     // Take down any handles still up for a composer that is going away.
     React.useEffect(
