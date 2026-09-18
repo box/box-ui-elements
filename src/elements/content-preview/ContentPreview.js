@@ -1572,8 +1572,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
-        onVersionChange(version, additionalVersionInfo);
-        // Host still gets the event so the compared pane can follow comparedVersion.
+        // Annotation clicks in the compared pane rewrite the activity path's fileVersionId.
+        // Forwarding that to the host as a version change unmounts side-by-side compare.
+        // Versions-sidebar clicks do not set origin and still notify the host.
+        if (!(this.props.isComparing && additionalVersionInfo.origin === 'annotation')) {
+            onVersionChange(version, additionalVersionInfo);
+        }
+        // Host still gets non-annotation events so the compared pane can follow comparedVersion.
         // The left pane stays on current for the whole comparison session.
         if (!this.props.isComparing) {
             this.setState({
@@ -1958,7 +1963,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           accessPattern={undefined}
                           advancedContentInsights={undefined}
                           autoFocus={false}
-                          boxAnnotations={undefined}
                           collection={EMPTY_COLLECTION}
                           componentRef={undefined}
                           comparedSlotRef={undefined}
@@ -1986,8 +1990,16 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           previewVersion={comparedVersion}
                           resin={undefined}
                           renderCustomPreview={undefined}
-                          showAnnotations={false}
+                          // Inherit host showAnnotations + boxAnnotations so this pane
+                          // creates a second annotator (PREVIEW-1818). Create stays off:
+                          // controls only hide the toolbar; discoverability would still
+                          // open the comment composer on text select.
+                          enableAnnotationsDiscoverability={false}
+                          enableAnnotationsImageDiscoverability={false}
+                          enableAnnotationsOnlyControls={false}
                           showAnnotationsControls={false}
+                          showAnnotationsDrawing={false}
+                          showAnnotationsDrawingCreate={false}
                       />,
                       comparedSlot,
                   )

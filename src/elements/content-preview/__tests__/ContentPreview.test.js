@@ -1796,6 +1796,41 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(onVersionChange).toHaveBeenCalledWith(version, {});
             expect(wrapper.state('selectedVersion')).toBeUndefined();
         });
+
+        test('should not notify the host for annotation-driven version changes when comparing', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ isComparing: true, onVersionChange });
+            const instance = wrapper.instance();
+            const version = { id: '12345' };
+
+            instance.onVersionChange(version, { origin: 'annotation', updateVersionToCurrent: jest.fn() });
+
+            expect(onVersionChange).not.toHaveBeenCalled();
+            expect(wrapper.state('selectedVersion')).toBeUndefined();
+        });
+
+        test('should not notify the host for the annotation-driven version reset when comparing', () => {
+            // SidebarPanels resets the version (null) when the sidebar leaves the versions route.
+            // When the exit is caused by opening an annotation thread, the reset is tagged with
+            // origin so the side-by-side comparison stays open.
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ isComparing: true, onVersionChange });
+            const instance = wrapper.instance();
+
+            instance.onVersionChange(null, { origin: 'annotation' });
+
+            expect(onVersionChange).not.toHaveBeenCalled();
+        });
+
+        test('should notify the host for the annotation-driven version reset when not comparing', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ onVersionChange });
+            const instance = wrapper.instance();
+
+            instance.onVersionChange(null, { origin: 'annotation' });
+
+            expect(onVersionChange).toHaveBeenCalledWith(null, { origin: 'annotation' });
+        });
     });
 
     describe('handleAnnotationSelect', () => {
@@ -2886,6 +2921,30 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.childAt(0).props().loadingIndicatorDelayMs).toBe(2000);
             expect(wrapper.childAt(1).props().children.props.loadingIndicatorDelayMs).toBe(0);
+        });
+
+        test('should inherit host annotations on the compared instance but keep create controls off', () => {
+            const boxAnnotations = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    boxAnnotations={boxAnnotations}
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    showAnnotations
+                    showAnnotationsControls
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            const comparedProps = wrapper.childAt(1).props().children.props;
+            expect(comparedProps.showAnnotations).toBe(true);
+            expect(comparedProps.boxAnnotations).toBe(boxAnnotations);
+            expect(comparedProps.showAnnotationsControls).toBe(false);
+            expect(comparedProps.enableAnnotationsDiscoverability).toBe(false);
+            expect(comparedProps.showAnnotationsDrawingCreate).toBe(false);
         });
 
         test('should not forward the host onMetric to the compared instance', () => {
