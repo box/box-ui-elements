@@ -348,6 +348,11 @@ class Feed extends Base {
     fileActivitiesAPI: FileActivitiesAPI;
 
     /**
+     * @property {boolean}
+     */
+    shouldEnableRichText: boolean;
+
+    /**
      * @property {BoxItem}
      */
     file: BoxItem;
@@ -362,6 +367,7 @@ class Feed extends Base {
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];
         this.errors = [];
+        this.shouldEnableRichText = false;
     }
 
     /**
@@ -581,6 +587,7 @@ class Feed extends Base {
             shouldShowVersions = true,
             shouldUseEnhancedActivities = false,
             shouldUseUAA = false,
+            shouldEnableRichText = false,
         }: {
             shouldShowAnnotations?: boolean,
             shouldShowAppActivity?: boolean,
@@ -589,6 +596,7 @@ class Feed extends Base {
             shouldShowVersions?: boolean,
             shouldUseEnhancedActivities?: boolean,
             shouldUseUAA?: boolean,
+            shouldEnableRichText?: boolean,
         } = {},
     ): void {
         const { id, permissions = {} } = file;
@@ -609,15 +617,18 @@ class Feed extends Base {
         this.file = file;
         this.errors = [];
         this.errorCallback = onError;
+        this.shouldEnableRichText = shouldEnableRichText;
 
         // Using the UAA File Activities endpoint replaces the need for these calls
         const annotationsPromise =
             !shouldUseUAA && shouldShowAnnotations
-                ? this.fetchAnnotations(permissions, shouldShowReplies)
+                ? this.fetchAnnotations(permissions, shouldShowReplies, shouldEnableRichText)
                 : Promise.resolve();
         const commentsPromise = () => {
             if (shouldUseUAA) return Promise.resolve();
-            return shouldShowReplies ? this.fetchThreadedComments(permissions) : this.fetchComments(permissions);
+            return shouldShowReplies
+                ? this.fetchThreadedComments(permissions, shouldEnableRichText)
+                : this.fetchComments(permissions);
         };
         const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise =
@@ -652,6 +663,7 @@ class Feed extends Base {
                       filteredActivityTypes,
                       shouldShowReplies,
                       shouldUseEnhancedActivities,
+                      shouldEnableRichText,
                   )
                 : Promise.resolve();
 
@@ -698,7 +710,11 @@ class Feed extends Base {
         }
     }
 
-    fetchAnnotations(permissions: BoxItemPermission, shouldFetchReplies?: boolean): Promise<?Annotations> {
+    fetchAnnotations(
+        permissions: BoxItemPermission,
+        shouldFetchReplies?: boolean,
+        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+    ): Promise<?Annotations> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
             this.annotationsAPI.getAnnotations(
@@ -710,6 +726,7 @@ class Feed extends Base {
                 undefined,
                 undefined,
                 shouldFetchReplies,
+                shouldEnableRichText,
             );
         });
     }
@@ -746,6 +763,7 @@ class Feed extends Base {
         commentId: string,
         successCallback: (comment: Comment) => void,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = this.shouldEnableRichText,
     ): Promise<?Comment> {
         const { id, permissions } = file;
         if (!id || !permissions) {
@@ -759,6 +777,7 @@ class Feed extends Base {
                 errorCallback,
                 fileId: id,
                 permissions,
+                shouldEnableRichText,
                 successCallback: this.fetchThreadedCommentSuccessCallback.bind(this, resolve, successCallback),
             });
         });
@@ -783,13 +802,17 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchThreadedComments(permissions: BoxItemPermission): Promise<?ThreadedCommentsType> {
+    fetchThreadedComments(
+        permissions: BoxItemPermission,
+        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+    ): Promise<?ThreadedCommentsType> {
         this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
         return new Promise(resolve => {
             this.threadedCommentsAPI.getComments({
                 errorCallback: this.fetchFeedItemErrorCallback.bind(this, resolve),
                 fileId: this.file.id,
                 permissions,
+                shouldEnableRichText,
                 successCallback: resolve,
             });
         });
@@ -808,6 +831,7 @@ class Feed extends Base {
         activityTypes: FileActivityTypes[],
         shouldShowReplies?: boolean = false,
         shouldUseEnhancedActivities?: boolean = false,
+        shouldEnableRichText?: boolean = this.shouldEnableRichText,
     ): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
@@ -819,6 +843,7 @@ class Feed extends Base {
                 activityTypes,
                 shouldShowReplies,
                 shouldUseEnhancedActivities,
+                shouldEnableRichText,
             });
         });
     }
@@ -839,6 +864,7 @@ class Feed extends Base {
         commentFeedItemType: CommentFeedItemType,
         successCallback: (comments: Array<Comment>) => void,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = this.shouldEnableRichText,
     ): void {
         const { id, permissions } = file;
         if (!id || !permissions) {
@@ -870,6 +896,7 @@ class Feed extends Base {
                 permissions,
                 successCallbackFn,
                 errorCallbackFn,
+                shouldEnableRichText,
             );
         } else if (commentFeedItemType === FEED_ITEM_TYPE_COMMENT) {
             this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
@@ -878,6 +905,7 @@ class Feed extends Base {
                 fileId: file.id,
                 commentId: commentFeedItemId,
                 permissions,
+                shouldEnableRichText,
                 successCallback: successCallbackFn,
                 errorCallback: errorCallbackFn,
             });

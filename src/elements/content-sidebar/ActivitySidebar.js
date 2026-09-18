@@ -800,6 +800,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
+        const shouldEnableRichText = isFeatureEnabled(features, 'activityFeed.richText.enabled');
 
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -815,6 +816,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowVersions,
                 shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
                 shouldUseUAA,
+                shouldEnableRichText,
             },
         );
     }
@@ -904,7 +906,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     });
 
     getFeedItemsWithReplies = (feedItems: FeedItems, id?: string, type?: CommentFeedItemType): Promise<FeedItems> => {
-        const { api, file } = this.props;
+        const { api, file, features } = this.props;
+        const shouldEnableRichText = isFeatureEnabled(features, 'activityFeed.richText.enabled');
 
         return new Promise((resolve, reject) => {
             if (!id || !type) {
@@ -932,6 +935,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 error => {
                     reject(error);
                 },
+                shouldEnableRichText,
             );
         });
     };
@@ -1178,7 +1182,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {Promise<{ id: string, type?: FocusableFeedItemType }>}
      */
     getActiveFeedEntryData = (feedItems: FeedItems): Promise<{ id?: string, type?: FeedItemType }> => {
-        const { activeFeedEntryId, activeFeedEntryType, api, file } = this.props;
+        const { activeFeedEntryId, activeFeedEntryType, api, file, features } = this.props;
+        const shouldEnableRichText = isFeatureEnabled(features, 'activityFeed.richText.enabled');
         return new Promise((resolve, reject) => {
             if (!activeFeedEntryId || !activeFeedEntryType || !this.isItemTypeFocusable(activeFeedEntryType)) {
                 resolve({});
@@ -1218,6 +1223,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         reject(error);
                     }
                 },
+                shouldEnableRichText,
             );
         });
     };
@@ -1241,9 +1247,17 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getReplies = (id: string, type: CommentFeedItemType): void => {
-        const { api, file } = this.props;
+        const { api, file, features } = this.props;
+        const shouldEnableRichText = isFeatureEnabled(features, 'activityFeed.richText.enabled');
 
-        api.getFeedAPI(false).fetchReplies(file, id, type, this.feedSuccessCallback, this.feedErrorCallback);
+        api.getFeedAPI(false).fetchReplies(
+            file,
+            id,
+            type,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+            shouldEnableRichText,
+        );
 
         // need to load the pending item
         this.fetchFeedItems();

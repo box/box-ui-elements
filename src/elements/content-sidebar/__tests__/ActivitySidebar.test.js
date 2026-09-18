@@ -805,6 +805,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowVersions: expectedVersions,
                         shouldUseEnhancedActivities: false,
                         shouldUseUAA: expectedUseUAA,
+                        shouldEnableRichText: false,
                     },
                 );
             },
@@ -839,6 +840,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowVersions: true,
                     shouldUseEnhancedActivities: false,
                     shouldUseUAA: false,
+                    shouldEnableRichText: false,
                 },
             );
         });
@@ -866,6 +868,31 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
                 expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
+            );
+        });
+
+        test('should set shouldEnableRichText when activityFeed.richText is enabled', () => {
+            wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        richText: { enabled: true },
+                    },
+                },
+            });
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+            instance.fetchFeedItemsErrorCallback = jest.fn();
+            instance.fetchFeedItemsSuccessCallback = jest.fn();
+
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                file,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({ shouldEnableRichText: true }),
             );
         });
 
@@ -1052,6 +1079,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 type,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(result).toMatchObject(expectedItems);
         });
@@ -1372,6 +1400,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 '123',
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(result).toMatchObject(expectedData);
         });
@@ -1477,6 +1506,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 itemType,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });
