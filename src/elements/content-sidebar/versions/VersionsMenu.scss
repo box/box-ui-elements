@@ -1,7 +1,0 @@
-@import '../../../styles/variables';
-
-.bcs-VersionsMenu-item {
-    & + & {
-        border-top: 1px solid $bdl-gray-10;
-    }
-}
