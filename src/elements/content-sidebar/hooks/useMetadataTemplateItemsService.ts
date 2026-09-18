@@ -128,8 +128,8 @@ export default function useMetadataTemplateItemsService(
                         };
                     });
 
-                // The namespace list mock only seeds child-namespace fixtures. Merge in
-                // already-loaded enterprise templates so existing schemas can be opened.
+                // Items-service lists may omit templates already in the editor cache.
+                // Merge those in so existing schemas can still be opened.
                 const listedKeys = new Set(listed.map(t => t.templateKey).filter(Boolean));
                 const fromLoaded: BrowserMetadataTemplate[] = templates
                     .filter(t => {

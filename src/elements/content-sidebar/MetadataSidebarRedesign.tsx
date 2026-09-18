@@ -38,6 +38,7 @@ import { useFeatureEnabled } from '../common/feature-checking';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
+    ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
 } from '../../constants';
@@ -53,7 +54,7 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import { deriveMetadataTemplateKey, isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
+import { isSameMetadataTemplate, resolveCreateMetadataTemplateKey } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
     metadataTaxonomiesListFetcher,
@@ -338,11 +339,18 @@ function MetadataSidebarRedesign({
     );
 
     const handleCreateTemplate = useCallback(
-        (body: MetadataTemplateCreateBody) =>
-            new Promise<void>((resolve, reject) => {
+        async (body: MetadataTemplateCreateBody) => {
+            const templateKey = resolveCreateMetadataTemplateKey(body);
+            if (!templateKey) {
+                const error = new Error(formatMessage(messages.sidebarMetadataTemplateKeyInvalid));
+                onError(error, ERROR_CODE_CREATE_METADATA_TEMPLATE, { showNotification: true });
+                throw error;
+            }
+
+            await new Promise<void>((resolve, reject) => {
                 api.getMetadataAPI(false).createMetadataTemplate(
                     file,
-                    { ...body, templateKey: body.templateKey || deriveMetadataTemplateKey(body.displayName) },
+                    { ...body, templateKey },
                     () => {
                         refetchMetadata();
                         resolve();
@@ -352,8 +360,9 @@ function MetadataSidebarRedesign({
                         reject(error);
                     },
                 );
-            }),
-        [api, file, onError, refetchMetadata],
+            });
+        },
+        [api, file, formatMessage, onError, refetchMetadata],
     );
 
     const fetchTaxonomyByKey = useCallback(

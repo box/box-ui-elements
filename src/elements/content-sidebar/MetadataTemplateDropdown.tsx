@@ -78,9 +78,9 @@ export default function MetadataTemplateDropdown({
                     return;
                 }
             }
-            // Fallback: ids encoded as "fqn||templateKey" by useMetadataTemplateItemsService
-            // (and by the namespace mocks). This is the only path for child-namespace
-            // templates, which the sidebar's root-only fetch never loads.
+            // Fallback: ids encoded as "fqn||templateKey" by useMetadataTemplateItemsService.
+            // This is the only path for child-namespace templates, which the sidebar's
+            // root-only fetch never loads.
             if (templateId.includes('||')) {
                 const separatorIndex = templateId.indexOf('||');
                 const namespaceFqn = templateId.slice(0, separatorIndex);
@@ -132,19 +132,19 @@ export default function MetadataTemplateDropdown({
             ...itemsService,
             ...(onCreateTemplate
                 ? {
-                    createTemplate: async (namespaceFqn: string) => {
-                        onCreateTemplate(namespaceFqn);
-                        return undefined;
-                    },
-                }
+                      createTemplate: async (namespaceFqn: string) => {
+                          onCreateTemplate(namespaceFqn);
+                          return undefined;
+                      },
+                  }
                 : {}),
             ...(onEditTemplate
                 ? {
-                    updateTemplate: async (templateId: string) => {
-                        handleEditTemplateById(templateId);
-                        return undefined;
-                    },
-                }
+                      updateTemplate: async (templateId: string) => {
+                          handleEditTemplateById(templateId);
+                          return undefined;
+                      },
+                  }
                 : {}),
         };
     }, [handleEditTemplateById, itemsService, onCreateTemplate, onEditTemplate]);
