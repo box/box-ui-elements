@@ -22,6 +22,15 @@ function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName
     return template.displayName || template.templateKey;
 }
 
+/**
+ * The browser renders every row it is given — it declares `hidden` but never acts on it —
+ * so hidden templates have to be dropped here, the way the sidebar drops hidden instances.
+ * The API spells visibility `hidden` on some responses and `isHidden` on others.
+ */
+function isHiddenTemplate(template: { hidden?: unknown; isHidden?: unknown }): boolean {
+    return template.hidden === true || template.isHidden === true;
+}
+
 function canEditMetadataTemplate(templateKey?: string, scopeOrNamespace?: string): boolean {
     if (!templateKey || templateKey === METADATA_TEMPLATE_PROPERTIES) {
         return false;
@@ -60,15 +69,17 @@ export default function useMetadataTemplateItemsService(
 
         // Flat browser-shape list derived from the already-loaded editor templates.
         // Used for client-side search so search doesn't require a round-trip.
-        const browserTemplatesForSearch: BrowserMetadataTemplate[] = templates.map(t => ({
-            id: t.id,
-            type: t.type,
-            displayName: resolveDisplayName(t, customMetadataName),
-            scope: t.scope,
-            templateKey: t.templateKey,
-            canEdit: canEditMetadataTemplate(t.templateKey, getMetadataTemplateNamespaceFqn(t)),
-            hidden: t.hidden,
-        }));
+        const browserTemplatesForSearch: BrowserMetadataTemplate[] = templates
+            .filter(t => !isHiddenTemplate(t))
+            .map(t => ({
+                id: t.id,
+                type: t.type,
+                displayName: resolveDisplayName(t, customMetadataName),
+                scope: t.scope,
+                templateKey: t.templateKey,
+                canEdit: canEditMetadataTemplate(t.templateKey, getMetadataTemplateNamespaceFqn(t)),
+                hidden: t.hidden,
+            }));
 
         return {
             getNamespaces: async (
@@ -90,26 +101,32 @@ export default function useMetadataTemplateItemsService(
                     .listTemplatesForNamespace(file, namespaceFQN, { limit: params.limit, marker: params.marker });
                 // Map the raw API response to the browser-expected shape.
                 // The API returns camelCase fields; we normalise displayName and scope/namespace.
-                const listed: BrowserMetadataTemplate[] = (result.entries ?? []).map((t: Record<string, unknown>) => {
-                    const templateKey = t.templateKey as string;
-                    const templateScope = (t.namespace as string) ?? (t.scope as string) ?? namespaceFQN;
-                    // Prefer the editor template's id so that id-based lookups in
-                    // handleEditTemplateById / onTemplateSelect resolve correctly.
-                    // Falls back to the raw API id when there is no matching editor template
-                    // (e.g. child-namespace-only templates not yet in the editor list).
-                    const editorMatch = templates.find(et =>
-                        isSameMetadataTemplate(et, { templateKey, scope: templateScope }),
-                    );
-                    return {
-                        id: editorMatch?.id ?? (t.id as string),
-                        type: (t.type as string) ?? 'metadata_template',
-                        displayName: ((t.displayName as string) ?? templateKey) || '',
-                        scope: templateScope,
-                        templateKey,
-                        canEdit: canEditMetadataTemplate(templateKey, templateScope),
-                        hidden: (t.hidden as boolean) ?? false,
-                    };
-                });
+                const listed: BrowserMetadataTemplate[] = (result.entries ?? [])
+                    .filter((t: Record<string, unknown>) => !isHiddenTemplate(t))
+                    .map((t: Record<string, unknown>) => {
+                        const templateKey = t.templateKey as string;
+                        const templateScope = (t.namespace as string) ?? (t.scope as string) ?? namespaceFQN;
+                        // Prefer the editor template's id so that id-based lookups in
+                        // handleEditTemplateById / onTemplateSelect resolve correctly.
+                        const editorMatch = templates.find(et =>
+                            isSameMetadataTemplate(et, { templateKey, scope: templateScope }),
+                        );
+                        return {
+                            // Child-namespace templates are never in the editor list, and a raw API
+                            // id carries no namespace or key — so the edit affordance could not
+                            // resolve one. Encode both instead, the format handleEditTemplateById
+                            // already parses.
+                            id:
+                                editorMatch?.id ??
+                                (templateKey ? `${templateScope}||${templateKey}` : (t.id as string)),
+                            type: (t.type as string) ?? 'metadata_template',
+                            displayName: ((t.displayName as string) ?? templateKey) || '',
+                            scope: templateScope,
+                            templateKey,
+                            canEdit: canEditMetadataTemplate(templateKey, templateScope),
+                            hidden: false,
+                        };
+                    });
 
                 // The namespace list mock only seeds child-namespace fixtures. Merge in
                 // already-loaded enterprise templates so existing schemas can be opened.
@@ -117,7 +134,12 @@ export default function useMetadataTemplateItemsService(
                 const fromLoaded: BrowserMetadataTemplate[] = templates
                     .filter(t => {
                         const fqn = getMetadataTemplateNamespaceFqn(t);
-                        return !!t.templateKey && fqn === namespaceFQN && !listedKeys.has(t.templateKey);
+                        return (
+                            !!t.templateKey &&
+                            fqn === namespaceFQN &&
+                            !listedKeys.has(t.templateKey) &&
+                            !isHiddenTemplate(t)
+                        );
                     })
                     .map(t => ({
                         id: t.id,

@@ -75,6 +75,38 @@ describe('useMetadataTemplateItemsService', () => {
         expect(listNamespaces).toHaveBeenCalledWith(mockFile, enterpriseFqn, { limit: 20, marker: 'm0' });
     });
 
+    test('should drop hidden templates from getTemplates', async () => {
+        listTemplatesForNamespace.mockResolvedValue({
+            entries: [
+                {
+                    id: 'api-id-1',
+                    templateKey: 'visibleTemplate',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Visible',
+                },
+                {
+                    id: 'api-id-2',
+                    templateKey: 'hiddenTemplate',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Hidden',
+                    hidden: true,
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getTemplates(`${enterpriseFqn}.legal`, {
+            limit: 50,
+            marker: undefined,
+        });
+
+        expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
+    });
+
     test('should map getTemplates entries and prefer editor template ids', async () => {
         listTemplatesForNamespace.mockResolvedValue({
             entries: [
@@ -112,7 +144,7 @@ describe('useMetadataTemplateItemsService', () => {
                     hidden: false,
                 },
                 {
-                    id: 'api-id-2',
+                    id: `${enterpriseFqn}.child||childOnly`,
                     type: 'metadata_template',
                     displayName: 'Child Only',
                     scope: `${enterpriseFqn}.child`,

@@ -53,7 +53,7 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import { isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
+import { deriveMetadataTemplateKey, isSameMetadataTemplate } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
     metadataTaxonomiesListFetcher,
@@ -342,7 +342,7 @@ function MetadataSidebarRedesign({
             new Promise<void>((resolve, reject) => {
                 api.getMetadataAPI(false).createMetadataTemplate(
                     file,
-                    body,
+                    { ...body, templateKey: body.templateKey || deriveMetadataTemplateKey(body.displayName) },
                     () => {
                         refetchMetadata();
                         resolve();
