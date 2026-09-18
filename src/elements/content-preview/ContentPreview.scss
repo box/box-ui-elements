@@ -39,6 +39,14 @@
         flex: 1;
     }
 
+    .bcpr-banner {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+    }
+
     .bcpr-content {
         flex: 1;
     }
@@ -103,6 +111,11 @@
         // the compared pane.
         .bcpr-body:not(.bcpr-body--comparing) .bcpr-container {
             position: static;
+        }
+
+        // Compared instance is not --comparing. Keep the banner's containing block.
+        .bcpr-body:not(.bcpr-body--comparing) .bcpr-container:has(.bcpr-banner) {
+            position: relative;
         }
 
         &.bcpr-thumbnails-open .bcpr-navigate-left {
