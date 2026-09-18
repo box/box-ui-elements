@@ -442,6 +442,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.preview.addListener).toHaveBeenCalledWith('load', instance.onPreviewLoad);
         });
 
+        test('should bind navigateRight to preview "mediaEndPlayNext" event', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.addListener).toHaveBeenCalledWith('mediaEndPlayNext', instance.navigateRight);
+        });
+
         test('should call preview show with correct params', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -798,6 +806,47 @@ describe('elements/content-preview/ContentPreview', () => {
                 file.id,
                 instance.fetchFileSuccessCallback,
                 instance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                },
+            );
+        });
+
+        test('should append waveform rep hint when audio player v2 is enabled', () => {
+            const wrapper = getWrapper({
+                ...props,
+                features: { audioPlayerV2: { enabled: true } },
+            });
+            const v2Instance = wrapper.instance();
+            v2Instance.api = instance.api;
+            v2Instance.fetchFileSuccessCallback = jest.fn();
+            v2Instance.fetchFileErrorCallback = jest.fn();
+            v2Instance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                v2Instance.fetchFileSuccessCallback,
+                v2Instance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                    repHints: '[waveform]',
+                },
+            );
+        });
+
+        test('should not append waveform rep hint when audio player v2 is disabled', () => {
+            const wrapper = getWrapper({
+                ...props,
+                features: { audioPlayerV2: { enabled: false } },
+            });
+            const v2Instance = wrapper.instance();
+            v2Instance.api = instance.api;
+            v2Instance.fetchFileSuccessCallback = jest.fn();
+            v2Instance.fetchFileErrorCallback = jest.fn();
+            v2Instance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                v2Instance.fetchFileSuccessCallback,
+                v2Instance.fetchFileErrorCallback,
                 {
                     fields: PREVIEW_FIELDS_TO_FETCH,
                 },

@@ -32,6 +32,13 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
 
             expect(wrapper.getByText(localize(messages.sidebarContentInsights.id))).toBeVisible();
             expect(wrapper.queryByTestId('ContentAnalyticsErrorState-image')).toBe(null);
+            expect(wrapper.container.querySelector('.ContentInsightsSummary--redesigned')).toBeNull();
+        });
+
+        test('should apply redesigned class when isRedesignEnabled', () => {
+            const wrapper = getWrapper({ isRedesignEnabled: true });
+
+            expect(wrapper.container.querySelector('.ContentInsightsSummary--redesigned')).toBeInTheDocument();
         });
 
         test('should call click handler when ContentInsightsSummary button is clicked', () => {

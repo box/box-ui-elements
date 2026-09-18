@@ -93,7 +93,7 @@ const getConfig = isReactBundle => {
                     // box-content-preview ships a pre-bundled dist with class private methods
                     // that this babel config cannot parse; it needs no transpilation.
                     exclude: hasAllBrowserSupport
-                        ? /@babel(?:\/|\\{1,2})runtime|box-content-preview|pikaday|core-js/
+                        ? /@babel(?:\/|\\{1,2})runtime|box-content-preview|pikaday|core-js|@tiptap/
                         : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for i18n
                     loader: 'babel-loader',
                 },

@@ -24,6 +24,12 @@ export function formatByTimeFormat(ms: number, format: TimeFormat, fps: number):
     }
 }
 
+const RANGE_SEPARATOR = '\u2013';
+
+export function formatTimeRange(startMs: number, endMs: number, format: TimeFormat, fps: number): string {
+    return `${formatByTimeFormat(startMs, format, fps)} ${RANGE_SEPARATOR} ${formatByTimeFormat(endMs, format, fps)}`;
+}
+
 export interface UseTimeFormatResult {
     timeFormat: TimeFormat;
     fps: number;

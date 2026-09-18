@@ -1,7 +1,6 @@
 import React, { act } from 'react';
 import { mount } from 'enzyme';
 import debounce from 'lodash/debounce';
-// @ts-ignore flow import
 import TextInput from '../../text-input';
 import { TimeInputComponent as TimeInput, TimeInputProps } from '../TimeInput';
 import { parseTimeFromString } from '../TimeInputUtils';

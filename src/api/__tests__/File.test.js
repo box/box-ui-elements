@@ -472,10 +472,7 @@ describe('api/File', () => {
 
         test('should make xhr to get file and not call success callback when destroyed', async () => {
             fields.findMissingProperties = jest.fn().mockReturnValueOnce([]);
-            file.isDestroyed = jest
-                .fn()
-                .mockReturnValueOnce(false)
-                .mockReturnValueOnce(true);
+            file.isDestroyed = jest.fn().mockReturnValueOnce(false).mockReturnValueOnce(true);
             file.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } })),
             };
@@ -578,6 +575,29 @@ describe('api/File', () => {
                 url: 'https://api.box.com/2.0/files/id',
                 headers: {
                     'X-Rep-Hints': X_REP_HINTS,
+                },
+            });
+        });
+
+        test('should append extra repHints to X-Rep-Hints when provided', async () => {
+            file.options = { cache };
+            file.getCache = jest.fn().mockReturnValueOnce(cache);
+            file.getCacheKey = jest.fn().mockReturnValueOnce('key');
+            fields.findMissingProperties = jest.fn().mockReturnValueOnce(['missing']);
+            fields.fillMissingProperties = jest.fn().mockReturnValueOnce({ id: 'id' });
+            file.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { id: 'id' } })),
+            };
+
+            await file.getFile('id', jest.fn(), jest.fn(), { repHints: '[waveform]' });
+            expect(file.xhr.get).toHaveBeenCalledWith({
+                id: 'file_id',
+                url: 'https://api.box.com/2.0/files/id',
+                params: {
+                    fields: 'missing',
+                },
+                headers: {
+                    'X-Rep-Hints': `${X_REP_HINTS}[waveform]`,
                 },
             });
         });

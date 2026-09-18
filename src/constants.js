@@ -278,6 +278,7 @@ export const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
+export const ERROR_CODE_UPLOAD_ITEM_LOCKED = 'access_denied_item_locked';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
 export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload';
 export const ERROR_CODE_UPLOAD_INSUFFICIENT_PERMISSIONS = 'access_denied_insufficient_permissions';
@@ -393,6 +394,7 @@ const X_REP_HINT_IMAGE = '[webp?dimensions=1024x1024][jpg?dimensions=2048x2048,p
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
 const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
+export const X_REP_HINT_WAVEFORM = '[waveform]';
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
 
 /* ------------------ Uploader ---------------------- */

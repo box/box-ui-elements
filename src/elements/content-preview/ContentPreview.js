@@ -64,6 +64,7 @@ import {
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
+    X_REP_HINT_WAVEFORM,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
 import type { Target } from '../../common/types/annotations';
@@ -1133,6 +1134,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.shouldUseNpmPreview() && this.npmPreviewModule ? this.npmPreviewModule.Preview : global.Box.Preview;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.addListener('mediaEndPlayNext', this.navigateRight);
         this.preview.addListener('preload', this.endLoadingSession);
 
         this.preview.addListener('preview_error', this.onPreviewError);
@@ -1268,6 +1270,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.fetchFileStartTime = performance.now();
         this.fetchFileEndTime = null;
 
+        const { features }: Props = this.props;
+        const repHints = isFeatureEnabled(features, 'audioPlayerV2.enabled') ? X_REP_HINT_WAVEFORM : '';
+
         this.api
             .getFileAPI()
             .getFile(
@@ -1277,6 +1282,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 {
                     ...fetchOptions,
                     fields: PREVIEW_FIELDS_TO_FETCH,
+                    ...(repHints ? { repHints } : {}),
                 },
             );
     }
