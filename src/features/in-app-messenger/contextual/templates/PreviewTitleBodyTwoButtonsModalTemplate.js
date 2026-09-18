@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import sanitizeHTML from 'sanitize-html';
 
 import PrimaryButton from '../../../../components/primary-button';
 import { Modal, ModalActions } from '../../../../components/modal';
@@ -50,13 +51,13 @@ const PreviewTitleBodyTwoButtonsModalTemplate = ({
                 <div
                     className="bdl-PreviewTitleBodyTwoButtonsModalTemplate-title"
                     dangerouslySetInnerHTML={{
-                        __html: title,
+                        __html: sanitizeHTML(title),
                     }}
                 />
                 <div
                     className="bdl-PreviewTitleBodyTwoButtonsModalTemplate-body"
                     dangerouslySetInnerHTML={{
-                        __html: body,
+                        __html: sanitizeHTML(body),
                     }}
                 />
                 {/* eslint-enable react/no-danger */}

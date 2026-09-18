@@ -3,6 +3,10 @@ import * as React from 'react';
 
 import PreviewTitleBodyTwoButtonsPopoutTemplate from '../PreviewTitleBodyTwoButtonsPopoutTemplate';
 
+// Override the identity Jest mapper for sanitize-html so these assertions prove
+// title/body go through sanitizeHTML (a distinct transformed value is rendered).
+jest.mock('sanitize-html', () => html => `sanitized:${html}`);
+
 describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButtonsPopoutTemplate', () => {
     const onAction = jest.fn();
 
@@ -55,8 +59,39 @@ describe('features/in-app-messenger/contextual/templates/PreviewTitleBodyTwoButt
 
     describe.each([paramsConfigs.all, paramsConfigs.missingButton2])('%o', ({ params }) => {
         test('renders correctly', () => {
-            getWrapper(params);
+            const wrapper = getWrapper(params);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate').length).toEqual(1);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-title').length).toEqual(1);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-body').length).toEqual(1);
+            expect(wrapper.find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-previewContainer').length).toEqual(1);
+            expect(wrapper.find('PrimaryButton').length).toEqual(1);
+            expect(
+                wrapper.find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-title').prop('dangerouslySetInnerHTML'),
+            ).toEqual({ __html: `sanitized:${params.title}` });
+            expect(
+                wrapper.find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-body').prop('dangerouslySetInnerHTML'),
+            ).toEqual({ __html: `sanitized:${params.body}` });
         });
+    });
+
+    test('does not pass raw script/on* payloads through to dangerouslySetInnerHTML', () => {
+        const params = {
+            ...paramsConfigs.all.params,
+            title: '<script>alert(1)</script>Safe title',
+            body: '<img src=x onerror=alert(1)>Safe body',
+        };
+        const wrapper = getWrapper(params);
+        const titleHtml = wrapper
+            .find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-title')
+            .prop('dangerouslySetInnerHTML');
+        const bodyHtml = wrapper
+            .find('.bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-body')
+            .prop('dangerouslySetInnerHTML');
+
+        expect(titleHtml).not.toEqual({ __html: params.title });
+        expect(bodyHtml).not.toEqual({ __html: params.body });
+        expect(titleHtml).toEqual({ __html: `sanitized:${params.title}` });
+        expect(bodyHtml).toEqual({ __html: `sanitized:${params.body}` });
     });
 
     function checkClickElement(findElement, expectCalled, ...expectCalledWith) {

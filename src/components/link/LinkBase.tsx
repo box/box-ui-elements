@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { isSafeHref } from '../../utils/url';
+
 export interface LinkBaseProps {
     children: React.ReactChild;
     className?: string;
@@ -17,9 +19,10 @@ const LinkBase = ({ children, href = '#', linkRef, target, rel, component, refPr
     const linkRel = target === '_blank' && !rel ? 'noopener' : rel;
     const LinkComponent = component || 'a';
     const ref = { [refProp || 'ref']: linkRef };
+    const safeHref = isSafeHref(href) ? href : '#';
 
     return (
-        <LinkComponent href={href} rel={linkRel} target={target} {...ref} {...rest}>
+        <LinkComponent href={safeHref} rel={linkRel} target={target} {...ref} {...rest}>
             {children}
         </LinkComponent>
     );

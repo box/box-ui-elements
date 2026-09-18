@@ -1,4 +1,6 @@
+/* eslint-disable no-script-url -- javascript:/data:/vbscript: payloads assert iframe URL sanitization */
 import openUrlInsideIframe from '../iframe';
+import { isSafeHref } from '../url';
 
 describe('openUrlInsideIframe', () => {
     test('should create new iframe', () => {
@@ -14,4 +16,18 @@ describe('openUrlInsideIframe', () => {
 
         expect(secondIframe).toEqual(firstIframe);
     });
+
+    test.each(['javascript:alert(1)', 'data:text/html,<script>alert(1)</script>', 'vbscript:msgbox(1)'])(
+        'should not assign unsafe URL %s to the iframe',
+        unsafeUrl => {
+            expect(isSafeHref(unsafeUrl)).toBe(false);
+
+            const safeUrl = 'http://box.com/safe';
+            const iframe = openUrlInsideIframe(safeUrl);
+            expect(iframe.src).toEqual(safeUrl);
+
+            openUrlInsideIframe(unsafeUrl);
+            expect(iframe.src).toEqual('about:blank');
+        },
+    );
 });

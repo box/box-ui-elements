@@ -3,6 +3,7 @@
  * @file Function to create iframe and downloading
  * @author Box
  */
+import { isSafeHref } from './url';
 
 /**
  * Creates an empty iframe or uses an existing one
@@ -40,6 +41,11 @@ function createDownloadIframe(): HTMLIFrameElement {
  */
 export default function openUrlInsideIframe(url: string): HTMLIFrameElement {
     const iframe: HTMLIFrameElement = createDownloadIframe();
-    iframe.src = url;
+    if (isSafeHref(url)) {
+        iframe.src = url;
+    } else {
+        // Reused #boxdownloadiframe must not keep a previous download URL loaded.
+        iframe.src = 'about:blank';
+    }
     return iframe;
 }

@@ -396,7 +396,7 @@
         "@sigstore/core": "3.2.1",
         "draft-js/immutable": "^3.8.4",
         "eslint-plugin-formatjs/**/minimatch": "^9.0.9",
-        "tar": "^7.5.19"
+        "tar": "^7.5.21"
     },
     "msw": {
         "workerDirectory": [".storybook/public"]

@@ -6,6 +6,7 @@
 
 import React, { PureComponent } from 'react';
 import { HTTP_POST } from '../../constants';
+import { isSafeHref } from '../../utils/url';
 import type { ExecuteAPI } from '../../common/types/integrations';
 
 type Props = {
@@ -24,7 +25,10 @@ class ExecuteForm extends PureComponent<Props> {
     }
 
     componentDidMount() {
-        const { onSubmit }: Props = this.props;
+        const { executePostData, onSubmit }: Props = this.props;
+        if (!this.ref.current || !isSafeHref(executePostData.url)) {
+            return;
+        }
         this.ref.current.submit();
         onSubmit();
     }
@@ -35,10 +39,11 @@ class ExecuteForm extends PureComponent<Props> {
             id,
             windowName,
         }: Props = this.props;
+        const action = isSafeHref(url) ? url : undefined;
         return (
             <form
                 ref={this.ref}
-                action={url}
+                action={action}
                 id={`bcow-execute-form-${id}`}
                 method={HTTP_POST}
                 rel="noreferrer noopener"
