@@ -409,6 +409,34 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(scrollIntoView).not.toHaveBeenCalled();
     });
 
+    test('should scroll to the active feed item once it arrives in a later update', () => {
+        const activeFeedEntryId = comments.entries[0].id;
+        const wrapper = getWrapper({ activeFeedEntryId, feedItems: [] });
+        const instance = wrapper.instance();
+        const li = document.createElement('li');
+
+        // The id changes before the item exists in the feed, so there is nothing to scroll to yet
+        wrapper.setProps({ activeFeedEntryId: 'another-id' });
+        expect(scrollIntoView).not.toHaveBeenCalled();
+
+        instance.activeFeedItemRef.current = li;
+        wrapper.setProps({ feedItems: [{ id: 'another-id', type: FEED_ITEM_TYPE_COMMENT }] });
+
+        expect(scrollIntoView).toHaveBeenCalledWith(li);
+    });
+
+    test('should scroll to the bottom when the active feed item is absent from a loaded feed', () => {
+        const wrapper = getWrapper({ activeFeedEntryId: 'missing-id', feedItems: [] });
+        const instance = wrapper.instance();
+        instance.feedContainer = { scrollTop: 0, scrollHeight: 100 };
+        instance.activeFeedItemRef.current = null;
+
+        wrapper.setProps({ feedItems: [{ id: 'some-other-id', type: FEED_ITEM_TYPE_COMMENT }] });
+
+        expect(scrollIntoView).not.toHaveBeenCalled();
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
     test('should show input when commentFormFocusHandler is called', () => {
         const wrapper = getWrapper();
 

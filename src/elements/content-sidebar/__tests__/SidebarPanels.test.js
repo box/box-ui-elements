@@ -723,6 +723,19 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             wrapper.setProps({ location: { pathname } });
             expect(onVersionChange).toBeCalledWith(null);
         });
+
+        test.each([
+            ['/activity/versions/123', '/activity/annotations/123/456'],
+            ['/activity/versions/123', '/activity/annotations/123'],
+            ['/details/versions/123', '/activity/annotations/456/789'],
+        ])(
+            'should tag the version reset with an annotation origin when transitioning to an annotations path',
+            (prevPathname, pathname) => {
+                const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
+                wrapper.setProps({ location: { pathname } });
+                expect(onVersionChange).toBeCalledWith(null, { origin: 'annotation' });
+            },
+        );
     });
 
     describe('multiple customSidebarPanels rendering', () => {
