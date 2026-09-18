@@ -332,7 +332,7 @@ describe('util/uploads', () => {
                 name: 'hi',
             };
 
-            expect(getFileId(file)).toBe('hi');
+            expect(getFileId(file, '0')).toBe('hi');
         });
 
         test('should return file id correctly when file does contain API options', () => {
@@ -346,7 +346,7 @@ describe('util/uploads', () => {
                 },
             };
 
-            expect(getFileId(file)).toBe('hi_0_123123');
+            expect(getFileId(file, '0')).toBe('hi_0_123123');
         });
     });
 
@@ -356,7 +356,7 @@ describe('util/uploads', () => {
                 name: 'hi',
             };
 
-            expect(getFileId(file)).toBe('hi');
+            expect(getFileId(file, '0')).toBe('hi');
         });
 
         test('should return file id correctly when file does contain API options', () => {
@@ -370,12 +370,12 @@ describe('util/uploads', () => {
                 },
             };
 
-            expect(getFileId(file)).toBe('hi_0_123123');
+            expect(getFileId(file, '0')).toBe('hi_0_123123');
         });
     });
 
     describe('getDataTransferItemId()', () => {
-        const rootFolderId = 0;
+        const rootFolderId = '0';
         const now = Date.now();
         Date.now = jest.fn(() => now);
 
