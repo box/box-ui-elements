@@ -3,9 +3,17 @@ import { digest, getRandomValues } from '../webcrypto';
 
 jest.mock('js-sha1');
 
+type WindowWithMsCrypto = Omit<Window, 'crypto'> & { crypto?: Crypto; msCrypto?: Crypto };
+type Sha1WithArrayBuffer = typeof sha1 & { arrayBuffer: jest.Mock };
+type CryptoOperation = {
+    oncomplete?: (event: { target: { result: ArrayBuffer } }) => void;
+    onerror?: (reason?: unknown) => void;
+};
+
+const sha1Mock = sha1 as Sha1WithArrayBuffer;
+
 describe('util/webcrypto', () => {
     beforeEach(() => {
-        // eslint-disable-next-line no-undef
         Object.defineProperty(globalThis, 'window', {
             value: {
                 ...window,
@@ -17,107 +25,108 @@ describe('util/webcrypto', () => {
     describe('getRandomValues()', () => {
         test('should call getRandomValues() to get an array of random values', () => {
             const getRandomValuesMock = jest.fn();
-            window.crypto = {
+            (window as WindowWithMsCrypto).crypto = {
                 getRandomValues: getRandomValuesMock,
-            };
+            } as unknown as Crypto;
 
-            getRandomValues();
+            getRandomValues(new Uint8Array());
             expect(getRandomValuesMock).toHaveBeenCalled();
         });
     });
 
     describe('digest()', () => {
         const algorithm = 'a';
-        const buffer = new Uint8Array([1, 2]);
+        const { buffer } = new Uint8Array([1, 2]);
         const digestVal = 'd';
 
         test('should return the return value of digest() when the crypto lib is not msCrypto', () => {
             const digestMock = jest.fn().mockReturnValueOnce(digestVal);
-            window.crypto = {
+            (window as WindowWithMsCrypto).crypto = {
                 subtle: {
                     digest: digestMock,
                 },
-            };
+            } as unknown as Crypto;
 
             expect(digest(algorithm, buffer)).toBe(digestVal);
             expect(digestMock).toHaveBeenCalledWith(algorithm, buffer);
         });
         describe('msCrypto', () => {
-            test('should return a promise which resolves properly when the crypto lib is msCrypto', () => {
-                sha1.arrayBuffer = jest.fn().mockImplementation(() => new ArrayBuffer());
-                const cryptoOperation = {};
+            test('should return a promise which resolves properly when the crypto lib is msCrypto', async () => {
+                sha1Mock.arrayBuffer = jest.fn().mockImplementation(() => new ArrayBuffer(0));
+                const cryptoOperation: CryptoOperation = {};
                 const digestMock = jest.fn().mockReturnValueOnce(cryptoOperation);
+                const expectedDigest = new ArrayBuffer(0);
 
-                window.crypto = undefined;
-                window.msCrypto = {
+                (window as WindowWithMsCrypto).crypto = undefined;
+                (window as WindowWithMsCrypto).msCrypto = {
                     subtle: {
                         digest: digestMock,
                     },
-                };
+                } as unknown as Crypto;
 
-                digest(algorithm, buffer);
+                const digestPromise = digest(algorithm, buffer);
 
-                cryptoOperation.oncomplete({
+                expect(cryptoOperation.oncomplete).toEqual(expect.any(Function));
+                cryptoOperation.oncomplete!({
                     target: {
-                        result: 'digest',
+                        result: expectedDigest,
                     },
                 });
 
+                await expect(digestPromise).resolves.toBe(expectedDigest);
                 expect(digestMock).toHaveBeenCalledWith({ name: algorithm }, buffer);
-                expect(sha1.arrayBuffer).not.toHaveBeenCalled();
+                expect(sha1Mock.arrayBuffer).not.toHaveBeenCalled();
             });
 
-            test('should return a promise which rejects properly when the crypto lib is msCrypto', () => {
-                const cryptoOperation = {};
+            test('should return a promise which rejects properly when the crypto lib is msCrypto', async () => {
+                const cryptoOperation: CryptoOperation = {};
                 const digestMock = jest.fn().mockReturnValueOnce(cryptoOperation);
 
-                window.crypto = undefined;
-                window.msCrypto = {
+                (window as WindowWithMsCrypto).crypto = undefined;
+                (window as WindowWithMsCrypto).msCrypto = {
                     subtle: {
                         digest: digestMock,
                     },
-                };
+                } as unknown as Crypto;
 
                 const expectedError = new Error('ERROR');
+                const digestPromise = digest(algorithm, buffer);
 
-                digest(algorithm, buffer).catch(error => {
-                    expect(error).toBe(expectedError);
-                });
-
-                cryptoOperation.onerror(expectedError);
-                expect.assertions(1);
+                expect(cryptoOperation.onerror).toEqual(expect.any(Function));
+                cryptoOperation.onerror!(expectedError);
+                await expect(digestPromise).rejects.toBe(expectedError);
             });
         });
         describe('js-sha1', () => {
             test('should use js-sha1 for calculating hash in IE-11 SHA-1 digest scenarios', async () => {
                 // ie11 does not support sha-1, so we use a library
-                sha1.arrayBuffer = jest.fn().mockImplementation(() => new ArrayBuffer());
+                sha1Mock.arrayBuffer = jest.fn().mockImplementation(() => new ArrayBuffer(0));
                 const digestMock = jest.fn().mockReturnValueOnce({});
-                window.crypto = undefined;
+                (window as WindowWithMsCrypto).crypto = undefined;
 
-                window.msCrypto = {
+                (window as WindowWithMsCrypto).msCrypto = {
                     subtle: {
                         digest: digestMock,
                     },
-                };
+                } as unknown as Crypto;
 
                 const hash = await digest('SHA-1', buffer);
                 expect(hash).toBeDefined();
                 expect(digestMock).not.toHaveBeenCalled();
-                expect(sha1.arrayBuffer).toHaveBeenCalledWith(buffer);
+                expect(sha1Mock.arrayBuffer).toHaveBeenCalledWith(buffer);
             });
             test('should return a promise which rejects properly when js-sha1 fails', () => {
                 const expectedError = new Error('ERROR');
                 // ie11 does not support sha-1, so we use a library
-                sha1.arrayBuffer = jest.fn().mockRejectedValue(expectedError);
+                sha1Mock.arrayBuffer = jest.fn().mockRejectedValue(expectedError);
                 const digestMock = jest.fn().mockReturnValueOnce({});
-                window.crypto = undefined;
+                (window as WindowWithMsCrypto).crypto = undefined;
 
-                window.msCrypto = {
+                (window as WindowWithMsCrypto).msCrypto = {
                     subtle: {
                         digest: digestMock,
                     },
-                };
+                } as unknown as Crypto;
 
                 digest('SHA-1', buffer).catch(error => {
                     expect(error).toBe(expectedError);

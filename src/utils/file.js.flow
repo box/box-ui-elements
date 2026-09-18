@@ -76,7 +76,7 @@ export function isGSuiteExtension(extension: string): boolean {
  * @param {string} filename a Box file
  * @return {string} typed id for file
  */
-export function getFileExtension(filename: string | void): string {
+export function getFileExtension(filename?: string): string {
     if (typeof filename !== 'string') {
         return '';
     }
