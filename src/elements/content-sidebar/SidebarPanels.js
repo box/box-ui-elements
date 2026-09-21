@@ -169,9 +169,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const { location, onVersionChange } = this.props;
         const { location: prevLocation } = prevProps;
 
-        // Reset the current version id if the wrapping versions route is no longer active.
-        // Tag annotation-driven exits (versions -> annotation thread) so hosts comparing
-        // versions side by side can ignore the reset and keep the comparison open.
+        // Leaving versions: tag annotation-thread exits so compare can stay open.
         if (onVersionChange && this.getVersionsMatchPath(prevLocation) && !this.getVersionsMatchPath(location)) {
             if (matchPath(location.pathname, SIDEBAR_PATH_ANNOTATIONS)) {
                 onVersionChange(null, { triggeredBy: 'annotation' });

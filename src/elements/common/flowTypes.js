@@ -35,8 +35,7 @@ type Page = {
 
 type AdditionalVersionInfo = {
     currentVersionId?: ?string,
-    // What caused this version change. Annotation clicks are not a user version
-    // pick — compare mode must not forward them to the host (that unmounts the compared pane).
+    // Set when a thread was opened, not when the user picked a version.
     triggeredBy?: 'annotation',
     updateVersionToCurrent?: () => void,
 };

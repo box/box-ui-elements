@@ -1830,9 +1830,6 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should not notify the host for the annotation-driven version reset when comparing', () => {
-            // SidebarPanels resets the version (null) when the sidebar leaves the versions route.
-            // When the exit is caused by opening an annotation thread, the reset is tagged with
-            // triggeredBy so the side-by-side comparison stays open.
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ isComparing: true, onVersionChange });
             const instance = wrapper.instance();

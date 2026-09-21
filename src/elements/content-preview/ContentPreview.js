@@ -1574,14 +1574,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const versionInfo = additionalVersionInfo || {};
         this.updateVersionToCurrent = versionInfo.updateVersionToCurrent;
 
-        // Annotation clicks in the compared pane rewrite the activity path's fileVersionId.
-        // Forwarding that to the host as a version change unmounts side-by-side compare.
-        // Versions-sidebar clicks do not set triggeredBy and still notify the host.
+        // Keep compare open: do not tell the host about annotation-driven version changes.
         if (!(this.props.isComparing && versionInfo.triggeredBy === 'annotation')) {
             onVersionChange(version, versionInfo);
         }
-        // Host still gets non-annotation events so the compared pane can follow comparedVersion.
-        // The left pane stays on current for the whole comparison session.
+        // While comparing, the left pane stays on the current version.
         if (!this.props.isComparing) {
             this.setState({
                 selectedVersion: version,
@@ -1992,10 +1989,9 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           previewVersion={comparedVersion}
                           resin={undefined}
                           renderCustomPreview={undefined}
-                          // Inherit host showAnnotations + boxAnnotations so this pane
-                          // creates a second annotator. Create stays off:
-                          // controls only hide the toolbar; discoverability would still
-                          // open the comment composer on text select.
+                          // Show existing threads; do not allow creating new ones.
+                          // TODO: Scope annotation fetch errors by file version. The shared
+                          // event bus can show a current-pane error when the old version fails.
                           enableAnnotationsDiscoverability={false}
                           enableAnnotationsImageDiscoverability={false}
                           enableAnnotationsOnlyControls={false}
