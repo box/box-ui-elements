@@ -42,10 +42,13 @@ describe('util/file', () => {
             ['filename.txt', 'txt'],
             ['filename.backup.mp4', 'mp4'],
             ['filename..temp.pdf', 'pdf'],
-            [{ name: 'test.pdf' }, ''],
             ['invalidfilenamepdf', ''],
         ])('should return extension of file correctly', (filename, extension) => {
             expect(getFileExtension(filename)).toBe(extension);
+        });
+
+        test('should return empty string when filename is not a string', () => {
+            expect(getFileExtension({ name: 'test.pdf' } as unknown as string)).toBe('');
         });
     });
 
