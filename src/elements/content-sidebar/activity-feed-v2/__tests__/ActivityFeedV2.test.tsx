@@ -1175,6 +1175,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             };
             return {
                 commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
+                dismissDraft: () => listeners.comment_range_draft_dismiss?.(undefined),
                 getViewer: () => viewer,
                 rangeEmits: () =>
                     viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
@@ -1306,6 +1307,41 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
                 expect(rangeEmits().pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 8055 }]);
                 expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great take', false);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should uncheck the timestamp toggle when the viewer dismisses the draft', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, dismissDraft, getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+
+                await act(async () => {
+                    dismissDraft();
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(lastEditorProps.videoTimestamp?.formattedTimestamp).toBe('0:08');
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft_clear', undefined]);
             } finally {
                 cleanup();
             }

@@ -2,12 +2,10 @@ import * as React from 'react';
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-// @ts-ignore flow import
 import { ModalActions } from '../modal';
 import Button, { ButtonType } from '../button';
 import PlainButton from '../plain-button';
 import DropdownMenu, { MenuToggle } from '../dropdown-menu';
-// @ts-ignore flow import
 import { Menu, MenuItem } from '../menu';
 import { HotkeyContext } from './HotkeyContext';
 import HotkeyFriendlyModal, { type HotkeyFriendlyModalProps } from './HotkeyFriendlyModal';

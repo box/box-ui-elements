@@ -642,6 +642,52 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
+    test('should uncheck the toggle and drop the range when the viewer dismisses the draft', () => {
+        const { cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            act(() => emitFromViewer('comment_range_draft_dismiss', undefined));
+
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft_clear', undefined]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should ignore a dismiss when the toggle is already off', () => {
+        const { cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => emitFromViewer('comment_range_draft_dismiss', undefined));
+
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(emittedEvents(viewer)).toHaveLength(0);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should let the start follow pause and seek again after a dismiss', () => {
+        const { audio, cleanup, emitFromViewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('press').click());
+            act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
+            act(() => emitFromViewer('comment_range_draft_dismiss', undefined));
+            act(() => screen.getByText('press').click());
+
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 61, writable: true });
+            act(() => audio.dispatchEvent(new Event('pause')));
+
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
+            expect(screen.getByTestId('ms').textContent).toBe('61000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+        } finally {
+            cleanup();
+        }
+    });
+
     test.each([
         ['a malformed payload', undefined],
         ['a non-numeric start', { endMs: 50000, startMs: 'nope' }],
@@ -773,6 +819,7 @@ describe('useMediaTimestamp range selection', () => {
         try {
             render(<TestHarness enabled getViewer={() => (isPreviewLoaded ? harness.viewer : null)} isAudioPlayerV2 />);
             expect(harness.hasListener('comment_range_draft_change')).toBe(false);
+            expect(harness.hasListener('comment_range_draft_dismiss')).toBe(false);
 
             isPreviewLoaded = true;
             act(() => jest.advanceTimersByTime(500));
@@ -816,6 +863,7 @@ describe('useMediaTimestamp range selection', () => {
 
             expect(emittedEvents(viewer)).toHaveLength(0);
             expect(hasListener('comment_range_draft_change')).toBe(false);
+            expect(hasListener('comment_range_draft_dismiss')).toBe(false);
             expect(screen.getByTestId('ms').textContent).toBe('43500');
         } finally {
             cleanup();
