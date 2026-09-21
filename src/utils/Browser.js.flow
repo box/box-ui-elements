@@ -11,7 +11,7 @@ class Browser {
      * Returns the user agent.
      * Helps in mocking out.
      *
-     * @return {String} navigator userAgent
+     * @return {string} navigator userAgent
      */
     static getUserAgent(): string {
         return global.navigator.userAgent;

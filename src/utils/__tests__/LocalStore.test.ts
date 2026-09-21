@@ -20,9 +20,7 @@ describe('util/LocalStore', () => {
     });
 
     beforeEach(() => {
-        localStorage.getItem.mockClear();
-        localStorage.removeItem.mockClear();
-        localStorage.setItem.mockClear();
+        jest.clearAllMocks();
         localStore = new LocalStore();
     });
 

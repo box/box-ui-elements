@@ -442,6 +442,14 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.preview.addListener).toHaveBeenCalledWith('load', instance.onPreviewLoad);
         });
 
+        test('should bind navigateRight to preview "mediaEndPlayNext" event', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.addListener).toHaveBeenCalledWith('mediaEndPlayNext', instance.navigateRight);
+        });
+
         test('should call preview show with correct params', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
