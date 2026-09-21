@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 
-import { formatByTimeFormat, useTimeFormat } from '../useTimeFormat';
+import { formatByTimeFormat, formatTimeRange, useTimeFormat } from '../useTimeFormat';
 
 const TestHarness = ({ enabled }: { enabled: boolean }) => {
     const { timeFormat, fps } = useTimeFormat(enabled);
@@ -142,5 +142,22 @@ describe('formatByTimeFormat', () => {
         expect(formatByTimeFormat(10000, 'frames', 24)).toBe('240');
         expect(formatByTimeFormat(1000, 'frames', 30)).toBe('30');
         expect(formatByTimeFormat(0, 'frames', 24)).toBe('0');
+    });
+});
+
+describe('formatTimeRange', () => {
+    test('should join both bounds with an en dash', () => {
+        expect(formatTimeRange(8055, 12000, 'standard', 24)).toBe('0:08 \u2013 0:12');
+    });
+
+    test('should format both bounds with the active time format', () => {
+        expect(formatTimeRange(61500, 122000, 'timecode', 30)).toBe('00:01:01:15 \u2013 00:02:02:00');
+        expect(formatTimeRange(1000, 10000, 'frames', 24)).toBe('24 \u2013 240');
+    });
+
+    test('should format each bound the same way formatByTimeFormat does', () => {
+        const [start, end] = formatTimeRange(43500, 3661000, 'standard', 24).split(' \u2013 ');
+        expect(start).toBe(formatByTimeFormat(43500, 'standard', 24));
+        expect(end).toBe(formatByTimeFormat(3661000, 'standard', 24));
     });
 });

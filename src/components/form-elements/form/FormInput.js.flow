@@ -1,0 +1,31 @@
+// @flow
+import * as React from 'react';
+
+import { FormContext } from './FormContext';
+
+class FormInput extends React.Component<any> {
+    componentDidMount() {
+        const { name, onValidityStateUpdate } = this.props;
+        const formContext = this.context;
+
+        if (formContext && formContext.form) {
+            formContext.form.registerInput(name, onValidityStateUpdate);
+        }
+    }
+
+    componentWillUnmount() {
+        const formContext = this.context;
+        if (formContext && formContext.form) {
+            formContext.form.unregisterInput(this.props.name);
+        }
+    }
+
+    render() {
+        return <div>{this.props.children}</div>;
+    }
+}
+
+// $FlowFixMe contextType is supported at runtime
+FormInput.contextType = FormContext;
+
+export default FormInput;

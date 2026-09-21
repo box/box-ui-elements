@@ -7,19 +7,29 @@ import { formatCount } from './numberUtils';
 
 interface Props {
     className?: string;
+    color?: 'textOnLightDefault' | 'textOnLightSecondary';
     count: number;
     intl: IntlShape;
     isRedesignEnabled?: boolean;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
+    variant?: 'bodyLargeBold' | 'captionBold';
 }
 
-function CompactCount({ className, count, intl, isRedesignEnabled, ...rest }: Props) {
+function CompactCount({
+    className,
+    color = 'textOnLightSecondary',
+    count,
+    intl,
+    isRedesignEnabled,
+    variant = 'captionBold',
+    ...rest
+}: Props) {
     const formattedCount = formatCount(count, intl);
 
     if (isRedesignEnabled) {
         return (
-            <Text as="span" className={className} color="textOnLightSecondary" variant="bodyDefaultSemibold" {...rest}>
+            <Text as="span" className={className} color={color} variant={variant} {...rest}>
                 {formattedCount}
             </Text>
         );

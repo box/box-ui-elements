@@ -46,6 +46,8 @@ type ResolvedInfo = {
 
 export type TransformedCommentItem = {
     annotationTarget?: AnnotationBadgeTargetType;
+    // End of a comment's time range. Undefined for single-timestamp comments.
+    annotationTimestampEndMs?: number;
     annotationTimestampMarkup?: string;
     annotationTimestampMs?: number;
     id: string;
@@ -81,10 +83,26 @@ export type ActivityFeedV2File = {
     };
 };
 
+/**
+ * Draft range the composer is holding, sent to the viewer so it can draw handles on the waveform.
+ * A null end means the composer still holds a single timestamp and the handles sit collapsed at the start.
+ */
+export type CommentRangeDraft = {
+    endMs: number | null;
+    startMs: number;
+};
+
 export type ViewerHandle = {
     addListener: (event: string, handler: (payload: unknown) => void) => void;
     emit: (event: string, payload: unknown) => void;
+    isDestroyed?: () => boolean;
+    pause?: () => void;
     removeListener: (event: string, handler: (payload: unknown) => void) => void;
+    setMediaTime?: (time: number) => void;
+};
+
+export type PreviewHandle = {
+    getCurrentViewer?: () => ViewerHandle | null;
 };
 
 export type ActivityFeedV2Props = {
@@ -98,8 +116,11 @@ export type ActivityFeedV2Props = {
     getMentionAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     getViewer?: () => ViewerHandle | null;
+    getPreview?: () => PreviewHandle | null;
     hasTasks?: boolean;
+    isAudioPlayerV2Enabled?: boolean;
     isDisabled?: boolean;
+    isRichTextEnabled?: boolean;
     isTimestampedCommentsEnabled?: boolean;
     onAnnotationCopyLink?: (params: { annotationId: string; fileVersionId: string }) => void;
     onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;

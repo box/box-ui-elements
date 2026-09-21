@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     AutofillContextProvider,
+    type MetadataInstanceFormProps,
     type MetadataTemplateField,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
@@ -14,6 +15,21 @@ import { FeatureProvider } from '../../common/feature-checking';
 const mockOnCancel = jest.fn();
 const mockOnDiscardUnsavedChanges = jest.fn();
 const mockSetIsUnsavedChangesModalOpen = jest.fn();
+
+// Records props passed to the form so wiring tests can assert on them
+// without replacing the real form used by the rest of this suite.
+const mockForm = jest.fn<null, [MetadataInstanceFormProps]>(() => null);
+jest.mock('@box/metadata-editor', () => {
+    const actual = jest.requireActual('@box/metadata-editor') as typeof import('@box/metadata-editor');
+
+    return {
+        ...actual,
+        MetadataInstanceForm: (props: MetadataInstanceFormProps) => {
+            mockForm(props);
+            return actual.MetadataInstanceForm(props);
+        },
+    };
+});
 
 jest.unmock('react-intl');
 
@@ -177,6 +193,47 @@ describe('MetadataInstanceEditor', () => {
 
         const templateHeader = screen.getByText(mockMetadataTemplateInstance.displayName);
         expect(templateHeader).toBeInTheDocument();
+    });
+
+    test('should pass user field props to MetadataInstanceForm when enabled', () => {
+        const fetchUsers = jest.fn();
+        const fetchAvatarUrls = jest.fn();
+        mockForm.mockClear();
+
+        renderWithAutofill(
+            <MetadataInstanceEditor
+                {...defaultProps}
+                fetchAvatarUrls={fetchAvatarUrls}
+                fetchUsers={fetchUsers}
+                isMetadataUserFieldEnabled
+            />,
+        );
+
+        expect(mockForm).toHaveBeenCalledWith(
+            expect.objectContaining({
+                fetchAvatarUrls,
+                fetchUsers,
+                isUserFieldEnabled: true,
+            }),
+        );
+    });
+
+    test('should pass isUserFieldEnabled false to MetadataInstanceForm by default', () => {
+        const fetchUsers = jest.fn();
+        const fetchAvatarUrls = jest.fn();
+        mockForm.mockClear();
+
+        renderWithAutofill(
+            <MetadataInstanceEditor {...defaultProps} fetchAvatarUrls={fetchAvatarUrls} fetchUsers={fetchUsers} />,
+        );
+
+        expect(mockForm).toHaveBeenCalledWith(
+            expect.objectContaining({
+                fetchAvatarUrls,
+                fetchUsers,
+                isUserFieldEnabled: false,
+            }),
+        );
     });
 
     test('should render without onToggleReviewFilter prop (optional)', () => {

@@ -1,6 +1,6 @@
 import { type MetadataTemplateField } from '@box/metadata-editor';
 import { act, renderHook } from '../../../test-utils/testing-library';
-import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
+import useMetadataFieldSelection, { METADATA_BOUNDING_BOX_SHOWN_EVENT } from '../hooks/useMetadataFieldSelection';
 
 const mockTargetLocation = [
     {
@@ -342,6 +342,61 @@ describe('useMetadataFieldSelection', () => {
                     pageNumber: 1,
                 },
             ]);
+        });
+    });
+
+    describe('analytics', () => {
+        const trackEvent = jest.fn();
+
+        beforeEach(() => {
+            trackEvent.mockClear();
+        });
+
+        test('tracks bounding box shown after showBoundingBoxHighlights succeeds', () => {
+            const { result } = renderHook(() => useMetadataFieldSelection(getPreview, trackEvent));
+
+            act(() => {
+                result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
+            });
+
+            expect(trackEvent).toHaveBeenCalledTimes(1);
+            expect(trackEvent).toHaveBeenCalledWith(METADATA_BOUNDING_BOX_SHOWN_EVENT, {
+                fieldType: 'string',
+                boundingBoxCount: 1,
+            });
+        });
+
+        test('does not track when field has no targetLocation', () => {
+            const { result } = renderHook(() => useMetadataFieldSelection(getPreview, trackEvent));
+
+            act(() => {
+                result.current.handleSelectMetadataField(createMockField());
+            });
+
+            expect(trackEvent).not.toHaveBeenCalled();
+        });
+
+        test('does not track when preview lacks showBoundingBoxHighlights', () => {
+            const getPreviewWithoutShow = jest.fn().mockReturnValue({
+                hideBoundingBoxHighlights: mockHideBoundingBoxHighlights,
+            });
+            const { result } = renderHook(() => useMetadataFieldSelection(getPreviewWithoutShow, trackEvent));
+
+            act(() => {
+                result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
+            });
+
+            expect(trackEvent).not.toHaveBeenCalled();
+        });
+
+        test('does not throw when trackEvent is omitted', () => {
+            const { result } = renderHook(() => useMetadataFieldSelection(getPreview));
+
+            expect(() => {
+                act(() => {
+                    result.current.handleSelectMetadataField(createMockField({ targetLocation: mockTargetLocation }));
+                });
+            }).not.toThrow();
         });
     });
 });

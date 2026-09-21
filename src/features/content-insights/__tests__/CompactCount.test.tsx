@@ -37,6 +37,12 @@ describe('features/content-insights/CompactCount', () => {
             expect(wrapper.getByText(expectedCount)).toBeVisible();
         });
 
+        test('should render the count when isRedesignEnabled', () => {
+            getWrapper({ count: 3, isRedesignEnabled: true });
+
+            expect(screen.getByText('3')).toBeVisible();
+        });
+
         test('should call mouseenter and mouseleave callbacks', () => {
             const onMouseEnter = jest.fn();
             const onMouseLeave = jest.fn();

@@ -2,6 +2,8 @@ import type { PaginationQueryInput } from '@box/metadata-editor';
 import type { Level } from '@box/combobox-with-api';
 import {
     createTaxonomyItemsService,
+    metadataTaxonomiesListFetcher,
+    metadataTaxonomyByKeyFetcher,
     metadataTaxonomyFetcher,
     metadataTaxonomyNodeAncestorsFetcher,
     type TaxonomyFieldConfig,
@@ -530,6 +532,157 @@ describe('metadataTaxonomyNodeAncestorsFetcher (new keys naming convention)', ()
         apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockRejectedValue(error);
 
         await expect(metadataTaxonomyNodeAncestorsFetcher(apiMock, fileID, scope, taxonomyKey, nodeID)).rejects.toThrow(
+            'API Error',
+        );
+    });
+});
+
+describe('metadataTaxonomiesListFetcher', () => {
+    const fileId = '12345';
+    const namespace = 'enterprise_1';
+    let apiMock: jest.Mocked<API>;
+
+    beforeEach(() => {
+        apiMock = {
+            getMetadataAPI: jest.fn().mockReturnValue({
+                getMetadataTaxonomies: jest.fn(),
+            }),
+        };
+    });
+
+    test('should map entries into TaxonomyOption[]', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomies.mockResolvedValue({
+            entries: [
+                {
+                    id: 'tax_1',
+                    key: 'geography',
+                    displayName: 'Geography',
+                    namespace: 'enterprise_1',
+                    levels: [{ level: 1, displayName: 'Country' }],
+                },
+            ],
+            next_marker: 'page-2',
+        });
+
+        const result = await metadataTaxonomiesListFetcher(apiMock, fileId, namespace);
+
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomies).toHaveBeenCalledWith(fileId, namespace);
+        expect(result).toEqual([
+            {
+                id: 'tax_1',
+                label: 'Geography',
+                taxonomyKey: 'geography',
+                namespace: 'enterprise_1',
+                levels: [{ name: 'Country', level: 1 }],
+                selected: false,
+            },
+        ]);
+    });
+
+    test('should return an empty list when there are no entries', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomies.mockResolvedValue({
+            entries: [],
+            next_marker: null,
+        });
+
+        const result = await metadataTaxonomiesListFetcher(apiMock, fileId, namespace);
+
+        expect(result).toEqual([]);
+    });
+});
+
+describe('metadataTaxonomyByKeyFetcher', () => {
+    const fileId = '12345';
+    const namespace = 'enterprise_1';
+    const taxonomyKey = 'geography';
+
+    let apiMock: jest.Mocked<API>;
+
+    beforeEach(() => {
+        apiMock = {
+            getMetadataAPI: jest.fn().mockReturnValue({
+                getMetadataTaxonomy: jest.fn(),
+            }),
+        };
+    });
+
+    test('should map camelCase taxonomy into a TaxonomyOption', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue({
+            displayName: 'Geography',
+            namespace: 'enterprise_1',
+            id: 'tax_id',
+            key: 'geography',
+            levels: [
+                { level: 1, displayName: 'Country' },
+                { level: 2, displayName: 'State' },
+            ],
+        });
+
+        const result = await metadataTaxonomyByKeyFetcher(apiMock, fileId, namespace, taxonomyKey);
+
+        expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomy).toHaveBeenCalledWith(fileId, namespace, taxonomyKey);
+        expect(result).toEqual({
+            id: 'tax_id',
+            label: 'Geography',
+            taxonomyKey: 'geography',
+            namespace: 'enterprise_1',
+            levels: [
+                { name: 'Country', level: 1 },
+                { name: 'State', level: 2 },
+            ],
+            selected: false,
+        });
+    });
+
+    test('should map snake_case taxonomy into a TaxonomyOption', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue({
+            display_name: 'Geography',
+            namespace: 'enterprise_1',
+            id: 'tax_id',
+            key: 'geography',
+            levels: [
+                { level: 1, display_name: 'Country' },
+                { level: 2, display_name: 'State' },
+            ],
+        });
+
+        const result = await metadataTaxonomyByKeyFetcher(apiMock, fileId, namespace, taxonomyKey);
+
+        expect(result).toEqual({
+            id: 'tax_id',
+            label: 'Geography',
+            taxonomyKey: 'geography',
+            namespace: 'enterprise_1',
+            levels: [
+                { name: 'Country', level: 1 },
+                { name: 'State', level: 2 },
+            ],
+            selected: false,
+        });
+    });
+
+    test('should fall back to request params when the response omits identity fields', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue({
+            levels: [],
+        });
+
+        const result = await metadataTaxonomyByKeyFetcher(apiMock, fileId, namespace, taxonomyKey);
+
+        expect(result).toEqual({
+            id: taxonomyKey,
+            label: taxonomyKey,
+            taxonomyKey,
+            namespace,
+            levels: [],
+            selected: false,
+        });
+    });
+
+    test('should throw if getMetadataTaxonomy fails', async () => {
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockRejectedValue(new Error('API Error'));
+
+        await expect(metadataTaxonomyByKeyFetcher(apiMock, fileId, namespace, taxonomyKey)).rejects.toThrow(
             'API Error',
         );
     });

@@ -30,6 +30,8 @@ type RequestOptions = {
     forceFetch?: boolean,
     noPagination?: boolean,
     refreshCache?: boolean,
+    // Extra X-Rep-Hints brackets appended to the default header (e.g. '[waveform]')
+    repHints?: string,
 };
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
@@ -99,6 +101,7 @@ type APIOptions = {
      * a future major version.
      */
     metadataApiHost?: string,
+    metadataNamespaceMode?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     retryableStatusCodes?: Array<number>,

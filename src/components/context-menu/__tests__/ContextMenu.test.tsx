@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import React, { act } from 'react';
 import { mount, shallow, ReactWrapper } from 'enzyme';
 import TetherComponent from 'react-tether';

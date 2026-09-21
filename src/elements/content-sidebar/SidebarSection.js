@@ -8,6 +8,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import { Text } from '@box/blueprint-web';
 import PlainButton from '../../components/plain-button/PlainButton';
 import IconCaretDown from '../../icons/general/IconCaretDown';
 import { COLOR_999 } from '../../constants';
@@ -90,7 +91,9 @@ class SidebarSection extends React.PureComponent<Props, State> {
                         onClick={this.toggleVisibility}
                         type="button"
                     >
-                        {title}
+                        <Text as="span" variant="bodyDefault">
+                            {title}
+                        </Text>
                         <IconCaretDown color={COLOR_999} width={8} />
                     </PlainButton>
                 )}

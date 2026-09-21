@@ -33,7 +33,11 @@ function convertTargetLocationToBoundingBox(
 const METADATA_FIELD_SELECTOR = '[data-metadata-field]';
 const BOUNDING_BOX_SELECTOR = '.ba-BoundingBoxHighlightRect';
 
-function useMetadataFieldSelection(getPreview: () => GetPreviewForMetadataReturnType) {
+export const METADATA_BOUNDING_BOX_SHOWN_EVENT = 'metadata_editor_bounding_box_shown';
+
+type TrackEvent = (eventName: string, data?: Record<string, unknown>) => void;
+
+function useMetadataFieldSelection(getPreview: () => GetPreviewForMetadataReturnType, trackEvent?: TrackEvent) {
     const [selectedMetadataFieldId, setSelectedMetadataFieldId] = useState<string | null>(null);
 
     const handleDeselectMetadataField = useCallback(() => {
@@ -89,8 +93,13 @@ function useMetadataFieldSelection(getPreview: () => GetPreviewForMetadataReturn
 
             setSelectedMetadataFieldId(field.id);
             preview.showBoundingBoxHighlights(boundingBoxes);
+
+            trackEvent?.(METADATA_BOUNDING_BOX_SHOWN_EVENT, {
+                fieldType: field.type,
+                boundingBoxCount: boundingBoxes.length,
+            });
         },
-        [getPreview, handleDeselectMetadataField],
+        [getPreview, handleDeselectMetadataField, trackEvent],
     );
 
     return { selectedMetadataFieldId, handleSelectMetadataField };

@@ -131,6 +131,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                     contentInsights: {},
                     fetchContentInsights: jest.fn(),
                     hasContentInsights: true,
+                    isRedesignEnabled: true,
                     onContentInsightsClick: jest.fn(),
                 },
                 { disableLifecycleMethods: true },
@@ -139,6 +140,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
 
             expect(wrapper.find('SidebarContentInsights').props()).toMatchObject({
                 contentInsights: {},
+                isRedesignEnabled: true,
                 onContentInsightsClick: expect.any(Function),
             });
         });

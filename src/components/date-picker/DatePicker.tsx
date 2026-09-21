@@ -18,7 +18,6 @@ import Label from '../label';
 import PlainButton from '../plain-button';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
 
-// @ts-ignore flow import
 import { convertDateToUnixMidnightTime } from '../../utils/datetime';
 
 import './DatePicker.scss';
