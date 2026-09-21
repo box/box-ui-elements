@@ -1576,8 +1576,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         // Annotation clicks in the compared pane rewrite the activity path's fileVersionId.
         // Forwarding that to the host as a version change unmounts side-by-side compare.
-        // Versions-sidebar clicks do not set origin and still notify the host.
-        if (!(this.props.isComparing && versionInfo.origin === 'annotation')) {
+        // Versions-sidebar clicks do not set triggeredBy and still notify the host.
+        if (!(this.props.isComparing && versionInfo.triggeredBy === 'annotation')) {
             onVersionChange(version, versionInfo);
         }
         // Host still gets non-annotation events so the compared pane can follow comparedVersion.

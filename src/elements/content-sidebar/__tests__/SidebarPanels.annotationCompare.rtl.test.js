@@ -2,7 +2,7 @@
 // compared (older-version) pane emits `annotations_active_change` on the shared annotator
 // event manager. The main pane's withAnnotations picks it up, withSidebarAnnotations pushes
 // the annotation thread path, and every resulting onVersionChange call must carry
-// `origin: 'annotation'` so a comparing ContentPreview can suppress them and keep the
+// `triggeredBy: 'annotation'` so a comparing ContentPreview can suppress them and keep the
 // comparison open (see ContentPreview.onVersionChange).
 import * as React from 'react';
 import { EventEmitter } from 'events';
@@ -28,7 +28,7 @@ describe('compared-pane annotation click -> sidebar switches to the annotation t
     };
     const api = { getFeedAPI: () => feedAPI };
 
-    test('pushes the annotations path and tags all version changes with an annotation origin', () => {
+    test('pushes the annotations path and tags all version changes as triggered by an annotation', () => {
         // Mirror the production SidebarPanels composition: withSidebarAnnotations inside,
         // withAnnotatorContext outside, router outermost.
         const SidebarChain = withRouter(withAnnotatorContext(withSidebarAnnotations(SidebarPanelsComponent)));
@@ -83,15 +83,15 @@ describe('compared-pane annotation click -> sidebar switches to the annotation t
 
         // SidebarPanels resets the version on leaving the versions route, and
         // withSidebarAnnotations reports the annotation's version; both must be tagged
-        // with origin 'annotation' so a comparing ContentPreview suppresses them.
+        // with triggeredBy 'annotation' so a comparing ContentPreview suppresses them.
         expect(onVersionChange).toHaveBeenCalled();
         onVersionChange.mock.calls.forEach(([, additionalVersionInfo]) => {
-            expect(additionalVersionInfo).toMatchObject({ origin: 'annotation' });
+            expect(additionalVersionInfo).toMatchObject({ triggeredBy: 'annotation' });
         });
-        expect(onVersionChange).toHaveBeenCalledWith(null, { origin: 'annotation' });
+        expect(onVersionChange).toHaveBeenCalledWith(null, { triggeredBy: 'annotation' });
         expect(onVersionChange).toHaveBeenCalledWith(
             oldVersion,
-            expect.objectContaining({ currentVersionId: 'CURRENT', origin: 'annotation' }),
+            expect.objectContaining({ currentVersionId: 'CURRENT', triggeredBy: 'annotation' }),
         );
     });
 });

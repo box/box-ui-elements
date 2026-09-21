@@ -174,7 +174,7 @@ class SidebarPanels extends React.Component<Props, State> {
         // versions side by side can ignore the reset and keep the comparison open.
         if (onVersionChange && this.getVersionsMatchPath(prevLocation) && !this.getVersionsMatchPath(location)) {
             if (matchPath(location.pathname, SIDEBAR_PATH_ANNOTATIONS)) {
-                onVersionChange(null, { origin: 'annotation' });
+                onVersionChange(null, { triggeredBy: 'annotation' });
             } else {
                 onVersionChange(null);
             }

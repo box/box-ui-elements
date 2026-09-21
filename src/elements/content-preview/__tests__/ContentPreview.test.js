@@ -1823,7 +1823,7 @@ describe('elements/content-preview/ContentPreview', () => {
             const instance = wrapper.instance();
             const version = { id: '12345' };
 
-            instance.onVersionChange(version, { origin: 'annotation', updateVersionToCurrent: jest.fn() });
+            instance.onVersionChange(version, { triggeredBy: 'annotation', updateVersionToCurrent: jest.fn() });
 
             expect(onVersionChange).not.toHaveBeenCalled();
             expect(wrapper.state('selectedVersion')).toBeUndefined();
@@ -1832,12 +1832,12 @@ describe('elements/content-preview/ContentPreview', () => {
         test('should not notify the host for the annotation-driven version reset when comparing', () => {
             // SidebarPanels resets the version (null) when the sidebar leaves the versions route.
             // When the exit is caused by opening an annotation thread, the reset is tagged with
-            // origin so the side-by-side comparison stays open.
+            // triggeredBy so the side-by-side comparison stays open.
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ isComparing: true, onVersionChange });
             const instance = wrapper.instance();
 
-            instance.onVersionChange(null, { origin: 'annotation' });
+            instance.onVersionChange(null, { triggeredBy: 'annotation' });
 
             expect(onVersionChange).not.toHaveBeenCalled();
         });
@@ -1847,9 +1847,9 @@ describe('elements/content-preview/ContentPreview', () => {
             const wrapper = getWrapper({ onVersionChange });
             const instance = wrapper.instance();
 
-            instance.onVersionChange(null, { origin: 'annotation' });
+            instance.onVersionChange(null, { triggeredBy: 'annotation' });
 
-            expect(onVersionChange).toHaveBeenCalledWith(null, { origin: 'annotation' });
+            expect(onVersionChange).toHaveBeenCalledWith(null, { triggeredBy: 'annotation' });
         });
     });
 
