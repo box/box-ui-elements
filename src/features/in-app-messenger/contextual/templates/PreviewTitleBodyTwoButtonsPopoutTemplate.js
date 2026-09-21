@@ -6,13 +6,14 @@
  */
 
 import * as React from 'react';
+import sanitizeHTML from 'sanitize-html';
 
 import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import Overlay from '../../../../components/flyout/Overlay';
 import MessagePreviewContent from '../../../message-preview-content/MessagePreviewContent';
 import type { Token } from '../../../../common/types/core';
-import type { MessageActions, PreviewTitleBodyTwoButtonsParams} from '../../types';
+import type { MessageActions, PreviewTitleBodyTwoButtonsParams } from '../../types';
 
 import './styles/PreviewTitleBodyTwoButtonsPopoutTemplate.scss';
 
@@ -55,13 +56,13 @@ const PreviewTitleBodyTwoButtonsPopoutTemplate = ({
                         <div
                             className="bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-title"
                             dangerouslySetInnerHTML={{
-                                __html: title,
+                                __html: sanitizeHTML(title),
                             }}
                         />
                         <div
                             className="bdl-PreviewTitleBodyTwoButtonsPopoutTemplate-body"
                             dangerouslySetInnerHTML={{
-                                __html: body,
+                                __html: sanitizeHTML(body),
                             }}
                         />
                         {/* eslint-enable react/no-danger */}

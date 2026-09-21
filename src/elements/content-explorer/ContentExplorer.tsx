@@ -20,6 +20,7 @@ import Pagination from '../common/pagination';
 import SubHeader from '../common/sub-header/SubHeader';
 import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
+import { openUrlSafely } from '../../utils/url';
 import Internationalize from '../common/Internationalize';
 import ThemingStyles from '../common/theming';
 import API from '../../api';
@@ -1128,7 +1129,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     preview = (item: BoxItem): void => {
         const { type, url }: BoxItem = item;
         if (type === TYPE_WEBLINK) {
-            window.open(url);
+            openUrlSafely(url);
             return;
         }
 

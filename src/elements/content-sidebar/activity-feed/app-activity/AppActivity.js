@@ -19,6 +19,7 @@ import messages from './messages';
 import { bdlGray80 } from '../../../../styles/variables';
 import { Link } from '../../../../components/link';
 import { MenuItem } from '../../../../components/menu';
+import { isSafeHref } from '../../../../utils/url';
 import type { AppItem, ActivityTemplateItem, ActionItemError } from '../../../../common/types/feed';
 import type { User, BoxItemPermission } from '../../../../common/types/core';
 import './AppActivity.scss';
@@ -43,17 +44,21 @@ type State = {
 };
 
 function mapActivityNodes(node: HTMLLinkElement): React.Node {
-    const { dataset = {}, href = '#', tagName, textContent } = node;
+    const { dataset = {}, tagName, textContent } = node;
+    const href = node.href || '#';
 
     switch (tagName) {
         case 'A':
+            if (!isSafeHref(href)) {
+                return textContent;
+            }
             return (
                 <Link
                     href={href}
                     data-resin-target={dataset.resinTarget}
                     data-resin-action={dataset.resinAction}
                     key={`app_actvity_link_${href}`}
-                    rel="roreferrer noopener"
+                    rel="noreferrer noopener"
                     className="bcs-AppActivity-link"
                     target="_blank"
                 >

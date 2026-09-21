@@ -14,7 +14,8 @@ exports[`components/message-center/components/templates/common/MessageFooter sho
   <a
     className="MessageFooter-action"
     data-resin-target="messageCenterAction|testmessagename"
-    href="testURL"
+    href="https://example.com"
+    rel="noopener noreferrer"
     target="_self"
   >
     label

@@ -49,9 +49,9 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
         className="bcs-AppActivity-link"
         data-resin-action="bar"
         data-resin-target="foo"
-        href=""
-        key="app_actvity_link_"
-        rel="roreferrer noopener"
+        href="#"
+        key="app_actvity_link_#"
+        rel="noreferrer noopener"
         target="_blank"
       >
         This App

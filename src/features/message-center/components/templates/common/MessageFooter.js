@@ -2,6 +2,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import type { ButtonParam } from '../../../types';
+import { isSafeHref } from '../../../../../utils/url';
 import './styles/MessageFooter.scss';
 import MessageFormattedDate from './MessageFormattedDate';
 
@@ -23,12 +24,13 @@ const renderActionItem = (actionItem: ?ButtonParam, name: string) => {
         return action.type === 'openURL';
     });
 
-    if (openURLAction && openURLAction.url && openURLAction.target) {
+    if (openURLAction && isSafeHref(openURLAction.url) && openURLAction.target) {
         return (
             <a
                 className="MessageFooter-action"
                 data-resin-target={`messageCenterAction|${name}`}
                 href={openURLAction.url}
+                rel="noopener noreferrer"
                 target={openURLAction.target}
             >
                 {label} &rarr;

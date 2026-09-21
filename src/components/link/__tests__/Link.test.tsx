@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/anchor-is-valid, no-script-url -- javascript: payloads assert href sanitization */
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
@@ -27,6 +27,18 @@ describe('components/link/Link', () => {
         expect(wrapper.find('a').hasClass('link')).toBe(true);
         expect(wrapper.find('a').prop('children')).toEqual('a link');
         expect(wrapper.find('a').prop('href')).toEqual('foo');
+    });
+
+    test('should replace javascript: href with #', () => {
+        const wrapper = mount(<Link href="javascript:alert(1)">a link</Link>);
+
+        expect(wrapper.find('a').prop('href')).toEqual('#');
+    });
+
+    test('should replace data: href with #', () => {
+        const wrapper = mount(<Link href="data:text/html,<script>alert(1)</script>">a link</Link>);
+
+        expect(wrapper.find('a').prop('href')).toEqual('#');
     });
 
     test('should render Link with rel="noopener" when target="_blank"', () => {

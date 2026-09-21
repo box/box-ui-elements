@@ -136,4 +136,30 @@ describe('elements/content-sidebar/ActivityFeed/app-activity/AppActivity', () =>
         expect(link.prop('data-resin-target')).toEqual(target);
         expect(wrapper.exists('a')).toBe(false);
     });
+
+    test('should not render javascript: hrefs from rendered_text as links', () => {
+        const wrapper = render({
+            currentUser: {
+                id: 'someone_else',
+            },
+            rendered_text: 'Click <a href="javascript:alert(1)">here</a>',
+        });
+
+        expect(wrapper.exists(Link)).toBe(false);
+        expect(wrapper.find(Media.Body).contains('here')).toBe(true);
+    });
+
+    test('should use noreferrer noopener on app activity links', () => {
+        const wrapper = render({
+            currentUser: {
+                id: 'someone_else',
+            },
+            rendered_text: 'You shared via <a href="https://example.com">Box</a>',
+        });
+        const link = wrapper.find(Link);
+
+        expect(link.prop('rel')).toEqual('noreferrer noopener');
+        expect(link.prop('href')).toEqual('https://example.com/');
+        expect(link.prop('target')).toEqual('_blank');
+    });
 });
