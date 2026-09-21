@@ -130,6 +130,7 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
 );
 
 const SIDEBAR_PATH_VERSIONS = '/:sidebar(activity|details)/versions/:versionId?';
+const SIDEBAR_PATH_ANNOTATIONS = '/:sidebar/annotations/:fileVersionId/:annotationId?';
 
 class SidebarPanels extends React.Component<Props, State> {
     boxAISidebar: ElementRefType = React.createRef();
@@ -168,9 +169,15 @@ class SidebarPanels extends React.Component<Props, State> {
         const { location, onVersionChange } = this.props;
         const { location: prevLocation } = prevProps;
 
-        // Reset the current version id if the wrapping versions route is no longer active
+        // Reset the current version id if the wrapping versions route is no longer active.
+        // Tag annotation-driven exits (versions -> annotation thread) so hosts comparing
+        // versions side by side can ignore the reset and keep the comparison open.
         if (onVersionChange && this.getVersionsMatchPath(prevLocation) && !this.getVersionsMatchPath(location)) {
-            onVersionChange(null);
+            if (matchPath(location.pathname, SIDEBAR_PATH_ANNOTATIONS)) {
+                onVersionChange(null, { origin: 'annotation' });
+            } else {
+                onVersionChange(null);
+            }
         }
     }
 
