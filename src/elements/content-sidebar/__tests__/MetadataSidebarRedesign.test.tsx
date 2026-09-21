@@ -3,7 +3,8 @@ import { userEvent } from '@testing-library/user-event';
 import { RouteComponentProps } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
-import { ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
+import { type MetadataTemplateCreateBody } from '@box/metadata-template-editor';
+import { ERROR_CODE_CREATE_METADATA_TEMPLATE, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
 import { screen, render, waitFor, within } from '../../../test-utils/testing-library';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
@@ -43,6 +44,21 @@ jest.mock('../hooks/useMetadataNamespaceContext');
 const mockUseMetadataNamespaceContext = useMetadataNamespaceContext as jest.MockedFunction<
     typeof useMetadataNamespaceContext
 >;
+
+let capturedCreateTemplate: ((body: MetadataTemplateCreateBody) => void | Promise<void>) | undefined;
+jest.mock('../hooks/useMetadataTemplateEditor', () => {
+    const actual = jest.requireActual(
+        '../hooks/useMetadataTemplateEditor',
+    ) as typeof import('../hooks/useMetadataTemplateEditor');
+
+    return {
+        __esModule: true,
+        default: (args: Parameters<typeof actual.default>[0]) => {
+            capturedCreateTemplate = args.onCreate;
+            return actual.default(args);
+        },
+    };
+});
 
 const getStructuredTextRep = jest.fn().mockResolvedValue('structured-text-rep');
 const api = {
@@ -1114,6 +1130,50 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             capturedCallback!(false);
 
             expect(onWarningModalClose).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('template create key', () => {
+        test('should reject create locally when the derived templateKey is empty', async () => {
+            const createMetadataTemplate = jest.fn();
+            const onError = jest.fn();
+            (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate });
+
+            renderComponent({ onError });
+            expect(capturedCreateTemplate).toBeDefined();
+
+            await expect(
+                capturedCreateTemplate!({ displayName: '日本語', templateKey: '' } as MetadataTemplateCreateBody),
+            ).rejects.toThrow(
+                'Template names must include at least one letter or number (A–Z, 0–9). Names that are only punctuation or non-Latin characters cannot be saved.',
+            );
+
+            expect(createMetadataTemplate).not.toHaveBeenCalled();
+            expect(onError).toHaveBeenCalledWith(expect.any(Error), ERROR_CODE_CREATE_METADATA_TEMPLATE, {
+                showNotification: true,
+            });
+        });
+
+        test('should POST a derived ASCII templateKey', async () => {
+            const createMetadataTemplate = jest.fn((_file, _body, successCallback) => {
+                successCallback();
+            });
+            (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate });
+
+            renderComponent();
+            expect(capturedCreateTemplate).toBeDefined();
+
+            await capturedCreateTemplate!({
+                displayName: 'Invoice Details',
+                templateKey: '',
+            } as MetadataTemplateCreateBody);
+
+            expect(createMetadataTemplate).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.objectContaining({ displayName: 'Invoice Details', templateKey: 'invoiceDetails' }),
+                expect.any(Function),
+                expect.any(Function),
+            );
         });
     });
 });
