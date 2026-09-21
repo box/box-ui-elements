@@ -1569,15 +1569,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo): void => {
         const { onVersionChange }: Props = this.props;
-        this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
+        const versionInfo = additionalVersionInfo || {};
+        this.updateVersionToCurrent = versionInfo.updateVersionToCurrent;
 
         // Annotation clicks in the compared pane rewrite the activity path's fileVersionId.
         // Forwarding that to the host as a version change unmounts side-by-side compare.
         // Versions-sidebar clicks do not set origin and still notify the host.
-        if (!(this.props.isComparing && additionalVersionInfo.origin === 'annotation')) {
-            onVersionChange(version, additionalVersionInfo);
+        if (!(this.props.isComparing && versionInfo.origin === 'annotation')) {
+            onVersionChange(version, versionInfo);
         }
         // Host still gets non-annotation events so the compared pane can follow comparedVersion.
         // The left pane stays on current for the whole comparison session.
