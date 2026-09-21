@@ -38,7 +38,7 @@ type AdditionalVersionInfo = {
     // What caused this version change. Annotation clicks are not a user version
     // pick — compare mode must not forward them to the host (that unmounts the compared pane).
     triggeredBy?: 'annotation',
-    updateVersionToCurrent: () => void,
+    updateVersionToCurrent?: () => void,
 };
 
 type ElementOrigin =

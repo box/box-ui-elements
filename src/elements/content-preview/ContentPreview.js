@@ -2000,7 +2000,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           enableAnnotationsImageDiscoverability={false}
                           enableAnnotationsOnlyControls={false}
                           showAnnotationsControls={false}
-                          showAnnotationsDrawing={false}
                           showAnnotationsDrawingCreate={false}
                       />,
                       comparedSlot,
