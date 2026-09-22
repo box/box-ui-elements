@@ -217,6 +217,7 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 successCallback,
                 url,
+                requestData: { params: { enable_rich_text: false } },
             });
         });
 
@@ -285,6 +286,7 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 requestData: {
                     replies_count: 1,
+                    enable_rich_text: false,
                 },
                 successCallback,
             });
@@ -328,6 +330,7 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
                 successCallback,
+                requestData: { params: { enable_rich_text: false } },
             });
         });
 

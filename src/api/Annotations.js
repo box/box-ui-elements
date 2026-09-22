@@ -220,7 +220,7 @@ export default class Annotations extends MarkerBasedApi {
 
         const params = {
             ...(shouldFetchReplies ? { fields: 'replies' } : {}),
-            ...(shouldEnableRichText ? { enable_rich_text: true } : {}),
+            enable_rich_text: Boolean(shouldEnableRichText),
         };
         const requestData = Object.keys(params).length ? { params } : undefined;
 
@@ -257,7 +257,7 @@ export default class Annotations extends MarkerBasedApi {
             file_id: fileId,
             file_version_id: fileVersionId,
             ...(shouldFetchReplies ? { fields: 'replies' } : null),
-            ...(shouldEnableRichText ? { enable_rich_text: true } : null),
+            enable_rich_text: Boolean(shouldEnableRichText),
         };
 
         this.markerGet({
@@ -292,7 +292,7 @@ export default class Annotations extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(annotationId),
-            ...(shouldEnableRichText ? { requestData: { params: { enable_rich_text: true } } } : {}),
+            requestData: { params: { enable_rich_text: Boolean(shouldEnableRichText) } },
         });
     }
 

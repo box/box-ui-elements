@@ -216,7 +216,7 @@ describe('api/Annotations', () => {
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
-                requestData: undefined,
+                requestData: { params: { enable_rich_text: false } },
             });
         });
 
@@ -233,7 +233,7 @@ describe('api/Annotations', () => {
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
-                requestData: { params: { fields: 'replies' } },
+                requestData: { params: { fields: 'replies', enable_rich_text: false } },
             });
         });
 
@@ -283,6 +283,7 @@ describe('api/Annotations', () => {
                 requestData: {
                     file_id: '12345',
                     file_version_id: '67890',
+                    enable_rich_text: false,
                 },
                 successCallback,
             });
@@ -306,6 +307,7 @@ describe('api/Annotations', () => {
                     file_id: '12345',
                     file_version_id: '67890',
                     fields: 'replies',
+                    enable_rich_text: false,
                 },
             });
         });
@@ -371,6 +373,7 @@ describe('api/Annotations', () => {
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
+                requestData: { params: { enable_rich_text: false } },
             });
         });
 

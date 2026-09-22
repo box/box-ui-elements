@@ -29,12 +29,13 @@ const getFileActivityQueryParams = (
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
     const enableReplies = shouldShowReplies ? 'true' : 'false';
+    const enableRichText = shouldEnableRichText ? 'true' : 'false';
     const replyLimit = shouldUseEnhancedActivities ? V2_REPLY_LIMIT : V1_REPLY_LIMIT;
     const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${replyLimit}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
-    const richTextQueryParam = shouldEnableRichText ? '&enable_rich_text=true' : '';
+    const enabledRichTextQueryParam = `&enable_rich_text=${enableRichText}`;
 
-    return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}${richTextQueryParam}`;
+    return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}${enabledRichTextQueryParam}`;
 };
 
 class FileActivities extends Base {

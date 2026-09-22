@@ -267,7 +267,7 @@ class ThreadedComments extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlForId(commentId),
-            ...(shouldEnableRichText ? { requestData: { params: { enable_rich_text: true } } } : {}),
+            requestData: { params: { enable_rich_text: Boolean(shouldEnableRichText) } },
         });
     }
 
@@ -322,7 +322,7 @@ class ThreadedComments extends MarkerBasedApi {
             limit,
             requestData: {
                 ...(repliesCount ? { replies_count: repliesCount } : null),
-                ...(shouldEnableRichText ? { enable_rich_text: true } : null),
+                enable_rich_text: Boolean(shouldEnableRichText),
             },
             shouldFetchAll,
         });
@@ -364,7 +364,7 @@ class ThreadedComments extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(commentId),
-            ...(shouldEnableRichText ? { requestData: { params: { enable_rich_text: true } } } : {}),
+            requestData: { params: { enable_rich_text: Boolean(shouldEnableRichText) } },
         });
     }
 
