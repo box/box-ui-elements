@@ -1967,6 +1967,12 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           contentAnswersProps={undefined}
                           contentOpenWithProps={undefined}
                           contentSidebarProps={undefined}
+                          // Show existing threads; do not allow creating new ones.
+                          // TODO: Scope annotation fetch errors by file version. The shared
+                          // event bus can show a current-pane error when the old version fails.
+                          enableAnnotationsDiscoverability={false}
+                          enableAnnotationsImageDiscoverability={false}
+                          enableAnnotationsOnlyControls={false}
                           hasHeader={false}
                           hideSidebar
                           isComparing={false}
@@ -1988,12 +1994,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           previewVersion={comparedVersion}
                           resin={undefined}
                           renderCustomPreview={undefined}
-                          // Show existing threads; do not allow creating new ones.
-                          // TODO: Scope annotation fetch errors by file version. The shared
-                          // event bus can show a current-pane error when the old version fails.
-                          enableAnnotationsDiscoverability={false}
-                          enableAnnotationsImageDiscoverability={false}
-                          enableAnnotationsOnlyControls={false}
                           showAnnotationsControls={false}
                           showAnnotationsDrawingCreate={false}
                       />,
