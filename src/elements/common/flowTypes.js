@@ -35,7 +35,6 @@ type Page = {
 
 type AdditionalVersionInfo = {
     currentVersionId?: ?string,
-    // Set when a thread was opened, not when the user picked a version.
     triggeredBy?: 'annotation',
     updateVersionToCurrent?: () => void,
 };
