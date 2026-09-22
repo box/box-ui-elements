@@ -21,6 +21,17 @@ const file = new FileAPI({ cache });
 const folder = new FolderAPI({ cache });
 const weblink = new WebLinkAPI({ cache });
 
+const getThrownError = (callback: () => unknown): Error => {
+    try {
+        callback();
+    } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        return error as Error;
+    }
+
+    throw new Error('Expected callback to throw');
+};
+
 describe('util/flatten', () => {
     test('should flatten the list and create new cache entries', () => {
         const items = flatten(list, folder, file, weblink);
@@ -45,16 +56,19 @@ describe('util/flatten', () => {
 
     test('should throw with a bad type', () => {
         const badList = [{ id: '1', type: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Unknown Type/);
+        const error = getThrownError(flatten.bind(flatten, badList, folder, file, weblink));
+        expect(error.message).toMatch(/Unknown Type/);
     });
 
     test('should throw with a bad item when no id', () => {
         const badList = [{ type: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Bad box item/);
+        const error = getThrownError(flatten.bind(flatten, badList, folder, file, weblink));
+        expect(error.message).toMatch(/Bad box item/);
     });
 
     test('should throw with a bad item when no type', () => {
         const badList = [{ id: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Bad box item/);
+        const error = getThrownError(flatten.bind(flatten, badList, folder, file, weblink));
+        expect(error.message).toMatch(/Bad box item/);
     });
 });
