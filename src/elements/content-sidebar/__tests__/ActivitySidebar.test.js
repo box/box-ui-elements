@@ -1084,6 +1084,41 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(result).toMatchObject(expectedItems);
         });
 
+        test('should pass shouldEnableRichText when activityFeed.richText is enabled', async () => {
+            const wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        richText: { enabled: true },
+                    },
+                },
+            });
+            const instance = wrapper.instance();
+            const feedItems = [{ id: '123', type: 'comment' }];
+            const id = '123';
+            const type = 'comment';
+            const replies = [{ id: '456' }];
+            const expectedItem = { id: '123', type: 'comment', replies };
+
+            instance.isItemTypeComment = jest.fn().mockImplementation(() => true);
+            instance.getCommentFeedItemWithReplies = jest.fn().mockImplementation(() => expectedItem);
+            api.getFeedAPI().fetchReplies = jest
+                .fn()
+                .mockImplementationOnce((fileParam, idParam, typeParam, successCallback) => {
+                    successCallback(replies);
+                });
+
+            await instance.getFeedItemsWithReplies(feedItems, id, type);
+
+            expect(api.getFeedAPI().fetchReplies).toBeCalledWith(
+                file,
+                id,
+                type,
+                expect.any(Function),
+                expect.any(Function),
+                true,
+            );
+        });
+
         test('should reject with error if fetchReplies is called and fails', async () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
@@ -1405,6 +1440,42 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(result).toMatchObject(expectedData);
         });
 
+        test('should pass shouldEnableRichText when activityFeed.richText is enabled', async () => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+                features: {
+                    activityFeed: {
+                        richText: { enabled: true },
+                    },
+                },
+            });
+            const instance = wrapper.instance();
+            const parentItem = { id: '123', type: 'comment', replies: [{ id: '456' }] };
+            const feedItems = [parentItem];
+
+            instance.getFocusableFeedItemById = jest
+                .fn()
+                .mockImplementation(() => parentItem)
+                .mockImplementationOnce(() => undefined);
+            instance.getCommentFeedItemByReplyId = jest.fn().mockImplementation(() => undefined);
+            api.getFeedAPI().fetchThreadedComment = jest
+                .fn()
+                .mockImplementationOnce((f, commentId, successCallback) => {
+                    successCallback({ parent: {} });
+                });
+
+            await instance.getActiveFeedEntryData(feedItems);
+
+            expect(api.getFeedAPI().fetchThreadedComment).toBeCalledWith(
+                file,
+                '123',
+                expect.any(Function),
+                expect.any(Function),
+                true,
+            );
+        });
+
         test('if fetchThreadedComment is called unsuccessfuly and error status is 404, should resolve with {}', async () => {
             const wrapper = getWrapper({
                 activeFeedEntryId: '123',
@@ -1507,6 +1578,32 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
                 expect.any(Function),
                 false,
+            );
+            expect(instance.fetchFeedItems).toBeCalled();
+        });
+
+        test('should pass shouldEnableRichText when activityFeed.richText is enabled', () => {
+            const wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        richText: { enabled: true },
+                    },
+                },
+            });
+            const instance = wrapper.instance();
+            const itemId = '123';
+            const itemType = FEED_ITEM_TYPE_COMMENT;
+            instance.fetchFeedItems = jest.fn();
+
+            wrapper.instance().getReplies(itemId, itemType);
+
+            expect(api.getFeedAPI().fetchReplies).toBeCalledWith(
+                file,
+                itemId,
+                itemType,
+                expect.any(Function),
+                expect.any(Function),
+                true,
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });
