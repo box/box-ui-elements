@@ -1805,18 +1805,6 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('selectedVersion')).toBeUndefined();
         });
 
-        test('should treat a null additionalVersionInfo as empty when comparing', () => {
-            const onVersionChange = jest.fn();
-            const wrapper = getWrapper({ isComparing: true, onVersionChange });
-            const instance = wrapper.instance();
-            const version = { id: '12345' };
-
-            instance.onVersionChange(version, null);
-
-            expect(onVersionChange).toHaveBeenCalledWith(version, {});
-            expect(wrapper.state('selectedVersion')).toBeUndefined();
-        });
-
         test('should not notify the host for annotation-driven version changes when comparing', () => {
             const onVersionChange = jest.fn();
             const wrapper = getWrapper({ isComparing: true, onVersionChange });

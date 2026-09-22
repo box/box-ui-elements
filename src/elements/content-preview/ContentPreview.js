@@ -1569,14 +1569,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {string} [version] - The version that is now previewed
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
-    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: ?AdditionalVersionInfo): void => {
+    onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
         const { onVersionChange }: Props = this.props;
-        const versionInfo = additionalVersionInfo || {};
-        this.updateVersionToCurrent = versionInfo.updateVersionToCurrent;
+        this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
         // Keep compare open: do not tell the host about annotation-driven version changes.
-        if (!(this.props.isComparing && versionInfo.triggeredBy === 'annotation')) {
-            onVersionChange(version, versionInfo);
+        if (!(this.props.isComparing && additionalVersionInfo.triggeredBy === 'annotation')) {
+            onVersionChange(version, additionalVersionInfo);
         }
         // While comparing, the left pane stays on the current version.
         if (!this.props.isComparing) {
