@@ -549,6 +549,42 @@ describe('api/Feed', () => {
             });
         });
 
+        test('should forward shouldEnableRichText to annotations, threaded comments, and file activities', () => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowReplies: true,
+                shouldEnableRichText: true,
+            });
+
+            expect(feed.fetchAnnotations).toBeCalledWith(file.permissions, true, true);
+            expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions, true);
+            expect(feed.fetchComments).not.toBeCalled();
+
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowReplies: true,
+                shouldShowTasks: true,
+                shouldShowVersions: true,
+                shouldUseUAA: true,
+                shouldEnableRichText: true,
+            });
+
+            expect(feed.fetchFileActivities).toBeCalledWith(
+                file.permissions,
+                [
+                    FILE_ACTIVITY_TYPE_ANNOTATION,
+                    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                    FILE_ACTIVITY_TYPE_COMMENT,
+                    FILE_ACTIVITY_TYPE_TASK,
+                    FILE_ACTIVITY_TYPE_VERSION,
+                ],
+                true,
+                false,
+                true,
+            );
+        });
+
         test('should not call success or error callback if it is destroyed', done => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
             feed.feedItems(file, false, successCb, errorCb);

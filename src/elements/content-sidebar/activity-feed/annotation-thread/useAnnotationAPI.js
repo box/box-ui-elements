@@ -1,5 +1,6 @@
 // @flow
 import API from '../../../../api/APIFactory';
+import { useFeatureEnabled } from '../../../common/feature-checking';
 
 import type { Annotation, AnnotationPermission, NewAnnotation } from '../../../../common/types/annotations';
 import type { BoxItem } from '../../../../common/types/core';
@@ -40,6 +41,7 @@ const useAnnotationAPI = ({
     errorCallback,
     file: { id: fileId, file_version: { id: fileVersionId } = {}, permissions: filePermissions = {} },
 }: Props): UseAnnotationAPI => {
+    const shouldEnableRichText = useFeatureEnabled('activityFeed.richText.enabled');
     const handleCreate = ({
         payload,
         successCallback,
@@ -71,6 +73,7 @@ const useAnnotationAPI = ({
             successCallback,
             errorCallback,
             true, // to fetch aanotation with its replies
+            shouldEnableRichText,
         );
     };
 

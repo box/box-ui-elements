@@ -1,5 +1,7 @@
+import * as React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { annotationsWithFormattedReplies as annotations } from '../../../../../api/fixtures';
+import FeatureProvider from '../../../../common/feature-checking/FeatureProvider';
 import useAnnotationAPI from '../useAnnotationAPI';
 
 describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
@@ -92,6 +94,44 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
             { can_annotate: true, can_view_annotations: true },
             mockSuccessCallback,
             errorCallback,
+            true,
+            false,
+        );
+    });
+
+    test('should pass shouldEnableRichText when activityFeed.richText is enabled', () => {
+        const mockSuccessCallback = jest.fn();
+        const mockGetAnnotation = jest.fn();
+        const api = getApi({ getAnnotation: mockGetAnnotation });
+        const wrapper = ({ children }) => (
+            <FeatureProvider features={{ activityFeed: { richText: { enabled: true } } }}>{children}</FeatureProvider>
+        );
+
+        const { result } = renderHook(
+            () =>
+                useAnnotationAPI({
+                    api,
+                    errorCallback,
+                    file: {
+                        id: 'fileId',
+                        file_version: { id: '123' },
+                        permissions: filePermissions,
+                    },
+                }),
+            { wrapper },
+        );
+
+        act(() => {
+            result.current.handleFetch({ id: annotation.id, successCallback: mockSuccessCallback });
+        });
+
+        expect(mockGetAnnotation).toBeCalledWith(
+            'fileId',
+            annotation.id,
+            filePermissions,
+            mockSuccessCallback,
+            errorCallback,
+            true,
             true,
         );
     });

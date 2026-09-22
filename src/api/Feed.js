@@ -626,6 +626,8 @@ class Feed extends Base {
                 : Promise.resolve();
         const commentsPromise = () => {
             if (shouldUseUAA) return Promise.resolve();
+            // Legacy non-reply comments have no rich-text param. Wrapped markdown is requested
+            // only on threaded comments, annotations, and file activities.
             return shouldShowReplies
                 ? this.fetchThreadedComments(permissions, shouldEnableRichText)
                 : this.fetchComments(permissions);
