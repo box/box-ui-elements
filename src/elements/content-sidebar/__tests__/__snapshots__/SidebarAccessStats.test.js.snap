@@ -25,6 +25,7 @@ exports[`elements/content-sidebar/SidebarAccessStats should render the component
       id="be.sidebarAccessStats"
     />
   }
+  titleVariant="bodyDefaultBold"
 >
   <AccessStats
     commentCount={0}
@@ -75,6 +76,7 @@ exports[`elements/content-sidebar/SidebarAccessStats should render the component
       id="be.sidebarAccessStats"
     />
   }
+  titleVariant="bodyDefaultBold"
 >
   <AccessStats
     commentCount={0}
