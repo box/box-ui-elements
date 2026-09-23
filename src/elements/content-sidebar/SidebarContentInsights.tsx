@@ -46,6 +46,7 @@ const SidebarContentInsights = ({
         <SidebarSection
             className="bcs-SidebarContentInsights"
             title={<FormattedMessage {...messages.sidebarContentInsights} />}
+            titleVariant="bodyDefaultBold"
         >
             <ContentInsightsSummary
                 error={error}

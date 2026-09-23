@@ -78,6 +78,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
         id="be.sidebarProperties"
       />
     }
+    titleVariant="bodyDefaultBold"
   >
     <SidebarVersions
       file={
@@ -149,6 +150,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
         id="be.sidebarProperties"
       />
     }
+    titleVariant="bodyDefaultBold"
   >
     <SidebarFileProperties
       file={
