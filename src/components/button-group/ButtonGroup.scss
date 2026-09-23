@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../styles/variables';
 
 /**************************************
@@ -18,7 +19,7 @@
             border-radius: 0 $bdl-border-radius-size-med $bdl-border-radius-size-med 0;
 
             &.btn-primary {
-                border-left-color: darken($primary-color, 10%);
+                border-left-color: color.adjust($primary-color, $lightness: -10%);
             }
         }
 
@@ -50,12 +51,12 @@
 
             &.btn-primary {
                 margin: 5px 0;
-                border-right-color: darken($primary-color, 10%);
+                border-right-color: color.adjust($primary-color, $lightness: -10%);
 
                 &.is-selected {
                     color: $white;
-                    background-color: darken($primary-color, 8%);
-                    border-color: darken($primary-color, 15%);
+                    background-color: color.adjust($primary-color, $lightness: -8%);
+                    border-color: color.adjust($primary-color, $lightness: -15%);
                     box-shadow: none;
                 }
 
@@ -110,7 +111,7 @@
                 color: $white;
                 background-color: $primary-color;
                 border-color: $primary-color;
-                border-right-color: darken($primary-color, 10%);
+                border-right-color: color.adjust($primary-color, $lightness: -10%);
 
                 &:last-of-type {
                     border-right-color: $primary-color;
