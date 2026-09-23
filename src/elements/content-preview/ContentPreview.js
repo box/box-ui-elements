@@ -1573,9 +1573,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { onVersionChange }: Props = this.props;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
-        onVersionChange(version, additionalVersionInfo);
-        // Host still gets the event so the compared pane can follow comparedVersion.
-        // The left pane stays on current for the whole comparison session.
+        // Keep compare open: do not tell the host about annotation-driven version changes.
+        if (!(this.props.isComparing && additionalVersionInfo.triggeredBy === 'annotation')) {
+            onVersionChange(version, additionalVersionInfo);
+        }
+        // While comparing, the left pane stays on the current version.
         if (!this.props.isComparing) {
             this.setState({
                 selectedVersion: version,
@@ -1959,13 +1961,18 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           accessPattern={undefined}
                           advancedContentInsights={undefined}
                           autoFocus={false}
-                          boxAnnotations={undefined}
                           collection={EMPTY_COLLECTION}
                           componentRef={undefined}
                           comparedSlotRef={undefined}
                           contentAnswersProps={undefined}
                           contentOpenWithProps={undefined}
                           contentSidebarProps={undefined}
+                          // Show existing threads; do not allow creating new ones.
+                          // TODO: Scope annotation fetch errors by file version. The shared
+                          // event bus can show a current-pane error when the old version fails.
+                          enableAnnotationsDiscoverability={false}
+                          enableAnnotationsImageDiscoverability={false}
+                          enableAnnotationsOnlyControls={false}
                           hasHeader={false}
                           hideSidebar
                           isComparing={false}
@@ -1987,8 +1994,8 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           previewVersion={comparedVersion}
                           resin={undefined}
                           renderCustomPreview={undefined}
-                          showAnnotations={false}
                           showAnnotationsControls={false}
+                          showAnnotationsDrawingCreate={false}
                       />,
                       comparedSlot,
                   )
