@@ -122,15 +122,22 @@ const mergeDetailedAndHydratedInstances = (
             return detailedEntry;
         }
 
-        const merged = { ...detailedEntry };
-        Object.keys(merged).forEach(key => {
+        const merged: { [string]: any } = { ...detailedEntry };
+        Object.keys(hydratedEntry).forEach(key => {
             if (key.startsWith('$')) {
                 return;
             }
 
-            if (isDetailedFieldValue(merged[key]) && key in hydratedEntry) {
+            if (isDetailedFieldValue(merged[key])) {
                 merged[key] = {
                     ...merged[key],
+                    values: hydratedEntry[key],
+                };
+                return;
+            }
+
+            if (!(key in merged)) {
+                merged[key] = {
                     values: hydratedEntry[key],
                 };
             }
