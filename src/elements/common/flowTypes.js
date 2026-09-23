@@ -35,6 +35,9 @@ type Page = {
 
 type AdditionalVersionInfo = {
     currentVersionId?: ?string,
+    // Annotation-path version changes vs versions-sidebar clicks. Compare mode
+    // must not forward annotation-driven changes to the host (that unmounts the compared pane).
+    origin?: 'annotation',
     updateVersionToCurrent: () => void,
 };
 
