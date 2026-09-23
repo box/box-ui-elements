@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../styles/variables';
 @import '../../styles/mixins/overlay';
 
@@ -35,7 +36,7 @@
             font-weight: bold;
             font-size: 11px;
             line-height: 1;
-            letter-spacing: .6px;
+            letter-spacing: 0.6px;
             text-transform: uppercase;
             pointer-events: none;
         }
@@ -55,7 +56,7 @@
         color: $bdl-gray-80 !important;
 
         &.is-selected {
-            background-color: fade-out($bdl-gray, .95);
+            background-color: color.adjust($bdl-gray, $alpha: -0.95);
         }
     }
 }

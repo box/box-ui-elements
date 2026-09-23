@@ -1,8 +1,10 @@
+@use 'sass:color';
+
 /**************************************
  * Pills
  **************************************/
 
-$pillTextColorDark: lighten($black, 31%);
+$pillTextColorDark: color.adjust($black, $lightness: 31%);
 
 .bdl-Pill,
 .btn.bdl-Pill {
@@ -41,7 +43,7 @@ $pillTextColorDark: lighten($black, 31%);
 
     &.bdl-is-disabled,
     &.is-disabled {
-        opacity: .5;
+        opacity: 0.5;
 
         .close-btn {
             cursor: default;
@@ -91,8 +93,8 @@ $pillTextColorDark: lighten($black, 31%);
     &:not(.bdl-is-disabled),
     &:not(.is-disabled) {
         &:focus {
-            border-color: darken($primary-color, 8%);
-            box-shadow: 0 1px 2px fade-out($black, .9);
+            border-color: color.adjust($primary-color, $lightness: -8%);
+            box-shadow: 0 1px 2px color.adjust($black, $alpha: -0.9);
         }
     }
 }
