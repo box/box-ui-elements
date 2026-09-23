@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 /**************************************
  * Links
  **************************************/
@@ -93,8 +95,8 @@ a svg {
     white-space: nowrap;
     text-decoration: none;
     text-overflow: ellipsis;
-    text-shadow: 1px 1px 1px fade-out($black, .996);
-    transition: color .05s;
+    text-shadow: 1px 1px 1px color.adjust($black, $alpha: -0.996);
+    transition: color 0.05s;
     font-smoothing: antialiased;
 
     &:hover {
@@ -106,6 +108,6 @@ a svg {
     color: $bdl-gray-40;
     font-size: 10px;
     line-height: 28px;
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
 }

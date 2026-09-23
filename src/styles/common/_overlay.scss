@@ -1,9 +1,11 @@
+@use 'sass:color';
+
 /**************************************
  * Overlay
  **************************************/
 
-$opacity-duration: .075s;
-$transform-duration: .125s;
+$opacity-duration: 0.075s;
+$transform-duration: 0.125s;
 
 .overlay-wrapper {
     position: relative;
@@ -17,7 +19,10 @@ $transform-duration: .125s;
         transform-style: preserve-3d;
         visibility: hidden;
         opacity: 0;
-        transition: visibility 0s linear $opacity-duration, opacity $opacity-duration, transform $transform-duration;
+        transition:
+            visibility 0s linear $opacity-duration,
+            opacity $opacity-duration,
+            transform $transform-duration;
         pointer-events: none;
     }
 
@@ -37,7 +42,7 @@ $transform-duration: .125s;
     padding: 8px 0;
     background: $white;
     border: 1px solid $bdl-gray-30;
-    box-shadow: 0 2px 6px 0 fade-out($black, .9);
+    box-shadow: 0 2px 6px 0 color.adjust($black, $alpha: -0.9);
 
     hr {
         height: 0;
