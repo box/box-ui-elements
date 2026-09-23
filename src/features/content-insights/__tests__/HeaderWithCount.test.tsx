@@ -13,7 +13,6 @@ describe('features/content-insights/HeaderWithCount', () => {
             const wrapper = getWrapper();
 
             expect(wrapper.getByText('Title type')).toBeVisible();
-            expect(wrapper.getByText('Title type')).toHaveClass('HeaderWithCount-title');
             expect(wrapper.getByText('3')).toBeVisible();
         });
 
@@ -21,7 +20,6 @@ describe('features/content-insights/HeaderWithCount', () => {
             const wrapper = getWrapper({ totalCount });
 
             expect(wrapper.getByText('Title type')).toBeVisible();
-            expect(wrapper.getByText('Title type')).toHaveClass('HeaderWithCount-title');
             expect(wrapper.container.querySelector('.HeaderWithCount-titleCount')).toBeNull();
         });
 
@@ -29,7 +27,6 @@ describe('features/content-insights/HeaderWithCount', () => {
             const wrapper = getWrapper({ isRedesignEnabled: true });
 
             expect(wrapper.getByText('Title type')).toBeVisible();
-            expect(wrapper.getByText('Title type')).toHaveClass('HeaderWithCount-title');
             expect(wrapper.getByText('3')).toBeVisible();
         });
     });
