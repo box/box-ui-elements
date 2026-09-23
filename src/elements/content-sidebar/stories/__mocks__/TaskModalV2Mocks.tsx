@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { BlueprintModernizationProvider, Button, TooltipProvider } from '@box/blueprint-web';
+import { Button, TooltipProvider } from '@box/blueprint-web';
 import type { FetchedAvatarUrls, UserContactType } from '@box/user-selector';
 
 import TaskModalV2 from '../../activity-feed-v2/task-modal-v2';
@@ -128,23 +128,21 @@ export const InteractiveTaskModal = ({
     };
 
     return (
-        <BlueprintModernizationProvider enableModernizedComponents>
-            <TooltipProvider>
-                <Button onClick={() => setIsOpen(true)} variant="secondary">
-                    Reopen task modal
-                </Button>
-                {editingTask ? (
-                    <TaskModalV2
-                        {...sharedProps}
-                        editingAssignees={editingAssignees}
-                        editingTask={editingTask}
-                        editTask={editTask}
-                        mode="edit"
-                    />
-                ) : (
-                    <TaskModalV2 {...sharedProps} />
-                )}
-            </TooltipProvider>
-        </BlueprintModernizationProvider>
+        <TooltipProvider>
+            <Button onClick={() => setIsOpen(true)} variant="secondary">
+                Reopen task modal
+            </Button>
+            {editingTask ? (
+                <TaskModalV2
+                    {...sharedProps}
+                    editingAssignees={editingAssignees}
+                    editingTask={editingTask}
+                    editTask={editTask}
+                    mode="edit"
+                />
+            ) : (
+                <TaskModalV2 {...sharedProps} />
+            )}
+        </TooltipProvider>
     );
 };

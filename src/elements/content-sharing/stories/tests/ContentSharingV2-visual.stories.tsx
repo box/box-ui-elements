@@ -10,7 +10,6 @@ import {
 export const withModernization = {
     args: {
         api: mockApiWithoutSharedLink,
-        enableModernizedComponents: true,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
