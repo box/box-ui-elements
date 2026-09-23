@@ -7,6 +7,7 @@ import PreviewHeader from '../preview-header';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import ContentPreviewWithComparison, { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
+import Browser from '../../../utils/Browser';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 
@@ -847,6 +848,70 @@ describe('elements/content-preview/ContentPreview', () => {
                 file.id,
                 v2Instance.fetchFileSuccessCallback,
                 v2Instance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                },
+            );
+        });
+
+        test('should append extracted_text when dash playback and video transcription are enabled', () => {
+            jest.spyOn(Browser, 'canPlayDash').mockReturnValue(true);
+            const wrapper = getWrapper({
+                ...props,
+                features: { aiTranscriptionForVideoSubtitles: true },
+            });
+            const transcriptionInstance = wrapper.instance();
+            transcriptionInstance.api = instance.api;
+            transcriptionInstance.fetchFileSuccessCallback = jest.fn();
+            transcriptionInstance.fetchFileErrorCallback = jest.fn();
+            transcriptionInstance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                transcriptionInstance.fetchFileSuccessCallback,
+                transcriptionInstance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                    repHints: '[extracted_text]',
+                },
+            );
+        });
+
+        test('should not append extracted_text when dash playback is unavailable', () => {
+            jest.spyOn(Browser, 'canPlayDash').mockReturnValue(false);
+            const wrapper = getWrapper({
+                ...props,
+                features: { aiTranscriptionForVideoSubtitles: true },
+            });
+            const transcriptionInstance = wrapper.instance();
+            transcriptionInstance.api = instance.api;
+            transcriptionInstance.fetchFileSuccessCallback = jest.fn();
+            transcriptionInstance.fetchFileErrorCallback = jest.fn();
+            transcriptionInstance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                transcriptionInstance.fetchFileSuccessCallback,
+                transcriptionInstance.fetchFileErrorCallback,
+                {
+                    fields: PREVIEW_FIELDS_TO_FETCH,
+                },
+            );
+        });
+
+        test('should not append extracted_text when video transcription is disabled', () => {
+            jest.spyOn(Browser, 'canPlayDash').mockReturnValue(true);
+            const wrapper = getWrapper({
+                ...props,
+                features: { aiTranscriptionForVideoSubtitles: false },
+            });
+            const transcriptionInstance = wrapper.instance();
+            transcriptionInstance.api = instance.api;
+            transcriptionInstance.fetchFileSuccessCallback = jest.fn();
+            transcriptionInstance.fetchFileErrorCallback = jest.fn();
+            transcriptionInstance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                transcriptionInstance.fetchFileSuccessCallback,
+                transcriptionInstance.fetchFileErrorCallback,
                 {
                     fields: PREVIEW_FIELDS_TO_FETCH,
                 },
