@@ -4,6 +4,14 @@
     @include ContentInsightsHeaderText;
 }
 
+.HeaderWithCount-title {
+    text-transform: uppercase;
+}
+
+span.HeaderWithCount-title[data-modern] {
+    text-transform: uppercase;
+}
+
 .HeaderWithCount-titleCount::before {
     margin: 0 $bdl-grid-unit;
     content: '•';

@@ -22,7 +22,7 @@ const messages = defineMessages({
         id: 'be.contentInsights.downloadGraphLabel',
     },
     downloadGraphType: {
-        defaultMessage: 'DOWNLOADS',
+        defaultMessage: 'Downloads',
         description: 'Title for the content insights graph card regarding number of Previews',
         id: 'be.contentInsights.downloadGraphType',
     },
@@ -66,7 +66,7 @@ const messages = defineMessages({
         id: 'be.contentInsights.peopleGraphLabel',
     },
     peopleTitle: {
-        defaultMessage: 'PEOPLE',
+        defaultMessage: 'People',
         description: 'Title used to represent how many users have interacted with the file',
         id: 'be.contentInsights.peopleTitle',
     },
