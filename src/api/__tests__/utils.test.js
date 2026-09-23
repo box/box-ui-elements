@@ -428,5 +428,116 @@ describe('api/utils', () => {
             expect(result[0].plainField).toBe('just a string');
             expect(result[0].detailedField).toEqual({ values: 'val', details: {} });
         });
+
+        test('should keep custom metadata fields that exist only on the hydrated instance', () => {
+            const detailedEntries = [
+                {
+                    $id: 'id-1',
+                    $type: 'properties',
+                    $template: 'properties',
+                    $parent: 'file_123',
+                    $scope: 'global',
+                    $typeVersion: 6,
+                    $version: 0,
+                    $canEdit: true,
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'id-1',
+                    $type: 'properties',
+                    $template: 'properties',
+                    $parent: 'file_123',
+                    $scope: 'global',
+                    $typeVersion: 6,
+                    $version: 0,
+                    phoneNumber: '11112222',
+                    $canEdit: true,
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result).toEqual([
+                {
+                    $id: 'id-1',
+                    $type: 'properties',
+                    $template: 'properties',
+                    $parent: 'file_123',
+                    $scope: 'global',
+                    $typeVersion: 6,
+                    $version: 0,
+                    $canEdit: true,
+                    phoneNumber: {
+                        values: '11112222',
+                    },
+                },
+            ]);
+        });
+
+        test('should hydrate predefined fields and keep custom fields on the same file', () => {
+            const detailedEntries = [
+                {
+                    $id: 'id-2',
+                    $type: 'VendorContract-template-id-1',
+                    $template: 'VendorContract',
+                    $scope: 'enterprise_123',
+                    supplierName: {
+                        values: 'My supplier name',
+                        details: { updatedAt: 1000, updatedBy: 'user1', updatedAppId: 'app1' },
+                    },
+                    $canEdit: true,
+                },
+                {
+                    $id: 'id-1',
+                    $type: 'properties',
+                    $template: 'properties',
+                    $scope: 'global',
+                    $canEdit: true,
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'id-2',
+                    $template: 'VendorContract',
+                    $scope: 'enterprise_123',
+                    supplierName: 'My supplier name',
+                    $canEdit: true,
+                },
+                {
+                    $id: 'id-1',
+                    $template: 'properties',
+                    $scope: 'global',
+                    phoneNumber: '11112222',
+                    $canEdit: true,
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result).toEqual([
+                {
+                    $id: 'id-2',
+                    $type: 'VendorContract-template-id-1',
+                    $template: 'VendorContract',
+                    $scope: 'enterprise_123',
+                    supplierName: {
+                        values: 'My supplier name',
+                        details: { updatedAt: 1000, updatedBy: 'user1', updatedAppId: 'app1' },
+                    },
+                    $canEdit: true,
+                },
+                {
+                    $id: 'id-1',
+                    $type: 'properties',
+                    $template: 'properties',
+                    $scope: 'global',
+                    $canEdit: true,
+                    phoneNumber: {
+                        values: '11112222',
+                    },
+                },
+            ]);
+        });
     });
 });
