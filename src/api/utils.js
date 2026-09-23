@@ -136,7 +136,7 @@ const mergeDetailedAndHydratedInstances = (
                 return;
             }
 
-            if (!(key in merged)) {
+            if (!Object.prototype.hasOwnProperty.call(merged, key)) {
                 merged[key] = {
                     values: hydratedEntry[key],
                 };

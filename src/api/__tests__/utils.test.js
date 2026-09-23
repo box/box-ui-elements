@@ -475,6 +475,34 @@ describe('api/utils', () => {
             ]);
         });
 
+        test('should keep custom metadata fields whose keys match Object.prototype properties', () => {
+            const detailedEntries = [
+                {
+                    $id: 'id-1',
+                    $template: 'properties',
+                },
+            ];
+            const hydratedEntries = [
+                {
+                    $id: 'id-1',
+                    $template: 'properties',
+                    constructor: 'custom constructor',
+                    toString: 'custom toString',
+                },
+            ];
+
+            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(result).toEqual([
+                {
+                    $id: 'id-1',
+                    $template: 'properties',
+                    constructor: { values: 'custom constructor' },
+                    toString: { values: 'custom toString' },
+                },
+            ]);
+        });
+
         test('should hydrate predefined fields and keep custom fields on the same file', () => {
             const detailedEntries = [
                 {
