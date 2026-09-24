@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../variables';
 
 /**************************************
@@ -66,7 +67,7 @@
 }
 
 .table.is-scrolling .table-header {
-    box-shadow: 0 4px 6px -2px fade-out($black, .96);
+    box-shadow: 0 4px 6px -2px color.adjust($black, $alpha: -0.96);
 }
 
 .table-row {
@@ -101,7 +102,7 @@
 
     .table.has-hover-styles &:not(.is-selected):hover,
     .table.has-hover-styles &:not(.is-selected).hover-styles {
-        color: darken($primary-color, 25%);
+        color: color.adjust($primary-color, $lightness: -25%);
         background-color: $hover-blue-background;
         border-top: 1px solid $hover-blue-border;
 
@@ -119,7 +120,7 @@
     }
 
     .table &.is-selected {
-        color: darken($primary-color, 25%);
+        color: color.adjust($primary-color, $lightness: -25%);
         background-color: $selected-blue-background;
         border-top: 1px solid $selected-blue-border;
 
@@ -234,7 +235,7 @@
             }
 
             &.is-selected {
-                background-color: fade-out($primary-color, .9);
+                background-color: color.adjust($primary-color, $alpha: -0.9);
             }
         }
     }

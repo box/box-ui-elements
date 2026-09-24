@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../styles/variables';
 
 /**************************************
@@ -32,7 +33,7 @@
     background-color: $bdl-gray-10;
     border: 2px solid $bdl-gray;
     border-radius: $bdl-border-radius-size-large;
-    box-shadow: 0 2px 6px fade-out($black, 0.85);
+    box-shadow: 0 2px 6px color.adjust($black, $alpha: -0.85);
     opacity: 1;
     transition: opacity 0.1s ease-out;
 
