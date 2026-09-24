@@ -377,6 +377,23 @@ describe('api/Annotations', () => {
             });
         });
 
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+                can_view_annotations: true,
+            };
+
+            annotations.getAnnotationReplies('12345', '67890', permissions, successCallback, errorCallback, true);
+
+            expect(annotations.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback,
+                url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
+                requestData: { params: { enable_rich_text: true } },
+            });
+        });
+
         test.each([
             { can_create_annotations: true, can_view_annotations: false },
             { can_create_annotations: false, can_view_annotations: false },

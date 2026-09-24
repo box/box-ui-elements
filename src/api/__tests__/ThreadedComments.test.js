@@ -292,6 +292,31 @@ describe('api/ThreadedComments', () => {
             });
         });
 
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            threadedComments.getComments({
+                fileId: '12345',
+                permissions,
+                successCallback,
+                errorCallback,
+                repliesCount: 1,
+                shouldEnableRichText: true,
+            });
+
+            expect(threadedComments.markerGet).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                requestData: {
+                    replies_count: 1,
+                    enable_rich_text: true,
+                },
+                successCallback,
+            });
+        });
+
         test('should reject with an error code for calls with invalid permissions', () => {
             const permissions = {
                 can_comment: false,
@@ -331,6 +356,29 @@ describe('api/ThreadedComments', () => {
                 url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
                 successCallback,
                 requestData: { params: { enable_rich_text: false } },
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            threadedComments.getCommentReplies({
+                fileId: '12345',
+                commentId: '67890',
+                permissions,
+                successCallback,
+                errorCallback,
+                shouldEnableRichText: true,
+            });
+
+            expect(threadedComments.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
+                successCallback,
+                requestData: { params: { enable_rich_text: true } },
             });
         });
 

@@ -115,6 +115,30 @@ describe('api/FileActivities', () => {
             });
         });
 
+        test('should append enable_rich_text=true when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            fileActivities.getActivities({
+                fileID: '123',
+                activityTypes: ['comment', 'task'],
+                permissions,
+                successCallback,
+                errorCallback,
+                shouldShowReplies: true,
+                shouldEnableRichText: true,
+            });
+
+            expect(fileActivities.get).toBeCalledWith({
+                id: '123',
+                errorCallback,
+                requestData: {},
+                successCallback,
+                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1&enable_rich_text=true',
+            });
+        });
+
         test.each([
             { can_comment: true, can_view_annotations: false },
             { can_comment: false, can_view_annotations: true },
