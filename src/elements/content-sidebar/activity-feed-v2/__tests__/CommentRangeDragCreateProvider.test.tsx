@@ -263,6 +263,79 @@ describe('CommentRangeDragCreateProvider', () => {
         expect(navigation.push).not.toHaveBeenCalled();
     });
 
+    test('should move listeners onto a replacement viewer', () => {
+        jest.useFakeTimers();
+        const first = createViewer();
+        const second = createViewer();
+        let current = first;
+        const navigation = history();
+        const { unmount } = render(
+            <CommentRangeDragCreateProvider
+                enabled
+                getViewer={() => current.viewer}
+                history={navigation}
+                location={{ pathname: '/details' }}
+            >
+                <div />
+            </CommentRangeDragCreateProvider>,
+        );
+
+        try {
+            expect(first.listenerCount('comment_range_compose')).toBe(1);
+
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+            expect(first.listenerCount('comment_range_compose')).toBe(1);
+
+            current = second;
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            expect(first.listenerCount('comment_range_compose')).toBe(0);
+            expect(first.listenerCount('comment_range_draft_dismiss')).toBe(0);
+            expect(second.listenerCount('comment_range_compose')).toBe(1);
+            expect(second.listenerCount('comment_range_draft_dismiss')).toBe(1);
+        } finally {
+            unmount();
+            jest.useRealTimers();
+        }
+    });
+
+    test('should detach listeners when the attached viewer is destroyed', () => {
+        jest.useFakeTimers();
+        let destroyed = false;
+        const viewerHarness = createViewer();
+        viewerHarness.viewer.isDestroyed = () => destroyed;
+        const navigation = history();
+        const { unmount } = render(
+            <CommentRangeDragCreateProvider
+                enabled
+                getViewer={() => (destroyed ? null : viewerHarness.viewer)}
+                history={navigation}
+                location={{ pathname: '/details' }}
+            >
+                <div />
+            </CommentRangeDragCreateProvider>,
+        );
+
+        try {
+            expect(viewerHarness.listenerCount('comment_range_compose')).toBe(1);
+
+            destroyed = true;
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            expect(viewerHarness.listenerCount('comment_range_compose')).toBe(0);
+            expect(viewerHarness.listenerCount('comment_range_draft_dismiss')).toBe(0);
+        } finally {
+            unmount();
+            jest.useRealTimers();
+        }
+    });
+
     test('should attach through getPreview when getViewer is empty', () => {
         const viewerHarness = createViewer();
         const navigation = history();

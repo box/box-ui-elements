@@ -199,14 +199,14 @@ const CommentRangeDragCreateProvider = ({
             return true;
         };
 
-        if (!tryAttach()) {
-            pollId = window.setInterval(() => {
-                if (tryAttach()) {
-                    window.clearInterval(pollId);
-                    pollId = 0;
-                }
-            }, VIEWER_POLL_MS);
-        }
+        tryAttach();
+        pollId = window.setInterval(() => {
+            if (attachedViewer?.isDestroyed?.()) {
+                detach(attachedViewer);
+                attachedViewer = null;
+            }
+            tryAttach();
+        }, VIEWER_POLL_MS);
 
         return () => {
             if (pollId) {
