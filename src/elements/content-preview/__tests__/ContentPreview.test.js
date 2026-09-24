@@ -3047,7 +3047,7 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.update();
 
             const comparedPreview = { handleAnnotationSelect: jest.fn() };
-            wrapper.childAt(1).props().children.props.componentRef(comparedPreview);
+            wrapper.childAt(1).props().children.props.componentRef.current = comparedPreview;
             wrapper.childAt(0).props().onComparedAnnotationSelect(annotation, true);
 
             expect(comparedPreview.handleAnnotationSelect).toHaveBeenCalledWith(annotation, true);

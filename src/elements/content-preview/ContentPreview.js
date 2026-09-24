@@ -1957,10 +1957,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
     const comparedVersionId = comparedVersion && comparedVersion.id;
     const isComparing = comparedVersionId != null && comparedVersionId !== '';
 
-    const setComparedPreview = React.useCallback((instance: ?ContentPreview) => {
-        comparedPreviewRef.current = instance;
-    }, []);
-
     const handleComparedAnnotationSelect = React.useCallback((annotation, deferScrollToOnload) => {
         const comparedPreview = comparedPreviewRef.current;
         if (comparedPreview) {
@@ -1986,7 +1982,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           advancedContentInsights={undefined}
                           autoFocus={false}
                           collection={EMPTY_COLLECTION}
-                          componentRef={setComparedPreview}
+                          componentRef={comparedPreviewRef}
                           comparedSlotRef={undefined}
                           contentAnswersProps={undefined}
                           contentOpenWithProps={undefined}
