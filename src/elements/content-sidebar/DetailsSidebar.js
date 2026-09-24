@@ -399,6 +399,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     <SidebarSection
                         interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
                         title={<FormattedMessage {...messages.sidebarProperties} />}
+                        titleVariant="bodyDefaultBold"
                     >
                         {hasVersions && <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />}
                         <SidebarFileProperties
