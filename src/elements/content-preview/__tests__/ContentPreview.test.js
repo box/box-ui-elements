@@ -1866,30 +1866,44 @@ describe('elements/content-preview/ContentPreview', () => {
             const wrapper = getWrapper({ isComparing: true, ...overrideProps });
             const instance = wrapper.instance();
             instance.setState({ file: { id: '123', file_version: { id: 'CURRENT' } } });
-            instance.emitScrollToAnnotation = jest.fn();
-            return { instance, wrapper };
+            const emit = jest.fn();
+            jest.spyOn(instance, 'getViewer').mockReturnValue({ emit });
+            return { emit, instance, wrapper };
         };
 
         test('should scroll in this pane for an annotation on the version it previews', () => {
             const onComparedAnnotationSelect = jest.fn();
-            const { instance } = getComparingWrapper({ onComparedAnnotationSelect });
+            const { emit, instance } = getComparingWrapper({ onComparedAnnotationSelect });
             const annotation = getAnnotation('CURRENT');
 
             instance.handleAnnotationSelect(annotation);
 
-            expect(instance.emitScrollToAnnotation).toHaveBeenCalledWith('anno-1', annotation.target);
+            expect(emit).toHaveBeenCalledWith('scrolltoannotation', { id: 'anno-1', target: annotation.target });
             expect(onComparedAnnotationSelect).not.toHaveBeenCalled();
+        });
+
+        test('should defer current-pane scroll until preview load when asked', () => {
+            const { emit, instance } = getComparingWrapper();
+            const annotation = {
+                ...getAnnotation('CURRENT'),
+                target: { location: { type: 'frame', value: 1000 } },
+            };
+
+            instance.handleAnnotationSelect(annotation, true);
+
+            expect(emit).not.toHaveBeenCalled();
+            expect(instance.dynamicOnPreviewLoadAction).toBeDefined();
         });
 
         test('should hand an annotation on another version to the compared pane', () => {
             const onComparedAnnotationSelect = jest.fn();
-            const { instance } = getComparingWrapper({ onComparedAnnotationSelect });
+            const { emit, instance } = getComparingWrapper({ onComparedAnnotationSelect });
             const annotation = getAnnotation('OLD');
 
             instance.handleAnnotationSelect(annotation, true);
 
             expect(onComparedAnnotationSelect).toHaveBeenCalledWith(annotation, true);
-            expect(instance.emitScrollToAnnotation).not.toHaveBeenCalled();
+            expect(emit).not.toHaveBeenCalled();
         });
 
         test('should not change the version this pane previews', () => {

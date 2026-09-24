@@ -1635,13 +1635,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const viewer = this.getViewer();
         const isOtherVersion = !!annotationFileVersionId && annotationFileVersionId !== currentPreviewFileVersionId;
 
-        // Each pane stays on its version, so route by version instead of switching.
-        if (isComparing) {
-            if (isOtherVersion) {
-                onComparedAnnotationSelect(annotation, deferScrollToOnload);
-            } else {
-                this.emitScrollToAnnotation(id, target);
-            }
+        // Each pane stays on its version, so route other-version clicks to that pane.
+        // Same-version uses the scroll path below, including defer-until-load.
+        if (isComparing && isOtherVersion) {
+            onComparedAnnotationSelect(annotation, deferScrollToOnload);
             return;
         }
 
