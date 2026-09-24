@@ -2116,6 +2116,30 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     type: 'comment',
                 }),
             ]);
+            const markers = mockViewer.emit.mock.calls.find(call => call[0] === 'comment_markers')?.[1];
+            expect(markers[0].endTime).toBeUndefined();
+        });
+
+        test('should include endTime when an audio comment has a timestamp range', () => {
+            renderComponentWithMarkers({
+                feedItems: [
+                    {
+                        ...timestampedComment,
+                        id: 'ts-range-1',
+                        tagged_message: '#[timestamp:8055,endTimestamp:12000,versionId:123] great take',
+                    },
+                ] as ActivityFeedV2Props['feedItems'],
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    endTime: 12,
+                    id: 'ts-range-1',
+                    time: 8.055,
+                    type: 'comment',
+                }),
+            ]);
         });
 
         test('should emit frame annotation markers for audio when they are present in the feed', () => {

@@ -59,6 +59,8 @@ const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): 
 type CommentMarkerPayload = {
     avatarUrl?: string;
     colorIndex?: number;
+    /** End of a ranged timestamp comment, in seconds. Omitted for a point comment. */
+    endTime?: number;
     id: string;
     initial?: string;
     isSelected?: boolean;
@@ -77,9 +79,12 @@ const buildCommentMarkers = (
     for (const item of items) {
         if (item.type === 'comment' && item.annotationTimestampMs != null) {
             const author = item.messages[0]?.author;
+            const endMs = item.annotationTimestampEndMs;
+            const endTime = endMs != null && endMs > item.annotationTimestampMs ? endMs / 1000 : undefined;
             markers.push({
                 avatarUrl: author?.avatarUrl ?? undefined,
                 colorIndex: author?.id ?? 0,
+                ...(endTime != null ? { endTime } : {}),
                 id: item.id,
                 initial: author?.name?.[0] ?? undefined,
                 isSelected: item.id === selectedFeedItemId,
