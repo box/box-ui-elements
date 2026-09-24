@@ -116,8 +116,6 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
 
     feedContainer: null | HTMLElement;
 
-    hasPendingActiveScroll: boolean = false;
-
     componentDidMount() {
         this.resetFeedScroll();
     }
@@ -142,52 +140,27 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
             this.resetFeedScroll();
         }
 
-        // Switching file versions replaces the items, so the active entry can be missing from
-        // the feed at the moment its id changes. Re-arm on any feed change to catch it later.
-        if (didLoadFeedItems || hasActiveFeedEntryIdChanged || prevFeedItems !== currFeedItems) {
-            this.hasPendingActiveScroll = true;
-        }
-
-        if (this.hasPendingActiveScroll) {
+        if (didLoadFeedItems || hasActiveFeedEntryIdChanged) {
             this.scrollToActiveFeedItemOrErrorMessage();
         }
     }
 
-    hasActiveFeedItem(): boolean {
-        const { activeFeedEntryId, feedItems = [] } = this.props;
-
-        return feedItems.some(item => {
-            const { id, replies } = (item: Object);
-            return id === activeFeedEntryId || (!!replies && replies.some(reply => reply.id === activeFeedEntryId));
-        });
-    }
-
     scrollToActiveFeedItemOrErrorMessage() {
         const { current: activeFeedItemRef } = this.activeFeedItemRef;
-        const { activeFeedEntryId, feedItems } = this.props;
+        const { activeFeedEntryId } = this.props;
 
         // if there is no active item, do not scroll
         if (!activeFeedEntryId) {
-            this.hasPendingActiveScroll = false;
             return;
         }
 
+        // if there was supposed to be an active feed item but the feed item does not exist
+        // scroll to the bottom to show the inline error message
         if (activeFeedItemRef === null) {
-            // The active item can arrive after the id does, e.g. while the items for another
-            // file version are still being fetched. Stay pending so a later update scrolls to
-            // it, rather than treating it as missing on the first try.
-            if (feedItems === undefined || this.hasActiveFeedItem()) {
-                return;
-            }
-
-            // if there was supposed to be an active feed item but the feed item does not exist
-            // scroll to the bottom to show the inline error message
-            this.hasPendingActiveScroll = false;
             this.resetFeedScroll();
             return;
         }
 
-        this.hasPendingActiveScroll = false;
         scrollIntoView(activeFeedItemRef);
     }
 
