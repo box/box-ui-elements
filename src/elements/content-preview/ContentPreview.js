@@ -153,6 +153,7 @@ type Props = {
     onAnnotatorEvent: Function,
     onBeforeNavigate?: (targetFileId: string) => boolean | Promise<boolean>,
     onClose?: Function,
+    onComparedAnnotationSelect: (annotation: Annotation, deferScrollToOnload?: boolean) => void,
     onContentInsightsEventReport: Function,
     onDownload: Function,
     onLoad: Function,
@@ -354,6 +355,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
         onAnnotatorEvent: noop,
+        onComparedAnnotationSelect: noop,
         onContentInsightsEventReport: noop,
         onDownload: noop,
         onError: noop,
@@ -1570,15 +1572,17 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {object} [additionalVersionInfo] - extra info about the version
      */
     onVersionChange = (version?: BoxItemVersion, additionalVersionInfo: AdditionalVersionInfo = {}): void => {
-        const { onVersionChange }: Props = this.props;
+        const { isComparing, onVersionChange }: Props = this.props;
+        const { currentVersionId, triggeredBy } = additionalVersionInfo;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
-        // Keep compare open: do not tell the host about annotation-driven version changes.
-        if (!(this.props.isComparing && additionalVersionInfo.triggeredBy === 'annotation')) {
+        // Back to Current version would close compare. Other-version threads still update the compared pane.
+        const isBackToCurrentVersion = !version || version.id === currentVersionId;
+        if (!(isComparing && triggeredBy === 'annotation' && isBackToCurrentVersion)) {
             onVersionChange(version, additionalVersionInfo);
         }
         // While comparing, the left pane stays on the current version.
-        if (!this.props.isComparing) {
+        if (!isComparing) {
             this.setState({
                 selectedVersion: version,
             });
@@ -1618,11 +1622,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         videoPlayer.addEventListener('loadeddata', handleLoadedData);
     };
 
-    handleAnnotationSelect = ({ file_version, id, target }: Annotation, deferScrollToOnload: boolean = false) => {
-        if (this.props.isComparing) {
-            return;
-        }
-
+    handleAnnotationSelect = (annotation: Annotation, deferScrollToOnload: boolean = false) => {
+        const { file_version, id, target } = annotation;
+        const { isComparing, onComparedAnnotationSelect }: Props = this.props;
         const { location = {} } = target;
         const { file } = this.state;
         const annotationFileVersionId = getProp(file_version, 'id');
@@ -1630,8 +1632,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const currentPreviewFileVersionId = getProp(this.getVersionToPreview(), 'id', currentFileVersionId);
         const unit = startAtTypes[location.type];
         const viewer = this.getViewer();
+        const isOtherVersion = !!annotationFileVersionId && annotationFileVersionId !== currentPreviewFileVersionId;
 
-        if (unit && annotationFileVersionId && annotationFileVersionId !== currentPreviewFileVersionId) {
+        // Other-version clicks go to the compared pane.
+        if (isComparing && isOtherVersion) {
+            onComparedAnnotationSelect(annotation, deferScrollToOnload);
+            return;
+        }
+
+        if (unit && isOtherVersion) {
             // Frame.value is milliseconds; Preview SDK startAt expects seconds for video.
             const value = location.type === 'frame' ? convertTimestampToSeconds(location.value) : location.value;
             this.setState({
@@ -1942,8 +1951,16 @@ const MemoConnectedContentPreview = React.memo(ConnectedContentPreview);
 function ContentPreviewWithComparison(props: ContentPreviewProps) {
     const { comparedVersion, ...rest } = props;
     const [comparedSlot, setComparedSlot] = React.useState<?HTMLDivElement>(null);
+    const comparedPreviewRef = React.useRef<?ContentPreview>(null);
     const comparedVersionId = comparedVersion && comparedVersion.id;
     const isComparing = comparedVersionId != null && comparedVersionId !== '';
+
+    const handleComparedAnnotationSelect = React.useCallback((annotation, deferScrollToOnload) => {
+        const comparedPreview = comparedPreviewRef.current;
+        if (comparedPreview) {
+            comparedPreview.handleAnnotationSelect(annotation, deferScrollToOnload);
+        }
+    }, []);
 
     return (
         <React.Fragment>
@@ -1952,6 +1969,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                 collection={isComparing ? EMPTY_COLLECTION : rest.collection}
                 comparedSlotRef={setComparedSlot}
                 isComparing={isComparing}
+                onComparedAnnotationSelect={handleComparedAnnotationSelect}
             />
             {comparedSlot && isComparing
                 ? createPortal(
@@ -1962,7 +1980,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           advancedContentInsights={undefined}
                           autoFocus={false}
                           collection={EMPTY_COLLECTION}
-                          componentRef={undefined}
+                          componentRef={comparedPreviewRef}
                           comparedSlotRef={undefined}
                           contentAnswersProps={undefined}
                           contentOpenWithProps={undefined}
