@@ -56,8 +56,8 @@ export interface UseMediaTimestampResult {
     formattedTimestamp: string;
     isPressed: boolean;
     onPressedChange: (pressed: boolean) => void;
-    /** Drops back to a collapsed single timestamp. Call after a comment is posted. */
-    resetRange: () => void;
+    /** Unchecks the timestamp toggle. Audio also emits comment_range_draft_clear. */
+    clearRange: () => void;
     /** End of the composer's selected range. Undefined until the user drags a waveform handle. */
     timestampEndMs?: number;
     timestampMs: number;
@@ -94,7 +94,8 @@ export const readRangeChange = (payload: unknown): PendingCommentRange | null =>
  * - Pressed on while media is playing: captured value frozen until pause/seek.
  * - Pressed on while media is paused: captured value updates on pause/seek.
  * - Toggle off->on: captures current time and pauses the media if it was playing.
- * - Viewer dismisses the draft: same as the user toggling off.
+ * - Comment posted or viewer dismisses the draft: toggle off. Audio emits comment_range_draft_clear
+ *   for a point timestamp or a range.
  * - Viewer drag create: checkbox on, reported range pinned, no comment_range_draft echo.
  * - New media src: captured value resets to 0; pressed state persists. A dragged range survives
  *   untouched, since a src change on the same element is a token refresh, not different content.
@@ -135,14 +136,6 @@ export const useMediaTimestamp = (
         getViewer?.()?.emit(EVENT_RANGE_DRAFT_CLEAR, undefined);
     }, [getViewer, isRangeEnabled]);
 
-    const resetRange = React.useCallback(() => {
-        isRangePinnedRef.current = false;
-        setTimestampEndMs(undefined);
-        if (isPressedRef.current) {
-            emitDraft(timestampMs);
-        }
-    }, [emitDraft, timestampMs]);
-
     // Reset state when disabled (e.g. switching from a media file to a non-media file)
     // so a re-enable does not leak the previous file's pressed state or captured ms.
     React.useEffect(() => {
@@ -163,6 +156,14 @@ export const useMediaTimestamp = (
         setTimestampEndMs(undefined);
         emitClear();
     }, [emitClear]);
+
+    /** Drops a point timestamp or a range. Shared by posting a comment and the viewer dismissing the draft. */
+    const clearRange = React.useCallback(() => {
+        if (!isPressedRef.current) {
+            return;
+        }
+        uncheckTimestamp();
+    }, [uncheckTimestamp]);
 
     const onPressedChange = React.useCallback(
         (pressed: boolean) => {
@@ -309,15 +310,6 @@ export const useMediaTimestamp = (
             setTimestampEndMs(change.endMs);
         };
 
-        // Click-outside on the waveform. The viewer has already taken its handles down, so the
-        // clear this echoes back is a no-op there, and there is nothing to echo with no draft up.
-        const handleRangeDismiss = () => {
-            if (!isPressedRef.current) {
-                return;
-            }
-            uncheckTimestamp();
-        };
-
         // Poll for the viewer until we find one.
         let attachedViewer: ViewerHandle | null = null;
         let pollId: ReturnType<typeof setInterval> | undefined;
@@ -328,7 +320,7 @@ export const useMediaTimestamp = (
                 return;
             }
             viewer.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
-            viewer.addListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
+            viewer.addListener(EVENT_RANGE_DRAFT_DISMISS, clearRange);
             attachedViewer = viewer;
             clearInterval(pollId);
         };
@@ -341,9 +333,9 @@ export const useMediaTimestamp = (
         return () => {
             clearInterval(pollId);
             attachedViewer?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
-            attachedViewer?.removeListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
+            attachedViewer?.removeListener(EVENT_RANGE_DRAFT_DISMISS, clearRange);
         };
-    }, [getViewer, isRangeEnabled, uncheckTimestamp]);
+    }, [clearRange, getViewer, isRangeEnabled]);
 
     // Take down any handles still up for a composer that is going away.
     React.useEffect(
@@ -362,7 +354,7 @@ export const useMediaTimestamp = (
                 : formatByTimeFormat(timestampMs, timeFormat, fps),
         isPressed,
         onPressedChange,
-        resetRange,
+        clearRange,
         timestampEndMs,
         timestampMs,
     };
