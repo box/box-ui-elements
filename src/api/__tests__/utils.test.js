@@ -503,6 +503,17 @@ describe('api/utils', () => {
             ]);
         });
 
+        test('should keep a custom metadata field named __proto__ as an own property', () => {
+            const detailedEntries = [{ $id: 'id-1', $template: 'properties' }];
+            const hydratedEntries = [JSON.parse('{"$id":"id-1","$template":"properties","__proto__":"custom value"}')];
+
+            const [result] = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+
+            expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+            expect(Object.keys(result)).toContain('__proto__');
+            expect(Object.getOwnPropertyDescriptor(result, '__proto__').value).toEqual({ values: 'custom value' });
+        });
+
         test('should hydrate predefined fields and keep custom fields on the same file', () => {
             const detailedEntries = [
                 {
