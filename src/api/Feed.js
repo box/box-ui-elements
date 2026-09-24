@@ -348,11 +348,6 @@ class Feed extends Base {
     fileActivitiesAPI: FileActivitiesAPI;
 
     /**
-     * @property {boolean}
-     */
-    shouldEnableRichText: boolean;
-
-    /**
      * @property {BoxItem}
      */
     file: BoxItem;
@@ -367,7 +362,6 @@ class Feed extends Base {
         this.taskCollaboratorsAPI = [];
         this.taskLinksAPI = [];
         this.errors = [];
-        this.shouldEnableRichText = false;
     }
 
     /**
@@ -617,7 +611,6 @@ class Feed extends Base {
         this.file = file;
         this.errors = [];
         this.errorCallback = onError;
-        this.shouldEnableRichText = shouldEnableRichText;
 
         // Using the UAA File Activities endpoint replaces the need for these calls
         const annotationsPromise =
@@ -715,7 +708,7 @@ class Feed extends Base {
     fetchAnnotations(
         permissions: BoxItemPermission,
         shouldFetchReplies?: boolean,
-        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+        shouldEnableRichText?: boolean = false,
     ): Promise<?Annotations> {
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return new Promise(resolve => {
@@ -765,7 +758,7 @@ class Feed extends Base {
         commentId: string,
         successCallback: (comment: Comment) => void,
         errorCallback: ErrorCallback,
-        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+        shouldEnableRichText?: boolean = false,
     ): Promise<?Comment> {
         const { id, permissions } = file;
         if (!id || !permissions) {
@@ -806,7 +799,7 @@ class Feed extends Base {
      */
     fetchThreadedComments(
         permissions: BoxItemPermission,
-        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+        shouldEnableRichText?: boolean = false,
     ): Promise<?ThreadedCommentsType> {
         this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
         return new Promise(resolve => {
@@ -833,7 +826,7 @@ class Feed extends Base {
         activityTypes: FileActivityTypes[],
         shouldShowReplies?: boolean = false,
         shouldUseEnhancedActivities?: boolean = false,
-        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+        shouldEnableRichText?: boolean = false,
     ): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
@@ -866,7 +859,7 @@ class Feed extends Base {
         commentFeedItemType: CommentFeedItemType,
         successCallback: (comments: Array<Comment>) => void,
         errorCallback: ErrorCallback,
-        shouldEnableRichText?: boolean = this.shouldEnableRichText,
+        shouldEnableRichText?: boolean = false,
     ): void {
         const { id, permissions } = file;
         if (!id || !permissions) {
