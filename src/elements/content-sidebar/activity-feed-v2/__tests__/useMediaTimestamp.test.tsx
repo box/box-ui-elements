@@ -631,6 +631,76 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
+    test('should adopt a drag create without emitting a draft', () => {
+        const { audio, cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => emitFromViewer('comment_range_compose', { endMs: 50000, startMs: 44000 }));
+
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
+            expect(screen.getByTestId('ms').textContent).toBe('44000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('50000');
+            expect(screen.getByTestId('timestamp').textContent).toBe('0:44 \u2013 0:50');
+            expect(emittedEvents(viewer)).toHaveLength(0);
+
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 90, writable: true });
+            act(() => audio.dispatchEvent(new Event('pause')));
+
+            expect(screen.getByTestId('ms').textContent).toBe('44000');
+            expect(emittedEvents(viewer)).toHaveLength(0);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should apply a drag create that has no span and still follow the playhead', () => {
+        const { audio, cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => emitFromViewer('comment_range_compose', { startMs: 1000 }));
+
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
+            expect(screen.getByTestId('ms').textContent).toBe('1000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+            expect(emittedEvents(viewer)).toHaveLength(0);
+
+            Object.defineProperty(audio, 'currentTime', { configurable: true, value: 12, writable: true });
+            act(() => audio.dispatchEvent(new Event('pause')));
+
+            expect(screen.getByTestId('ms').textContent).toBe('12000');
+            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 12000 }]);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should ignore a malformed drag create', () => {
+        const { cleanup, emitFromViewer, viewer } = renderWithRange();
+        try {
+            act(() => emitFromViewer('comment_range_compose', { endMs: 50000, startMs: -1 }));
+
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(screen.getByTestId('ms').textContent).toBe('0');
+            expect(emittedEvents(viewer)).toHaveLength(0);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should ignore a drag create when range selection is disabled', () => {
+        const audio = createMediaElement('audio', 43.5);
+        const cleanup = mountMediaInDom(audio);
+        const { emitFromViewer, hasListener, viewer } = createViewer();
+        try {
+            render(<TestHarness enabled getViewer={() => viewer} />);
+            act(() => emitFromViewer('comment_range_compose', { endMs: 50000, startMs: 44000 }));
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(emittedEvents(viewer)).toHaveLength(0);
+        } finally {
+            cleanup();
+        }
+    });
+
     test('should ignore a drag reported while the toggle is off', () => {
         const { cleanup, emitFromViewer } = renderWithRange();
         try {

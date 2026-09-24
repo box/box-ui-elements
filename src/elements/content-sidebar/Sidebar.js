@@ -31,6 +31,8 @@ import ThemingStyles from '../common/theming';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+// $FlowFixMe TypeScript file
+import CommentRangeDragCreateProvider from './activity-feed-v2/CommentRangeDragCreateProvider';
 import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
@@ -388,10 +390,13 @@ class Sidebar extends React.Component<Props, State> {
             fileId,
             getPreview,
             getViewer,
+            hasActivityFeed,
             hasAdditionalTabs,
             hasNav,
             hasVersions,
+            history,
             isLoading,
+            location,
             metadataEditors,
             metadataSidebarProps,
             onAnnotationSelect,
@@ -425,6 +430,11 @@ class Sidebar extends React.Component<Props, State> {
         const shouldApplyInlineWidth = isResizable && isOpen && width != null;
         const inlineStyle = shouldApplyInlineWidth ? { width: currentWidth, maxWidth: currentWidth } : undefined;
 
+        const routerDisabled =
+            Boolean(activitySidebarProps?.routerDisabled) || isFeatureEnabled(features, 'routerDisabled.value');
+        const commentRangeDragCreateEnabled =
+            Boolean(hasActivityFeed) && isFeatureEnabled(features, 'audioPlayerV2.enabled');
+
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
             'bcs-is-resizable': isResizable,
@@ -445,64 +455,76 @@ class Sidebar extends React.Component<Props, State> {
                     />
                 )}
                 <ThemingStyles theme={theme} />
-                {isLoading ? (
-                    <div className="bcs-loading">
-                        <LoadingIndicator />
-                    </div>
-                ) : (
-                    <>
-                        {hasNav && (
-                            <SidebarNav
-                                additionalTabs={additionalTabs}
+                <CommentRangeDragCreateProvider
+                    enabled={commentRangeDragCreateEnabled}
+                    fileId={fileId}
+                    getPreview={getPreview}
+                    getViewer={getViewer}
+                    history={history}
+                    internalSidebarNavigation={activitySidebarProps?.internalSidebarNavigation}
+                    internalSidebarNavigationHandler={activitySidebarProps?.internalSidebarNavigationHandler}
+                    location={location}
+                    routerDisabled={routerDisabled}
+                >
+                    {isLoading ? (
+                        <div className="bcs-loading">
+                            <LoadingIndicator />
+                        </div>
+                    ) : (
+                        <>
+                            {hasNav && (
+                                <SidebarNav
+                                    additionalTabs={additionalTabs}
+                                    customSidebarPanels={customSidebarPanels}
+                                    elementId={this.id}
+                                    fileId={fileId}
+                                    hasActivity={hasActivity}
+                                    hasAdditionalTabs={hasAdditionalTabs}
+                                    hasNativeBoxAISidebar={hasNativeBoxAISidebar}
+                                    hasDetails={hasDetails}
+                                    hasMetadata={hasMetadata}
+                                    hasSkills={hasSkills}
+                                    hasDocGen={docGenSidebarProps.isDocGenTemplate}
+                                    isOpen={isOpen}
+                                    onPanelChange={this.handlePanelChange}
+                                    signSidebarProps={signSidebarProps}
+                                />
+                            )}
+                            <SidebarPanels
+                                activitySidebarProps={activitySidebarProps}
+                                boxAISidebarProps={boxAISidebarProps}
+                                currentUser={currentUser}
+                                currentUserError={currentUserError}
+                                shouldFetchSidebarData={shouldFetchSidebarData}
                                 customSidebarPanels={customSidebarPanels}
                                 elementId={this.id}
+                                defaultPanel={defaultPanel}
+                                detailsSidebarProps={detailsSidebarProps}
+                                docGenSidebarProps={docGenSidebarProps}
+                                file={file}
                                 fileId={fileId}
+                                getPreview={getPreview}
+                                getViewer={getViewer}
                                 hasActivity={hasActivity}
-                                hasAdditionalTabs={hasAdditionalTabs}
                                 hasNativeBoxAISidebar={hasNativeBoxAISidebar}
                                 hasDetails={hasDetails}
+                                hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
-                                hasDocGen={docGenSidebarProps.isDocGenTemplate}
+                                hasVersions={hasVersions}
                                 isOpen={isOpen}
+                                key={file.id}
+                                metadataSidebarProps={metadataSidebarProps}
+                                onAnnotationSelect={onAnnotationSelect}
                                 onPanelChange={this.handlePanelChange}
-                                signSidebarProps={signSidebarProps}
+                                onVersionChange={onVersionChange}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                ref={this.sidebarPanels}
+                                versionsSidebarProps={versionsSidebarProps}
                             />
-                        )}
-                        <SidebarPanels
-                            activitySidebarProps={activitySidebarProps}
-                            boxAISidebarProps={boxAISidebarProps}
-                            currentUser={currentUser}
-                            currentUserError={currentUserError}
-                            shouldFetchSidebarData={shouldFetchSidebarData}
-                            customSidebarPanels={customSidebarPanels}
-                            elementId={this.id}
-                            defaultPanel={defaultPanel}
-                            detailsSidebarProps={detailsSidebarProps}
-                            docGenSidebarProps={docGenSidebarProps}
-                            file={file}
-                            fileId={fileId}
-                            getPreview={getPreview}
-                            getViewer={getViewer}
-                            hasActivity={hasActivity}
-                            hasNativeBoxAISidebar={hasNativeBoxAISidebar}
-                            hasDetails={hasDetails}
-                            hasDocGen={docGenSidebarProps.isDocGenTemplate}
-                            hasMetadata={hasMetadata}
-                            hasSkills={hasSkills}
-                            hasVersions={hasVersions}
-                            isOpen={isOpen}
-                            key={file.id}
-                            metadataSidebarProps={metadataSidebarProps}
-                            onAnnotationSelect={onAnnotationSelect}
-                            onPanelChange={this.handlePanelChange}
-                            onVersionChange={onVersionChange}
-                            onVersionHistoryClick={onVersionHistoryClick}
-                            ref={this.sidebarPanels}
-                            versionsSidebarProps={versionsSidebarProps}
-                        />
-                    </>
-                )}
+                        </>
+                    )}
+                </CommentRangeDragCreateProvider>
             </aside>
         );
     }
