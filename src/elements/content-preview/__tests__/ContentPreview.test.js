@@ -1899,17 +1899,6 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.state('startAt')).toBeUndefined();
         });
-
-        test('should scroll to a forwarded annotation when the request prop changes', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.handleAnnotationSelect = jest.fn();
-            const annotation = getAnnotation('OLD');
-
-            wrapper.setProps({ annotationScrollRequest: { annotation, deferScrollToOnload: false } });
-
-            expect(instance.handleAnnotationSelect).toHaveBeenCalledWith(annotation, false);
-        });
     });
 
     describe('handleAnnotationSelect', () => {
@@ -3024,6 +3013,30 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.childAt(0).props().onMetric).toBe(onMetric);
             expect(wrapper.childAt(1).props().children.props.onMetric).not.toBe(onMetric);
+        });
+
+        test('should call the compared pane when a compared-version annotation is selected', () => {
+            const annotation = {
+                id: 'anno-1',
+                file_version: { id: '456' },
+                target: { location: { type: 'page', value: 3 } },
+            };
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            const comparedPreview = { handleAnnotationSelect: jest.fn() };
+            wrapper.childAt(1).props().children.props.componentRef(comparedPreview);
+            wrapper.childAt(0).props().onComparedAnnotationSelect(annotation, true);
+
+            expect(comparedPreview.handleAnnotationSelect).toHaveBeenCalledWith(annotation, true);
         });
 
         test('should not navigate when isComparing', () => {

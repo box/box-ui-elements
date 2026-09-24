@@ -89,11 +89,6 @@ type StartAt = {
     value: number,
 };
 
-type AnnotationScrollRequest = {
-    annotation: Annotation,
-    deferScrollToOnload?: boolean,
-};
-
 type Props = {
     accessPattern?: 'file_list' | 'direct_link' | 'shared_link',
     advancedContentInsights: {
@@ -122,7 +117,6 @@ type Props = {
      * future major version.
      */
     metadataApiHost?: string,
-    annotationScrollRequest?: ?AnnotationScrollRequest,
     appHost: string,
     autoFocus: boolean,
     boxAnnotations?: Object,
@@ -639,15 +633,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         // false. Drop it so the left pane stays on current when comparison ends.
         if (!prevProps.isComparing && this.props.isComparing && this.state.selectedVersion) {
             this.setState({ selectedVersion: undefined });
-        }
-
-        // The compared pane has no sidebar of its own, so the pane that does forwards
-        // annotations belonging to this version. A pane mounting for a newly compared version
-        // already deep links through fileOptions, so this only covers one already showing it.
-        const { annotationScrollRequest } = this.props;
-        if (annotationScrollRequest && annotationScrollRequest !== prevProps.annotationScrollRequest) {
-            const { annotation, deferScrollToOnload } = annotationScrollRequest;
-            this.handleAnnotationSelect(annotation, deferScrollToOnload);
         }
 
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
@@ -1971,21 +1956,25 @@ const MemoConnectedContentPreview = React.memo(ConnectedContentPreview);
 function ContentPreviewWithComparison(props: ContentPreviewProps) {
     const { comparedVersion, ...rest } = props;
     const [comparedSlot, setComparedSlot] = React.useState<?HTMLDivElement>(null);
-    const [annotationScrollRequest, setAnnotationScrollRequest] = React.useState<?AnnotationScrollRequest>(null);
+    const comparedPreviewRef = React.useRef<?ContentPreview>(null);
     const comparedVersionId = comparedVersion && comparedVersion.id;
     const isComparing = comparedVersionId != null && comparedVersionId !== '';
 
-    // A new object every time so selecting the same annotation twice still scrolls.
-    const handleComparedAnnotationSelect = React.useCallback(
-        (annotation, deferScrollToOnload) => setAnnotationScrollRequest({ annotation, deferScrollToOnload }),
-        [],
-    );
+    const setComparedPreview = React.useCallback((instance: ?ContentPreview) => {
+        comparedPreviewRef.current = instance;
+    }, []);
+
+    const handleComparedAnnotationSelect = React.useCallback((annotation, deferScrollToOnload) => {
+        const comparedPreview = comparedPreviewRef.current;
+        if (comparedPreview) {
+            comparedPreview.handleAnnotationSelect(annotation, deferScrollToOnload);
+        }
+    }, []);
 
     return (
         <React.Fragment>
             <MemoConnectedContentPreview
                 {...rest}
-                annotationScrollRequest={undefined}
                 collection={isComparing ? EMPTY_COLLECTION : rest.collection}
                 comparedSlotRef={setComparedSlot}
                 isComparing={isComparing}
@@ -1998,10 +1987,9 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           key={comparedVersionId}
                           accessPattern={undefined}
                           advancedContentInsights={undefined}
-                          annotationScrollRequest={annotationScrollRequest}
                           autoFocus={false}
                           collection={EMPTY_COLLECTION}
-                          componentRef={undefined}
+                          componentRef={setComparedPreview}
                           comparedSlotRef={undefined}
                           contentAnswersProps={undefined}
                           contentOpenWithProps={undefined}
