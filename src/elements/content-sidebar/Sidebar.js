@@ -24,6 +24,7 @@ import LocalStore from '../../utils/LocalStore';
 import { withCurrentUser } from '../common/current-user';
 import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
+// $FlowFixMe TypeScript file
 import { FILE_EXTENSIONS } from '../common/item/constants';
 import type { Errors } from '../common/flowTypes';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
