@@ -45,9 +45,11 @@ const ItemProperties = ({
         <dl className="item-properties" data-testid="item-properties">
             {description || onDescriptionChange ? (
                 <>
-                    <FormattedMessage {...messages.description}>
-                        {text => <dt id={descriptionId}>{text}</dt>}
-                    </FormattedMessage>
+                    <dt id={descriptionId}>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.description} />
+                        </Text>
+                    </dt>
                     <dd>
                         {onDescriptionChange ? (
                             <EditableDescription
@@ -63,31 +65,51 @@ const ItemProperties = ({
             ) : null}
             {!!url && (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.url} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.url} />
+                        </Text>
+                    </dt>
                     <dd>{onValidURLChange ? <EditableURL onValidURLChange={onValidURLChange} value={url} /> : url}</dd>
                 </>
             )}
             {owner ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.owner} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.owner} />
+                        </Text>
+                    </dt>
                     <dd>{owner}</dd>
                 </>
             ) : null}
             {enterpriseOwner ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.enterpriseOwner} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.enterpriseOwner} />
+                        </Text>
+                    </dt>
                     <dd>{enterpriseOwner}</dd>
                 </>
             ) : null}
             {uploader ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.uploader} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.uploader} />
+                        </Text>
+                    </dt>
                     <dd>{uploader}</dd>
                 </>
             ) : null}
             {createdAt ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.created} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.created} />
+                        </Text>
+                    </dt>
                     <dd>
                         <FormattedDate value={new Date(createdAt)} {...datetimeOptions} />
                     </dd>
@@ -95,7 +117,11 @@ const ItemProperties = ({
             ) : null}
             {modifiedAt ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.modified} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.modified} />
+                        </Text>
+                    </dt>
                     <dd>
                         <FormattedDate value={new Date(modifiedAt)} {...datetimeOptions} />
                     </dd>
@@ -103,7 +129,11 @@ const ItemProperties = ({
             ) : null}
             {archivedAt ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.archived} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.archived} />
+                        </Text>
+                    </dt>
                     <dd>
                         <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />
                     </dd>
@@ -111,7 +141,11 @@ const ItemProperties = ({
             ) : null}
             {size ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.size} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.size} />
+                        </Text>
+                    </dt>
                     <dd>
                         <Text>{size}</Text>
                         {typeof filesCount === 'number' && type === ITEM_TYPE_FOLDER ? (
@@ -122,7 +156,11 @@ const ItemProperties = ({
             ) : null}
             {trashedAt ? (
                 <>
-                    <FormattedMessage tagName="dt" {...messages.deleted} />
+                    <dt>
+                        <Text as="span" variant="bodyDefaultSemibold">
+                            <FormattedMessage {...messages.deleted} />
+                        </Text>
+                    </dt>
                     <dd>
                         <FormattedDate value={new Date(trashedAt)} {...datetimeOptions} />
                     </dd>
