@@ -1576,10 +1576,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { currentVersionId, triggeredBy } = additionalVersionInfo;
         this.updateVersionToCurrent = additionalVersionInfo.updateVersionToCurrent;
 
-        // A return to the current version would close compare. An annotation on another
-        // version is still forwarded so the compared pane can follow the thread.
-        const isReturnToCurrentVersion = !version || version.id === currentVersionId;
-        if (!(isComparing && triggeredBy === 'annotation' && isReturnToCurrentVersion)) {
+        // Back to Current version would close compare. Other-version threads still update the compared pane.
+        const isBackToCurrentVersion = !version || version.id === currentVersionId;
+        if (!(isComparing && triggeredBy === 'annotation' && isBackToCurrentVersion)) {
             onVersionChange(version, additionalVersionInfo);
         }
         // While comparing, the left pane stays on the current version.
@@ -1635,8 +1634,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const viewer = this.getViewer();
         const isOtherVersion = !!annotationFileVersionId && annotationFileVersionId !== currentPreviewFileVersionId;
 
-        // Each pane stays on its version, so route other-version clicks to that pane.
-        // Same-version uses the scroll path below, including defer-until-load.
+        // Other-version clicks go to the compared pane.
         if (isComparing && isOtherVersion) {
             onComparedAnnotationSelect(annotation, deferScrollToOnload);
             return;
@@ -2003,7 +2001,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           onAnnotator={noop}
                           onAnnotatorEvent={noop}
                           onBeforeNavigate={undefined}
-                          onComparedAnnotationSelect={noop}
                           onContentInsightsEventReport={noop}
                           onError={noop}
                           onLoad={noop}
