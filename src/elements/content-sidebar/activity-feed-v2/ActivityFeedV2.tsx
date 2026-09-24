@@ -442,7 +442,7 @@ const ActivityFeedV2 = ({
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
-        resetRange,
+        clearRange,
         timestampEndMs,
         timestampMs,
     } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps, {
@@ -558,7 +558,7 @@ const ActivityFeedV2 = ({
                 const snapshot = new Set(filteredItems.map(item => item.id));
                 await onCommentCreate(text, serialized.hasMention);
                 knownIdsBeforePostRef.current = snapshot;
-                resetRange();
+                clearRange();
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('ActivityFeedV2: failed to post comment', error);
@@ -571,7 +571,7 @@ const ActivityFeedV2 = ({
             isRichTextEnabled,
             isTimestampPressed,
             onCommentCreate,
-            resetRange,
+            clearRange,
             timestampEndMs,
             timestampMs,
         ],

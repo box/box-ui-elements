@@ -926,6 +926,28 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
+    const createRangeViewer = () => {
+        const listeners: Record<string, ((payload: unknown) => void) | undefined> = {};
+        const viewer = {
+            addListener: jest.fn((event: string, handler: (payload: unknown) => void) => {
+                listeners[event] = handler;
+            }),
+            emit: jest.fn(),
+            removeListener: jest.fn((event: string) => {
+                delete listeners[event];
+            }),
+        };
+        return {
+            commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
+            dragCreate: (payload: unknown) => listeners.comment_range_compose?.(payload),
+            dismissDraft: () => listeners.comment_range_draft_dismiss?.(undefined),
+            getViewer: () => viewer,
+            rangeEmits: () =>
+                viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
+            viewer,
+        };
+    };
+
     describe('media timestamp', () => {
         const mountMedia = (tag: 'video' | 'audio' = 'video', currentTime: number = 0) => {
             const container = document.createElement('div');
@@ -1004,6 +1026,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should prepend timestamp markup to posted text when toggle is pressed', async () => {
             const { cleanup, video } = mountVideo();
+            const { getViewer, rangeEmits } = createRangeViewer();
             mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great frame' });
             const onCommentCreate = jest.fn();
             try {
@@ -1012,6 +1035,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
                         file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        getViewer={getViewer}
                         isTimestampedCommentsEnabled
                         onCommentCreate={onCommentCreate}
                     />,
@@ -1024,6 +1048,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
                 expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great frame', false);
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(rangeEmits()).toEqual([]);
             } finally {
                 cleanup();
             }
@@ -1093,6 +1119,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should prepend timestamp markup to posted text when audio toggle is pressed', async () => {
             const { cleanup, media } = mountMedia('audio');
+            const { getViewer, rangeEmits } = createRangeViewer();
             mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great moment' });
             const onCommentCreate = jest.fn();
             try {
@@ -1101,6 +1128,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
                         file={{ extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        getViewer={getViewer}
                         isAudioPlayerV2Enabled
                         isTimestampedCommentsEnabled
                         onCommentCreate={onCommentCreate}
@@ -1114,6 +1142,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
                 expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great moment', false);
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft_clear', undefined]);
             } finally {
                 cleanup();
             }
@@ -1165,28 +1195,6 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             container.appendChild(media);
             document.body.appendChild(container);
             return { cleanup: () => container.remove(), media };
-        };
-
-        const createRangeViewer = () => {
-            const listeners: Record<string, ((payload: unknown) => void) | undefined> = {};
-            const viewer = {
-                addListener: jest.fn((event: string, handler: (payload: unknown) => void) => {
-                    listeners[event] = handler;
-                }),
-                emit: jest.fn(),
-                removeListener: jest.fn((event: string) => {
-                    delete listeners[event];
-                }),
-            };
-            return {
-                commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
-                dragCreate: (payload: unknown) => listeners.comment_range_compose?.(payload),
-                dismissDraft: () => listeners.comment_range_draft_dismiss?.(undefined),
-                getViewer: () => viewer,
-                rangeEmits: () =>
-                    viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
-                viewer,
-            };
         };
 
         const audioFile = { extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } };
@@ -1279,7 +1287,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             }
         });
 
-        test('should drop the range back to a single timestamp after a successful post', async () => {
+        test('should uncheck the timestamp toggle and clear the draft after a successful post', async () => {
             const { cleanup, media } = mountAudio();
             const { commitDrag, getViewer, rangeEmits } = createRangeViewer();
             mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
@@ -1306,13 +1314,16 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 await act(async () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft_clear', undefined]);
+
                 onCommentCreate.mockClear();
                 await act(async () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
 
-                expect(rangeEmits().pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 8055 }]);
-                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great take', false);
+                expect(onCommentCreate).toHaveBeenCalledWith('great take', false);
             } finally {
                 cleanup();
             }
