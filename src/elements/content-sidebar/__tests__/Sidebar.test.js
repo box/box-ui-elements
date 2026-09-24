@@ -733,6 +733,12 @@ describe('elements/content-sidebar/Sidebar', () => {
     });
 
     describe('comment range drag create', () => {
+        const audioFile = { ...file, extension: 'mp3' };
+        const dragCreateFeatures = {
+            activityFeed: { timestampedComments: { enabled: true } },
+            audioPlayerV2: { enabled: true },
+        };
+
         const createViewer = () => {
             const listeners = {};
             const viewer = {
@@ -757,7 +763,8 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             render(
                 getSidebar({
-                    features: { audioPlayerV2: { enabled: true } },
+                    features: dragCreateFeatures,
+                    file: audioFile,
                     getViewer: () => viewer,
                     hasActivityFeed: true,
                     history,
@@ -779,7 +786,8 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             render(
                 getSidebar({
-                    features: { audioPlayerV2: { enabled: true } },
+                    features: dragCreateFeatures,
+                    file: audioFile,
                     getViewer: () => viewer,
                     hasActivityFeed: true,
                     history,
@@ -807,7 +815,8 @@ describe('elements/content-sidebar/Sidebar', () => {
                         internalSidebarNavigationHandler,
                         routerDisabled: true,
                     },
-                    features: { audioPlayerV2: { enabled: true } },
+                    features: dragCreateFeatures,
+                    file: audioFile,
                     getViewer: () => viewer,
                     hasActivityFeed: true,
                     history,
@@ -830,7 +839,8 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             render(
                 getSidebar({
-                    features: { audioPlayerV2: { enabled: true } },
+                    features: dragCreateFeatures,
+                    file: audioFile,
                     getViewer: () => viewer,
                     hasActivityFeed: true,
                     history,
@@ -852,7 +862,8 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             render(
                 getSidebar({
-                    features: { audioPlayerV2: { enabled: true } },
+                    features: dragCreateFeatures,
+                    file: audioFile,
                     getViewer: () => viewer,
                     hasActivityFeed: false,
                     history,
@@ -870,6 +881,46 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             render(
                 getSidebar({
+                    features: { activityFeed: { timestampedComments: { enabled: true } } },
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(history.push).not.toHaveBeenCalled();
+        });
+
+        test('should not listen when timestamped comments are off', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { hasListener, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: { audioPlayerV2: { enabled: true } },
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(history.push).not.toHaveBeenCalled();
+        });
+
+        test('should not listen when the file is not audio', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { hasListener, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: dragCreateFeatures,
+                    file,
                     getViewer: () => viewer,
                     hasActivityFeed: true,
                     history,

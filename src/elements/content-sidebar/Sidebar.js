@@ -24,6 +24,7 @@ import LocalStore from '../../utils/LocalStore';
 import { withCurrentUser } from '../common/current-user';
 import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
+import { FILE_EXTENSIONS } from '../common/item/constants';
 import type { Errors } from '../common/flowTypes';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 // $FlowFixMe TypeScript file
@@ -433,7 +434,10 @@ class Sidebar extends React.Component<Props, State> {
         const routerDisabled =
             Boolean(activitySidebarProps?.routerDisabled) || isFeatureEnabled(features, 'routerDisabled.value');
         const commentRangeDragCreateEnabled =
-            Boolean(hasActivityFeed) && isFeatureEnabled(features, 'audioPlayerV2.enabled');
+            Boolean(hasActivityFeed) &&
+            FILE_EXTENSIONS.audio.includes(file?.extension) &&
+            isFeatureEnabled(features, 'audioPlayerV2.enabled') &&
+            isFeatureEnabled(features, 'activityFeed.timestampedComments.enabled');
 
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,

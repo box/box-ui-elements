@@ -107,10 +107,6 @@ const CommentRangeDragCreateProvider = ({
         routerDisabled,
     };
 
-    const clearPendingDragCreate = React.useCallback(() => {
-        pendingRef.current = null;
-    }, []);
-
     const consumePendingDragCreate = React.useCallback((): PendingCommentRange | null => {
         const pending = pendingRef.current;
         pendingRef.current = null;
@@ -131,8 +127,8 @@ const CommentRangeDragCreateProvider = ({
     }, []);
 
     const contextValue = React.useMemo(
-        () => ({ clearPendingDragCreate, consumePendingDragCreate, version }),
-        [clearPendingDragCreate, consumePendingDragCreate, version],
+        () => ({ consumePendingDragCreate, version }),
+        [consumePendingDragCreate, version],
     );
 
     React.useEffect(() => {

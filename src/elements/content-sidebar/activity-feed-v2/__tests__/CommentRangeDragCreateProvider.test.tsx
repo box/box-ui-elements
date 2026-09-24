@@ -178,8 +178,76 @@ describe('CommentRangeDragCreateProvider', () => {
         expect(screen.getByTestId('pressed').textContent).toBe('true');
         expect(screen.getByTestId('ms').textContent).toBe('1000');
         expect(screen.getByTestId('end-ms').textContent).toBe('4000');
+        expect(viewerHarness.listenerCount('comment_range_compose')).toBe(1);
         expect(navigation.push).toHaveBeenCalledWith({ pathname: '/activity', state: { open: true } });
         expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
+    });
+
+    test('should keep a pinned range when playback pauses', () => {
+        const viewerHarness = createViewer();
+        const getViewer = () => viewerHarness.viewer;
+        const container = document.createElement('div');
+        container.className = 'bp-media-container';
+        const media = document.createElement('audio');
+        Object.defineProperty(media, 'currentTime', { configurable: true, value: 1, writable: true });
+        container.appendChild(media);
+        document.body.appendChild(container);
+
+        render(
+            <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                <TimestampReadout getViewer={getViewer} />
+            </CommentRangeDragCreateProvider>,
+        );
+
+        try {
+            act(() => {
+                viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
+            });
+            Object.defineProperty(media, 'currentTime', { configurable: true, value: 90, writable: true });
+            act(() => {
+                media.dispatchEvent(new Event('pause'));
+            });
+
+            expect(screen.getByTestId('ms').textContent).toBe('1000');
+            expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
+        } finally {
+            container.remove();
+        }
+    });
+
+    test('should follow the playhead after a drag create that has no span', () => {
+        const viewerHarness = createViewer();
+        const getViewer = () => viewerHarness.viewer;
+        const container = document.createElement('div');
+        container.className = 'bp-media-container';
+        const media = document.createElement('audio');
+        Object.defineProperty(media, 'currentTime', { configurable: true, value: 1, writable: true });
+        container.appendChild(media);
+        document.body.appendChild(container);
+
+        render(
+            <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                <TimestampReadout getViewer={getViewer} />
+            </CommentRangeDragCreateProvider>,
+        );
+
+        try {
+            act(() => {
+                viewerHarness.emit('comment_range_compose', { startMs: 1000 });
+            });
+            Object.defineProperty(media, 'currentTime', { configurable: true, value: 12, writable: true });
+            act(() => {
+                media.dispatchEvent(new Event('pause'));
+            });
+
+            expect(screen.getByTestId('ms').textContent).toBe('12000');
+            expect(viewerHarness.viewer.emit).toHaveBeenCalledWith('comment_range_draft', {
+                endMs: null,
+                startMs: 12000,
+            });
+        } finally {
+            container.remove();
+        }
     });
 
     test('should ignore a malformed drag create', () => {

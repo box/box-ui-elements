@@ -66,7 +66,6 @@ export interface UseMediaTimestampResult {
 export type PendingCommentRange = { endMs?: number; startMs: number };
 
 export type CommentRangeDragCreateContextValue = {
-    clearPendingDragCreate: () => void;
     consumePendingDragCreate: () => PendingCommentRange | null;
     version: number;
 };
@@ -111,8 +110,6 @@ export const useMediaTimestamp = (
     const [timestampMs, setTimestampMs] = React.useState(0);
     const isPressedRef = React.useRef(isPressed);
     const dragCreateContext = React.useContext(CommentRangeDragCreateContext);
-    const clearPendingDragCreateRef = React.useRef<() => void>(() => undefined);
-    clearPendingDragCreateRef.current = dragCreateContext?.clearPendingDragCreate ?? (() => undefined);
     const isLoadingRef = React.useRef(false);
 
     const isRangeEnabled = enabled && isAudioPlayerV2;
@@ -321,17 +318,6 @@ export const useMediaTimestamp = (
             uncheckTimestamp();
         };
 
-        // Already-open Activity adopts the range itself. Chrome still stashes the same event for
-        // the collapsed case; clear that stash so a later mount does not apply it again.
-        const handleRangeDragCreate = (payload: unknown) => {
-            const change = readRangeChange(payload);
-            if (!change) {
-                return;
-            }
-            adoptRange(change);
-            clearPendingDragCreateRef.current();
-        };
-
         // Poll for the viewer until we find one.
         let attachedViewer: ViewerHandle | null = null;
         let pollId: ReturnType<typeof setInterval> | undefined;
@@ -343,7 +329,6 @@ export const useMediaTimestamp = (
             }
             viewer.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
             viewer.addListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
-            viewer.addListener(EVENT_RANGE_DRAG_CREATE, handleRangeDragCreate);
             attachedViewer = viewer;
             clearInterval(pollId);
         };
@@ -357,9 +342,8 @@ export const useMediaTimestamp = (
             clearInterval(pollId);
             attachedViewer?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
             attachedViewer?.removeListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
-            attachedViewer?.removeListener(EVENT_RANGE_DRAG_CREATE, handleRangeDragCreate);
         };
-    }, [adoptRange, getViewer, isRangeEnabled, uncheckTimestamp]);
+    }, [getViewer, isRangeEnabled, uncheckTimestamp]);
 
     // Take down any handles still up for a composer that is going away.
     React.useEffect(

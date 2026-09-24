@@ -4,6 +4,7 @@ import { ActivityFeed } from '@box/activity-feed';
 
 import { act, render, screen } from '../../../../test-utils/testing-library';
 import ActivityFeedV2 from '..';
+import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
@@ -1357,14 +1358,16 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const { dragCreate, getViewer, rangeEmits } = createRangeViewer();
             try {
                 render(
-                    <ActivityFeedV2
-                        currentUser={mockCurrentUser}
-                        feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={audioFile}
-                        getViewer={getViewer}
-                        isAudioPlayerV2Enabled
-                        isTimestampedCommentsEnabled
-                    />,
+                    <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={audioFile}
+                            getViewer={getViewer}
+                            isAudioPlayerV2Enabled
+                            isTimestampedCommentsEnabled
+                        />
+                    </CommentRangeDragCreateProvider>,
                 );
                 const composer = screen.getByTestId('activity-feed-composer');
                 const focus = jest.spyOn(composer, 'focus');
@@ -1417,15 +1420,17 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const onCommentCreate = jest.fn();
             try {
                 render(
-                    <ActivityFeedV2
-                        currentUser={mockCurrentUser}
-                        feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={audioFile}
-                        getViewer={getViewer}
-                        isAudioPlayerV2Enabled
-                        isTimestampedCommentsEnabled
-                        onCommentCreate={onCommentCreate}
-                    />,
+                    <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={audioFile}
+                            getViewer={getViewer}
+                            isAudioPlayerV2Enabled
+                            isTimestampedCommentsEnabled
+                            onCommentCreate={onCommentCreate}
+                        />
+                    </CommentRangeDragCreateProvider>,
                 );
                 await act(async () => {
                     dragCreate({ endMs: 5000, startMs: 1000 });
@@ -1448,14 +1453,16 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const { dragCreate, getViewer } = createRangeViewer();
             try {
                 render(
-                    <ActivityFeedV2
-                        currentUser={mockCurrentUser}
-                        feedItems={[] as ActivityFeedV2Props['feedItems']}
-                        file={videoFile}
-                        getViewer={getViewer}
-                        isAudioPlayerV2Enabled
-                        isTimestampedCommentsEnabled
-                    />,
+                    <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={videoFile}
+                            getViewer={getViewer}
+                            isAudioPlayerV2Enabled
+                            isTimestampedCommentsEnabled
+                        />
+                    </CommentRangeDragCreateProvider>,
                 );
                 const focus = jest.spyOn(screen.getByTestId('activity-feed-composer'), 'focus');
 
