@@ -60,17 +60,12 @@ describe('features/item-details/ItemProperties', () => {
         expect(screen.getByText('3.3 KB')).toBeVisible();
         expect(screen.getByText('Retention policy description')).toBeVisible();
 
-        const createdLabel = screen.getByText('Created');
-        expect(createdLabel.nextElementSibling).toHaveTextContent(/Dec 12, 2012/);
+        const valueAfter = label => label.closest('dt').nextElementSibling;
 
-        const modifiedLabel = screen.getByText('Modified');
-        expect(modifiedLabel.nextElementSibling).toHaveTextContent(/Apr 4, 2016/);
-
-        const archivedLabel = screen.getByText('Archived');
-        expect(archivedLabel.nextElementSibling).toHaveTextContent(/Sep 20, 2024/);
-
-        const deletedLabel = screen.getByText('Deleted');
-        expect(deletedLabel.nextElementSibling).toHaveTextContent(/Feb 7, 2013/);
+        expect(valueAfter(screen.getByText('Created'))).toHaveTextContent(/Dec 12, 2012/);
+        expect(valueAfter(screen.getByText('Modified'))).toHaveTextContent(/Apr 4, 2016/);
+        expect(valueAfter(screen.getByText('Archived'))).toHaveTextContent(/Sep 20, 2024/);
+        expect(valueAfter(screen.getByText('Deleted'))).toHaveTextContent(/Feb 7, 2013/);
     });
 
     describe('description field', () => {
