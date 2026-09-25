@@ -216,7 +216,7 @@ describe('api/Annotations', () => {
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
-                requestData: undefined,
+                requestData: { params: { enable_rich_text: false } },
             });
         });
 
@@ -233,7 +233,24 @@ describe('api/Annotations', () => {
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
-                requestData: { params: { fields: 'replies' } },
+                requestData: { params: { fields: 'replies', enable_rich_text: false } },
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+                can_view_annotations: true,
+            };
+
+            annotations.getAnnotation('12345', 'abc', permissions, successCallback, errorCallback, true, true);
+
+            expect(annotations.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback,
+                url: 'https://api.box.com/2.0/undoc/annotations/abc',
+                requestData: { params: { fields: 'replies', enable_rich_text: true } },
             });
         });
 
@@ -266,6 +283,7 @@ describe('api/Annotations', () => {
                 requestData: {
                     file_id: '12345',
                     file_version_id: '67890',
+                    enable_rich_text: false,
                 },
                 successCallback,
             });
@@ -289,6 +307,40 @@ describe('api/Annotations', () => {
                     file_id: '12345',
                     file_version_id: '67890',
                     fields: 'replies',
+                    enable_rich_text: false,
+                },
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+                can_view_annotations: true,
+            };
+
+            annotations.getAnnotations(
+                '12345',
+                '67890',
+                permissions,
+                successCallback,
+                errorCallback,
+                100,
+                false,
+                true,
+                true,
+            );
+
+            expect(annotations.markerGet).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback: expect.any(Function),
+                limit: 100,
+                shouldFetchAll: false,
+                requestData: {
+                    file_id: '12345',
+                    file_version_id: '67890',
+                    fields: 'replies',
+                    enable_rich_text: true,
                 },
             });
         });
@@ -321,6 +373,24 @@ describe('api/Annotations', () => {
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
+                requestData: { params: { enable_rich_text: false } },
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+                can_view_annotations: true,
+            };
+
+            annotations.getAnnotationReplies('12345', '67890', permissions, successCallback, errorCallback, true);
+
+            expect(annotations.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback,
+                url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
+                requestData: { params: { enable_rich_text: true } },
             });
         });
 

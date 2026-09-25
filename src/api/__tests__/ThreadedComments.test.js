@@ -217,6 +217,33 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 successCallback,
                 url,
+                requestData: { params: { enable_rich_text: false } },
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+            const url = 'http://test-url.com';
+
+            threadedComments.getUrlForId = jest.fn().mockImplementationOnce(() => url);
+
+            threadedComments.getComment({
+                commentId: '123',
+                fileId: '12345',
+                permissions,
+                shouldEnableRichText: true,
+                successCallback,
+                errorCallback,
+            });
+
+            expect(threadedComments.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                successCallback,
+                url,
+                requestData: { params: { enable_rich_text: true } },
             });
         });
 
@@ -259,6 +286,32 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 requestData: {
                     replies_count: 1,
+                    enable_rich_text: false,
+                },
+                successCallback,
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            threadedComments.getComments({
+                fileId: '12345',
+                permissions,
+                successCallback,
+                errorCallback,
+                repliesCount: 1,
+                shouldEnableRichText: true,
+            });
+
+            expect(threadedComments.markerGet).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                requestData: {
+                    replies_count: 1,
+                    enable_rich_text: true,
                 },
                 successCallback,
             });
@@ -302,6 +355,30 @@ describe('api/ThreadedComments', () => {
                 errorCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
                 successCallback,
+                requestData: { params: { enable_rich_text: false } },
+            });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            threadedComments.getCommentReplies({
+                fileId: '12345',
+                commentId: '67890',
+                permissions,
+                successCallback,
+                errorCallback,
+                shouldEnableRichText: true,
+            });
+
+            expect(threadedComments.get).toBeCalledWith({
+                id: '12345',
+                errorCallback,
+                url: 'https://api.box.com/2.0/undoc/comments/67890/replies',
+                successCallback,
+                requestData: { params: { enable_rich_text: true } },
             });
         });
 
