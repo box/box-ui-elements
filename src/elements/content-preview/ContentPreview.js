@@ -64,8 +64,10 @@ import {
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
+    X_REP_HINT_EXTRACTED_TEXT,
     X_REP_HINT_WAVEFORM,
 } from '../../constants';
+import Browser from '../../utils/Browser';
 import type { Annotation } from '../../common/types/feed';
 import type { Target } from '../../common/types/annotations';
 import type { TargetingApi } from '../../features/targeting/types';
@@ -1273,7 +1275,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.fetchFileEndTime = null;
 
         const { features }: Props = this.props;
-        const repHints = isFeatureEnabled(features, 'audioPlayerV2.enabled') ? X_REP_HINT_WAVEFORM : '';
+        const extraRepHints = [
+            isFeatureEnabled(features, 'audioPlayerV2.enabled') ? X_REP_HINT_WAVEFORM : '',
+            Browser.canPlayDash() && isFeatureEnabled(features, 'aiTranscriptionForVideoSubtitles')
+                ? X_REP_HINT_EXTRACTED_TEXT
+                : '',
+            fetchOptions.repHints || '',
+        ].join('');
 
         this.api
             .getFileAPI()
@@ -1284,7 +1292,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 {
                     ...fetchOptions,
                     fields: PREVIEW_FIELDS_TO_FETCH,
-                    ...(repHints ? { repHints } : {}),
+                    ...(extraRepHints ? { repHints: extraRepHints } : {}),
                 },
             );
     }
