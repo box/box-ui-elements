@@ -1329,6 +1329,45 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             }
         });
 
+        test('should keep the timestamp toggle and draft when posting fails', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, getViewer, rangeEmits } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn().mockRejectedValue(new Error('network error'));
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                const emitsBeforePost = rangeEmits().length;
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+                expect(lastEditorProps.videoTimestamp?.formattedTimestamp).toBe('0:08 \u2013 0:12');
+                expect(rangeEmits()).toHaveLength(emitsBeforePost);
+            } finally {
+                consoleError.mockRestore();
+                cleanup();
+            }
+        });
+
         test('should uncheck the timestamp toggle when the viewer dismisses the draft', async () => {
             const { cleanup, media } = mountAudio();
             const { commitDrag, dismissDraft, getViewer, rangeEmits } = createRangeViewer();
