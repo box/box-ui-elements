@@ -1,9 +1,17 @@
-@import '../common/variables';
-@import './mixins';
-
 .bcs-details {
     .bcs-scroll-content {
-        padding-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: var(--bp-space-050);
+        padding: var(--bp-space-040) var(--bp-space-050) var(--bp-space-050);
+    }
+
+    .bcs-section {
+        margin: 0;
+    }
+
+    .bcs-DetailsSidebar-notices:empty {
+        display: none;
     }
 
     .item-properties dd {
@@ -13,8 +21,4 @@
             margin-bottom: 0;
         }
     }
-}
-
-.bcs-DetailsSidebar-notices {
-    @include bcs-SidebarSection;
 }
