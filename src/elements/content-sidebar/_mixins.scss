@@ -31,11 +31,3 @@
     width: var(--size-5);
     height: var(--size-5);
 }
-
-@mixin bcs-SidebarSection {
-    margin: 0 8px 20px 25px;
-
-    &:empty {
-        margin: 0;
-    }
-}
