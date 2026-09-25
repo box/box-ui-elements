@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../styles/variables';
 
 /**************************************
@@ -46,7 +47,9 @@
         border-radius: 40px;
         outline: 0;
         cursor: pointer;
-        transition: left .4s ease, background .4s ease;
+        transition:
+            left 0.4s ease,
+            background 0.4s ease;
 
         &::after,
         &::before {
@@ -63,8 +66,10 @@
             background: $white;
             border: 1px solid $bdl-gray-65;
             border-radius: 50%;
-            box-shadow: 0 1px 2px fade-out($black, .9);
-            transition: left .2s ease, background .2s ease;
+            box-shadow: 0 1px 2px color.adjust($black, $alpha: -0.9);
+            transition:
+                left 0.2s ease,
+                background 0.2s ease;
         }
 
         &::before {
@@ -163,7 +168,7 @@ $width: $height * 2;
         right: 0;
         background-color: $bdl-gray-30;
         border-radius: $height;
-        transition: background .4s;
+        transition: background 0.4s;
     }
 
     &::after {
@@ -172,7 +177,7 @@ $width: $height * 2;
         background-color: $white;
         border: 1px solid $bdl-gray-65;
         border-radius: 100%;
-        transition: margin .4s;
+        transition: margin 0.4s;
     }
 
     .toggle-simple-input:checked ~ & {
@@ -192,12 +197,12 @@ $width: $height * 2;
         }
 
         &::before {
-            opacity: .5;
+            opacity: 0.5;
         }
 
         &::after {
-            background-color: darken($white, 2%);
-            border-color: lighten($bdl-gray-65, 32%);
+            background-color: color.adjust($white, $lightness: -2%);
+            border-color: color.adjust($bdl-gray-65, $lightness: 32%);
         }
     }
 

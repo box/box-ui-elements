@@ -4,6 +4,7 @@ import { ActivityFeed } from '@box/activity-feed';
 
 import { act, render, screen } from '../../../../test-utils/testing-library';
 import ActivityFeedV2 from '..';
+import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
@@ -85,7 +86,11 @@ jest.mock('@box/activity-feed', () => {
     ActivityFeedList.Version = (props: { id: string }) => <div data-testid={`version-${props.id}`}>Version</div>;
     const ActivityFeedEditor = (props: Partial<EditorProps>) => {
         lastEditorProps = props;
-        return <div data-testid="activity-feed-editor">Editor</div>;
+        return (
+            <div data-testid="activity-feed-editor">
+                <div contentEditable="true" data-testid="activity-feed-composer" suppressContentEditableWarning />
+            </div>
+        );
     };
     const ActivityFeedHeader = ({ children }: { children: React.ReactNode }) => (
         <div data-testid="activity-feed-header">{children}</div>
@@ -1175,6 +1180,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             };
             return {
                 commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
+                dragCreate: (payload: unknown) => listeners.comment_range_compose?.(payload),
+                dismissDraft: () => listeners.comment_range_draft_dismiss?.(undefined),
                 getViewer: () => viewer,
                 rangeEmits: () =>
                     viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
@@ -1306,6 +1313,165 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
                 expect(rangeEmits().pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 8055 }]);
                 expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great take', false);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should uncheck the timestamp toggle when the viewer dismisses the draft', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, dismissDraft, getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+
+                await act(async () => {
+                    dismissDraft();
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(lastEditorProps.videoTimestamp?.formattedTimestamp).toBe('0:08');
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft_clear', undefined]);
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should check the toggle, show the range, and focus the editor when the viewer drag-creates', async () => {
+            const { cleanup } = mountAudio();
+            const { dragCreate, getViewer, rangeEmits } = createRangeViewer();
+            try {
+                render(
+                    <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={audioFile}
+                            getViewer={getViewer}
+                            isAudioPlayerV2Enabled
+                            isTimestampedCommentsEnabled
+                        />
+                    </CommentRangeDragCreateProvider>,
+                );
+                const composer = screen.getByTestId('activity-feed-composer');
+                const focus = jest.spyOn(composer, 'focus');
+
+                await act(async () => {
+                    dragCreate({ endMs: 5000, startMs: 1000 });
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+                expect(lastEditorProps.videoTimestamp?.formattedTimestamp).toBe('0:01 \u2013 0:05');
+                expect(rangeEmits()).toEqual([]);
+                expect(focus).toHaveBeenCalled();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should not focus the editor when the timestamp toggle is checked from the checkbox', async () => {
+            const { cleanup, media } = mountAudio();
+            const { getViewer } = createRangeViewer();
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                    />,
+                );
+                const focus = jest.spyOn(screen.getByTestId('activity-feed-composer'), 'focus');
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+                expect(focus).not.toHaveBeenCalled();
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should post range markup after a viewer drag create', async () => {
+            const { cleanup } = mountAudio();
+            const { dragCreate, getViewer } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn();
+            try {
+                render(
+                    <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={audioFile}
+                            getViewer={getViewer}
+                            isAudioPlayerV2Enabled
+                            isTimestampedCommentsEnabled
+                            onCommentCreate={onCommentCreate}
+                        />
+                    </CommentRangeDragCreateProvider>,
+                );
+                await act(async () => {
+                    dragCreate({ endMs: 5000, startMs: 1000 });
+                });
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(onCommentCreate).toHaveBeenCalledWith(
+                    '#[timestamp:1000,endTimestamp:5000,versionId:99] great take',
+                    false,
+                );
+            } finally {
+                cleanup();
+            }
+        });
+
+        test('should ignore a viewer drag create on a video file', async () => {
+            const { cleanup } = mountAudio();
+            const { dragCreate, getViewer } = createRangeViewer();
+            try {
+                render(
+                    <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={videoFile}
+                            getViewer={getViewer}
+                            isAudioPlayerV2Enabled
+                            isTimestampedCommentsEnabled
+                        />
+                    </CommentRangeDragCreateProvider>,
+                );
+                const focus = jest.spyOn(screen.getByTestId('activity-feed-composer'), 'focus');
+
+                await act(async () => {
+                    dragCreate({ endMs: 5000, startMs: 1000 });
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(focus).not.toHaveBeenCalled();
             } finally {
                 cleanup();
             }

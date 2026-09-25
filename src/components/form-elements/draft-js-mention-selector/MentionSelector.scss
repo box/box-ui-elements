@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../../styles/variables';
 
 /**************************************
@@ -21,7 +22,7 @@
         background: $white;
         border: 1px solid $bdl-gray-30;
         border-radius: $bdl-border-radius-size-med;
-        box-shadow: 0 2px 6px 0 fade-out($black, .9);
+        box-shadow: 0 2px 6px 0 color.adjust($black, $alpha: -0.9);
     }
 
     // Normally .bdl-SelectorDropdown > .text-input-container has a bottom margin

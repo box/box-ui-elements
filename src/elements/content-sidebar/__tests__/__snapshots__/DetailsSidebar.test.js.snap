@@ -69,15 +69,14 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
     }
   />
   <SidebarSection
-    className=""
     interactionTarget="fileproperties"
-    isOpen={true}
     title={
       <FormattedMessage
         defaultMessage="File Properties"
         id="be.sidebarProperties"
       />
     }
+    titleVariant="bodyDefaultBold"
   >
     <SidebarVersions
       file={
@@ -140,15 +139,14 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   }
 >
   <SidebarSection
-    className=""
     interactionTarget="fileproperties"
-    isOpen={true}
     title={
       <FormattedMessage
         defaultMessage="File Properties"
         id="be.sidebarProperties"
       />
     }
+    titleVariant="bodyDefaultBold"
   >
     <SidebarFileProperties
       file={

@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../styles/variables';
 @import '../../styles/mixins/buttons';
 
@@ -60,7 +61,7 @@
     background-color: $white;
     background-clip: padding-box;
     border-radius: $bdl-border-radius-size-xlarge;
-    box-shadow: 0 1px 1px 1px fade-out($black, 0.95);
+    box-shadow: 0 1px 1px 1px color.adjust($black, $alpha: -0.95);
 }
 
 .modal-title {
@@ -112,7 +113,7 @@
     position: fixed;
     inset: 0;
     z-index: -1; // .modal creates a new stacking context. Let's just make sure that backdrop is below dialog.
-    background: fade-out($black, 0.25);
+    background: color.adjust($black, $alpha: -0.25);
 }
 
 .modal-actions {

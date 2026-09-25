@@ -9,6 +9,8 @@ const VIEWER_POLL_MS = 500;
 export const EVENT_RANGE_DRAFT = 'comment_range_draft';
 export const EVENT_RANGE_DRAFT_CHANGE = 'comment_range_draft_change';
 export const EVENT_RANGE_DRAFT_CLEAR = 'comment_range_draft_clear';
+export const EVENT_RANGE_DRAFT_DISMISS = 'comment_range_draft_dismiss';
+export const EVENT_RANGE_DRAG_CREATE = 'comment_range_compose';
 
 const findMediaElement = (): HTMLMediaElement | null => {
     if (typeof document === 'undefined') {
@@ -39,6 +41,16 @@ export const seekMediaToMs = (ms: number, getViewer?: () => ViewerHandle | null)
     media.pause();
 };
 
+const ACTIVITY_FEED_EDITOR_SELECTOR = '.bcs-NewActivityFeed-editor [contenteditable="true"]';
+
+/** Focuses the Activity composer. A no-op when the feed is not mounted yet. */
+export const focusActivityFeedEditor = (): void => {
+    if (typeof document === 'undefined') {
+        return;
+    }
+    document.querySelector<HTMLElement>(ACTIVITY_FEED_EDITOR_SELECTOR)?.focus();
+};
+
 export interface UseMediaTimestampResult {
     /** Defaults to "0:00" until the first capture. */
     formattedTimestamp: string;
@@ -51,12 +63,22 @@ export interface UseMediaTimestampResult {
     timestampMs: number;
 }
 
+export type PendingCommentRange = { endMs?: number; startMs: number };
+
+export type CommentRangeDragCreateContextValue = {
+    consumePendingDragCreate: () => PendingCommentRange | null;
+    version: number;
+};
+
+/** Stash owned by sidebar chrome for a drag create that arrived before the feed was mounted. */
+export const CommentRangeDragCreateContext = React.createContext<CommentRangeDragCreateContextValue | null>(null);
+
 export interface UseMediaTimestampOptions {
     getViewer?: () => ViewerHandle | null;
     isAudioPlayerV2?: boolean;
 }
 
-const readRangeChange = (payload: unknown): { endMs?: number; startMs: number } | null => {
+export const readRangeChange = (payload: unknown): PendingCommentRange | null => {
     const { endMs, startMs } = (payload ?? {}) as Partial<CommentRangeDraft>;
     if (!Number.isSafeInteger(startMs) || (startMs as number) < 0) {
         return null;
@@ -72,6 +94,8 @@ const readRangeChange = (payload: unknown): { endMs?: number; startMs: number } 
  * - Pressed on while media is playing: captured value frozen until pause/seek.
  * - Pressed on while media is paused: captured value updates on pause/seek.
  * - Toggle off->on: captures current time and pauses the media if it was playing.
+ * - Viewer dismisses the draft: same as the user toggling off.
+ * - Viewer drag create: checkbox on, reported range pinned, no comment_range_draft echo.
  * - New media src: captured value resets to 0; pressed state persists. A dragged range survives
  *   untouched, since a src change on the same element is a token refresh, not different content.
  * - New media element: any selected range is dropped.
@@ -85,6 +109,7 @@ export const useMediaTimestamp = (
     const [isPressed, setIsPressed] = React.useState(false);
     const [timestampMs, setTimestampMs] = React.useState(0);
     const isPressedRef = React.useRef(isPressed);
+    const dragCreateContext = React.useContext(CommentRangeDragCreateContext);
     const isLoadingRef = React.useRef(false);
 
     const isRangeEnabled = enabled && isAudioPlayerV2;
@@ -131,17 +156,21 @@ export const useMediaTimestamp = (
         }
     }, [enabled]);
 
+    const uncheckTimestamp = React.useCallback(() => {
+        isPressedRef.current = false;
+        setIsPressed(false);
+        isRangePinnedRef.current = false;
+        setTimestampEndMs(undefined);
+        emitClear();
+    }, [emitClear]);
+
     const onPressedChange = React.useCallback(
         (pressed: boolean) => {
             if (!enabled) {
                 return;
             }
             if (!pressed) {
-                isPressedRef.current = false;
-                setIsPressed(false);
-                isRangePinnedRef.current = false;
-                setTimestampEndMs(undefined);
-                emitClear();
+                uncheckTimestamp();
                 return;
             }
             const media = findMediaElement();
@@ -159,8 +188,29 @@ export const useMediaTimestamp = (
             setTimestampEndMs(undefined);
             emitDraft(capturedMs);
         },
-        [emitClear, emitDraft, enabled],
+        [emitDraft, enabled, uncheckTimestamp],
     );
+
+    // Drag create is an initiation, not a checkbox toggle: pin the reported range and do not emit a
+    // draft. Emitting comment_range_draft would collapse the waveform handles the viewer just drew.
+    const adoptRange = React.useCallback((change: PendingCommentRange) => {
+        isPressedRef.current = true;
+        setIsPressed(true);
+        setTimestampMs(change.startMs);
+        setTimestampEndMs(change.endMs);
+        isRangePinnedRef.current = change.endMs !== undefined;
+        focusActivityFeedEditor();
+    }, []);
+
+    React.useEffect(() => {
+        if (!isRangeEnabled || !dragCreateContext) {
+            return;
+        }
+        const pending = dragCreateContext.consumePendingDragCreate();
+        if (pending) {
+            adoptRange(pending);
+        }
+    }, [adoptRange, dragCreateContext, isRangeEnabled]);
 
     React.useEffect(() => {
         if (!enabled || typeof document === 'undefined') {
@@ -259,6 +309,15 @@ export const useMediaTimestamp = (
             setTimestampEndMs(change.endMs);
         };
 
+        // Click-outside on the waveform. The viewer has already taken its handles down, so the
+        // clear this echoes back is a no-op there, and there is nothing to echo with no draft up.
+        const handleRangeDismiss = () => {
+            if (!isPressedRef.current) {
+                return;
+            }
+            uncheckTimestamp();
+        };
+
         // Poll for the viewer until we find one.
         let attachedViewer: ViewerHandle | null = null;
         let pollId: ReturnType<typeof setInterval> | undefined;
@@ -269,6 +328,7 @@ export const useMediaTimestamp = (
                 return;
             }
             viewer.addListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            viewer.addListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
             attachedViewer = viewer;
             clearInterval(pollId);
         };
@@ -281,8 +341,9 @@ export const useMediaTimestamp = (
         return () => {
             clearInterval(pollId);
             attachedViewer?.removeListener(EVENT_RANGE_DRAFT_CHANGE, handleRangeChange);
+            attachedViewer?.removeListener(EVENT_RANGE_DRAFT_DISMISS, handleRangeDismiss);
         };
-    }, [getViewer, isRangeEnabled]);
+    }, [getViewer, isRangeEnabled, uncheckTimestamp]);
 
     // Take down any handles still up for a composer that is going away.
     React.useEffect(

@@ -35,7 +35,8 @@ type Page = {
 
 type AdditionalVersionInfo = {
     currentVersionId?: ?string,
-    updateVersionToCurrent: () => void,
+    triggeredBy?: 'annotation',
+    updateVersionToCurrent?: () => void,
 };
 
 type ElementOrigin =

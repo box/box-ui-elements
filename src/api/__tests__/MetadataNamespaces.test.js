@@ -1,15 +1,6 @@
 import MetadataNamespaces from '../MetadataNamespaces';
 import { METADATA_SCOPE_MODE_FINAL, METADATA_SCOPE_MODE_MIGRATION, METADATA_SCOPE_MODE_SCOPED } from '../../constants';
 
-jest.mock('../metadataNamespaceMocks', () => ({
-    IS_NAMESPACE_API_MOCKED: false,
-    mockListNamespaces: jest.fn(),
-    mockListTemplatesForNamespace: jest.fn(),
-    mockCreateMetadataTemplate: jest.fn(),
-    mockUpdateMetadataTemplate: jest.fn(),
-    mockGetTemplateSchemaForEditor: jest.fn(),
-}));
-
 describe('api/MetadataNamespaces', () => {
     const file = { id: '123' };
     let host;
@@ -36,6 +27,7 @@ describe('api/MetadataNamespaces', () => {
     });
 
     beforeEach(() => {
+        jest.clearAllMocks();
         host = createHost();
         api = new MetadataNamespaces(host);
     });
