@@ -3,7 +3,7 @@ import TokenService from '../TokenService';
 import Xhr from '../Xhr';
 
 jest.mock('../TokenService');
-TokenService.getReadToken.mockImplementation(() => Promise.resolve(`${Math.random()}`));
+(TokenService.getReadToken as jest.Mock).mockImplementation(() => Promise.resolve(`${Math.random()}`));
 
 describe('util/Xhr', () => {
     let xhrInstance;
@@ -375,10 +375,7 @@ describe('util/Xhr', () => {
                 },
             };
             xhrInstance.axios = jest.fn().mockImplementation(() => {
-                xhrInstance
-                    .errorInterceptor(error)
-                    .then(() => {})
-                    .catch(() => {});
+                xhrInstance.errorInterceptor(error).then(noop).catch(noop);
                 return Promise.resolve();
             });
             // first time return true, then false
