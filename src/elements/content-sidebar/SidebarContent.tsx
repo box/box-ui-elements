@@ -40,7 +40,7 @@ const SidebarContent = ({
         >
             <div className="bcs-content-header">
                 {title && (
-                    <Text as="h2" className="bcs-title" variant="titleMedium">
+                    <Text as="h2" className="bcs-title" variant="titleLarge">
                         {title}
                     </Text>
                 )}
