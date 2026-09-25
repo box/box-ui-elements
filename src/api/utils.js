@@ -136,10 +136,13 @@ const mergeDetailedAndHydratedInstances = (
                 return;
             }
 
-            if (!(key in merged)) {
-                merged[key] = {
-                    values: hydratedEntry[key],
-                };
+            if (!Object.prototype.hasOwnProperty.call(merged, key)) {
+                Object.defineProperty(merged, key, {
+                    configurable: true,
+                    enumerable: true,
+                    value: { values: hydratedEntry[key] },
+                    writable: true,
+                });
             }
         });
 
