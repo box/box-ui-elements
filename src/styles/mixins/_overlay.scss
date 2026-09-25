@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../variables';
 
 /**
@@ -11,7 +12,7 @@
     cursor: pointer;
 
     &.is-active {
-        background-color: fade-out($bdl-gray, .95);
+        background-color: color.adjust($bdl-gray, $alpha: -0.95);
     }
 }
 
@@ -42,5 +43,5 @@
  * - FTUX tooltip guides
  */
 @mixin bdl-Overlay-containerShadow {
-    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, .1);
+    box-shadow: 0 $bdl-grid-unit ($bdl-grid-unit * 3) 0 rgba($black, 0.1);
 }

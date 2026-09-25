@@ -55,6 +55,7 @@ const SidebarAccessStats = ({
         <SidebarSection
             interactionTarget={SECTION_TARGETS.ACCESS_STATS}
             title={<FormattedMessage {...messages.sidebarAccessStats} />}
+            titleVariant="bodyDefaultBold"
         >
             <AccessStats
                 errorMessage={errorMessage}

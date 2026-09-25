@@ -448,6 +448,7 @@ export default function withSidebarAnnotations(
                 if (version) {
                     onVersionChange(version, {
                         currentVersionId: currentFileVersionId,
+                        triggeredBy: 'annotation',
                         updateVersionToCurrent: () => {
                             const currentVersionNavigation =
                                 this.getInternalAnnotationsNavigation(currentFileVersionId);
@@ -466,6 +467,7 @@ export default function withSidebarAnnotations(
                 if (version) {
                     onVersionChange(version, {
                         currentVersionId: currentFileVersionId,
+                        triggeredBy: 'annotation',
                         updateVersionToCurrent: () => history.push(getAnnotationsPath(currentFileVersionId)),
                     });
                 }

@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../styles/variables';
 
 @keyframes pulse {
@@ -70,7 +71,7 @@
 .bdl-DropCloud {
     position: absolute;
     display: inline-block;
-    fill: darken($bdl-dark-blue, 20%);
+    fill: color.adjust($bdl-dark-blue, $lightness: -20%);
 
     .logo {
         position: absolute;

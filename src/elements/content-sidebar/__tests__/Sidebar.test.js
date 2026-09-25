@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
@@ -730,5 +730,206 @@ describe('elements/content-sidebar/Sidebar', () => {
                 expect(mockSetItem).not.toHaveBeenCalled();
             },
         );
+    });
+
+    describe('comment range drag create', () => {
+        const audioFile = { ...file, extension: 'mp3' };
+        const dragCreateFeatures = {
+            activityFeed: { timestampedComments: { enabled: true } },
+            audioPlayerV2: { enabled: true },
+        };
+
+        const createViewer = () => {
+            const listeners = {};
+            const viewer = {
+                addListener: (event, handler) => {
+                    listeners[event] = handler;
+                },
+                emit: jest.fn(),
+                removeListener: jest.fn(event => {
+                    delete listeners[event];
+                }),
+            };
+            return {
+                emit: (event, payload) => listeners[event]?.(payload),
+                hasListener: event => Boolean(listeners[event]),
+                viewer,
+            };
+        };
+
+        test('should open activity when the viewer emits a drag create', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { emit, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: dragCreateFeatures,
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            act(() => {
+                emit('comment_range_compose', { endMs: 20, startMs: 10 });
+            });
+
+            expect(history.push).toHaveBeenCalledWith({ pathname: '/activity', state: { open: true } });
+            expect(history.replace).not.toHaveBeenCalled();
+        });
+
+        test('should replace the activity route when a drag create arrives while activity is already open', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { emit, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: dragCreateFeatures,
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/activity' },
+                }),
+            );
+
+            act(() => {
+                emit('comment_range_compose', { endMs: 20, startMs: 10 });
+            });
+
+            expect(history.replace).toHaveBeenCalledWith({ pathname: '/activity', state: { open: true } });
+            expect(history.push).not.toHaveBeenCalled();
+        });
+
+        test('should use the internal navigation handler when the router is disabled', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const internalSidebarNavigationHandler = jest.fn();
+            const { emit, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    activitySidebarProps: {
+                        internalSidebarNavigation: { sidebar: 'details' },
+                        internalSidebarNavigationHandler,
+                        routerDisabled: true,
+                    },
+                    features: dragCreateFeatures,
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            act(() => {
+                emit('comment_range_compose', { endMs: 20, startMs: 10 });
+            });
+
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({ open: true, sidebar: 'activity' }, false);
+            expect(history.push).not.toHaveBeenCalled();
+            expect(history.replace).not.toHaveBeenCalled();
+        });
+
+        test('should not navigate when the viewer dismisses a draft', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { emit, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: dragCreateFeatures,
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            act(() => {
+                emit('comment_range_draft_dismiss');
+            });
+
+            expect(history.push).not.toHaveBeenCalled();
+            expect(history.replace).not.toHaveBeenCalled();
+        });
+
+        test('should not listen when the host has no activity feed', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { hasListener, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: dragCreateFeatures,
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: false,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(history.push).not.toHaveBeenCalled();
+        });
+
+        test('should not listen when audio player v2 is off', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { hasListener, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: { activityFeed: { timestampedComments: { enabled: true } } },
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(history.push).not.toHaveBeenCalled();
+        });
+
+        test('should not listen when timestamped comments are off', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { hasListener, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: { audioPlayerV2: { enabled: true } },
+                    file: audioFile,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(history.push).not.toHaveBeenCalled();
+        });
+
+        test('should not listen when the file is not audio', () => {
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const { hasListener, viewer } = createViewer();
+
+            render(
+                getSidebar({
+                    features: dragCreateFeatures,
+                    file,
+                    getViewer: () => viewer,
+                    hasActivityFeed: true,
+                    history,
+                    location: { pathname: '/details' },
+                }),
+            );
+
+            expect(hasListener('comment_range_compose')).toBe(false);
+            expect(history.push).not.toHaveBeenCalled();
+        });
     });
 });

@@ -13,7 +13,7 @@ interface Props {
     isRedesignEnabled?: boolean;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
-    variant?: 'bodyLargeBold' | 'captionBold';
+    variant?: 'bodyLargeBold' | 'captionBold' | 'labelBold';
 }
 
 function CompactCount({

@@ -76,7 +76,7 @@ const messages = defineMessages({
         id: 'be.contentInsights.previewGraphLabel',
     },
     previewGraphType: {
-        defaultMessage: 'Previews',
+        defaultMessage: 'PREVIEWS',
         description: 'Title for the content insights graph card regarding number of Previews',
         id: 'be.contentInsights.previewGraphType',
     },
