@@ -132,7 +132,7 @@ export type ActivityFeedV2Props = {
         status: FeedItemStatus;
     }) => void;
     onCommentCopyLink?: (params: { id: string }) => void;
-    onCommentCreate?: (text: string, hasMention: boolean) => void;
+    onCommentCreate?: (text: string, hasMention: boolean) => void | Promise<void>;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentSelect?: (commentId: string) => void;
     onCommentUpdate?: (

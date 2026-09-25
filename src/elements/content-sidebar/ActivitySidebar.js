@@ -672,13 +672,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Posts a new comment to the API
+     * Posts a new comment to the API.
+     * Resolves after the comment is created and rejects if the API call fails,
+     * so callers can wait before clearing a timestamp draft.
      *
      * @param {string} text - The comment's text
      * @param {boolean} hasMention - The comment's text
-     * @return {void}
+     * @return {Promise<void>}
      */
-    createComment = (text: string, hasMention: boolean): void => {
+    createComment = (text: string, hasMention: boolean): Promise<void> => {
         const { api, currentUser, features, file, hasReplies, onCommentCreate } = this.props;
         const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
 
@@ -686,32 +688,33 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             throw getBadUserError();
         }
 
-        const successCallback = (comment: Comment) => {
-            onCommentCreate(comment);
-            this.feedSuccessCallback();
-        };
+        return new Promise((resolve, reject) => {
+            const successCallback = (comment: Comment) => {
+                onCommentCreate(comment);
+                this.feedSuccessCallback();
+                resolve();
+            };
+            const errorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => {
+                this.feedErrorCallback(e, code, contextInfo);
+                reject(e);
+            };
 
-        if (hasReplies || isThreadedRepliesV2Enabled) {
-            api.getFeedAPI(false).createThreadedComment(
-                file,
-                currentUser,
-                text,
-                successCallback,
-                this.feedErrorCallback,
-            );
-        } else {
-            api.getFeedAPI(false).createComment(
-                file,
-                currentUser,
-                text,
-                hasMention,
-                successCallback,
-                this.feedErrorCallback,
-            );
-        }
+            if (hasReplies || isThreadedRepliesV2Enabled) {
+                api.getFeedAPI(false).createThreadedComment(file, currentUser, text, successCallback, errorCallback);
+            } else {
+                api.getFeedAPI(false).createComment(
+                    file,
+                    currentUser,
+                    text,
+                    hasMention,
+                    successCallback,
+                    errorCallback,
+                );
+            }
 
-        // need to load the pending item
-        this.fetchFeedItems();
+            // need to load the pending item
+            this.fetchFeedItems();
+        });
     };
 
     /**

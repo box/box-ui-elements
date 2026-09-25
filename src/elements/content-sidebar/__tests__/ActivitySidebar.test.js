@@ -505,6 +505,43 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(feedAPI.createComment).not.toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
+
+        test('should resolve after the success callback refreshes the feed', async () => {
+            const onCommentCreate = jest.fn();
+            const wrapper = getWrapper({ onCommentCreate });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            feedAPI.createComment.mockClear();
+            const comment = { id: 'c1' };
+
+            const pending = instance.createComment('foo', true);
+            const successCallback = feedAPI.createComment.mock.calls[0][4];
+            successCallback(comment);
+
+            await expect(pending).resolves.toBeUndefined();
+            expect(onCommentCreate).toHaveBeenCalledWith(comment);
+            // Once for the pending item, and once from feedSuccessCallback.
+            expect(instance.fetchFeedItems).toHaveBeenCalledTimes(2);
+        });
+
+        test('should reject after the error callback refreshes the feed', async () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            const errorCallbackSpy = jest.spyOn(instance, 'feedErrorCallback');
+            feedAPI.createComment.mockClear();
+            const error = { status: 500 };
+            const contextInfo = { error };
+
+            const pending = instance.createComment('foo', false);
+            const errorCallback = feedAPI.createComment.mock.calls[0][5];
+            errorCallback(error, 'create_error', contextInfo);
+
+            await expect(pending).rejects.toBe(error);
+            expect(errorCallbackSpy).toHaveBeenCalledWith(error, 'create_error', contextInfo);
+            // The pending item is still refreshed before the API failure is reported.
+            expect(instance.fetchFeedItems).toHaveBeenCalledTimes(2);
+        });
     });
 
     describe('createReply()', () => {
