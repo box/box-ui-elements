@@ -1,11 +1,4 @@
-/**
- * @flow
- * @file Network utilities
- * @author Box
- */
-
-import axios from 'axios';
-import type { $AxiosError, $AxiosXHR } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 import getProp from 'lodash/get';
 import includes from 'lodash/includes';
 import lowerCase from 'lodash/lowerCase';
@@ -32,29 +25,32 @@ const MAX_NUM_RETRIES = 3;
 const RETRYABLE_HTTP_METHODS = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(lowerCase);
 
 class Xhr {
-    id: ?string;
+    id: string | null | undefined;
 
-    axios: Axios;
+    axios: AxiosInstance;
 
     axiosSource: CancelTokenSource;
 
-    clientName: ?string;
+    clientName: string | null | undefined;
 
-    language: ?string;
+    language: string | null | undefined;
 
     token: Token;
 
-    version: ?string;
+    version: string | null | undefined;
 
-    sharedLink: ?string;
+    sharedLink: string | null | undefined;
 
-    sharedLinkPassword: ?string;
+    sharedLinkPassword: string | null | undefined;
 
     xhr: XMLHttpRequest;
 
-    responseInterceptor: Function;
+    responseInterceptor: (response: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>;
 
-    requestInterceptor: ?Function;
+    requestInterceptor:
+        | ((config: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>)
+        | null
+        | undefined;
 
     tokenService: TokenService;
 
@@ -62,26 +58,10 @@ class Xhr {
 
     retryableStatusCodes: Array<number>;
 
-    retryTimeout: ?TimeoutID;
+    retryTimeout: ReturnType<typeof setTimeout> | null | undefined;
 
     shouldRetry: boolean;
 
-    /**
-     * [constructor]
-     *
-     * @param {Object} options
-     * @param {string} options.id - item id
-     * @param {string} options.clientName - Client Name
-     * @param {string|function} options.token - Auth token
-     * @param {string} [options.language] - Accept-Language header value
-     * @param {string} [options.sharedLink] - Shared link
-     * @param {string} [options.sharedLinkPassword] - Shared link password
-     * @param {string} [options.requestInterceptor] - Request interceptor
-     * @param {string} [options.responseInterceptor] - Response interceptor
-     * @param {number[]} [options.retryableStatusCodes] - Response codes to retry
-     * @param {boolean} [options.shouldRetry] - Should retry failed requests
-     * @return {Xhr} Cache instance
-     */
     constructor({
         id,
         clientName,
@@ -115,23 +95,11 @@ class Xhr {
         }
     }
 
-    /**
-     * Default response interceptor which just returns the response
-     *
-     * @param {Object} response - the axios response
-     * @return the response
-     */
-    defaultResponseInterceptor(response: $AxiosXHR<any>) {
+    defaultResponseInterceptor(response: AxiosResponse): AxiosResponse {
         return response;
     }
 
-    /**
-     * Determines if a request should be retried
-     *
-     * @param {Object} error - Error object from axios
-     * @return {boolean} true if the request should be retried
-     */
-    shouldRetryRequest(error: $AxiosError<any>): boolean {
+    shouldRetryRequest(error: AxiosError): boolean {
         if (!this.shouldRetry || this.retryCount >= MAX_NUM_RETRIES) {
             return false;
         }
@@ -147,25 +115,15 @@ class Xhr {
         return isNetworkError || isRateLimitError || isOtherRetryableError;
     }
 
-    /**
-     * Calculate the exponential backoff time with randomized jitter.
-     *
-     * @param {number} numRetries Which retry number this one will be. Must be > 0
-     * @returns {number} The number of milliseconds after which to retry
-     */
+    /** Calculate the exponential backoff time with randomized jitter. */
     getExponentialRetryTimeoutInMs(numRetries: number): number {
         const randomizationMs = Math.ceil(Math.random() * 1000);
         const exponentialMs = 2 ** (numRetries - 1) * 1000;
         return exponentialMs + randomizationMs;
     }
 
-    /**
-     * Error interceptor that wraps the passed in responseInterceptor
-     *
-     * @param {Object} error - Error object from axios
-     * @return {Promise} rejected promise with error info
-     */
-    errorInterceptor = (error: $AxiosError<any>): Promise<any> => {
+    /** Error interceptor that wraps the passed in responseInterceptor. */
+    errorInterceptor = (error: AxiosError): Promise<unknown> => {
         const shouldRetry = this.shouldRetryRequest(error);
         if (shouldRetry) {
             this.retryCount += 1;
@@ -178,18 +136,21 @@ class Xhr {
         }
 
         const errorObject = getProp(error, 'response.data') || error; // In the case of 401, response.data is empty so fall back to error
-        this.responseInterceptor(errorObject);
+        this.responseInterceptor(errorObject as AxiosResponse);
 
         return Promise.reject(error);
     };
 
-    /**
-     * Utility to parse a URL.
-     *
-     * @param {string} url - Url to parse
-     * @return {Object} parsed url
-     */
-    getParsedUrl(url: string) {
+    getParsedUrl(url: string): {
+        api: string;
+        hash: string;
+        host: string;
+        hostname: string;
+        origin: string;
+        pathname: string;
+        port: string;
+        protocol: string;
+    } {
         const a = document.createElement('a');
         a.href = url;
         return {
@@ -204,14 +165,7 @@ class Xhr {
         };
     }
 
-    /**
-     * Builds a list of required XHR headers.
-     *
-     * @param {string} [id] - Optional box item id
-     * @param {Object} [args] - Optional existing headers
-     * @return {Object} Headers
-     */
-    async getHeaders(id?: string, args: StringMap = {}) {
+    async getHeaders(id?: string, args: StringMap = {}): Promise<StringMap> {
         const headers: StringMap = {
             Accept: 'application/json',
             [HEADER_CONTENT_TYPE]: 'application/json',
@@ -249,25 +203,16 @@ class Xhr {
         return headers;
     }
 
-    /**
-     * HTTP GETs a URL
-     *
-     * @param {string} id - Box item id
-     * @param {string} url - The URL to fetch
-     * @param {Object} [headers] - Key-value map of headers
-     * @param {Object} [params] - Key-value map of querystring params
-     * @return {Promise} - HTTP response
-     */
     get({
         url,
         id,
         params = {},
         headers = {},
     }: {
-        headers?: StringMap,
-        id?: string,
-        params?: StringAnyMap,
-        url: string,
+        headers?: StringMap;
+        id?: string;
+        params?: StringAnyMap;
+        url: string;
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then(hdrs =>
             this.axios.get(url, {
@@ -275,21 +220,10 @@ class Xhr {
                 params,
                 headers: hdrs,
                 parsedUrl: this.getParsedUrl(url),
-            }),
+            } as AxiosRequestConfig),
         );
     }
 
-    /**
-     * HTTP POSTs a URL with JSON data
-     *
-     * @param {string} id - Box item id
-     * @param {string} url - The URL to fetch
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @param {Object} params - Optional query params for the request
-     * @param {Object} [headers] - Key-value map of headers
-     * @param {string} [method] - xhr type
-     * @return {Promise} - HTTP response
-     */
     post({
         url,
         id,
@@ -298,12 +232,12 @@ class Xhr {
         headers = {},
         method = HTTP_POST,
     }: {
-        data: PayloadType,
-        headers?: StringMap,
-        id?: string,
-        method?: Method,
-        params?: StringAnyMap,
-        url: string,
+        data: PayloadType;
+        headers?: StringMap;
+        id?: string;
+        method?: Method;
+        params?: StringAnyMap;
+        url: string;
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then(hdrs =>
             this.axios({
@@ -313,58 +247,28 @@ class Xhr {
                 method,
                 parsedUrl: this.getParsedUrl(url),
                 headers: hdrs,
-            }),
+            } as AxiosRequestConfig),
         );
     }
 
-    /**
-     * HTTP PUTs a URL with JSON data
-     *
-     * @param {string} id - Box item id
-     * @param {string} url - The URL to fetch
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @param {Object} params - Optional query params for the request
-     * @param {Object} [headers] - Key-value map of headers
-     * @return {Promise} - HTTP response
-     */
     put({ url, id, data, params, headers = {} }: RequestData): Promise<StringAnyMap> {
         return this.post({ id, url, data, params, headers, method: HTTP_PUT });
     }
 
-    /**
-     * HTTP DELETEs a URL with JSON data
-     *
-     * @param {string} id - Box item id
-     * @param {string} url - The URL to fetch
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @param {Object} [headers] - Key-value map of headers
-     * @return {Promise} - HTTP response
-     */
     delete({
         url,
         id,
         data = {},
         headers = {},
     }: {
-        data?: StringAnyMap,
-        headers?: StringMap,
-        id?: string,
-        url: string,
+        data?: StringAnyMap;
+        headers?: StringMap;
+        id?: string;
+        url: string;
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, headers, method: HTTP_DELETE });
     }
 
-    /**
-     * HTTP OPTIONs a URL with JSON data.
-     *
-     * @param {string} id - Box item id
-     * @param {string} url - The URL to post to
-     * @param {Object} data - The non-file post data that should accompany the post
-     * @param {Object} [headers] - Key-value map of headers
-     * @param {Function} successHandler - Load success handler
-     * @param {Function} errorHandler - Error handler
-     * @return {void}
-     */
     options({
         id,
         url,
@@ -373,14 +277,14 @@ class Xhr {
         successHandler,
         errorHandler,
     }: {
-        data: StringAnyMap,
-        errorHandler: Function,
-        headers?: StringMap,
-        id?: string,
-        progressHandler?: Function,
-        successHandler: Function,
-        url: string,
-    }): Promise<StringAnyMap> {
+        data: StringAnyMap;
+        errorHandler: (error: unknown) => void;
+        headers?: StringMap;
+        id?: string;
+        progressHandler?: (event: ProgressEvent) => void;
+        successHandler: (response: AxiosResponse) => void;
+        url: string;
+    }): Promise<void> {
         return this.getHeaders(id, headers)
             .then(hdrs =>
                 this.axios({
@@ -395,22 +299,6 @@ class Xhr {
             .catch(errorHandler);
     }
 
-    /**
-     * HTTP POST or PUT a URL with File data. Uses native XHR for progress event.
-     *
-     * @param {string} id - Box item id
-     * @param {string} url - The URL to post to
-     * @param {Object} [data] - File data and attributes
-     * @param {Object} [headers] - Key-value map of headers
-     * @param {string} [method] - XHR method, supports 'POST' and 'PUT'
-     * @param {Function} successHandler - Load success handler
-     * @param {Function} errorHandler - Error handler
-     * @param {Function} progressHandler - Progress handler
-     * @param {boolean} [withIdleTimeout] - enable idle timeout
-     * @param {number} [idleTimeoutDuration] - idle timeout duration
-     * @param {Function} [idleTimeoutHandler]
-     * @return {void}
-     */
     uploadFile({
         id,
         url,
@@ -424,18 +312,18 @@ class Xhr {
         idleTimeoutDuration = DEFAULT_UPLOAD_TIMEOUT_MS,
         idleTimeoutHandler,
     }: {
-        data?: ?Blob | ?StringAnyMap,
-        errorHandler: Function,
-        headers?: StringMap,
-        id?: string,
-        idleTimeoutDuration?: number,
-        idleTimeoutHandler?: Function,
-        method?: Method,
-        progressHandler: Function,
-        successHandler: Function,
-        url: string,
-        withIdleTimeout?: boolean,
-    }): Promise<any> {
+        data?: Blob | StringAnyMap | null;
+        errorHandler: (error: unknown) => void;
+        headers?: StringMap;
+        id?: string;
+        idleTimeoutDuration?: number;
+        idleTimeoutHandler?: () => void;
+        method?: Method;
+        progressHandler: (event: ProgressEvent) => void;
+        successHandler: (response: AxiosResponse) => void;
+        url: string;
+        withIdleTimeout?: boolean;
+    }): Promise<unknown> {
         return this.getHeaders(id, headers)
             .then(hdrs => {
                 let idleTimeout;
@@ -488,7 +376,7 @@ class Xhr {
                     headers: hdrs,
                     onUploadProgress: progressHandlerToUse,
                     cancelToken: this.axiosSource.token,
-                })
+                } as AxiosRequestConfig)
                     .then(response => {
                         clearTimeout(idleTimeout);
                         successHandler(response);
@@ -501,11 +389,7 @@ class Xhr {
             .catch(errorHandler);
     }
 
-    /**
-     * Aborts an axios request.
-     *
-     * @return {void}
-     */
+    /** Aborts an axios request. */
     abort(): void {
         if (this.retryTimeout) {
             clearTimeout(this.retryTimeout);
