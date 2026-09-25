@@ -52,7 +52,6 @@ export const basic = {
 
 export const withModernizedBlueprint = {
     args: {
-        enableModernizedComponents: true,
         defaultView: 'docgen',
         docGenSidebarProps,
         features: {
@@ -71,7 +70,6 @@ export const pdfTemplate = {
 
 export const pdfTemplateWithModernizedBlueprint = {
     args: {
-        enableModernizedComponents: true,
         defaultView: 'docgen',
         docGenSidebarProps: docGenSidebarPdfTemplateProps,
         features: {

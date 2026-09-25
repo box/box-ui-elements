@@ -78,10 +78,6 @@ export const ContentSidebar: StoryObj<typeof ContentSidebarComponent> = {
     args: { features: defaultFeatures },
 };
 
-export const withModernization: StoryObj<typeof ContentSidebarComponent> = {
-    args: { enableModernizedComponents: true },
-};
-
 export const ContentSidebarDetailsTab: StoryObj<typeof ContentSidebarComponent> = {
     args: { hasActivityFeed: false, hasMetadata: false },
 };

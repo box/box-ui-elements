@@ -30,12 +30,6 @@ export const basic = {
     },
 };
 
-export const withModernization = {
-    args: {
-        enableModernizedComponents: true,
-    },
-};
-
 export const closeModal = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);

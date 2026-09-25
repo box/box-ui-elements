@@ -23,7 +23,6 @@ import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
 import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import ThemingStyles, { Theme } from '../common/theming';
 import FolderUpload from '../../api/uploads/FolderUpload';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
@@ -2003,5 +2002,5 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     }
 }
 
-export default flow([makeResponsive, withBlueprintModernization, withBlueprintAnimations])(ContentUploader);
+export default flow([makeResponsive, withBlueprintAnimations])(ContentUploader);
 export { ContentUploader as ContentUploaderComponent, CHUNKED_UPLOAD_MIN_SIZE_BYTES };

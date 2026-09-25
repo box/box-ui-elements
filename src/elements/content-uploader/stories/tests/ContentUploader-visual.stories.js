@@ -23,12 +23,6 @@ export const basic = {
     },
 };
 
-export const withModernization = {
-    args: {
-        enableModernizedComponents: true,
-    },
-};
-
 export const singleUpload = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
