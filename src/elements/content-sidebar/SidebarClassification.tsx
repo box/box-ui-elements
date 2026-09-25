@@ -1,34 +1,29 @@
-/**
- * @flow
- * @file Classification sidebar component
- * @author Box
- */
-
 import * as React from 'react';
-import getProp from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
+import { Text } from '@box/blueprint-web';
 
 import Classification, { classificationMessages, EditClassificationButton } from '../../features/classification';
 import { INTERACTION_TARGET, SECTION_TARGETS } from '../common/interactionTargets';
 import Collapsible from '../../components/collapsible';
-import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../constants';
-import type { ClassificationInfo } from './flowTypes';
 import type { BoxItem } from '../../common/types/core';
+import type { ClassificationInfo } from './flowTypes';
+
 import './SidebarClassification.scss';
 
-type OnEdit = (e: SyntheticEvent<HTMLButtonElement>) => void;
 type Props = {
-    classification?: ClassificationInfo,
-    file: BoxItem,
-    onEdit?: OnEdit,
+    classification?: ClassificationInfo;
+    file: BoxItem;
+    onEdit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const SidebarClassification = ({ classification, file, onEdit }: Props) => {
-    const isEditable = !!onEdit && getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false);
-    const hasClassification = !!getProp(classification, 'name');
+    const hasClassification = Boolean(classification?.name);
+    const isEditable = Boolean(onEdit) && Boolean(file.permissions?.can_upload);
+
     if (!hasClassification && !isEditable) {
         return null;
     }
+
     return (
         <Collapsible
             buttonProps={{
@@ -36,17 +31,21 @@ const SidebarClassification = ({ classification, file, onEdit }: Props) => {
             }}
             className="bcs-SidebarClassification"
             headerActionItems={
-                isEditable ? (
+                isEditable && onEdit ? (
                     <EditClassificationButton
                         className="bcs-SidebarClassification-edit"
                         isEditing={hasClassification}
-                        onEdit={((onEdit: any): OnEdit)}
+                        onEdit={onEdit}
                     />
                 ) : null
             }
-            title={<FormattedMessage {...classificationMessages.classification} />}
+            title={
+                <Text as="span" variant="bodyDefaultBold">
+                    <FormattedMessage {...classificationMessages.classification} />
+                </Text>
+            }
         >
-            <Classification {...classification} messageStyle="inline" />
+            <Classification messageStyle="inline" {...(classification ?? {})} />
         </Collapsible>
     );
 };

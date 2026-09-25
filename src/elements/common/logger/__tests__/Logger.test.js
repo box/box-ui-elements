@@ -4,7 +4,10 @@ import Logger from '../Logger';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../../constants';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../constants';
 
-jest.mock('../../../../utils/performance');
+jest.mock('../../../../utils/performance', () => ({
+    isMarkSupported: true,
+    mark: jest.fn(),
+}));
 
 describe('elements/common/logger/Logger', () => {
     const WrappedComponent = () => <div>Test</div>;

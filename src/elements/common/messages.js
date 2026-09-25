@@ -497,6 +497,13 @@ const messages = defineMessages({
         description: 'Generic error content for metadata fetching.',
         defaultMessage: 'An error has occurred while fetching metadata. Please refresh the page and try again.',
     },
+    sidebarMetadataTemplateKeyInvalid: {
+        id: 'be.sidebarMetadataTemplateKeyInvalid',
+        description:
+            'Error when a metadata template display name cannot produce a valid ASCII template key (punctuation-only or non-Latin-only names).',
+        defaultMessage:
+            'Template names must include at least one letter or number (A–Z, 0–9). Names that are only punctuation or non-Latin characters cannot be saved.',
+    },
     sidebarFileFetchingErrorContent: {
         id: 'be.sidebarFileFetchingErrorContent',
         description: 'Generic error content for file fetching.',

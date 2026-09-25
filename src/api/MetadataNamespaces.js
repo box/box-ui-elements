@@ -23,15 +23,6 @@ import type { ElementsErrorCallback } from '../common/types/api';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import type Xhr from '../utils/Xhr';
-// TODO: remove this import when namespace API is deployed
-import {
-    IS_NAMESPACE_API_MOCKED,
-    mockListNamespaces,
-    mockListTemplatesForNamespace,
-    mockCreateMetadataTemplate,
-    mockUpdateMetadataTemplate,
-    mockGetTemplateSchemaForEditor,
-} from './metadataNamespaceMocks';
 
 /** Minimal host surface MetadataNamespaces needs from Metadata. */
 export type MetadataNamespaceHost = {
@@ -73,9 +64,6 @@ export default class MetadataNamespaces {
         namespaceFqn: string,
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
-        // TODO: remove next line when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) return mockListNamespaces(file, namespaceFqn, params);
-
         const url = `${this.getMetadataNamespacesUrl(namespaceFqn)}/children`;
         try {
             const response = await this.host.xhr.get({
@@ -97,9 +85,6 @@ export default class MetadataNamespaces {
         namespaceFqn: string,
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
-        // TODO: remove next line when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) return mockListTemplatesForNamespace(file, namespaceFqn, params);
-
         const url = this.host.getMetadataTemplateUrlForScope(namespaceFqn);
         try {
             const response = await this.host.xhr.get({
@@ -122,12 +107,6 @@ export default class MetadataNamespaces {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
-        // TODO: remove next two lines when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) {
-            mockCreateMetadataTemplate(file, body, successCallback);
-            return;
-        }
-
         this.host.errorCode = ERROR_CODE_CREATE_METADATA_TEMPLATE;
         const url = `${this.host.getMetadataTemplateUrl()}/schema`;
         try {
@@ -155,12 +134,6 @@ export default class MetadataNamespaces {
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
-        // TODO: remove next two lines when namespace API is deployed
-        if (IS_NAMESPACE_API_MOCKED) {
-            mockUpdateMetadataTemplate(file, namespaceFqn, templateKey, patchItems, successCallback);
-            return;
-        }
-
         this.host.errorCode = ERROR_CODE_UPDATE_METADATA_TEMPLATE;
         const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
         try {
@@ -183,12 +156,6 @@ export default class MetadataNamespaces {
      * Fetches a template schema in the shape expected by MetadataTemplateEditor.
      */
     async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file: ?BoxItem): Promise<Object> {
-        // TODO: remove the mock block when namespace API is deployed.
-        if (IS_NAMESPACE_API_MOCKED) {
-            const mockResult = mockGetTemplateSchemaForEditor(namespaceFqn, templateKey);
-            if (mockResult) return mockResult;
-        }
-
         const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
         const response = await this.host.xhr.get({
             url,

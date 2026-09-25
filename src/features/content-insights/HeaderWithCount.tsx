@@ -20,7 +20,7 @@ function HeaderWithCount({ isRedesignEnabled, title, totalCount }: Props) {
         <div className={classNames(!isRedesignEnabled && 'HeaderWithCount')}>
             {isRedesignEnabled ? (
                 <>
-                    <Text as="span" color="textOnLightSecondary" variant="captionBold">
+                    <Text as="span" color="textOnLightSecondary" variant="labelBold">
                         {title}
                     </Text>
                     {isNumber(totalCount) && (
@@ -28,7 +28,7 @@ function HeaderWithCount({ isRedesignEnabled, title, totalCount }: Props) {
                             className="HeaderWithCount-titleCount"
                             count={totalCount}
                             isRedesignEnabled
-                            variant="captionBold"
+                            variant="labelBold"
                         />
                     )}
                 </>

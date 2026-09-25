@@ -78,9 +78,9 @@ export default function MetadataTemplateDropdown({
                     return;
                 }
             }
-            // Fallback: mock template ids are encoded as "fqn||templateKey".
-            // This handles child-namespace templates and newly created mock templates
-            // that aren't yet in the editor templates list.
+            // Fallback: ids encoded as "fqn||templateKey" by useMetadataTemplateItemsService.
+            // This is the only path for child-namespace templates, which the sidebar's
+            // root-only fetch never loads.
             if (templateId.includes('||')) {
                 const separatorIndex = templateId.indexOf('||');
                 const namespaceFqn = templateId.slice(0, separatorIndex);
@@ -92,6 +92,27 @@ export default function MetadataTemplateDropdown({
         },
         [templates, onEditTemplate],
     );
+
+    // Applied rows stay listed but are disabled with a tooltip. Applied instances carry
+    // their template's id, which is the row id for root templates. Child-namespace rows
+    // are keyed by the synthesised "fqn||templateKey" id instead, since they are never in
+    // the sidebar's root-only template list — so both forms go in the set.
+    const appliedTemplateIds = useMemo(() => {
+        const ids = new Set<string>();
+
+        selectedTemplates.forEach(template => {
+            if (template.id) {
+                ids.add(template.id);
+            }
+
+            const namespaceFqn = getMetadataTemplateNamespaceFqn(template);
+            if (namespaceFqn && template.templateKey) {
+                ids.add(`${namespaceFqn}||${template.templateKey}`);
+            }
+        });
+
+        return ids;
+    }, [selectedTemplates]);
 
     const eventService = useMetadataTemplateEventService({
         templates,
@@ -131,6 +152,7 @@ export default function MetadataTemplateDropdown({
     if (isMetadataTemplateManagementEnabled && enterpriseId && browserItemsService) {
         return (
             <AddMetadataTemplateDropdownWithBrowser
+                appliedTemplateIds={appliedTemplateIds}
                 canCreateAtRoot={canCreateAtRoot}
                 enterpriseId={enterpriseId}
                 eventService={eventService}
