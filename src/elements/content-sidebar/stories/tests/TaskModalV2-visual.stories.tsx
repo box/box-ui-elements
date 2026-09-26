@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, screen, userEvent } from 'storybook/test';
+import { expect, screen, userEvent, waitFor } from 'storybook/test';
 
 import { InteractiveTaskModal } from '../__mocks__/TaskModalV2Mocks';
 
@@ -65,11 +65,11 @@ export const AssigneeListboxAccessibleNames: StoryObj<typeof InteractiveTaskModa
         await userEvent.type(combobox, 'team');
 
         const listbox = await screen.findByRole('listbox');
-        expect(listbox).toBeVisible();
+        await waitFor(() => expect(listbox).toBeVisible());
 
         const designOption = await screen.findByRole('option', { name: /Design Team/ });
         const engineeringOption = await screen.findByRole('option', { name: /Engineering Team/ });
-        expect(designOption).toBeVisible();
-        expect(engineeringOption).toBeVisible();
+        await waitFor(() => expect(designOption).toBeVisible());
+        await waitFor(() => expect(engineeringOption).toBeVisible());
     },
 };
