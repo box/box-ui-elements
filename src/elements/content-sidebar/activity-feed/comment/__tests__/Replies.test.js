@@ -5,6 +5,7 @@ import { IntlProvider } from 'react-intl';
 import { ContentState, EditorState } from 'draft-js';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { Replies } from '../BaseComment';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('react-intl', () => ({
@@ -219,6 +220,18 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
 
         expect(showReplies).toBeCalledTimes(1);
         expect(hideReplies).not.toBeCalled();
+    });
+
+    test('should hide reply button for resolved parent comments', () => {
+        getWrapper({ parentStatus: COMMENT_STATUS_RESOLVED });
+
+        expect(screen.queryByRole('button', { name: 'Reply' })).not.toBeInTheDocument();
+    });
+
+    test('should show reply button for unresolved parent comments', () => {
+        getWrapper({ parentStatus: COMMENT_STATUS_OPEN });
+
+        expect(screen.queryByRole('button', { name: 'Reply' })).toBeInTheDocument();
     });
 
     test.each`
