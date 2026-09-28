@@ -226,14 +226,13 @@ export default class Annotations extends MarkerBasedApi {
             ...(shouldFetchReplies ? { fields: 'replies' } : {}),
             enable_rich_text: Boolean(shouldEnableRichText),
         };
-        const requestData = Object.keys(params).length ? { params } : undefined;
 
         this.get({
             id: fileId,
             errorCallback,
             successCallback,
             url: this.getUrlForId(annotationId),
-            requestData,
+            requestData: { params },
         });
     }
 
