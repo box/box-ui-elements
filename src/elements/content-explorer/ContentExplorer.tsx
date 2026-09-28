@@ -653,6 +653,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 // Fire folder navigation event
                 this.setState({ rootName }, this.finishNavigation);
                 if (boxItem) {
+                    // @ts-expect-error - Collection boxItem retains the legacy flattened shape with an optional id.
                     onNavigate(cloneDeep(boxItem));
                 }
             } else {
@@ -1079,6 +1080,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const { items = [] } = currentCollection;
         const newCollection = { ...currentCollection } as const;
 
+        // @ts-expect-error - Preserve the legacy mutation of the cloned collection despite its const assertion.
         newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
 
         this.validateSelectedItemIds(newCollection.items);
@@ -1107,6 +1109,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const selectedItem: BoxItem = { ...item, selected: true };
 
         this.updateCollection(currentCollection, selectedItem, () => {
+            // @ts-expect-error - Legacy callback receives a one-element array at runtime.
             onSelect(cloneDeep([selectedItem]));
             callback(selectedItem);
         });
@@ -1197,6 +1200,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         const openUrl = (url: string) => {
             openUrlInsideIframe(url);
+            // @ts-expect-error - Legacy callback receives a one-element array at runtime.
             onDownload(cloneDeep([selected]));
         };
 
@@ -1250,6 +1254,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         this.api.getAPI(type).deleteItem(
             selected,
             () => {
+                // @ts-expect-error - Legacy callback receives a one-element array at runtime.
                 onDelete(cloneDeep([selected]));
                 this.refreshCollection();
             },
@@ -1267,6 +1272,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     rename = (item: BoxItem): void => {
+        // @ts-expect-error - Legacy selection invokes the rename callback with the selected item before opening the dialog.
         this.select(item, this.renameCallback);
     };
 
@@ -2100,9 +2106,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default flow([
-    makeResponsive,
-    withFeatureConsumer,
-    withFeatureProvider,
-    withBlueprintAnimations,
-])(ContentExplorer);
+export default flow([makeResponsive, withFeatureConsumer, withFeatureProvider, withBlueprintAnimations])(
+    ContentExplorer,
+);
