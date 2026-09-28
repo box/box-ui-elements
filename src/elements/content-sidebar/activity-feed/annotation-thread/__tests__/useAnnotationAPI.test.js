@@ -74,6 +74,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
             mockFile.permissions,
             mockSuccessCallback,
             mockErrorCallback,
+            false,
         );
     });
 
@@ -158,6 +159,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
             { message: 'new text' },
             mockSuccessCallback,
             errorCallback,
+            false,
         );
     });
 
@@ -183,6 +185,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
             { status: 'resolved' },
             mockSuccessCallback,
             errorCallback,
+            false,
         );
     });
 

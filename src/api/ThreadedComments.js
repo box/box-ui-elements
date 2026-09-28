@@ -98,12 +98,14 @@ class ThreadedComments extends MarkerBasedApi {
     createComment({
         file,
         message,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
     }: {
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
         message?: string,
+        shouldEnableRichText?: boolean,
         successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
@@ -121,6 +123,7 @@ class ThreadedComments extends MarkerBasedApi {
             url: this.getUrl(id),
             data: {
                 data: { message },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
             },
             successCallback,
             errorCallback,
@@ -145,6 +148,7 @@ class ThreadedComments extends MarkerBasedApi {
         status,
         message,
         permissions,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
     }: {
@@ -153,6 +157,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message?: string,
         permissions: BoxCommentPermission,
+        shouldEnableRichText?: boolean,
         status?: FeedItemStatus,
         successCallback: (comment: Comment) => void,
     }): void {
@@ -178,6 +183,7 @@ class ThreadedComments extends MarkerBasedApi {
 
         const requestData = {
             data: { status, message },
+            params: { enable_rich_text: Boolean(shouldEnableRichText) },
         };
 
         this.put({
@@ -380,6 +386,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId,
         commentId,
         permissions,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
         message,
@@ -389,6 +396,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message: string,
         permissions: BoxItemPermission,
+        shouldEnableRichText?: boolean,
         successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
@@ -402,7 +410,10 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.post({
             id: fileId,
-            data: { data: { message } },
+            data: {
+                data: { message },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
+            },
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(commentId, fileId),

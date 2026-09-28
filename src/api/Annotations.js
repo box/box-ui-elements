@@ -102,6 +102,7 @@ export default class Annotations extends MarkerBasedApi {
         permissions: BoxItemPermission,
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_CREATE_ANNOTATION;
 
@@ -126,6 +127,7 @@ export default class Annotations extends MarkerBasedApi {
             id: fileId,
             data: {
                 data: merge(defaults, payload),
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
             },
             errorCallback,
             successCallback,
@@ -140,6 +142,7 @@ export default class Annotations extends MarkerBasedApi {
         payload: { message?: string, status?: FeedItemStatus },
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_EDIT_ANNOTATION;
         const { message, status } = payload;
@@ -169,6 +172,7 @@ export default class Annotations extends MarkerBasedApi {
                     description: message ? { message } : undefined,
                     status,
                 },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
             },
             errorCallback,
             successCallback,
@@ -303,6 +307,7 @@ export default class Annotations extends MarkerBasedApi {
         message: string,
         successCallback: (comment: Comment) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
 
@@ -315,7 +320,10 @@ export default class Annotations extends MarkerBasedApi {
 
         this.post({
             id: fileId,
-            data: { data: { message } },
+            data: {
+                data: { message },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
+            },
             errorCallback,
             successCallback,
             url: `${this.getUrlWithRepliesForId(annotationId)}?file_id=${fileId}`,

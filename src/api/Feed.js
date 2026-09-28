@@ -404,6 +404,7 @@ class Feed extends Base {
         permissions: AnnotationPermission,
         successCallback: (annotation: Annotation) => void,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = false,
     ): void => {
         if (!file.id) {
             throw getBadItemError();
@@ -448,6 +449,7 @@ class Feed extends Base {
             (e: ErrorResponseData, code: string) => {
                 this.updateCommentErrorCallback(e, code, annotationId);
             },
+            shouldEnableRichText,
         );
     };
 
@@ -2037,6 +2039,7 @@ class Feed extends Base {
      * @param {string} text - the comment text
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
+     * @param {boolean} shouldEnableRichText - whether the response should keep rich text markup
      * @return {void}
      */
     createThreadedComment = (
@@ -2045,6 +2048,7 @@ class Feed extends Base {
         text: string,
         successCallback: Function,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = false,
     ): void => {
         if (!file.id) {
             throw getBadItemError();
@@ -2066,6 +2070,7 @@ class Feed extends Base {
         this.threadedCommentsAPI.createComment({
             file,
             message: text,
+            shouldEnableRichText,
             successCallback: (comment: Comment) => {
                 this.createCommentSuccessCallback(comment, uuid, successCallback);
             },
@@ -2085,6 +2090,7 @@ class Feed extends Base {
      * @param {string} text - the comment text
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
+     * @param {boolean} shouldEnableRichText - whether the response should keep rich text markup
      * @return {void}
      */
     createReply(
@@ -2095,6 +2101,7 @@ class Feed extends Base {
         text: string,
         successCallback: Function,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = false,
     ): void {
         const { id, permissions } = file;
         if (!id || !permissions) {
@@ -2130,6 +2137,7 @@ class Feed extends Base {
                 text,
                 successCallbackFn,
                 errorCallbackFn,
+                shouldEnableRichText,
             );
         } else if (parentType === FEED_ITEM_TYPE_COMMENT) {
             this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
@@ -2139,6 +2147,7 @@ class Feed extends Base {
                 commentId: parentId,
                 permissions,
                 message: text,
+                shouldEnableRichText,
                 successCallback: successCallbackFn,
                 errorCallback: errorCallbackFn,
             });
@@ -2223,6 +2232,7 @@ class Feed extends Base {
      * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
+     * @param {boolean} shouldEnableRichText - whether the response should keep rich text markup
      * @return {void}
      */
     updateThreadedComment = (
@@ -2233,6 +2243,7 @@ class Feed extends Base {
         permissions: BoxCommentPermission,
         successCallback: Function,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = false,
     ): void => {
         if (!file.id) {
             throw getBadItemError();
@@ -2260,6 +2271,7 @@ class Feed extends Base {
             commentId,
             permissions,
             message: text,
+            shouldEnableRichText,
             status,
             successCallback: (comment: Comment) => {
                 const { replies, total_reply_count, ...commentBase } = comment;
@@ -2291,6 +2303,7 @@ class Feed extends Base {
      * @param {BoxCommentPermission} permissions - Permissions to attach to the app activity items
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
+     * @param {boolean} shouldEnableRichText - whether the response should keep rich text markup
      * @return {void}
      */
     updateReply = (
@@ -2301,6 +2314,7 @@ class Feed extends Base {
         permissions: BoxCommentPermission,
         successCallback: (comment: Comment) => void,
         errorCallback: ErrorCallback,
+        shouldEnableRichText?: boolean = false,
     ): void => {
         if (!file.id) {
             throw getBadItemError();
@@ -2317,6 +2331,7 @@ class Feed extends Base {
             commentId: id,
             permissions,
             message: text,
+            shouldEnableRichText,
             undefined,
             successCallback: (comment: Comment) => {
                 this.updateReplyItem(

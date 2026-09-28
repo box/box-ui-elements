@@ -480,6 +480,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 message,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });
@@ -501,6 +502,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 message,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(feedAPI.createComment).not.toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
@@ -536,6 +538,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 message,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(instance.fetchFeedItems).toBeCalled();
             expect(mockEmitAnnotationReplyCreateEvent).toBeCalledWith(
@@ -614,6 +617,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     { can_edit: true, can_delete: true },
                     expect.any(Function),
                     expect.any(Function),
+                    false,
                 );
                 expect(instance.fetchFeedItems).toBeCalled();
             });
@@ -643,6 +647,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 reply.permissions,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(instance.fetchFeedItems).toBeCalled();
             expect(mockEmitAnnotationReplyUpdateEvent).toBeCalledWith(
@@ -1681,6 +1686,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 { can_edit: true, can_delete: true, can_resolve: true },
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });
@@ -1712,6 +1718,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 { can_edit: true, can_delete: true, can_resolve: true },
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(instance.fetchFeedItems).toBeCalled();
         });

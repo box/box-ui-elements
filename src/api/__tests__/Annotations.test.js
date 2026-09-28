@@ -101,6 +101,7 @@ describe('api/Annotations', () => {
                         },
                         target: payload.target,
                     },
+                    params: { enable_rich_text: false },
                 },
                 errorCallback,
                 successCallback,
@@ -128,7 +129,7 @@ describe('api/Annotations', () => {
 
             expect(annotations.put).toBeCalledWith({
                 id: '12345',
-                data: { data: { description: { message: 'hello' } } },
+                data: { data: { description: { message: 'hello' } }, params: { enable_rich_text: false } },
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
@@ -155,6 +156,7 @@ describe('api/Annotations', () => {
                         description: undefined,
                         status: 'resolved',
                     },
+                    params: { enable_rich_text: false },
                 },
                 errorCallback,
                 successCallback,
@@ -417,7 +419,7 @@ describe('api/Annotations', () => {
             annotations.createAnnotationReply('12345', '67890', permissions, message, successCallback, errorCallback);
             expect(annotations.post).toBeCalledWith({
                 id: '12345',
-                data: { data: { message } },
+                data: { data: { message }, params: { enable_rich_text: false } },
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies?file_id=12345',

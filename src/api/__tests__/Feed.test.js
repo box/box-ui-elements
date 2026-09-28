@@ -1310,6 +1310,7 @@ describe('api/Feed', () => {
                     commentId: comment.id,
                     permissions: comment.permissions,
                     ...expected,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
                 });
@@ -1373,6 +1374,7 @@ describe('api/Feed', () => {
                 commentId: reply.id,
                 permissions: reply.permissions,
                 message: text,
+                shouldEnableRichText: false,
                 status: undefined,
                 successCallback: expect.any(Function),
                 errorCallback: expect.any(Function),
@@ -1918,11 +1920,12 @@ describe('api/Feed', () => {
         });
 
         test('should create the comment using threaded comments api and invoke the success callback', done => {
-            feed.createThreadedComment(file, currentUser, text, true, successCb, errorCb);
+            feed.createThreadedComment(file, currentUser, text, successCb, errorCb);
             setImmediate(() => {
                 expect(feed.threadedCommentsAPI.createComment).toBeCalledWith({
                     file,
                     message: text,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
                 });
@@ -2001,6 +2004,7 @@ describe('api/Feed', () => {
                     text,
                     expect.any(Function),
                     expect.any(Function),
+                    false,
                 );
                 expect(feed.createReplySuccessCallback).toBeCalled();
                 expect(feed.createReplyErrorCallback).not.toBeCalled();
@@ -2027,6 +2031,7 @@ describe('api/Feed', () => {
                     commentId,
                     permissions: file.permissions,
                     message: text,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
                 });
@@ -2255,6 +2260,7 @@ describe('api/Feed', () => {
                     expected,
                     expect.any(Function),
                     expect.any(Function),
+                    false,
                 );
                 expect(feed.updateFeedItem).toBeCalled();
                 expect(successCallback).toBeCalled();

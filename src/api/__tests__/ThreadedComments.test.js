@@ -87,6 +87,7 @@ describe('api/ThreadedComments', () => {
                 id: 'foo',
                 data: {
                     data: { message },
+                    params: { enable_rich_text: false },
                 },
                 errorCallback,
                 successCallback,
@@ -128,7 +129,7 @@ describe('api/ThreadedComments', () => {
 
             expect(threadedComments.put).toBeCalledWith({
                 id: '12345',
-                data: { data: { status, message } },
+                data: { data: { status, message }, params: { enable_rich_text: false } },
                 errorCallback,
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/abc',
@@ -423,7 +424,7 @@ describe('api/ThreadedComments', () => {
                 id: '12345',
                 errorCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/67890/replies?file_id=12345',
-                data: { data: { message } },
+                data: { data: { message }, params: { enable_rich_text: false } },
                 successCallback,
             });
         });

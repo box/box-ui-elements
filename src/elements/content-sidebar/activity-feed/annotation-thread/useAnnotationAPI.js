@@ -56,6 +56,7 @@ const useAnnotationAPI = ({
             filePermissions,
             successCallback,
             errorCallback,
+            shouldEnableRichText,
         );
     };
 
@@ -107,6 +108,7 @@ const useAnnotationAPI = ({
             { message: text },
             successCallback,
             errorCallback,
+            shouldEnableRichText,
         );
     };
 
@@ -128,6 +130,7 @@ const useAnnotationAPI = ({
             { status },
             successCallback,
             errorCallback,
+            shouldEnableRichText,
         );
     };
 

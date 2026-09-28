@@ -71,6 +71,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
             commentId: id,
             message,
             permissions,
+            shouldEnableRichText: false,
             successCallback,
             errorCallback: expect.any(Function),
         });
@@ -96,6 +97,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
             message,
             successCallback,
             expect.any(Function),
+            false,
         );
     });
 });

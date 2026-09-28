@@ -280,6 +280,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 this.feedSuccessCallback();
             },
             this.feedErrorCallback,
+            this.getIsRichTextEnabled(),
         );
 
         this.fetchFeedItems();
@@ -300,6 +301,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 this.feedSuccessCallback();
             },
             this.feedErrorCallback,
+            this.getIsRichTextEnabled(),
         );
 
         this.fetchFeedItems();
@@ -554,6 +556,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 permissions,
                 successCallback,
                 errorCallback,
+                this.getIsRichTextEnabled(),
             );
         } else {
             api.getFeedAPI(false).updateComment(
@@ -606,6 +609,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 }
                 this.feedErrorCallback(error, code);
             },
+            this.getIsRichTextEnabled(),
         );
 
         // need to load the pending item
@@ -703,6 +707,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 text,
                 successCallback,
                 this.feedErrorCallback,
+                this.getIsRichTextEnabled(),
             );
         } else {
             api.getFeedAPI(false).createComment(
@@ -744,6 +749,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             text,
             this.createReplySuccessCallback.bind(this, eventRequestId, parentId),
             this.feedErrorCallback,
+            this.getIsRichTextEnabled(),
         );
 
         // need to load the pending item
