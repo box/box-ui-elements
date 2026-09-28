@@ -2296,6 +2296,73 @@ describe('api/Feed', () => {
         });
     });
 
+    describe('writes with shouldEnableRichText', () => {
+        const currentUser = { id: 'bar' };
+        const richText = expect.objectContaining({ shouldEnableRichText: true });
+
+        beforeEach(() => {
+            feed.addPendingItem = jest.fn();
+            feed.addPendingReply = jest.fn();
+            feed.createCommentSuccessCallback = jest.fn();
+            feed.createReplySuccessCallback = jest.fn();
+            feed.modifyFeedItemRepliesCountBy = jest.fn();
+            feed.updateFeedItem = jest.fn();
+            feed.updateReplyItem = jest.fn();
+        });
+
+        test('updateAnnotation should forward shouldEnableRichText to the annotations api', () => {
+            feed.updateAnnotation(file, '1', 'hello', undefined, { can_edit: true }, jest.fn(), jest.fn(), true);
+
+            expect(feed.annotationsAPI.updateAnnotation).toBeCalledWith(
+                file.id,
+                '1',
+                { can_edit: true },
+                { message: 'hello' },
+                expect.any(Function),
+                expect.any(Function),
+                true,
+            );
+        });
+
+        test('updateThreadedComment should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.updateThreadedComment(file, '1', 'hello', 'open', { can_edit: true }, jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.updateComment).toBeCalledWith(richText);
+        });
+
+        test('updateReply should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.updateReply(file, '1', '123', 'hello', { can_edit: true }, jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.updateComment).toBeCalledWith(richText);
+        });
+
+        test('createThreadedComment should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.createThreadedComment(file, currentUser, 'hello', jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.createComment).toBeCalledWith(richText);
+        });
+
+        test('createReply on an annotation should forward shouldEnableRichText to the annotations api', () => {
+            feed.createReply(file, currentUser, '123', FEED_ITEM_TYPE_ANNOTATION, 'hello', jest.fn(), jest.fn(), true);
+
+            expect(feed.annotationsAPI.createAnnotationReply).toBeCalledWith(
+                file.id,
+                '123',
+                file.permissions,
+                'hello',
+                expect.any(Function),
+                expect.any(Function),
+                true,
+            );
+        });
+
+        test('createReply on a comment should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.createReply(file, currentUser, '123', FEED_ITEM_TYPE_COMMENT, 'hello', jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.createCommentReply).toBeCalledWith(richText);
+        });
+    });
+
     describe('updateCommentErrorCallback()', () => {
         const e = new Error('foo');
 

@@ -61,6 +61,24 @@ describe('util/Xhr', () => {
                     });
                 });
         });
+
+        test('should forward query params to axios', () => {
+            xhrInstance.getParsedUrl = jest.fn().mockReturnValue('parsedurl');
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest.fn().mockReturnValue({});
+
+            return xhrInstance
+                .post({
+                    url: 'url',
+                    data: {},
+                    params: { enable_rich_text: true },
+                })
+                .then(() => {
+                    expect(xhrInstance.axios).toHaveBeenCalledWith(
+                        expect.objectContaining({ params: { enable_rich_text: true } }),
+                    );
+                });
+        });
     });
 
     describe('put()', () => {
@@ -79,6 +97,19 @@ describe('util/Xhr', () => {
                 method: 'PUT',
                 headers: {},
             });
+        });
+
+        test('should forward query params to post()', () => {
+            xhrInstance.post = jest.fn();
+            xhrInstance.put({
+                url: 'url',
+                data: {},
+                params: { enable_rich_text: true },
+            });
+
+            expect(xhrInstance.post).toHaveBeenCalledWith(
+                expect.objectContaining({ method: 'PUT', params: { enable_rich_text: true } }),
+            );
         });
     });
 

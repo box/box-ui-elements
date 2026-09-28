@@ -189,6 +189,38 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
         );
     });
 
+    describe('writes with activityFeed.richText enabled', () => {
+        const wrapper = ({ children }) => (
+            <FeatureProvider features={{ activityFeed: { richText: { enabled: true } } }}>{children}</FeatureProvider>
+        );
+
+        test.each`
+            handler                 | apiMethod             | args
+            ${'handleCreate'}       | ${'createAnnotation'} | ${{ payload: { description: { message: 'foo' }, target: {} } }}
+            ${'handleEdit'}         | ${'updateAnnotation'} | ${{ id: annotation.id, permissions: { can_edit: true }, text: 'foo' }}
+            ${'handleStatusChange'} | ${'updateAnnotation'} | ${{ id: annotation.id, permissions: { can_resolve: true }, status: 'resolved' }}
+        `('$handler should pass shouldEnableRichText=true to $apiMethod', ({ handler, apiMethod, args }) => {
+            const mockApiMethod = jest.fn();
+            const api = getApi({ [apiMethod]: mockApiMethod });
+            const { result } = renderHook(
+                () =>
+                    useAnnotationAPI({
+                        api,
+                        errorCallback,
+                        file: { id: 'fileId', file_version: { id: '123' }, permissions: filePermissions },
+                    }),
+                { wrapper },
+            );
+
+            act(() => {
+                result.current[handler]({ ...args, successCallback: jest.fn() });
+            });
+
+            const [call] = mockApiMethod.mock.calls;
+            expect(call[call.length - 1]).toBe(true);
+        });
+    });
+
     test('should call api function on handleDelete with correct arguments', () => {
         const mockSuccessCallback = jest.fn();
 

@@ -210,6 +210,25 @@ describe('api/Base', () => {
             });
         });
 
+        test('should forward write body and query params to xhr as separate fields', () => {
+            base.xhr = {
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
+            };
+            const requestData = {
+                data: { message: 'hello' },
+                params: { enable_rich_text: true },
+            };
+
+            return base.makeRequest(HTTP_POST, 'id', url, jest.fn(), jest.fn(), requestData).then(() => {
+                expect(base.xhr.post).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url,
+                    data: { message: 'hello' },
+                    params: { enable_rich_text: true },
+                });
+            });
+        });
+
         test('should call error callback when xhr fails', () => {
             const error = new Error('error');
             base.xhr = {

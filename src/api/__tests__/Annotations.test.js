@@ -109,6 +109,21 @@ describe('api/Annotations', () => {
             });
         });
 
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+                can_view_annotations: true,
+            };
+
+            annotations.createAnnotation('12345', '67890', payload, permissions, successCallback, errorCallback, true);
+
+            expect(annotations.post).toBeCalledWith(
+                expect.objectContaining({
+                    data: expect.objectContaining({ params: { enable_rich_text: true } }),
+                }),
+            );
+        });
+
         test.each([
             { can_create_annotations: false, can_view_annotations: false },
             { can_create_annotations: false, can_view_annotations: true },
@@ -134,6 +149,17 @@ describe('api/Annotations', () => {
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/abc',
             });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const payload = { message: 'hello' };
+            annotations.updateAnnotation('12345', 'abc', { can_edit: true }, payload, jest.fn(), jest.fn(), true);
+
+            expect(annotations.put).toBeCalledWith(
+                expect.objectContaining({
+                    data: { data: { description: { message: 'hello' } }, params: { enable_rich_text: true } },
+                }),
+            );
         });
 
         test('should format its parameters and call the update method for a given id and status', () => {
@@ -424,6 +450,27 @@ describe('api/Annotations', () => {
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/annotations/67890/replies?file_id=12345',
             });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_create_annotations: true,
+            };
+            annotations.createAnnotationReply(
+                '12345',
+                '67890',
+                permissions,
+                message,
+                successCallback,
+                errorCallback,
+                true,
+            );
+
+            expect(annotations.post).toBeCalledWith(
+                expect.objectContaining({
+                    data: { data: { message }, params: { enable_rich_text: true } },
+                }),
+            );
         });
         test.each([
             { can_create_annotations: false, can_view_annotations: false },

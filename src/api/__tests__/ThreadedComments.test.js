@@ -95,6 +95,22 @@ describe('api/ThreadedComments', () => {
             });
         });
 
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            threadedComments.createComment({
+                file: { ...file, permissions: { can_comment: true } },
+                message,
+                shouldEnableRichText: true,
+                errorCallback,
+                successCallback,
+            });
+
+            expect(threadedComments.post).toBeCalledWith(
+                expect.objectContaining({
+                    data: { data: { message }, params: { enable_rich_text: true } },
+                }),
+            );
+        });
+
         test('should reject with an error code for calls with invalid permission ', () => {
             threadedComments.createComment({
                 file: { ...file, can_comment: false },
@@ -134,6 +150,25 @@ describe('api/ThreadedComments', () => {
                 successCallback,
                 url: 'https://api.box.com/2.0/undoc/comments/abc',
             });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            threadedComments.updateComment({
+                fileId: '12345',
+                commentId: 'abc',
+                permissions: { can_resolve: true, can_edit: true },
+                status,
+                message,
+                shouldEnableRichText: true,
+                successCallback: jest.fn(),
+                errorCallback: jest.fn(),
+            });
+
+            expect(threadedComments.put).toBeCalledWith(
+                expect.objectContaining({
+                    data: { data: { status, message }, params: { enable_rich_text: true } },
+                }),
+            );
         });
 
         test.each([
@@ -427,6 +462,24 @@ describe('api/ThreadedComments', () => {
                 data: { data: { message }, params: { enable_rich_text: false } },
                 successCallback,
             });
+        });
+
+        test('should pass enable_rich_text when shouldEnableRichText is true', () => {
+            threadedComments.createCommentReply({
+                fileId: '12345',
+                commentId: '67890',
+                permissions: { can_comment: true },
+                shouldEnableRichText: true,
+                successCallback,
+                errorCallback,
+                message,
+            });
+
+            expect(threadedComments.post).toBeCalledWith(
+                expect.objectContaining({
+                    data: { data: { message }, params: { enable_rich_text: true } },
+                }),
+            );
         });
 
         test('should reject with an error code for calls with invalid permissions', () => {

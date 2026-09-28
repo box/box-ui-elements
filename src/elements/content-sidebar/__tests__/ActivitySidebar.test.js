@@ -1652,6 +1652,32 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('writes with activityFeed.richText enabled', () => {
+        const richTextFeatures = { activityFeed: { richText: { enabled: true } } };
+        const permissions = { can_edit: true, can_delete: true, can_resolve: true };
+
+        test.each`
+            handler                           | feedMethod                 | invoke
+            ${'createComment'}                | ${'createThreadedComment'} | ${instance => instance.createComment('foo', false)}
+            ${'createReply'}                  | ${'createReply'}           | ${instance => instance.createReply('123', FEED_ITEM_TYPE_COMMENT, 'foo')}
+            ${'updateComment'}                | ${'updateThreadedComment'} | ${instance => instance.updateComment('123', 'foo', undefined, false, permissions)}
+            ${'updateReply'}                  | ${'updateReply'}           | ${instance => instance.updateReply('1', '123', 'foo', permissions)}
+            ${'handleAnnotationEdit'}         | ${'updateAnnotation'}      | ${instance => instance.handleAnnotationEdit({ id: '123', permissions, text: 'foo' })}
+            ${'handleAnnotationStatusChange'} | ${'updateAnnotation'}      | ${instance => instance.handleAnnotationStatusChange({ id: '123', permissions, status: 'open' })}
+        `('$handler should pass shouldEnableRichText=true to feedAPI.$feedMethod', ({ feedMethod, invoke }) => {
+            const wrapper = getWrapper({ features: richTextFeatures, hasReplies: true });
+            const instance = wrapper.instance();
+            instance.fetchFeedItems = jest.fn();
+            instance.setState({ currentUser });
+
+            invoke(instance);
+
+            const { calls } = feedAPI[feedMethod].mock;
+            expect(calls).toHaveLength(1);
+            expect(calls[0][calls[0].length - 1]).toBe(true);
+        });
+    });
+
     describe('handleAnnotationEdit()', () => {
         test('should call updateAnnotation API and call emitAnnotationUpdateEvent', () => {
             const mockEmitAnnotationUpdateEvent = jest.fn();
