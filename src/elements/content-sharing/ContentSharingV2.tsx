@@ -16,7 +16,6 @@ import type {
 
 import API from '../../api';
 import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { fetchAvatars, fetchCollaborators, fetchCurrentUser, fetchItem } from './apis';
 import { CONTENT_SHARING_ERRORS } from './constants';
 import { useContactService, useSharingService } from './hooks';
@@ -302,4 +301,4 @@ function ContentSharingV2({
 }
 
 export { ContentSharingV2 as ContentSharingV2Component };
-export default withBlueprintAnimations(withBlueprintModernization(ContentSharingV2));
+export default withBlueprintAnimations(ContentSharingV2);

@@ -6,7 +6,6 @@ import { Tooltip as BPTooltip, TooltipProvider as BPTooltipProvider } from '@box
 import PresenceAvatar from './PresenceAvatar';
 import PresenceAvatarTooltipContent from './PresenceAvatarTooltipContent';
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
-import { withBlueprintModernization } from '../../elements/common/withBlueprintModernization';
 import './PresenceAvatarList.scss';
 
 export type Collaborator = {
@@ -23,7 +22,6 @@ export type Props = {
     avatarAttributes?: React.HTMLAttributes<HTMLDivElement>;
     className?: string;
     collaborators: Array<Collaborator>;
-    enableModernizedComponents?: boolean;
     hideAdditionalCount?: boolean;
     hideTooltips?: boolean;
     maxAdditionalCollaborators?: number;
@@ -146,4 +144,4 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
 
 export { PresenceAvatarList as PresenceAvatarListComponent };
 
-export default withBlueprintModernization(React.forwardRef(PresenceAvatarList));
+export default React.forwardRef(PresenceAvatarList);
