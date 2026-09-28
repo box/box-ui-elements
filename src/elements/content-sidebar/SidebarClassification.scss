@@ -1,9 +1,4 @@
 @import '../common/variables';
-@import './mixins';
-
-.bcs-SidebarClassification {
-    @include bcs-SidebarSection;
-}
 
 .bcs-SidebarClassification-edit {
     position: absolute;
