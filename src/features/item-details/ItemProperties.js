@@ -46,7 +46,7 @@ const ItemProperties = ({
             {description || onDescriptionChange ? (
                 <>
                     <dt id={descriptionId}>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.description} />
                         </Text>
                     </dt>
@@ -66,7 +66,7 @@ const ItemProperties = ({
             {!!url && (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.url} />
                         </Text>
                     </dt>
@@ -76,7 +76,7 @@ const ItemProperties = ({
             {owner ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.owner} />
                         </Text>
                     </dt>
@@ -86,7 +86,7 @@ const ItemProperties = ({
             {enterpriseOwner ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.enterpriseOwner} />
                         </Text>
                     </dt>
@@ -96,7 +96,7 @@ const ItemProperties = ({
             {uploader ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.uploader} />
                         </Text>
                     </dt>
@@ -106,7 +106,7 @@ const ItemProperties = ({
             {createdAt ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.created} />
                         </Text>
                     </dt>
@@ -118,7 +118,7 @@ const ItemProperties = ({
             {modifiedAt ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.modified} />
                         </Text>
                     </dt>
@@ -130,7 +130,7 @@ const ItemProperties = ({
             {archivedAt ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.archived} />
                         </Text>
                     </dt>
@@ -142,7 +142,7 @@ const ItemProperties = ({
             {size ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.size} />
                         </Text>
                     </dt>
@@ -157,7 +157,7 @@ const ItemProperties = ({
             {trashedAt ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.deleted} />
                         </Text>
                     </dt>
