@@ -50,7 +50,7 @@ export const basic = {
     },
 };
 
-export const withModernizedBlueprint = {
+export const withPreviewModernization = {
     args: {
         defaultView: 'docgen',
         docGenSidebarProps,
@@ -68,7 +68,7 @@ export const pdfTemplate = {
     },
 };
 
-export const pdfTemplateWithModernizedBlueprint = {
+export const pdfTemplateWithPreviewModernization = {
     args: {
         defaultView: 'docgen',
         docGenSidebarProps: docGenSidebarPdfTemplateProps,
