@@ -29,7 +29,6 @@ import { withErrorBoundary } from '../common/error-boundary';
 // $FlowFixMe
 import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
 // $FlowFixMe
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import {
     isFeatureEnabled as isFeatureEnabledInContext,
     withFeatureConsumer,
@@ -480,7 +479,6 @@ export { ContentSidebar as ContentSidebarComponent };
 export default flow([
     withFeatureConsumer,
     withFeatureProvider,
-    withBlueprintModernization,
     withBlueprintAnimations,
     withLogger(ORIGIN_CONTENT_SIDEBAR),
     withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),

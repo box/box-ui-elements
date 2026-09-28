@@ -7,10 +7,9 @@ import {
     mockApiWithoutSharedLink,
 } from '../../utils/__mocks__/ContentSharingV2Mocks';
 
-export const withModernization = {
+export const withoutSharedLink = {
     args: {
         api: mockApiWithoutSharedLink,
-        enableModernizedComponents: true,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -32,7 +31,7 @@ export const withSharedLink = {
         api: mockApiWithSharedLink,
     },
     play: async context => {
-        await withModernization.play(context);
+        await withoutSharedLink.play(context);
         expect(screen.getByLabelText('Shared link URL')).toBeVisible();
         expect(screen.getByRole('button', { name: 'Link Settings' })).toBeVisible();
         const peopleWithTheLinkButton = screen.getByRole('button', { name: 'People with the link' });
@@ -62,7 +61,7 @@ export const withCollaborators = {
         api: mockApiWithCollaborators,
     },
     play: async context => {
-        await withModernization.play(context);
+        await withoutSharedLink.play(context);
         await waitFor(async () => {
             const sharedWithAvatars = screen.getByRole('button', { name: 'Shared with D R D' });
             expect(sharedWithAvatars).toBeVisible();
