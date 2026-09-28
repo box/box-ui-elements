@@ -22,7 +22,6 @@ import makeResponsive from '../common/makeResponsive';
 // $FlowFixMe
 import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
 // $FlowFixMe
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
 // $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 import Pagination from '../../features/pagination';
@@ -1352,4 +1351,4 @@ class ContentPicker extends Component<Props, State> {
 }
 
 export { ContentPicker as ContentPickerComponent };
-export default flow([makeResponsive, withBlueprintModernization, withBlueprintAnimations])(ContentPicker);
+export default flow([makeResponsive, withBlueprintAnimations])(ContentPicker);

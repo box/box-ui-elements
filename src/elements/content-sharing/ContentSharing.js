@@ -51,8 +51,6 @@ type ContentSharingProps = {
     displayInModal: boolean,
     /** Forwarded to ContentSharingV2 Blueprint HOCs when contentSharingV2 is enabled */
     enableBlueprintAnimations?: boolean | Object,
-    /** Forwarded to ContentSharingV2 Blueprint HOCs when contentSharingV2 is enabled */
-    enableModernizedComponents?: boolean,
     /** features - Features for the element */
     features?: FeatureConfig,
     /** hasProviders - Whether the element has providers for USM already */
@@ -95,7 +93,6 @@ function ContentSharing({
     customButton,
     displayInModal,
     enableBlueprintAnimations,
-    enableModernizedComponents,
     features = {},
     hasProviders = true,
     itemID,
@@ -146,7 +143,6 @@ function ContentSharing({
                             api={api}
                             config={config}
                             enableBlueprintAnimations={enableBlueprintAnimations}
-                            enableModernizedComponents={enableModernizedComponents}
                             itemId={itemID}
                             itemType={itemType}
                             onClose={onClose}
