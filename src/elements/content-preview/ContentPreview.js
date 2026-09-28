@@ -43,7 +43,6 @@ import { isFeatureEnabled, withFeatureConsumer, withFeatureProvider } from '../c
 // $FlowFixMe
 import { withBlueprintAnimations } from '../common/withBlueprintAnimations';
 // $FlowFixMe
-import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
@@ -1940,7 +1939,6 @@ const ConnectedContentPreview = flow([
     withNavRouter,
     withFeatureConsumer,
     withFeatureProvider,
-    withBlueprintModernization,
     withBlueprintAnimations,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
