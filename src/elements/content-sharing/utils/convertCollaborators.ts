@@ -94,6 +94,7 @@ export const convertCollabsResponse = (
     };
 
     return [itemOwner, ...entries].flatMap(collab => {
+        // @ts-expect-error -- synthetic owner collaborations omit the API-only expires_at field
         const converted = convertCollab({ avatarUrlMap, collab, currentUser, ownerEmailDomain });
         return converted ? [converted] : [];
     });

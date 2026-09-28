@@ -393,7 +393,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const metadataSourceFieldName = `metadata.${metadataSource}`;
             const metadataQuery = {
                 from: metadataSource,
-                ancestor_folder_id: 0,
+                ancestor_folder_id: '0',
                 fields: [`${metadataSourceFieldName}.industry`, `${metadataSourceFieldName}.last_contacted_at`],
             };
             const fieldsToShow = [

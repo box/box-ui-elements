@@ -4,8 +4,9 @@ import userEvent from '@testing-library/user-event';
 import ItemName, { ItemNameProps } from '../ItemName';
 import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
 import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../../constants';
+import type { BoxItem } from '../../../../common/types/core';
 
-const mockItem = {
+const mockItem: BoxItem = {
     id: '1',
     name: 'Test Item',
     type: 'file',

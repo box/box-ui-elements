@@ -1,14 +1,15 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import type { BoxItem } from '../../../../common/types/core';
 import { render, screen } from '../../../../test-utils/testing-library';
-import ItemGrid from '../ItemGrid';
+import ItemGrid, { ItemGridProps } from '../ItemGrid';
 import { isThumbnailAvailable } from '../../utils';
 
 jest.mock('../../utils');
 
 describe('elements/common/item-grid/ItemGrid', () => {
-    const renderComponent = (props = {}) => {
-        const defaultProps = {
+    const renderComponent = (props: Partial<ItemGridProps> = {}) => {
+        const defaultProps: ItemGridProps = {
             items: [
                 { type: 'folder', id: '001', name: 'Shared folder', modified_at: '2021-10-18T09:00:00-07:00' },
                 { type: 'folder', id: '002', name: 'Documents', modified_at: '2021-10-18T09:00:00-07:00' },
@@ -33,7 +34,7 @@ describe('elements/common/item-grid/ItemGrid', () => {
     });
 
     test('renders component correctly with item thumbnails', () => {
-        const items = [
+        const items: BoxItem[] = [
             {
                 type: 'file',
                 id: '003',
@@ -59,7 +60,7 @@ describe('elements/common/item-grid/ItemGrid', () => {
         expect(screen.queryByRole('img', { name: 'Sample PDF' })).not.toBeInTheDocument();
     });
 
-    test.each(['folder', 'file', 'web_link'])(
+    test.each(['folder', 'file', 'web_link'] as const)(
         'calls `onItemClick` when a %s item is clicked with preview enabled',
         async type => {
             const items = [{ type, id: '004', name: 'Box item', modified_at: '2021-10-18T09:00:00-07:00' }];
@@ -76,7 +77,9 @@ describe('elements/common/item-grid/ItemGrid', () => {
     );
 
     test('does not call `onItemClick` when a file item is clicked with preview disabled', async () => {
-        const items = [{ type: 'file', id: '004', name: 'Box file', modified_at: '2021-10-18T09:00:00-07:00' }];
+        const items: BoxItem[] = [
+            { type: 'file', id: '004', name: 'Box file', modified_at: '2021-10-18T09:00:00-07:00' },
+        ];
         const onItemClick = jest.fn();
 
         renderComponent({ canPreview: false, items, onItemClick });
@@ -86,7 +89,7 @@ describe('elements/common/item-grid/ItemGrid', () => {
         expect(onItemClick).not.toHaveBeenCalled();
     });
 
-    test.each(['file', 'web_link'])(
+    test.each(['file', 'web_link'] as const)(
         'does not call `onItemClick` when a %s item is clicked on a touch device with preview enabled',
         async type => {
             const items = [{ type, id: '004', name: 'Box item', modified_at: '2021-10-18T09:00:00-07:00' }];

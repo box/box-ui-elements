@@ -1,3 +1,4 @@
+import type { BoxItem } from '../../common/types/core';
 import {
     FILE_EXTENSION_GOOGLE_DOC,
     FILE_EXTENSION_GOOGLE_SHEET,
@@ -6,22 +7,20 @@ import {
 } from '../../constants';
 import { isBoxNote, getTypedFileId, getTypedFolderId, getFileExtension, isGSuiteExtension } from '../file';
 
+const boxFile = (extension: string): BoxItem => ({
+    id: '1',
+    type: 'file',
+    extension,
+});
+
 describe('util/file', () => {
     describe('isBoxNote()', () => {
         test('should false when file is not a box note', () => {
-            expect(
-                isBoxNote({
-                    extension: 'foo',
-                }),
-            ).toBe(false);
+            expect(isBoxNote(boxFile('foo'))).toBe(false);
         });
 
         test('should true when file is a box note', () => {
-            expect(
-                isBoxNote({
-                    extension: 'boxnote',
-                }),
-            ).toBe(true);
+            expect(isBoxNote(boxFile('boxnote'))).toBe(true);
         });
     });
 

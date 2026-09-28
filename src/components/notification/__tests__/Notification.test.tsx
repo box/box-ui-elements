@@ -2,6 +2,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 
+import type { NotificationType } from '../../../common/types/core';
 import { TYPE_DEFAULT, TYPE_INFO, TYPE_WARN, TYPE_ERROR } from '../constants';
 
 import { Notification } from '..';
@@ -26,20 +27,14 @@ describe('components/notification/Notification', () => {
         expect(wrapper.find('span').text()).toEqual('test');
     });
 
-    [
-        {
-            type: 'info',
-        },
-        {
-            type: 'warn',
-        },
-        {
-            type: 'default',
-        },
-        {
-            type: 'error',
-        },
-    ].forEach(({ type }) => {
+    (
+        [
+            { type: TYPE_INFO },
+            { type: TYPE_WARN },
+            { type: TYPE_DEFAULT },
+            { type: TYPE_ERROR },
+        ] as const satisfies ReadonlyArray<{ type: NotificationType }>
+    ).forEach(({ type }) => {
         test(`should render a notification with ${type} styling when initialized`, () => {
             const component = mount(<Notification type={type}>test</Notification>);
 

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { render, screen } from '../../../test-utils/testing-library';
 import ItemList, { ItemListProps } from '../ItemList';
 import { STATUS_ERROR, STATUS_COMPLETE, ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED } from '../../../constants';
+import PlainUpload from '../../../api/uploads/PlainUpload';
+import type { UploadItem } from '../../../common/types/upload';
 
 jest.mock(
     '@box/react-virtualized/dist/es/AutoSizer',
@@ -9,6 +11,22 @@ jest.mock(
         ({ children }) =>
             children({ height: 600, width: 600 }),
 );
+
+const uploadApi = new PlainUpload({ token: 'token' });
+const createUploadItem = (name: string, overrides: Partial<UploadItem> = {}): UploadItem => {
+    const file = new File(['test content'], name);
+
+    return {
+        api: uploadApi,
+        extension: '',
+        file,
+        name,
+        progress: 100,
+        size: file.size,
+        status: STATUS_COMPLETE,
+        ...overrides,
+    };
+};
 
 describe('elements/content-uploader/ItemList', () => {
     const renderComponent = (props?: Partial<ItemListProps>) =>
@@ -20,11 +38,7 @@ describe('elements/content-uploader/ItemList', () => {
     });
 
     test('should render component with correct number of items', () => {
-        const items = [
-            { id: '1', name: 'item1', status: STATUS_COMPLETE },
-            { id: '2', name: 'item2', status: STATUS_COMPLETE },
-            { id: '3', name: 'item3', status: STATUS_COMPLETE },
-        ];
+        const items = [createUploadItem('item1'), createUploadItem('item2'), createUploadItem('item3')];
         renderComponent({ items });
 
         expect(screen.getAllByRole('row')).toHaveLength(3);
@@ -36,7 +50,10 @@ describe('elements/content-uploader/ItemList', () => {
 
     test('should render action column with correct width for upgrade cta', () => {
         const items = [
-            { id: '1', name: 'item1', status: STATUS_ERROR, code: ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED },
+            createUploadItem('item1', {
+                error: { code: ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED },
+                status: STATUS_ERROR,
+            }),
         ];
 
         renderComponent({ items, onUpgradeCTAClick: jest.fn() });
@@ -48,7 +65,7 @@ describe('elements/content-uploader/ItemList', () => {
     });
 
     test('should render component with resumable uploads enabled', () => {
-        const items = [{ id: '1', name: 'item1', status: STATUS_COMPLETE }];
+        const items = [createUploadItem('item1')];
         renderComponent({ items, isResumableUploadsEnabled: true });
         expect(screen.getByRole('grid')).toBeInTheDocument();
         expect(screen.getAllByRole('gridcell')).toHaveLength(4);
