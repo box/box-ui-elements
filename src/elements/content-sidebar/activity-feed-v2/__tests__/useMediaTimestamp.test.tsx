@@ -51,7 +51,7 @@ const TestHarness = ({
     isAudioPlayerV2?: boolean;
     timeFormat?: TimeFormat;
 }) => {
-    const { formattedTimestamp, isPressed, onPressedChange, resetRange, timestampEndMs, timestampMs } =
+    const { clearRange, formattedTimestamp, isPressed, onPressedChange, timestampEndMs, timestampMs } =
         useMediaTimestamp(enabled, timeFormat, fps, { getViewer, isAudioPlayerV2 });
     return (
         <div>
@@ -65,8 +65,8 @@ const TestHarness = ({
             <button onClick={() => onPressedChange(false)} type="button">
                 unpress
             </button>
-            <button onClick={() => resetRange()} type="button">
-                reset
+            <button onClick={() => clearRange()} type="button">
+                clear
             </button>
         </div>
     );
@@ -580,14 +580,15 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
-    test('should return the label to a single time after the range is reset', () => {
+    test('should return the label to a single time after the range is cleared', () => {
         const { cleanup, emitFromViewer } = renderWithRange();
         try {
             act(() => screen.getByText('press').click());
             act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
-            act(() => screen.getByText('reset').click());
+            act(() => screen.getByText('clear').click());
 
-            // The reset drops the end, keeping the dragged start rather than recapturing playback.
+            // Clearing drops the end, keeping the dragged start rather than recapturing playback.
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
             expect(screen.getByTestId('timestamp').textContent).toBe('0:44');
         } finally {
             cleanup();
@@ -733,31 +734,63 @@ describe('useMediaTimestamp range selection', () => {
         }
     });
 
-    test('should drop back to a collapsed draft after the range is reset', () => {
+    test('should uncheck the toggle and clear the draft after the range is cleared', () => {
         const { cleanup, emitFromViewer, viewer } = renderWithRange();
         try {
             act(() => screen.getByText('press').click());
             act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
-            act(() => screen.getByText('reset').click());
+            act(() => screen.getByText('clear').click());
 
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
             expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
-            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 44000 }]);
+            expect(emittedEvents(viewer).pop()).toEqual(['comment_range_draft_clear', undefined]);
         } finally {
             cleanup();
         }
     });
 
-    test('should let the start follow playback again after the range is reset', () => {
+    test('should let the start follow pause and seek again after the range is cleared', () => {
         const { audio, cleanup, emitFromViewer } = renderWithRange();
         try {
             act(() => screen.getByText('press').click());
             act(() => emitFromViewer('comment_range_draft_change', { endMs: 50000, startMs: 44000 }));
-            act(() => screen.getByText('reset').click());
+            act(() => screen.getByText('clear').click());
+            act(() => screen.getByText('press').click());
 
             Object.defineProperty(audio, 'currentTime', { configurable: true, value: 61, writable: true });
             act(() => audio.dispatchEvent(new Event('pause')));
 
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
             expect(screen.getByTestId('ms').textContent).toBe('61000');
+            expect(screen.getByTestId('end-ms').textContent).toBe('undefined');
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should uncheck a point timestamp without emitting a range event when cleared', () => {
+        const video = createVideoElement(43.5);
+        const cleanup = mountVideoInDom(video);
+        const harness = createViewer();
+        try {
+            render(<TestHarness enabled getViewer={harness.getViewer} />);
+            act(() => screen.getByText('press').click());
+            act(() => screen.getByText('clear').click());
+
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(emittedEvents(harness.viewer)).toHaveLength(0);
+        } finally {
+            cleanup();
+        }
+    });
+
+    test('should not emit clear when clearRange runs with the toggle off', () => {
+        const { cleanup, viewer } = renderWithRange();
+        try {
+            act(() => screen.getByText('clear').click());
+
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            expect(emittedEvents(viewer)).toHaveLength(0);
         } finally {
             cleanup();
         }
