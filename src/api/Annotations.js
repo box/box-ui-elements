@@ -102,6 +102,7 @@ export default class Annotations extends MarkerBasedApi {
         permissions: BoxItemPermission,
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_CREATE_ANNOTATION;
 
@@ -126,6 +127,7 @@ export default class Annotations extends MarkerBasedApi {
             id: fileId,
             data: {
                 data: merge(defaults, payload),
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
             },
             errorCallback,
             successCallback,
@@ -140,6 +142,7 @@ export default class Annotations extends MarkerBasedApi {
         payload: { message?: string, status?: FeedItemStatus },
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_EDIT_ANNOTATION;
         const { message, status } = payload;
@@ -169,6 +172,7 @@ export default class Annotations extends MarkerBasedApi {
                     description: message ? { message } : undefined,
                     status,
                 },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
             },
             errorCallback,
             successCallback,
@@ -207,6 +211,7 @@ export default class Annotations extends MarkerBasedApi {
         successCallback: (annotation: Annotation) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
         shouldFetchReplies?: boolean,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ANNOTATION;
 
@@ -217,14 +222,17 @@ export default class Annotations extends MarkerBasedApi {
             return;
         }
 
-        const requestData = shouldFetchReplies ? { params: { fields: 'replies' } } : undefined;
+        const params = {
+            ...(shouldFetchReplies ? { fields: 'replies' } : {}),
+            enable_rich_text: Boolean(shouldEnableRichText),
+        };
 
         this.get({
             id: fileId,
             errorCallback,
             successCallback,
             url: this.getUrlForId(annotationId),
-            requestData,
+            requestData: { params },
         });
     }
 
@@ -237,6 +245,7 @@ export default class Annotations extends MarkerBasedApi {
         limit?: number,
         shouldFetchAll?: boolean,
         shouldFetchReplies?: boolean,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_ANNOTATIONS;
 
@@ -251,6 +260,7 @@ export default class Annotations extends MarkerBasedApi {
             file_id: fileId,
             file_version_id: fileVersionId,
             ...(shouldFetchReplies ? { fields: 'replies' } : null),
+            enable_rich_text: Boolean(shouldEnableRichText),
         };
 
         this.markerGet({
@@ -269,6 +279,7 @@ export default class Annotations extends MarkerBasedApi {
         permissions: BoxItemPermission,
         successCallback: (comments: ThreadedComments) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
 
@@ -284,6 +295,7 @@ export default class Annotations extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(annotationId),
+            requestData: { params: { enable_rich_text: Boolean(shouldEnableRichText) } },
         });
     }
 
@@ -294,6 +306,7 @@ export default class Annotations extends MarkerBasedApi {
         message: string,
         successCallback: (comment: Comment) => void,
         errorCallback: (e: ElementsXhrError, code: string) => void,
+        shouldEnableRichText?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
 
@@ -306,7 +319,10 @@ export default class Annotations extends MarkerBasedApi {
 
         this.post({
             id: fileId,
-            data: { data: { message } },
+            data: {
+                data: { message },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
+            },
             errorCallback,
             successCallback,
             url: `${this.getUrlWithRepliesForId(annotationId)}?file_id=${fileId}`,

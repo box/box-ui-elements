@@ -529,7 +529,7 @@ describe('api/Feed', () => {
                     shouldShowAnnotations: true,
                     shouldShowReplies,
                 });
-                expect(feed.fetchAnnotations).toBeCalledWith(expect.anything(), expected);
+                expect(feed.fetchAnnotations).toBeCalledWith(expect.anything(), expected, false);
             },
         );
 
@@ -544,9 +544,45 @@ describe('api/Feed', () => {
         test('should use the threaded comments api if shouldShowReplies is true', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldShowReplies: true });
             setImmediate(() => {
-                expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions);
+                expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions, false);
                 done();
             });
+        });
+
+        test('should forward shouldEnableRichText to annotations, threaded comments, and file activities', () => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowReplies: true,
+                shouldEnableRichText: true,
+            });
+
+            expect(feed.fetchAnnotations).toBeCalledWith(file.permissions, true, true);
+            expect(feed.fetchThreadedComments).toBeCalledWith(file.permissions, true);
+            expect(feed.fetchComments).not.toBeCalled();
+
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowReplies: true,
+                shouldShowTasks: true,
+                shouldShowVersions: true,
+                shouldUseUAA: true,
+                shouldEnableRichText: true,
+            });
+
+            expect(feed.fetchFileActivities).toBeCalledWith(
+                file.permissions,
+                [
+                    FILE_ACTIVITY_TYPE_ANNOTATION,
+                    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                    FILE_ACTIVITY_TYPE_COMMENT,
+                    FILE_ACTIVITY_TYPE_TASK,
+                    FILE_ACTIVITY_TYPE_VERSION,
+                ],
+                true,
+                false,
+                true,
+            );
         });
 
         test('should not call success or error callback if it is destroyed', done => {
@@ -631,6 +667,7 @@ describe('api/Feed', () => {
                     ],
                     true,
                     false,
+                    false,
                 );
                 expect(feed.fetchComments).not.toBeCalled();
                 expect(feed.fetchThreadedComments).not.toBeCalled();
@@ -665,6 +702,7 @@ describe('api/Feed', () => {
                     ],
                     true,
                     true,
+                    false,
                 );
                 done();
             });
@@ -695,6 +733,7 @@ describe('api/Feed', () => {
                 undefined,
                 undefined,
                 true,
+                false,
             );
         });
     });
@@ -736,6 +775,7 @@ describe('api/Feed', () => {
                 errorCallback,
                 fileId: file.id,
                 permissions: file.permissions,
+                shouldEnableRichText: false,
                 successCallback: boundFetchThreadedCommentSuccessCallback,
             });
             expect(feed.fetchThreadedCommentSuccessCallback.bind).toBeCalledWith(
@@ -773,6 +813,7 @@ describe('api/Feed', () => {
                 errorCallback: expect.any(Function),
                 fileId: feed.file.id,
                 permissions,
+                shouldEnableRichText: false,
                 successCallback: expect.any(Function),
             });
         });
@@ -802,6 +843,7 @@ describe('api/Feed', () => {
                 fileId: feed.file.id,
                 commentId,
                 permissions: feed.file.permissions,
+                shouldEnableRichText: false,
                 successCallback: expect.any(Function),
                 errorCallback: expect.any(Function),
             });
@@ -820,6 +862,7 @@ describe('api/Feed', () => {
                 feed.file.permissions,
                 expect.any(Function),
                 expect.any(Function),
+                false,
             );
             expect(feed.updateFeedItem).toHaveBeenNthCalledWith(1, { isRepliesLoading: true }, annotationId);
             expect(feed.updateFeedItem).toHaveBeenNthCalledWith(
@@ -912,6 +955,7 @@ describe('api/Feed', () => {
                     permissions,
                     shouldShowReplies: false,
                     shouldUseEnhancedActivities: false,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                 });
                 expect(fileActivityItems).resolves.toEqual({ entries: mockFileActivities });
@@ -1266,6 +1310,7 @@ describe('api/Feed', () => {
                     commentId: comment.id,
                     permissions: comment.permissions,
                     ...expected,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
                 });
@@ -1329,6 +1374,7 @@ describe('api/Feed', () => {
                 commentId: reply.id,
                 permissions: reply.permissions,
                 message: text,
+                shouldEnableRichText: false,
                 status: undefined,
                 successCallback: expect.any(Function),
                 errorCallback: expect.any(Function),
@@ -1874,11 +1920,12 @@ describe('api/Feed', () => {
         });
 
         test('should create the comment using threaded comments api and invoke the success callback', done => {
-            feed.createThreadedComment(file, currentUser, text, true, successCb, errorCb);
+            feed.createThreadedComment(file, currentUser, text, successCb, errorCb);
             setImmediate(() => {
                 expect(feed.threadedCommentsAPI.createComment).toBeCalledWith({
                     file,
                     message: text,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
                 });
@@ -1957,6 +2004,7 @@ describe('api/Feed', () => {
                     text,
                     expect.any(Function),
                     expect.any(Function),
+                    false,
                 );
                 expect(feed.createReplySuccessCallback).toBeCalled();
                 expect(feed.createReplyErrorCallback).not.toBeCalled();
@@ -1983,6 +2031,7 @@ describe('api/Feed', () => {
                     commentId,
                     permissions: file.permissions,
                     message: text,
+                    shouldEnableRichText: false,
                     successCallback: expect.any(Function),
                     errorCallback: expect.any(Function),
                 });
@@ -2211,6 +2260,7 @@ describe('api/Feed', () => {
                     expected,
                     expect.any(Function),
                     expect.any(Function),
+                    false,
                 );
                 expect(feed.updateFeedItem).toBeCalled();
                 expect(successCallback).toBeCalled();
@@ -2243,6 +2293,73 @@ describe('api/Feed', () => {
             };
             expect(feed.updateFeedItem).toHaveBeenNthCalledWith(1, { status, isPending: true }, annotationId);
             expect(feed.updateFeedItem).toHaveBeenNthCalledWith(2, expectedUpdateFeedItemCommentData, annotationId);
+        });
+    });
+
+    describe('writes with shouldEnableRichText', () => {
+        const currentUser = { id: 'bar' };
+        const richText = expect.objectContaining({ shouldEnableRichText: true });
+
+        beforeEach(() => {
+            feed.addPendingItem = jest.fn();
+            feed.addPendingReply = jest.fn();
+            feed.createCommentSuccessCallback = jest.fn();
+            feed.createReplySuccessCallback = jest.fn();
+            feed.modifyFeedItemRepliesCountBy = jest.fn();
+            feed.updateFeedItem = jest.fn();
+            feed.updateReplyItem = jest.fn();
+        });
+
+        test('updateAnnotation should forward shouldEnableRichText to the annotations api', () => {
+            feed.updateAnnotation(file, '1', 'hello', undefined, { can_edit: true }, jest.fn(), jest.fn(), true);
+
+            expect(feed.annotationsAPI.updateAnnotation).toBeCalledWith(
+                file.id,
+                '1',
+                { can_edit: true },
+                { message: 'hello' },
+                expect.any(Function),
+                expect.any(Function),
+                true,
+            );
+        });
+
+        test('updateThreadedComment should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.updateThreadedComment(file, '1', 'hello', 'open', { can_edit: true }, jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.updateComment).toBeCalledWith(richText);
+        });
+
+        test('updateReply should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.updateReply(file, '1', '123', 'hello', { can_edit: true }, jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.updateComment).toBeCalledWith(richText);
+        });
+
+        test('createThreadedComment should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.createThreadedComment(file, currentUser, 'hello', jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.createComment).toBeCalledWith(richText);
+        });
+
+        test('createReply on an annotation should forward shouldEnableRichText to the annotations api', () => {
+            feed.createReply(file, currentUser, '123', FEED_ITEM_TYPE_ANNOTATION, 'hello', jest.fn(), jest.fn(), true);
+
+            expect(feed.annotationsAPI.createAnnotationReply).toBeCalledWith(
+                file.id,
+                '123',
+                file.permissions,
+                'hello',
+                expect.any(Function),
+                expect.any(Function),
+                true,
+            );
+        });
+
+        test('createReply on a comment should forward shouldEnableRichText to the threaded comments api', () => {
+            feed.createReply(file, currentUser, '123', FEED_ITEM_TYPE_COMMENT, 'hello', jest.fn(), jest.fn(), true);
+
+            expect(feed.threadedCommentsAPI.createCommentReply).toBeCalledWith(richText);
         });
     });
 
