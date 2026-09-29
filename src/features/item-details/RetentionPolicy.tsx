@@ -27,7 +27,7 @@ const RetentionPolicy = ({ dispositionTime, openModal, policyType, retentionPoli
     return (
         <>
             <dt>
-                <Text as="span" variant="bodyDefaultSemibold">
+                <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                     <FormattedMessage {...messages.retentionPolicyDescription} />
                 </Text>
             </dt>
@@ -35,7 +35,7 @@ const RetentionPolicy = ({ dispositionTime, openModal, policyType, retentionPoli
             {policyType !== 'indefinite' ? (
                 <>
                     <dt>
-                        <Text as="span" variant="bodyDefaultSemibold">
+                        <Text as="span" color="textOnLightSecondary" variant="bodyDefaultSemibold">
                             <FormattedMessage {...messages.retentionPolicyExpiration} />
                         </Text>
                     </dt>
