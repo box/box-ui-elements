@@ -9,7 +9,7 @@ import type {
 import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import { useMediaTimestamp } from '../useMediaTimestamp';
 import type { PreviewHandle, ViewerHandle } from '../types';
-import { letPreviewWidthSettle } from './letPreviewWidthSettle';
+import { letPreviewWidthSettle } from './testUtils';
 
 type Listener = (payload: unknown) => void;
 

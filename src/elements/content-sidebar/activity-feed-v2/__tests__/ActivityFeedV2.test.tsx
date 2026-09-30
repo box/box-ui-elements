@@ -8,7 +8,7 @@ import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
-import { letPreviewWidthSettle } from './letPreviewWidthSettle';
+import { letPreviewWidthSettle } from './testUtils';
 
 type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
     isRichTextEnabled?: boolean;
