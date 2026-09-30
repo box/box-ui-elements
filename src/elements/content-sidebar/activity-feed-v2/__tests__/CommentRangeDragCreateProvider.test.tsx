@@ -9,6 +9,7 @@ import type {
 import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import { useMediaTimestamp } from '../useMediaTimestamp';
 import type { PreviewHandle, ViewerHandle } from '../types';
+import { letPreviewWidthSettle } from './letPreviewWidthSettle';
 
 type Listener = (payload: unknown) => void;
 
@@ -77,14 +78,16 @@ describe('CommentRangeDragCreateProvider', () => {
         expect(navigation.push).toHaveBeenCalledWith({ pathname: '/activity', state: { open: true } });
         expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
 
-        rerender(
-            <CommentRangeDragCreateProvider {...props}>
-                <div className="bcs-NewActivityFeed-editor">
-                    <div contentEditable="true" data-testid="composer" />
-                </div>
-                <TimestampReadout getViewer={getViewer} />
-            </CommentRangeDragCreateProvider>,
-        );
+        letPreviewWidthSettle(() => {
+            rerender(
+                <CommentRangeDragCreateProvider {...props}>
+                    <div className="bcs-NewActivityFeed-editor">
+                        <div contentEditable="true" data-testid="composer" />
+                    </div>
+                    <TimestampReadout getViewer={getViewer} />
+                </CommentRangeDragCreateProvider>,
+            );
+        });
 
         expect(screen.getByTestId('pressed').textContent).toBe('true');
         expect(document.activeElement).toBe(screen.getByTestId('composer'));
@@ -171,7 +174,7 @@ describe('CommentRangeDragCreateProvider', () => {
             </CommentRangeDragCreateProvider>,
         );
 
-        act(() => {
+        letPreviewWidthSettle(() => {
             viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
         });
 
@@ -181,6 +184,76 @@ describe('CommentRangeDragCreateProvider', () => {
         expect(viewerHarness.listenerCount('comment_range_compose')).toBe(1);
         expect(navigation.push).toHaveBeenCalledWith({ pathname: '/activity', state: { open: true } });
         expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
+    });
+
+    test('should wait to apply a drag create until the preview width stops changing', () => {
+        const viewerHarness = createViewer();
+        const getViewer = () => viewerHarness.viewer;
+        const container = document.createElement('div');
+        container.className = 'bp-media-container';
+        let previewWidth = 400;
+        container.getBoundingClientRect = () =>
+            ({
+                bottom: 0,
+                height: 0,
+                left: 0,
+                right: previewWidth,
+                toJSON: () => ({}),
+                top: 0,
+                width: previewWidth,
+                x: 0,
+                y: 0,
+            }) as DOMRect;
+        document.body.appendChild(container);
+
+        const queuedFrames = new Map<number, FrameRequestCallback>();
+        let nextFrameId = 1;
+        const requestFrame = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => {
+            const frameId = nextFrameId;
+            nextFrameId += 1;
+            queuedFrames.set(frameId, callback);
+            return frameId;
+        });
+        const cancelFrame = jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(frameId => {
+            queuedFrames.delete(frameId);
+        });
+        const advanceWidthCheck = () => {
+            const batch: FrameRequestCallback[] = [];
+            queuedFrames.forEach(frame => batch.push(frame));
+            queuedFrames.clear();
+            act(() => {
+                batch.forEach(frame => frame(0));
+            });
+        };
+
+        try {
+            render(
+                <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                    <TimestampReadout getViewer={getViewer} />
+                </CommentRangeDragCreateProvider>,
+            );
+            act(() => {
+                viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
+            });
+
+            advanceWidthCheck();
+            previewWidth = 360;
+            advanceWidthCheck();
+            previewWidth = 320;
+            advanceWidthCheck();
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+
+            advanceWidthCheck();
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+            advanceWidthCheck();
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
+            expect(screen.getByTestId('ms').textContent).toBe('1000');
+            expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
+        } finally {
+            container.remove();
+            requestFrame.mockRestore();
+            cancelFrame.mockRestore();
+        }
     });
 
     test('should keep a pinned range when playback pauses', () => {
@@ -200,7 +273,7 @@ describe('CommentRangeDragCreateProvider', () => {
         );
 
         try {
-            act(() => {
+            letPreviewWidthSettle(() => {
                 viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
             });
             Object.defineProperty(media, 'currentTime', { configurable: true, value: 90, writable: true });
@@ -232,7 +305,7 @@ describe('CommentRangeDragCreateProvider', () => {
         );
 
         try {
-            act(() => {
+            letPreviewWidthSettle(() => {
                 viewerHarness.emit('comment_range_compose', { startMs: 1000 });
             });
             Object.defineProperty(media, 'currentTime', { configurable: true, value: 12, writable: true });

@@ -5,6 +5,10 @@ import type { TimeFormat } from './useTimeFormat';
 import type { CommentRangeDraft, ViewerHandle } from './types';
 
 const VIEWER_POLL_MS = 500;
+/** Consecutive frames the preview must keep the same width before a drag-created range is applied. */
+const PREVIEW_WIDTH_STABLE_FRAMES = 2;
+/** Stop polling if the preview width never repeats, then apply any pending range. */
+const PREVIEW_WIDTH_SETTLE_FRAME_LIMIT = 45;
 
 export const EVENT_RANGE_DRAFT = 'comment_range_draft';
 export const EVENT_RANGE_DRAFT_CHANGE = 'comment_range_draft_change';
@@ -25,6 +29,14 @@ const captureCurrentMs = (media: HTMLMediaElement | null): number => {
         return 0;
     }
     return Math.floor(media.currentTime * 1000);
+};
+
+const readPreviewWidth = (): number => {
+    if (typeof document === 'undefined') {
+        return 0;
+    }
+    const container = document.querySelector(MEDIA_CONTAINER_SELECTOR);
+    return container ? Math.round(container.getBoundingClientRect().width) : 0;
 };
 
 export const seekMediaToMs = (ms: number, getViewer?: () => ViewerHandle | null): void => {
@@ -97,6 +109,7 @@ export const readRangeChange = (payload: unknown): PendingCommentRange | null =>
  * - Comment posted or viewer dismisses the draft: toggle off. Audio emits comment_range_draft_clear
  *   for a point timestamp or a range.
  * - Viewer drag create: checkbox on, reported range pinned, no comment_range_draft echo.
+ *   Applied once the preview width stops changing, so a resize cannot retrigger the composer.
  * - New media src: captured value resets to 0; pressed state persists. A dragged range survives
  *   untouched, since a src change on the same element is a token refresh, not different content.
  * - New media element: any selected range is dropped.
@@ -203,14 +216,36 @@ export const useMediaTimestamp = (
         focusActivityFeedEditor();
     }, []);
 
+    // Consume the range only after the width settles, so a dismiss during the resize still drops it.
     React.useEffect(() => {
         if (!isRangeEnabled || !dragCreateContext) {
-            return;
+            return undefined;
         }
-        const pending = dragCreateContext.consumePendingDragCreate();
-        if (pending) {
-            adoptRange(pending);
-        }
+
+        let animationFrameId = 0;
+        let previousWidth: number | undefined;
+        let matchingWidthCount = 0;
+        let framesChecked = 0;
+
+        const applyRangeWhenPreviewWidthSettles = () => {
+            framesChecked += 1;
+            const width = readPreviewWidth();
+            matchingWidthCount = width === previousWidth ? matchingWidthCount + 1 : 0;
+            previousWidth = width;
+            const widthSettled = matchingWidthCount >= PREVIEW_WIDTH_STABLE_FRAMES;
+            const settleTimedOut = framesChecked >= PREVIEW_WIDTH_SETTLE_FRAME_LIMIT;
+            if (!widthSettled && !settleTimedOut) {
+                animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewWidthSettles);
+                return;
+            }
+            const pendingRange = dragCreateContext.consumePendingDragCreate();
+            if (pendingRange) {
+                adoptRange(pendingRange);
+            }
+        };
+
+        animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewWidthSettles);
+        return () => window.cancelAnimationFrame(animationFrameId);
     }, [adoptRange, dragCreateContext, isRangeEnabled]);
 
     React.useEffect(() => {
