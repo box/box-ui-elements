@@ -118,11 +118,13 @@ describe('CommentRangeDragCreateProvider', () => {
             viewerHarness.emit('comment_range_draft_dismiss');
         });
 
-        rerender(
-            <CommentRangeDragCreateProvider {...props}>
-                <TimestampReadout getViewer={getViewer} />
-            </CommentRangeDragCreateProvider>,
-        );
+        letPreviewWidthSettle(() => {
+            rerender(
+                <CommentRangeDragCreateProvider {...props}>
+                    <TimestampReadout getViewer={getViewer} />
+                </CommentRangeDragCreateProvider>,
+            );
+        });
 
         expect(screen.getByTestId('pressed').textContent).toBe('false');
         expect(screen.getByTestId('ms').textContent).toBe('0');
@@ -149,11 +151,13 @@ describe('CommentRangeDragCreateProvider', () => {
             viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
         });
 
-        rerender(
-            <CommentRangeDragCreateProvider {...props} fileId="file-b">
-                <TimestampReadout getViewer={getViewer} />
-            </CommentRangeDragCreateProvider>,
-        );
+        letPreviewWidthSettle(() => {
+            rerender(
+                <CommentRangeDragCreateProvider {...props} fileId="file-b">
+                    <TimestampReadout getViewer={getViewer} />
+                </CommentRangeDragCreateProvider>,
+            );
+        });
 
         expect(screen.getByTestId('pressed').textContent).toBe('false');
     });
