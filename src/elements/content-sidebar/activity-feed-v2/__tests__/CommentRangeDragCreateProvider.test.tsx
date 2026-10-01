@@ -9,7 +9,7 @@ import type {
 import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import { useMediaTimestamp } from '../useMediaTimestamp';
 import type { PreviewHandle, ViewerHandle } from '../types';
-import { letPreviewWidthSettle } from './testUtils';
+import { letPreviewSizeSettle } from './testUtils';
 
 type Listener = (payload: unknown) => void;
 
@@ -78,7 +78,7 @@ describe('CommentRangeDragCreateProvider', () => {
         expect(navigation.push).toHaveBeenCalledWith({ pathname: '/activity', state: { open: true } });
         expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
 
-        letPreviewWidthSettle(() => {
+        letPreviewSizeSettle(() => {
             rerender(
                 <CommentRangeDragCreateProvider {...props}>
                     <div className="bcs-NewActivityFeed-editor">
@@ -118,7 +118,7 @@ describe('CommentRangeDragCreateProvider', () => {
             viewerHarness.emit('comment_range_draft_dismiss');
         });
 
-        letPreviewWidthSettle(() => {
+        letPreviewSizeSettle(() => {
             rerender(
                 <CommentRangeDragCreateProvider {...props}>
                     <TimestampReadout getViewer={getViewer} />
@@ -151,7 +151,7 @@ describe('CommentRangeDragCreateProvider', () => {
             viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
         });
 
-        letPreviewWidthSettle(() => {
+        letPreviewSizeSettle(() => {
             rerender(
                 <CommentRangeDragCreateProvider {...props} fileId="file-b">
                     <TimestampReadout getViewer={getViewer} />
@@ -178,7 +178,7 @@ describe('CommentRangeDragCreateProvider', () => {
             </CommentRangeDragCreateProvider>,
         );
 
-        letPreviewWidthSettle(() => {
+        letPreviewSizeSettle(() => {
             viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
         });
 
@@ -352,7 +352,7 @@ describe('CommentRangeDragCreateProvider', () => {
         );
 
         try {
-            letPreviewWidthSettle(() => {
+            letPreviewSizeSettle(() => {
                 viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
             });
             Object.defineProperty(media, 'currentTime', { configurable: true, value: 90, writable: true });
@@ -384,7 +384,7 @@ describe('CommentRangeDragCreateProvider', () => {
         );
 
         try {
-            letPreviewWidthSettle(() => {
+            letPreviewSizeSettle(() => {
                 viewerHarness.emit('comment_range_compose', { startMs: 1000 });
             });
             Object.defineProperty(media, 'currentTime', { configurable: true, value: 12, writable: true });

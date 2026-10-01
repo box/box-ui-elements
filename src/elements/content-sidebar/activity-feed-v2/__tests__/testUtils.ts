@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 
-/** Runs the action, then animation frames 50ms apart, until the preview size has stopped changing. */
-export const letPreviewWidthSettle = (action: () => void): void => {
+/** Runs the action, then animation frames 50ms apart, through both preview-size waits. */
+export const letPreviewSizeSettle = (action: () => void): void => {
     const frames = new Map<number, FrameRequestCallback>();
     let nextFrameId = 1;
     let frameTime = 0;

@@ -8,7 +8,7 @@ import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
-import { letPreviewWidthSettle } from './testUtils';
+import { letPreviewSizeSettle } from './testUtils';
 
 type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
     isRichTextEnabled?: boolean;
@@ -1423,7 +1423,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 const composer = screen.getByTestId('activity-feed-composer');
                 const focus = jest.spyOn(composer, 'focus');
 
-                letPreviewWidthSettle(() => {
+                letPreviewSizeSettle(() => {
                     dragCreate({ endMs: 5000, startMs: 1000 });
                 });
 
@@ -1483,7 +1483,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         />
                     </CommentRangeDragCreateProvider>,
                 );
-                letPreviewWidthSettle(() => {
+                letPreviewSizeSettle(() => {
                     dragCreate({ endMs: 5000, startMs: 1000 });
                 });
                 await act(async () => {
