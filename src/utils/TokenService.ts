@@ -10,7 +10,7 @@ class TokenService {
      * Fetches a single token. The supplied value can be a literal token or a function
      * that returns a promise resolving to a string, null, undefined, or a read/write pair.
      */
-    static async getToken(id: string, tokenOrTokenFunction?: Token): Promise<string | null | undefined> {
+    static async getToken(id: string, tokenOrTokenFunction?: Token): Promise<TokenLiteral> {
         // Make sure we are getting typed ids
         // Tokens should either be null or undefined or string or functions
         // Anything else is not supported and throw error

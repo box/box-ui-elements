@@ -265,6 +265,7 @@ const MetadataViewContainer = ({
         <MetadataView
             actionBarProps={transformedActionBarProps}
             columns={newColumns}
+            // @ts-expect-error -- Local BoxItem metadata shape is broader than the metadata-view package Item shape.
             items={items}
             tableProps={newTableProps}
             areSelectionCheckboxesDisabled={isEditing}
