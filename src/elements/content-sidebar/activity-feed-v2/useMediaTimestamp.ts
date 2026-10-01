@@ -5,10 +5,10 @@ import type { TimeFormat } from './useTimeFormat';
 import type { CommentRangeDraft, ViewerHandle } from './types';
 
 const VIEWER_POLL_MS = 500;
-/** Consecutive frames the preview must keep the same width before a drag-created range is applied. */
-const PREVIEW_WIDTH_STABLE_FRAMES = 2;
-/** Stop polling if the preview width never repeats, then apply any pending range. */
-const PREVIEW_WIDTH_SETTLE_FRAME_LIMIT = 45;
+/** How long the preview width and height must stay the same before a drag-created range is applied. */
+const PREVIEW_SIZE_STABLE_MS = 100;
+/** Stop polling after this long even if the preview size never sits still, then apply any pending range. */
+const PREVIEW_SIZE_SETTLE_LIMIT_MS = 750;
 
 export const EVENT_RANGE_DRAFT = 'comment_range_draft';
 export const EVENT_RANGE_DRAFT_CHANGE = 'comment_range_draft_change';
@@ -31,12 +31,16 @@ const captureCurrentMs = (media: HTMLMediaElement | null): number => {
     return Math.floor(media.currentTime * 1000);
 };
 
-const readPreviewWidth = (): number => {
+const readPreviewSize = (): { height: number; width: number } => {
     if (typeof document === 'undefined') {
-        return 0;
+        return { height: 0, width: 0 };
     }
     const container = document.querySelector(MEDIA_CONTAINER_SELECTOR);
-    return container ? Math.round(container.getBoundingClientRect().width) : 0;
+    if (!container) {
+        return { height: 0, width: 0 };
+    }
+    const { height, width } = container.getBoundingClientRect();
+    return { height: Math.round(height), width: Math.round(width) };
 };
 
 export const seekMediaToMs = (ms: number, getViewer?: () => ViewerHandle | null): void => {
@@ -109,7 +113,8 @@ export const readRangeChange = (payload: unknown): PendingCommentRange | null =>
  * - Comment posted or viewer dismisses the draft: toggle off. Audio emits comment_range_draft_clear
  *   for a point timestamp or a range.
  * - Viewer drag create: checkbox on, reported range pinned, no comment_range_draft echo.
- *   Applied once the preview width stops changing, so a resize cannot retrigger the composer.
+ *   Applied once the preview width and height stop changing, then again after the composer
+ *   is focused, so a keyboard resize cannot retrigger the composer.
  * - New media src: captured value resets to 0; pressed state persists. A dragged range survives
  *   untouched, since a src change on the same element is a token refresh, not different content.
  * - New media element: any selected range is dropped.
@@ -216,26 +221,44 @@ export const useMediaTimestamp = (
         focusActivityFeedEditor();
     }, []);
 
-    // Consume the range only after the width settles, so a dismiss during the resize still drops it.
+    // Consume the range only after the size settles, so a dismiss during the resize still drops it.
     React.useEffect(() => {
         if (!isRangeEnabled || !dragCreateContext) {
             return undefined;
         }
 
         let animationFrameId = 0;
-        let previousWidth: number | undefined;
-        let matchingWidthCount = 0;
-        let framesChecked = 0;
+        let startedAt: number | undefined;
+        let stableSince: number | undefined;
+        let previousSize: { height: number; width: number } | undefined;
+        let composerFocused = false;
 
-        const applyRangeWhenPreviewWidthSettles = () => {
-            framesChecked += 1;
-            const width = readPreviewWidth();
-            matchingWidthCount = width === previousWidth ? matchingWidthCount + 1 : 0;
-            previousWidth = width;
-            const widthSettled = matchingWidthCount >= PREVIEW_WIDTH_STABLE_FRAMES;
-            const settleTimedOut = framesChecked >= PREVIEW_WIDTH_SETTLE_FRAME_LIMIT;
-            if (!widthSettled && !settleTimedOut) {
-                animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewWidthSettles);
+        const applyRangeWhenPreviewSizeSettles = (frameTime: number) => {
+            if (startedAt === undefined) {
+                startedAt = frameTime;
+            }
+            const size = readPreviewSize();
+            const sizeChanged =
+                previousSize === undefined || size.width !== previousSize.width || size.height !== previousSize.height;
+            previousSize = size;
+            if (sizeChanged) {
+                stableSince = frameTime;
+            }
+            const sizeSettled = frameTime - (stableSince ?? frameTime) >= PREVIEW_SIZE_STABLE_MS;
+            const settleTimedOut = frameTime - startedAt >= PREVIEW_SIZE_SETTLE_LIMIT_MS;
+            if (!sizeSettled && !settleTimedOut) {
+                animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewSizeSettles);
+                return;
+            }
+            // Focusing the composer opens the keyboard on Android, which shrinks the preview.
+            // Apply the range only after that resize stops. iOS does not relayout for the keyboard.
+            if (!composerFocused) {
+                composerFocused = true;
+                focusActivityFeedEditor();
+                startedAt = frameTime;
+                stableSince = frameTime;
+                previousSize = size;
+                animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewSizeSettles);
                 return;
             }
             const pendingRange = dragCreateContext.consumePendingDragCreate();
@@ -244,7 +267,7 @@ export const useMediaTimestamp = (
             }
         };
 
-        animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewWidthSettles);
+        animationFrameId = window.requestAnimationFrame(applyRangeWhenPreviewSizeSettles);
         return () => window.cancelAnimationFrame(animationFrameId);
     }, [adoptRange, dragCreateContext, isRangeEnabled]);
 

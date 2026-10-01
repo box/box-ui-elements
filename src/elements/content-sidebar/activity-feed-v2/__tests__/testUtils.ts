@@ -1,9 +1,10 @@
 import { act } from '@testing-library/react';
 
-/** Runs the action, then the animation frames, until the preview width has stopped changing. */
+/** Runs the action, then animation frames 50ms apart, until the preview size has stopped changing. */
 export const letPreviewWidthSettle = (action: () => void): void => {
     const frames = new Map<number, FrameRequestCallback>();
     let nextFrameId = 1;
+    let frameTime = 0;
     const requestFrame = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => {
         const frameId = nextFrameId;
         nextFrameId += 1;
@@ -21,10 +22,12 @@ export const letPreviewWidthSettle = (action: () => void): void => {
             let framesRun = 0;
             while (frames.size > 0 && framesRun < 8) {
                 framesRun += 1;
+                frameTime += 50;
+                const timestamp = frameTime;
                 const batch: FrameRequestCallback[] = [];
                 frames.forEach(frame => batch.push(frame));
                 frames.clear();
-                batch.forEach(frame => frame(0));
+                batch.forEach(frame => frame(timestamp));
             }
         });
     } finally {

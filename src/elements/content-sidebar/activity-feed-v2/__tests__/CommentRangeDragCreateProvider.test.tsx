@@ -190,16 +190,17 @@ describe('CommentRangeDragCreateProvider', () => {
         expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
     });
 
-    test('should wait to apply a drag create until the preview width stops changing', () => {
+    test('should wait to apply a drag create until the preview size stops changing', () => {
         const viewerHarness = createViewer();
         const getViewer = () => viewerHarness.viewer;
         const container = document.createElement('div');
         container.className = 'bp-media-container';
         let previewWidth = 400;
+        let previewHeight = 200;
         container.getBoundingClientRect = () =>
             ({
                 bottom: 0,
-                height: 0,
+                height: previewHeight,
                 left: 0,
                 right: previewWidth,
                 toJSON: () => ({}),
@@ -212,6 +213,7 @@ describe('CommentRangeDragCreateProvider', () => {
 
         const queuedFrames = new Map<number, FrameRequestCallback>();
         let nextFrameId = 1;
+        let frameTime = 0;
         const requestFrame = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => {
             const frameId = nextFrameId;
             nextFrameId += 1;
@@ -221,12 +223,13 @@ describe('CommentRangeDragCreateProvider', () => {
         const cancelFrame = jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(frameId => {
             queuedFrames.delete(frameId);
         });
-        const advanceWidthCheck = () => {
+        const advanceSizeCheck = (elapsedMs: number) => {
+            frameTime += elapsedMs;
             const batch: FrameRequestCallback[] = [];
             queuedFrames.forEach(frame => batch.push(frame));
             queuedFrames.clear();
             act(() => {
-                batch.forEach(frame => frame(0));
+                batch.forEach(frame => frame(frameTime));
             });
         };
 
@@ -240,19 +243,91 @@ describe('CommentRangeDragCreateProvider', () => {
                 viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
             });
 
-            advanceWidthCheck();
+            advanceSizeCheck(16);
             previewWidth = 360;
-            advanceWidthCheck();
+            advanceSizeCheck(16);
             previewWidth = 320;
-            advanceWidthCheck();
+            advanceSizeCheck(16);
+            previewHeight = 160;
+            advanceSizeCheck(16);
             expect(screen.getByTestId('pressed').textContent).toBe('false');
 
-            advanceWidthCheck();
+            advanceSizeCheck(100);
             expect(screen.getByTestId('pressed').textContent).toBe('false');
-            advanceWidthCheck();
+
+            advanceSizeCheck(100);
             expect(screen.getByTestId('pressed').textContent).toBe('true');
             expect(screen.getByTestId('ms').textContent).toBe('1000');
             expect(viewerHarness.viewer.emit).not.toHaveBeenCalled();
+        } finally {
+            container.remove();
+            requestFrame.mockRestore();
+            cancelFrame.mockRestore();
+        }
+    });
+
+    test('should apply a drag create when the preview size keeps changing past the settle limit', () => {
+        const viewerHarness = createViewer();
+        const getViewer = () => viewerHarness.viewer;
+        const container = document.createElement('div');
+        container.className = 'bp-media-container';
+        let previewWidth = 400;
+        container.getBoundingClientRect = () =>
+            ({
+                bottom: 0,
+                height: 200,
+                left: 0,
+                right: previewWidth,
+                toJSON: () => ({}),
+                top: 0,
+                width: previewWidth,
+                x: 0,
+                y: 0,
+            }) as DOMRect;
+        document.body.appendChild(container);
+
+        const queuedFrames = new Map<number, FrameRequestCallback>();
+        let nextFrameId = 1;
+        let frameTime = 0;
+        const requestFrame = jest.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => {
+            const frameId = nextFrameId;
+            nextFrameId += 1;
+            queuedFrames.set(frameId, callback);
+            return frameId;
+        });
+        const cancelFrame = jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(frameId => {
+            queuedFrames.delete(frameId);
+        });
+        const advanceSizeCheck = (elapsedMs: number) => {
+            frameTime += elapsedMs;
+            previewWidth += 1;
+            const batch: FrameRequestCallback[] = [];
+            queuedFrames.forEach(frame => batch.push(frame));
+            queuedFrames.clear();
+            act(() => {
+                batch.forEach(frame => frame(frameTime));
+            });
+        };
+
+        try {
+            render(
+                <CommentRangeDragCreateProvider enabled getViewer={getViewer}>
+                    <TimestampReadout getViewer={getViewer} />
+                </CommentRangeDragCreateProvider>,
+            );
+            act(() => {
+                viewerHarness.emit('comment_range_compose', { endMs: 4000, startMs: 1000 });
+            });
+
+            advanceSizeCheck(0);
+            advanceSizeCheck(749);
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+
+            advanceSizeCheck(1);
+            expect(screen.getByTestId('pressed').textContent).toBe('false');
+
+            advanceSizeCheck(750);
+            expect(screen.getByTestId('pressed').textContent).toBe('true');
         } finally {
             container.remove();
             requestFrame.mockRestore();
