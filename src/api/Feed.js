@@ -39,7 +39,7 @@ import {
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
     FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
-    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2,
+    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
     HTTP_STATUS_CODE_CONFLICT,
@@ -175,10 +175,10 @@ export const getParsedFileActivitiesResponse = (
                 }
                 case FILE_ACTIVITY_TYPE_COMMENT:
                 case FILE_ACTIVITY_TYPE_ENHANCED_COMMENT:
-                case FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2: {
+                case FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN: {
                     let rawCommentItem;
-                    if (item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2) {
-                        rawCommentItem = source[FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2];
+                    if (item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN) {
+                        rawCommentItem = source[FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN];
                     } else if (item.activity_type === FILE_ACTIVITY_TYPE_ENHANCED_COMMENT) {
                         rawCommentItem = source[FILE_ACTIVITY_TYPE_ENHANCED_COMMENT];
                     } else {
@@ -196,7 +196,7 @@ export const getParsedFileActivitiesResponse = (
                     }
 
                     commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
-                    // enhanced_comment and enhanced_comment_v2 are wire-only; downstream consumers see the legacy type
+                    // enhanced_comment and enhanced_comment_timespan are wire-only; downstream consumers see the legacy type
                     commentItem.type = FEED_ITEM_TYPE_COMMENT;
 
                     return commentItem;
@@ -648,7 +648,7 @@ class Feed extends Base {
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
         const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
         const commentActivityType = permissions[PERMISSION_CAN_COMMENT]
-            ? [shouldUseEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2 : FILE_ACTIVITY_TYPE_COMMENT]
+            ? [shouldUseEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN : FILE_ACTIVITY_TYPE_COMMENT]
             : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
