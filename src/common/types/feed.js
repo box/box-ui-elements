@@ -17,7 +17,7 @@ import {
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
     FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
-    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2,
+    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
 } from '../../constants';
@@ -184,7 +184,7 @@ type FileActivityTypes =
     | typeof FILE_ACTIVITY_TYPE_COMMENT
     | typeof FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION
     | typeof FILE_ACTIVITY_TYPE_ENHANCED_COMMENT
-    | typeof FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_V2
+    | typeof FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN
     | typeof FILE_ACTIVITY_TYPE_TASK
     | typeof FILE_ACTIVITY_TYPE_VERSION;
 
@@ -205,7 +205,7 @@ type FileActivitySource =
           enhanced_comment: Comment,
       }
     | {
-          enhanced_comment_v2: Comment,
+          enhanced_comment_timespan: Comment,
       }
     | {
           task: TaskNew,
