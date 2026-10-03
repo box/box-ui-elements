@@ -8,7 +8,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
     type="success"
   >
     <span
-      className="bdl-LabelPill bdl-LabelPill--success bdl-LabelPill--sizeRegular"
+      className="bdl-LabelPill bdl-LabelPill--success bdl-LabelPill--sizeLarge"
     >
       <LabelPillText>
         <span
@@ -35,7 +35,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
     type="success"
   >
     <span
-      className="bdl-LabelPill bdl-LabelPill--success bdl-LabelPill--sizeRegular"
+      className="bdl-LabelPill bdl-LabelPill--success bdl-LabelPill--sizeLarge"
     >
       <LabelPillText>
         <span
@@ -62,7 +62,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
     type="default"
   >
     <span
-      className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+      className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeLarge"
     >
       <LabelPillText>
         <span
@@ -89,7 +89,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
     type="default"
   >
     <span
-      className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeRegular"
+      className="bdl-LabelPill bdl-LabelPill--default bdl-LabelPill--sizeLarge"
     >
       <LabelPillText>
         <span
@@ -116,7 +116,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
     type="error"
   >
     <span
-      className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeRegular"
+      className="bdl-LabelPill bdl-LabelPill--error bdl-LabelPill--sizeLarge"
     >
       <LabelPillText>
         <span
