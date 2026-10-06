@@ -588,7 +588,7 @@ class Feed extends Base {
             shouldShowTasks = true,
             shouldShowVersions = true,
             shouldUseEnhancedActivities = false,
-            shouldUseTimespanComments = false,
+            shouldUseEnhancedTimespanComments = false,
             shouldUseUAA = false,
             shouldEnableRichText = false,
         }: {
@@ -598,7 +598,7 @@ class Feed extends Base {
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
             shouldUseEnhancedActivities?: boolean,
-            shouldUseTimespanComments?: boolean,
+            shouldUseEnhancedTimespanComments?: boolean,
             shouldUseUAA?: boolean,
             shouldEnableRichText?: boolean,
         } = {},
@@ -653,7 +653,7 @@ class Feed extends Base {
         // enhanced_comment_timespan: timespan comments, only when the audio player updates split is on.
         let commentFileActivityType = FILE_ACTIVITY_TYPE_COMMENT;
         if (shouldUseEnhancedActivities) {
-            commentFileActivityType = shouldUseTimespanComments
+            commentFileActivityType = shouldUseEnhancedTimespanComments
                 ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN
                 : FILE_ACTIVITY_TYPE_ENHANCED_COMMENT;
         }

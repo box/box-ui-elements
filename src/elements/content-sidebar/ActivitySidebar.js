@@ -836,7 +836,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowTasks,
                 shouldShowVersions,
                 shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
-                shouldUseTimespanComments: isAudioPlayerV2Enabled,
+                shouldUseEnhancedTimespanComments: isAudioPlayerV2Enabled,
                 shouldUseUAA,
                 shouldEnableRichText,
             },

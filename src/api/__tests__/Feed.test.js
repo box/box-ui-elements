@@ -717,7 +717,7 @@ describe('api/Feed', () => {
                 shouldShowTasks: true,
                 shouldShowVersions: true,
                 shouldUseEnhancedActivities: true,
-                shouldUseTimespanComments: true,
+                shouldUseEnhancedTimespanComments: true,
                 shouldUseUAA: true,
             });
             setImmediate(() => {

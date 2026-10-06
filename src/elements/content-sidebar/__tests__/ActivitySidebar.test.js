@@ -846,7 +846,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
                         shouldUseEnhancedActivities: false,
-                        shouldUseTimespanComments: false,
+                        shouldUseEnhancedTimespanComments: false,
                         shouldUseUAA: expectedUseUAA,
                         shouldEnableRichText: false,
                     },
@@ -882,7 +882,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowTasks: true,
                     shouldShowVersions: true,
                     shouldUseEnhancedActivities: false,
-                    shouldUseTimespanComments: false,
+                    shouldUseEnhancedTimespanComments: false,
                     shouldUseUAA: false,
                     shouldEnableRichText: false,
                 },
@@ -960,7 +960,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.errorCallback,
                 expect.objectContaining({
                     shouldUseEnhancedActivities: true,
-                    shouldUseTimespanComments: true,
+                    shouldUseEnhancedTimespanComments: true,
                 }),
             );
         });
