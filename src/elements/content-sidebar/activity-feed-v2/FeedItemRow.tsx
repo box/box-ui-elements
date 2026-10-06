@@ -48,6 +48,8 @@ const HIGHLIGHT_HOLD_MS = 2000;
 type FeedItemRowProps = {
     activeFeedEntryId?: string;
     currentUserId?: string;
+    /** Bumps when the same active comment is selected again, so the highlight hold restarts. */
+    highlightSeq?: number;
     fps: number;
     getViewer?: () => ViewerHandle | null;
     isDisabled: boolean;
@@ -107,6 +109,7 @@ const FeedItemRow = ({
     currentUserId,
     fps,
     getViewer,
+    highlightSeq = 0,
     isDisabled,
     isRichTextEnabled = false,
     item,
@@ -137,6 +140,7 @@ const FeedItemRow = ({
     // Deep-link hosts keep `activeFeedEntryId` set; clear the visual highlight after a hold so
     // threaded-annotations' CSS transition can fade the border/background out.
     // Depend on `activeFeedEntryId` so navigating to another message in the same thread restarts the hold.
+    // `highlightSeq` restarts it when that same message is selected again.
     React.useEffect(() => {
         if (!isActiveEntry) {
             setIsHighlighted(false);
@@ -147,7 +151,7 @@ const FeedItemRow = ({
         const timeoutId = window.setTimeout(() => setIsHighlighted(false), HIGHLIGHT_HOLD_MS);
 
         return () => window.clearTimeout(timeoutId);
-    }, [activeFeedEntryId, isActiveEntry]);
+    }, [activeFeedEntryId, highlightSeq, isActiveEntry]);
 
     switch (item.type) {
         case 'comment': {

@@ -42,6 +42,11 @@ type TaskListItemProps = {
     id: string;
     onLoadAllAssignee?: () => Promise<unknown>;
 };
+let lastThreadedAnnotationProps: {
+    isHighlighted?: boolean;
+    messages?: Array<{ id: string }>;
+    onAnnotationBadgeClick?: (id: string) => void;
+} = {};
 let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
@@ -81,9 +86,14 @@ jest.mock('@box/activity-feed', () => {
         lastTaskItemProps = props;
         return <div data-testid={`task-${props.id}`}>Task</div>;
     };
-    ActivityFeedList.ThreadedAnnotation = (props: { messages?: Array<{ id: string }> }) => (
-        <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>
-    );
+    ActivityFeedList.ThreadedAnnotation = (props: {
+        isHighlighted?: boolean;
+        messages?: Array<{ id: string }>;
+        onAnnotationBadgeClick?: (id: string) => void;
+    }) => {
+        lastThreadedAnnotationProps = props;
+        return <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>;
+    };
     ActivityFeedList.Version = (props: { id: string }) => <div data-testid={`version-${props.id}`}>Version</div>;
     const ActivityFeedEditor = (props: Partial<EditorProps>) => {
         lastEditorProps = props;
@@ -2272,6 +2282,73 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     isSelected: true,
                 }),
             ]);
+        });
+
+        test('should re-send the selected marker when the same timestamp is clicked again', () => {
+            const onCommentSelect = jest.fn();
+            renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1', onCommentSelect });
+            mockViewer.emit.mockClear();
+
+            act(() => {
+                lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+            });
+
+            expect(onCommentSelect).toHaveBeenCalledWith('ts-comment-1');
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                    selectionSeq: 1,
+                }),
+            ]);
+
+            mockViewer.emit.mockClear();
+            act(() => {
+                lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                    selectionSeq: 2,
+                }),
+            ]);
+        });
+
+        test('should highlight the active comment again when its waveform marker is selected', () => {
+            jest.useFakeTimers();
+            let onMarkerSelect: ((payload: { id: string }) => void) | undefined;
+            mockViewer.addListener.mockImplementation((event: string, handler: (payload: { id: string }) => void) => {
+                if (event === 'comment_marker_select') {
+                    onMarkerSelect = handler;
+                }
+            });
+
+            try {
+                renderComponentWithMarkers({
+                    activeFeedEntryId: 'ts-comment-1',
+                    onCommentSelect: jest.fn(),
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+                act(() => {
+                    jest.advanceTimersByTime(2000);
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+
+                act(() => {
+                    onMarkerSelect?.({ id: 'ts-comment-1' });
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+                expect(mockViewer.emit).not.toHaveBeenCalledWith(
+                    'comment_markers',
+                    expect.arrayContaining([expect.objectContaining({ selectionSeq: expect.any(Number) })]),
+                );
+            } finally {
+                mockViewer.addListener.mockReset();
+                jest.useRealTimers();
+            }
         });
 
         test('should not clear comment_markers when the feed refreshes without a comment revision change', () => {
