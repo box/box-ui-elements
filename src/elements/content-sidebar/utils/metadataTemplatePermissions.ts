@@ -4,8 +4,7 @@
  * Retrieval endpoints return these only when the request includes
  * `fields=permissions`. A missing or null object stays unknown and does not
  * grant access. A present object must carry every documented boolean; anything
- * else, including a null flag, is an explicit deny. This matches the
- * metadata-ui-client permission adapter.
+ * else, including a null flag, is an explicit deny.
  */
 
 const TEMPLATE_PERMISSION_KEYS = [
