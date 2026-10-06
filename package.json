@@ -98,7 +98,11 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
+        "development": [
+            "last 1 Chrome versions",
+            "last 1 Firefox versions",
+            "last 1 Safari versions"
+        ]
     },
     "husky": {
         "hooks": {
@@ -138,10 +142,10 @@
         "@box/frontend": "^11.0.1",
         "@box/item-icon": "^3.2.0",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "^2.7.0",
+        "@box/metadata-editor": "^2.10.8",
         "@box/metadata-filter": "^1.80.23",
         "@box/metadata-taxonomy-picker": "^3.3.31",
-        "@box/metadata-template-browser": "^2.3.31",
+        "@box/metadata-template-browser": "^3.0.0",
         "@box/metadata-template-editor": "^2.5.0",
         "@box/metadata-view": "^1.53.26",
         "@box/react-virtualized": "^9.22.3-rc-box.10",
@@ -315,10 +319,10 @@
         "@box/content-field": "^1.40.23",
         "@box/copy-input": "^1.42.16",
         "@box/item-icon": "^3.2.0",
-        "@box/metadata-editor": "^2.7.0",
+        "@box/metadata-editor": "^2.10.8",
         "@box/metadata-filter": "^1.80.23",
         "@box/metadata-taxonomy-picker": "^3.3.31",
-        "@box/metadata-template-browser": "^2.3.31",
+        "@box/metadata-template-browser": "^3.0.0",
         "@box/metadata-template-editor": "^2.5.0",
         "@box/metadata-view": "^1.53.26",
         "@box/react-virtualized": "^9.22.3-rc-box.10",
@@ -388,9 +392,9 @@
         "@box/blueprint-web-assets": "5.10.26",
         "@box/box-ai-agent-selector": "2.2.23",
         "@box/combobox-with-api": "2.2.25",
-        "@box/metadata-editor": "^2.7.0",
+        "@box/metadata-editor": "^2.10.8",
         "@box/metadata-taxonomy-picker": "^3.3.31",
-        "@box/metadata-template-browser": "^2.3.31",
+        "@box/metadata-template-browser": "^3.0.0",
         "@box/metadata-template-editor": "^2.5.0",
         "@box/user-selector": "3.0.1",
         "@sigstore/core": "3.2.1",
@@ -402,6 +406,8 @@
         "webpack-dev-middleware": "^7.4.6"
     },
     "msw": {
-        "workerDirectory": [".storybook/public"]
+        "workerDirectory": [
+            ".storybook/public"
+        ]
     }
 }

@@ -174,13 +174,7 @@ export default function useMetadataTemplateItemsService(
                             isSameMetadataTemplate(et, { templateKey, scope: templateScope }),
                         );
                         return {
-                            // Child-namespace templates are never in the editor list, and a raw API
-                            // id carries no namespace or key — so the edit affordance could not
-                            // resolve one. Encode both instead, the format handleEditTemplateById
-                            // already parses.
-                            id:
-                                editorMatch?.id ??
-                                (templateKey ? `${templateScope}||${templateKey}` : (t.id as string)),
+                            id: editorMatch?.id ?? readNonBlank(t.id) ?? '',
                             type: (t.type as string) ?? 'metadata_template',
                             displayName: ((t.displayName as string) ?? templateKey) || '',
                             scope: templateScope,
@@ -239,19 +233,12 @@ export default function useMetadataTemplateItemsService(
                         const templateKey = readNonBlank(hit.templateKey);
                         const namespace = readNonBlank(hit.namespace);
                         const scope = readNonBlank(hit.scope) ?? namespace;
-                        const namespaceFqn = namespace ?? scope;
                         const editorMatch = templates.find(template =>
                             isSameMetadataTemplate(template, { templateKey, namespace, scope }),
                         );
 
                         return {
-                            // Same id encoding as getTemplates: a raw API id cannot
-                            // recover namespace and key for a child-namespace hit.
-                            id:
-                                editorMatch?.id ??
-                                (namespaceFqn && templateKey
-                                    ? `${namespaceFqn}||${templateKey}`
-                                    : readNonBlank(hit.id) || ''),
+                            id: editorMatch?.id ?? readNonBlank(hit.id) ?? '',
                             type: readNonBlank(hit.type) ?? 'metadata_template',
                             displayName: resolveSearchDisplayName(hit, templateKey, editorMatch, customMetadataName),
                             scope,

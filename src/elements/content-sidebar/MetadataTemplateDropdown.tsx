@@ -8,10 +8,10 @@
  *
  * The metadata-editor package owns only UI; this file owns the wiring.
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { AddMetadataTemplateDropdown, AddMetadataTemplateDropdownWithBrowser } from '@box/metadata-editor';
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
-import type { ItemsService } from '@box/metadata-template-browser';
+import type { ItemsService, MetadataTemplate as BrowserMetadataTemplate } from '@box/metadata-template-browser';
 
 import useMetadataTemplateEventService, { type MetadataTemplateLocator } from './hooks/useMetadataTemplateEventService';
 import { getMetadataTemplateNamespaceFqn } from './utils/metadataTemplateIdentity';
@@ -32,11 +32,7 @@ export interface MetadataTemplateDropdownProps {
     isMetadataTemplateManagementEnabled: boolean;
     /** Opens the template editor modal in create mode for the given namespace FQN. */
     onCreateTemplate?: (namespaceFqn: string) => void;
-    /**
-     * Opens the template editor modal in edit mode for the given template.
-     * The `templateId` is the native API id; the consumer looks it up in
-     * `templates` to recover `namespaceFqn` and `templateKey`.
-     */
+    /** Opens the template editor modal in edit mode for the given template. */
     onEditTemplate?: (args: { namespaceFqn: string; templateKey: string }) => void;
     /** Whether template creation is allowed at the enterprise root namespace. */
     canCreateAtRoot?: boolean;
@@ -65,54 +61,48 @@ export default function MetadataTemplateDropdown({
     selectedTemplates,
     templates,
 }: Readonly<MetadataTemplateDropdownProps>) {
-    // Bridge: native template id → { namespaceFqn, templateKey } for the edit callback.
+    const templateLocatorsRef = useRef(new Map<string, { namespaceFqn: string; templateKey: string }>());
+
+    const rememberTemplateLocator = useCallback((template: BrowserMetadataTemplate | EditorMetadataTemplate) => {
+        const namespaceFqn = getMetadataTemplateNamespaceFqn(template);
+        if (template.id && namespaceFqn && template.templateKey) {
+            templateLocatorsRef.current.set(template.id, { namespaceFqn, templateKey: template.templateKey });
+        }
+    }, []);
+
+    useEffect(() => {
+        templates.forEach(rememberTemplateLocator);
+    }, [rememberTemplateLocator, templates]);
+
+    const rememberTemplates = useCallback(
+        (entries: BrowserMetadataTemplate[]) => {
+            entries.forEach(rememberTemplateLocator);
+        },
+        [rememberTemplateLocator],
+    );
+
+    // Bridge: template id → { namespaceFqn, templateKey } for the edit callback.
     const handleEditTemplateById = useCallback(
         (templateId: string) => {
             if (!onEditTemplate) return;
-            // Primary: exact id match against already-loaded editor templates.
-            const template = templates.find(t => t.id === templateId);
-            if (template?.templateKey) {
-                const namespaceFqn = getMetadataTemplateNamespaceFqn(template);
-                if (namespaceFqn) {
-                    onEditTemplate({ namespaceFqn, templateKey: template.templateKey });
-                    return;
-                }
+            const loaded = templates.find(template => template.id === templateId);
+            const namespaceFqn = loaded ? getMetadataTemplateNamespaceFqn(loaded) : undefined;
+            if (loaded?.templateKey && namespaceFqn) {
+                onEditTemplate({ namespaceFqn, templateKey: loaded.templateKey });
+                return;
             }
-            // Fallback: ids encoded as "fqn||templateKey" by useMetadataTemplateItemsService.
-            // This is the only path for child-namespace templates, which the sidebar's
-            // root-only fetch never loads.
-            if (templateId.includes('||')) {
-                const separatorIndex = templateId.indexOf('||');
-                const namespaceFqn = templateId.slice(0, separatorIndex);
-                const templateKey = templateId.slice(separatorIndex + 2);
-                if (namespaceFqn && templateKey) {
-                    onEditTemplate({ namespaceFqn, templateKey });
-                }
+            const located = templateLocatorsRef.current.get(templateId);
+            if (located) {
+                onEditTemplate(located);
             }
         },
         [templates, onEditTemplate],
     );
 
-    // Applied rows stay listed but are disabled with a tooltip. Applied instances carry
-    // their template's id, which is the row id for root templates. Child-namespace rows
-    // are keyed by the synthesised "fqn||templateKey" id instead, since they are never in
-    // the sidebar's root-only template list — so both forms go in the set.
-    const appliedTemplateIds = useMemo(() => {
-        const ids = new Set<string>();
-
-        selectedTemplates.forEach(template => {
-            if (template.id) {
-                ids.add(template.id);
-            }
-
-            const namespaceFqn = getMetadataTemplateNamespaceFqn(template);
-            if (namespaceFqn && template.templateKey) {
-                ids.add(`${namespaceFqn}||${template.templateKey}`);
-            }
-        });
-
-        return ids;
-    }, [selectedTemplates]);
+    const appliedTemplateIds = useMemo(
+        () => new Set(selectedTemplates.map(template => template.id).filter((id): id is string => Boolean(id))),
+        [selectedTemplates],
+    );
 
     const eventService = useMetadataTemplateEventService({
         templates,
@@ -130,6 +120,24 @@ export default function MetadataTemplateDropdown({
         }
         return {
             ...itemsService,
+            ...(itemsService.getTemplates
+                ? {
+                      getTemplates: async (namespaceFqn, params) => {
+                          const page = await itemsService.getTemplates!(namespaceFqn, params);
+                          rememberTemplates(page.entries);
+                          return page;
+                      },
+                  }
+                : {}),
+            ...(itemsService.getSearchResults
+                ? {
+                      getSearchResults: async (query, params) => {
+                          const page = await itemsService.getSearchResults!(query, params);
+                          rememberTemplates(page.entries);
+                          return page;
+                      },
+                  }
+                : {}),
             ...(onCreateTemplate
                 ? {
                       createTemplate: async (namespaceFqn: string) => {
@@ -147,7 +155,7 @@ export default function MetadataTemplateDropdown({
                   }
                 : {}),
         };
-    }, [handleEditTemplateById, itemsService, onCreateTemplate, onEditTemplate]);
+    }, [handleEditTemplateById, itemsService, onCreateTemplate, onEditTemplate, rememberTemplates]);
 
     if (isMetadataTemplateManagementEnabled && enterpriseId && browserItemsService) {
         return (
