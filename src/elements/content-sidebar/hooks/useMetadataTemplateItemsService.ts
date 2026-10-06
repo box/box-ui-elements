@@ -10,10 +10,12 @@ import {
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 
 import API from '../../../api';
-import { METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import { METADATA_NAMESPACE_GLOBAL, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
 import type { BoxItem } from '../../../common/types/core';
 import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
+
+type BreadcrumbEntry = NonNullable<BrowserMetadataTemplate['ancestors']>[number];
 
 function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName: string): string {
     if (template.templateKey === METADATA_TEMPLATE_PROPERTIES) {
@@ -35,18 +37,92 @@ function canEditMetadataTemplate(templateKey?: string, scopeOrNamespace?: string
     if (!templateKey || templateKey === METADATA_TEMPLATE_PROPERTIES) {
         return false;
     }
-    return scopeOrNamespace !== METADATA_SCOPE_GLOBAL && scopeOrNamespace !== 'global';
+    return (
+        scopeOrNamespace !== METADATA_SCOPE_GLOBAL &&
+        scopeOrNamespace !== 'global' &&
+        scopeOrNamespace !== METADATA_NAMESPACE_GLOBAL
+    );
 }
 
+function readNonBlank(value: unknown): string | undefined {
+    return typeof value === 'string' && value.trim() ? value : undefined;
+}
+
+type NamespaceFields = {
+    displayName?: unknown;
+    display_name?: unknown;
+    fqn?: unknown;
+};
+
+function asNamespaceFields(value: unknown): NamespaceFields | undefined {
+    if (value && typeof value === 'object') {
+        return value as NamespaceFields;
+    }
+    return undefined;
+}
+
+function toBreadcrumbEntry(value: unknown): BreadcrumbEntry | undefined {
+    const fields = asNamespaceFields(value);
+    if (!fields) {
+        return undefined;
+    }
+
+    const fqn = readNonBlank(fields.fqn);
+    if (!fqn) {
+        return undefined;
+    }
+
+    const dot = fqn.lastIndexOf('.');
+    const leaf = dot === -1 ? fqn : fqn.slice(dot + 1);
+
+    return {
+        fqn,
+        displayName: readNonBlank(fields.displayName) || readNonBlank(fields.display_name) || leaf,
+    };
+}
+
+/**
+ * Search-row subtitle. The folder path is `ancestors` plus the immediate
+ * folder in `containingNamespace`.
+ * Root, legacy, and global hits omit both, so they render with no path.
+ * `containingNamespace` is appended because `ancestors` stops at the parent.
+ */
+function toSearchAncestors(entry: Record<string, unknown>): BreadcrumbEntry[] | undefined {
+    const rawAncestors = Array.isArray(entry.ancestors) ? entry.ancestors : [];
+    const path = rawAncestors
+        .map(ancestor => toBreadcrumbEntry(ancestor))
+        .filter((ancestor): ancestor is BreadcrumbEntry => ancestor !== undefined);
+
+    const containing = toBreadcrumbEntry(entry.containingNamespace);
+    if (containing && !path.some(ancestor => ancestor.fqn === containing.fqn)) {
+        path.push(containing);
+    }
+
+    return path.length > 0 ? path : undefined;
+}
+
+function resolveSearchDisplayName(
+    hit: Record<string, unknown>,
+    templateKey: string | undefined,
+    editorMatch: EditorMetadataTemplate | undefined,
+    customMetadataName: string,
+): string {
+    if (editorMatch) {
+        return resolveDisplayName(editorMatch, customMetadataName);
+    }
+    if (templateKey === METADATA_TEMPLATE_PROPERTIES) {
+        return customMetadataName;
+    }
+    return readNonBlank(hit.displayName) || templateKey || '';
+}
 /**
  * Builds the data-fetching `ItemsService` consumed by `MetadataTemplateBrowser`
  * for the metadata sidebar in namespace-enabled mode.
  *
  * - `getNamespaces` and `getTemplates` delegate to live API calls via `Metadata.js`,
  *   enabling paginated namespace navigation and per-namespace template lists.
- * - `getSearchResults` performs client-side filtering over the editor-shape `templates`
- *   already fetched by `useSidebarMetadataFetcher`. A server-side search endpoint
- *   would replace this body when available.
+ * - `getSearchResults` calls `GET /metadata_templates/search`. The browser
+ *   already invokes this callback as the user types; this supplies the endpoint.
  *
  * Returns `undefined` when `enterpriseFqn` is not yet known (current user still loading).
  *
@@ -67,20 +143,6 @@ export default function useMetadataTemplateItemsService(
             return undefined;
         }
 
-        // Flat browser-shape list derived from the already-loaded editor templates.
-        // Used for client-side search so search doesn't require a round-trip.
-        const browserTemplatesForSearch: BrowserMetadataTemplate[] = templates
-            .filter(t => !isHiddenTemplate(t))
-            .map(t => ({
-                id: t.id,
-                type: t.type,
-                displayName: resolveDisplayName(t, customMetadataName),
-                scope: t.scope,
-                templateKey: t.templateKey,
-                canEdit: canEditMetadataTemplate(t.templateKey, getMetadataTemplateNamespaceFqn(t)),
-                hidden: t.hidden,
-            }));
-
         return {
             getNamespaces: async (
                 namespaceFQN: string,
@@ -89,7 +151,13 @@ export default function useMetadataTemplateItemsService(
                 const result = await api
                     .getMetadataAPI(false)
                     .listNamespaces(file, namespaceFQN, { limit: params.limit, marker: params.marker });
-                return result as FetchResponse<MetadataNamespace>;
+                return {
+                    entries: (result.entries ?? []).map(entry => {
+                        const namespace = entry as { displayName: string; fqn: string };
+                        return { displayName: namespace.displayName, fqn: namespace.fqn };
+                    }),
+                    next_marker: readNonBlank(result.next_marker),
+                };
             },
 
             getTemplates: async (
@@ -158,18 +226,50 @@ export default function useMetadataTemplateItemsService(
                 query: string,
                 params: FetchParams,
             ): Promise<FetchResponse<BrowserMetadataTemplate>> => {
-                const normalizedQuery = query.trim().toLowerCase();
-                const filtered = normalizedQuery
-                    ? browserTemplatesForSearch.filter(t => t.displayName.toLowerCase().includes(normalizedQuery))
-                    : browserTemplatesForSearch;
+                const normalizedQuery = query.trim();
+                // The search endpoint 400s on a missing or blank query. An empty
+                // string is the browser leaving search, not a request to send.
+                if (!normalizedQuery) {
+                    return { entries: [] };
+                }
 
-                // Cursor pagination over in-memory results using numeric offset markers.
-                const start = params.marker ? Number.parseInt(params.marker, 10) : 0;
-                const end = start + params.limit;
-                return {
-                    entries: filtered.slice(start, end),
-                    next_marker: end < filtered.length ? String(end) : undefined,
-                };
+                const result = await api.getMetadataAPI(false).searchTemplates(file, {
+                    query: normalizedQuery,
+                    limit: params.limit,
+                    marker: params.marker,
+                });
+
+                const entries: BrowserMetadataTemplate[] = (result.entries ?? [])
+                    .filter((hit: Record<string, unknown>) => !isHiddenTemplate(hit))
+                    .map((hit: Record<string, unknown>) => {
+                        const templateKey = readNonBlank(hit.templateKey);
+                        const namespace = readNonBlank(hit.namespace);
+                        const scope = readNonBlank(hit.scope) ?? namespace;
+                        const namespaceFqn = namespace ?? scope;
+                        const editorMatch = templates.find(template =>
+                            isSameMetadataTemplate(template, { templateKey, namespace, scope }),
+                        );
+
+                        return {
+                            // Same id encoding as getTemplates: a raw API id cannot
+                            // recover namespace and key for a child-namespace hit.
+                            id:
+                                editorMatch?.id ??
+                                (namespaceFqn && templateKey
+                                    ? `${namespaceFqn}||${templateKey}`
+                                    : readNonBlank(hit.id) || ''),
+                            type: readNonBlank(hit.type) ?? 'metadata_template',
+                            displayName: resolveSearchDisplayName(hit, templateKey, editorMatch, customMetadataName),
+                            scope,
+                            namespace,
+                            templateKey,
+                            canEdit: canEditMetadataTemplate(templateKey, namespaceFqn),
+                            hidden: false,
+                            ancestors: toSearchAncestors(hit),
+                        };
+                    });
+
+                return { entries, next_marker: readNonBlank(result.next_marker) };
             },
         };
     }, [api, file, enterpriseFqn, templates, customMetadataName]);

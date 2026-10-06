@@ -328,6 +328,14 @@ class Metadata extends File {
         return this.getNamespacesAPI().listTemplatesForNamespace(file, namespaceFqn, params);
     }
 
+    /** @see MetadataNamespaces.searchTemplates */
+    searchTemplates(
+        file: BoxItem,
+        params: { query: string, limit: number, marker?: string },
+    ): Promise<{ entries: Array<Object>, next_marker?: string }> {
+        return this.getNamespacesAPI().searchTemplates(file, params);
+    }
+
     /** @see MetadataNamespaces.createMetadataTemplate */
     createMetadataTemplate(
         file: BoxItem,
