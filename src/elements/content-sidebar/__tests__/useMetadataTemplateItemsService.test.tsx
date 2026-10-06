@@ -206,7 +206,7 @@ describe('useMetadataTemplateItemsService', () => {
                     hidden: false,
                 },
                 {
-                    id: `${enterpriseFqn}.child||childOnly`,
+                    id: 'api-id-2',
                     type: 'metadata_template',
                     displayName: 'Child Only',
                     scope: `${enterpriseFqn}.child`,
@@ -281,7 +281,7 @@ describe('useMetadataTemplateItemsService', () => {
         await expect(result.current!.getSearchResults('  Le  ', { limit: 20, marker: 'cursor-0' })).resolves.toEqual({
             entries: [
                 {
-                    id: `${enterpriseFqn}.legal.contracts||legalHold`,
+                    id: 'api-legal-hold',
                     type: 'metadata_template',
                     displayName: 'Legal Hold',
                     scope: `${enterpriseFqn}.legal.contracts`,
@@ -307,7 +307,7 @@ describe('useMetadataTemplateItemsService', () => {
                     ancestors: undefined,
                 },
                 {
-                    id: 'box.metadata||legalContract',
+                    id: 'api-global',
                     type: 'metadata_template',
                     displayName: 'Legal Contract',
                     scope: 'box.metadata',
