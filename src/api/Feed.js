@@ -588,6 +588,7 @@ class Feed extends Base {
             shouldShowTasks = true,
             shouldShowVersions = true,
             shouldUseEnhancedActivities = false,
+            shouldUseTimespanComments = false,
             shouldUseUAA = false,
             shouldEnableRichText = false,
         }: {
@@ -597,6 +598,7 @@ class Feed extends Base {
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
             shouldUseEnhancedActivities?: boolean,
+            shouldUseTimespanComments?: boolean,
             shouldUseUAA?: boolean,
             shouldEnableRichText?: boolean,
         } = {},
@@ -647,9 +649,15 @@ class Feed extends Base {
         const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
         const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
-        const commentActivityType = permissions[PERMISSION_CAN_COMMENT]
-            ? [shouldUseEnhancedActivities ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN : FILE_ACTIVITY_TYPE_COMMENT]
-            : [];
+        // comment: older clients. enhanced_comment: point timestamps.
+        // enhanced_comment_timespan: timespan comments, only when the audio player updates split is on.
+        let commentFileActivityType = FILE_ACTIVITY_TYPE_COMMENT;
+        if (shouldUseEnhancedActivities) {
+            commentFileActivityType = shouldUseTimespanComments
+                ? FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN
+                : FILE_ACTIVITY_TYPE_ENHANCED_COMMENT;
+        }
+        const commentActivityType = permissions[PERMISSION_CAN_COMMENT] ? [commentFileActivityType] : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
             ...appActivityActivityType,

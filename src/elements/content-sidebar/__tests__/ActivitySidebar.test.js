@@ -846,6 +846,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
                         shouldUseEnhancedActivities: false,
+                        shouldUseTimespanComments: false,
                         shouldUseUAA: expectedUseUAA,
                         shouldEnableRichText: false,
                     },
@@ -881,6 +882,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowTasks: true,
                     shouldShowVersions: true,
                     shouldUseEnhancedActivities: false,
+                    shouldUseTimespanComments: false,
                     shouldUseUAA: false,
                     shouldEnableRichText: false,
                 },
@@ -935,6 +937,31 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
                 expect.objectContaining({ shouldEnableRichText: true }),
+            );
+        });
+
+        test('should request timespan comments only when audioPlayerV2 is enabled', () => {
+            wrapper = getWrapper({
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                    audioPlayerV2: { enabled: true },
+                },
+            });
+            instance = wrapper.instance();
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                file,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({
+                    shouldUseEnhancedActivities: true,
+                    shouldUseTimespanComments: true,
+                }),
             );
         });
 

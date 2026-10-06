@@ -681,7 +681,7 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should request enhanced_annotation and enhanced_comment_timespan when shouldUseEnhancedActivities is true', done => {
+        test('should request enhanced_annotation and enhanced_comment when shouldUseEnhancedActivities is true', done => {
             feed.feedItems(file, false, successCb, errorCb, errorCb, {
                 shouldShowAnnotations: true,
                 shouldShowAppActivity: true,
@@ -689,6 +689,35 @@ describe('api/Feed', () => {
                 shouldShowTasks: true,
                 shouldShowVersions: true,
                 shouldUseEnhancedActivities: true,
+                shouldUseUAA: true,
+            });
+            setImmediate(() => {
+                expect(feed.fetchFileActivities).toBeCalledWith(
+                    file.permissions,
+                    [
+                        FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+                        FILE_ACTIVITY_TYPE_TASK,
+                        FILE_ACTIVITY_TYPE_VERSION,
+                    ],
+                    true,
+                    true,
+                    false,
+                );
+                done();
+            });
+        });
+
+        test('should request enhanced_comment_timespan when the audio player updates split is on', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowReplies: true,
+                shouldShowTasks: true,
+                shouldShowVersions: true,
+                shouldUseEnhancedActivities: true,
+                shouldUseTimespanComments: true,
                 shouldUseUAA: true,
             });
             setImmediate(() => {

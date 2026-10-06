@@ -814,6 +814,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasVersions: shouldShowVersions,
         } = this.props;
         const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
         const shouldShowReplies = hasReplies || isThreadedRepliesV2Enabled;
         const shouldFetchReplies =
             shouldRefreshCache && hasReplies && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
@@ -835,6 +836,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowTasks,
                 shouldShowVersions,
                 shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
+                shouldUseTimespanComments: isAudioPlayerV2Enabled,
                 shouldUseUAA,
                 shouldEnableRichText,
             },
