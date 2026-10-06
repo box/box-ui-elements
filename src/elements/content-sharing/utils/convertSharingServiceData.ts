@@ -16,7 +16,7 @@ export interface ConvertSharedLinkSettingsReturnType {
         can_edit?: boolean;
         can_preview: boolean;
     };
-    unshared_at: string | null;
+    unshared_at?: string | null;
     vanity_url: string;
 }
 
@@ -42,21 +42,44 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
  * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
  *   convertItemResponse, so it is in internal USM format.
  */
+const isSameLocalCalendarDay = (left: Date, right: Date) =>
+    left.getFullYear() === right.getFullYear() &&
+    left.getMonth() === right.getMonth() &&
+    left.getDate() === right.getDate();
+
 export const convertSharedLinkSettings = (
     newSettings: SharedLinkSettings,
     accessLevel: string,
     isDownloadAvailable: boolean,
     serverUrl: string,
+    currentExpiresAt?: number | null,
 ): ConvertSharedLinkSettingsReturnType => {
     const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, password, vanityName } = newSettings;
 
+    const unsharedAt =
+        expiration && isExpirationEnabled
+            ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
+            : null;
+
     const convertedSettings: ConvertSharedLinkSettingsReturnType = {
-        unshared_at:
-            expiration && isExpirationEnabled
-                ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
-                : null,
         vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
+
+    if (currentExpiresAt === undefined) {
+        convertedSettings.unshared_at = unsharedAt;
+    } else {
+        const submittedHasExpiration = Boolean(expiration && isExpirationEnabled);
+        const currentHasExpiration = currentExpiresAt !== null;
+        const expirationChanged =
+            submittedHasExpiration !== currentHasExpiration ||
+            (submittedHasExpiration &&
+                currentHasExpiration &&
+                !isSameLocalCalendarDay(new Date(expiration), new Date(currentExpiresAt)));
+
+        if (expirationChanged) {
+            convertedSettings.unshared_at = unsharedAt;
+        }
+    }
 
     // Download permissions can only be set on "company" or "open" shared links.
     if (accessLevel !== ACCESS_COLLAB) {

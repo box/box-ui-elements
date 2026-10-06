@@ -119,6 +119,291 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
                 expect(result.unshared_at).toBeNull();
             });
+
+            test('should omit unshared_at when the submitted date is the same local calendar day', () => {
+                const settings = {
+                    ...mockSettings,
+                    expiration: new Date(2024, 11, 31, 0, 0, 0),
+                };
+
+                const result = convertSharedLinkSettings(
+                    settings,
+                    ACCESS_OPEN,
+                    true,
+                    mockServerUrl,
+                    new Date(2024, 11, 31, 18, 30, 0).getTime(),
+                );
+
+                expect(result.unshared_at).toBeUndefined();
+            });
+
+            test('should include unshared_at when the submitted date is a different local calendar day', () => {
+                const settings = {
+                    ...mockSettings,
+                    expiration: new Date(2024, 11, 31, 0, 0, 0),
+                };
+
+                const result = convertSharedLinkSettings(
+                    settings,
+                    ACCESS_OPEN,
+                    true,
+                    mockServerUrl,
+                    new Date(2024, 11, 30, 23, 0, 0).getTime(),
+                );
+
+                expect(result.unshared_at).toBe('2024-12-31T23:59:59.000Z');
+            });
+
+            test('should include unshared_at when expiration is toggled on and there was no current expiration', () => {
+                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, true, mockServerUrl, null);
+
+                expect(result.unshared_at).toBe('2024-12-31T23:59:59.000Z');
+            });
+
+            test('should set unshared_at to null when expiration is toggled off and there was a current expiration', () => {
+                const settingsWithoutExpiration = {
+                    ...mockSettings,
+                    isExpirationEnabled: false,
+                };
+
+                const result = convertSharedLinkSettings(
+                    settingsWithoutExpiration,
+                    ACCESS_OPEN,
+                    true,
+                    mockServerUrl,
+                    new Date(2024, 11, 31, 18, 30, 0).getTime(),
+                );
+
+                expect(result.unshared_at).toBeNull();
+            });
+
+            test('should include unshared_at when the current expiration argument is omitted', () => {
+                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, true, mockServerUrl);
+
+                expect(result.unshared_at).toBe('2024-12-31T23:59:59.000Z');
+            });
+
+            describe('which shared link fields are sent together', () => {
+                const sameDay = new Date(2024, 11, 31, 18, 30, 0).getTime();
+                const otherDay = new Date(2024, 11, 30, 23, 0, 0).getTime();
+                const sameDaySettings = {
+                    ...mockSettings,
+                    expiration: new Date(2024, 11, 31, 0, 0, 0),
+                };
+
+                test.each([
+                    {
+                        name: 'day - same, download, vanity name, no expiration',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: true, vanityName: 'vanity-name' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: mockServerUrl,
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: false, can_download: true },
+                            vanity_url: 'https://example.com/server-url/vanity-name',
+                        },
+                    },
+                    {
+                        name: 'day - same, download, no vanity name, no expiration',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: true, vanityName: '' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: '',
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: false, can_download: true },
+                            vanity_url: '',
+                        },
+                    },
+                    {
+                        name: 'day - same, vanity name, download off, no expiration',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: false, vanityName: 'vanity-name' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: mockServerUrl,
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: true, can_download: false },
+                            vanity_url: 'https://example.com/server-url/vanity-name',
+                        },
+                    },
+                    {
+                        name: 'day - same, download off, no vanity name, no expiration',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: false, vanityName: '' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: '',
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: true, can_download: false },
+                            vanity_url: '',
+                        },
+                    },
+                    {
+                        name: 'day - different, expiration, download, vanity name',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: true, vanityName: 'vanity-name' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: mockServerUrl,
+                            currentExpiresAt: otherDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: false, can_download: true },
+                            unshared_at: '2024-12-31T23:59:59.000Z',
+                            vanity_url: 'https://example.com/server-url/vanity-name',
+                        },
+                    },
+                    {
+                        name: 'day - different, expiration, download, no vanity name',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: true, vanityName: '' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: '',
+                            currentExpiresAt: otherDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: false, can_download: true },
+                            unshared_at: '2024-12-31T23:59:59.000Z',
+                            vanity_url: '',
+                        },
+                    },
+                    {
+                        name: 'day - different, expiration, vanity name, download off',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: false, vanityName: 'vanity-name' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: mockServerUrl,
+                            currentExpiresAt: otherDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: true, can_download: false },
+                            unshared_at: '2024-12-31T23:59:59.000Z',
+                            vanity_url: 'https://example.com/server-url/vanity-name',
+                        },
+                    },
+                    {
+                        name: 'day - different, expiration, download off, no vanity name',
+                        inputs: {
+                            settings: { ...sameDaySettings, isDownloadEnabled: false, vanityName: '' },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: '',
+                            currentExpiresAt: otherDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: true, can_download: false },
+                            unshared_at: '2024-12-31T23:59:59.000Z',
+                            vanity_url: '',
+                        },
+                    },
+                    {
+                        name: 'day - off, expiration null, download, vanity name',
+                        inputs: {
+                            settings: {
+                                ...sameDaySettings,
+                                isDownloadEnabled: true,
+                                isExpirationEnabled: false,
+                                vanityName: 'vanity-name',
+                            },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: mockServerUrl,
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: false, can_download: true },
+                            unshared_at: null,
+                            vanity_url: 'https://example.com/server-url/vanity-name',
+                        },
+                    },
+                    {
+                        name: 'day - off, expiration null, download, no vanity name',
+                        inputs: {
+                            settings: {
+                                ...sameDaySettings,
+                                isDownloadEnabled: true,
+                                isExpirationEnabled: false,
+                                vanityName: '',
+                            },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: '',
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: false, can_download: true },
+                            unshared_at: null,
+                            vanity_url: '',
+                        },
+                    },
+                    {
+                        name: 'day - off, expiration null, vanity name, download off',
+                        inputs: {
+                            settings: {
+                                ...sameDaySettings,
+                                isDownloadEnabled: false,
+                                isExpirationEnabled: false,
+                                vanityName: 'vanity-name',
+                            },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: mockServerUrl,
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: true, can_download: false },
+                            unshared_at: null,
+                            vanity_url: 'https://example.com/server-url/vanity-name',
+                        },
+                    },
+                    {
+                        name: 'day - off, expiration null, download off, no vanity name',
+                        inputs: {
+                            settings: {
+                                ...sameDaySettings,
+                                isDownloadEnabled: false,
+                                isExpirationEnabled: false,
+                                vanityName: '',
+                            },
+                            access: ACCESS_COMPANY,
+                            isDownloadAvailable: true,
+                            serverUrl: '',
+                            currentExpiresAt: sameDay,
+                        },
+                        expected_body: {
+                            permissions: { can_preview: true, can_download: false },
+                            unshared_at: null,
+                            vanity_url: '',
+                        },
+                    },
+                ])('$name', ({ inputs, expected_body }) => {
+                    const { settings, access, isDownloadAvailable, serverUrl, currentExpiresAt } = inputs;
+                    const result =
+                        currentExpiresAt === undefined
+                            ? convertSharedLinkSettings(settings, access, isDownloadAvailable, serverUrl)
+                            : convertSharedLinkSettings(
+                                  settings,
+                                  access,
+                                  isDownloadAvailable,
+                                  serverUrl,
+                                  currentExpiresAt,
+                              );
+
+                    expect(result).toEqual(expected_body);
+                });
+            });
         });
 
         describe('vanity URL', () => {
