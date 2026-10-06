@@ -67,6 +67,7 @@ import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarF
 import useMetadataFieldSelection from './hooks/useMetadataFieldSelection';
 import useMetadataSidebarUnsavedChangesGuard from './hooks/useMetadataSidebarUnsavedChangesGuard';
 import useMetadataTemplateEditor from './hooks/useMetadataTemplateEditor';
+import useCanCreateTemplateAtRoot from './hooks/useCanCreateTemplateAtRoot';
 import useMetadataTemplateItemsService from './hooks/useMetadataTemplateItemsService';
 import { type MetadataTemplateLocator } from './hooks/useMetadataTemplateEventService';
 import useMetadataNamespaceContext, { type MetadataScopeMode } from './hooks/useMetadataNamespaceContext';
@@ -234,6 +235,13 @@ function MetadataSidebarRedesign({
         file,
         isTemplateManagementEnabled ? enterpriseId : undefined,
         templates ?? [],
+    );
+    // The browser reads this only when it mounts, so the dropdown is keyed on
+    // the resolved value and remounts once the root namespace grant arrives.
+    const canCreateAtRoot = useCanCreateTemplateAtRoot(
+        api,
+        file,
+        isTemplateManagementEnabled ? enterpriseId : undefined,
     );
 
     const { handleUnsavedChangesModalOpen, pendingNavLocation, setPendingNavLocation, unblockRouterHistory } =
@@ -510,6 +518,7 @@ function MetadataSidebarRedesign({
 
     const metadataDropdown = canEdit && isSuccess && templates && (
         <MetadataTemplateDropdown
+            key={canCreateAtRoot ? 'root-create' : 'root-view'}
             templates={templates}
             selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
@@ -520,7 +529,7 @@ function MetadataSidebarRedesign({
             itemsService={isTemplateManagementEnabled ? itemsService : undefined}
             onCreateTemplate={isTemplateManagementEnabled ? handleOpenCreateEditor : undefined}
             onEditTemplate={isTemplateManagementEnabled ? handleOpenEditEditor : undefined}
-            canCreateAtRoot
+            canCreateAtRoot={canCreateAtRoot}
             open={isDropdownOpen}
             onOpenChange={setIsDropdownOpen}
         />

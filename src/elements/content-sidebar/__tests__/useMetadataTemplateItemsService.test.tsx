@@ -16,6 +16,13 @@ describe('useMetadataTemplateItemsService', () => {
             displayName: 'My Template',
             canEdit: true,
             hidden: false,
+            permissions: {
+                can_read: true,
+                can_update: true,
+                can_delete: false,
+                can_view_permissions: false,
+                can_manage_permissions: false,
+            },
             fields: [],
         },
         {
@@ -62,7 +69,34 @@ describe('useMetadataTemplateItemsService', () => {
 
     test('should delegate getNamespaces to the metadata API', async () => {
         const namespacesResponse = {
-            entries: [{ fqn: `${enterpriseFqn}.child`, displayName: 'Child' }],
+            entries: [
+                {
+                    fqn: `${enterpriseFqn}.child`,
+                    displayName: 'Child',
+                    permissions: {
+                        can_read: true,
+                        can_update: false,
+                        can_delete: false,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                        can_create_namespaces: false,
+                        can_create_templates: true,
+                    },
+                },
+                {
+                    fqn: `${enterpriseFqn}.readonly`,
+                    displayName: 'Read only',
+                    permissions: {
+                        can_read: true,
+                        can_update: false,
+                        can_delete: false,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                        can_create_namespaces: false,
+                        can_create_templates: false,
+                    },
+                },
+            ],
             next_marker: 'marker-1',
         };
         listNamespaces.mockResolvedValue(namespacesResponse);
@@ -72,7 +106,10 @@ describe('useMetadataTemplateItemsService', () => {
         );
 
         await expect(result.current!.getNamespaces(enterpriseFqn, { limit: 20, marker: 'm0' })).resolves.toEqual({
-            entries: [{ fqn: `${enterpriseFqn}.child`, displayName: 'Child' }],
+            entries: [
+                { fqn: `${enterpriseFqn}.child`, displayName: 'Child', canCreate: true },
+                { fqn: `${enterpriseFqn}.readonly`, displayName: 'Read only', canCreate: false },
+            ],
             next_marker: 'marker-1',
         });
         expect(api.getMetadataAPI).toHaveBeenCalledWith(false);
@@ -87,6 +124,13 @@ describe('useMetadataTemplateItemsService', () => {
                     templateKey: 'visibleTemplate',
                     namespace: `${enterpriseFqn}.legal`,
                     displayName: 'Visible',
+                    permissions: {
+                        can_read: true,
+                        can_update: true,
+                        can_delete: false,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                    },
                 },
                 {
                     id: 'api-id-2',
@@ -121,12 +165,26 @@ describe('useMetadataTemplateItemsService', () => {
                     displayName: 'My Template',
                     canEdit: true,
                     hidden: false,
+                    permissions: {
+                        can_read: true,
+                        can_update: true,
+                        can_delete: false,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                    },
                 },
                 {
                     id: 'api-id-2',
                     templateKey: 'childOnly',
                     namespace: `${enterpriseFqn}.child`,
                     displayName: 'Child Only',
+                    permissions: {
+                        can_read: true,
+                        can_update: false,
+                        can_delete: true,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                    },
                 },
             ],
             next_marker: undefined,
@@ -153,7 +211,7 @@ describe('useMetadataTemplateItemsService', () => {
                     displayName: 'Child Only',
                     scope: `${enterpriseFqn}.child`,
                     templateKey: 'childOnly',
-                    canEdit: true,
+                    canEdit: false,
                     hidden: false,
                 },
             ],
@@ -175,6 +233,13 @@ describe('useMetadataTemplateItemsService', () => {
                         { fqn: enterpriseFqn, displayName: 'Enterprise' },
                         { fqn: `${enterpriseFqn}.legal`, displayName: 'Legal' },
                     ],
+                    permissions: {
+                        can_read: true,
+                        can_update: true,
+                        can_delete: false,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                    },
                 },
                 {
                     type: 'metadata_template',
@@ -182,6 +247,13 @@ describe('useMetadataTemplateItemsService', () => {
                     templateKey: 'myTemplate',
                     displayName: 'My Template',
                     namespace: enterpriseFqn,
+                    permissions: {
+                        can_read: true,
+                        can_update: true,
+                        can_delete: false,
+                        can_view_permissions: false,
+                        can_manage_permissions: false,
+                    },
                 },
                 {
                     type: 'metadata_template',

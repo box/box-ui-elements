@@ -310,6 +310,11 @@ class Metadata extends File {
         return this.getNamespacesAPI().getMetadataNamespacesUrl(namespaceFqn);
     }
 
+    /** @see MetadataNamespaces.getNamespace */
+    getNamespace(file: BoxItem, namespaceFqn: string): Promise<?Object> {
+        return this.getNamespacesAPI().getNamespace(file, namespaceFqn);
+    }
+
     /** @see MetadataNamespaces.listNamespaces */
     listNamespaces(
         file: BoxItem,

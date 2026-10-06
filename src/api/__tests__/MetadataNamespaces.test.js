@@ -114,8 +114,37 @@ describe('api/MetadataNamespaces', () => {
             expect(host.xhr.get).toHaveBeenCalledWith({
                 url: 'https://api.box.com/2.0/metadata_namespaces/enterprise_1/children',
                 id: 'file_123',
-                params: { limit: 20, marker: undefined },
+                params: { limit: 20, marker: undefined, fields: 'permissions' },
             });
+        });
+    });
+
+    describe('getNamespace()', () => {
+        test('should GET the namespace and return its grants', async () => {
+            host.xhr.get.mockResolvedValue({
+                data: {
+                    fqn: 'enterprise_1',
+                    displayName: 'Enterprise',
+                    permissions: { can_create_templates: true },
+                },
+            });
+
+            await expect(api.getNamespace(file, 'enterprise_1')).resolves.toEqual({
+                fqn: 'enterprise_1',
+                displayName: 'Enterprise',
+                permissions: { can_create_templates: true },
+            });
+            expect(host.xhr.get).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_namespaces/enterprise_1',
+                id: 'file_123',
+                params: { fields: 'permissions' },
+            });
+        });
+
+        test('should return null when the namespace request fails', async () => {
+            host.xhr.get.mockRejectedValue(new Error('not found'));
+
+            await expect(api.getNamespace(file, 'enterprise_1')).resolves.toBeNull();
         });
     });
 
@@ -139,7 +168,7 @@ describe('api/MetadataNamespaces', () => {
             expect(host.xhr.get).toHaveBeenCalledWith({
                 url: 'https://api.box.com/2.0/metadata_templates/search',
                 id: 'file_123',
-                params: { query: 'Le', limit: 20, marker: 'cursor-0' },
+                params: { query: 'Le', limit: 20, fields: 'permissions', marker: 'cursor-0' },
             });
         });
 
@@ -151,7 +180,7 @@ describe('api/MetadataNamespaces', () => {
             expect(host.xhr.get).toHaveBeenCalledWith({
                 url: 'https://api.box.com/2.0/metadata_templates/search',
                 id: 'file_123',
-                params: { query: 'Le', limit: 20 },
+                params: { query: 'Le', limit: 20, fields: 'permissions' },
             });
         });
 
