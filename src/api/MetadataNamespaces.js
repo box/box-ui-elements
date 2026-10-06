@@ -69,11 +69,33 @@ export default class MetadataNamespaces {
             const response = await this.host.xhr.get({
                 url,
                 id: this.getRequestFileId(file),
-                params: { limit: params.limit, marker: params.marker },
+                params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
             });
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
             return { entries: [] };
+        }
+    }
+
+    /**
+     * Fetches one namespace, including `permissions` when the caller may create
+     * templates under it.
+     *
+     * The enterprise root is never a row of `.../children`, so template
+     * creation at the root is decided from this response. `permissions` is
+     * omitted unless `fields=permissions` is requested.
+     */
+    async getNamespace(file: BoxItem, namespaceFqn: string): Promise<?Object> {
+        const url = this.getMetadataNamespacesUrl(namespaceFqn);
+        try {
+            const response = await this.host.xhr.get({
+                url,
+                id: this.getRequestFileId(file),
+                params: { fields: 'permissions' },
+            });
+            return getProp(response, 'data', null);
+        } catch (e) {
+            return null;
         }
     }
 
@@ -85,6 +107,8 @@ export default class MetadataNamespaces {
      * and hidden templates. A sub-namespace hit carries `containingNamespace`
      * and `ancestors` (`fqn` + `displayName` only); enterprise-root, legacy, and
      * global hits carry neither. The path is `ancestors` and `containingNamespace`.
+     * `fields=permissions` asks for the same template permission object as
+     * template list. The field is absent until that search response includes it.
      * Errors propagate so the picker can show its search error state.
      */
     async searchTemplates(
@@ -98,6 +122,7 @@ export default class MetadataNamespaces {
             params: {
                 query: params.query,
                 limit: params.limit,
+                fields: 'permissions',
                 ...(params.marker ? { marker: params.marker } : {}),
             },
         });
@@ -117,7 +142,7 @@ export default class MetadataNamespaces {
             const response = await this.host.xhr.get({
                 url,
                 id: this.getRequestFileId(file),
-                params: { limit: params.limit, marker: params.marker },
+                params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
             });
             return getProp(response, 'data', { entries: [] });
         } catch (e) {

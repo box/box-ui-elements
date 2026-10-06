@@ -10,10 +10,11 @@ import {
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 
 import API from '../../../api';
-import { METADATA_NAMESPACE_GLOBAL, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import { METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
 import type { BoxItem } from '../../../common/types/core';
 import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
+import { canCreateTemplatesInNamespace, canEditMetadataTemplate } from '../utils/metadataTemplatePermissions';
 
 type BreadcrumbEntry = NonNullable<BrowserMetadataTemplate['ancestors']>[number];
 
@@ -31,17 +32,6 @@ function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName
  */
 function isHiddenTemplate(template: { hidden?: unknown; isHidden?: unknown }): boolean {
     return template.hidden === true || template.isHidden === true;
-}
-
-function canEditMetadataTemplate(templateKey?: string, scopeOrNamespace?: string): boolean {
-    if (!templateKey || templateKey === METADATA_TEMPLATE_PROPERTIES) {
-        return false;
-    }
-    return (
-        scopeOrNamespace !== METADATA_SCOPE_GLOBAL &&
-        scopeOrNamespace !== 'global' &&
-        scopeOrNamespace !== METADATA_NAMESPACE_GLOBAL
-    );
 }
 
 function readNonBlank(value: unknown): string | undefined {
@@ -154,7 +144,11 @@ export default function useMetadataTemplateItemsService(
                 return {
                     entries: (result.entries ?? []).map(entry => {
                         const namespace = entry as { displayName: string; fqn: string };
-                        return { displayName: namespace.displayName, fqn: namespace.fqn };
+                        return {
+                            displayName: namespace.displayName,
+                            fqn: namespace.fqn,
+                            canCreate: canCreateTemplatesInNamespace(entry),
+                        };
                     }),
                     next_marker: readNonBlank(result.next_marker),
                 };
@@ -191,7 +185,7 @@ export default function useMetadataTemplateItemsService(
                             displayName: ((t.displayName as string) ?? templateKey) || '',
                             scope: templateScope,
                             templateKey,
-                            canEdit: canEditMetadataTemplate(templateKey, templateScope),
+                            canEdit: canEditMetadataTemplate(t),
                             hidden: false,
                         };
                     });
@@ -215,7 +209,7 @@ export default function useMetadataTemplateItemsService(
                         displayName: resolveDisplayName(t, customMetadataName),
                         scope: getMetadataTemplateNamespaceFqn(t) ?? namespaceFQN,
                         templateKey: t.templateKey,
-                        canEdit: canEditMetadataTemplate(t.templateKey, getMetadataTemplateNamespaceFqn(t)),
+                        canEdit: canEditMetadataTemplate(t),
                         hidden: t.hidden ?? false,
                     }));
 
@@ -263,7 +257,7 @@ export default function useMetadataTemplateItemsService(
                             scope,
                             namespace,
                             templateKey,
-                            canEdit: canEditMetadataTemplate(templateKey, namespaceFqn),
+                            canEdit: canEditMetadataTemplate(hit),
                             hidden: false,
                             ancestors: toSearchAncestors(hit),
                         };
