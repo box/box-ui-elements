@@ -78,6 +78,33 @@ export default class MetadataNamespaces {
     }
 
     /**
+     * Typeahead over templates the caller can see.
+     *
+     * `GET /metadata_templates/search`. `query` is a required prefix
+     * matched against `displayName` and `templateKey`. Hits omit template fields
+     * and hidden templates. A sub-namespace hit carries `containingNamespace`
+     * and `ancestors` (`fqn` + `displayName` only); enterprise-root, legacy, and
+     * global hits carry neither. The path is `ancestors` and `containingNamespace`.
+     * Errors propagate so the picker can show its search error state.
+     */
+    async searchTemplates(
+        file: BoxItem,
+        params: { query: string, limit: number, marker?: string },
+    ): Promise<{ entries: Array<Object>, next_marker?: string }> {
+        const url = `${this.host.getMetadataTemplateUrl()}/search`;
+        const response = await this.host.xhr.get({
+            url,
+            id: this.getRequestFileId(file),
+            params: {
+                query: params.query,
+                limit: params.limit,
+                ...(params.marker ? { marker: params.marker } : {}),
+            },
+        });
+        return getProp(response, 'data', { entries: [] });
+    }
+
+    /**
      * Lists templates under a namespace FQN with cursor pagination.
      */
     async listTemplatesForNamespace(
