@@ -127,7 +127,7 @@ describe('convertItemResponse', () => {
             const result = convertItemResponse(MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK_WITH_PERMISSIONS);
             expect(result.sharedLink.settings.canChangeDownload).toEqual(false);
             expect(result.sharedLink.settings.canChangePassword).toEqual(false);
-            expect(result.sharedLink.settings.canChangeExpiration).toEqual(false);
+            expect(result.sharedLink.settings.canChangeExpiration).toEqual(true);
         });
 
         test('should convert shared link settings correctly if user does not have permissions', () => {
@@ -138,7 +138,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     effective_access: 'collaborators',
                 },
-                shared_link_features: { download_url: false, password: false, vanity_name: false },
+                shared_link_features: { download_url: false, expiration: false, password: false, vanity_name: false },
                 permissions: {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.permissions,
                 },
@@ -149,6 +149,20 @@ describe('convertItemResponse', () => {
             expect(result.sharedLink.settings.canChangeExpiration).toEqual(false);
             expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);
             expect(result.sharedLink.settings.isVanityNameAvailable).toEqual(false);
+        });
+
+        test.each([
+            ['expiration false greys the switch', false, false],
+            ['expiration true leaves the switch on', true, true],
+        ])('%s', (_name, expiration, expected) => {
+            const result = convertItemResponse({
+                ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
+                shared_link_features: {
+                    ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link_features,
+                    expiration,
+                },
+            });
+            expect(result.sharedLink.settings.canChangeExpiration).toEqual(expected);
         });
     });
 
