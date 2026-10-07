@@ -233,8 +233,10 @@ export default function useMetadataTemplateItemsService(
                         const templateKey = readNonBlank(hit.templateKey);
                         const namespace = readNonBlank(hit.namespace);
                         const scope = readNonBlank(hit.scope) ?? namespace;
+                        // A namespaced hit also reports its root `scope`; matching on it would
+                        // resolve child-namespace hits to a root editor template.
                         const editorMatch = templates.find(template =>
-                            isSameMetadataTemplate(template, { templateKey, namespace, scope }),
+                            isSameMetadataTemplate(template, { templateKey, scope: namespace ?? scope }),
                         );
 
                         return {
