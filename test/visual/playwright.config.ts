@@ -37,7 +37,7 @@ export default defineConfig({
     },
     projects: [{ name: 'chromium' }],
     webServer: {
-        command: `yarn http-server storybook -a 127.0.0.1 -p ${PORT} -s -c-1`,
+        command: `npx http-server storybook -a 127.0.0.1 -p ${PORT} -s -c-1`,
         cwd: repoRoot,
         url: `http://127.0.0.1:${PORT}/index.json`,
         reuseExistingServer: !process.env.CI,

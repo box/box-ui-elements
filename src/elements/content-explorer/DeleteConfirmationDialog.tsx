@@ -42,6 +42,8 @@ const DeleteConfirmationDialog = ({
         >
             <BlueprintModal.Body>
                 <FormattedMessage {...message} values={{ name: item.name }} />
+                {/* Temporary visual-diff probe for a Chromatic test PR. Remove before merging. */}
+                <div>Temporary visual diff probe</div>
             </BlueprintModal.Body>
             <BlueprintModal.Footer>
                 <BlueprintModal.Footer.SecondaryButton autoFocus disabled={isLoading} onClick={onCancel} size="large">
