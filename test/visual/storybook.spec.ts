@@ -23,9 +23,12 @@ interface StorybookIndexEntry {
     importPath: string;
 }
 
-// Groups baselines by element, e.g. `Elements/ContentExplorer/tests/...` -> `ContentExplorer`.
-function getScreenshotFolder(title: string): string {
-    return title.split('/')[1].replace(/\s+/g, '');
+// Groups baselines by element and names them after the story, e.g. a `deleteDialogIsLoading` story
+// titled `Elements/ContentExplorer/tests/...` -> `ContentExplorer/delete-dialog-is-loading.png`.
+function getScreenshotName({ id, title }: StorybookIndexEntry): [string, string] {
+    const folder = title.split('/')[1].replace(/\s+/g, '');
+    const storyName = id.split('--')[1];
+    return [folder, `${storyName}.png`];
 }
 
 type StorybookWindow = typeof globalThis & {
@@ -106,6 +109,12 @@ test.describe('Storybook visual regression', () => {
         expect(optedIn, 'remove `chromatic.disableSnapshot: false` from these files').toEqual([]);
     });
 
+    test('gives every story its own screenshot', () => {
+        const names = stories.map(story => getScreenshotName(story).join('/'));
+        const duplicates = [...new Set(names.filter((name, index) => names.indexOf(name) !== index))];
+        expect(duplicates, 'rename stories that share a name within an element').toEqual([]);
+    });
+
     test.beforeEach(async ({ page }) => {
         await trackStoryLifecycle(page);
     });
@@ -115,7 +124,7 @@ test.describe('Storybook visual regression', () => {
             await page.goto(`/iframe.html?id=${encodeURIComponent(story.id)}&viewMode=story`);
             await waitForStory(page);
             // Full page, not `#storybook-root`: dialogs portal into elements appended to <body>.
-            await expect(page).toHaveScreenshot([getScreenshotFolder(story.title), `${story.id}.png`]);
+            await expect(page).toHaveScreenshot(getScreenshotName(story));
         });
     }
 });
