@@ -1884,6 +1884,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     logger={logger}
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
+                                                                    fileVersionId={getProp(versionToPreview, 'id')}
                                                                 />
                                                             ) : null}
                                                         </div>
@@ -2031,7 +2032,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           preloadStatus={undefined}
                           previewVersion={comparedVersion}
                           resin={undefined}
-                          renderCustomPreview={undefined}
                           showAnnotationsControls={false}
                           showAnnotationsDrawingCreate={false}
                       />,

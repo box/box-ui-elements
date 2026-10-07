@@ -36,6 +36,8 @@ export type ContentPreviewChildProps = {
     file: BoxItem,
     onError: CustomPreviewOnError,
     onLoad: CustomPreviewOnLoad,
+    // Version shown in this pane. The compared pane passes the selected version id.
+    fileVersionId?: ?string,
 };
 
 type Props = {
@@ -47,6 +49,7 @@ type Props = {
     onPreviewError: (errorData: { error: ErrorType }) => void,
     onPreviewLoad: CustomPreviewOnLoad,
     token: Token,
+    fileVersionId?: ?string,
 };
 
 /**
@@ -63,6 +66,7 @@ function CustomPreviewWrapper({
     onPreviewError,
     onPreviewLoad,
     token,
+    fileVersionId,
 }: Props): React.Node {
     // Create wrapper for onError to transform to PreviewLibraryError signature
     const handleCustomError: CustomPreviewOnError = (customError: ErrorType | ElementsXhrError) => {
@@ -109,6 +113,7 @@ function CustomPreviewWrapper({
         file,
         onError: handleCustomError,
         onLoad: onPreviewLoad,
+        fileVersionId,
     };
 
     // Call render function with props and wrap in fragment to ensure it's a valid React.Element

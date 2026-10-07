@@ -2313,6 +2313,32 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(instance.preview).toBeUndefined();
             });
 
+            test('should return early for a compared markdown file', async () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'md' } });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
+            test('should return early for a compared pane when renderCustomPreview is provided', async () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
             test('should load Box.Preview normally when renderCustomPreview is not provided', async () => {
                 const propsWithoutCustom = { ...props };
                 delete propsWithoutCustom.renderCustomPreview;
@@ -2390,6 +2416,26 @@ describe('elements/content-preview/ContentPreview', () => {
                 // Verify renderCustomPreview is passed to the wrapper
                 const wrapperInstance = measureContent.find('CustomPreviewWrapper');
                 expect(wrapperInstance.prop('renderCustomPreview')).toEqual(props.renderCustomPreview);
+            });
+
+            test('should render the custom preview for a compared markdown file', () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'md' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+            });
+
+            test('should render the custom preview for a compared pane when renderCustomPreview is provided', () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
             });
 
             test('should pass correct props to custom preview content', () => {
