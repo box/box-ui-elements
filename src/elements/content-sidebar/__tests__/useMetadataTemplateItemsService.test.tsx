@@ -323,6 +323,38 @@ describe('useMetadataTemplateItemsService', () => {
         expect(searchTemplates).toHaveBeenCalledWith(mockFile, { query: 'Le', limit: 20, marker: 'cursor-0' });
     });
 
+    test('should not resolve a namespaced search hit to a root editor template sharing its scope', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    type: 'metadata_template',
+                    id: 'api-legal-my-template',
+                    templateKey: 'myTemplate',
+                    displayName: 'Legal Template',
+                    namespace: `${enterpriseFqn}.legal`,
+                    scope: enterpriseFqn,
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        await expect(result.current!.getSearchResults('legal', { limit: 20 })).resolves.toEqual({
+            entries: [
+                expect.objectContaining({
+                    id: 'api-legal-my-template',
+                    displayName: 'Legal Template',
+                    namespace: `${enterpriseFqn}.legal`,
+                    templateKey: 'myTemplate',
+                }),
+            ],
+            next_marker: undefined,
+        });
+    });
+
     test('should not call search for a blank query', async () => {
         const { result } = renderHook(() =>
             useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
