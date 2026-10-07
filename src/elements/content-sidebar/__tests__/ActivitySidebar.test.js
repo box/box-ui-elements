@@ -940,8 +940,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             );
         });
 
-        test('should request timespan comments only when audioPlayerV2 is enabled', () => {
+        test('should request timespan comments for an audio file when audioPlayerV2 is enabled', () => {
+            const audioFile = { ...file, extension: 'mp3' };
             wrapper = getWrapper({
+                file: audioFile,
                 features: {
                     activityFeed: {
                         threadedRepliesV2: { enabled: true },
@@ -953,7 +955,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             instance.fetchFeedItems();
 
             expect(feedAPI.feedItems).toHaveBeenCalledWith(
-                file,
+                audioFile,
                 false,
                 instance.fetchFeedItemsSuccessCallback,
                 instance.fetchFeedItemsErrorCallback,
@@ -961,6 +963,33 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.objectContaining({
                     shouldUseEnhancedActivities: true,
                     shouldUseEnhancedTimespanComments: true,
+                }),
+            );
+        });
+
+        test('should request enhanced_comment for a non-audio file when audioPlayerV2 is enabled', () => {
+            const videoFile = { ...file, extension: 'mp4' };
+            wrapper = getWrapper({
+                file: videoFile,
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                    audioPlayerV2: { enabled: true },
+                },
+            });
+            instance = wrapper.instance();
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                videoFile,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({
+                    shouldUseEnhancedActivities: true,
+                    shouldUseEnhancedTimespanComments: false,
                 }),
             );
         });

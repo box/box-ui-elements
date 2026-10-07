@@ -650,7 +650,7 @@ class Feed extends Base {
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
         const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
         // comment: older clients. enhanced_comment: point timestamps.
-        // enhanced_comment_timespan: timespan comments, only when the audio player updates split is on.
+        // enhanced_comment_timespan: audio files when the audio player updates split is on.
         let commentFileActivityType = FILE_ACTIVITY_TYPE_COMMENT;
         if (shouldUseEnhancedActivities) {
             commentFileActivityType = shouldUseEnhancedTimespanComments
