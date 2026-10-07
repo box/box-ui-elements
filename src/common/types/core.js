@@ -296,7 +296,7 @@ type SharedLink = {
 
 type SharedLinkFeatures = {
     download_url: boolean,
-    expiration?: boolean,
+    expiration: boolean,
     password: boolean,
     vanity_name: boolean,
 };

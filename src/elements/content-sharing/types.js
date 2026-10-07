@@ -86,7 +86,7 @@ export type ContentSharingItemAPIResponse = {
     shared_link?: APISharedLink,
     shared_link_features: {
         download_url: boolean,
-        expiration?: boolean,
+        expiration: boolean,
         password: boolean,
         vanity_name: boolean,
     },

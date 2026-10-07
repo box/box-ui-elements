@@ -180,7 +180,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     download_url: undefined,
                 },
-                shared_link_features: { download_url: false, password: true, vanity_name: true },
+                shared_link_features: { download_url: false, expiration: false, password: true, vanity_name: true },
             };
             const result = convertItemResponse(mockItemWithoutDirectLink);
             expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);
