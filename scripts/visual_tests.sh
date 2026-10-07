@@ -31,14 +31,27 @@ npx playwright test -c "$CONFIG" --last-failed --update-snapshots=changed --repo
 
 find "$SCREENSHOTS_DIR" -name '*.png' -newer "$MARKER" | sort > "$CHANGED_LIST"
 
+if [ -n "${CIRCLE_WORKFLOW_JOB_ID:-}" ]; then
+    ARTIFACTS_URL="https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX:-0}/visual"
+else
+    ARTIFACTS_URL="$ARTIFACTS_DIR"
+fi
+PR_NUMBER="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
+
+echo
+echo "Review the changes at ${ARTIFACTS_URL}/report/index.html#?q=s:failed"
+echo
+
 if [ -s "$CHANGED_LIST" ]; then
     tar -czf "$ARTIFACTS_DIR/visual-baselines.tgz" -T "$CHANGED_LIST"
+    echo "Regenerated baselines:"
+    sed 's/^/  /' "$CHANGED_LIST"
     echo
-    echo "Updated baselines:"
-    cat "$CHANGED_LIST"
-    echo
-    echo "If these changes are intended, download visual/visual-baselines.tgz from this job's"
-    echo "Artifacts tab, run \`tar -xzf visual-baselines.tgz\` at the repo root, and commit the PNGs."
+    echo "If these changes are intended, apply them from the repo root and commit the PNGs:"
+    if [ -n "$PR_NUMBER" ]; then
+        echo "  yarn test:visual:download ${PR_NUMBER}"
+    fi
+    echo "  curl -sL ${ARTIFACTS_URL}/visual-baselines.tgz | tar -xz"
 else
     echo "No baselines were regenerated; the failure is not a screenshot difference. See the log above."
 fi

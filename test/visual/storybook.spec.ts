@@ -2,14 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import { expect, test, type Page } from '@playwright/test';
 
-const STORYBOOK_INDEX = path.resolve(__dirname, '../../storybook/index.json');
+const REPO_ROOT = path.resolve(__dirname, '../..');
+const STORYBOOK_INDEX = path.join(REPO_ROOT, 'storybook/index.json');
 
-// Story files migrated off Chromatic. Grow this list file by file; remove it once every
-// `*-visual.stories.*` file has moved.
+// Story files migrated off Chromatic. To migrate one, add it here and remove its
+// `chromatic.disableSnapshot: false`. Remove this list once every `*-visual.stories.*` file has moved.
 const MIGRATED_STORY_FILES = [
-    'src/elements/content-explorer/stories/tests/DeleteConfirmationDialog-visual.stories.js',
-    'src/elements/content-explorer/stories/tests/ContentExplorer-visual.stories.js',
+    './src/elements/content-explorer/stories/tests/ContentExplorer-visual.stories.js',
+    './src/elements/content-explorer/stories/tests/DeleteConfirmationDialog-visual.stories.js',
 ];
+const CHROMATIC_OPT_IN = /disableSnapshot:\s*false/;
 
 // Matches Chromatic's `delay: 500` in .storybook/preview.tsx.
 const SETTLE_DELAY_MS = 500;
@@ -39,7 +41,7 @@ function loadStories(): StorybookIndexEntry[] {
     const { entries } = JSON.parse(fs.readFileSync(STORYBOOK_INDEX, 'utf-8')) as {
         entries: Record<string, StorybookIndexEntry>;
     };
-    const files = new Set(MIGRATED_STORY_FILES.map(file => `./${file}`));
+    const files = new Set(MIGRATED_STORY_FILES);
 
     return Object.values(entries)
         .filter(entry => entry.type === 'story' && files.has(entry.importPath))
@@ -92,8 +94,16 @@ const stories = loadStories();
 
 test.describe('Storybook visual regression', () => {
     test('finds every migrated story file in the Storybook index', () => {
-        const found = new Set(stories.map(story => story.importPath));
-        expect(MIGRATED_STORY_FILES.filter(file => !found.has(`./${file}`))).toEqual([]);
+        const indexed = new Set(stories.map(story => story.importPath));
+        const missing = MIGRATED_STORY_FILES.filter(file => !indexed.has(file));
+        expect(missing, 'fix the path in MIGRATED_STORY_FILES, or rebuild Storybook').toEqual([]);
+    });
+
+    test('keeps migrated story files out of Chromatic', () => {
+        const optedIn = MIGRATED_STORY_FILES.filter(file =>
+            CHROMATIC_OPT_IN.test(fs.readFileSync(path.join(REPO_ROOT, file), 'utf-8')),
+        );
+        expect(optedIn, 'remove `chromatic.disableSnapshot: false` from these files').toEqual([]);
     });
 
     test.beforeEach(async ({ page }) => {

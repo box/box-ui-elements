@@ -24,6 +24,8 @@ export default defineConfig({
         toHaveScreenshot: {
             animations: 'disabled',
             caret: 'hide',
+            // Strict: a single pixel whose colour differs by more than `threshold` fails the story.
+            maxDiffPixels: 0,
             threshold: 0.1,
         },
     },
