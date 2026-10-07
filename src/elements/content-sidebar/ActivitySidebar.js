@@ -26,6 +26,7 @@ import { mark } from '../../utils/performance';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+// $FlowFixMe TypeScript file
 import { FILE_EXTENSIONS } from '../common/item/constants';
 import { withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
