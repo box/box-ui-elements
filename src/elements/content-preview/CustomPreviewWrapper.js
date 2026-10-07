@@ -36,7 +36,7 @@ export type ContentPreviewChildProps = {
     file: BoxItem,
     onError: CustomPreviewOnError,
     onLoad: CustomPreviewOnLoad,
-    // Version shown in this pane. The compared pane passes the selected version id.
+    // Id from getVersionToPreview(). Undefined means the current file version.
     fileVersionId?: ?string,
 };
 
@@ -54,7 +54,7 @@ type Props = {
 
 /**
  * Wrapper component for custom preview content.
- * Calls the render function with props (fileId, token, apiHost, file, onError, onLoad).
+ * Calls the render function with props (fileId, token, apiHost, file, onError, onLoad, fileVersionId).
  * Wraps rendered content in ErrorBoundary and transforms errors to ContentPreview error format.
  */
 function CustomPreviewWrapper({

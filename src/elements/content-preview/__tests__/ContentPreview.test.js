@@ -2438,6 +2438,36 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
             });
 
+            test('should pass previewVersion id as fileVersionId while comparing', () => {
+                const wrapper = getWrapper({ ...props, isComparing: true, previewVersion: { id: '999' } });
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBe('999');
+            });
+
+            test('should leave fileVersionId empty on the current comparison pane', () => {
+                const wrapper = getWrapper({ ...props, isComparing: true });
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBeUndefined();
+            });
+
+            test('should pass the selected version id as fileVersionId when not comparing', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBe('111');
+            });
+
             test('should pass correct props to custom preview content', () => {
                 const wrapper = getWrapper(props);
                 wrapper.setState({ file });
@@ -3157,6 +3187,24 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.childAt(0).props().onComparedAnnotationSelect(annotation, true);
 
             expect(comparedPreview.handleAnnotationSelect).toHaveBeenCalledWith(annotation, true);
+        });
+
+        test('should keep the host renderer on the compared instance', () => {
+            const renderCustomPreview = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    renderCustomPreview={renderCustomPreview}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().renderCustomPreview).toBe(renderCustomPreview);
+            expect(wrapper.childAt(1).props().children.props.renderCustomPreview).toBe(renderCustomPreview);
         });
 
         test('should stamp isComparedPreview only on the compared instance', () => {
