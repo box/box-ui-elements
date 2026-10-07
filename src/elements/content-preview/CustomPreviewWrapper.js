@@ -36,12 +36,8 @@ export type ContentPreviewChildProps = {
     file: BoxItem,
     onError: CustomPreviewOnError,
     onLoad: CustomPreviewOnLoad,
-    // Side-by-side comparison. The main pane sets isComparing and leaves
-    // fileVersionId empty so the host shows the current version. The compared
-    // pane sets isComparedPreview and fileVersionId to the selected version.
+    // Version shown in this pane. The compared pane passes the selected version id.
     fileVersionId?: ?string,
-    isComparing?: boolean,
-    isComparedPreview?: boolean,
 };
 
 type Props = {
@@ -54,8 +50,6 @@ type Props = {
     onPreviewLoad: CustomPreviewOnLoad,
     token: Token,
     fileVersionId?: ?string,
-    isComparing?: boolean,
-    isComparedPreview?: boolean,
 };
 
 /**
@@ -73,8 +67,6 @@ function CustomPreviewWrapper({
     onPreviewLoad,
     token,
     fileVersionId,
-    isComparing = false,
-    isComparedPreview = false,
 }: Props): React.Node {
     // Create wrapper for onError to transform to PreviewLibraryError signature
     const handleCustomError: CustomPreviewOnError = (customError: ErrorType | ElementsXhrError) => {
@@ -122,8 +114,6 @@ function CustomPreviewWrapper({
         onError: handleCustomError,
         onLoad: onPreviewLoad,
         fileVersionId,
-        isComparing,
-        isComparedPreview,
     };
 
     // Call render function with props and wrap in fragment to ensure it's a valid React.Element

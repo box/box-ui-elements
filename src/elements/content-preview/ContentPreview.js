@@ -287,9 +287,6 @@ const LoadableSidebar = AsyncLoad({
 
 const EMPTY_COLLECTION = [];
 
-// Compared pane only. Other extensions keep the Preview viewer.
-const CUSTOM_COMPARISON_PREVIEW_EXTENSIONS = ['htm', 'html', 'md', 'markdown', 'mdc', 'mdx', 'mdwn', 'mkd', 'mkdn'];
-
 class ContentPreview extends React.PureComponent<Props, State> {
     id: string;
 
@@ -597,7 +594,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { features, previewExperiences, token } = this.props;
+        const { features, previewExperiences, renderCustomPreview, token } = this.props;
         const { features: prevFeatures, previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
@@ -625,7 +622,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevProps, prevState)) {
             this.destroyPreview(false);
-            if (!this.shouldUseCustomPreview()) {
+            if (!renderCustomPreview) {
                 this.setState({ error: this.npmPreviewLoadFailed ? this.state.error : undefined, isLoading: true });
                 this.loadPreview();
             }
@@ -1058,26 +1055,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Whether this pane should mount the host renderer instead of Preview.
-     * The main pane follows renderCustomPreview. The compared pane only does
-     * so for markdown and HTML, so PDFs and images keep Preview.
-     *
-     * @return {boolean}
-     */
-    shouldUseCustomPreview(): boolean {
-        const { isComparedPreview, renderCustomPreview }: Props = this.props;
-        if (!renderCustomPreview) {
-            return false;
-        }
-        if (!isComparedPreview) {
-            return true;
-        }
-
-        const extension = String(getProp(this.state, 'file.extension', '')).toLowerCase();
-        return CUSTOM_COMPARISON_PREVIEW_EXTENSIONS.includes(extension);
-    }
-
-    /**
      * Loads preview in the component using the preview library.
      *
      * @return {void}
@@ -1112,9 +1089,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const versionToPreview = this.getVersionToPreview();
 
         // Early return: Box.Preview initialization not needed when using custom render function.
-        // Custom content will be rendered directly in the Measure block (see render method).
-        // The compared pane only does this for markdown and HTML.
-        if (this.shouldUseCustomPreview()) {
+        // Custom content will be rendered directly in the Measure block (see render method)
+        if (renderCustomPreview) {
             return;
         }
 
@@ -1561,12 +1537,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        const { isComparing, useHotkeys }: Props = this.props;
+        const { isComparing, useHotkeys, renderCustomPreview }: Props = this.props;
 
         // Skip ContentPreview hotkeys when custom content is provided to prevent conflicts.
         // Custom components must implement their own keyboard shortcuts (arrow navigation, etc)
         // as ContentPreview's default handlers only work with Box.Preview viewer.
-        if (!useHotkeys || this.shouldUseCustomPreview()) {
+        if (!useHotkeys || renderCustomPreview) {
             return;
         }
 
@@ -1898,7 +1874,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
                                                     return (
                                                         <div ref={previewRef} className="bcpr-content">
-                                                            {renderCustomPreview && this.shouldUseCustomPreview() ? (
+                                                            {renderCustomPreview ? (
                                                                 <CustomPreviewWrapper
                                                                     renderCustomPreview={renderCustomPreview}
                                                                     fileId={currentFileId}
@@ -1909,8 +1885,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
                                                                     fileVersionId={getProp(versionToPreview, 'id')}
-                                                                    isComparing={!!isComparing}
-                                                                    isComparedPreview={!!this.props.isComparedPreview}
                                                                 />
                                                             ) : null}
                                                         </div>
@@ -2058,7 +2032,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           preloadStatus={undefined}
                           previewVersion={comparedVersion}
                           resin={undefined}
-                          // Inherit renderCustomPreview. Markdown and HTML use it; other types stay on Preview.
                           showAnnotationsControls={false}
                           showAnnotationsDrawingCreate={false}
                       />,

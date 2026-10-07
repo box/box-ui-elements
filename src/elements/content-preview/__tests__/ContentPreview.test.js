@@ -2326,16 +2326,17 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(instance.preview).toBeUndefined();
             });
 
-            test('should load Box.Preview for a compared pdf when renderCustomPreview is provided', async () => {
+            test('should return early for a compared pane when renderCustomPreview is provided', async () => {
                 const wrapper = getWrapper({ ...props, isComparedPreview: true });
                 wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
                 const instance = wrapper.instance();
                 instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
 
                 await instance.loadPreview();
 
-                expect(instance.preview).toBeDefined();
-                expect(instance.preview.show).toHaveBeenCalled();
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
             });
 
             test('should load Box.Preview normally when renderCustomPreview is not provided', async () => {
@@ -2427,14 +2428,14 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
             });
 
-            test('should use Preview for a compared pdf when renderCustomPreview is provided', () => {
+            test('should render the custom preview for a compared pane when renderCustomPreview is provided', () => {
                 const wrapper = getWrapper({ ...props, isComparedPreview: true });
                 wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
 
                 const renderProp = wrapper.find('Measure').prop('children');
                 const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
 
-                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(false);
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
             });
 
             test('should pass correct props to custom preview content', () => {
