@@ -2313,6 +2313,32 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(instance.preview).toBeUndefined();
             });
 
+            test('should return early for a compared markdown file', async () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'md' } });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
+            test('should return early for a compared pane when renderCustomPreview is provided', async () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
             test('should load Box.Preview normally when renderCustomPreview is not provided', async () => {
                 const propsWithoutCustom = { ...props };
                 delete propsWithoutCustom.renderCustomPreview;
@@ -2390,6 +2416,56 @@ describe('elements/content-preview/ContentPreview', () => {
                 // Verify renderCustomPreview is passed to the wrapper
                 const wrapperInstance = measureContent.find('CustomPreviewWrapper');
                 expect(wrapperInstance.prop('renderCustomPreview')).toEqual(props.renderCustomPreview);
+            });
+
+            test('should render the custom preview for a compared markdown file', () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'md' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+            });
+
+            test('should render the custom preview for a compared pane when renderCustomPreview is provided', () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+            });
+
+            test('should pass previewVersion id as fileVersionId while comparing', () => {
+                const wrapper = getWrapper({ ...props, isComparing: true, previewVersion: { id: '999' } });
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBe('999');
+            });
+
+            test('should leave fileVersionId empty on the current comparison pane', () => {
+                const wrapper = getWrapper({ ...props, isComparing: true });
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBeUndefined();
+            });
+
+            test('should pass the selected version id as fileVersionId when not comparing', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBe('111');
             });
 
             test('should pass correct props to custom preview content', () => {
@@ -3111,6 +3187,24 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.childAt(0).props().onComparedAnnotationSelect(annotation, true);
 
             expect(comparedPreview.handleAnnotationSelect).toHaveBeenCalledWith(annotation, true);
+        });
+
+        test('should keep the host renderer on the compared instance', () => {
+            const renderCustomPreview = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    renderCustomPreview={renderCustomPreview}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().renderCustomPreview).toBe(renderCustomPreview);
+            expect(wrapper.childAt(1).props().children.props.renderCustomPreview).toBe(renderCustomPreview);
         });
 
         test('should stamp isComparedPreview only on the compared instance', () => {
