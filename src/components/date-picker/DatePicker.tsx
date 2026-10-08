@@ -18,7 +18,7 @@ import Label from '../label';
 import PlainButton from '../plain-button';
 import Tooltip, { TooltipPosition, TooltipTheme } from '../tooltip';
 
-import { convertDateToUnixMidnightTime, ISO_DATE_FORMAT_PATTERN, parseLocalCalendarDate } from '../../utils/datetime';
+import { convertDateToUnixMidnightTime } from '../../utils/datetime';
 
 import './DatePicker.scss';
 
@@ -69,6 +69,8 @@ const TOGGLE_DELAY_MS = 300;
 const ENTER_KEY = 'Enter';
 const ESCAPE_KEY = 'Escape';
 const TAB_KEY = 'Tab';
+
+const ISO_DATE_FORMAT_PATTERN = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
 
 export enum DateFormat {
     ISO_STRING_DATE_FORMAT = 'isoString',
@@ -596,7 +598,14 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     };
 
     parseDisplayDateType = (dateString?: string | null): Date | null => {
-        return dateString ? parseLocalCalendarDate(dateString) : null;
+        if (dateString && ISO_DATE_FORMAT_PATTERN.test(dateString)) {
+            // Calling new Date('YYYY-MM-DD') without 'T00:00:00' yields undesired results:
+            // E.g. new Date('2017-06-01') => May 31 2017
+            // E.g. new Date('2017-06-01T00:00:00') => June 01 2017
+            // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#parameters
+            return new Date(`${dateString}T00:00:00`);
+        }
+        return null;
     };
 
     formatValue = (date: Date | null): string | number => {

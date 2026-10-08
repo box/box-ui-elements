@@ -5,7 +5,7 @@ import {
     PERMISSION_CAN_EDIT,
     PERMISSION_CAN_PREVIEW,
 } from '../../../constants';
-import { convertISOStringToUTCDate, ISO_DATE_FORMAT_PATTERN, parseLocalCalendarDate } from '../../../utils/datetime';
+import { convertISOStringToUTCDate } from '../../../utils/datetime';
 
 import type { SharedLinkSettings } from '../types';
 
@@ -42,22 +42,19 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
  * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
  *   convertItemResponse, so it is in internal USM format.
  */
-const localCalendarDate = (value: Date | number | string) => {
-    if (typeof value === 'string') {
-        if (ISO_DATE_FORMAT_PATTERN.test(value)) {
-            return parseLocalCalendarDate(value) ?? new Date(NaN);
-        }
+const DATE_ONLY_PATTERN = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
 
-        return new Date(value);
+const localDayLabel = (value: Date | number | string) => {
+    if (typeof value === 'string' && DATE_ONLY_PATTERN.test(value)) {
+        return value;
     }
 
-    return new Date(value);
-};
+    const date = value instanceof Date ? value : new Date(value);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
-const isSameLocalCalendarDay = (left: Date, right: Date) =>
-    left.getFullYear() === right.getFullYear() &&
-    left.getMonth() === right.getMonth() &&
-    left.getDate() === right.getDate();
+    return `${date.getFullYear()}-${month}-${day}`;
+};
 
 export const convertSharedLinkSettings = (
     newSettings: SharedLinkSettings,
@@ -77,14 +74,10 @@ export const convertSharedLinkSettings = (
         vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
 
-    const submittedDate = expiration && isExpirationEnabled ? localCalendarDate(expiration) : null;
-    const currentDate = typeof currentExpiresAt === 'number' ? new Date(currentExpiresAt) : null;
-    const isSameDay =
-        submittedDate && currentDate
-            ? isSameLocalCalendarDay(submittedDate, currentDate)
-            : submittedDate === currentDate;
+    const submittedDay = expiration && isExpirationEnabled ? localDayLabel(expiration) : '';
+    const currentDay = typeof currentExpiresAt === 'number' ? localDayLabel(currentExpiresAt) : '';
 
-    if (currentExpiresAt === undefined || !isSameDay) {
+    if (currentExpiresAt === undefined || submittedDay !== currentDay) {
         convertedSettings.unshared_at = isExpirationEnabled ? unsharedAt : null;
     }
 

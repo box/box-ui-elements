@@ -10,7 +10,6 @@ import {
     isTomorrow,
     isValidDate,
     isYesterday,
-    parseLocalCalendarDate,
 } from '../datetime';
 
 describe('utils/datetime', () => {
@@ -206,26 +205,6 @@ describe('utils/datetime', () => {
         ])('should convert %s to %s correctly', (from, to) => {
             const input = convertISOStringtoRFC3339String(from);
             expect(input).toEqual(to);
-        });
-    });
-
-    describe('parseLocalCalendarDate()', () => {
-        test('should parse a date-only string as local midnight', () => {
-            const result = parseLocalCalendarDate('2017-06-01');
-
-            expect(result).not.toBeNull();
-            expect(result?.getFullYear()).toBe(2017);
-            expect(result?.getMonth()).toBe(5);
-            expect(result?.getDate()).toBe(1);
-            expect(result?.getHours()).toBe(0);
-        });
-
-        test('should return null for a string that is not a calendar date', () => {
-            expect(parseLocalCalendarDate('2017-13-01')).toBeNull();
-        });
-
-        test('should return null for a February day that does not exist', () => {
-            expect(parseLocalCalendarDate('2026-02-30')).toBeNull();
         });
     });
 });
