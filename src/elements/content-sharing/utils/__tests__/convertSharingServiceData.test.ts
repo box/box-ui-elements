@@ -9,7 +9,10 @@ import {
 import { convertISOStringToUTCDate } from '../../../../utils/datetime';
 import { convertSharedLinkPermissions, convertSharedLinkSettings } from '../convertSharingServiceData';
 
-jest.mock('../../../../utils/datetime');
+jest.mock('../../../../utils/datetime', () => ({
+    ...jest.requireActual('../../../../utils/datetime'),
+    convertISOStringToUTCDate: jest.fn(),
+}));
 
 describe('elements/content-sharing/utils/convertSharingServiceData', () => {
     beforeEach(() => {
@@ -118,6 +121,25 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                 const result = convertSharedLinkSettings(settingsWithNullExpiration, ACCESS_OPEN, true, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
+            });
+
+            test('should omit unshared_at when the date field submits the saved local calendar day', () => {
+                const saved = new Date('2026-10-15T23:59:00-07:00');
+                const submittedDay = [
+                    saved.getFullYear(),
+                    String(saved.getMonth() + 1).padStart(2, '0'),
+                    String(saved.getDate()).padStart(2, '0'),
+                ].join('-');
+                const settings = {
+                    ...mockSettings,
+                    expiration: submittedDay,
+                    isDownloadEnabled: false,
+                };
+
+                const result = convertSharedLinkSettings(settings, ACCESS_OPEN, true, mockServerUrl, saved.getTime());
+
+                expect(result.unshared_at).toBeUndefined();
+                expect(result.permissions).toEqual({ can_preview: true, can_download: false });
             });
 
             test('should omit unshared_at when the submitted date is the same local calendar day', () => {

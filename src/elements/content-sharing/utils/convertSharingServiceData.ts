@@ -5,7 +5,7 @@ import {
     PERMISSION_CAN_EDIT,
     PERMISSION_CAN_PREVIEW,
 } from '../../../constants';
-import { convertISOStringToUTCDate } from '../../../utils/datetime';
+import { convertISOStringToUTCDate, ISO_DATE_FORMAT_PATTERN, parseLocalCalendarDate } from '../../../utils/datetime';
 
 import type { SharedLinkSettings } from '../types';
 
@@ -42,6 +42,18 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
  * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
  *   convertItemResponse, so it is in internal USM format.
  */
+const localCalendarDate = (value: Date | number | string) => {
+    if (typeof value === 'string') {
+        if (ISO_DATE_FORMAT_PATTERN.test(value)) {
+            return parseLocalCalendarDate(value) ?? new Date(NaN);
+        }
+
+        return new Date(value);
+    }
+
+    return new Date(value);
+};
+
 const isSameLocalCalendarDay = (left: Date, right: Date) =>
     left.getFullYear() === right.getFullYear() &&
     left.getMonth() === right.getMonth() &&
@@ -65,20 +77,15 @@ export const convertSharedLinkSettings = (
         vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
 
-    if (currentExpiresAt === undefined) {
-        convertedSettings.unshared_at = unsharedAt;
-    } else {
-        const submittedHasExpiration = Boolean(expiration && isExpirationEnabled);
-        const currentHasExpiration = currentExpiresAt !== null;
-        const expirationChanged =
-            submittedHasExpiration !== currentHasExpiration ||
-            (submittedHasExpiration &&
-                currentHasExpiration &&
-                !isSameLocalCalendarDay(new Date(expiration), new Date(currentExpiresAt)));
+    const submittedDate = expiration && isExpirationEnabled ? localCalendarDate(expiration) : null;
+    const currentDate = typeof currentExpiresAt === 'number' ? new Date(currentExpiresAt) : null;
+    const isSameDay =
+        submittedDate && currentDate
+            ? isSameLocalCalendarDay(submittedDate, currentDate)
+            : submittedDate === currentDate;
 
-        if (expirationChanged) {
-            convertedSettings.unshared_at = unsharedAt;
-        }
+    if (currentExpiresAt === undefined || !isSameDay) {
+        convertedSettings.unshared_at = isExpirationEnabled ? unsharedAt : null;
     }
 
     // Download permissions can only be set on "company" or "open" shared links.
