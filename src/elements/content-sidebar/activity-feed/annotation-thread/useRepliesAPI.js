@@ -1,5 +1,6 @@
 // @flow
 import APIFactory from '../../../../api';
+import { useFeatureEnabled } from '../../../common/feature-checking';
 
 import type { BoxItemPermission } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment } from '../../../../common/types/feed';
@@ -14,6 +15,8 @@ type Props = {
 };
 
 const useRepliesAPI = ({ annotationId, api, errorCallback, fileId, filePermissions }: Props) => {
+    const shouldEnableRichText = useFeatureEnabled('activityFeed.richText.enabled');
+
     const createReply = ({
         message,
         requestId,
@@ -33,6 +36,7 @@ const useRepliesAPI = ({ annotationId, api, errorCallback, fileId, filePermissio
             message,
             successCallback,
             errorCallback.bind(null, requestId),
+            shouldEnableRichText,
         );
     };
 
@@ -70,6 +74,7 @@ const useRepliesAPI = ({ annotationId, api, errorCallback, fileId, filePermissio
             commentId: id,
             message,
             permissions,
+            shouldEnableRichText,
             successCallback,
             errorCallback: errorCallback.bind(null, id),
         });

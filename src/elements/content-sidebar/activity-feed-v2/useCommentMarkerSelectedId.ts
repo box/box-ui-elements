@@ -21,6 +21,7 @@ type MarkerSelectionSnapshot = {
     contentKey: string;
     emittedSelectedId: string | null;
     selectedId: string | null;
+    selectionSeq: number;
 };
 
 const resolveSelectedId = (
@@ -38,6 +39,7 @@ const markEmitted = (
 const createSnapshot = (
     activeFeedEntryId: string | undefined,
     filteredItems: readonly TransformedFeedItem[],
+    selectionSeq = 0,
 ): MarkerSelectionSnapshot => {
     const selectedId = resolveSelectedId(activeFeedEntryId, filteredItems);
     return {
@@ -45,6 +47,7 @@ const createSnapshot = (
         contentKey: feedContentKey(filteredItems),
         emittedSelectedId: markEmitted(selectedId, filteredItems, null),
         selectedId,
+        selectionSeq,
     };
 };
 
@@ -52,14 +55,17 @@ const reduceSnapshot = (
     previous: MarkerSelectionSnapshot,
     activeFeedEntryId: string | undefined,
     filteredItems: readonly TransformedFeedItem[],
+    selectionSeq: number,
 ): MarkerSelectionSnapshot => {
     const contentKey = feedContentKey(filteredItems);
     const resolvedId = resolveSelectedId(activeFeedEntryId, filteredItems);
 
     let selectedId: string | null;
-    let {emittedSelectedId} = previous;
+    let { emittedSelectedId } = previous;
 
-    if (activeFeedEntryId !== previous.activeFeedEntryId) {
+    // A new entry, or the same entry chosen again, asserts selection once.
+    // A feed refresh with neither change leaves an already-sent id unmarked.
+    if (activeFeedEntryId !== previous.activeFeedEntryId || selectionSeq !== previous.selectionSeq) {
         selectedId = resolvedId;
         emittedSelectedId = null;
     } else {
@@ -72,6 +78,7 @@ const reduceSnapshot = (
         contentKey,
         emittedSelectedId: markEmitted(selectedId, filteredItems, emittedSelectedId),
         selectedId,
+        selectionSeq,
     };
 };
 
@@ -79,16 +86,24 @@ const reduceSnapshot = (
  * Send `isSelected` once for the current `activeFeedEntryId` (click / deep link).
  * Add, delete, and edit refresh the marker list without re-asserting selection,
  * so Preview does not treat the refresh as a new host select and re-seek.
+ * `selectionSeq` re-asserts the same entry when the user picks it again.
  */
 export const useCommentMarkerSelectedId = (
     activeFeedEntryId: string | undefined,
     filteredItems: readonly TransformedFeedItem[],
+    selectionSeq = 0,
 ): string | null => {
-    const [snapshot, setSnapshot] = React.useState(() => createSnapshot(activeFeedEntryId, filteredItems));
+    const [snapshot, setSnapshot] = React.useState(() =>
+        createSnapshot(activeFeedEntryId, filteredItems, selectionSeq),
+    );
     const contentKey = feedContentKey(filteredItems);
 
-    if (activeFeedEntryId !== snapshot.activeFeedEntryId || contentKey !== snapshot.contentKey) {
-        const nextSnapshot = reduceSnapshot(snapshot, activeFeedEntryId, filteredItems);
+    if (
+        activeFeedEntryId !== snapshot.activeFeedEntryId ||
+        contentKey !== snapshot.contentKey ||
+        selectionSeq !== snapshot.selectionSeq
+    ) {
+        const nextSnapshot = reduceSnapshot(snapshot, activeFeedEntryId, filteredItems, selectionSeq);
         setSnapshot(nextSnapshot);
         return nextSnapshot.selectedId;
     }

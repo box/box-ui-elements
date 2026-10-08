@@ -59,9 +59,13 @@ const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): 
 type CommentMarkerPayload = {
     avatarUrl?: string;
     colorIndex?: number;
+    /** End of a ranged timestamp comment, in seconds. Omitted for a point comment. */
+    endTime?: number;
     id: string;
     initial?: string;
     isSelected?: boolean;
+    /** Set when the user selects this same comment again. Absent on the first select and on feed refreshes. */
+    selectionSeq?: number;
     time: number;
     type: 'annotation' | 'comment';
 };
@@ -72,17 +76,22 @@ const COMMENT_MARKERS_VIEWER_POLL_MS = 100;
 const buildCommentMarkers = (
     items: readonly TransformedFeedItem[],
     selectedFeedItemId: string | null,
+    selectionSeq = 0,
 ): CommentMarkerPayload[] => {
     const markers: CommentMarkerPayload[] = [];
     for (const item of items) {
         if (item.type === 'comment' && item.annotationTimestampMs != null) {
             const author = item.messages[0]?.author;
+            const endMs = item.annotationTimestampEndMs;
+            const endTime = endMs != null && endMs > item.annotationTimestampMs ? endMs / 1000 : undefined;
             markers.push({
                 avatarUrl: author?.avatarUrl ?? undefined,
                 colorIndex: author?.id ?? 0,
+                ...(endTime != null ? { endTime } : {}),
                 id: item.id,
                 initial: author?.name?.[0] ?? undefined,
                 isSelected: item.id === selectedFeedItemId,
+                ...(item.id === selectedFeedItemId && selectionSeq > 0 ? { selectionSeq } : {}),
                 time: item.annotationTimestampMs / 1000,
                 type: 'comment',
             });
@@ -96,6 +105,7 @@ const buildCommentMarkers = (
                     id: item.id,
                     initial: author?.name?.[0] ?? undefined,
                     isSelected: item.id === selectedFeedItemId,
+                    ...(item.id === selectedFeedItemId && selectionSeq > 0 ? { selectionSeq } : {}),
                     time: loc.value / 1000,
                     type: 'annotation',
                 });
@@ -442,7 +452,7 @@ const ActivityFeedV2 = ({
         formattedTimestamp,
         isPressed: isTimestampPressed,
         onPressedChange,
-        resetRange,
+        clearRange,
         timestampEndMs,
         timestampMs,
     } = useMediaTimestamp(allowMediaTimestamps, timeFormat, fps, {
@@ -455,18 +465,26 @@ const ActivityFeedV2 = ({
         : undefined;
 
     const allowCommentMarkers = isVideo || isAudioPlayerV2;
-    const markerSelectedId = useCommentMarkerSelectedId(activeFeedEntryId, filteredItems);
+    // Restarts the sidebar highlight when the same comment is chosen again.
+    const [highlightSeq, setHighlightSeq] = React.useState(0);
+    // Re-asserts the waveform avatar and range. Feed refreshes do not increment it.
+    const [selectionSeq, setSelectionSeq] = React.useState(0);
+    const markerSelectedId = useCommentMarkerSelectedId(activeFeedEntryId, filteredItems, selectionSeq);
 
+    const activeFeedEntryIdRef = React.useRef(activeFeedEntryId);
     const filteredItemsRef = React.useRef(filteredItems);
     const markerSelectedIdRef = React.useRef(markerSelectedId);
     const onCommentSelectRef = React.useRef(onCommentSelect);
+    const selectionSeqRef = React.useRef(selectionSeq);
     const attachedViewerRef = React.useRef<ViewerHandle | null>(null);
 
     React.useLayoutEffect(() => {
+        activeFeedEntryIdRef.current = activeFeedEntryId;
         filteredItemsRef.current = filteredItems;
         markerSelectedIdRef.current = markerSelectedId;
         onCommentSelectRef.current = onCommentSelect;
-    }, [filteredItems, markerSelectedId, onCommentSelect]);
+        selectionSeqRef.current = selectionSeq;
+    }, [activeFeedEntryId, filteredItems, markerSelectedId, onCommentSelect, selectionSeq]);
 
     React.useEffect(() => {
         if ((!getViewer && !getPreview) || !allowCommentMarkers) return undefined;
@@ -477,6 +495,10 @@ const ActivityFeedV2 = ({
             const item = filteredItemsRef.current.find(filteredItem => filteredItem.id === id);
             // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
             if (item?.type === 'comment' && onCommentSelectRef.current) {
+                // The route id is already set, so the highlight hold would not restart on its own.
+                if (id === activeFeedEntryIdRef.current) {
+                    setHighlightSeq(seq => seq + 1);
+                }
                 onCommentSelectRef.current(id);
             }
         };
@@ -495,7 +517,10 @@ const ActivityFeedV2 = ({
 
         const attachMarkerViewer = (viewer: ViewerHandle) => {
             attachedViewerRef.current = viewer;
-            viewer.emit('comment_markers', buildCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current));
+            viewer.emit(
+                'comment_markers',
+                buildCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current, selectionSeqRef.current),
+            );
             viewer.addListener('comment_marker_select', handleMarkerSelect);
         };
 
@@ -538,8 +563,16 @@ const ActivityFeedV2 = ({
         if (!viewer) {
             return;
         }
-        viewer.emit('comment_markers', buildCommentMarkers(filteredItems, markerSelectedId));
-    }, [filteredItems, markerSelectedId]);
+        viewer.emit('comment_markers', buildCommentMarkers(filteredItems, markerSelectedId, selectionSeq));
+    }, [filteredItems, markerSelectedId, selectionSeq]);
+
+    const handleCommentSelect = React.useCallback((commentId: string) => {
+        if (commentId && commentId === activeFeedEntryIdRef.current) {
+            setHighlightSeq(seq => seq + 1);
+            setSelectionSeq(seq => seq + 1);
+        }
+        onCommentSelectRef.current?.(commentId);
+    }, []);
 
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
@@ -558,7 +591,7 @@ const ActivityFeedV2 = ({
                 const snapshot = new Set(filteredItems.map(item => item.id));
                 await onCommentCreate(text, serialized.hasMention);
                 knownIdsBeforePostRef.current = snapshot;
-                resetRange();
+                clearRange();
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.error('ActivityFeedV2: failed to post comment', error);
@@ -571,7 +604,7 @@ const ActivityFeedV2 = ({
             isRichTextEnabled,
             isTimestampPressed,
             onCommentCreate,
-            resetRange,
+            clearRange,
             timestampEndMs,
             timestampMs,
         ],
@@ -660,6 +693,7 @@ const ActivityFeedV2 = ({
                                     currentUserId={currentUserId}
                                     fps={fps}
                                     getViewer={getViewer}
+                                    highlightSeq={highlightSeq}
                                     isDisabled={isDisabled}
                                     isRichTextEnabled={isRichTextEnabled}
                                     item={item}
@@ -670,7 +704,7 @@ const ActivityFeedV2 = ({
                                     onAnnotationStatusChange={onAnnotationStatusChange}
                                     onCommentCopyLink={onCommentCopyLink}
                                     onCommentDelete={onCommentDelete}
-                                    onCommentSelect={onCommentSelect}
+                                    onCommentSelect={handleCommentSelect}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
                                     onReplyDelete={onReplyDelete}

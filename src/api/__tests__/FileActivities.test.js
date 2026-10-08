@@ -27,7 +27,7 @@ describe('api/FileActivities', () => {
             'should return the filtered query parameters as $expected when $activityTypes is passed in',
             ({ activityTypes, expected }) => {
                 expect(fileActivities.getFilteredUrl('1', activityTypes, true)).toBe(
-                    `https://api.box.com/2.0/file_activities?file_id=1${expected}&enable_replies=true&reply_limit=1`,
+                    `https://api.box.com/2.0/file_activities?file_id=1${expected}&enable_replies=true&reply_limit=1&enable_rich_text=false`,
                 );
             },
         );
@@ -40,20 +40,26 @@ describe('api/FileActivities', () => {
             'should return the enable_replies as $expected when $enableReplies is passed in',
             ({ enableReplies, expected }) => {
                 expect(fileActivities.getFilteredUrl('1', ['comment', 'annotation', 'task'], enableReplies)).toBe(
-                    `https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment,annotation,task${expected}&reply_limit=1`,
+                    `https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment,annotation,task${expected}&reply_limit=1&enable_rich_text=false`,
                 );
             },
         );
 
         test('should use reply_limit=1000 when shouldUseEnhancedActivities is true (V2)', () => {
             expect(fileActivities.getFilteredUrl('1', ['comment'], true, true)).toBe(
-                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1000',
+                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1000&enable_rich_text=false',
             );
         });
 
         test('should use reply_limit=1 when shouldUseEnhancedActivities is false (V1)', () => {
             expect(fileActivities.getFilteredUrl('1', ['comment'], true, false)).toBe(
-                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1',
+                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1&enable_rich_text=false',
+            );
+        });
+
+        test('should append enable_rich_text=true when shouldEnableRichText is true', () => {
+            expect(fileActivities.getFilteredUrl('1', ['comment'], true, true, true)).toBe(
+                'https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment&enable_replies=true&reply_limit=1000&enable_rich_text=true',
             );
         });
     });
@@ -81,7 +87,7 @@ describe('api/FileActivities', () => {
                 errorCallback,
                 requestData: {},
                 successCallback,
-                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1',
+                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1&enable_rich_text=false',
             });
         });
 
@@ -105,7 +111,31 @@ describe('api/FileActivities', () => {
                 errorCallback,
                 requestData: {},
                 successCallback,
-                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1000',
+                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1000&enable_rich_text=false',
+            });
+        });
+
+        test('should append enable_rich_text=true when shouldEnableRichText is true', () => {
+            const permissions = {
+                can_comment: true,
+            };
+
+            fileActivities.getActivities({
+                fileID: '123',
+                activityTypes: ['comment', 'task'],
+                permissions,
+                successCallback,
+                errorCallback,
+                shouldShowReplies: true,
+                shouldEnableRichText: true,
+            });
+
+            expect(fileActivities.get).toBeCalledWith({
+                id: '123',
+                errorCallback,
+                requestData: {},
+                successCallback,
+                url: 'https://api.box.com/2.0/file_activities?file_id=123&activity_types=comment,task&enable_replies=true&reply_limit=1&enable_rich_text=true',
             });
         });
 

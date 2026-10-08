@@ -8,6 +8,7 @@ import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
+import { letPreviewSizeSettle } from './testUtils';
 
 type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
     isRichTextEnabled?: boolean;
@@ -41,6 +42,11 @@ type TaskListItemProps = {
     id: string;
     onLoadAllAssignee?: () => Promise<unknown>;
 };
+let lastThreadedAnnotationProps: {
+    isHighlighted?: boolean;
+    messages?: Array<{ id: string }>;
+    onAnnotationBadgeClick?: (id: string) => void;
+} = {};
 let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
@@ -80,9 +86,14 @@ jest.mock('@box/activity-feed', () => {
         lastTaskItemProps = props;
         return <div data-testid={`task-${props.id}`}>Task</div>;
     };
-    ActivityFeedList.ThreadedAnnotation = (props: { messages?: Array<{ id: string }> }) => (
-        <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>
-    );
+    ActivityFeedList.ThreadedAnnotation = (props: {
+        isHighlighted?: boolean;
+        messages?: Array<{ id: string }>;
+        onAnnotationBadgeClick?: (id: string) => void;
+    }) => {
+        lastThreadedAnnotationProps = props;
+        return <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>;
+    };
     ActivityFeedList.Version = (props: { id: string }) => <div data-testid={`version-${props.id}`}>Version</div>;
     const ActivityFeedEditor = (props: Partial<EditorProps>) => {
         lastEditorProps = props;
@@ -926,6 +937,28 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         });
     });
 
+    const createRangeViewer = () => {
+        const listeners: Record<string, ((payload: unknown) => void) | undefined> = {};
+        const viewer = {
+            addListener: jest.fn((event: string, handler: (payload: unknown) => void) => {
+                listeners[event] = handler;
+            }),
+            emit: jest.fn(),
+            removeListener: jest.fn((event: string) => {
+                delete listeners[event];
+            }),
+        };
+        return {
+            commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
+            dragCreate: (payload: unknown) => listeners.comment_range_compose?.(payload),
+            dismissDraft: () => listeners.comment_range_draft_dismiss?.(undefined),
+            getViewer: () => viewer,
+            rangeEmits: () =>
+                viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
+            viewer,
+        };
+    };
+
     describe('media timestamp', () => {
         const mountMedia = (tag: 'video' | 'audio' = 'video', currentTime: number = 0) => {
             const container = document.createElement('div');
@@ -1004,6 +1037,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should prepend timestamp markup to posted text when toggle is pressed', async () => {
             const { cleanup, video } = mountVideo();
+            const { getViewer, rangeEmits } = createRangeViewer();
             mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great frame' });
             const onCommentCreate = jest.fn();
             try {
@@ -1012,6 +1046,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
                         file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        getViewer={getViewer}
                         isTimestampedCommentsEnabled
                         onCommentCreate={onCommentCreate}
                     />,
@@ -1024,6 +1059,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
                 expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great frame', false);
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(rangeEmits()).toEqual([]);
             } finally {
                 cleanup();
             }
@@ -1093,6 +1130,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
         test('should prepend timestamp markup to posted text when audio toggle is pressed', async () => {
             const { cleanup, media } = mountMedia('audio');
+            const { getViewer, rangeEmits } = createRangeViewer();
             mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great moment' });
             const onCommentCreate = jest.fn();
             try {
@@ -1101,6 +1139,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         currentUser={mockCurrentUser}
                         feedItems={[] as ActivityFeedV2Props['feedItems']}
                         file={{ extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        getViewer={getViewer}
                         isAudioPlayerV2Enabled
                         isTimestampedCommentsEnabled
                         onCommentCreate={onCommentCreate}
@@ -1114,6 +1153,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
                 expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great moment', false);
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft_clear', undefined]);
             } finally {
                 cleanup();
             }
@@ -1165,28 +1206,6 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             container.appendChild(media);
             document.body.appendChild(container);
             return { cleanup: () => container.remove(), media };
-        };
-
-        const createRangeViewer = () => {
-            const listeners: Record<string, ((payload: unknown) => void) | undefined> = {};
-            const viewer = {
-                addListener: jest.fn((event: string, handler: (payload: unknown) => void) => {
-                    listeners[event] = handler;
-                }),
-                emit: jest.fn(),
-                removeListener: jest.fn((event: string) => {
-                    delete listeners[event];
-                }),
-            };
-            return {
-                commitDrag: (payload: unknown) => listeners.comment_range_draft_change?.(payload),
-                dragCreate: (payload: unknown) => listeners.comment_range_compose?.(payload),
-                dismissDraft: () => listeners.comment_range_draft_dismiss?.(undefined),
-                getViewer: () => viewer,
-                rangeEmits: () =>
-                    viewer.emit.mock.calls.filter(([event]) => String(event).startsWith('comment_range_draft')),
-                viewer,
-            };
         };
 
         const audioFile = { extension: 'mp3', file_version: { id: '99' }, permissions: { can_comment: true } };
@@ -1279,7 +1298,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             }
         });
 
-        test('should drop the range back to a single timestamp after a successful post', async () => {
+        test('should uncheck the timestamp toggle and clear the draft after a successful post', async () => {
             const { cleanup, media } = mountAudio();
             const { commitDrag, getViewer, rangeEmits } = createRangeViewer();
             mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
@@ -1306,14 +1325,56 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 await act(async () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(false);
+                expect(rangeEmits().pop()).toEqual(['comment_range_draft_clear', undefined]);
+
                 onCommentCreate.mockClear();
                 await act(async () => {
                     await lastEditorProps.onPost?.({ type: 'doc', content: [] });
                 });
 
-                expect(rangeEmits().pop()).toEqual(['comment_range_draft', { endMs: null, startMs: 8055 }]);
-                expect(onCommentCreate).toHaveBeenCalledWith('#[timestamp:8055,versionId:99] great take', false);
+                expect(onCommentCreate).toHaveBeenCalledWith('great take', false);
             } finally {
+                cleanup();
+            }
+        });
+
+        test('should keep the timestamp toggle and draft when posting fails', async () => {
+            const { cleanup, media } = mountAudio();
+            const { commitDrag, getViewer, rangeEmits } = createRangeViewer();
+            mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'great take' });
+            const onCommentCreate = jest.fn().mockRejectedValue(new Error('network error'));
+            const consoleError = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+            try {
+                render(
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={audioFile}
+                        getViewer={getViewer}
+                        isAudioPlayerV2Enabled
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />,
+                );
+                Object.defineProperty(media, 'currentTime', { configurable: true, value: 8.055, writable: true });
+                await act(async () => {
+                    lastEditorProps.videoTimestamp?.onPressedChange(true);
+                });
+                await act(async () => {
+                    commitDrag({ endMs: 12000, startMs: 8055 });
+                });
+                const emitsBeforePost = rangeEmits().length;
+                await act(async () => {
+                    await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                });
+
+                expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+                expect(lastEditorProps.videoTimestamp?.formattedTimestamp).toBe('0:08 \u2013 0:12');
+                expect(rangeEmits()).toHaveLength(emitsBeforePost);
+            } finally {
+                consoleError.mockRestore();
                 cleanup();
             }
         });
@@ -1372,7 +1433,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 const composer = screen.getByTestId('activity-feed-composer');
                 const focus = jest.spyOn(composer, 'focus');
 
-                await act(async () => {
+                letPreviewSizeSettle(() => {
                     dragCreate({ endMs: 5000, startMs: 1000 });
                 });
 
@@ -1432,7 +1493,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                         />
                     </CommentRangeDragCreateProvider>,
                 );
-                await act(async () => {
+                letPreviewSizeSettle(() => {
                     dragCreate({ endMs: 5000, startMs: 1000 });
                 });
                 await act(async () => {
@@ -2105,6 +2166,30 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     type: 'comment',
                 }),
             ]);
+            const markers = mockViewer.emit.mock.calls.find(call => call[0] === 'comment_markers')?.[1];
+            expect(markers[0].endTime).toBeUndefined();
+        });
+
+        test('should include endTime when an audio comment has a timestamp range', () => {
+            renderComponentWithMarkers({
+                feedItems: [
+                    {
+                        ...timestampedComment,
+                        id: 'ts-range-1',
+                        tagged_message: '#[timestamp:8055,endTimestamp:12000,versionId:123] great take',
+                    },
+                ] as ActivityFeedV2Props['feedItems'],
+                file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
+                isAudioPlayerV2Enabled: true,
+            });
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    endTime: 12,
+                    id: 'ts-range-1',
+                    time: 8.055,
+                    type: 'comment',
+                }),
+            ]);
         });
 
         test('should emit frame annotation markers for audio when they are present in the feed', () => {
@@ -2197,6 +2282,73 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     isSelected: true,
                 }),
             ]);
+        });
+
+        test('should re-send the selected marker when the same timestamp is clicked again', () => {
+            const onCommentSelect = jest.fn();
+            renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1', onCommentSelect });
+            mockViewer.emit.mockClear();
+
+            act(() => {
+                lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+            });
+
+            expect(onCommentSelect).toHaveBeenCalledWith('ts-comment-1');
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                    selectionSeq: 1,
+                }),
+            ]);
+
+            mockViewer.emit.mockClear();
+            act(() => {
+                lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                    selectionSeq: 2,
+                }),
+            ]);
+        });
+
+        test('should highlight the active comment again when its waveform marker is selected', () => {
+            jest.useFakeTimers();
+            let onMarkerSelect: ((payload: { id: string }) => void) | undefined;
+            mockViewer.addListener.mockImplementation((event: string, handler: (payload: { id: string }) => void) => {
+                if (event === 'comment_marker_select') {
+                    onMarkerSelect = handler;
+                }
+            });
+
+            try {
+                renderComponentWithMarkers({
+                    activeFeedEntryId: 'ts-comment-1',
+                    onCommentSelect: jest.fn(),
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+                act(() => {
+                    jest.advanceTimersByTime(2000);
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+
+                act(() => {
+                    onMarkerSelect?.({ id: 'ts-comment-1' });
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+                expect(mockViewer.emit).not.toHaveBeenCalledWith(
+                    'comment_markers',
+                    expect.arrayContaining([expect.objectContaining({ selectionSeq: expect.any(Number) })]),
+                );
+            } finally {
+                mockViewer.addListener.mockReset();
+                jest.useRealTimers();
+            }
         });
 
         test('should not clear comment_markers when the feed refreshes without a comment revision change', () => {

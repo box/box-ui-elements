@@ -98,12 +98,14 @@ class ThreadedComments extends MarkerBasedApi {
     createComment({
         file,
         message,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
     }: {
         errorCallback: ElementsErrorCallback,
         file: BoxItem,
         message?: string,
+        shouldEnableRichText?: boolean,
         successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_COMMENT;
@@ -121,6 +123,7 @@ class ThreadedComments extends MarkerBasedApi {
             url: this.getUrl(id),
             data: {
                 data: { message },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
             },
             successCallback,
             errorCallback,
@@ -145,6 +148,7 @@ class ThreadedComments extends MarkerBasedApi {
         status,
         message,
         permissions,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
     }: {
@@ -153,6 +157,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message?: string,
         permissions: BoxCommentPermission,
+        shouldEnableRichText?: boolean,
         status?: FeedItemStatus,
         successCallback: (comment: Comment) => void,
     }): void {
@@ -178,6 +183,7 @@ class ThreadedComments extends MarkerBasedApi {
 
         const requestData = {
             data: { status, message },
+            params: { enable_rich_text: Boolean(shouldEnableRichText) },
         };
 
         this.put({
@@ -244,12 +250,14 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback,
         fileId,
         permissions,
+        shouldEnableRichText,
         successCallback,
     }: {
         commentId: string,
         errorCallback: (e: ElementsXhrError, code: string) => void,
         fileId: string,
         permissions: BoxItemPermission,
+        shouldEnableRichText?: boolean,
         successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_COMMENT;
@@ -265,6 +273,7 @@ class ThreadedComments extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlForId(commentId),
+            requestData: { params: { enable_rich_text: Boolean(shouldEnableRichText) } },
         });
     }
 
@@ -291,6 +300,7 @@ class ThreadedComments extends MarkerBasedApi {
         limit,
         shouldFetchAll,
         repliesCount,
+        shouldEnableRichText,
     }: {
         errorCallback: (e: ElementsXhrError, code: string) => void,
         fileId: string,
@@ -298,6 +308,7 @@ class ThreadedComments extends MarkerBasedApi {
         marker?: string,
         permissions: BoxItemPermission,
         repliesCount?: number,
+        shouldEnableRichText?: boolean,
         shouldFetchAll?: boolean,
         successCallback: (threadedComments: ThreadedCommentsType) => void,
     }): void {
@@ -317,6 +328,7 @@ class ThreadedComments extends MarkerBasedApi {
             limit,
             requestData: {
                 ...(repliesCount ? { replies_count: repliesCount } : null),
+                enable_rich_text: Boolean(shouldEnableRichText),
             },
             shouldFetchAll,
         });
@@ -333,6 +345,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId,
         commentId,
         permissions,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
     }: {
@@ -340,6 +353,7 @@ class ThreadedComments extends MarkerBasedApi {
         errorCallback: (e: ElementsXhrError, code: string) => void,
         fileId: string,
         permissions: BoxItemPermission,
+        shouldEnableRichText?: boolean,
         successCallback: (comments: ThreadedCommentsType) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_REPLIES;
@@ -356,6 +370,7 @@ class ThreadedComments extends MarkerBasedApi {
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(commentId),
+            requestData: { params: { enable_rich_text: Boolean(shouldEnableRichText) } },
         });
     }
 
@@ -371,6 +386,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId,
         commentId,
         permissions,
+        shouldEnableRichText,
         successCallback,
         errorCallback,
         message,
@@ -380,6 +396,7 @@ class ThreadedComments extends MarkerBasedApi {
         fileId: string,
         message: string,
         permissions: BoxItemPermission,
+        shouldEnableRichText?: boolean,
         successCallback: (comment: Comment) => void,
     }): void {
         this.errorCode = ERROR_CODE_CREATE_REPLY;
@@ -393,7 +410,10 @@ class ThreadedComments extends MarkerBasedApi {
 
         this.post({
             id: fileId,
-            data: { data: { message } },
+            data: {
+                data: { message },
+                params: { enable_rich_text: Boolean(shouldEnableRichText) },
+            },
             errorCallback,
             successCallback,
             url: this.getUrlWithRepliesForId(commentId, fileId),

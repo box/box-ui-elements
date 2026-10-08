@@ -280,6 +280,29 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
         });
 
+        test('should restart the highlight hold when the same comment is selected again', () => {
+            jest.useFakeTimers();
+            const { rerender } = render(
+                <FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" highlightSeq={0} item={mockComment} />,
+            );
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+
+            rerender(
+                <FeedItemRow {...defaultProps} activeFeedEntryId="comment-1" highlightSeq={1} item={mockComment} />,
+            );
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+            act(() => {
+                jest.advanceTimersByTime(2000);
+            });
+            expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+        });
+
         test('should pass isHighlighted=false when activeFeedEntryId does not match', () => {
             render(<FeedItemRow {...defaultProps} activeFeedEntryId="other-id" item={mockComment} />);
             expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);

@@ -26,6 +26,8 @@ import { mark } from '../../utils/performance';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+// $FlowFixMe TypeScript file
+import { FILE_EXTENSIONS } from '../common/item/constants';
 import { withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
@@ -183,6 +185,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onVersionHistoryClick: noop,
     };
 
+    getIsRichTextEnabled = (): boolean => {
+        const { features } = this.props;
+        return isFeatureEnabled(features, 'activityFeed.richText.enabled');
+    };
+
     constructor(props: Props) {
         super(props);
         // eslint-disable-next-line react/prop-types
@@ -275,6 +282,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 this.feedSuccessCallback();
             },
             this.feedErrorCallback,
+            this.getIsRichTextEnabled(),
         );
 
         this.fetchFeedItems();
@@ -295,6 +303,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 this.feedSuccessCallback();
             },
             this.feedErrorCallback,
+            this.getIsRichTextEnabled(),
         );
 
         this.fetchFeedItems();
@@ -549,6 +558,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 permissions,
                 successCallback,
                 errorCallback,
+                this.getIsRichTextEnabled(),
             );
         } else {
             api.getFeedAPI(false).updateComment(
@@ -601,6 +611,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 }
                 this.feedErrorCallback(error, code);
             },
+            this.getIsRichTextEnabled(),
         );
 
         // need to load the pending item
@@ -672,13 +683,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Posts a new comment to the API
+     * Posts a new comment to the API.
+     * Resolves after the comment is created and rejects if the API call fails,
+     * so callers can wait before clearing a timestamp draft.
      *
      * @param {string} text - The comment's text
      * @param {boolean} hasMention - The comment's text
-     * @return {void}
+     * @return {Promise<void>}
      */
-    createComment = (text: string, hasMention: boolean): void => {
+    createComment = (text: string, hasMention: boolean): Promise<void> => {
         const { api, currentUser, features, file, hasReplies, onCommentCreate } = this.props;
         const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
 
@@ -686,32 +699,40 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             throw getBadUserError();
         }
 
-        const successCallback = (comment: Comment) => {
-            onCommentCreate(comment);
-            this.feedSuccessCallback();
-        };
+        return new Promise((resolve, reject) => {
+            const successCallback = (comment: Comment) => {
+                onCommentCreate(comment);
+                this.feedSuccessCallback();
+                resolve();
+            };
+            const errorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => {
+                this.feedErrorCallback(e, code, contextInfo);
+                reject(e);
+            };
 
-        if (hasReplies || isThreadedRepliesV2Enabled) {
-            api.getFeedAPI(false).createThreadedComment(
-                file,
-                currentUser,
-                text,
-                successCallback,
-                this.feedErrorCallback,
-            );
-        } else {
-            api.getFeedAPI(false).createComment(
-                file,
-                currentUser,
-                text,
-                hasMention,
-                successCallback,
-                this.feedErrorCallback,
-            );
-        }
+            if (hasReplies || isThreadedRepliesV2Enabled) {
+                api.getFeedAPI(false).createThreadedComment(
+                    file,
+                    currentUser,
+                    text,
+                    successCallback,
+                    errorCallback,
+                    this.getIsRichTextEnabled(),
+                );
+            } else {
+                api.getFeedAPI(false).createComment(
+                    file,
+                    currentUser,
+                    text,
+                    hasMention,
+                    successCallback,
+                    errorCallback,
+                );
+            }
 
-        // need to load the pending item
-        this.fetchFeedItems();
+            // need to load the pending item
+            this.fetchFeedItems();
+        });
     };
 
     /**
@@ -739,6 +760,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             text,
             this.createReplySuccessCallback.bind(this, eventRequestId, parentId),
             this.feedErrorCallback,
+            this.getIsRichTextEnabled(),
         );
 
         // need to load the pending item
@@ -794,12 +816,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasVersions: shouldShowVersions,
         } = this.props;
         const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
+        const isAudioFile = Boolean(file.extension && FILE_EXTENSIONS.audio.includes(file.extension));
         const shouldShowReplies = hasReplies || isThreadedRepliesV2Enabled;
         const shouldFetchReplies =
             shouldRefreshCache && hasReplies && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
+        const shouldEnableRichText = this.getIsRichTextEnabled();
 
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -814,7 +839,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowTasks,
                 shouldShowVersions,
                 shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
+                shouldUseEnhancedTimespanComments: isAudioPlayerV2Enabled && isAudioFile,
                 shouldUseUAA,
+                shouldEnableRichText,
             },
         );
     }
@@ -905,6 +932,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     getFeedItemsWithReplies = (feedItems: FeedItems, id?: string, type?: CommentFeedItemType): Promise<FeedItems> => {
         const { api, file } = this.props;
+        const shouldEnableRichText = this.getIsRichTextEnabled();
 
         return new Promise((resolve, reject) => {
             if (!id || !type) {
@@ -932,6 +960,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 error => {
                     reject(error);
                 },
+                shouldEnableRichText,
             );
         });
     };
@@ -1179,6 +1208,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     getActiveFeedEntryData = (feedItems: FeedItems): Promise<{ id?: string, type?: FeedItemType }> => {
         const { activeFeedEntryId, activeFeedEntryType, api, file } = this.props;
+        const shouldEnableRichText = this.getIsRichTextEnabled();
         return new Promise((resolve, reject) => {
             if (!activeFeedEntryId || !activeFeedEntryType || !this.isItemTypeFocusable(activeFeedEntryType)) {
                 resolve({});
@@ -1218,6 +1248,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         reject(error);
                     }
                 },
+                shouldEnableRichText,
             );
         });
     };
@@ -1242,8 +1273,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     getReplies = (id: string, type: CommentFeedItemType): void => {
         const { api, file } = this.props;
+        const shouldEnableRichText = this.getIsRichTextEnabled();
 
-        api.getFeedAPI(false).fetchReplies(file, id, type, this.feedSuccessCallback, this.feedErrorCallback);
+        api.getFeedAPI(false).fetchReplies(
+            file,
+            id,
+            type,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+            shouldEnableRichText,
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -1470,7 +1509,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
             const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
             const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
-            const isRichTextEnabled = isFeatureEnabled(features, 'activityFeed.richText.enabled');
             return (
                 <div
                     aria-labelledby={label}
@@ -1494,7 +1532,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         hasTasks={this.props.hasTasks}
                         isAudioPlayerV2Enabled={isAudioPlayerV2Enabled}
                         isDisabled={isDisabled}
-                        isRichTextEnabled={isRichTextEnabled}
+                        isRichTextEnabled={this.getIsRichTextEnabled()}
                         isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
                         onAnnotationCopyLink={onAnnotationCopyLink}
                         onAnnotationDelete={this.handleAnnotationDelete}
