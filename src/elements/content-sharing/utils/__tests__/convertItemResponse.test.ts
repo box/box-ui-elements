@@ -152,8 +152,8 @@ describe('convertItemResponse', () => {
         });
 
         test.each([
-            ['expiration false greys the switch', false, false],
-            ['expiration true leaves the switch on', true, true],
+            ['expiration false leaves the switch not editable', false, false],
+            ['expiration true leaves the switch editable', true, true],
         ])('%s', (_name, expiration, expected) => {
             const result = convertItemResponse({
                 ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,

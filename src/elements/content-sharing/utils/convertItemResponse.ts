@@ -25,7 +25,7 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
 
     const {
         download_url: isDirectLinkAvailable,
-        expiration: canChangeExpirationFromServer,
+        expiration: canChangeExpiration,
         password: isPasswordAvailable,
         vanity_name: isVanityNameAvailable,
     } = shared_link_features;
@@ -64,7 +64,6 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
         const isDownloadAllowed = permission === PERMISSION_CAN_DOWNLOAD || permission === PERMISSION_CAN_EDIT;
         const canChangeDownload = canChangeAccessLevel && isDownloadSettingAvailable && access !== ACCESS_COLLAB; // access must be "company" or "open"
         const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
-        const canChangeExpiration = canChangeExpirationFromServer;
 
         sharedLink = {
             access,
