@@ -26,6 +26,8 @@ import { mark } from '../../utils/performance';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+// $FlowFixMe TypeScript file
+import { FILE_EXTENSIONS } from '../common/item/constants';
 import { withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
@@ -814,6 +816,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasVersions: shouldShowVersions,
         } = this.props;
         const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
+        const isAudioFile = Boolean(file.extension && FILE_EXTENSIONS.audio.includes(file.extension));
         const shouldShowReplies = hasReplies || isThreadedRepliesV2Enabled;
         const shouldFetchReplies =
             shouldRefreshCache && hasReplies && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
@@ -835,6 +839,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowTasks,
                 shouldShowVersions,
                 shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
+                shouldUseEnhancedTimespanComments: isAudioPlayerV2Enabled && isAudioFile,
                 shouldUseUAA,
                 shouldEnableRichText,
             },

@@ -846,6 +846,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
                         shouldUseEnhancedActivities: false,
+                        shouldUseEnhancedTimespanComments: false,
                         shouldUseUAA: expectedUseUAA,
                         shouldEnableRichText: false,
                     },
@@ -881,6 +882,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowTasks: true,
                     shouldShowVersions: true,
                     shouldUseEnhancedActivities: false,
+                    shouldUseEnhancedTimespanComments: false,
                     shouldUseUAA: false,
                     shouldEnableRichText: false,
                 },
@@ -935,6 +937,60 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
                 expect.objectContaining({ shouldEnableRichText: true }),
+            );
+        });
+
+        test('should request timespan comments for an audio file when audioPlayerV2 is enabled', () => {
+            const audioFile = { ...file, extension: 'mp3' };
+            wrapper = getWrapper({
+                file: audioFile,
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                    audioPlayerV2: { enabled: true },
+                },
+            });
+            instance = wrapper.instance();
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                audioFile,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({
+                    shouldUseEnhancedActivities: true,
+                    shouldUseEnhancedTimespanComments: true,
+                }),
+            );
+        });
+
+        test('should request enhanced_comment for a non-audio file when audioPlayerV2 is enabled', () => {
+            const videoFile = { ...file, extension: 'mp4' };
+            wrapper = getWrapper({
+                file: videoFile,
+                features: {
+                    activityFeed: {
+                        threadedRepliesV2: { enabled: true },
+                    },
+                    audioPlayerV2: { enabled: true },
+                },
+            });
+            instance = wrapper.instance();
+            instance.fetchFeedItems();
+
+            expect(feedAPI.feedItems).toHaveBeenCalledWith(
+                videoFile,
+                false,
+                instance.fetchFeedItemsSuccessCallback,
+                instance.fetchFeedItemsErrorCallback,
+                instance.errorCallback,
+                expect.objectContaining({
+                    shouldUseEnhancedActivities: true,
+                    shouldUseEnhancedTimespanComments: false,
+                }),
             );
         });
 

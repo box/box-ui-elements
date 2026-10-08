@@ -14,6 +14,7 @@ import {
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
     FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+    FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
     IS_ERROR_DISPLAYED,
@@ -697,6 +698,35 @@ describe('api/Feed', () => {
                         FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
                         FILE_ACTIVITY_TYPE_APP_ACTIVITY,
                         FILE_ACTIVITY_TYPE_ENHANCED_COMMENT,
+                        FILE_ACTIVITY_TYPE_TASK,
+                        FILE_ACTIVITY_TYPE_VERSION,
+                    ],
+                    true,
+                    true,
+                    false,
+                );
+                done();
+            });
+        });
+
+        test('should request enhanced_comment_timespan when the audio player updates split is on', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowReplies: true,
+                shouldShowTasks: true,
+                shouldShowVersions: true,
+                shouldUseEnhancedActivities: true,
+                shouldUseEnhancedTimespanComments: true,
+                shouldUseUAA: true,
+            });
+            setImmediate(() => {
+                expect(feed.fetchFileActivities).toBeCalledWith(
+                    file.permissions,
+                    [
+                        FILE_ACTIVITY_TYPE_ENHANCED_ANNOTATION,
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN,
                         FILE_ACTIVITY_TYPE_TASK,
                         FILE_ACTIVITY_TYPE_VERSION,
                     ],
@@ -2537,6 +2567,26 @@ describe('api/Feed', () => {
             const byId = Object.fromEntries(parsed.map(item => [item.id, item]));
             expect(byId['enh-comment-1'].type).toBe(FEED_ITEM_TYPE_COMMENT);
             expect(byId['enh-annotation-1'].type).toBe(FEED_ITEM_TYPE_ANNOTATION);
+        });
+
+        test('should remap enhanced_comment_timespan activity types to the legacy comment type', () => {
+            const enhancedCommentTimespan = {
+                ...threadedCommentsFormatted[0],
+                id: 'enh-comment-timespan',
+                message: '#[timestamp:8055,endTimestamp:12000,versionId:1] range',
+                type: FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN,
+            };
+            const parsed = getParsedFileActivitiesResponse({
+                entries: [
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN,
+                        source: { [FILE_ACTIVITY_TYPE_ENHANCED_COMMENT_TIMESPAN]: enhancedCommentTimespan },
+                    },
+                ],
+            });
+            expect(parsed).toHaveLength(1);
+            expect(parsed[0].id).toBe('enh-comment-timespan');
+            expect(parsed[0].type).toBe(FEED_ITEM_TYPE_COMMENT);
         });
 
         test('should drop entries whose activity_type does not match a populated source key', () => {
