@@ -44,13 +44,18 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
  */
 const pad = (value: number) => String(value).padStart(2, '0');
 
-const localCalendarDay = (value: number | { day: number; month: number; year: number }) => {
+/**
+ * Normalize dates from the API (number) and content-sharing (object) to a string in the format YYYY-MM-DD.
+ */
+const normalizeDateToYearMonthDay = (value: number | { day: number; month: number; year: number }) => {
+    // currentExpiresAt comes in as a number
     if (typeof value === 'number') {
         const date = new Date(value);
 
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     }
 
+    // User-set expiration comes in as an object
     return `${value.year}-${pad(value.month)}-${pad(value.day)}`;
 };
 
@@ -61,28 +66,32 @@ export const convertSharedLinkSettings = (
     serverUrl: string,
     currentExpiresAt?: number | null,
 ): ConvertSharedLinkSettingsReturnType => {
-    const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, password, vanityName } = newSettings;
+    const {
+        expiration: newExpiration,
+        isDownloadEnabled,
+        isExpirationEnabled,
+        isPasswordEnabled,
+        password,
+        vanityName,
+    } = newSettings;
 
     const convertedSettings: ConvertSharedLinkSettingsReturnType = {
         vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
 
-    // The form holds a calendar date, { year: 2026, month: 10, day: 16 }.
-    // The saved value is an instant, 2026-10-15T23:59:00-07:00, which is Oct 16 2:59am in New York.
-    // Both local days are 2026-10-16, so an untouched date is left off the request.
-    const submittedDay =
-        expiration && isExpirationEnabled && typeof expiration === 'object' && 'year' in expiration
-            ? localCalendarDay(expiration)
-            : '';
-    const currentDay = typeof currentExpiresAt === 'number' ? localCalendarDay(currentExpiresAt) : '';
+    if (!isExpirationEnabled || !newExpiration) {
+        if (currentExpiresAt !== null) {
+            convertedSettings.unshared_at = null;
+        }
+    } else {
+        const submittedYearMonthDay = normalizeDateToYearMonthDay(newExpiration);
+        const currentYearMonthDay = currentExpiresAt ? normalizeDateToYearMonthDay(currentExpiresAt) : '';
 
-    if (currentExpiresAt === undefined || submittedDay !== currentDay) {
-        const unsharedAt =
-            expiration && isExpirationEnabled
-                ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
-                : null;
-
-        convertedSettings.unshared_at = isExpirationEnabled ? unsharedAt : null;
+        if (submittedYearMonthDay !== currentYearMonthDay) {
+            convertedSettings.unshared_at = convertISOStringToUTCDate(
+                new Date(newExpiration).toISOString(),
+            ).toISOString();
+        }
     }
 
     // Download permissions can only be set on "company" or "open" shared links.
