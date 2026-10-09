@@ -74,7 +74,12 @@ export default class MetadataQueryAPIHelper {
             return [];
         }
 
-        let operation = JSON_PATCH_OP_REPLACE;
+        type JsonPatchMutationOp =
+            | typeof JSON_PATCH_OP_ADD
+            | typeof JSON_PATCH_OP_REMOVE
+            | typeof JSON_PATCH_OP_REPLACE;
+
+        let operation: JsonPatchMutationOp = JSON_PATCH_OP_REPLACE;
 
         if (isEmptyValue(oldValue) && !isEmptyValue(newValue)) {
             operation = JSON_PATCH_OP_ADD;
@@ -89,7 +94,11 @@ export default class MetadataQueryAPIHelper {
             path: `/${field}`,
             value: oldValue,
         };
-        const patchOp = {
+        const patchOp: {
+            op: JsonPatchMutationOp;
+            path: string;
+            value?: MetadataFieldValue | null;
+        } = {
             op: operation,
             path: `/${field}`,
             value: newValue,

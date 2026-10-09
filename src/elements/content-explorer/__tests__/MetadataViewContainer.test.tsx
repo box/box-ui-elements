@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import type { FloatType } from '@box/metadata-filter';
-import type { Collection } from '../../../common/types/core';
+import type { BoxItem, Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
 import { render, screen, userEvent, waitFor, within } from '../../../test-utils/testing-library';
 import MetadataViewContainer, {
@@ -16,7 +16,7 @@ Object.defineProperty(Element.prototype, 'scrollTo', {
 });
 
 describe('elements/content-explorer/MetadataViewContainer', () => {
-    const mockItems = [
+    const mockItems: Array<BoxItem & { 'item.name': string; industry: string }> = [
         {
             id: '1',
             name: 'File 1.txt',

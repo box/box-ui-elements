@@ -50,7 +50,11 @@ export const mockEditingAssignees: TaskAssignee[] = [
 ];
 
 export const mockEditingTask: TaskNew = {
-    assigned_to: { entries: mockEditingAssignees, limit: 25, next_marker: '' },
+    assigned_to: {
+        entries: mockEditingAssignees as unknown as TaskNew['assigned_to']['entries'],
+        limit: 25,
+        next_marker: '',
+    },
     completion_rule: TASK_COMPLETION_RULE_ALL,
     created_at: '2026-06-30T12:00:00Z',
     created_by: {

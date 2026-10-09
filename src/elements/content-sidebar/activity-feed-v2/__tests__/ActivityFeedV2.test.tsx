@@ -8,6 +8,8 @@ import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
+import type { Comment } from '../../../../common/types/feed';
+import type { TaskNew } from '../../../../common/types/tasks';
 import { letPreviewSizeSettle } from './testUtils';
 
 type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
@@ -144,7 +146,7 @@ const mockFileWithCommentPermission: NonNullable<ActivityFeedV2Props['file']> = 
     permissions: { can_comment: true },
 };
 
-const mockComment = {
+const mockComment: Comment = {
     created_at: '2024-01-01T00:00:00Z',
     created_by: { id: '2', name: 'Commenter', type: 'user' },
     id: 'comment-1',
@@ -168,7 +170,7 @@ const mockAnnotation = {
     type: 'annotation',
 };
 
-const mockTask = {
+const mockTask: TaskNew = {
     assigned_to: { entries: [], limit: 20, next_marker: null },
     completion_rule: 'ALL_ASSIGNEES',
     created_at: '2024-03-01T00:00:00Z',
@@ -176,7 +178,7 @@ const mockTask = {
         id: 'tc',
         role: 'CREATOR',
         status: 'NOT_STARTED',
-        target: { id: 'user-1', name: 'Current User' },
+        target: { id: 'user-1', name: 'Current User', type: 'user' },
         type: 'task_collaborator',
     },
     description: 'Review document',
@@ -320,7 +322,10 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
     test('should render task feed items', () => {
         render(
-            <ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[mockTask] as ActivityFeedV2Props['feedItems']} />,
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[mockTask] as unknown as ActivityFeedV2Props['feedItems']}
+            />,
         );
 
         expect(screen.getByTestId('task-task-1')).toBeVisible();
@@ -374,7 +379,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
             );
@@ -428,7 +433,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getAvatarUrl={getAvatarUrl}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
@@ -456,7 +461,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getAvatarUrl={getAvatarUrl}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
@@ -484,7 +489,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                 />,
             );
 
@@ -499,7 +504,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
             );
