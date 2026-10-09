@@ -42,18 +42,16 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
  * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
  *   convertItemResponse, so it is in internal USM format.
  */
-const DATE_ONLY_PATTERN = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+const pad = (value: number) => String(value).padStart(2, '0');
 
-const localDayLabel = (value: Date | number | string) => {
-    if (typeof value === 'string' && DATE_ONLY_PATTERN.test(value)) {
-        return value;
+const localCalendarDay = (value: number | { day: number; month: number; year: number }) => {
+    if (typeof value === 'number') {
+        const date = new Date(value);
+
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     }
 
-    const date = value instanceof Date ? value : new Date(value);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${date.getFullYear()}-${month}-${day}`;
+    return `${value.year}-${pad(value.month)}-${pad(value.day)}`;
 };
 
 export const convertSharedLinkSettings = (
@@ -65,19 +63,25 @@ export const convertSharedLinkSettings = (
 ): ConvertSharedLinkSettingsReturnType => {
     const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, password, vanityName } = newSettings;
 
-    const unsharedAt =
-        expiration && isExpirationEnabled
-            ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
-            : null;
-
     const convertedSettings: ConvertSharedLinkSettingsReturnType = {
         vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
 
-    const submittedDay = expiration && isExpirationEnabled ? localDayLabel(expiration) : '';
-    const currentDay = typeof currentExpiresAt === 'number' ? localDayLabel(currentExpiresAt) : '';
+    // The form holds a calendar date, { year: 2026, month: 10, day: 16 }.
+    // The saved value is an instant, 2026-10-15T23:59:00-07:00, which is Oct 16 2:59am in New York.
+    // Both local days are 2026-10-16, so an untouched date is left off the request.
+    const submittedDay =
+        expiration && isExpirationEnabled && typeof expiration === 'object' && 'year' in expiration
+            ? localCalendarDay(expiration)
+            : '';
+    const currentDay = typeof currentExpiresAt === 'number' ? localCalendarDay(currentExpiresAt) : '';
 
     if (currentExpiresAt === undefined || submittedDay !== currentDay) {
+        const unsharedAt =
+            expiration && isExpirationEnabled
+                ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
+                : null;
+
         convertedSettings.unshared_at = isExpirationEnabled ? unsharedAt : null;
     }
 

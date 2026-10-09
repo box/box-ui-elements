@@ -123,46 +123,27 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                 expect(result.unshared_at).toBeNull();
             });
 
-            test('should omit unshared_at when the date field submits the saved local calendar day', () => {
-                const saved = new Date('2026-10-15T23:59:00-07:00');
-                const submittedDay = [
-                    saved.getFullYear(),
-                    String(saved.getMonth() + 1).padStart(2, '0'),
-                    String(saved.getDate()).padStart(2, '0'),
-                ].join('-');
-                const settings = {
-                    ...mockSettings,
-                    expiration: submittedDay,
-                    isDownloadEnabled: false,
-                };
-
-                const result = convertSharedLinkSettings(settings, ACCESS_OPEN, true, mockServerUrl, saved.getTime());
+            test('should keep the other shared link fields when the calendar date is omitted', () => {
+                const result = convertSharedLinkSettings(
+                    {
+                        ...mockSettings,
+                        expiration: { year: 2026, month: 10, day: 16 },
+                        isDownloadEnabled: false,
+                    },
+                    ACCESS_OPEN,
+                    true,
+                    mockServerUrl,
+                    new Date(2026, 9, 16, 2, 59, 0).getTime(),
+                );
 
                 expect(result.unshared_at).toBeUndefined();
                 expect(result.permissions).toEqual({ can_preview: true, can_download: false });
             });
 
-            test('should omit unshared_at when the submitted date is the same local calendar day', () => {
-                const settings = {
-                    ...mockSettings,
-                    expiration: new Date(2024, 11, 31, 0, 0, 0),
-                };
-
-                const result = convertSharedLinkSettings(
-                    settings,
-                    ACCESS_OPEN,
-                    true,
-                    mockServerUrl,
-                    new Date(2024, 11, 31, 18, 30, 0).getTime(),
-                );
-
-                expect(result.unshared_at).toBeUndefined();
-            });
-
             test('should include unshared_at when the submitted date is a different local calendar day', () => {
                 const settings = {
                     ...mockSettings,
-                    expiration: new Date(2024, 11, 31, 0, 0, 0),
+                    expiration: { year: 2024, month: 12, day: 31, toString: () => '2024-12-31' },
                 };
 
                 const result = convertSharedLinkSettings(
@@ -177,7 +158,13 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
             });
 
             test('should include unshared_at when expiration is toggled on and there was no current expiration', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, true, mockServerUrl, null);
+                const result = convertSharedLinkSettings(
+                    { ...mockSettings, expiration: { year: 2024, month: 12, day: 31, toString: () => '2024-12-31' } },
+                    ACCESS_OPEN,
+                    true,
+                    mockServerUrl,
+                    null,
+                );
 
                 expect(result.unshared_at).toBe('2024-12-31T23:59:59.000Z');
             });
