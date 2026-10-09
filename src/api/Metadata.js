@@ -310,6 +310,11 @@ class Metadata extends File {
         return this.getNamespacesAPI().getMetadataNamespacesUrl(namespaceFqn);
     }
 
+    /** @see MetadataNamespaces.getNamespace */
+    getNamespace(file: BoxItem, namespaceFqn: string): Promise<?Object> {
+        return this.getNamespacesAPI().getNamespace(file, namespaceFqn);
+    }
+
     /** @see MetadataNamespaces.listNamespaces */
     listNamespaces(
         file: BoxItem,
@@ -326,6 +331,14 @@ class Metadata extends File {
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
         return this.getNamespacesAPI().listTemplatesForNamespace(file, namespaceFqn, params);
+    }
+
+    /** @see MetadataNamespaces.searchTemplates */
+    searchTemplates(
+        file: BoxItem,
+        params: { query: string, limit: number, marker?: string },
+    ): Promise<{ entries: Array<Object>, next_marker?: string }> {
+        return this.getNamespacesAPI().searchTemplates(file, params);
     }
 
     /** @see MetadataNamespaces.createMetadataTemplate */
