@@ -215,6 +215,7 @@ describe('elements/content-sharing/sharingService', () => {
                 undefined, // access
                 undefined, // isDownloadAvailable
                 undefined, // serverUrl
+                undefined,
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
@@ -247,6 +248,7 @@ describe('elements/content-sharing/sharingService', () => {
                 options: {
                     ...options,
                     access: 'open',
+                    currentExpiresAt: 1700000000000,
                     isDownloadAvailable: true,
                     serverUrl: 'https://example.com/server-url',
                 },
@@ -268,6 +270,7 @@ describe('elements/content-sharing/sharingService', () => {
                 'open',
                 true,
                 'https://example.com/server-url',
+                1700000000000,
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
@@ -297,7 +300,13 @@ describe('elements/content-sharing/sharingService', () => {
 
             await service.updateSharedLink(sharedLinkSettings);
 
-            expect(convertSharedLinkSettings).toHaveBeenCalledWith(sharedLinkSettings, undefined, undefined, undefined);
+            expect(convertSharedLinkSettings).toHaveBeenCalledWith(
+                sharedLinkSettings,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+            );
         });
 
         test('should reject with 404 error when hasSharedLink is false', async () => {

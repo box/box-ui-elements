@@ -16,7 +16,7 @@ export interface ConvertSharedLinkSettingsReturnType {
         can_edit?: boolean;
         can_preview: boolean;
     };
-    unshared_at: string | null;
+    unshared_at?: string | null;
     vanity_url: string;
 }
 
@@ -42,21 +42,57 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
  * - Changing the settings for a shared link in any other scenario. The access level is saved from the initial calls to the Item API and
  *   convertItemResponse, so it is in internal USM format.
  */
+const pad = (value: number) => String(value).padStart(2, '0');
+
+/**
+ * Normalize dates from the API (number) and content-sharing (object) to a string in the format YYYY-MM-DD.
+ */
+const normalizeDateToYearMonthDay = (value: number | { day: number; month: number; year: number }) => {
+    // currentExpiresAt comes in as a number
+    if (typeof value === 'number') {
+        const date = new Date(value);
+
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
+    // User-set expiration comes in as an object
+    return `${value.year}-${pad(value.month)}-${pad(value.day)}`;
+};
+
 export const convertSharedLinkSettings = (
     newSettings: SharedLinkSettings,
     accessLevel: string,
     isDownloadAvailable: boolean,
     serverUrl: string,
+    currentExpiresAt?: number | null,
 ): ConvertSharedLinkSettingsReturnType => {
-    const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, password, vanityName } = newSettings;
+    const {
+        expiration: newExpiration,
+        isDownloadEnabled,
+        isExpirationEnabled,
+        isPasswordEnabled,
+        password,
+        vanityName,
+    } = newSettings;
 
     const convertedSettings: ConvertSharedLinkSettingsReturnType = {
-        unshared_at:
-            expiration && isExpirationEnabled
-                ? convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString()
-                : null,
         vanity_url: serverUrl && vanityName ? `${serverUrl}${vanityName}` : '',
     };
+
+    if (!isExpirationEnabled || !newExpiration) {
+        if (currentExpiresAt !== null) {
+            convertedSettings.unshared_at = null;
+        }
+    } else {
+        const submittedYearMonthDay = normalizeDateToYearMonthDay(newExpiration);
+        const currentYearMonthDay = currentExpiresAt ? normalizeDateToYearMonthDay(currentExpiresAt) : '';
+
+        if (submittedYearMonthDay !== currentYearMonthDay) {
+            convertedSettings.unshared_at = convertISOStringToUTCDate(
+                new Date(newExpiration).toISOString(),
+            ).toISOString();
+        }
+    }
 
     // Download permissions can only be set on "company" or "open" shared links.
     if (accessLevel !== ACCESS_COLLAB) {
