@@ -86,9 +86,10 @@ type APIOptions = {
     /**
      * Optional regional metadata API host (e.g. "https://api-jp.box.com").
      *
-     * Affects ONLY metadata *instance* endpoints (file/folder
-     * `/metadata/...`). Templates, taxonomies, suggestions, options, and
-     * metadata queries always use `apiHost` regardless of this value.
+     * Affects metadata *instance* endpoints (file/folder `/metadata/...`) and
+     * metadata *template* endpoints (`/metadata_templates/...`). Taxonomies,
+     * suggestions, options, and metadata queries always use `apiHost`
+     * regardless of this value.
      *
      * Forward-compatible by design: when undefined, empty, or equal to
      * `apiHost`, the resulting URLs are identical to those produced when
