@@ -322,7 +322,7 @@ type BoxItem = {
     created_by?: User;
     description?: string;
     download_url?: string;
-    extension?: string;
+    extension?: string | null;
     file_version?: BoxItemVersion;
     has_collaborations?: boolean;
     id: string;
