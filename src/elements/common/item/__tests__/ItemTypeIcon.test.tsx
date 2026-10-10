@@ -26,6 +26,18 @@ describe('elements/common/item/ItemTypeIcon', () => {
         expect(screen.getByRole('img', { name: 'Personal folder' })).toBeInTheDocument();
     });
 
+    test('renders a folder when the extension is null', () => {
+        renderComponent({ item: { id: '1', type: 'folder', extension: null } });
+
+        expect(screen.getByRole('img', { name: 'Personal folder' })).toBeInTheDocument();
+    });
+
+    test('renders a file when the extension is null', () => {
+        renderComponent({ item: { id: '1', type: 'file', extension: null } });
+
+        expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
+    });
+
     test('renders component correctly for a bookmark item', async () => {
         renderComponent({ item: { id: '1', type: 'web_link' } });
 

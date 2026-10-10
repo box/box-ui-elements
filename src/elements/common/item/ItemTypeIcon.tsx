@@ -19,11 +19,12 @@ export interface ItemTypeIconProps extends Partial<ItemIconProps> {
 const ItemTypeIcon = ({ item, ...rest }: ItemTypeIconProps) => {
     const {
         archive_type: archiveType,
-        extension = '',
+        extension: itemExtension,
         has_collaborations: hasCollabs,
         is_externally_owned: isExternal,
         type,
     } = item;
+    const extension = itemExtension ?? '';
 
     const { formatMessage } = useIntl();
 
