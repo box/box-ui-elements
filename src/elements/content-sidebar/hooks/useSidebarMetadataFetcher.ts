@@ -104,7 +104,7 @@ function useSidebarMetadataFetcher(
             const isValidError = isUserCorrectableError(errorStatus);
             setStatus(STATUS.ERROR);
             setErrorMessage(message);
-            onError(error, code, {
+            onError(error as Error, code, {
                 error,
                 isErrorDisplayed: isValidError,
             });

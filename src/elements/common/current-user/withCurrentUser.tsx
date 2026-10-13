@@ -14,7 +14,8 @@ import { ElementsXhrError, ErrorContextProps } from '../../../common/types/api';
 import { Errors } from '../flowTypes';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
-import { User } from '../../../common/types/core';
+import { BoxItem, User } from '../../../common/types/core';
+import type API from '../../../api';
 
 export type WithCurrentUserProps = {
     currentUser?: User;
@@ -76,7 +77,7 @@ export default function withCurrentUser<P extends object>(
          * @return {void}
          */
         fetchCurrentUser = (user?: User, shouldDestroy = false): void => {
-            const { api, file } = this.props;
+            const { api, file } = this.props as P & WithCurrentUserProps & { api: API; file?: BoxItem };
 
             if (!file) {
                 throw getBadItemError();
