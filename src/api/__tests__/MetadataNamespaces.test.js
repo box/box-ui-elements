@@ -150,12 +150,34 @@ describe('api/MetadataNamespaces', () => {
 
     describe('searchTemplates()', () => {
         test('should GET /metadata_templates/search with query, limit, and marker', async () => {
+            const entry = {
+                id: '58063d82-4128-7b43-bba9-92f706befcdf',
+                type: 'metadata_template',
+                templateKey: 'legalHold',
+                displayName: 'Legal Hold',
+                namespace: 'enterprise_123.legal.contracts',
+                containingNamespace: {
+                    fqn: 'enterprise_123.legal.contracts',
+                    displayName: 'Contracts',
+                },
+                ancestors: [
+                    { fqn: 'enterprise_123', displayName: 'Enterprise 123' },
+                    { fqn: 'enterprise_123.legal', displayName: 'Legal' },
+                ],
+                permissions: {
+                    can_read: true,
+                    can_update: true,
+                    can_delete: false,
+                    can_view_permissions: true,
+                    can_manage_permissions: false,
+                },
+            };
             host.xhr.get.mockResolvedValue({
                 data: {
                     limit: 20,
                     next_marker: 'cursor-1',
                     prev_marker: null,
-                    entries: [],
+                    entries: [entry],
                 },
             });
 
@@ -163,7 +185,7 @@ describe('api/MetadataNamespaces', () => {
                 limit: 20,
                 next_marker: 'cursor-1',
                 prev_marker: null,
-                entries: [],
+                entries: [entry],
             });
             expect(host.xhr.get).toHaveBeenCalledWith({
                 url: 'https://api.box.com/2.0/metadata_templates/search',

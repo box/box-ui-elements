@@ -237,7 +237,7 @@ describe('useMetadataTemplateItemsService', () => {
                         can_read: true,
                         can_update: true,
                         can_delete: false,
-                        can_view_permissions: false,
+                        can_view_permissions: true,
                         can_manage_permissions: false,
                     },
                 },
