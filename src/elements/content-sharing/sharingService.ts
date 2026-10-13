@@ -15,6 +15,7 @@ export interface ItemData {
 
 export interface Options extends ItemData {
     access?: string;
+    currentExpiresAt?: number | null;
     isDownloadAvailable?: boolean;
     serverUrl?: string;
 }
@@ -69,12 +70,12 @@ export const createSharingService = ({
             return Promise.reject(Object.assign(new Error('Shared link not found'), { status: 404 }));
         }
 
-        const { access, isDownloadAvailable, serverUrl } = options;
+        const { access, currentExpiresAt, isDownloadAvailable, serverUrl } = options;
 
         return new Promise((resolve, reject) => {
             itemApiInstance.updateSharedLink(
                 { id, permissions },
-                convertSharedLinkSettings(sharedLinkSettings, access, isDownloadAvailable, serverUrl),
+                convertSharedLinkSettings(sharedLinkSettings, access, isDownloadAvailable, serverUrl, currentExpiresAt),
                 data => {
                     onUpdateSharedLink(data);
                     resolve(data);

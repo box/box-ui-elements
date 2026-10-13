@@ -58,6 +58,7 @@ export const useSharingService = ({
                 can_share: sharingServiceProps?.can_share,
             },
             serverUrl: sharingServiceProps?.serverUrl,
+            currentExpiresAt: sharedLink?.expiresAt ?? null,
             isDownloadAvailable: sharedLink?.settings?.isDownloadAvailable ?? false,
         };
 
