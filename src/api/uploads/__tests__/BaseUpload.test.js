@@ -299,7 +299,7 @@ describe('api/uploads/BaseUpload', () => {
         test('should call error callback on file on 409 if overwrite property is "error"', () => {
             const error = new Error();
             error.status = 409;
-            
+
             upload.fileId = '123';
             upload.overwrite = 'error';
             upload.makePreflightRequest = jest.fn();
@@ -363,18 +363,41 @@ describe('api/uploads/BaseUpload', () => {
         });
 
         test('should retry on 429 status after default retry interval', () => {
+            jest.spyOn(Math, 'random').mockReturnValue(0);
             const retryAfterMs = 3000;
 
             upload.makePreflightRequest = jest.fn();
             upload.preflightErrorHandler({
                 status: 429,
             });
-            clock.advanceTimersByTime(retryAfterMs + 1);
+            clock.advanceTimersByTime(retryAfterMs - 1);
+            expect(upload.makePreflightRequest).not.toHaveBeenCalled();
 
+            clock.advanceTimersByTime(1);
             expect(upload.makePreflightRequest).toHaveBeenCalled();
+            Math.random.mockRestore();
+        });
+
+        test('should retry on 429 with exponential backoff and jitter', () => {
+            jest.spyOn(Math, 'random').mockReturnValue(0.5);
+            upload.retryCount = 1;
+            upload.makePreflightRequest = jest.fn();
+
+            upload.preflightErrorHandler({
+                status: 429,
+            });
+
+            // 3000 * 2^1 + 500
+            clock.advanceTimersByTime(6500 - 1);
+            expect(upload.makePreflightRequest).not.toHaveBeenCalled();
+
+            clock.advanceTimersByTime(1);
+            expect(upload.makePreflightRequest).toHaveBeenCalled();
+            Math.random.mockRestore();
         });
 
         test('should retry on too_many_requests code after default retry interval', () => {
+            jest.spyOn(Math, 'random').mockReturnValue(0);
             const retryAfterMs = 3000;
 
             upload.makePreflightRequest = jest.fn();
@@ -385,6 +408,7 @@ describe('api/uploads/BaseUpload', () => {
             clock.advanceTimersByTime(retryAfterMs + 1);
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
+            Math.random.mockRestore();
         });
 
         test('should retry after interval defined in response header', () => {
