@@ -13,6 +13,13 @@ executors:
         user: root
     resource_class: large
     working_directory: ~/buie
+  # Keep the tag in sync with @playwright/test; baselines are rendered in this image.
+  playwright-executor:
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.63.0-noble
+        user: root
+    resource_class: large
+    working_directory: ~/buie
 
 commands:
   yarn-install:
@@ -127,6 +134,43 @@ jobs:
           name: Chromatic
           command: yarn --cwd /buie chromatic
 
+  build-storybook:
+    executor: default
+    steps:
+      - checkout
+      - setup-workspace
+      - run:
+          name: Checking for changes that affect rendering
+          command: /buie/scripts/visual_changes.sh || circleci-agent step halt
+      - build-locales
+      - run:
+          name: Building Storybook
+          command: yarn --cwd /buie build:prod:storybook
+      - persist_to_workspace:
+          root: /buie
+          paths:
+            - storybook
+
+  visual-tests:
+    executor: playwright-executor
+    steps:
+      - setup-workspace
+      - run:
+          name: Checking for a Storybook build
+          command: |
+            if [ ! -f /buie/storybook/index.json ]; then
+              echo "build-storybook skipped the build because no rendering files changed."
+              circleci-agent step halt
+            fi
+      - run:
+          name: Playwright visual tests
+          command: /buie/scripts/visual_tests.sh
+          environment:
+            VISUAL_ARTIFACTS_DIR: /tmp/visual-artifacts
+      - store_artifacts:
+          path: /tmp/visual-artifacts
+          destination: visual
+
 workflows:
   version: 2
   lint_test_build:
@@ -147,3 +191,9 @@ workflows:
       - chromatic:
           requires:
             - setup
+      - build-storybook:
+          requires:
+            - setup
+      - visual-tests:
+          requires:
+            - build-storybook

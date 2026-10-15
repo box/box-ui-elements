@@ -97,6 +97,8 @@ This will add your changes on top of what's already in upstream, minimizing merg
 
 Make sure that all tests are passing before submitting a pull request. See the [developing guide](DEVELOPING.md).
 
+If your change affects how components render, run the visual regression tests with `yarn test:visual` (requires Docker) and commit any updated screenshots in `test/visual/__screenshots__/` with your change. Otherwise the CircleCI `visual-tests` job fails; if the differences are intended, apply the baselines it regenerated with `yarn test:visual:download <pull request number>` and commit them. See [Visual Regression Testing](DEVELOPING.md#visual-regression-testing).
+
 ### Step 7: Send the pull request
 
 Send the pull request from your feature branch to us. Be sure to include a description (as mentioned above in step 4) that lets us know what work you did.
