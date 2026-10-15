@@ -219,6 +219,42 @@ describe('useMetadataTemplateItemsService', () => {
         });
     });
 
+    test('should give a list row a namespace and template key id when the API omits one', async () => {
+        listTemplatesForNamespace.mockResolvedValue({
+            entries: [
+                {
+                    templateKey: 'untitled',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Untitled',
+                },
+                {
+                    id: '   ',
+                    templateKey: 'blankId',
+                    scope: `${enterpriseFqn}.hr`,
+                    displayName: 'Blank id',
+                },
+                {
+                    displayName: 'No identity',
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getTemplates(`${enterpriseFqn}.legal`, {
+            limit: 50,
+            marker: undefined,
+        });
+
+        expect(entries.map(entry => entry.id)).toEqual([
+            `${enterpriseFqn}.legal/untitled`,
+            `${enterpriseFqn}.hr/blankId`,
+        ]);
+    });
+
     test('should search templates through the metadata API and map the hit shape', async () => {
         searchTemplates.mockResolvedValue({
             entries: [
@@ -353,6 +389,39 @@ describe('useMetadataTemplateItemsService', () => {
             ],
             next_marker: undefined,
         });
+    });
+
+    test('should give a search hit a namespace and template key id when the API omits one', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    templateKey: 'legalHold',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Legal Hold',
+                },
+                {
+                    id: '',
+                    templateKey: 'hrPolicy',
+                    scope: `${enterpriseFqn}.hr`,
+                    displayName: 'HR Policy',
+                },
+                {
+                    displayName: 'No identity',
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getSearchResults('hold', { limit: 20 });
+
+        expect(entries.map(entry => entry.id)).toEqual([
+            `${enterpriseFqn}.legal/legalHold`,
+            `${enterpriseFqn}.hr/hrPolicy`,
+        ]);
     });
 
     test('should not call search for a blank query', async () => {

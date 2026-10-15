@@ -38,6 +38,25 @@ function readNonBlank(value: unknown): string | undefined {
     return typeof value === 'string' && value.trim() ? value : undefined;
 }
 
+/**
+ * Browser row id. The editor cache id wins, then a non-blank API id.
+ * Otherwise namespace plus template key stays unique across rows. Callers
+ * drop a row that still has no id — an empty id collides in React, can select
+ * the wrong row, and makes Edit a no-op.
+ */
+function resolveBrowserTemplateId(
+    editorId: string | undefined,
+    apiId: unknown,
+    namespace: string | undefined,
+    templateKey: string | undefined,
+): string | undefined {
+    return (
+        readNonBlank(editorId) ??
+        readNonBlank(apiId) ??
+        (namespace && templateKey ? `${namespace}/${templateKey}` : undefined)
+    );
+}
+
 type NamespaceFields = {
     displayName?: unknown;
     display_name?: unknown;
@@ -165,23 +184,30 @@ export default function useMetadataTemplateItemsService(
                 // The API returns camelCase fields; we normalise displayName and scope/namespace.
                 const listed: BrowserMetadataTemplate[] = (result.entries ?? [])
                     .filter((t: Record<string, unknown>) => !isHiddenTemplate(t))
-                    .map((t: Record<string, unknown>) => {
-                        const templateKey = t.templateKey as string;
-                        const templateScope = (t.namespace as string) ?? (t.scope as string) ?? namespaceFQN;
+                    .flatMap((t: Record<string, unknown>) => {
+                        const templateKey = readNonBlank(t.templateKey);
+                        const templateScope =
+                            readNonBlank(t.namespace) ?? readNonBlank(t.scope) ?? readNonBlank(namespaceFQN);
                         // Prefer the editor template's id so that id-based lookups in
                         // handleEditTemplateById / onTemplateSelect resolve correctly.
                         const editorMatch = templates.find(et =>
                             isSameMetadataTemplate(et, { templateKey, scope: templateScope }),
                         );
-                        return {
-                            id: editorMatch?.id ?? readNonBlank(t.id) ?? '',
-                            type: (t.type as string) ?? 'metadata_template',
-                            displayName: ((t.displayName as string) ?? templateKey) || '',
-                            scope: templateScope,
-                            templateKey,
-                            canEdit: canEditMetadataTemplate(t),
-                            hidden: false,
-                        };
+                        const id = resolveBrowserTemplateId(editorMatch?.id, t.id, templateScope, templateKey);
+                        if (!id) {
+                            return [];
+                        }
+                        return [
+                            {
+                                id,
+                                type: (t.type as string) ?? 'metadata_template',
+                                displayName: ((t.displayName as string) ?? templateKey) || '',
+                                scope: templateScope,
+                                templateKey,
+                                canEdit: canEditMetadataTemplate(t),
+                                hidden: false,
+                            },
+                        ];
                     });
 
                 // Items-service lists may omit templates already in the editor cache.
@@ -229,7 +255,7 @@ export default function useMetadataTemplateItemsService(
 
                 const entries: BrowserMetadataTemplate[] = (result.entries ?? [])
                     .filter((hit: Record<string, unknown>) => !isHiddenTemplate(hit))
-                    .map((hit: Record<string, unknown>) => {
+                    .flatMap((hit: Record<string, unknown>) => {
                         const templateKey = readNonBlank(hit.templateKey);
                         const namespace = readNonBlank(hit.namespace);
                         const scope = readNonBlank(hit.scope) ?? namespace;
@@ -238,18 +264,29 @@ export default function useMetadataTemplateItemsService(
                         const editorMatch = templates.find(template =>
                             isSameMetadataTemplate(template, { templateKey, scope: namespace ?? scope }),
                         );
+                        const id = resolveBrowserTemplateId(editorMatch?.id, hit.id, namespace ?? scope, templateKey);
+                        if (!id) {
+                            return [];
+                        }
 
-                        return {
-                            id: editorMatch?.id ?? readNonBlank(hit.id) ?? '',
-                            type: readNonBlank(hit.type) ?? 'metadata_template',
-                            displayName: resolveSearchDisplayName(hit, templateKey, editorMatch, customMetadataName),
-                            scope,
-                            namespace,
-                            templateKey,
-                            canEdit: canEditMetadataTemplate(hit),
-                            hidden: false,
-                            ancestors: toSearchAncestors(hit),
-                        };
+                        return [
+                            {
+                                id,
+                                type: readNonBlank(hit.type) ?? 'metadata_template',
+                                displayName: resolveSearchDisplayName(
+                                    hit,
+                                    templateKey,
+                                    editorMatch,
+                                    customMetadataName,
+                                ),
+                                scope,
+                                namespace,
+                                templateKey,
+                                canEdit: canEditMetadataTemplate(hit),
+                                hidden: false,
+                                ancestors: toSearchAncestors(hit),
+                            },
+                        ];
                     });
 
                 return { entries, next_marker: readNonBlank(result.next_marker) };
