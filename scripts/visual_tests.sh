@@ -31,27 +31,37 @@ npx playwright test -c "$CONFIG" --last-failed --update-snapshots=changed --repo
 
 find "$SCREENSHOTS_DIR" -name '*.png' -newer "$MARKER" | sort > "$CHANGED_LIST"
 
-if [ -n "${CIRCLE_WORKFLOW_JOB_ID:-}" ]; then
-    ARTIFACTS_URL="https://output.circle-artifacts.com/output/job/${CIRCLE_WORKFLOW_JOB_ID}/artifacts/${CIRCLE_NODE_INDEX:-0}/visual"
+IN_CI="${CIRCLE_WORKFLOW_JOB_ID:-}"
+if [ -n "$IN_CI" ]; then
+    ARTIFACTS_URL="https://output.circle-artifacts.com/output/job/${IN_CI}/artifacts/${CIRCLE_NODE_INDEX:-0}/visual"
 else
     ARTIFACTS_URL="$ARTIFACTS_DIR"
 fi
+CIRCLE_PULL_REQUEST="${CIRCLE_PULL_REQUEST:-}"
 PR_NUMBER="${CIRCLE_PR_NUMBER:-${CIRCLE_PULL_REQUEST##*/}}"
 
 echo
-echo "Review the changes at ${ARTIFACTS_URL}/report/index.html#?q=s:failed"
-echo
+if [ -n "$IN_CI" ]; then
+    echo "Review the changes at ${ARTIFACTS_URL}/report/index.html#?q=s:failed"
+    echo
+fi
 
 if [ -s "$CHANGED_LIST" ]; then
     tar -czf "$ARTIFACTS_DIR/visual-baselines.tgz" -T "$CHANGED_LIST"
     echo "Regenerated baselines:"
     sed 's/^/  /' "$CHANGED_LIST"
     echo
-    echo "If these changes are intended, apply them from the repo root and commit the PNGs:"
-    if [ -n "$PR_NUMBER" ]; then
-        echo "  yarn test:visual:download ${PR_NUMBER}"
+    if [ -n "$IN_CI" ]; then
+        echo "If these changes are intended, apply them from the repo root and commit the PNGs:"
+        if [ -n "$PR_NUMBER" ]; then
+            echo "  yarn test:visual:download ${PR_NUMBER}"
+        fi
+        echo "  curl -sL ${ARTIFACTS_URL}/visual-baselines.tgz | tar -xz"
+    else
+        echo "These baselines were rewritten in your working tree. If the changes are intended, commit the PNGs."
+        echo "Otherwise restore them:"
+        echo "  git checkout -- ${SCREENSHOTS_DIR} && git clean -fd ${SCREENSHOTS_DIR}"
     fi
-    echo "  curl -sL ${ARTIFACTS_URL}/visual-baselines.tgz | tar -xz"
 else
     echo "No baselines were regenerated; the failure is not a screenshot difference. See the log above."
 fi
