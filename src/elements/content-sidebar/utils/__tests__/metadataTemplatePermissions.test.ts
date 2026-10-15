@@ -15,15 +15,25 @@ const namespacePermissions = {
 };
 
 describe('metadataTemplatePermissions', () => {
-    test('should allow template creation only when every namespace flag is boolean and can_create_templates is true', () => {
+    test('should allow template creation when can_create_templates is true', () => {
         expect(
             canCreateTemplatesInNamespace({
                 permissions: { ...namespacePermissions, can_create_templates: true },
             }),
         ).toBe(true);
+        expect(
+            canCreateTemplatesInNamespace({
+                permissions: { can_create_templates: true },
+            }),
+        ).toBe(true);
+        expect(
+            canCreateTemplatesInNamespace({
+                permissions: { can_create_templates: true, can_read: 'yes', extra_flag: 1 },
+            }),
+        ).toBe(true);
     });
 
-    test('should deny template creation when the grant is false, missing, or incomplete', () => {
+    test('should deny template creation when can_create_templates is not exactly true', () => {
         expect(canCreateTemplatesInNamespace({ permissions: namespacePermissions })).toBe(false);
         expect(canCreateTemplatesInNamespace({ permissions: null })).toBe(false);
         expect(canCreateTemplatesInNamespace({})).toBe(false);
@@ -40,13 +50,19 @@ describe('metadataTemplatePermissions', () => {
         ).toBe(false);
     });
 
-    test('should allow template edit only when every template flag is boolean and can_update is true', () => {
+    test('should allow template edit when can_update is true', () => {
         expect(canEditMetadataTemplate({ permissions: { ...templatePermissions, can_update: true } })).toBe(true);
+        expect(canEditMetadataTemplate({ permissions: { can_update: true } })).toBe(true);
+        expect(
+            canEditMetadataTemplate({
+                permissions: { can_update: true, can_delete: null, can_read: 'yes' },
+            }),
+        ).toBe(true);
     });
 
-    test('should deny template edit when the grant is false, missing, or incomplete', () => {
+    test('should deny template edit when can_update is not exactly true', () => {
         expect(canEditMetadataTemplate({ permissions: templatePermissions })).toBe(false);
-        expect(canEditMetadataTemplate({ permissions: { can_update: true } })).toBe(false);
+        expect(canEditMetadataTemplate({ permissions: { can_update: false } })).toBe(false);
         expect(canEditMetadataTemplate({ permissions: null })).toBe(false);
         expect(canEditMetadataTemplate({ canEdit: true })).toBe(false);
         expect(canEditMetadataTemplate({ allowedOperations: ['UPDATE_TEMPLATE'] })).toBe(false);
