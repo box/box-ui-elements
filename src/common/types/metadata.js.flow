@@ -75,7 +75,7 @@ type MetadataFields = { [string]: MetadataFieldValue };
 type MetadataQueryInstanceTypeField = {
     displayName: string,
     key: string,
-    options?: MetadataTemplateFieldOption,
+    options?: Array<MetadataTemplateFieldOption>,
     type: string,
     value: ?MetadataFieldValue,
 };

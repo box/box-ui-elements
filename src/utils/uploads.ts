@@ -13,37 +13,39 @@ import type {
 const DEFAULT_API_OPTIONS: UploadItemAPIOptions = {};
 
 /** Returns true if file contains API options. */
-function doesFileContainAPIOptions(file: UploadFile | UploadFileWithAPIOptions): boolean {
-    return !!(file.options && file.file);
+function doesFileContainAPIOptions(file: UploadFile | UploadFileWithAPIOptions): file is UploadFileWithAPIOptions {
+    return 'file' in file && file.file != null;
 }
 
 /** Returns true if item contains API options. */
-function doesDataTransferItemContainAPIOptions(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): boolean {
-    return !!(item.options && item.item);
+function doesDataTransferItemContainAPIOptions(
+    item: DataTransferItem | UploadDataTransferItemWithAPIOptions,
+): item is UploadDataTransferItemWithAPIOptions {
+    return 'item' in item && item.item != null;
 }
 
 /** Converts UploadFile or UploadFileWithAPIOptions to UploadFile. */
 function getFile(file: UploadFile | UploadFileWithAPIOptions): UploadFile {
     if (doesFileContainAPIOptions(file)) {
-        return (file as UploadFileWithAPIOptions).file;
+        return file.file;
     }
 
-    return file as UploadFile;
+    return file;
 }
 
 /** Converts DataTransferItem or UploadDataTransferItemWithAPIOptions to DataTransferItem. */
 function getDataTransferItem(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): DataTransferItem {
     if (doesDataTransferItemContainAPIOptions(item)) {
-        return (item as UploadDataTransferItemWithAPIOptions).item;
+        return item.item;
     }
 
-    return item as DataTransferItem;
+    return item;
 }
 
 /** Get API Options from file. */
 function getFileAPIOptions(file: UploadFile | UploadFileWithAPIOptions): UploadItemAPIOptions {
     if (doesFileContainAPIOptions(file)) {
-        return (file as UploadFileWithAPIOptions).options || DEFAULT_API_OPTIONS;
+        return file.options || DEFAULT_API_OPTIONS;
     }
 
     return DEFAULT_API_OPTIONS;
@@ -54,7 +56,7 @@ function getDataTransferItemAPIOptions(
     item: DataTransferItem | UploadDataTransferItemWithAPIOptions,
 ): UploadItemAPIOptions {
     if (doesDataTransferItemContainAPIOptions(item)) {
-        return (item as UploadDataTransferItemWithAPIOptions).options || DEFAULT_API_OPTIONS;
+        return item.options || DEFAULT_API_OPTIONS;
     }
 
     return DEFAULT_API_OPTIONS;
@@ -221,13 +223,16 @@ function getPackageFileFromDataTransferItem(
  */
 function getFileId(file: UploadFileWithAPIOptions | UploadFile, rootFolderId: string): string {
     if (!doesFileContainAPIOptions(file)) {
-        return (file as UploadFile).name;
+        return file.name;
     }
 
-    const fileWithOptions = file as UploadFileWithAPIOptions;
-    const folderId = getProp(fileWithOptions, 'options.folderId', rootFolderId);
-    const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp', Date.now());
-    const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
+    if (!file.options) {
+        return file.file.name;
+    }
+
+    const folderId = getProp(file, 'options.folderId', rootFolderId);
+    const uploadInitTimestamp = getProp(file, 'options.uploadInitTimestamp', Date.now());
+    const fileName = file.file.webkitRelativePath || file.file.name;
 
     return `${fileName}_${folderId}_${uploadInitTimestamp}`;
 }
@@ -245,7 +250,7 @@ function getDataTransferItemId(
 ): string {
     const item = getDataTransferItem(itemData);
     const { name } = getEntryFromDataTransferItem(item);
-    if (!doesDataTransferItemContainAPIOptions(itemData)) {
+    if (!doesDataTransferItemContainAPIOptions(itemData) || !itemData.options) {
         return name;
     }
 
