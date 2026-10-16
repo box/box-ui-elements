@@ -98,6 +98,61 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 expect(onLoad).toHaveBeenCalledTimes(1);
             });
         });
+
+        test('should register version actions and clear them on unmount', () => {
+            const registerVersionActions = jest.fn();
+            const { unmount } = renderComponent({ registerVersionActions });
+
+            expect(registerVersionActions).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    delete: expect.any(Function),
+                    download: expect.any(Function),
+                    promote: expect.any(Function),
+                    isArchived: false,
+                    isWatermarked: false,
+                    versionCount: Infinity,
+                    versionLimit: Infinity,
+                    versions: [],
+                }),
+            );
+
+            unmount();
+
+            expect(registerVersionActions).toHaveBeenLastCalledWith(null);
+        });
+
+        test('should republish version actions when the version list loads', async () => {
+            const loadedVersions = [
+                {
+                    id: '123',
+                    created_at: '2023-01-02T00:00:00Z',
+                    permissions: { can_download: true },
+                },
+                {
+                    id: '456',
+                    created_at: '2023-01-01T00:00:00Z',
+                    permissions: { can_delete: true, can_download: true, can_upload: true },
+                },
+            ];
+            versionsAPI.addPermissions.mockReturnValueOnce({
+                entries: loadedVersions,
+                total_count: 2,
+            });
+            const registerVersionActions = jest.fn();
+
+            renderComponent({ registerVersionActions });
+
+            await waitFor(() => {
+                expect(registerVersionActions).toHaveBeenLastCalledWith(
+                    expect.objectContaining({
+                        isArchived: false,
+                        isWatermarked: false,
+                        versionCount: 2,
+                        versions: loadedVersions,
+                    }),
+                );
+            });
+        });
     });
 
     describe('handleActionDelete', () => {

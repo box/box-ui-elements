@@ -23,7 +23,12 @@ import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
 import { withRouterIfEnabled } from '../../common/routing';
 import type { FeatureConfig } from '../../common/feature-checking';
-import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
+import type {
+    RegisterVersionActionsCallback,
+    VersionActionCallback,
+    VersionChangeCallback,
+    SidebarLoadCallback,
+} from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 import {
     ViewType,
@@ -50,6 +55,7 @@ type Props = {
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
     parentName: ViewTypeValues,
+    registerVersionActions?: RegisterVersionActionsCallback,
     routerDisabled?: boolean,
     versionId?: string,
 };
@@ -91,16 +97,56 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
     window: any = window;
 
+    publishVersionActions = (prevState?: State) => {
+        const { registerVersionActions } = this.props;
+        const { isArchived, isWatermarked, versionCount, versionLimit, versions } = this.state;
+
+        if (!registerVersionActions) {
+            return;
+        }
+
+        // With prevState, only publish when something the actions depend on changed.
+        if (
+            prevState &&
+            prevState.versions === versions &&
+            prevState.isArchived === isArchived &&
+            prevState.isWatermarked === isWatermarked &&
+            prevState.versionCount === versionCount &&
+            prevState.versionLimit === versionLimit
+        ) {
+            return;
+        }
+
+        registerVersionActions({
+            delete: this.handleActionDelete,
+            download: this.handleActionDownload,
+            promote: this.handleActionPromote,
+            isArchived,
+            isWatermarked,
+            versionCount,
+            versionLimit,
+            versions,
+        });
+    };
+
     componentDidMount() {
         const { onLoad } = this.props;
+        this.publishVersionActions();
         this.initialize();
         this.fetchData().then(() => {
             onLoad({ component: 'preview', feature: 'versions' });
         });
     }
 
-    componentDidUpdate({ fileId: prevFileId, versionId: prevVersionId }: Props) {
+    componentWillUnmount() {
+        const { registerVersionActions } = this.props;
+        registerVersionActions?.(null);
+    }
+
+    componentDidUpdate({ fileId: prevFileId, versionId: prevVersionId }: Props, prevState: State) {
         const { fileId, versionId } = this.props;
+
+        this.publishVersionActions(prevState);
 
         if (fileId !== prevFileId) {
             this.refresh();

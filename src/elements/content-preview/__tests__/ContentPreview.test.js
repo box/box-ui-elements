@@ -1407,6 +1407,35 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.childAt(1).props().children.key).toBe('789');
             expect(instance.loadPreview).not.toHaveBeenCalled();
         });
+
+        describe('registerVersionActions', () => {
+            const getSidebar = wrapper => wrapper.find('.bcpr-body').children().last();
+            const getSidebarWrapper = (extraProps = {}) => {
+                const wrapper = getWrapper({ fileId: '123', ...extraProps });
+                wrapper.setState({ currentFileId: '123', file: { id: '123' } });
+                return wrapper;
+            };
+
+            test('should add registerVersionActions to the versions sidebar props', () => {
+                const registerVersionActions = jest.fn();
+                const wrapper = getSidebarWrapper({
+                    contentSidebarProps: { versionsSidebarProps: { foo: 'bar' } },
+                    registerVersionActions,
+                });
+
+                expect(getSidebar(wrapper).prop('versionsSidebarProps')).toEqual({
+                    foo: 'bar',
+                    registerVersionActions,
+                });
+            });
+
+            test('should leave the versions sidebar props alone without registerVersionActions', () => {
+                const versionsSidebarProps = { foo: 'bar' };
+                const wrapper = getSidebarWrapper({ contentSidebarProps: { versionsSidebarProps } });
+
+                expect(getSidebar(wrapper).prop('versionsSidebarProps')).toBe(versionsSidebarProps);
+            });
+        });
     });
 
     describe('loadFileFromStage()', () => {
@@ -1595,6 +1624,63 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.setProps({ isComparing: true });
 
             expect(livePreview.setComparisonMode).not.toHaveBeenCalled();
+        });
+
+        describe('comparison banner', () => {
+            const comparisonBanner = { onDownload: jest.fn() };
+
+            beforeEach(() => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+                instance.preview = {
+                    options: {},
+                    updateComparisonBanner: jest.fn(),
+                };
+            });
+
+            test('should push a changed banner to the live preview', () => {
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBe(comparisonBanner);
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(1);
+            });
+
+            test('should push an empty banner when the banner is cleared', () => {
+                wrapper.setProps({ comparisonBanner });
+                wrapper.setProps({ comparisonBanner: undefined });
+
+                expect(instance.preview.options.comparisonBanner).toEqual({});
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(2);
+            });
+
+            test('should not push the banner when it did not change', () => {
+                wrapper.setProps({ foo: 'bar' });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview is reloading anyway', () => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview has no updateComparisonBanner', () => {
+                instance.preview = { options: {} };
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+            });
+
+            test('should not push the banner when there is no live preview', () => {
+                instance.preview = undefined;
+
+                expect(() => wrapper.setProps({ comparisonBanner })).not.toThrow();
+            });
         });
     });
 
@@ -3223,6 +3309,104 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.childAt(0).props().isComparedPreview).toBeUndefined();
             expect(wrapper.childAt(1).props().children.props.isComparing).toBe(false);
             expect(wrapper.childAt(1).props().children.props.isComparedPreview).toBe(true);
+        });
+
+        describe('comparison banner', () => {
+            const permissions = { can_delete: true, can_download: true, can_upload: true };
+            const versions = [
+                { extension: 'docx', id: '123', is_download_available: true, permissions, version_number: '3' },
+                { extension: 'docx', id: '456', is_download_available: true, permissions, version_number: '2' },
+            ];
+            const versionActions = {
+                delete: jest.fn(),
+                download: jest.fn(),
+                promote: jest.fn(),
+                isArchived: false,
+                isWatermarked: false,
+                versionCount: 2,
+                versionLimit: Infinity,
+                versions,
+            };
+
+            const getComparingWrapper = (extraProps = {}) => {
+                const wrapper = shallow(
+                    <ContentPreviewWithComparison
+                        comparedVersion={{ id: '456' }}
+                        fileId="123"
+                        logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                        {...extraProps}
+                    />,
+                );
+                wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+                wrapper.update();
+                return wrapper;
+            };
+            const getBanners = wrapper => ({
+                main: wrapper.childAt(0).props().comparisonBanner,
+                compared: wrapper.childAt(1).props().children.props.comparisonBanner,
+            });
+
+            test('should pass registerVersionActions to the main pane only', () => {
+                const wrapper = getComparingWrapper();
+
+                expect(wrapper.childAt(0).props().registerVersionActions).toEqual(expect.any(Function));
+                expect(wrapper.childAt(1).props().children.props.registerVersionActions).toBeUndefined();
+            });
+
+            test('should pass the host banner through until version actions register', () => {
+                const hostBanner = { currentFileVersion: { id: '123' }, onDownload: jest.fn() };
+                const wrapper = getComparingWrapper({ comparisonBanner: hostBanner });
+
+                const { main, compared } = getBanners(wrapper);
+                expect(main).toBe(hostBanner);
+                expect(compared).toBe(hostBanner);
+            });
+
+            test('should add the selected version actions to the host banner', () => {
+                const hostBanner = {
+                    currentFileVersion: { id: '123' },
+                    onOpenFullPreview: jest.fn(),
+                    previousFileVersion: { id: '456' },
+                };
+                const wrapper = getComparingWrapper({ comparisonBanner: hostBanner });
+
+                wrapper.childAt(0).props().registerVersionActions(versionActions);
+                wrapper.update();
+
+                const { main, compared } = getBanners(wrapper);
+                expect(compared).toBe(main);
+                expect(compared.currentFileVersion).toBe(hostBanner.currentFileVersion);
+                expect(compared.previousFileVersion).toBe(hostBanner.previousFileVersion);
+                expect(compared.onOpenFullPreview).toBe(hostBanner.onOpenFullPreview);
+
+                compared.onDownload();
+                expect(versionActions.download).toHaveBeenCalledWith('456');
+            });
+
+            test('should keep only the host fields when the selected version has no actions', () => {
+                const hostBanner = { previousFileVersion: { id: '456' } };
+                const wrapper = getComparingWrapper({ comparisonBanner: hostBanner });
+
+                wrapper
+                    .childAt(0)
+                    .props()
+                    .registerVersionActions({ ...versionActions, versions: [] });
+                wrapper.update();
+
+                expect(getBanners(wrapper).compared).toEqual(hostBanner);
+            });
+
+            test('should fall back to the host banner once version actions unregister', () => {
+                const hostBanner = { previousFileVersion: { id: '456' } };
+                const wrapper = getComparingWrapper({ comparisonBanner: hostBanner });
+
+                wrapper.childAt(0).props().registerVersionActions(versionActions);
+                wrapper.update();
+                wrapper.childAt(0).props().registerVersionActions(null);
+                wrapper.update();
+
+                expect(getBanners(wrapper).compared).toBe(hostBanner);
+            });
         });
 
         test('should not navigate when isComparing', () => {
