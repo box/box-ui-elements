@@ -24,7 +24,7 @@ import BoxEditAPI from '../box-edit';
 import MetadataQueryAPI from '../MetadataQuery';
 import FileCollaborationsAPI from '../FileCollaborations';
 import FolderCollaborationsAPI from '../FolderCollaborations';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
+import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, METADATA_SCOPE_MODE_FINAL } from '../../constants';
 
 let factory;
 
@@ -350,6 +350,16 @@ describe('api/APIFactory', () => {
             expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
             expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should carry the resolved namespace mode onto the next metadata client', () => {
+            const first = factory.getMetadataAPI(false);
+            first.metadataNamespaceMode = METADATA_SCOPE_MODE_FINAL;
+
+            const second = factory.getMetadataAPI(false);
+
+            expect(second).not.toBe(first);
+            expect(second.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
         });
     });
 

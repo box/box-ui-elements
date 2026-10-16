@@ -48,6 +48,32 @@ export function getEnterpriseNamespaceFromInstances(
 }
 
 /**
+ * `global` and `box.metadata` name the same Box-owned template home.
+ * Comparison only — request paths still go through `resolveScopeOrNamespace`.
+ */
+function isBoxOwnedMetadataHome(value: ?string): boolean {
+    return value === METADATA_SCOPE_GLOBAL || value === METADATA_NAMESPACE_GLOBAL;
+}
+
+/**
+ * Stable identity for matching a template to an instance.
+ *
+ * Namespace wins when it names a real FQN. A scope-only `global` and a
+ * namespace-only `box.metadata` compare as the same home, so a file that still
+ * carries a legacy global instance matches templates listed from `box.metadata`
+ * without a second fetch of `/metadata_templates/global`.
+ */
+export function canonicalMetadataHome(scope: ?string, namespace: ?string): ?string {
+    if (namespace && !isBoxOwnedMetadataHome(namespace)) {
+        return namespace;
+    }
+    if (isBoxOwnedMetadataHome(namespace) || isBoxOwnedMetadataHome(scope)) {
+        return METADATA_NAMESPACE_GLOBAL;
+    }
+    return namespace || scope || null;
+}
+
+/**
  * Resolves the URL path segment for a scope/namespace given the current mode.
  *
  * - In FINAL mode, legacy `global` becomes `box.metadata`.

@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 import { renderHook } from '@testing-library/react';
-import { METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import { METADATA_TEMPLATE_CLASSIFICATION, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import useMetadataTemplateItemsService from '../hooks/useMetadataTemplateItemsService';
 
 describe('useMetadataTemplateItemsService', () => {
@@ -151,6 +151,65 @@ describe('useMetadataTemplateItemsService', () => {
             limit: 50,
             marker: undefined,
         });
+
+        expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
+    });
+
+    test('should drop the classification template from getTemplates', async () => {
+        listTemplatesForNamespace.mockResolvedValue({
+            entries: [
+                {
+                    id: 'api-id-1',
+                    templateKey: 'visibleTemplate',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Visible',
+                },
+                {
+                    id: 'api-id-2',
+                    templateKey: METADATA_TEMPLATE_CLASSIFICATION,
+                    namespace: enterpriseFqn,
+                    displayName: 'Classification',
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getTemplates(`${enterpriseFqn}.legal`, {
+            limit: 50,
+            marker: undefined,
+        });
+
+        expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
+    });
+
+    test('should drop the classification template from search results', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    id: 'search-visible',
+                    templateKey: 'visibleTemplate',
+                    scope: enterpriseFqn,
+                    displayName: 'Visible',
+                },
+                {
+                    id: 'search-classification',
+                    templateKey: METADATA_TEMPLATE_CLASSIFICATION,
+                    scope: enterpriseFqn,
+                    displayName: 'Classification',
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getSearchResults('class', { limit: 20 });
 
         expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
     });

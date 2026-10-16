@@ -507,11 +507,19 @@ class APIFactory {
      * @return {MetadataAPI} MetadataAPI instance
      */
     getMetadataAPI(shouldDestroy: boolean): MetadataAPI {
+        // Each call constructs a new client. Carry the mode the sidebar already
+        // resolved so a later templates request does not fall back to SCOPED
+        // and ask for `/metadata_templates/global` after Final was selected.
+        const metadataNamespaceMode = this.metadataAPI && this.metadataAPI.metadataNamespaceMode;
+
         if (shouldDestroy) {
             this.destroy();
         }
 
-        this.metadataAPI = new MetadataAPI(this.options);
+        this.metadataAPI = new MetadataAPI({
+            ...this.options,
+            ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
+        });
         return this.metadataAPI;
     }
 

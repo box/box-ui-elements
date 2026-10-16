@@ -72,6 +72,7 @@ import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import MetadataNamespaces from './MetadataNamespaces';
 import {
+    canonicalMetadataHome,
     getEnterpriseNamespaceFromInstances as resolveEnterpriseNamespaceFromInstances,
     getEnterpriseRootFromScopeOrNamespace as resolveEnterpriseRoot,
     isTemplateExternallyOwned,
@@ -215,7 +216,7 @@ class Metadata extends File {
     getMetadataUrl(id: string, scope?: string, template?: string): string {
         const baseUrl = `${this.getMetadataInstanceBaseUrl()}/files/${id}/metadata`;
         if (scope && template) {
-            return `${baseUrl}/${scope}/${template}`;
+            return `${baseUrl}/${this.getScopeOrNamespace(scope)}/${template}`;
         }
         return baseUrl;
     }
@@ -234,7 +235,7 @@ class Metadata extends File {
     getMetadataUrlForFolder(id: string, scope?: string, template?: string): string {
         const baseUrl = `${this.getMetadataInstanceBaseUrl()}/folders/${id}/metadata`;
         if (scope && template) {
-            return `${baseUrl}/${scope}/${template}`;
+            return `${baseUrl}/${this.getScopeOrNamespace(scope)}/${template}`;
         }
         return baseUrl;
     }
@@ -292,7 +293,7 @@ class Metadata extends File {
      * @return {string} API url for getting template schema by template key
      */
     getMetadataTemplateSchemaUrl(templateKey: string, scope?: string = METADATA_SCOPE_ENTERPRISE): string {
-        return `${this.getMetadataTemplateUrl()}/${scope}/${templateKey}/schema`;
+        return `${this.getMetadataTemplateUrl()}/${this.getScopeOrNamespace(scope)}/${templateKey}/schema`;
     }
 
     /**
@@ -302,7 +303,7 @@ class Metadata extends File {
      * @return {string} base url for files
      */
     getMetadataTemplateUrlForScope(scope: string): string {
-        return `${this.getMetadataTemplateUrl()}/${scope}`;
+        return `${this.getMetadataTemplateUrl()}/${this.getScopeOrNamespace(scope)}`;
     }
 
     /** @see MetadataNamespaces.getMetadataNamespacesUrl */
@@ -736,19 +737,18 @@ class Metadata extends File {
         const templateKey = instance.$template;
         const scope = instance.$scope;
         const namespace = instance.$namespace;
+        // `global` and `box.metadata` are one home. A scope-only global instance
+        // must match a template listed from `box.metadata`, or the sidebar
+        // fetches `/metadata_templates/global` again and FINAL rejects it.
+        const instanceHome = canonicalMetadataHome(scope, namespace);
 
-        // Primary match: by scope (SCOPED mode; also works for enterprise-scoped
-        // instances in MIGRATION mode where $scope is still populated).
-        // Only run when scope is defined so namespace-only instances (undefined
-        // $scope) do not incorrectly match templates that also lack scope.
-        let template =
-            scope != null ? templates.find(t => t.templateKey === templateKey && t.scope === scope) : undefined;
-
-        // Fallback match: by namespace for namespace-only instances in
-        // MIGRATION/FINAL mode where $scope is absent.
-        if (!template && namespace) {
-            template = templates.find(t => t.templateKey === templateKey && t.namespace === namespace);
-        }
+        const template =
+            instanceHome != null
+                ? templates.find(
+                      t =>
+                          t.templateKey === templateKey && canonicalMetadataHome(t.scope, t.namespace) === instanceHome,
+                  )
+                : undefined;
 
         if (!template && instanceId) {
             const instanceEnterpriseRoot = resolveEnterpriseRoot(scope, namespace);
@@ -767,7 +767,7 @@ class Metadata extends File {
 
                 const fetchedTemplates = await this.getTemplates(
                     id,
-                    scope || namespace || instanceEnterpriseRoot || '',
+                    this.getScopeOrNamespace(scope, namespace) || instanceEnterpriseRoot || '',
                     instanceId,
                     isExternallyOwned,
                 );
@@ -881,6 +881,11 @@ class Metadata extends File {
             });
         }
 
+        const scope =
+            template.scope === METADATA_SCOPE_GLOBAL
+                ? this.getScopeOrNamespace(template.scope, template.namespace)
+                : template.scope;
+
         return {
             isExternallyOwned,
             canEdit: instance.$canEdit && canEdit,
@@ -888,7 +893,9 @@ class Metadata extends File {
             hidden: template.hidden,
             id: template.id,
             fields,
-            scope: template.scope,
+            // FINAL rewrites a legacy `global` scope so the editor does not
+            // request `/metadata_templates/global` for this instance.
+            scope,
             namespace: template.namespace,
             templateKey: template.templateKey,
             type: instance.$type,
@@ -1050,6 +1057,12 @@ class Metadata extends File {
         const cache: APICache = this.getCache();
         const key = this.getMetadataCacheKey(id);
 
+        // Per-call mode for this fetch; persist on the instance so later
+        // URL helpers on this client match. APIFactory copies it onto the
+        // next Metadata client, which would otherwise default to SCOPED.
+        const metadataNamespaceMode = options.metadataNamespaceMode || this.metadataNamespaceMode;
+        this.metadataNamespaceMode = metadataNamespaceMode;
+
         // Clear the cache if needed
         if (options.forceFetch) {
             cache.unset(key);
@@ -1065,12 +1078,6 @@ class Metadata extends File {
 
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
-
-            // Per-call mode for this fetch; persist on the instance so later
-            // URL helpers (create/update/delete) on the same Metadata client
-            // match. Not stored on Base — File/Users/etc. do not use it.
-            const metadataNamespaceMode = options.metadataNamespaceMode || this.metadataNamespaceMode;
-            this.metadataNamespaceMode = metadataNamespaceMode;
 
             const { instances, globalTemplates, enterpriseTemplates } =
                 metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED

@@ -10,7 +10,7 @@ import {
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 
 import API from '../../../api';
-import { METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import { METADATA_TEMPLATE_CLASSIFICATION, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
 import type { BoxItem } from '../../../common/types/core';
 import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
@@ -32,6 +32,18 @@ function resolveDisplayName(template: EditorMetadataTemplate, customMetadataName
  */
 function isHiddenTemplate(template: { hidden?: unknown; isHidden?: unknown }): boolean {
     return template.hidden === true || template.isHidden === true;
+}
+
+/**
+ * Classification is edited from the classification control. The template
+ * picker omits it, matching `getUserAddableTemplates`.
+ */
+function isClassificationTemplate(template: { templateKey?: unknown }): boolean {
+    return template.templateKey === METADATA_TEMPLATE_CLASSIFICATION;
+}
+
+function isOmittedPickerTemplate(template: { hidden?: unknown; isHidden?: unknown; templateKey?: unknown }): boolean {
+    return isHiddenTemplate(template) || isClassificationTemplate(template);
 }
 
 function readNonBlank(value: unknown): string | undefined {
@@ -183,7 +195,7 @@ export default function useMetadataTemplateItemsService(
                 // Map the raw API response to the browser-expected shape.
                 // The API returns camelCase fields; we normalise displayName and scope/namespace.
                 const listed: BrowserMetadataTemplate[] = (result.entries ?? [])
-                    .filter((t: Record<string, unknown>) => !isHiddenTemplate(t))
+                    .filter((t: Record<string, unknown>) => !isOmittedPickerTemplate(t))
                     .flatMap((t: Record<string, unknown>) => {
                         const templateKey = readNonBlank(t.templateKey);
                         const templateScope =
@@ -220,7 +232,7 @@ export default function useMetadataTemplateItemsService(
                             !!t.templateKey &&
                             fqn === namespaceFQN &&
                             !listedKeys.has(t.templateKey) &&
-                            !isHiddenTemplate(t)
+                            !isOmittedPickerTemplate(t)
                         );
                     })
                     .map(t => ({
@@ -254,7 +266,7 @@ export default function useMetadataTemplateItemsService(
                 });
 
                 const entries: BrowserMetadataTemplate[] = (result.entries ?? [])
-                    .filter((hit: Record<string, unknown>) => !isHiddenTemplate(hit))
+                    .filter((hit: Record<string, unknown>) => !isOmittedPickerTemplate(hit))
                     .flatMap((hit: Record<string, unknown>) => {
                         const templateKey = readNonBlank(hit.templateKey);
                         const namespace = readNonBlank(hit.namespace);
