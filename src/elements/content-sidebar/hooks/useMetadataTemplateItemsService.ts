@@ -10,7 +10,12 @@ import {
 import type { MetadataTemplate as EditorMetadataTemplate } from '@box/metadata-editor';
 
 import API from '../../../api';
-import { METADATA_TEMPLATE_CLASSIFICATION, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import {
+    METADATA_NAMESPACE_GLOBAL,
+    METADATA_SCOPE_GLOBAL,
+    METADATA_TEMPLATE_CLASSIFICATION,
+    METADATA_TEMPLATE_PROPERTIES,
+} from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
 import type { BoxItem } from '../../../common/types/core';
 import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
@@ -44,6 +49,61 @@ function isClassificationTemplate(template: { templateKey?: unknown }): boolean 
 
 function isOmittedPickerTemplate(template: { hidden?: unknown; isHidden?: unknown; templateKey?: unknown }): boolean {
     return isHiddenTemplate(template) || isClassificationTemplate(template);
+}
+
+/** `global` and `box.metadata` name the same Box-owned template home. */
+function isBoxOwnedMetadataHome(fqn: string | undefined): boolean {
+    return fqn === METADATA_SCOPE_GLOBAL || fqn === METADATA_NAMESPACE_GLOBAL;
+}
+
+function loadedTemplateHome(template: EditorMetadataTemplate): string | undefined {
+    return getMetadataTemplateNamespaceFqn(template as EditorMetadataTemplate & { namespace?: string });
+}
+
+/**
+ * Custom Metadata (`properties`) is a client-built row under `global` / `box.metadata`.
+ * It has no stored schema, so template search never returns it.
+ */
+function isLocalCustomMetadataTemplate(template: EditorMetadataTemplate): boolean {
+    return (
+        template.templateKey === METADATA_TEMPLATE_PROPERTIES && isBoxOwnedMetadataHome(loadedTemplateHome(template))
+    );
+}
+
+function matchesMetadataSearchQuery(
+    template: EditorMetadataTemplate,
+    query: string,
+    customMetadataName: string,
+): boolean {
+    const normalizedQuery = query.trim().toLocaleLowerCase();
+    if (!normalizedQuery) {
+        return false;
+    }
+    const visibleName = resolveDisplayName(template, customMetadataName);
+    return [visibleName, template.displayName, template.templateKey].some(
+        value => typeof value === 'string' && value.toLocaleLowerCase().includes(normalizedQuery),
+    );
+}
+
+function toLoadedBrowserTemplate(
+    template: EditorMetadataTemplate,
+    customMetadataName: string,
+): BrowserMetadataTemplate {
+    const home = loadedTemplateHome(template);
+    return {
+        id: template.id,
+        type: template.type ?? 'metadata_template',
+        displayName: resolveDisplayName(template, customMetadataName),
+        scope: template.scope,
+        namespace: isBoxOwnedMetadataHome(home) ? METADATA_NAMESPACE_GLOBAL : home,
+        templateKey: template.templateKey,
+        canEdit: canEditMetadataTemplate(template),
+        hidden: template.hidden ?? false,
+    };
+}
+
+function isAlreadyListed(row: BrowserMetadataTemplate, entries: BrowserMetadataTemplate[]): boolean {
+    return entries.some(entry => (row.id && entry.id === row.id) || isSameMetadataTemplate(row, entry));
 }
 
 function readNonBlank(value: unknown): string | undefined {
@@ -245,7 +305,18 @@ export default function useMetadataTemplateItemsService(
                         hidden: t.hidden ?? false,
                     }));
 
-                return { entries: [...fromLoaded, ...listed], next_marker: result.next_marker };
+                const page = [...fromLoaded, ...listed];
+                // The namespace list does not include Custom Metadata. It is a client-built
+                // `properties` row, so the first enterprise-root page adds that row alone.
+                const customMetadataEntries =
+                    namespaceFQN === enterpriseFqn && !readNonBlank(params.marker)
+                        ? templates
+                              .filter(template => isLocalCustomMetadataTemplate(template))
+                              .map(template => toLoadedBrowserTemplate(template, customMetadataName))
+                              .filter(row => row.id && !isAlreadyListed(row, page))
+                        : [];
+
+                return { entries: [...customMetadataEntries, ...page], next_marker: result.next_marker };
             },
 
             getSearchResults: async (
@@ -301,7 +372,23 @@ export default function useMetadataTemplateItemsService(
                         ];
                     });
 
-                return { entries, next_marker: readNonBlank(result.next_marker) };
+                // Custom Metadata has no stored schema, so search never returns it.
+                // Offer the loaded row on the first page when the query matches.
+                const customMetadataEntries = readNonBlank(params.marker)
+                    ? []
+                    : templates
+                          .filter(
+                              template =>
+                                  isLocalCustomMetadataTemplate(template) &&
+                                  matchesMetadataSearchQuery(template, normalizedQuery, customMetadataName),
+                          )
+                          .map(template => toLoadedBrowserTemplate(template, customMetadataName))
+                          .filter(row => row.id && !isAlreadyListed(row, entries));
+
+                return {
+                    entries: [...customMetadataEntries, ...entries],
+                    next_marker: readNonBlank(result.next_marker),
+                };
             },
         };
     }, [api, file, enterpriseFqn, templates, customMetadataName]);
