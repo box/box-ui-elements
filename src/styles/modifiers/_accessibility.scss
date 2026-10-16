@@ -1,9 +1,0 @@
-/**************************************
- * Accessibility
- **************************************/
-
-.accessibility-hidden {
-    position: absolute;
-    top: auto; /* Some browsers ignore left without a top */
-    left: -9999px;
-}
