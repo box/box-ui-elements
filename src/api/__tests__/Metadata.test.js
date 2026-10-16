@@ -156,6 +156,13 @@ describe('api/Metadata', () => {
                 'https://api.box.com/2.0/metadata_templates/scope',
             );
         });
+
+        test('should rewrite global to box.metadata in FINAL mode', () => {
+            metadata.metadataNamespaceMode = 'FINAL';
+            expect(metadata.getMetadataTemplateUrlForScope('global')).toBe(
+                `https://api.box.com/2.0/metadata_templates/${METADATA_NAMESPACE_GLOBAL}`,
+            );
+        });
     });
 
     describe('getCustomPropertiesTemplate()', () => {
@@ -537,6 +544,24 @@ describe('api/Metadata', () => {
             const result = metadata.createTemplateInstance(instance, template, false);
 
             expect(result.fields[0].value).toBe('DetailedStringValue');
+        });
+
+        test('should rewrite a legacy global scope to box.metadata in FINAL mode', () => {
+            metadata.metadataNamespaceMode = 'FINAL';
+
+            const result = metadata.createTemplateInstance(
+                { $id: '321', $template: 'properties', $canEdit: true },
+                {
+                    displayName: 'Custom Metadata',
+                    fields: [],
+                    id: '123456',
+                    templateKey: 'properties',
+                    scope: 'global',
+                },
+                true,
+            );
+
+            expect(result.scope).toBe(METADATA_NAMESPACE_GLOBAL);
         });
     });
 
@@ -1204,6 +1229,26 @@ describe('api/Metadata', () => {
             expect(result.isExternallyOwned).toBe(true);
             expect(metadata.getTemplates).toBeCalledWith('id', 'enterprise_999.legal', 'instanceId', true);
         });
+
+        test('should match a scope-only global instance to a box.metadata template without another fetch', async () => {
+            metadata.getTemplates = jest.fn();
+            const boxMetadataTemplate = {
+                id: 11,
+                templateKey: 'properties',
+                namespace: METADATA_NAMESPACE_GLOBAL,
+            };
+            const result = await metadata.getTemplateForInstance(
+                'id',
+                {
+                    $id: 'instanceId',
+                    $scope: 'global',
+                    $template: 'properties',
+                },
+                [boxMetadataTemplate],
+            );
+            expect(result.template).toBe(boxMetadataTemplate);
+            expect(metadata.getTemplates).not.toHaveBeenCalled();
+        });
     });
 
     describe('getEditors()', () => {
@@ -1556,6 +1601,39 @@ describe('api/Metadata', () => {
                 'enterprise_123456',
             );
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterpriseRoot', true, false);
+        });
+        test('should request box.metadata instead of global in FINAL mode', async () => {
+            const file = {
+                id: 'id',
+                is_externally_owned: false,
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+
+            metadata.errorHandler = jest.fn();
+            metadata.successHandler = jest.fn();
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
+            metadata.getInstances = jest.fn().mockResolvedValueOnce([]);
+            metadata.getEditors = jest.fn().mockResolvedValueOnce([]);
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce([]);
+            metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
+            metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterpriseRoot');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce([]);
+
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {
+                enterpriseFqn: 'enterprise_123456',
+                metadataNamespaceMode: 'FINAL',
+            });
+
+            expect(metadata.metadataNamespaceMode).toBe('FINAL');
+            expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, METADATA_NAMESPACE_GLOBAL);
+            expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'global');
+            expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise_123456');
         });
         test('should make request and update cache and call success handler for Metadata Redesign', async () => {
             const file = {

@@ -115,6 +115,15 @@ describe('metadataTemplateIdentity', () => {
             ).toBe(false);
         });
 
+        test('matches a scope-only global template to a box.metadata template', () => {
+            expect(
+                isSameMetadataTemplate(
+                    { templateKey: 'contract', scope: 'global' },
+                    { templateKey: 'contract', namespace: 'box.metadata' },
+                ),
+            ).toBe(true);
+        });
+
         test('matches when one side stores the FQN in scope and the other in namespace', () => {
             expect(
                 isSameMetadataTemplate(
