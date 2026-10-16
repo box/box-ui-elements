@@ -1,11 +1,12 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
+import type { BoxItem } from '../../../../common/types/core';
 import { render, screen } from '../../../../test-utils/testing-library';
 import InlineBreadcrumbs, { InlineBreadcrumbsProps } from '../InlineBreadcrumbs';
 
 describe('elements/common/breadcrumbs/InlineBreadcrumbs', () => {
     const renderComponent = (props: Partial<InlineBreadcrumbsProps> = {}) => {
-        const item = {
+        const item: BoxItem = {
             id: '123',
             name: 'Test Item',
             path_collection: {
@@ -13,6 +14,7 @@ describe('elements/common/breadcrumbs/InlineBreadcrumbs', () => {
                     { id: '0', name: 'All Files' },
                     { id: '1', name: 'Folder 1' },
                 ],
+                total_count: 2,
             },
         };
         return render(<InlineBreadcrumbs item={item} onItemClick={jest.fn()} rootId={'0'} {...props} />);
@@ -37,7 +39,7 @@ describe('elements/common/breadcrumbs/InlineBreadcrumbs', () => {
     });
 
     test('should render dropdown when there are at least 4 crumbs', () => {
-        const item = {
+        const item: BoxItem = {
             id: '123',
             name: 'Test Item',
             path_collection: {
@@ -47,6 +49,7 @@ describe('elements/common/breadcrumbs/InlineBreadcrumbs', () => {
                     { id: '2', name: 'Folder 2' },
                     { id: '3', name: 'Folder 3' },
                 ],
+                total_count: 4,
             },
         };
         renderComponent({ item });

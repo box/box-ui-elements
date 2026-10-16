@@ -4,6 +4,7 @@ import actionCellRenderer from '../actionCellRenderer';
 import progressCellRenderer from '../progressCellRenderer';
 import removeCellRenderer from '../removeCellRenderer';
 
+import PlainUpload from '../../../api/uploads/PlainUpload';
 import Browser from '../../../utils/Browser';
 import {
     STATUS_COMPLETE,
@@ -23,6 +24,22 @@ import {
 
 import type { UploadItem } from '../../../common/types/upload';
 
+const uploadApi = new PlainUpload({ token: 'token' });
+const createUploadItem = (overrides: Partial<UploadItem> = {}): UploadItem => {
+    const file = new File(['test content'], overrides.name || 'test.txt');
+
+    return {
+        api: uploadApi,
+        extension: 'txt',
+        file,
+        name: file.name,
+        progress: 0,
+        size: file.size,
+        status: STATUS_STAGED,
+        ...overrides,
+    };
+};
+
 describe('elements/content-uploader/CellRenderer', () => {
     describe('actionCellRenderer', () => {
         const renderComponent = (rowData: UploadItem, onClick: jest.Mock) => {
@@ -31,7 +48,7 @@ describe('elements/content-uploader/CellRenderer', () => {
         };
 
         test('calls onClick with rowData when ItemAction is clicked', () => {
-            const rowData = { id: '3', status: STATUS_ERROR, isFolder: false };
+            const rowData = createUploadItem({ status: STATUS_ERROR, isFolder: false });
             const onClick = jest.fn();
             renderComponent(rowData, onClick);
             fireEvent.click(screen.getByRole('button'));
@@ -39,9 +56,9 @@ describe('elements/content-uploader/CellRenderer', () => {
         });
     });
     describe('progressCellRenderer', () => {
-        const renderComponent = (rowData: UploadItem, shouldShowUpgradeCTAMessage?: boolean) => {
+        const renderComponent = (overrides: Partial<UploadItem>, shouldShowUpgradeCTAMessage?: boolean) => {
             const Component = progressCellRenderer(shouldShowUpgradeCTAMessage);
-            return render(<Component rowData={rowData} />);
+            return render(<Component rowData={createUploadItem(overrides)} />);
         };
 
         test('renders ItemProgress for in-progress status', () => {
@@ -125,7 +142,7 @@ describe('elements/content-uploader/CellRenderer', () => {
             const rowData = {
                 status: STATUS_ERROR,
                 error: { code: ERROR_CODE_UPLOAD_BAD_DIGEST },
-                file: { name: 'file.zip' },
+                file: new File(['zip content'], 'file.zip'),
             };
             renderComponent(rowData);
             expect(
@@ -140,7 +157,7 @@ describe('elements/content-uploader/CellRenderer', () => {
         });
 
         test('returns null for folder with non-error status', () => {
-            const rowData = { status: STATUS_IN_PROGRESS, isFolder: true };
+            const rowData = createUploadItem({ status: STATUS_IN_PROGRESS, isFolder: true });
             const Component = progressCellRenderer();
             const { container } = render(<Component rowData={rowData} />);
             expect(container.firstChild).toBeNull();
@@ -153,21 +170,21 @@ describe('elements/content-uploader/CellRenderer', () => {
         };
 
         test('renders ItemRemove for non-folder item', () => {
-            const rowData = { isFolder: false };
+            const rowData = createUploadItem({ isFolder: false });
             const onClick = jest.fn();
             renderComponent(rowData, onClick);
             expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
         });
 
         test('does not render ItemRemove for folder item', () => {
-            const rowData = { id: '2', status: STATUS_COMPLETE, isFolder: true };
+            const rowData = createUploadItem({ status: STATUS_COMPLETE, isFolder: true });
             const onClick = jest.fn();
             const { container } = renderComponent(rowData, onClick);
             expect(container.firstChild).toBeNull();
         });
 
         test('calls onClick with rowData when ItemRemove is clicked', () => {
-            const rowData = { id: '3', status: STATUS_ERROR, isFolder: false };
+            const rowData = createUploadItem({ status: STATUS_ERROR, isFolder: false });
             const onClick = jest.fn();
             renderComponent(rowData, onClick);
             fireEvent.click(screen.getByRole('button', { name: 'Remove' }));

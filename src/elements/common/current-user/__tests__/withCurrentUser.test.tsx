@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
+import type { ElementsXhrError } from '../../../../common/types/api';
 import withCurrentUser, { ComponentWithCurrentUser, CurrentUserState, WithCurrentUserProps } from '../withCurrentUser';
 // @ts-ignore no ts defintion
 import messages from '../../messages';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
-
-type WrappedProps = Partial<WithCurrentUserProps>;
-type WrapperType = ShallowWrapper<WrappedProps, CurrentUserState, Component & ComponentWithCurrentUser>;
 
 jest.mock('../../api-context/withAPIContext', () => (div: React.Component) => div);
 
@@ -24,15 +22,34 @@ describe('elements/common/current-user/withCurrentUser', () => {
         id: 'id',
     };
 
-    const MockComponent = (props: WithCurrentUserProps) => <div {...props} />;
-    const WrappedComponent = withCurrentUser(MockComponent);
+    type MockComponentProps = WithCurrentUserProps & {
+        api: typeof api;
+        file: typeof file;
+    };
+
+    const MockComponent: React.FC<MockComponentProps> = () => <div />;
+    const WrappedComponent = withCurrentUser<MockComponentProps>(MockComponent);
+    type WrappedProps = Partial<React.ComponentProps<typeof WrappedComponent>>;
+    type WrapperType = ShallowWrapper<WrappedProps, CurrentUserState, Component & ComponentWithCurrentUser>;
 
     const getWrapper = (props: WrappedProps = {}): WrapperType =>
-        shallow(<WrappedComponent api={api} file={file} {...props} />);
+        shallow(<WrappedComponent api={api} file={file} onError={jest.fn()} {...props} />);
 
     const currentUser = {
         id: 'foo',
-    };
+        name: 'Foo User',
+        type: 'user',
+    } as const;
+
+    const createError = (status: number): ElementsXhrError => ({
+        code: 'error',
+        context_info: {},
+        help_url: '',
+        message: 'Request failed',
+        request_id: 'request-id',
+        status,
+        type: 'error',
+    });
 
     let instance: React.Component<{}, {}, {}> & ComponentWithCurrentUser;
     let wrapper: WrapperType;
@@ -85,7 +102,7 @@ describe('elements/common/current-user/withCurrentUser', () => {
         });
 
         test('should set a maskError if there is an error in fetching the current user', () => {
-            instance.fetchCurrentUserErrorCallback({}, '404');
+            instance.fetchCurrentUserErrorCallback(createError(404), '404');
             const inlineErrorState = wrapper.state().currentUserError.maskError;
 
             expect(typeof currentUserErrorHeaderMessage).toBe('object');
@@ -96,7 +113,7 @@ describe('elements/common/current-user/withCurrentUser', () => {
 
         test('should set the current user error and call the error callback', () => {
             instance.setState = jest.fn();
-            instance.fetchCurrentUserErrorCallback({ status: 500 }, '500');
+            instance.fetchCurrentUserErrorCallback(createError(500), '500');
             expect(instance.setState).toBeCalledWith({
                 currentUser: undefined,
                 currentUserError: expect.any(Object),

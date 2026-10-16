@@ -37,7 +37,7 @@ import {
 import type { MetadataType } from './metadata';
 
 type Token = null | typeof undefined | string | Function;
-type TokenReadWrite = { read: string, write?: string };
+type TokenReadWrite = { read: string, write?: string } | { read?: string, write: string };
 type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
 
 type ClassComponent<P, S> = Class<React$Component<P, S>>;
