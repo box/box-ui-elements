@@ -362,13 +362,6 @@ describe('useMetadataTemplateItemsService', () => {
                 },
                 {
                     type: 'metadata_template',
-                    id: 'api-global',
-                    templateKey: 'legalContract',
-                    displayName: 'Legal Contract',
-                    namespace: 'box.metadata',
-                },
-                {
-                    type: 'metadata_template',
                     id: 'api-hidden',
                     templateKey: 'hiddenTemplate',
                     displayName: 'Hidden',
@@ -411,21 +404,72 @@ describe('useMetadataTemplateItemsService', () => {
                     hidden: false,
                     ancestors: undefined,
                 },
-                {
-                    id: 'api-global',
-                    type: 'metadata_template',
-                    displayName: 'Legal Contract',
-                    scope: 'box.metadata',
-                    namespace: 'box.metadata',
-                    templateKey: 'legalContract',
-                    canEdit: false,
-                    hidden: false,
-                    ancestors: undefined,
-                },
             ],
             next_marker: undefined,
         });
         expect(searchTemplates).toHaveBeenCalledWith(mockFile, { query: 'Le', limit: 20, marker: 'cursor-0' });
+    });
+
+    test('should drop box-owned templates from search and the namespace list', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    id: 'api-global-namespace',
+                    templateKey: 'legalContract',
+                    displayName: 'Legal Contract',
+                    namespace: 'box.metadata',
+                },
+                {
+                    id: 'api-global-scope',
+                    templateKey: 'boxSign',
+                    displayName: 'Sign',
+                    scope: 'global',
+                },
+                {
+                    id: 'api-namespaced',
+                    templateKey: 'childTemplate',
+                    displayName: 'Child',
+                    namespace: `${enterpriseFqn}.legal`,
+                    scope: 'global',
+                },
+                {
+                    id: 'api-enterprise',
+                    templateKey: 'visibleTemplate',
+                    displayName: 'Visible',
+                    namespace: enterpriseFqn,
+                },
+            ],
+        });
+        listTemplatesForNamespace.mockResolvedValue({
+            entries: [
+                {
+                    id: 'listed-global',
+                    templateKey: 'legalContract',
+                    displayName: 'Legal Contract',
+                    namespace: 'box.metadata',
+                },
+                {
+                    id: 'listed-enterprise',
+                    templateKey: 'visibleTemplate',
+                    displayName: 'Visible',
+                    namespace: enterpriseFqn,
+                },
+            ],
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const search = await result.current!.getSearchResults('legal', { limit: 20 });
+        const listed = await result.current!.getTemplates(enterpriseFqn, { limit: 50 });
+
+        expect(search.entries.map(entry => entry.templateKey)).toEqual(['childTemplate', 'visibleTemplate']);
+        expect(listed.entries.map(entry => entry.templateKey)).toEqual([
+            METADATA_TEMPLATE_PROPERTIES,
+            'myTemplate',
+            'visibleTemplate',
+        ]);
     });
 
     test('should not resolve a namespaced search hit to a root editor template sharing its scope', async () => {

@@ -111,6 +111,17 @@ function readNonBlank(value: unknown): string | undefined {
 }
 
 /**
+ * Box-owned templates live under `global` / `box.metadata`. The browser is
+ * rooted at the enterprise, so those hits are not offered. Custom Metadata is
+ * the exception and is added from the loaded templates, not from these rows.
+ */
+function isBoxOwnedTemplate(template: { namespace?: unknown; scope?: unknown }): boolean {
+    const namespace = readNonBlank(template.namespace);
+    const scope = readNonBlank(template.scope);
+    return isBoxOwnedMetadataHome(namespace ?? scope);
+}
+
+/**
  * Browser row id. The editor cache id wins, then a non-blank API id.
  * Otherwise namespace plus template key stays unique across rows. Callers
  * drop a row that still has no id — an empty id collides in React, can select
@@ -204,6 +215,8 @@ function resolveSearchDisplayName(
  *   enabling paginated namespace navigation and per-namespace template lists.
  * - `getSearchResults` calls `GET /metadata_templates/search`. The browser
  *   already invokes this callback as the user types; this supplies the endpoint.
+ *   Hits under `global` / `box.metadata` are dropped. Custom Metadata is added
+ *   from the loaded templates when the query matches.
  *
  * Returns `undefined` when `enterpriseFqn` is not yet known (current user still loading).
  *
@@ -255,7 +268,7 @@ export default function useMetadataTemplateItemsService(
                 // Map the raw API response to the browser-expected shape.
                 // The API returns camelCase fields; we normalise displayName and scope/namespace.
                 const listed: BrowserMetadataTemplate[] = (result.entries ?? [])
-                    .filter((t: Record<string, unknown>) => !isOmittedPickerTemplate(t))
+                    .filter((t: Record<string, unknown>) => !isOmittedPickerTemplate(t) && !isBoxOwnedTemplate(t))
                     .flatMap((t: Record<string, unknown>) => {
                         const templateKey = readNonBlank(t.templateKey);
                         const templateScope =
@@ -337,7 +350,7 @@ export default function useMetadataTemplateItemsService(
                 });
 
                 const entries: BrowserMetadataTemplate[] = (result.entries ?? [])
-                    .filter((hit: Record<string, unknown>) => !isOmittedPickerTemplate(hit))
+                    .filter((hit: Record<string, unknown>) => !isOmittedPickerTemplate(hit) && !isBoxOwnedTemplate(hit))
                     .flatMap((hit: Record<string, unknown>) => {
                         const templateKey = readNonBlank(hit.templateKey);
                         const namespace = readNonBlank(hit.namespace);
