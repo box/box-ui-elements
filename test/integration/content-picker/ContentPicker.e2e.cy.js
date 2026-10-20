@@ -1,4 +1,5 @@
-import localize from '../../support/i18n';
+import IntlMessageFormat from 'intl-messageformat';
+import messages from '../../../src/elements/common/messages';
 
 // <reference types="Cypress" />
 const helpers = {
@@ -27,7 +28,9 @@ const helpers = {
     getPaginationCountButton: pageNumber => {
         return cy
             .getByTestId('content-picker')
-            .contains(localize('be.pagination.pageStatus', { pageNumber, pageCount: 2 }));
+            .contains(
+                new IntlMessageFormat(messages.pageStatus.defaultMessage, 'en').format({ pageNumber, pageCount: 2 }),
+            );
     },
     getPaginationDropdown: () => {
         return cy.get('.bdl-Pagination-dropdownMenu').first().children();

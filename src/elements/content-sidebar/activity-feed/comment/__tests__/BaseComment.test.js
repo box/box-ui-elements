@@ -18,7 +18,6 @@ import {
     TIME_STRING_SEPT_28_2017,
 } from '../stories/common';
 import messages from '../messages';
-import localize from '../../../../../../test/support/i18n';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -79,7 +78,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
     test('should render annotation badge when annotationActivityLink prop is defined', () => {
         getWrapper({ ...annotation, ...repliesProps });
-        expect(screen.getByText(localize(messages.inlineCommentAnnotationIconTitle.id))).toBeInTheDocument();
+        expect(screen.getByText(messages.inlineCommentAnnotationIconTitle.defaultMessage)).toBeInTheDocument();
     });
 
     test.each`

@@ -4,8 +4,6 @@ import { render, fireEvent } from '@testing-library/react';
 
 import contentInsightsMessages from '../../../features/content-insights/messages';
 // @ts-ignore Module is written in Flow
-import localize from '../../../../test/support/i18n';
-// @ts-ignore Module is written in Flow
 import messages from '../../common/messages';
 import SidebarContentInsights from '../SidebarContentInsights';
 
@@ -30,7 +28,7 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
         test('should render correctly', () => {
             const wrapper = getWrapper();
 
-            expect(wrapper.getByText(localize(messages.sidebarContentInsights.id))).toBeVisible();
+            expect(wrapper.getByText(messages.sidebarContentInsights.defaultMessage)).toBeVisible();
             expect(wrapper.queryByTestId('ContentAnalyticsErrorState-image')).toBe(null);
             expect(wrapper.container.querySelector('.ContentInsightsSummary--redesigned')).toBeNull();
         });
@@ -48,7 +46,7 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
                 onContentInsightsClick,
             });
 
-            fireEvent.click(wrapper.getByText(localize(contentInsightsMessages.openContentInsightsButton.id)));
+            fireEvent.click(wrapper.getByText(contentInsightsMessages.openContentInsightsButton.defaultMessage));
 
             expect(onContentInsightsClick).toBeCalledTimes(1);
         });
