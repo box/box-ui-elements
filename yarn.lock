@@ -58,7 +58,7 @@
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.29.7.tgz#6f0237f0f36d2e51c0570a636faed9d2d0efe629"
   integrity sha512-locTkQyKvwIEgBzVrn8693ebc97F2U8ZHjbXwDXJ5Fn2TCpNwTlKcaKLkdHop5c/icOFE7qt7Q9JC5hnKNa6Gg==
 
-"@babel/core@^7.11.6", "@babel/core@^7.12.3", "@babel/core@^7.23.9", "@babel/core@^7.24.7", "@babel/core@^7.26.0", "@babel/core@^7.28.0", "@babel/core@^7.7.2":
+"@babel/core@^7.11.6", "@babel/core@^7.12.3", "@babel/core@^7.23.9", "@babel/core@^7.24.7", "@babel/core@^7.26.0", "@babel/core@^7.28.0":
   version "7.29.7"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.29.7.tgz#80c10b17248082968b57a857b91640971f2070f7"
   integrity sha512-RgHBCvtjbOK2gXSNBNIkNoEc9qoVEtau3hj8gEqKQuL3HZAibKarWFEI3Lfm6EYKkLalOh8eSrj9b+ch9H/VBA==
@@ -5720,7 +5720,7 @@
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-5.0.4.tgz#1a31c3d378850d2778dabb6374d036dcba4ba708"
   integrity sha512-rfT93uj5s0PRL7EzccGMs3brplhcrghnDoV26NqKhCAS1hVo+WdNsPvE/yb6ilfr5hi2MEk6d5EWJTKdxg8jVw==
 
-"@types/babel__core@^7.1.14", "@types/babel__core@^7.1.3", "@types/babel__core@^7.20.5":
+"@types/babel__core@^7.1.14", "@types/babel__core@^7.20.5":
   version "7.20.5"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.5.tgz#3df15f27ba85319caa07ba08d0721889bb39c017"
   integrity sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==
@@ -6014,7 +6014,7 @@
     "@types/tough-cookie" "*"
     parse5 "^7.0.0"
 
-"@types/json-schema@*", "@types/json-schema@^7.0.12", "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
+"@types/json-schema@*", "@types/json-schema@^7.0.12", "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
@@ -6215,11 +6215,6 @@
   version "0.16.8"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.8.tgz#ce5ace04cfeabe7ef87c0091e50752e36707deff"
   integrity sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==
-
-"@types/schema-utils@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/schema-utils/-/schema-utils-1.0.0.tgz#295d36f01e2cb8bc3207ca1d9a68e210db6b40cb"
-  integrity sha512-YesPanU1+WCigC/Aj1Mga8UCOjHIfMNHZ3zzDsUY7lI8GlKnh/Kv2QwJOQ+jNQ36Ru7IfzSedlG14hppYaN13A==
 
 "@types/semver@^7.5.0", "@types/semver@^7.7.1":
   version "7.7.1"
@@ -7327,19 +7322,6 @@ babel-plugin-polyfill-regenerator@^0.6.6:
   integrity sha512-M762rNHfSF1EV3SLtnCJXFoQbbIIz0OyRwnCmV0KPC7qosSfCO0QLTSuJX3ayAebubhE6oYBAYPrBA5ljowaZg==
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.6.8"
-
-babel-plugin-react-intl@^5.1.18:
-  version "5.1.18"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-5.1.18.tgz#7713c1fdf0055b606d67e2d1624a2e583a1fcdb7"
-  integrity sha512-tzzZoGDNQOiHmGFh+NPQJDpC10RbKlfw1CBVfALulqRa6UGkAv5eMs9sirxjhD3HryHPbYZ4x5FNdbzOyG2GJw==
-  dependencies:
-    "@babel/core" "^7.7.2"
-    "@babel/helper-plugin-utils" "^7.0.0"
-    "@types/babel__core" "^7.1.3"
-    "@types/schema-utils" "^1.0.0"
-    fs-extra "^8.1.0"
-    intl-messageformat-parser "^3.6.4"
-    schema-utils "^2.2.0"
 
 babel-plugin-react-remove-properties@^0.3.0:
   version "0.3.0"
@@ -17727,15 +17709,6 @@ scheduler@^0.26.0:
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.26.0.tgz#4ce8a8c2a2095f13ea11bf9a445be50c555d6337"
   integrity sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==
-
-schema-utils@^2.2.0:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-2.7.1.tgz#1ca4f32d1b24c590c203b8e7a50bf0ea4cd394d7"
-  integrity sha512-SHiNtMOUGWBQJwzISiVYKu82GiV4QYGePp3odlY1tuKO7gPtphAT5R/py0fA6xtbgLL/RvtJZnU9b8s0F1q0Xg==
-  dependencies:
-    "@types/json-schema" "^7.0.5"
-    ajv "^6.12.4"
-    ajv-keywords "^3.5.2"
 
 schema-utils@^3.0.0, schema-utils@^3.1.1:
   version "3.3.0"

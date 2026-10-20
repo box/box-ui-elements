@@ -6,7 +6,6 @@ import { IntlProvider } from 'react-intl';
 import { render } from '@testing-library/react';
 
 import { BaseCommentInfo } from '../BaseCommentInfo';
-import localize from '../../../../../../../test/support/i18n';
 
 import { annotationActivityLinkProviderProps, user1 } from '../../stories/common';
 import { baseCommmentInfoDefaultProps } from '../stories/common';
@@ -40,12 +39,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentInfo', () => 
         // This could fail for some locales, but I was unable to use the ReadableTime component to get the properly-formatted time programmatically
         expect(wrapper.getByText('Sep 27, 2017')).toBeInTheDocument();
 
-        expect(wrapper.queryByText(localize(messages.inlineCommentAnnotationIconTitle.id))).not.toBeInTheDocument();
+        expect(wrapper.queryByText(messages.inlineCommentAnnotationIconTitle.defaultMessage)).not.toBeInTheDocument();
     });
     test('should render an annotation badge if annotationActivityLink is defined', () => {
         const wrapper = getWrapper({
             annotationActivityLink: <AnnotationActivityLinkProvider {...annotationActivityLinkProviderProps} />,
         });
-        expect(wrapper.getByText(localize(messages.inlineCommentAnnotationIconTitle.id))).toBeInTheDocument();
+        expect(wrapper.getByText(messages.inlineCommentAnnotationIconTitle.defaultMessage)).toBeInTheDocument();
     });
 });

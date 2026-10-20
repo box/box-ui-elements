@@ -3,8 +3,8 @@ import * as React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import IntlMessageFormat from 'intl-messageformat';
 import ActivityThread from '../ActivityThread.js';
-import localize from '../../../../../../test/support/i18n';
 import { replies as repliesMock } from '../fixtures';
 import messages from '../messages';
 
@@ -44,7 +44,9 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         const replies = [cloneDeep(repliesMock[0])];
         const { getByText } = getWrapper({ onShowReplies, replies });
 
-        const button = getByText(localize(messages.showReplies.id, { repliesToLoadCount: 1 }));
+        const button = getByText(
+            new IntlMessageFormat(messages.showReplies.defaultMessage, 'en').format({ repliesToLoadCount: 1 }),
+        );
         expect(button).toBeVisible();
         fireEvent.click(button);
 
@@ -56,7 +58,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         const lastReply = cloneDeep(repliesMock[repliesMock.length - 1]);
         const { getByText } = getWrapper({ onHideReplies });
 
-        const button = getByText(localize(messages.hideReplies.id));
+        const button = getByText(messages.hideReplies.defaultMessage);
         expect(button).toBeVisible();
         fireEvent.click(button);
 
@@ -91,18 +93,18 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     test('should NOT have reply button when onReplyCreate is not passed', () => {
         getWrapper({ onReplyCreate: undefined });
 
-        expect(screen.queryByRole('button', { name: localize(messages.reply.id) })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: messages.reply.defaultMessage })).not.toBeInTheDocument();
     });
 
     test('should have reply button when onReplyCreate is passed', () => {
         getWrapper({ onReplyCreate: function someFunction() {} });
 
-        expect(screen.getByRole('button', { name: localize(messages.reply.id) })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: messages.reply.defaultMessage })).toBeInTheDocument();
     });
 
     test('should disable reply button when ietm is in pending state', () => {
         getWrapper({ isPending: true, onReplyCreate: jest.fn() });
-        const replyButton = screen.getByRole('button', { name: localize(messages.reply.id) });
+        const replyButton = screen.getByRole('button', { name: messages.reply.defaultMessage });
         expect(replyButton).toHaveAttribute('aria-disabled', 'true');
     });
 });
