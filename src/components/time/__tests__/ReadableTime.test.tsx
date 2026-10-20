@@ -2,8 +2,6 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 import { createIntl } from 'react-intl';
-import russianMessages from '../../../../i18n/ru-RU.js';
-import japaneseMessages from '../../../../i18n/ja-JP.js';
 
 import { ReadableTimeComponent as ReadableTime } from '../ReadableTime';
 
@@ -73,7 +71,7 @@ describe('components/time/ReadableTime', () => {
         expect(wrapper).toMatchSnapshot();
     });
     test('should not uppercase locales that do not have uppercase grammar (e.g. russian)', () => {
-        const ruIntl = createIntl({ locale: 'ru', messages: russianMessages });
+        const ruIntl = createIntl({ locale: 'ru', messages: {} });
 
         const wrapperUppercase = mount(
             <ReadableTime intl={ruIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
@@ -85,7 +83,7 @@ describe('components/time/ReadableTime', () => {
         expect(wrapperUppercase.text()).toEqual(wrapperLowercase.text());
     });
     test('CJK languages should look the same for uppercase and lowercase (e.g. japanese)', () => {
-        const jaIntl = createIntl({ locale: 'ja', messages: japaneseMessages });
+        const jaIntl = createIntl({ locale: 'ja', messages: {} });
 
         const wrapperUppercaseJa = mount(
             <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase />,

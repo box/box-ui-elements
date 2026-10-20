@@ -78,7 +78,9 @@ const preview: Preview = {
     initialGlobals: {
         locale: reactIntl.defaultLocale,
         locales: Object.keys(boxLanguages).reduce((locales, language) => {
-            locales[language] = boxLanguages[language].name;
+            if (reactIntl.messages[language]) {
+                locales[language] = boxLanguages[language].name;
+            }
             return locales;
         }, {}),
     },

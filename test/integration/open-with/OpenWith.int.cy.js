@@ -1,5 +1,6 @@
 // <reference types="Cypress" />
-import localize from '../../support/i18n';
+import IntlMessageFormat from 'intl-messageformat';
+import messages from '../../../src/elements/common/messages';
 
 const getSingleButton = () => cy.getByTestId('singleintegrationbutton');
 const getOpenWithContent = () => cy.getByTestId('bcow-content');
@@ -61,7 +62,11 @@ xdescribe('OpenWith', () => {
             // Tooltip should render automatically
             cy.getTooltip()
                 .as('tooltip')
-                .contains(localize('be.boxToolsInstallMessage', { boxTools: 'Box Tools' }));
+                .contains(
+                    new IntlMessageFormat(messages.boxToolsInstallMessage.defaultMessage, 'en').format({
+                        boxTools: 'Box Tools',
+                    }),
+                );
 
             // Clicking on the close button of the tooltip
             cy.get('@tooltip').find('button').click();
@@ -121,7 +126,7 @@ xdescribe('OpenWith', () => {
             getOpenWithContent().trigger('mouseover');
 
             // Tooltip should render on mouseover
-            cy.getTooltip().contains(localize('be.boxEditBlacklistedError'));
+            cy.getTooltip().contains(messages.boxToolsBlacklistedError.defaultMessage);
         });
 
         it('the box edit integration cannot be executed', () => {
