@@ -1159,10 +1159,10 @@
   resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-1.42.16.tgz#a5eb28e07d7296fc7277dae96fda73de96b1dfba"
   integrity sha512-QDjB0MjzYE1IeRFn4C8NPakLhNq/PULcmDgWTbcku2ch69IRTz4GkR488LPfi31K9Pj94dUF+qMYGM2Fe3JEYA==
 
-"@box/frontend@^12.1.0":
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-12.1.0.tgz#316f8dc2ecd41b4e6c24dae0d6d2e78716356b54"
-  integrity sha512-rbKRp9KXdXww39TP9Jvi1oHD6uac4nzyeZwO9ukE5QPNP9ZQP/d5eWBiSSb8sj0Axu1qCTijLgj3Hj1vpgVVXw==
+"@box/frontend@^11.0.1":
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-11.1.1.tgz#bcf16748615fd25a55876b52e35104eecf8b2ba7"
+  integrity sha512-f1B0/dw7obB/Kum/faUrzvONQ/vxVWDNQ+tedhoiojANaDLUJYIGAXjGZ2kDvkRcv8fe55o8VqQ4ujtFsSA+Vg==
   dependencies:
     properties-parser "^0.3.1"
     rimraf "^3.0.0"

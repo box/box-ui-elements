@@ -5,7 +5,6 @@
 *.swp
 dist/
 es/
-i18n/*.js
 i18n/bundles/
 node_modules/
 reports/
