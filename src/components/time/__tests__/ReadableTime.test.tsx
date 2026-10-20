@@ -1,15 +1,15 @@
-import * as React from "react";
-import { mount, shallow } from "enzyme";
-import sinon from "sinon";
-import { createIntl } from "react-intl";
+import * as React from 'react';
+import { mount, shallow } from 'enzyme';
+import sinon from 'sinon';
+import { createIntl } from 'react-intl';
 
-import { ReadableTimeComponent as ReadableTime } from "../ReadableTime";
+import { ReadableTimeComponent as ReadableTime } from '../ReadableTime';
 
-jest.unmock("react-intl");
+jest.unmock('react-intl');
 const sandbox = sinon.sandbox.create();
-const intl = createIntl({ locale: "en" });
+const intl = createIntl({ locale: 'en' });
 
-describe("components/time/ReadableTime", () => {
+describe('components/time/ReadableTime', () => {
     const TEST_TIMESTAMP = 1506551456000; // Some random timestamp [09/27/2017 @ 10:33pm (UTC)]
 
     beforeEach(() => {
@@ -37,17 +37,17 @@ describe("components/time/ReadableTime", () => {
 
     test.each`
         timestamp                        | timestampName                      | allowFutureTimestamps | alwaysShowTime | showWeekday | description
-        ${msYesterday}                   | ${"yesterday"}                     | ${true}               | ${false}       | ${false}    | ${"Yesterday at hh:mm"}
-        ${msBeginningOfCenturyTime}      | ${"msBeginningOfCenturyTime"}      | ${true}               | ${false}       | ${false}    | ${"mm dd yy at hh:mm"}
-        ${msTwoDaysAgo}                  | ${"msTwoDaysAgo"}                  | ${true}               | ${false}       | ${false}    | ${"mm dd"}
-        ${msTwoDaysAgo}                  | ${"msTwoDaysAgo"}                  | ${true}               | ${true}        | ${false}    | ${"mm dd at hh:mm when we show the time"}
-        ${msTwoDaysAgo}                  | ${"msTwoDaysAgo"}                  | ${true}               | ${false}       | ${true}     | ${"Weekday"}
-        ${relativeThreshold * 2 + now}   | ${"relativeThreshold * 2 + now"}   | ${true}               | ${false}       | ${false}    | ${"Today at hh:mm"}
-        ${ms1HourInFuture}               | ${"ms1HourInFuture"}               | ${false}              | ${false}       | ${false}    | ${"Today at hh:mm"}
-        ${withinRelativeThresholdAhead}  | ${"withinRelativeThresholdAhead"}  | ${true}               | ${false}       | ${false}    | ${"in 30 minutes"}
-        ${withinRelativeThresholdBehind} | ${"withinRelativeThresholdBehind"} | ${true}               | ${false}       | ${false}    | ${"30 minutes ago"}
+        ${msYesterday}                   | ${'yesterday'}                     | ${true}               | ${false}       | ${false}    | ${'Yesterday at hh:mm'}
+        ${msBeginningOfCenturyTime}      | ${'msBeginningOfCenturyTime'}      | ${true}               | ${false}       | ${false}    | ${'mm dd yy at hh:mm'}
+        ${msTwoDaysAgo}                  | ${'msTwoDaysAgo'}                  | ${true}               | ${false}       | ${false}    | ${'mm dd'}
+        ${msTwoDaysAgo}                  | ${'msTwoDaysAgo'}                  | ${true}               | ${true}        | ${false}    | ${'mm dd at hh:mm when we show the time'}
+        ${msTwoDaysAgo}                  | ${'msTwoDaysAgo'}                  | ${true}               | ${false}       | ${true}     | ${'Weekday'}
+        ${relativeThreshold * 2 + now}   | ${'relativeThreshold * 2 + now'}   | ${true}               | ${false}       | ${false}    | ${'Today at hh:mm'}
+        ${ms1HourInFuture}               | ${'ms1HourInFuture'}               | ${false}              | ${false}       | ${false}    | ${'Today at hh:mm'}
+        ${withinRelativeThresholdAhead}  | ${'withinRelativeThresholdAhead'}  | ${true}               | ${false}       | ${false}    | ${'in 30 minutes'}
+        ${withinRelativeThresholdBehind} | ${'withinRelativeThresholdBehind'} | ${true}               | ${false}       | ${false}    | ${'30 minutes ago'}
     `(
-        "timestamp: $timestampName | allowFutureTimestamps: $allowFutureTimestamps | alwaysShowTime: $alwaysShowTime | showWeekday: $showWeekday | $description",
+        'timestamp: $timestampName | allowFutureTimestamps: $allowFutureTimestamps | alwaysShowTime: $alwaysShowTime | showWeekday: $showWeekday | $description',
         ({
             timestamp,
             allowFutureTimestamps = true,
@@ -67,11 +67,11 @@ describe("components/time/ReadableTime", () => {
 
             expect(wrapper.children()).toMatchSnapshot();
             wrapper.setProps({ uppercase: true });
-            expect(wrapper.children()).toMatchSnapshot("uppercase");
+            expect(wrapper.children()).toMatchSnapshot('uppercase');
         },
     );
 
-    test("should use default relative threshold if not provided", () => {
+    test('should use default relative threshold if not provided', () => {
         const wrapper = shallow(
             <ReadableTime
                 intl={intl}
@@ -80,8 +80,8 @@ describe("components/time/ReadableTime", () => {
         );
         expect(wrapper).toMatchSnapshot();
     });
-    test("should suppress uppercase for locales in the nonUppercaseLocales list (e.g. russian)", () => {
-        const ruIntl = createIntl({ locale: "ru", messages: {} });
+    test('should suppress uppercase for locales in the nonUppercaseLocales list (e.g. russian)', () => {
+        const ruIntl = createIntl({ locale: 'ru', messages: {} });
 
         const wrapperUppercase = mount(
             <ReadableTime
@@ -100,8 +100,8 @@ describe("components/time/ReadableTime", () => {
 
         expect(wrapperUppercase.text()).toEqual(wrapperLowercase.text());
     });
-    test("CJK languages should look the same for uppercase and lowercase (e.g. japanese)", () => {
-        const jaIntl = createIntl({ locale: "ja", messages: {} });
+    test('CJK languages should look the same for uppercase and lowercase (e.g. japanese)', () => {
+        const jaIntl = createIntl({ locale: 'ja', messages: {} });
 
         const wrapperUppercaseJa = mount(
             <ReadableTime

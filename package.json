@@ -55,7 +55,7 @@
         "build:dev:dist": "NODE_ENV=development BABEL_ENV=development LANGUAGE=en-US webpack --config scripts/webpack.config.js --mode development --progress",
         "build:dev:es": "NODE_ENV=development BABEL_ENV=development yarn build:es --copy-files --source-maps inline --watch --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
         "build:es": "babel src --extensions '.js,.tsx,.ts' --out-dir es",
-        "build:i18n": "buildBundles",
+        "build:i18n": "node scripts/buildLanguages.js",
         "build:npm": "npm-run-all clean build:i18n build:prod:npm build:prod:es",
         "build:prod:analyze": "BUNDLE_ANALYSIS=true npm-run-all setup build:prod:npm",
         "build:prod:dist": "NODE_ENV=production webpack --config scripts/webpack.config.js --mode production",
@@ -396,6 +396,8 @@
         "webpack-dev-middleware": "^7.4.6"
     },
     "msw": {
-        "workerDirectory": [".storybook/public"]
+        "workerDirectory": [
+            ".storybook/public"
+        ]
     }
 }
