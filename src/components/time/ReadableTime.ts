@@ -1,10 +1,10 @@
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, IntlShape } from "react-intl";
 
-import { ONE_HOUR_MS } from '../../constants';
-import { isCurrentYear, isToday, isYesterday } from '../../utils/datetime';
-import timeFromNow from '../../utils/relativeTime';
+import { ONE_HOUR_MS } from "../../constants";
+import { isCurrentYear, isToday, isYesterday } from "../../utils/datetime";
+import timeFromNow from "../../utils/relativeTime";
 
-import messages from './messages';
+import messages from "./messages";
 
 export interface ReadableTimeProps {
     /** A boolean that will cause future timestamps (usually due to incorrect computer time) to be corrected to the isToday message */
@@ -23,8 +23,9 @@ export interface ReadableTimeProps {
     uppercase?: boolean;
 }
 
-// exclude languages that do not have a grammar for uppercase (e.g. russian)
-const nonUppercaseLocales = ['ru'];
+// Uppercase is suppressed for these locales as a product/UX choice.
+// Cyrillic does have uppercase; `ru` is still excluded from ALL-CAPS.
+const nonUppercaseLocales = ["ru"];
 const ReadableTime = ({
     intl,
     timestamp,
@@ -34,7 +35,8 @@ const ReadableTime = ({
     showWeekday = false,
     uppercase = false,
 }: ReadableTimeProps): string => {
-    const shouldUppercase = uppercase && !nonUppercaseLocales.includes(intl.locale);
+    const shouldUppercase =
+        uppercase && !nonUppercaseLocales.includes(intl.locale);
     const relativeIfNewerThanTs = Date.now() - relativeThreshold;
     const shouldShowYear = !isCurrentYear(timestamp);
 
@@ -57,17 +59,17 @@ const ReadableTime = ({
     } else if (showWeekday) {
         // e.g. Monday, Oct 5, 2018
         dateMessage = messages.eventTimeWeekdayLong;
-        weekday = intl.formatDate(timestamp, { weekday: 'long' });
+        weekday = intl.formatDate(timestamp, { weekday: "long" });
     } else if (shouldShowYear && alwaysShowTime) {
         // e.g. Oct 5, 2018 at 10:30 PM
         dateMessage = messages.eventTimeDate;
     } else if (!shouldShowYear && alwaysShowTime) {
         // e.g. Oct 5 at 10:30 PM
         dateMessage = messages.eventTimeDateShort;
-        date = intl.formatDate(timestamp, { month: 'short', day: 'numeric' });
+        date = intl.formatDate(timestamp, { month: "short", day: "numeric" });
     } else if (!shouldShowYear && !alwaysShowTime) {
         // e.g. Oct 5
-        output = intl.formatDate(timestamp, { month: 'short', day: 'numeric' });
+        output = intl.formatDate(timestamp, { month: "short", day: "numeric" });
         return shouldUppercase ? output.toLocaleUpperCase(intl.locale) : output;
     }
     const values = { time: timestamp, date, weekday };
