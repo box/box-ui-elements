@@ -173,7 +173,7 @@ const SidebarNav = ({
     routerDisabled,
     signSidebarProps,
 }: Props) => {
-    const { enabled: hasBoxSign } = signSidebarProps || {};
+    const { enabled: hasBoxSign, isForcedToUseTemplates } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
     const { enabled: isPreviewModernizationEnabled } = useFeatureConfig('previewModernization');
@@ -351,7 +351,7 @@ const SidebarNav = ({
                     {allVisibleTabs}
                 </SidebarNavTablist>
 
-                {hasBoxSign && (
+                {hasBoxSign && !isForcedToUseTemplates && (
                     <div className="bcs-SidebarNav-secondary">
                         <SidebarNavSign {...signSidebarProps} />
                     </div>
