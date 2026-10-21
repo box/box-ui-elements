@@ -577,6 +577,17 @@ describe('useMetadataTemplateItemsService', () => {
         });
     });
 
+    test('should propagate a failed template list without adding custom metadata', async () => {
+        const error = new Error('list unavailable');
+        listTemplatesForNamespace.mockRejectedValue(error);
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        await expect(result.current!.getTemplates(enterpriseFqn, { limit: 50 })).rejects.toBe(error);
+    });
+
     test('should propagate a failed template search', async () => {
         const error = new Error('search unavailable');
         searchTemplates.mockRejectedValue(error);

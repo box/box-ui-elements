@@ -321,6 +321,8 @@ export default function useMetadataTemplateItemsService(
                 const page = [...fromLoaded, ...listed];
                 // The namespace list does not include Custom Metadata. It is a client-built
                 // `properties` row, so the first enterprise-root page adds that row alone.
+                // This runs only after listTemplatesForNamespace resolves. A failure rejects
+                // above, so a failed list is not shown as a namespace that only has this row.
                 const customMetadataEntries =
                     namespaceFQN === enterpriseFqn && !readNonBlank(params.marker)
                         ? templates
