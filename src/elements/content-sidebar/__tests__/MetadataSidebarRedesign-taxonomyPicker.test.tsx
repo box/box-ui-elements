@@ -216,7 +216,7 @@ describe('MetadataSidebarRedesign taxonomy picker wiring', () => {
             templateKey: 'taxonomyTemplate',
             fieldKey: 'geography',
         });
-        await service?.getNodes(null, {});
+        await service?.getNodes(null, { limit: 100 });
 
         expect(getMetadataOptions).toHaveBeenLastCalledWith(
             'file-id-1',
