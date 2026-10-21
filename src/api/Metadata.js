@@ -370,9 +370,25 @@ class Metadata extends File {
         );
     }
 
-    /** @see MetadataNamespaces.getTemplateSchemaForEditor */
-    getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file?: BoxItem): Promise<Object> {
-        return this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+    /**
+     * Fetches a template schema for the editor and attaches taxonomy `levels`.
+     *
+     * `getTemplates` hydrates levels for the enterprise-root list only. A
+     * child-namespace template is loaded through this schema call, so the same
+     * hydration has to happen here or the taxonomy picker receives no levels.
+     *
+     * @see MetadataNamespaces.getTemplateSchemaForEditor
+     */
+    async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file?: BoxItem): Promise<Object> {
+        const schema = await this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+        if (!file || !file.id) {
+            return schema;
+        }
+
+        // Schema responses omit id/scope. Hydration only reads taxonomy fields.
+        // $FlowFixMe
+        const [hydrated] = await this.getTaxonomyLevelsForTemplates([schema], file.id);
+        return hydrated || schema;
     }
 
     /**

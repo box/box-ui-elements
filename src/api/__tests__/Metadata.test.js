@@ -835,6 +835,117 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('getTemplateSchemaForEditor()', () => {
+        const file = { id: '123' };
+        const namespaceFqn = 'enterprise_1.legal';
+        const templateKey = 'testNestedWithTaxonomy';
+
+        test('should attach taxonomy levels for a child-namespace schema', async () => {
+            metadata.xhr.get = jest
+                .fn()
+                .mockResolvedValueOnce({
+                    data: {
+                        namespace: namespaceFqn,
+                        templateKey,
+                        displayName: 'Nested',
+                        hidden: false,
+                        fields: [
+                            {
+                                type: 'taxonomy',
+                                key: 'abcd',
+                                displayName: 'ABCD',
+                                hidden: false,
+                                namespace: 'enterprise_1',
+                                taxonomyKey: 'continents',
+                            },
+                        ],
+                    },
+                })
+                .mockResolvedValueOnce({
+                    data: {
+                        levels: [
+                            { displayName: 'Country', description: 'First level', level: 1 },
+                            { displayName: 'Region', description: 'Second level', level: 2 },
+                        ],
+                    },
+                });
+
+            const schema = await metadata.getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+
+            expect(metadata.xhr.get).toHaveBeenNthCalledWith(1, {
+                url: `https://api.box.com/2.0/metadata_templates/${namespaceFqn}/${templateKey}/schema`,
+                id: 'file_123',
+            });
+            expect(metadata.xhr.get).toHaveBeenNthCalledWith(2, {
+                url: 'https://api.box.com/2.0/metadata_taxonomies/enterprise_1/continents',
+                id: 'file_123',
+            });
+            expect(schema).toEqual({
+                namespace: namespaceFqn,
+                templateKey,
+                displayName: 'Nested',
+                hidden: false,
+                fields: [
+                    {
+                        type: 'taxonomy',
+                        key: 'abcd',
+                        displayName: 'ABCD',
+                        hidden: false,
+                        namespace: 'enterprise_1',
+                        taxonomyKey: 'continents',
+                        levels: [
+                            { displayName: 'Country', description: 'First level', level: 1 },
+                            { displayName: 'Region', description: 'Second level', level: 2 },
+                        ],
+                    },
+                ],
+            });
+        });
+
+        test('should not request taxonomy levels when the schema has no taxonomy fields', async () => {
+            metadata.xhr.get = jest.fn().mockResolvedValueOnce({
+                data: {
+                    namespace: namespaceFqn,
+                    templateKey,
+                    displayName: 'Nested',
+                    hidden: false,
+                    fields: [{ type: 'string', key: 'vendor', displayName: 'Vendor', hidden: false }],
+                },
+            });
+
+            const schema = await metadata.getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(schema.fields).toEqual([{ type: 'string', key: 'vendor', displayName: 'Vendor', hidden: false }]);
+        });
+
+        test('should return the schema without taxonomy levels when the file id is missing', async () => {
+            metadata.xhr.get = jest.fn().mockResolvedValueOnce({
+                data: {
+                    namespace: namespaceFqn,
+                    templateKey,
+                    displayName: 'Nested',
+                    hidden: false,
+                    fields: [
+                        {
+                            type: 'taxonomy',
+                            key: 'abcd',
+                            displayName: 'ABCD',
+                            hidden: false,
+                            namespace: 'enterprise_1',
+                            taxonomyKey: 'continents',
+                        },
+                    ],
+                },
+            });
+
+            const schema = await metadata.getTemplateSchemaForEditor(namespaceFqn, templateKey, {});
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(schema.fields[0].levels).toBeUndefined();
+        });
+    });
+
     describe('getSchemaByTemplateKey()', () => {
         test('should return metadata template for provided template key', async () => {
             const metadataTemplate = 'metadataTemplate';
