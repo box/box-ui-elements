@@ -13,6 +13,7 @@ import VersionsItemActions from './VersionsItemActions';
 import VersionsItemButton from './VersionsItemButton';
 import VersionsItemBadge from './VersionsItemBadge';
 import VersionsItemRetention from './VersionsItemRetention';
+import { getVersionItemActionVisibility } from './versionItemActionVisibility';
 import { ReadableTime } from '../../../components/time';
 import {
     FILE_REQUEST_NAME,
@@ -47,7 +48,6 @@ const ACTION_MAP = {
     [VERSION_PROMOTE_ACTION]: messages.versionPromotedBy,
     [VERSION_UPLOAD_ACTION]: messages.versionUploadedBy,
 };
-const FILE_EXTENSIONS_OFFICE = ['xlsb', 'xlsm', 'xlsx'];
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
@@ -67,10 +67,7 @@ const VersionsItem = ({
 }: Props) => {
     const {
         created_at: createdAt,
-        extension,
         id: versionId,
-        is_download_available,
-        permissions = {},
         restored_at: restoredAt,
         retention,
         size,
@@ -78,13 +75,9 @@ const VersionsItem = ({
         version_number: versionNumber,
         version_promoted: versionPromoted,
     } = version;
-    const { can_delete, can_download, can_preview, can_upload } = permissions;
-    const { applied_at: retentionAppliedAt, disposition_at: retentionDispositionAt } = retention || {};
-    const retentionDispositionAtDate = retentionDispositionAt && new Date(retentionDispositionAt);
 
     // Version info helpers
     const versionAction = selectors.getVersionAction(version);
-    const versionInteger = versionNumber ? parseInt(versionNumber, 10) : 1;
     const versionTime = restoredAt || trashedAt || createdAt;
     const versionTimestamp = versionTime && new Date(versionTime).getTime();
     const versionUserName = selectors.getVersionUser(version).name || (
@@ -96,22 +89,26 @@ const VersionsItem = ({
         ) : (
             <FormattedMessage {...messages.fileRequestDisplayName} />
         );
-    // Version state helpers
-    const isDeleted = versionAction === VERSION_DELETE_ACTION;
-    const isDownloadable = !!is_download_available;
-    const isLimited = versionCount - versionInteger >= versionLimit;
-    const isOffice = FILE_EXTENSIONS_OFFICE.includes(extension);
-    const isRestricted = (isOffice || isWatermarked) && !isCurrent;
-    const isRetained = !!retentionAppliedAt && (!retentionDispositionAtDate || retentionDispositionAtDate > new Date());
-
-    // Version action helpers
-    const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
-    const showDelete = can_delete && !isDeleted && !isArchived && !isCurrent;
-    const showDownload = can_download && !isDeleted && isDownloadable;
-    const showPromote = can_upload && !isDeleted && !isArchived && !isCurrent;
-    const showRestore = can_delete && isDeleted && !isArchived;
-    const showPreview = canPreview && !isSelected;
-    const hasActions = showDelete || showDownload || showPreview || showPromote || showRestore;
+    const {
+        canPreview,
+        hasActions,
+        isLimited,
+        isRetained,
+        showDelete,
+        showDownload,
+        showPreview,
+        showPromote,
+        showRestore,
+    } = getVersionItemActionVisibility({
+        isArchived,
+        isCurrent,
+        isSelected,
+        isWatermarked,
+        version,
+        versionAction,
+        versionCount,
+        versionLimit,
+    });
 
     // Version action callback helper
     const handleAction = (handler?: VersionActionCallback) => (): void => {

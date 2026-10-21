@@ -72,7 +72,13 @@ import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { RequestOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/types/core';
-import type { VersionChangeCallback } from '../content-sidebar/versions';
+import type {
+    ComparisonBannerProps,
+    ComparisonVersionActions,
+    RegisterVersionActionsCallback,
+    VersionChangeCallback,
+} from '../content-sidebar/versions';
+import { selectComparisonBannerActions } from '../content-sidebar/versions/versionItemActionVisibility';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { WithAnnotationsProps, WithAnnotatorContextProps } from '../common/annotator-context';
 // $FlowFixMe TypeScript file
@@ -141,6 +147,7 @@ type Props = {
     isComparedPreview?: boolean,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
     comparedVersion?: BoxItemVersion,
+    comparisonBanner?: ComparisonBannerProps,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -175,6 +182,7 @@ type Props = {
     },
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    registerVersionActions?: RegisterVersionActionsCallback,
     sharedLink?: string,
     sharedLinkAuth?: 'logged_in' | 'logged_out' | 'na',
     sharedLinkPassword?: string,
@@ -630,28 +638,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.updatePreviewToken();
         }
 
-        // The click that starts comparison writes selectedVersion while isComparing is still
-        // false. Drop it so the left pane stays on current when comparison ends.
-        if (!prevProps.isComparing && this.props.isComparing && this.state.selectedVersion) {
-            this.setState({ selectedVersion: undefined });
-        }
-
-        // Comparison can start on an already-open current pane; stamp BCP without reloading.
-        const comparisonFlagsChanged =
-            !!prevProps.isComparing !== !!this.props.isComparing ||
-            !!prevProps.isComparedPreview !== !!this.props.isComparedPreview;
-        if (
-            comparisonFlagsChanged &&
-            this.preview &&
-            this.preview.setComparisonMode &&
-            !this.shouldLoadPreview(prevProps, prevState)
-        ) {
-            this.preview.setComparisonMode({
-                isComparing: !!(this.props.isComparing || this.props.isComparedPreview),
-                isComparedPreview: !!this.props.isComparedPreview,
-            });
-        }
-
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
         }
@@ -663,6 +649,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         ) {
             this.preview.updateContentInsightsOptions(features?.advancedContentInsights);
         }
+
+        this.updatePreviewComparisonMode(prevProps, prevState);
+        this.updatePreviewComparisonBanner(prevProps, prevState);
     }
 
     /**
@@ -673,6 +662,58 @@ class ContentPreview extends React.PureComponent<Props, State> {
     updatePreviewToken(shouldReload: boolean = false) {
         if (this.preview) {
             this.preview.updateToken(this.props.token, shouldReload);
+        }
+    }
+
+    /**
+     * Handles comparison starting or ending on an already-open pane without reloading.
+     *
+     * @param {Props} prevProps - Previous props
+     * @param {State} prevState - Previous state
+     */
+    updatePreviewComparisonMode(prevProps: Props, prevState: State) {
+        const { isComparing, isComparedPreview } = this.props;
+
+        // The click that starts comparison writes selectedVersion while isComparing is still
+        // false. Drop it so the left pane stays on current when comparison ends.
+        if (!prevProps.isComparing && isComparing && this.state.selectedVersion) {
+            this.setState({ selectedVersion: undefined });
+        }
+
+        const haveFlagsChanged =
+            !!prevProps.isComparing !== !!isComparing || !!prevProps.isComparedPreview !== !!isComparedPreview;
+
+        if (
+            haveFlagsChanged &&
+            this.preview &&
+            this.preview.setComparisonMode &&
+            !this.shouldLoadPreview(prevProps, prevState)
+        ) {
+            this.preview.setComparisonMode({
+                isComparing: !!(isComparing || isComparedPreview),
+                isComparedPreview: !!isComparedPreview,
+            });
+        }
+    }
+
+    /**
+     * Pushes a changed comparisonBanner into an already-shown preview without reloading.
+     *
+     * @param {Props} prevProps - Previous props
+     * @param {State} prevState - Previous state
+     */
+    updatePreviewComparisonBanner(prevProps: Props, prevState: State) {
+        const { comparisonBanner } = this.props;
+
+        if (
+            prevProps.comparisonBanner !== comparisonBanner &&
+            this.preview &&
+            this.preview.options &&
+            this.preview.updateComparisonBanner &&
+            !this.shouldLoadPreview(prevProps, prevState)
+        ) {
+            this.preview.options.comparisonBanner = comparisonBanner || {};
+            this.preview.updateComparisonBanner();
         }
     }
 
@@ -1080,6 +1121,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             previewExperiences,
             previewMode,
             previewVersion,
+            registerVersionActions, // sidebar-only, not a Preview option
             sharedLinkAuth,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
@@ -1772,6 +1814,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             logoUrl,
             onClose,
             measureRef,
+            registerVersionActions,
             sharedLink,
             sharedLinkPassword,
             requestInterceptor,
@@ -1792,8 +1835,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }: State = this.state;
 
         const hostOnEditingStateChange = contentSidebarProps.metadataSidebarProps?.onEditingStateChange;
+        const { versionsSidebarProps } = contentSidebarProps;
         const mergedContentSidebarProps = {
             ...contentSidebarProps,
+            versionsSidebarProps: registerVersionActions
+                ? { ...versionsSidebarProps, registerVersionActions }
+                : versionsSidebarProps,
             metadataSidebarProps: {
                 ...contentSidebarProps.metadataSidebarProps,
                 onEditingStateChange: (isEditing: boolean) => {
@@ -1969,11 +2016,26 @@ const ConnectedContentPreview = flow([
 const MemoConnectedContentPreview = React.memo(ConnectedContentPreview);
 
 function ContentPreviewWithComparison(props: ContentPreviewProps) {
-    const { comparedVersion, ...rest } = props;
+    const { comparedVersion, comparisonBanner: hostComparisonBanner, ...rest } = props;
     const [comparedSlot, setComparedSlot] = React.useState<?HTMLDivElement>(null);
+    const [versionActions, setVersionActions] = React.useState<ComparisonVersionActions | null>(null);
     const comparedPreviewRef = React.useRef<?ContentPreview>(null);
     const comparedVersionId = comparedVersion && comparedVersion.id;
     const isComparing = comparedVersionId != null && comparedVersionId !== '';
+    const registerVersionActions = React.useCallback((actions: ComparisonVersionActions | null) => {
+        setVersionActions(actions);
+    }, []);
+    const comparisonBanner = React.useMemo(() => {
+        if (!versionActions || comparedVersionId == null || comparedVersionId === '') {
+            return hostComparisonBanner;
+        }
+
+        // Sidebar handlers override the host's; a handler the sidebar withholds keeps the host's.
+        return {
+            ...hostComparisonBanner,
+            ...selectComparisonBannerActions(versionActions, comparedVersionId),
+        };
+    }, [hostComparisonBanner, versionActions, comparedVersionId]);
 
     const handleComparedAnnotationSelect = React.useCallback((annotation, deferScrollToOnload) => {
         const comparedPreview = comparedPreviewRef.current;
@@ -1987,9 +2049,11 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
             <MemoConnectedContentPreview
                 {...rest}
                 collection={isComparing ? EMPTY_COLLECTION : rest.collection}
+                comparisonBanner={comparisonBanner}
                 comparedSlotRef={setComparedSlot}
                 isComparing={isComparing}
                 onComparedAnnotationSelect={handleComparedAnnotationSelect}
+                registerVersionActions={registerVersionActions}
             />
             {comparedSlot && isComparing
                 ? createPortal(
@@ -2000,6 +2064,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           advancedContentInsights={undefined}
                           autoFocus={false}
                           collection={EMPTY_COLLECTION}
+                          comparisonBanner={comparisonBanner}
                           componentRef={comparedPreviewRef}
                           comparedSlotRef={undefined}
                           contentAnswersProps={undefined}
