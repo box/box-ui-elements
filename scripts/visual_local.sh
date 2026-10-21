@@ -43,12 +43,4 @@ esac
 
 # `--ulimit core=0` stops a crashing browser from writing multi-GB core dumps into the repo.
 docker run --rm --platform "$PLATFORM" --ipc=host --ulimit core=0 -e CI=true -v "$PWD":/work -w /work "$IMAGE" scripts/visual_tests.sh
-STATUS=$?
-
-# The path printed inside the container is relative to /work, so print the host URL here.
-REPORT="$PWD/reports/visual-artifacts/report/index.html"
-if [ "$STATUS" -ne 0 ] && [ -f "$REPORT" ]; then
-    echo
-    echo "Review the changes at file://${REPORT}#?q=s:failed"
-fi
-exit "$STATUS"
+exit $?
