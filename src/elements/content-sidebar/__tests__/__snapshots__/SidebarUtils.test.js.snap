@@ -7,6 +7,7 @@ exports[`elements/content-sidebar/SidebarUtil getAsyncSidebarContent() should re
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for activity 1`] = `
 <FormattedMessage
   defaultMessage="Activity"
+  description="Title for the preview activity feed."
   id="be.sidebarActivityTitle"
 />
 `;
@@ -16,6 +17,7 @@ exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return th
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for details 1`] = `
 <FormattedMessage
   defaultMessage="Details"
+  description="Title for the preview details sidebar."
   id="be.sidebarDetailsTitle"
 />
 `;
@@ -23,6 +25,7 @@ exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return th
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for docgen 1`] = `
 <FormattedMessage
   defaultMessage="Doc Gen Tags"
+  description="Title for the DocGen sidebar tab."
   id="be.sidebarDocGenTitle"
 />
 `;
@@ -30,6 +33,7 @@ exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return th
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for metadata 1`] = `
 <FormattedMessage
   defaultMessage="Metadata"
+  description="Title for the preview metadata."
   id="be.sidebarMetadataTitle"
 />
 `;
@@ -37,6 +41,7 @@ exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return th
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for skills 1`] = `
 <FormattedMessage
   defaultMessage="Skills"
+  description="Title for the preview details skills."
   id="be.sidebarSkillsTitle"
 />
 `;
