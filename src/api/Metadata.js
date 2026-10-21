@@ -386,8 +386,10 @@ class Metadata extends File {
         }
 
         // Schema responses omit id/scope. Hydration only reads taxonomy fields.
+        // The sidebar list keeps an empty-levels fallback. This editor path must
+        // reject, or a failed levels request opens as a taxonomy with no levels.
         // $FlowFixMe
-        const [hydrated] = await this.getTaxonomyLevelsForTemplates([schema], file.id);
+        const [hydrated] = await this.getTaxonomyLevelsForTemplates([schema], file.id, { throwOnError: true });
         return hydrated || schema;
     }
 
@@ -460,14 +462,23 @@ class Metadata extends File {
     }
 
     /**
+     * Attaches taxonomy `levels` onto template fields that do not already have them.
+     *
+     * The sidebar list uses the default: a failed levels request becomes
+     * `levels: []` so one missing taxonomy does not fail the whole sidebar.
+     * The template editor passes `{ throwOnError: true }` so that failure
+     * rejects the schema load instead.
      *
      * @param {Array<MetadataTemplate>} metadataTemplates
      * @param {string} id
+     * @param {Object} [options]
+     * @param {boolean} [options.throwOnError]
      * @returns {Array<MetadataTemplate>}
      */
     async getTaxonomyLevelsForTemplates(
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
+        options: { throwOnError?: boolean } = {},
     ): Promise<Array<MetadataTemplate>> {
         const templates = cloneDeep(metadataTemplates);
 
@@ -499,7 +510,11 @@ class Metadata extends File {
                     levels: getProp(result, 'data.levels', []),
                 };
             } catch (error) {
-                // A missing taxonomy must not fail the whole metadata sidebar.
+                // The sidebar list keeps the template. The editor opts into throwOnError
+                // so a failed levels request is not shown as a taxonomy with no levels.
+                if (options.throwOnError) {
+                    throw error;
+                }
                 return { path: taxonomyPath, levels: [] };
             }
         });

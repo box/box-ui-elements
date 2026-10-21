@@ -704,6 +704,23 @@ describe('api/Metadata', () => {
                 },
             ]);
         });
+
+        test('should reject when taxonomy levels fail and throwOnError is set', async () => {
+            const metadataTemplates = [
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: 'missing' }],
+                },
+            ];
+            const error = { status: 500 };
+            metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
+            metadata.xhr.get = jest.fn().mockRejectedValue(error);
+
+            await expect(
+                metadata.getTaxonomyLevelsForTemplates(metadataTemplates, 'id', { throwOnError: true }),
+            ).rejects.toEqual(error);
+        });
     });
 
     describe('getTemplates()', () => {
@@ -943,6 +960,33 @@ describe('api/Metadata', () => {
 
             expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
             expect(schema.fields[0].levels).toBeUndefined();
+        });
+
+        test('should reject when taxonomy levels cannot be loaded', async () => {
+            const error = { status: 500 };
+            metadata.xhr.get = jest
+                .fn()
+                .mockResolvedValueOnce({
+                    data: {
+                        namespace: namespaceFqn,
+                        templateKey,
+                        displayName: 'Nested',
+                        hidden: false,
+                        fields: [
+                            {
+                                type: 'taxonomy',
+                                key: 'abcd',
+                                displayName: 'ABCD',
+                                hidden: false,
+                                namespace: 'enterprise_1',
+                                taxonomyKey: 'continents',
+                            },
+                        ],
+                    },
+                })
+                .mockRejectedValueOnce(error);
+
+            await expect(metadata.getTemplateSchemaForEditor(namespaceFqn, templateKey, file)).rejects.toEqual(error);
         });
     });
 
