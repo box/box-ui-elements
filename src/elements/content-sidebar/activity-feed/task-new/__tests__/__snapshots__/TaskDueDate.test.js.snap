@@ -22,6 +22,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
           >
             <FormattedMessage
               defaultMessage="DUE {dateTime}"
+              description="Text for due date description formatted with relative date and relative time. (Upper-case in supported languages)"
               id="be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue"
               values={
                 {
