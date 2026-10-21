@@ -80,15 +80,45 @@ function transformInitialFilterValuesToInternal(
     );
 }
 
+function toExternalFieldValue(value: FilterValues[string]['value']): ExternalMetadataFormFieldValue {
+    if (!('enum' in value)) {
+        return value as RangeType | FloatType;
+    }
+
+    const { enum: enumValue } = value;
+
+    if (!Array.isArray(enumValue)) {
+        return enumValue.value.filter((item): item is string => typeof item === 'string');
+    }
+
+    const rangeEntry = enumValue.find(
+        (
+            entry,
+        ): entry is { value: { range: FloatType['range'] }; advancedFilterOption: FloatType['advancedFilterOption'] } =>
+            typeof entry !== 'string' && typeof entry.value !== 'string',
+    );
+    if (rangeEntry) {
+        return {
+            range: rangeEntry.value.range,
+            advancedFilterOption: rangeEntry.advancedFilterOption,
+        };
+    }
+
+    return enumValue.flatMap(entry => {
+        if (typeof entry === 'string') {
+            return [entry];
+        }
+        if (typeof entry.value === 'string') {
+            return [entry.value];
+        }
+        return [];
+    });
+}
+
 export function convertFilterValuesToExternal(fields: FilterValues): ExternalFilterValues {
     return Object.entries(fields).reduce<ExternalFilterValues>((acc, [key, field]) => {
         const { value, options, fieldType } = field;
-
-        // Transform the value based on its type
-        const transformedValue: ExternalMetadataFormFieldValue =
-            'enum' in value && Array.isArray(value.enum)
-                ? value.enum // Convert enum type to string array
-                : (value as RangeType | FloatType); // Keep range/float objects as-is
+        const transformedValue = toExternalFieldValue(value);
 
         acc[key === ITEM_FILTER_NAME ? FIELD_ITEM_NAME : key] = {
             options,
