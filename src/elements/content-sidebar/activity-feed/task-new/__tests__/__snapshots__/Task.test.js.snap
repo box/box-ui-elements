@@ -21,6 +21,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
             title={
               <FormattedMessage
                 defaultMessage="General Task"
+                description="Text for aria label of general task circle type icon"
                 id="be.contentSidebar.activityFeed.task.generalTaskAnnotationIconTitle"
               />
             }
