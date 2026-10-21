@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 import { renderHook } from '@testing-library/react';
-import { METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
+import { METADATA_TEMPLATE_CLASSIFICATION, METADATA_TEMPLATE_PROPERTIES } from '../../../constants';
 import useMetadataTemplateItemsService from '../hooks/useMetadataTemplateItemsService';
 
 describe('useMetadataTemplateItemsService', () => {
@@ -155,6 +155,65 @@ describe('useMetadataTemplateItemsService', () => {
         expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
     });
 
+    test('should drop the classification template from getTemplates', async () => {
+        listTemplatesForNamespace.mockResolvedValue({
+            entries: [
+                {
+                    id: 'api-id-1',
+                    templateKey: 'visibleTemplate',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Visible',
+                },
+                {
+                    id: 'api-id-2',
+                    templateKey: METADATA_TEMPLATE_CLASSIFICATION,
+                    namespace: enterpriseFqn,
+                    displayName: 'Classification',
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getTemplates(`${enterpriseFqn}.legal`, {
+            limit: 50,
+            marker: undefined,
+        });
+
+        expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
+    });
+
+    test('should drop the classification template from search results', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    id: 'search-visible',
+                    templateKey: 'visibleTemplate',
+                    scope: enterpriseFqn,
+                    displayName: 'Visible',
+                },
+                {
+                    id: 'search-classification',
+                    templateKey: METADATA_TEMPLATE_CLASSIFICATION,
+                    scope: enterpriseFqn,
+                    displayName: 'Classification',
+                },
+            ],
+            next_marker: undefined,
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getSearchResults('class', { limit: 20 });
+
+        expect(entries.map(entry => entry.templateKey)).toEqual(['visibleTemplate']);
+    });
+
     test('should map getTemplates entries and prefer editor template ids', async () => {
         listTemplatesForNamespace.mockResolvedValue({
             entries: [
@@ -196,6 +255,16 @@ describe('useMetadataTemplateItemsService', () => {
 
         await expect(result.current!.getTemplates(enterpriseFqn, { limit: 50, marker: undefined })).resolves.toEqual({
             entries: [
+                {
+                    id: 'editor-props',
+                    type: 'metadata_template',
+                    displayName: 'Custom Metadata',
+                    scope: 'global',
+                    namespace: 'box.metadata',
+                    templateKey: METADATA_TEMPLATE_PROPERTIES,
+                    canEdit: false,
+                    hidden: false,
+                },
                 {
                     id: 'editor-1',
                     type: 'metadata_template',
@@ -293,13 +362,6 @@ describe('useMetadataTemplateItemsService', () => {
                 },
                 {
                     type: 'metadata_template',
-                    id: 'api-global',
-                    templateKey: 'legalContract',
-                    displayName: 'Legal Contract',
-                    namespace: 'box.metadata',
-                },
-                {
-                    type: 'metadata_template',
                     id: 'api-hidden',
                     templateKey: 'hiddenTemplate',
                     displayName: 'Hidden',
@@ -342,21 +404,72 @@ describe('useMetadataTemplateItemsService', () => {
                     hidden: false,
                     ancestors: undefined,
                 },
-                {
-                    id: 'api-global',
-                    type: 'metadata_template',
-                    displayName: 'Legal Contract',
-                    scope: 'box.metadata',
-                    namespace: 'box.metadata',
-                    templateKey: 'legalContract',
-                    canEdit: false,
-                    hidden: false,
-                    ancestors: undefined,
-                },
             ],
             next_marker: undefined,
         });
         expect(searchTemplates).toHaveBeenCalledWith(mockFile, { query: 'Le', limit: 20, marker: 'cursor-0' });
+    });
+
+    test('should drop box-owned templates from search and the namespace list', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    id: 'api-global-namespace',
+                    templateKey: 'legalContract',
+                    displayName: 'Legal Contract',
+                    namespace: 'box.metadata',
+                },
+                {
+                    id: 'api-global-scope',
+                    templateKey: 'boxSign',
+                    displayName: 'Sign',
+                    scope: 'global',
+                },
+                {
+                    id: 'api-namespaced',
+                    templateKey: 'childTemplate',
+                    displayName: 'Child',
+                    namespace: `${enterpriseFqn}.legal`,
+                    scope: 'global',
+                },
+                {
+                    id: 'api-enterprise',
+                    templateKey: 'visibleTemplate',
+                    displayName: 'Visible',
+                    namespace: enterpriseFqn,
+                },
+            ],
+        });
+        listTemplatesForNamespace.mockResolvedValue({
+            entries: [
+                {
+                    id: 'listed-global',
+                    templateKey: 'legalContract',
+                    displayName: 'Legal Contract',
+                    namespace: 'box.metadata',
+                },
+                {
+                    id: 'listed-enterprise',
+                    templateKey: 'visibleTemplate',
+                    displayName: 'Visible',
+                    namespace: enterpriseFqn,
+                },
+            ],
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const search = await result.current!.getSearchResults('legal', { limit: 20 });
+        const listed = await result.current!.getTemplates(enterpriseFqn, { limit: 50 });
+
+        expect(search.entries.map(entry => entry.templateKey)).toEqual(['childTemplate', 'visibleTemplate']);
+        expect(listed.entries.map(entry => entry.templateKey)).toEqual([
+            METADATA_TEMPLATE_PROPERTIES,
+            'myTemplate',
+            'visibleTemplate',
+        ]);
     });
 
     test('should not resolve a namespaced search hit to a root editor template sharing its scope', async () => {
@@ -464,6 +577,17 @@ describe('useMetadataTemplateItemsService', () => {
         });
     });
 
+    test('should propagate a failed template list without adding custom metadata', async () => {
+        const error = new Error('list unavailable');
+        listTemplatesForNamespace.mockRejectedValue(error);
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        await expect(result.current!.getTemplates(enterpriseFqn, { limit: 50 })).rejects.toBe(error);
+    });
+
     test('should propagate a failed template search', async () => {
         const error = new Error('search unavailable');
         searchTemplates.mockRejectedValue(error);
@@ -475,6 +599,88 @@ describe('useMetadataTemplateItemsService', () => {
         await expect(result.current!.getSearchResults('Le', { limit: 20 })).rejects.toBe(error);
     });
 
+    test('should offer only custom metadata from the box-owned home on the first enterprise-root page', async () => {
+        const templatesWithAnotherGlobalTemplate = [
+            ...templates,
+            {
+                id: 'editor-sign',
+                templateKey: 'boxSign',
+                scope: 'global',
+                namespace: 'box.metadata',
+                type: 'metadata_template',
+                displayName: 'Sign',
+                hidden: false,
+                fields: [],
+            },
+        ];
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(
+                api as never,
+                mockFile as never,
+                enterpriseFqn,
+                templatesWithAnotherGlobalTemplate as never,
+            ),
+        );
+
+        const { entries } = await result.current!.getTemplates(enterpriseFqn, { limit: 50 });
+
+        expect(entries.map(entry => entry.templateKey)).toEqual([METADATA_TEMPLATE_PROPERTIES, 'myTemplate']);
+    });
+
+    test('should omit custom metadata from a marked enterprise-root page and a child namespace', async () => {
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const markedRootPage = await result.current!.getTemplates(enterpriseFqn, { limit: 50, marker: 'cursor-1' });
+        const childPage = await result.current!.getTemplates(`${enterpriseFqn}.legal`, { limit: 50 });
+
+        expect(markedRootPage.entries.map(entry => entry.templateKey)).toEqual(['myTemplate']);
+        expect(childPage.entries).toEqual([]);
+    });
+
+    test('should offer custom metadata on the first search page when the query matches', async () => {
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const { entries } = await result.current!.getSearchResults('custom', { limit: 20 });
+
+        expect(entries).toEqual([
+            expect.objectContaining({
+                id: 'editor-props',
+                displayName: 'Custom Metadata',
+                scope: 'global',
+                namespace: 'box.metadata',
+                templateKey: METADATA_TEMPLATE_PROPERTIES,
+            }),
+        ]);
+    });
+
+    test('should not offer custom metadata when search does not match or the page is not the first', async () => {
+        searchTemplates.mockResolvedValue({
+            entries: [
+                {
+                    id: 'api-legal-hold',
+                    templateKey: 'legalHold',
+                    namespace: `${enterpriseFqn}.legal`,
+                    displayName: 'Legal Hold',
+                },
+            ],
+        });
+
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
+        );
+
+        const unmatched = await result.current!.getSearchResults('legal', { limit: 20 });
+        const laterPage = await result.current!.getSearchResults('custom', { limit: 20, marker: 'cursor-1' });
+
+        expect(unmatched.entries.map(entry => entry.templateKey)).toEqual(['legalHold']);
+        expect(laterPage.entries.map(entry => entry.templateKey)).toEqual(['legalHold']);
+    });
+
     test('should merge already-loaded enterprise templates when the namespace list is empty', async () => {
         const { result } = renderHook(() =>
             useMetadataTemplateItemsService(api as never, mockFile as never, enterpriseFqn, templates as never),
@@ -482,6 +688,12 @@ describe('useMetadataTemplateItemsService', () => {
 
         await expect(result.current!.getTemplates(enterpriseFqn, { limit: 50, marker: undefined })).resolves.toEqual({
             entries: [
+                expect.objectContaining({
+                    id: 'editor-props',
+                    templateKey: METADATA_TEMPLATE_PROPERTIES,
+                    scope: 'global',
+                    namespace: 'box.metadata',
+                }),
                 expect.objectContaining({
                     id: 'editor-1',
                     templateKey: 'myTemplate',
