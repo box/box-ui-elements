@@ -504,21 +504,18 @@ class APIFactory {
      * API for metadata
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @param {Object} [options] - merged over the factory options for this client.
+     *   Callers that know the namespace migration mode pass `metadataNamespaceMode` here.
      * @return {MetadataAPI} MetadataAPI instance
      */
-    getMetadataAPI(shouldDestroy: boolean): MetadataAPI {
-        // Each call constructs a new client. Carry the mode the sidebar already
-        // resolved so a later templates request does not fall back to SCOPED
-        // and ask for `/metadata_templates/global` after Final was selected.
-        const metadataNamespaceMode = this.metadataAPI && this.metadataAPI.metadataNamespaceMode;
-
+    getMetadataAPI(shouldDestroy?: boolean, options?: Object): MetadataAPI {
         if (shouldDestroy) {
             this.destroy();
         }
 
         this.metadataAPI = new MetadataAPI({
             ...this.options,
-            ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
+            ...options,
         });
         return this.metadataAPI;
     }

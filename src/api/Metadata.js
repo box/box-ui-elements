@@ -79,12 +79,11 @@ import {
     resolveScopeOrNamespace,
 } from './metadataNamespaceUtils';
 
-/** Options for getMetadata — cache flags plus namespace-migration context. */
+/** Options for getMetadata — cache flags plus the viewer's enterprise FQN. */
 type MetadataGetOptions = {
     enterpriseFqn?: string,
     fields?: Array<string>,
     forceFetch?: boolean,
-    metadataNamespaceMode?: string,
     noPagination?: boolean,
     refreshCache?: boolean,
 };
@@ -92,8 +91,8 @@ type MetadataGetOptions = {
 class Metadata extends File {
     /**
      * Namespace migration mode for URL helpers on this Metadata instance.
-     * Defaults to SCOPED. getMetadata updates it from per-call options so
-     * subsequent template/instance URLs match the resolved sidebar mode.
+     * Set from constructor options and fixed for the life of the client.
+     * Defaults to SCOPED. Callers pass the sidebar mode to `getMetadataAPI`.
      *
      * @property {string}
      */
@@ -1057,11 +1056,7 @@ class Metadata extends File {
         const cache: APICache = this.getCache();
         const key = this.getMetadataCacheKey(id);
 
-        // Per-call mode for this fetch; persist on the instance so later
-        // URL helpers on this client match. APIFactory copies it onto the
-        // next Metadata client, which would otherwise default to SCOPED.
-        const metadataNamespaceMode = options.metadataNamespaceMode || this.metadataNamespaceMode;
-        this.metadataNamespaceMode = metadataNamespaceMode;
+        const { metadataNamespaceMode } = this;
 
         // Clear the cache if needed
         if (options.forceFetch) {

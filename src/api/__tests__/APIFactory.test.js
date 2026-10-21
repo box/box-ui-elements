@@ -352,14 +352,23 @@ describe('api/APIFactory', () => {
             expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
 
-        test('should carry the resolved namespace mode onto the next metadata client', () => {
-            const first = factory.getMetadataAPI(false);
-            first.metadataNamespaceMode = METADATA_SCOPE_MODE_FINAL;
+        test('should construct the client with caller options', () => {
+            const metadataAPI = factory.getMetadataAPI(false, {
+                metadataNamespaceMode: METADATA_SCOPE_MODE_FINAL,
+            });
 
+            expect(metadataAPI.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
+        });
+
+        test('should not copy namespace mode from a previous client', () => {
+            const first = factory.getMetadataAPI(false, {
+                metadataNamespaceMode: METADATA_SCOPE_MODE_FINAL,
+            });
             const second = factory.getMetadataAPI(false);
 
             expect(second).not.toBe(first);
-            expect(second.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
+            expect(first.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
+            expect(second.metadataNamespaceMode).toBe('SCOPED');
         });
     });
 

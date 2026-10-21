@@ -6,10 +6,10 @@
  * core scoped metadata flows. Methods are delegated from Metadata for a stable
  * public API (`api.getMetadataAPI().listNamespaces(...)`).
  *
- * Migration mode lives on the Metadata host (defaults to SCOPED). The sidebar
- * may overwrite it from getMetadata options after opt-in. This class does
- * not fetch enterprise-configuration flags. Auth is the same file-scoped
- * TokenService path as `getTemplates` (`id: file_…`).
+ * Migration mode lives on the Metadata host (defaults to SCOPED) and is set
+ * when that client is constructed. This class does not fetch
+ * enterprise-configuration flags. Auth is the same file-scoped TokenService
+ * path as `getTemplates` (`id: file_…`).
  */
 
 import getProp from 'lodash/get';

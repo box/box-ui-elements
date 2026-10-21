@@ -1581,10 +1581,10 @@ describe('api/Metadata', () => {
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterpriseRoot');
             metadata.extractClassification = jest.fn().mockReturnValueOnce([]);
             metadata.getEnterpriseNamespaceFromInstances = jest.fn();
+            metadata.metadataNamespaceMode = 'MIGRATION';
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {
                 enterpriseFqn: 'enterprise_123456',
-                metadataNamespaceMode: 'MIGRATION',
             });
 
             expect(metadata.metadataNamespaceMode).toBe('MIGRATION');
@@ -1624,10 +1624,10 @@ describe('api/Metadata', () => {
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterpriseRoot');
             metadata.extractClassification = jest.fn().mockReturnValueOnce([]);
+            metadata.metadataNamespaceMode = 'FINAL';
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {
                 enterpriseFqn: 'enterprise_123456',
-                metadataNamespaceMode: 'FINAL',
             });
 
             expect(metadata.metadataNamespaceMode).toBe('FINAL');
