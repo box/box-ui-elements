@@ -138,9 +138,16 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
+    // Mode is a constructor option. Each getMetadataAPI() builds a new client,
+    // so every sidebar call passes the resolved mode instead of writing it later.
+    const metadataAPI = React.useCallback(
+        () => api.getMetadataAPI(false, metadataNamespaceMode ? { metadataNamespaceMode } : undefined),
+        [api, metadataNamespaceMode],
+    );
+
     const fetchMetadata = React.useCallback(
         (fetchedFile: BoxItem) => {
-            api.getMetadataAPI(false).getMetadata(
+            metadataAPI().getMetadata(
                 fetchedFile,
                 fetchMetadataSuccessCallback,
                 fetchMetadataErrorCallback,
@@ -148,7 +155,6 @@ function useSidebarMetadataFetcher(
                 {
                     refreshCache: true,
                     ...(enterpriseFqn ? { enterpriseFqn } : {}),
-                    ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
                 },
                 true,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
@@ -156,13 +162,12 @@ function useSidebarMetadataFetcher(
             );
         },
         [
-            api,
             enterpriseFqn,
             fetchMetadataErrorCallback,
             fetchMetadataSuccessCallback,
             isFeatureEnabled,
             isBoundingBoxOrConfidenceScoreReviewEnabled,
-            metadataNamespaceMode,
+            metadataAPI,
             shouldFetchDetailedMetadata,
         ],
     );
@@ -190,7 +195,7 @@ function useSidebarMetadataFetcher(
                 return;
             }
             setStatus(STATUS.LOADING);
-            await api.getMetadataAPI(false).deleteMetadata(
+            await metadataAPI().deleteMetadata(
                 file,
                 metadataInstance,
                 () => {
@@ -203,12 +208,12 @@ function useSidebarMetadataFetcher(
                 true,
             );
         },
-        [api, onApiError, onSuccess, file],
+        [file, metadataAPI, onApiError, onSuccess],
     );
 
     const handleCreateMetadataInstance = React.useCallback(
         async (templateInstance: MetadataTemplateInstance, successCallback: () => void): Promise<void> => {
-            await api.getMetadataAPI(false).createMetadataRedesign(
+            await metadataAPI().createMetadataRedesign(
                 file,
                 templateInstance,
                 () => {
@@ -220,7 +225,7 @@ function useSidebarMetadataFetcher(
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
-        [api, file, onApiError, onSuccess, isBoundingBoxOrConfidenceScoreReviewEnabled],
+        [file, isBoundingBoxOrConfidenceScoreReviewEnabled, metadataAPI, onApiError, onSuccess],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(
@@ -229,7 +234,7 @@ function useSidebarMetadataFetcher(
             JSONPatch: JSONPatchOperations,
             successCallback: () => void,
         ) => {
-            await api.getMetadataAPI(false).updateMetadataRedesign(
+            await metadataAPI().updateMetadataRedesign(
                 file,
                 metadataInstance,
                 JSONPatch,
@@ -242,7 +247,7 @@ function useSidebarMetadataFetcher(
                 },
             );
         },
-        [api, file, onApiError, onSuccess],
+        [file, metadataAPI, onApiError, onSuccess],
     );
 
     const [, setError] = React.useState();

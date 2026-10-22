@@ -142,6 +142,7 @@ type Props = {
     isComparedPreview?: boolean,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
     comparedVersion?: BoxItemVersion,
+    comparisonBanner?: Object,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -668,6 +669,29 @@ class ContentPreview extends React.PureComponent<Props, State> {
             haveAdvancedContentInsightsChanged
         ) {
             this.preview.updateContentInsightsOptions(features?.advancedContentInsights);
+        }
+
+        this.updatePreviewComparisonBanner(prevProps, prevState);
+    }
+
+    /**
+     * Pushes a changed comparisonBanner into an already-shown preview without reloading.
+     *
+     * @param {Props} prevProps - Previous props
+     * @param {State} prevState - Previous state
+     */
+    updatePreviewComparisonBanner(prevProps: Props, prevState: State) {
+        const { comparisonBanner } = this.props;
+
+        if (
+            prevProps.comparisonBanner !== comparisonBanner &&
+            this.preview &&
+            this.preview.options &&
+            this.preview.updateComparisonBanner &&
+            !this.shouldLoadPreview(prevProps, prevState)
+        ) {
+            this.preview.options.comparisonBanner = comparisonBanner || {};
+            this.preview.updateComparisonBanner();
         }
     }
 

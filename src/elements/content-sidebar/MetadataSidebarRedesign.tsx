@@ -35,12 +35,14 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { useFeatureEnabled } from '../common/feature-checking';
+import { resolveScopeOrNamespace } from '../../api/metadataNamespaceUtils';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
     ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
+    METADATA_SCOPE_MODE_SCOPED,
 } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
@@ -54,7 +56,11 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import { isSameMetadataTemplate, resolveCreateMetadataTemplateKey } from './utils/metadataTemplateIdentity';
+import {
+    isSameMetadataTemplate,
+    resolveCreateMetadataTemplateKey,
+    type MetadataTemplateIdentity,
+} from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
     metadataTaxonomiesListFetcher,
@@ -310,14 +316,22 @@ function MetadataSidebarRedesign({
         }
     };
 
+    // Mode is a constructor option. Each getMetadataAPI() builds a new client.
+    const metadataAPI = useCallback(
+        () => api.getMetadataAPI(false, metadataNamespaceMode ? { metadataNamespaceMode } : undefined),
+        [api, metadataNamespaceMode],
+    );
+
     // The sidebar only loads templates at the enterprise root, so a template the browser
     // lists under a child namespace has no entry in `templates` to select. Fetch its
     // schema on demand instead of dropping the click.
     const fetchTemplateByLocator = useCallback(
         async ({ id, namespaceFqn, templateKey }: MetadataTemplateLocator): Promise<MetadataTemplate | null> => {
-            const schema = (await api
-                .getMetadataAPI(false)
-                .getTemplateSchemaForEditor(namespaceFqn, templateKey, file)) as MetadataTemplateApiResponse | null;
+            const schema = (await metadataAPI().getTemplateSchemaForEditor(
+                namespaceFqn,
+                templateKey,
+                file,
+            )) as MetadataTemplateApiResponse | null;
 
             if (!schema) {
                 return null;
@@ -336,7 +350,7 @@ function MetadataSidebarRedesign({
                 fields: schema.fields ?? [],
             } as unknown as MetadataTemplate;
         },
-        [api, file],
+        [file, metadataAPI],
     );
 
     const handleTemplateSelectError = useCallback(
@@ -356,7 +370,7 @@ function MetadataSidebarRedesign({
             }
 
             await new Promise<void>((resolve, reject) => {
-                api.getMetadataAPI(false).createMetadataTemplate(
+                metadataAPI().createMetadataTemplate(
                     file,
                     { ...body, templateKey },
                     () => {
@@ -370,7 +384,7 @@ function MetadataSidebarRedesign({
                 );
             });
         },
-        [api, file, formatMessage, onError, refetchMetadata],
+        [file, formatMessage, metadataAPI, onError, refetchMetadata],
     );
 
     const fetchTaxonomyByKey = useCallback(
@@ -391,7 +405,7 @@ function MetadataSidebarRedesign({
     const handleEditTemplate = useCallback(
         (patchItems: MetadataTemplatePatchItem[], identifier: { namespaceFQN: string; templateKey: string }) =>
             new Promise<void>((resolve, reject) => {
-                api.getMetadataAPI(false).updateMetadataTemplate(
+                metadataAPI().updateMetadataTemplate(
                     file,
                     identifier.namespaceFQN,
                     identifier.templateKey,
@@ -406,7 +420,7 @@ function MetadataSidebarRedesign({
                     },
                 );
             }),
-        [api, file, onError, refetchMetadata],
+        [file, metadataAPI, onError, refetchMetadata],
     );
 
     const {
@@ -437,16 +451,14 @@ function MetadataSidebarRedesign({
                 namespaceFqn,
                 templateKey,
                 fetchTemplate: () =>
-                    api
-                        .getMetadataAPI(false)
-                        .getTemplateSchemaForEditor(
-                            namespaceFqn,
-                            templateKey,
-                            file,
-                        ) as Promise<MetadataTemplateApiResponse>,
+                    metadataAPI().getTemplateSchemaForEditor(
+                        namespaceFqn,
+                        templateKey,
+                        file,
+                    ) as Promise<MetadataTemplateApiResponse>,
             });
         },
-        [openEdit, api, file],
+        [file, metadataAPI, openEdit],
     );
 
     const handleCancel = () => {
@@ -552,16 +564,28 @@ function MetadataSidebarRedesign({
         </InlineError>
     );
 
+    // FINAL templates have a namespace and no scope. Taxonomy fetchers only
+    // receive scope, so fill it from the template being edited.
+    const resolveTaxonomyScope = useCallback(
+        (scope: string) =>
+            resolveScopeOrNamespace(
+                metadataNamespaceMode ?? METADATA_SCOPE_MODE_SCOPED,
+                scope,
+                (editingTemplate as (MetadataTemplateInstance & MetadataTemplateIdentity) | null)?.namespace,
+            ),
+        [editingTemplate, metadataNamespaceMode],
+    );
+
     const taxonomyOptionsFetcher = useCallback(
         (scope: string, templateKey: string, fieldKey: string, level: number, options: TreeQueryInput) =>
-            metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options),
-        [api, fileId],
+            metadataTaxonomyFetcher(api, fileId, resolveTaxonomyScope(scope), templateKey, fieldKey, level, options),
+        [api, fileId, resolveTaxonomyScope],
     );
 
     const taxonomyNodeFetcher = useCallback(
         (scope: string, taxonomyKey: string, nodeID: string) =>
-            metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID),
-        [api, fileId],
+            metadataTaxonomyNodeAncestorsFetcher(api, fileId, resolveTaxonomyScope(scope), taxonomyKey, nodeID),
+        [api, fileId, resolveTaxonomyScope],
     );
 
     const resolveTaxonomyFieldConfig = useCallback(
@@ -578,10 +602,11 @@ function MetadataSidebarRedesign({
         [editingTemplate],
     );
 
-    const taxonomyItemsServiceCreator = useMemo(
-        () => createTaxonomyItemsService(api, fileId, resolveTaxonomyFieldConfig),
-        [api, fileId, resolveTaxonomyFieldConfig],
-    );
+    const taxonomyItemsServiceCreator = useMemo(() => {
+        const createService = createTaxonomyItemsService(api, fileId, resolveTaxonomyFieldConfig);
+        return ({ scope, templateKey, fieldKey }: { scope: string; templateKey: string; fieldKey: string }) =>
+            createService({ scope: resolveTaxonomyScope(scope), templateKey, fieldKey });
+    }, [api, fileId, resolveTaxonomyFieldConfig, resolveTaxonomyScope]);
 
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {

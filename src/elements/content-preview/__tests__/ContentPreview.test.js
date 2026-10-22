@@ -1625,6 +1625,63 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(livePreview.setComparisonMode).not.toHaveBeenCalled();
         });
+
+        describe('comparison banner', () => {
+            const comparisonBanner = { onDownload: jest.fn() };
+
+            beforeEach(() => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+                instance.preview = {
+                    options: {},
+                    updateComparisonBanner: jest.fn(),
+                };
+            });
+
+            test('should push a changed banner to the live preview', () => {
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBe(comparisonBanner);
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(1);
+            });
+
+            test('should push an empty banner when the banner is cleared', () => {
+                wrapper.setProps({ comparisonBanner });
+                wrapper.setProps({ comparisonBanner: undefined });
+
+                expect(instance.preview.options.comparisonBanner).toEqual({});
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(2);
+            });
+
+            test('should not push the banner when it did not change', () => {
+                wrapper.setProps({ foo: 'bar' });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview is reloading anyway', () => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview has no updateComparisonBanner', () => {
+                instance.preview = { options: {} };
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+            });
+
+            test('should not push the banner when there is no live preview', () => {
+                instance.preview = undefined;
+
+                expect(() => wrapper.setProps({ comparisonBanner })).not.toThrow();
+            });
+        });
     });
 
     describe('getDerivedStateFromProps()', () => {

@@ -1134,13 +1134,14 @@ describe('useSidebarMetadataFetcher', () => {
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
 
+        expect(api.getMetadataAPI).toHaveBeenCalledWith(false, { metadataNamespaceMode: 'MIGRATION' });
         expect(mockAPI.getMetadata).toHaveBeenCalledTimes(1);
         expect(mockAPI.getMetadata).toHaveBeenCalledWith(
             mockFile,
             expect.any(Function),
             expect.any(Function),
             isFeatureEnabledMock,
-            { refreshCache: true, enterpriseFqn: 'enterprise_123', metadataNamespaceMode: 'MIGRATION' },
+            { refreshCache: true, enterpriseFqn: 'enterprise_123' },
             true,
             false,
             false,
