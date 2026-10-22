@@ -1469,8 +1469,10 @@ class Metadata extends File {
                     cachedMetadata.templateInstances.splice(
                         cachedMetadata.templateInstances.findIndex(
                             instance =>
-                                instance.scope === templateInstance.scope &&
-                                instance.templateKey === templateInstance.templateKey,
+                                instance.templateKey === templateInstance.templateKey &&
+                                (templateInstance.scope
+                                    ? instance.scope === templateInstance.scope
+                                    : instance.namespace === templateInstance.namespace),
                         ),
                         1,
                         templateInstance,
