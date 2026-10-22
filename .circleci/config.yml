@@ -141,7 +141,15 @@ jobs:
       - setup-workspace
       - run:
           name: Checking for changes that affect rendering
-          command: /buie/scripts/visual_changes.sh || circleci-agent step halt
+          command: |
+            STATUS=0
+            /buie/scripts/visual_changes.sh || STATUS=$?
+            if [ "$STATUS" -eq 10 ]; then
+              circleci-agent step halt
+            elif [ "$STATUS" -ne 0 ]; then
+              echo "visual_changes.sh failed with exit code $STATUS."
+              exit "$STATUS"
+            fi
       - build-locales
       - run:
           name: Building Storybook

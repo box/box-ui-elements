@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Exits 1 when the branch only changes files that cannot affect how a story renders, so CI can
+# Exits 10 when the branch only changes files that cannot affect how a story renders, so CI can
 # skip the visual tests. Anything uncertain (master, no merge base, git errors) exits 0 to run them.
+# CI fails on any other exit code, so the skip code must not overlap with shell errors (1, 126, 127).
 
 cd "$(dirname "$0")/.." || exit 0
 
@@ -32,4 +33,4 @@ if [ -n "$RENDERING" ]; then
 fi
 
 echo "Only docs, metadata, or tests changed since $(git rev-parse --short "$BASE"): skipping visual tests."
-exit 1
+exit 10
