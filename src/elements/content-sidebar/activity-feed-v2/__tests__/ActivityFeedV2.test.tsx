@@ -2462,7 +2462,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                 expect(onCommentSelect).not.toHaveBeenCalled();
             });
 
-            test('should open a comment version that starts a merged run of uploads', () => {
+            test('should seek in place when the comment version is an earlier upload in a merged run', () => {
                 const onCommentVersionSelect = jest.fn();
                 const mergedVersions = { ...mockVersion, end: { id: '200' }, id: '200', start: { id: '123' } };
                 renderComponentWithMarkers({
@@ -2475,11 +2475,8 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
                 });
 
-                expect(onCommentVersionSelect).toHaveBeenCalledWith({
-                    commentId: 'ts-comment-1',
-                    fileVersionId: '123',
-                    startMs: 5000,
-                });
+                expect(onCommentVersionSelect).not.toHaveBeenCalled();
+                expect(setMediaTime).toHaveBeenCalledWith(5);
             });
 
             test('should seek in place when the previewed version is the comment version', () => {

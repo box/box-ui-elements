@@ -58,13 +58,12 @@ const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): 
         return (block.content ?? []).some(item => hasMentionInBlocks(item.content, userId));
     });
 
-/** A run of consecutive uploads is one feed item, keyed by its last version. */
+/**
+ * Matches the sidebar's version lookup, which opens a version by feed item id. A run of consecutive
+ * uploads is one item keyed by its last version, so earlier versions in the run can't be opened.
+ */
 const isVersionInFeed = (items: FeedItems | undefined, versionId: string): boolean =>
-    (items ?? []).some(
-        item =>
-            item.type === FEED_ITEM_TYPE_VERSION &&
-            (item.id === versionId || item.start?.id === versionId || item.end?.id === versionId),
-    );
+    (items ?? []).some(item => item.type === FEED_ITEM_TYPE_VERSION && item.id === versionId);
 
 const ActivityFeedV2 = ({
     activeFeedEntryId,
