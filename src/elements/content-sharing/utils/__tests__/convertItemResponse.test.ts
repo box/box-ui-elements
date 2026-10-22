@@ -1,6 +1,7 @@
 import {
     DEFAULT_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
+    MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE,
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     mockOwnerEmail,
     mockOwnerId,
@@ -86,14 +87,18 @@ describe('convertItemResponse', () => {
                 settings: {
                     canChangeDownload: true,
                     canChangeExpiration: true,
+                    canChangeOtp: false,
                     canChangePassword: true,
                     canChangeVanityName: false,
                     isDirectLinkAvailable: true,
                     isDownloadAvailable: true,
                     isDownloadEnabled: true,
+                    isOtpAvailable: false,
                     isPasswordAvailable: true,
                     isPasswordEnabled: true,
                     isVanityNameAvailable: true,
+                    otpAccessEntries: undefined,
+                    otpMode: undefined,
                 },
                 url: 'https://example.com/shared-link',
                 vanityDomain: 'https://example.com/vanity-url',
@@ -151,18 +156,33 @@ describe('convertItemResponse', () => {
             expect(result.sharedLink.settings.isVanityNameAvailable).toEqual(false);
         });
 
-        test.each([
-            ['expiration false leaves the switch not editable', false, false],
-            ['expiration true leaves the switch editable', true, true],
-        ])('%s', (_name, expiration, expected) => {
+        test('should convert OTP settings correctly if user cannot change access level', () => {
             const result = convertItemResponse({
-                ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
-                shared_link_features: {
-                    ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link_features,
-                    expiration,
+                ...MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE,
+                permissions: {
+                    ...MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE.permissions,
+                    can_set_share_access: false,
                 },
             });
-            expect(result.sharedLink.settings.canChangeExpiration).toEqual(expected);
+
+            expect(result.sharedLink.settings.canChangeOtp).toBe(false);
+            expect(result.sharedLink.settings.isOtpAvailable).toBe(true);
+        });
+
+        test('should convert OTP settings correctly if there are allowlist entries', () => {
+            const result = convertItemResponse(MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE);
+
+            expect(result.sharedLink.settings).toEqual(
+                expect.objectContaining({
+                    canChangeOtp: true,
+                    isOtpAvailable: true,
+                    otpAccessEntries: [
+                        { createdAt: Date.parse('2026-01-31T08:00:00Z'), type: 'email', value: 'dparrot@example.com' },
+                        { createdAt: Date.parse('2026-01-25T08:00:00Z'), type: 'domain', value: 'example.com' },
+                    ],
+                    otpMode: 'allowlist',
+                }),
+            );
         });
     });
 

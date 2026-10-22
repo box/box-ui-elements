@@ -50,16 +50,18 @@ export const useSharingService = ({
             return null;
         }
 
+        const { access, settings } = sharedLink ?? {};
+        const { can_set_share_access, can_share, serverUrl } = sharingServiceProps ?? {};
+
         const options = {
+            access,
             id: itemId,
-            access: sharedLink?.access,
+            settings,
             permissions: {
-                can_set_share_access: sharingServiceProps?.can_set_share_access,
-                can_share: sharingServiceProps?.can_share,
+                can_set_share_access,
+                can_share,
             },
-            serverUrl: sharingServiceProps?.serverUrl,
-            currentExpiresAt: sharedLink?.expiresAt ?? null,
-            isDownloadAvailable: sharedLink?.settings?.isDownloadAvailable ?? false,
+            serverUrl,
         };
 
         const handleUpdateSharedLink = updatedItemData => {

@@ -98,11 +98,7 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": [
-            "last 1 Chrome versions",
-            "last 1 Firefox versions",
-            "last 1 Safari versions"
-        ]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "husky": {
         "hooks": {
@@ -138,7 +134,7 @@
         "@box/collaboration-popover": "^2.2.21",
         "@box/combobox-with-api": "2.2.25",
         "@box/content-field": "^3.1.17",
-        "@box/copy-input": "^1.42.16",
+        "@box/copy-input": "^2.3.21",
         "@box/frontend": "^11.0.1",
         "@box/item-icon": "^3.2.0",
         "@box/languages": "^1.0.0",
@@ -152,9 +148,9 @@
         "@box/readable-time": "^2.2.21",
         "@box/threaded-annotations": "^4.14.0",
         "@box/types": "^2.1.8",
-        "@box/unified-share-modal": "^3.5.25",
+        "@box/unified-share-modal": "^3.6.2",
         "@box/uploads-manager": "^2.4.0",
-        "@box/user-selector": "3.0.1",
+        "@box/user-selector": "^3.1.21",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^5.2.1",
         "@commitlint/cli": "^19.8.0",
@@ -317,7 +313,7 @@
         "@box/collaboration-popover": "^2.2.21",
         "@box/combobox-with-api": "2.2.25",
         "@box/content-field": "^3.1.17",
-        "@box/copy-input": "^1.42.16",
+        "@box/copy-input": "^2.3.21",
         "@box/item-icon": "^3.2.0",
         "@box/metadata-editor": "^2.10.8",
         "@box/metadata-filter": "^1.80.23",
@@ -329,9 +325,9 @@
         "@box/readable-time": "^2.2.21",
         "@box/threaded-annotations": "^4.14.0",
         "@box/types": "^2.1.8",
-        "@box/unified-share-modal": "^3.5.25",
+        "@box/unified-share-modal": "^3.6.2",
         "@box/uploads-manager": "^2.4.0",
-        "@box/user-selector": "3.0.1",
+        "@box/user-selector": "^3.1.21",
         "@dnd-kit/core": "^6.1.0",
         "@dnd-kit/sortable": "^8.0.0",
         "@dnd-kit/utilities": "^3.2.2",
@@ -397,8 +393,6 @@
         "webpack-dev-middleware": "^7.4.6"
     },
     "msw": {
-        "workerDirectory": [
-            ".storybook/public"
-        ]
+        "workerDirectory": [".storybook/public"]
     }
 }
