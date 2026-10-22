@@ -1178,35 +1178,35 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^2.10.8":
-  version "2.10.8"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.10.8.tgz#9718f983de2611a01dbe6073dcb6d083e7d3520c"
-  integrity sha512-yL383TQIu1en0c2VMNHBm0cxQZmLTnieGWDpiVv60KGoIVU1SjUm7Uz62TcwCI50V5yvirzFq9gefdMpFO6vkg==
+"@box/metadata-editor@^2.11.11":
+  version "2.11.11"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.11.11.tgz#0fee4fa8f39c9fa7df35776c492097df6fc015ec"
+  integrity sha512-hsYmDUIfAvu5Bh1wZta9cY80WIFFBZZf/11f5ru3VncKYw/O/OwF1SyNJDQxISzXwLStRUrKVu8t5ZWSN8wsrA==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
   resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
   integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
 
-"@box/metadata-taxonomy-picker@^3.3.31":
-  version "3.3.31"
-  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.3.31.tgz#894bbf641af206d15bb6586ff8d1dbce1e59afcc"
-  integrity sha512-y5gWuDJLOzevfyerAaBuplgv/zWrpjT4JSHCK4z/Ns+KamdltfnuwGXgmy4DfQ3HwqHcaP7FwRQpnRBHavoRgg==
+"@box/metadata-taxonomy-picker@^3.4.23":
+  version "3.4.23"
+  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.4.23.tgz#c7b519649fcfcb3e7cec8c65e47ba335de8a662b"
+  integrity sha512-r/6BIEKsZFiD9Mhtd8JngRJhVQtoSPKj8maznE/TsCG8eIWH7xpeh1bEzpTVoJx/71B9eqcpza0BYdAz4KxokA==
 
-"@box/metadata-template-browser@^3.0.0":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-3.0.2.tgz#cca36885aa7870bd2bbe84e1fb46dc411e683656"
-  integrity sha512-COMvx/sWnNQ49ib5dL3NrDMVTu1aoC1gR+/RUMqmofd+GQ0DkUbLeesMM8Uy7WqAund/plWe8ZkTOneXeEtcJA==
+"@box/metadata-template-browser@^3.0.17":
+  version "3.0.17"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-3.0.17.tgz#15ce80a3b246586de9afec03f325129a4b40f140"
+  integrity sha512-uTkypfG5SzjJNVWj0ii5qRpXgqeENbyQSIQFOvsVtrpahWS5owXx6rV55/RI2WJfusUN8AO+vsPm1yR7Ux8VYQ==
 
-"@box/metadata-template-editor@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.5.0.tgz#fae64594069b679d79427269e01c7b7da8b6ac3d"
-  integrity sha512-J9tbLYnE1am8Ej/cgr9hKle33ItbzKH453koYndXSt7A0WEyxDlbhTk4EgyHyCuhusDVXWVnccUlQULKF81Xpg==
+"@box/metadata-template-editor@^2.7.8":
+  version "2.7.8"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.7.8.tgz#c8b36c5d51059df9be0ac92d527a372e298eb4aa"
+  integrity sha512-uxDk8ziw+LoEHejQyBsGB5vu8qHAcnRvZqJX+ZVav29eei1NE8An7PR5KcU3vtavJVSPY2RfyxHntRIFd5adag==
 
-"@box/metadata-view@1.62.3":
-  version "1.62.3"
-  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-1.62.3.tgz#b716951d41f659ae1d2364e8c4298b96088ee25a"
-  integrity sha512-fd6/XPHEMkyzVzqAS6SaYLON07gL5f0p69q4p3RToUz609HKOItnei3EGjeWZObu4UmmBxCJVvJcHGcRb0ibJw==
+"@box/metadata-view@2.4.18":
+  version "2.4.18"
+  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-2.4.18.tgz#be477507c1f6fe3975759e78497852431810c406"
+  integrity sha512-n6nK4Fq2UU495mS5Lj9zlNrH4tzYchahRQd5nFUnW7HsMw41hBsN56m/x5Va23AUw4M1GYwH7Ay7BIZ6a0mP4Q==
 
 "@box/react-virtualized@^9.22.3-rc-box.10":
   version "9.22.3-rc-box.10"
@@ -10755,9 +10755,9 @@ flowgen@^1.10.0:
     typescript-compiler "^1.4.1-2"
 
 follow-redirects@^1.0.0, follow-redirects@^1.15.4, follow-redirects@^1.16.0:
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.16.0.tgz#28474a159d3b9d11ef62050a14ed60e4df6d61bc"
-  integrity sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.16.1.tgz#6e0efa40a727fb369b98dab15883ec34787d675e"
+  integrity sha512-FNvFGzoMLWmE6Yj9spb/zjd7yiNCHiAW9/Tg9CXrQ8wuu32HtlJOwWO11OJafl5FfY3DxTdQ0vj42zU1kvv5jg==
 
 for-each@^0.3.3, for-each@^0.3.5:
   version "0.3.5"
@@ -13297,12 +13297,12 @@ language-tags@^1.0.9:
     language-subtag-registry "^0.3.20"
 
 launch-editor@^2.14.1:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/launch-editor/-/launch-editor-2.14.1.tgz#f7e0da3f58aaea03fea01074d840b5f739ed7ddc"
-  integrity sha512-QWBrQsMpH7gPr965dsKD/3cKWiNoTjpATQf++Xq63N6sKRGMwlVXz41O1IZTMfZQgBctD/K5Zt06+/I6pP6+HA==
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/launch-editor/-/launch-editor-2.14.2.tgz#d476a1cb09159d9aee6ca225a8c7c6c1d94d6331"
+  integrity sha512-NHJEb30MGBCkmZXLZwz25t37QR4aY03ZzPYUJXOJaOa92uWwExI9SBQUuIznBYc1xkD7cJNGX7oc3Nl3sq2kQQ==
   dependencies:
     picocolors "^1.1.1"
-    shell-quote "^1.8.4"
+    shell-quote "^1.10.0"
 
 launder@^1.7.1:
   version "1.7.1"
@@ -13847,9 +13847,9 @@ makeerror@1.0.12:
     tmpl "1.0.5"
 
 markdown-it@^14.2.0:
-  version "14.3.1"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-14.3.1.tgz#8974e2473779363ed5682ea377f31564ee51e292"
-  integrity sha512-4Ej49aYTDFIQ+uBkfX8GBvJGccoARxxPep+7aWTs55ozbjQJpW9M26Fe53vnGgvLeVzva/amzjQQaQu9w0vMhA==
+  version "14.3.3"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-14.3.3.tgz#15e6e145d20b1499a7b323bb14e21062690132d8"
+  integrity sha512-L//tDAkjTjJCU6pBUSBTgs3Kg4InVaZuUZog/b6V12UKhcDQ7S78877ibbCanRExwPuYP1CZD7Gd2dxSy1GXRg==
   dependencies:
     argparse "^2.0.1"
     entities "^4.5.0"
@@ -18001,7 +18001,7 @@ shebang-regex@^3.0.0:
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-shell-quote@^1.6.1, shell-quote@^1.8.4:
+shell-quote@^1.10.0, shell-quote@^1.6.1:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.12.0.tgz#e98fdfd2e921d8a58ae2820f4fc0f75c39f09675"
   integrity sha512-PcByqNyT/38F2kDNi006HAMRJaULuBzq/FOsw3qdZvX/GA9W/jamDaRskgHjubHiftXK5sIFxLNkvrXUwcof6Q==

@@ -24,7 +24,7 @@ import BoxEditAPI from '../box-edit';
 import MetadataQueryAPI from '../MetadataQuery';
 import FileCollaborationsAPI from '../FileCollaborations';
 import FolderCollaborationsAPI from '../FolderCollaborations';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
+import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, METADATA_SCOPE_MODE_FINAL } from '../../constants';
 
 let factory;
 
@@ -350,6 +350,25 @@ describe('api/APIFactory', () => {
             expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
             expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should construct the client with caller options', () => {
+            const metadataAPI = factory.getMetadataAPI(false, {
+                metadataNamespaceMode: METADATA_SCOPE_MODE_FINAL,
+            });
+
+            expect(metadataAPI.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
+        });
+
+        test('should not copy namespace mode from a previous client', () => {
+            const first = factory.getMetadataAPI(false, {
+                metadataNamespaceMode: METADATA_SCOPE_MODE_FINAL,
+            });
+            const second = factory.getMetadataAPI(false);
+
+            expect(second).not.toBe(first);
+            expect(first.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
+            expect(second.metadataNamespaceMode).toBe('SCOPED');
         });
     });
 

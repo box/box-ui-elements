@@ -29,6 +29,7 @@ import messages from '../../common/messages';
 import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
+import { type AiItemBaseTypeField } from '../../../api/schemas/AiItemBase';
 import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 export enum STATUS {
@@ -137,9 +138,16 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
+    // Mode is a constructor option. Each getMetadataAPI() builds a new client,
+    // so every sidebar call passes the resolved mode instead of writing it later.
+    const metadataAPI = React.useCallback(
+        () => api.getMetadataAPI(false, metadataNamespaceMode ? { metadataNamespaceMode } : undefined),
+        [api, metadataNamespaceMode],
+    );
+
     const fetchMetadata = React.useCallback(
         (fetchedFile: BoxItem) => {
-            api.getMetadataAPI(false).getMetadata(
+            metadataAPI().getMetadata(
                 fetchedFile,
                 fetchMetadataSuccessCallback,
                 fetchMetadataErrorCallback,
@@ -147,7 +155,6 @@ function useSidebarMetadataFetcher(
                 {
                     refreshCache: true,
                     ...(enterpriseFqn ? { enterpriseFqn } : {}),
-                    ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
                 },
                 true,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
@@ -155,13 +162,12 @@ function useSidebarMetadataFetcher(
             );
         },
         [
-            api,
             enterpriseFqn,
             fetchMetadataErrorCallback,
             fetchMetadataSuccessCallback,
             isFeatureEnabled,
             isBoundingBoxOrConfidenceScoreReviewEnabled,
-            metadataNamespaceMode,
+            metadataAPI,
             shouldFetchDetailedMetadata,
         ],
     );
@@ -189,7 +195,7 @@ function useSidebarMetadataFetcher(
                 return;
             }
             setStatus(STATUS.LOADING);
-            await api.getMetadataAPI(false).deleteMetadata(
+            await metadataAPI().deleteMetadata(
                 file,
                 metadataInstance,
                 () => {
@@ -202,12 +208,12 @@ function useSidebarMetadataFetcher(
                 true,
             );
         },
-        [api, onApiError, onSuccess, file],
+        [file, metadataAPI, onApiError, onSuccess],
     );
 
     const handleCreateMetadataInstance = React.useCallback(
         async (templateInstance: MetadataTemplateInstance, successCallback: () => void): Promise<void> => {
-            await api.getMetadataAPI(false).createMetadataRedesign(
+            await metadataAPI().createMetadataRedesign(
                 file,
                 templateInstance,
                 () => {
@@ -219,7 +225,7 @@ function useSidebarMetadataFetcher(
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
-        [api, file, onApiError, onSuccess, isBoundingBoxOrConfidenceScoreReviewEnabled],
+        [file, isBoundingBoxOrConfidenceScoreReviewEnabled, metadataAPI, onApiError, onSuccess],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(
@@ -228,7 +234,7 @@ function useSidebarMetadataFetcher(
             JSONPatch: JSONPatchOperations,
             successCallback: () => void,
         ) => {
-            await api.getMetadataAPI(false).updateMetadataRedesign(
+            await metadataAPI().updateMetadataRedesign(
                 file,
                 metadataInstance,
                 JSONPatch,
@@ -241,7 +247,7 @@ function useSidebarMetadataFetcher(
                 },
             );
         },
-        [api, file, onApiError, onSuccess],
+        [file, metadataAPI, onApiError, onSuccess],
     );
 
     const [, setError] = React.useState();
@@ -250,13 +256,13 @@ function useSidebarMetadataFetcher(
             const aiAPI = api.getIntelligenceAPI();
             setExtractErrorCode(null);
             let response = null;
-            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
+            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id' as const, id: agentId } } : {};
 
             const confidenceScoreParams = isConfidenceScoreApiEnabled ? { include_confidence_score: true } : {};
             const boundingBoxParams = isBoundingBoxApiEnabled ? { include_reference: true } : {};
 
             const requestBody: AiExtractStructured = {
-                items: [{ id: file.id, type: file.type }],
+                items: [{ id: file.id, type: file.type as AiItemBaseTypeField }],
                 metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 ...customAiAgent,
                 ...confidenceScoreParams,

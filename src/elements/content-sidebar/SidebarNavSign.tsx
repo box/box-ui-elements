@@ -21,6 +21,7 @@ import type { TargetingApi } from '../../features/targeting/types';
 export interface SignSidebarProps {
     blockedReason: string;
     enabled: boolean;
+    isForcedToUseTemplates?: boolean;
     onClick: () => void;
     onClickSignMyself: () => void;
     targetingApi?: TargetingApi;
