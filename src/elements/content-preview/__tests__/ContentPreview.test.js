@@ -652,8 +652,8 @@ describe('elements/content-preview/ContentPreview', () => {
 
         test('should call preview show with startAt params if provided', async () => {
             const wrapper = getWrapper(props);
+            wrapper.setState({ file });
             wrapper.setState({
-                file,
                 startAt: {
                     unit: 'pages',
                     value: 3,
@@ -679,6 +679,28 @@ describe('elements/content-preview/ContentPreview', () => {
                         },
                     },
                 }),
+            );
+        });
+
+        test('should clear startAt after one load so a later load starts from the beginning', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            wrapper.setState({ startAt: { unit: 'seconds', value: 5 } });
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({ fileOptions: { [file.id]: { startAt: { unit: 'seconds', value: 5 } } } }),
+            );
+            expect(wrapper.state('startAt')).toBeUndefined();
+
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({ fileOptions: {} }),
             );
         });
 
@@ -1511,6 +1533,13 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('isLoading')).toBe(true);
         });
 
+        test('should drop a pending startAt if fileId changes', () => {
+            wrapper.setState({ startAt: { unit: 'seconds', value: 5 } });
+            wrapper.setProps({ fileId: 'bar' });
+
+            expect(wrapper.state('startAt')).toBeUndefined();
+        });
+
         test("should load preview if fileId hasn't changed and shouldLoadPreview returns true", () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setProps({
@@ -1970,6 +1999,24 @@ describe('elements/content-preview/ContentPreview', () => {
             const { instance, wrapper } = getComparingWrapper();
 
             instance.handleAnnotationSelect(getAnnotation('OLD'));
+
+            expect(wrapper.state('startAt')).toBeUndefined();
+        });
+    });
+
+    describe('handleCommentVersionSelect', () => {
+        test('should start the next preview load at the comment timestamp in seconds', () => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().handleCommentVersionSelect({ fileVersionId: 'OLD', startMs: 4623 });
+
+            expect(wrapper.state('startAt')).toEqual({ unit: 'seconds', value: 4.623 });
+        });
+
+        test('should not set startAt while comparing', () => {
+            const wrapper = getWrapper({ isComparing: true });
+
+            wrapper.instance().handleCommentVersionSelect({ fileVersionId: 'OLD', startMs: 4623 });
 
             expect(wrapper.state('startAt')).toBeUndefined();
         });

@@ -132,6 +132,7 @@ type Props = {
     features?: FeatureConfig,
     fileId?: string,
     fileOptions?: Object,
+    getComparedPreview?: () => any,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
     hasProviders?: boolean,
@@ -610,14 +611,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.destroyPreview();
             this.loadingWasDeferred = false;
             if (loadingIndicatorDelayMs) {
-                this.setState({ isLoading: true, isLoadingDeferred: true, selectedVersion: undefined });
+                this.setState({
+                    isLoading: true,
+                    isLoadingDeferred: true,
+                    selectedVersion: undefined,
+                    startAt: undefined,
+                });
                 this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
                     this.loadingIndicatorDelayTimeoutId = null;
                     this.loadingWasDeferred = true;
                     this.setState({ isLoadingDeferred: false });
                 }, loadingIndicatorDelayMs);
             } else {
-                this.setState({ isLoading: true, selectedVersion: undefined });
+                this.setState({ isLoading: true, selectedVersion: undefined, startAt: undefined });
             }
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevProps, prevState)) {
@@ -1177,6 +1183,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (advancedContentInsights) {
             this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
         }
+        if (startAt) {
+            this.setState({ startAt: undefined });
+        }
     };
 
     /**
@@ -1688,6 +1697,27 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Starts the next preview load at a comment's timestamp. The sidebar switches to the comment's
+     * version, and that load reads startAt.
+     *
+     * @param {number} startMs - Comment timestamp in milliseconds
+     * @return {void}
+     */
+    handleCommentVersionSelect = ({ startMs }: { startMs: number }): void => {
+        // While comparing, the other version opens in the compared pane, which this startAt does not reach.
+        if (this.props.isComparing) {
+            return;
+        }
+
+        this.setState({
+            startAt: {
+                unit: startAtTypes.frame,
+                value: convertTimestampToSeconds(startMs),
+            },
+        });
+    };
+
+    /**
      * Holds the reference the preview container
      *
      * @return {void}
@@ -1916,6 +1946,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             token={token}
                                             cache={this.api.getCache()}
                                             fileId={currentFileId}
+                                            getComparedPreview={this.props.getComparedPreview}
                                             getPreview={this.getPreview}
                                             getViewer={this.getViewer}
                                             history={history}
@@ -1928,6 +1959,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             requestInterceptor={requestInterceptor}
                                             responseInterceptor={responseInterceptor}
                                             onAnnotationSelect={this.handleAnnotationSelect}
+                                            onCommentVersionSelect={this.handleCommentVersionSelect}
                                             onVersionChange={this.onVersionChange}
                                         />
                                     )}
@@ -1982,12 +2014,18 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
         }
     }, []);
 
+    const getComparedPreview = React.useCallback(() => {
+        const comparedPreview = comparedPreviewRef.current;
+        return comparedPreview ? comparedPreview.getPreview() : null;
+    }, []);
+
     return (
         <React.Fragment>
             <MemoConnectedContentPreview
                 {...rest}
                 collection={isComparing ? EMPTY_COLLECTION : rest.collection}
                 comparedSlotRef={setComparedSlot}
+                getComparedPreview={isComparing ? getComparedPreview : undefined}
                 isComparing={isComparing}
                 onComparedAnnotationSelect={handleComparedAnnotationSelect}
             />

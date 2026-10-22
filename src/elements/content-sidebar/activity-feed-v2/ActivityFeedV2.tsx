@@ -24,17 +24,19 @@ import { buildTimestampMarkup } from './timestampMarkup';
 import { transformFeedItem, transformTaskAssignees } from './transformers';
 import { useAvatarUrls } from './useAvatarUrls';
 import { useCommentMarkerSelectedId } from './useCommentMarkerSelectedId';
+import { useCommentMarkerViewer } from './useCommentMarkerViewer';
 import { useTimeFormat } from './useTimeFormat';
-import { useMediaTimestamp } from './useMediaTimestamp';
+import { seekMediaToMs, useMediaTimestamp } from './useMediaTimestamp';
 
 import type { TaskFormV2SubmitPayload } from './task-modal-v2/types';
-import type { ActivityFeedV2Props, TransformedFeedItem, ViewerHandle } from './types';
+import type { ActivityFeedV2Props, CommentTimestampSelectParams, TransformedFeedItem, ViewerHandle } from './types';
 import type { ElementsXhrError } from '../../../common/types/api';
 import type { GroupMini, SelectorItem, UserMini } from '../../../common/types/core';
+import type { FeedItems } from '../../../common/types/feed';
 import type { TaskAssigneeCollection, TaskNew, TaskType, TaskUpdatePayload } from '../../../common/types/tasks';
 
 import { FILE_EXTENSIONS } from '../../common/item/constants';
-import { TASK_TYPE_APPROVAL } from '../../../constants';
+import { FEED_ITEM_TYPE_VERSION, TASK_TYPE_APPROVAL } from '../../../constants';
 
 import commonMessages from '../../common/messages';
 import draftJsMentionSelectorMessages from '../../../components/form-elements/draft-js-mention-selector/messages';
@@ -56,64 +58,13 @@ const hasMentionInBlocks = (blocks: BlockNodeV2[] | undefined, userId: string): 
         return (block.content ?? []).some(item => hasMentionInBlocks(item.content, userId));
     });
 
-type CommentMarkerPayload = {
-    avatarUrl?: string;
-    colorIndex?: number;
-    /** End of a ranged timestamp comment, in seconds. Omitted for a point comment. */
-    endTime?: number;
-    id: string;
-    initial?: string;
-    isSelected?: boolean;
-    /** Set when the user selects this same comment again. Absent on the first select and on feed refreshes. */
-    selectionSeq?: number;
-    time: number;
-    type: 'annotation' | 'comment';
-};
-
-/** ContentPreview.getViewer() waits for playable. The waveform shell exists earlier. */
-const COMMENT_MARKERS_VIEWER_POLL_MS = 100;
-
-const buildCommentMarkers = (
-    items: readonly TransformedFeedItem[],
-    selectedFeedItemId: string | null,
-    selectionSeq = 0,
-): CommentMarkerPayload[] => {
-    const markers: CommentMarkerPayload[] = [];
-    for (const item of items) {
-        if (item.type === 'comment' && item.annotationTimestampMs != null) {
-            const author = item.messages[0]?.author;
-            const endMs = item.annotationTimestampEndMs;
-            const endTime = endMs != null && endMs > item.annotationTimestampMs ? endMs / 1000 : undefined;
-            markers.push({
-                avatarUrl: author?.avatarUrl ?? undefined,
-                colorIndex: author?.id ?? 0,
-                ...(endTime != null ? { endTime } : {}),
-                id: item.id,
-                initial: author?.name?.[0] ?? undefined,
-                isSelected: item.id === selectedFeedItemId,
-                ...(item.id === selectedFeedItemId && selectionSeq > 0 ? { selectionSeq } : {}),
-                time: item.annotationTimestampMs / 1000,
-                type: 'comment',
-            });
-        } else if (item.type === 'annotation') {
-            const loc = item.annotation?.target?.location;
-            if (loc?.type === 'frame' && loc.value != null) {
-                const author = item.messages[0]?.author;
-                markers.push({
-                    avatarUrl: author?.avatarUrl ?? undefined,
-                    colorIndex: author?.id ?? 0,
-                    id: item.id,
-                    initial: author?.name?.[0] ?? undefined,
-                    isSelected: item.id === selectedFeedItemId,
-                    ...(item.id === selectedFeedItemId && selectionSeq > 0 ? { selectionSeq } : {}),
-                    time: loc.value / 1000,
-                    type: 'annotation',
-                });
-            }
-        }
-    }
-    return markers;
-};
+/** A run of consecutive uploads is one feed item, keyed by its last version. */
+const isVersionInFeed = (items: FeedItems | undefined, versionId: string): boolean =>
+    (items ?? []).some(
+        item =>
+            item.type === FEED_ITEM_TYPE_VERSION &&
+            (item.id === versionId || item.start?.id === versionId || item.end?.id === versionId),
+    );
 
 const ActivityFeedV2 = ({
     activeFeedEntryId,
@@ -123,6 +74,7 @@ const ActivityFeedV2 = ({
     file,
     getApproverAsync,
     getAvatarUrl,
+    getComparedPreview,
     getMentionAsync,
     getPreview,
     getTaskCollaborators,
@@ -142,6 +94,7 @@ const ActivityFeedV2 = ({
     onCommentDelete,
     onCommentSelect,
     onCommentUpdate,
+    onCommentVersionSelect,
     onReplyCreate,
     onReplyDelete,
     onReplyUpdate,
@@ -460,10 +413,6 @@ const ActivityFeedV2 = ({
         isAudioPlayerV2,
     });
 
-    const editorMediaTimestamp = allowMediaTimestamps
-        ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
-        : undefined;
-
     const allowCommentMarkers = isVideo || isAudioPlayerV2;
     // Restarts the sidebar highlight when the same comment is chosen again.
     const [highlightSeq, setHighlightSeq] = React.useState(0);
@@ -472,99 +421,81 @@ const ActivityFeedV2 = ({
     const markerSelectedId = useCommentMarkerSelectedId(activeFeedEntryId, filteredItems, selectionSeq);
 
     const activeFeedEntryIdRef = React.useRef(activeFeedEntryId);
+    const feedItemsRef = React.useRef(feedItems);
     const filteredItemsRef = React.useRef(filteredItems);
-    const markerSelectedIdRef = React.useRef(markerSelectedId);
     const onCommentSelectRef = React.useRef(onCommentSelect);
-    const selectionSeqRef = React.useRef(selectionSeq);
-    const attachedViewerRef = React.useRef<ViewerHandle | null>(null);
 
     React.useLayoutEffect(() => {
         activeFeedEntryIdRef.current = activeFeedEntryId;
+        feedItemsRef.current = feedItems;
         filteredItemsRef.current = filteredItems;
-        markerSelectedIdRef.current = markerSelectedId;
         onCommentSelectRef.current = onCommentSelect;
-        selectionSeqRef.current = selectionSeq;
-    }, [activeFeedEntryId, filteredItems, markerSelectedId, onCommentSelect, selectionSeq]);
+    }, [activeFeedEntryId, feedItems, filteredItems, onCommentSelect]);
+
+    // `file` is always the current version. Preview may be showing a previous one.
+    const getPreviewedVersionId = React.useCallback(
+        (): string | undefined => getPreview?.()?.getCurrentFile?.()?.file_version?.id ?? fileVersionId,
+        [fileVersionId, getPreview],
+    );
+
+    const getComparedVersionId = React.useCallback(
+        (): string | undefined => getComparedPreview?.()?.getCurrentFile?.()?.file_version?.id,
+        [getComparedPreview],
+    );
+
+    const resolvePreviewedViewer = React.useCallback((): ViewerHandle | null => {
+        const loaded = getViewer?.() ?? null;
+        if (loaded) {
+            return loaded;
+        }
+        const current = getPreview?.()?.getCurrentViewer?.() ?? null;
+        return current && !current.isDestroyed?.() ? current : null;
+    }, [getPreview, getViewer]);
+
+    const resolveComparedViewer = React.useCallback((): ViewerHandle | null => {
+        const current = getComparedPreview?.()?.getCurrentViewer?.() ?? null;
+        return current && !current.isDestroyed?.() ? current : null;
+    }, [getComparedPreview]);
+
+    const handleMarkerSelect = React.useCallback((id: string) => {
+        const item = filteredItemsRef.current.find(filteredItem => filteredItem.id === id);
+        // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
+        if (item?.type === 'comment' && onCommentSelectRef.current) {
+            // The route id is already set, so the highlight hold would not restart on its own.
+            if (id === activeFeedEntryIdRef.current) {
+                setHighlightSeq(seq => seq + 1);
+            }
+            onCommentSelectRef.current(id);
+        }
+    }, []);
+
+    const markerViewerOptions = { filteredItems, markerSelectedId, onMarkerSelect: handleMarkerSelect, selectionSeq };
+    const previewedVersionId = useCommentMarkerViewer({
+        ...markerViewerOptions,
+        enabled: allowCommentMarkers && (!!getViewer || !!getPreview),
+        getVersionId: getPreviewedVersionId,
+        resolveViewer: resolvePreviewedViewer,
+    });
+    useCommentMarkerViewer({
+        ...markerViewerOptions,
+        enabled: allowCommentMarkers && !!getComparedPreview,
+        getVersionId: getComparedVersionId,
+        resolveViewer: resolveComparedViewer,
+    });
+
+    // New timestamps go on the current version, so they can't be made while a previous one is on screen.
+    const isPreviewingPreviousVersion = !!previewedVersionId && !!fileVersionId && previewedVersionId !== fileVersionId;
 
     React.useEffect(() => {
-        if ((!getViewer && !getPreview) || !allowCommentMarkers) return undefined;
-
-        let pollId = 0;
-
-        const handleMarkerSelect = ({ id }: { id: string }) => {
-            const item = filteredItemsRef.current.find(filteredItem => filteredItem.id === id);
-            // Annotation markers are already handled via the annotator pipeline, so only handle comments here.
-            if (item?.type === 'comment' && onCommentSelectRef.current) {
-                // The route id is already set, so the highlight hold would not restart on its own.
-                if (id === activeFeedEntryIdRef.current) {
-                    setHighlightSeq(seq => seq + 1);
-                }
-                onCommentSelectRef.current(id);
-            }
-        };
-
-        const resolveViewer = (): ViewerHandle | null => {
-            const loaded = getViewer?.() ?? null;
-            if (loaded) {
-                return loaded;
-            }
-            const current = getPreview?.()?.getCurrentViewer?.() ?? null;
-            if (!current || current.isDestroyed?.()) {
-                return null;
-            }
-            return current;
-        };
-
-        const attachMarkerViewer = (viewer: ViewerHandle) => {
-            attachedViewerRef.current = viewer;
-            viewer.emit(
-                'comment_markers',
-                buildCommentMarkers(filteredItemsRef.current, markerSelectedIdRef.current, selectionSeqRef.current),
-            );
-            viewer.addListener('comment_marker_select', handleMarkerSelect);
-        };
-
-        const attachMarkerViewerIfReady = (): boolean => {
-            const viewer = resolveViewer();
-            if (!viewer) {
-                return false;
-            }
-            attachMarkerViewer(viewer);
-            return true;
-        };
-
-        if (!attachMarkerViewerIfReady()) {
-            pollId = window.setInterval(() => {
-                if (attachMarkerViewerIfReady()) {
-                    window.clearInterval(pollId);
-                    pollId = 0;
-                }
-            }, COMMENT_MARKERS_VIEWER_POLL_MS);
+        if (isPreviewingPreviousVersion) {
+            clearRange();
         }
+    }, [clearRange, isPreviewingPreviousVersion]);
 
-        return () => {
-            if (pollId) {
-                window.clearInterval(pollId);
-            }
-            const attachedViewer = attachedViewerRef.current;
-            attachedViewerRef.current = null;
-            if (!attachedViewer) {
-                return;
-            }
-            attachedViewer.removeListener('comment_marker_select', handleMarkerSelect);
-            if (!attachedViewer.isDestroyed?.()) {
-                attachedViewer.emit('comment_markers', []);
-            }
-        };
-    }, [allowCommentMarkers, fileVersionId, getPreview, getViewer]);
-
-    React.useEffect(() => {
-        const viewer = attachedViewerRef.current;
-        if (!viewer) {
-            return;
-        }
-        viewer.emit('comment_markers', buildCommentMarkers(filteredItems, markerSelectedId, selectionSeq));
-    }, [filteredItems, markerSelectedId, selectionSeq]);
+    const editorMediaTimestamp =
+        allowMediaTimestamps && !isPreviewingPreviousVersion
+            ? { formattedTimestamp, isPressed: isTimestampPressed, onPressedChange }
+            : undefined;
 
     const handleCommentSelect = React.useCallback((commentId: string) => {
         if (commentId && commentId === activeFeedEntryIdRef.current) {
@@ -574,13 +505,48 @@ const ActivityFeedV2 = ({
         onCommentSelectRef.current?.(commentId);
     }, []);
 
+    // A comment from another version opens that version at the timestamp. Without a matching
+    // version in the feed there is nothing to open, so it seeks the previewed media instead.
+    const handleCommentTimestampSelect = React.useCallback(
+        ({ commentId, fileVersionId: commentVersionId, startMs }: CommentTimestampSelectParams) => {
+            if (
+                commentVersionId &&
+                commentVersionId === getComparedVersionId() &&
+                commentVersionId !== getPreviewedVersionId()
+            ) {
+                seekMediaToMs(startMs, resolveComparedViewer);
+                handleCommentSelect(commentId);
+                return;
+            }
+            const canOpenCommentVersion =
+                !!onCommentVersionSelect &&
+                !!commentVersionId &&
+                commentVersionId !== getPreviewedVersionId() &&
+                isVersionInFeed(feedItemsRef.current, commentVersionId);
+            if (canOpenCommentVersion) {
+                onCommentVersionSelect({ commentId, fileVersionId: commentVersionId, startMs });
+                return;
+            }
+            seekMediaToMs(startMs, getViewer);
+            handleCommentSelect(commentId);
+        },
+        [
+            getComparedVersionId,
+            getPreviewedVersionId,
+            getViewer,
+            handleCommentSelect,
+            onCommentVersionSelect,
+            resolveComparedViewer,
+        ],
+    );
+
     const handleCommentPost = React.useCallback(
         async (content: unknown) => {
             if (!onCommentCreate) return;
             const serialized = serializeEditorContent(content, isRichTextEnabled);
             if (!serialized || !serialized.text) return;
             const text =
-                allowMediaTimestamps && isTimestampPressed && fileVersionId
+                allowMediaTimestamps && isTimestampPressed && !isPreviewingPreviousVersion && fileVersionId
                     ? `${buildTimestampMarkup({
                           endMs: timestampEndMs,
                           startMs: timestampMs,
@@ -601,6 +567,7 @@ const ActivityFeedV2 = ({
             allowMediaTimestamps,
             filteredItems,
             fileVersionId,
+            isPreviewingPreviousVersion,
             isRichTextEnabled,
             isTimestampPressed,
             onCommentCreate,
@@ -705,6 +672,7 @@ const ActivityFeedV2 = ({
                                     onCommentCopyLink={onCommentCopyLink}
                                     onCommentDelete={onCommentDelete}
                                     onCommentSelect={handleCommentSelect}
+                                    onCommentTimestampSelect={handleCommentTimestampSelect}
                                     onCommentUpdate={onCommentUpdate}
                                     onReplyCreate={onReplyCreate}
                                     onReplyDelete={onReplyDelete}

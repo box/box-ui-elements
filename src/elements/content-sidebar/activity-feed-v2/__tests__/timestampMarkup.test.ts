@@ -17,6 +17,7 @@ describe('elements/content-sidebar/activity-feed-v2/timestampMarkup', () => {
             expect(result.timestampMarkup).toBe('#[timestamp:8055,versionId:2390295731268]');
             expect(result.timestampMs).toBe(8055);
             expect(result.timestampEndMs).toBeUndefined();
+            expect(result.timestampVersionId).toBe('2390295731268');
         });
 
         test('should extract timestamp markup without versionId', () => {
@@ -24,6 +25,7 @@ describe('elements/content-sidebar/activity-feed-v2/timestampMarkup', () => {
             expect(result.cleanText).toBe('hello');
             expect(result.timestampMs).toBe(65000);
             expect(result.timestampEndMs).toBeUndefined();
+            expect(result.timestampVersionId).toBeUndefined();
         });
 
         test('should extract the end timestamp of a range comment', () => {
