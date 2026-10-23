@@ -19,6 +19,8 @@ import {
     ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
+    METADATA_NAMESPACE_GLOBAL,
+    METADATA_SCOPE_GLOBAL,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
@@ -30,7 +32,7 @@ import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
 import { type AiItemBaseTypeField } from '../../../api/schemas/AiItemBase';
-import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
+import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -261,9 +263,29 @@ function useSidebarMetadataFetcher(
             const confidenceScoreParams = isConfidenceScoreApiEnabled ? { include_confidence_score: true } : {};
             const boundingBoxParams = isBoundingBoxApiEnabled ? { include_reference: true } : {};
 
+            const lookupScope = scope || enterpriseFqn;
+            const templateInstance =
+                (lookupScope
+                    ? templates?.find(template =>
+                          isSameMetadataTemplate(template, { templateKey, scope: lookupScope }),
+                      ) ??
+                      templateInstances?.find(instance =>
+                          isSameMetadataTemplate(instance, { templateKey, scope: lookupScope }),
+                      )
+                    : undefined) ??
+                templates?.find(template => template.templateKey === templateKey) ??
+                templateInstances?.find(instance => instance.templateKey === templateKey);
+
+            const rawScope =
+                scope ||
+                (templateInstance ? getMetadataTemplateNamespaceFqn(templateInstance) : undefined) ||
+                enterpriseFqn;
+            // POST /2.0/ai/extract_structured only accepts legacy scopes (`global` or `enterprise_<id>`).
+            const resolvedScope = rawScope === METADATA_NAMESPACE_GLOBAL ? METADATA_SCOPE_GLOBAL : rawScope;
+
             const requestBody: AiExtractStructured = {
                 items: [{ id: file.id, type: file.type as AiItemBaseTypeField }],
-                metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
+                metadata_template: { template_key: templateKey, scope: resolvedScope, type: 'metadata_template' },
                 ...customAiAgent,
                 ...confidenceScoreParams,
                 ...boundingBoxParams,
@@ -304,9 +326,6 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templates.find(template =>
-                isSameMetadataTemplate(template, { templateKey, scope }),
-            );
             const fields = templateInstance?.fields || [];
 
             return fields.map(field => {
@@ -340,7 +359,16 @@ function useSidebarMetadataFetcher(
                 return result;
             });
         },
-        [api, file, isConfidenceScoreApiEnabled, isBoundingBoxApiEnabled, onError, templates],
+        [
+            api,
+            enterpriseFqn,
+            file,
+            isConfidenceScoreApiEnabled,
+            isBoundingBoxApiEnabled,
+            onError,
+            templateInstances,
+            templates,
+        ],
     );
 
     React.useEffect(() => {

@@ -138,7 +138,7 @@
         "@box/frontend": "^11.0.1",
         "@box/item-icon": "^3.2.0",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "^2.11.11",
+        "@box/metadata-editor": "^2.11.17",
         "@box/metadata-filter": "^1.80.23",
         "@box/metadata-taxonomy-picker": "^3.4.23",
         "@box/metadata-template-browser": "^3.0.17",

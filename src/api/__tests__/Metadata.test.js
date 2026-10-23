@@ -3047,6 +3047,54 @@ describe('api/Metadata', () => {
                 templateInstances: [updatedMetadata],
             });
         });
+        test('should update cache by namespace when scope is absent', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const ops = [{ op: 'add', path: '/field1', value: 'updated' }];
+            const cache = new Cache();
+
+            const otherNamespaceInstance = {
+                namespace: 'enterprise_123',
+                templateKey: 'otherTemplate',
+                id: '111',
+                fields: [{ key: 'field1', value: 'keep' }],
+            };
+            const existingMetadataInstance = {
+                namespace: 'enterprise_123.legal',
+                templateKey: 'templateKey',
+                id: '123',
+                fields: [{ key: 'field1', value: 'old' }],
+            };
+            const updatedMetadata = {
+                ...existingMetadataInstance,
+                fields: [{ key: 'field1', value: 'updated' }],
+            };
+
+            cache.set('metadata_id', {
+                templateInstances: [otherNamespaceInstance, existingMetadataInstance],
+            });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.put = jest.fn().mockReturnValueOnce({ data: 'foo' });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.updateMetadataRedesign(file, updatedMetadata, ops, success, error);
+
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'enterprise_123.legal', 'templateKey');
+            expect(cache.get('metadata_id')).toEqual({
+                templateInstances: [otherNamespaceInstance, updatedMetadata],
+            });
+        });
     });
 
     describe('createMetadata()', () => {
