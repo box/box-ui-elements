@@ -1,6 +1,4 @@
 // <reference types="Cypress" />
-import validationMessages from '../../../src/common/messages';
-import commentFormMessages from '../../../src/elements/content-sidebar/activity-feed/comment-form/messages';
 
 describe('ContentSidebar', () => {
     describe('navigation buttons', () => {
@@ -110,7 +108,7 @@ describe('ContentSidebar', () => {
     describe.skip('activity feed comments', () => {
         const getDraftJSEditor = () => cy.getByTestId('bcs-CommentForm-body').find('[contenteditable]');
         const getTooltip = () => cy.get('[data-testid="bdl-Tooltip"]');
-        const getCancelButton = () => cy.contains(commentFormMessages.commentCancel.defaultMessage);
+        const getCancelButton = () => cy.contains('Cancel');
 
         beforeEach(() => {
             cy.visitStorybook('elements-contentsidebar-tests-e2e--basic');
@@ -128,7 +126,7 @@ describe('ContentSidebar', () => {
             // should show required error if type and then delete text
             getDraftJSEditor().click().type('qwerty').clear();
 
-            getTooltip().contains(validationMessages.requiredFieldError.defaultMessage);
+            getTooltip().contains('Required Field');
 
             // should reset validation state after clicking "Cancel" and focusing again
             getCancelButton().click();

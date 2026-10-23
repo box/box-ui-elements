@@ -2,9 +2,6 @@ import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 import { render, fireEvent } from '@testing-library/react';
 
-import contentInsightsMessages from '../../../features/content-insights/messages';
-// @ts-ignore Module is written in Flow
-import messages from '../../common/messages';
 import SidebarContentInsights from '../SidebarContentInsights';
 
 jest.unmock('react-intl');
@@ -28,7 +25,7 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
         test('should render correctly', () => {
             const wrapper = getWrapper();
 
-            expect(wrapper.getByText(messages.sidebarContentInsights.defaultMessage)).toBeVisible();
+            expect(wrapper.getByText('Content Insights')).toBeVisible();
             expect(wrapper.queryByTestId('ContentAnalyticsErrorState-image')).toBe(null);
             expect(wrapper.container.querySelector('.ContentInsightsSummary--redesigned')).toBeNull();
         });
@@ -46,7 +43,7 @@ describe('elements/content-sidebar/SidebarContentInsights', () => {
                 onContentInsightsClick,
             });
 
-            fireEvent.click(wrapper.getByText(contentInsightsMessages.openContentInsightsButton.defaultMessage));
+            fireEvent.click(wrapper.getByText('See Details'));
 
             expect(onContentInsightsClick).toBeCalledTimes(1);
         });

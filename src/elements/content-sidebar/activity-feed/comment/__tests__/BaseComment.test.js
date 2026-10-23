@@ -17,7 +17,6 @@ import {
     TIME_STRING_SEPT_27_2017,
     TIME_STRING_SEPT_28_2017,
 } from '../stories/common';
-import messages from '../messages';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -78,7 +77,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
     test('should render annotation badge when annotationActivityLink prop is defined', () => {
         getWrapper({ ...annotation, ...repliesProps });
-        expect(screen.getByText(messages.inlineCommentAnnotationIconTitle.defaultMessage)).toBeInTheDocument();
+        expect(screen.getByText('Inline Comment')).toBeInTheDocument();
     });
 
     test.each`

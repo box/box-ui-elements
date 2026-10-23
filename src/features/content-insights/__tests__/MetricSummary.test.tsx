@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import messages from '../messages';
 import MetricSummary from '../MetricSummary';
 import { METRIC, PERIOD } from '../constants';
 import { GraphData } from '../types';
@@ -37,9 +36,9 @@ const mockUserData = [
 ] as unknown as GraphData;
 
 describe('features/content-insights/MetricSummary', () => {
-    const downloadHeaderMessage = messages.downloadGraphType.defaultMessage;
-    const peopleHeaderMessage = messages.peopleTitle.defaultMessage;
-    const previewHeaderMessage = messages.previewGraphType.defaultMessage;
+    const downloadHeaderMessage = 'DOWNLOADS';
+    const peopleHeaderMessage = 'PEOPLE';
+    const previewHeaderMessage = 'PREVIEWS';
 
     const getWrapper = (props = {}) => {
         return render(
