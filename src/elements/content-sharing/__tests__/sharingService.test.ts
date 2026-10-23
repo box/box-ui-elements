@@ -217,6 +217,7 @@ describe('elements/content-sharing/sharingService', () => {
                 sharedLinkSettings,
                 {}, // prevSettings
                 undefined, // access
+                undefined, // expiresAt
                 undefined, // serverUrl
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
@@ -250,6 +251,7 @@ describe('elements/content-sharing/sharingService', () => {
                 options: {
                     ...options,
                     access: 'open',
+                    expiresAt: 1735689600000,
                     serverUrl: 'https://example.com/server-url',
                     settings: {
                         canChangeExpiration: true,
@@ -281,6 +283,7 @@ describe('elements/content-sharing/sharingService', () => {
                     otpMode: 'none',
                 },
                 'open',
+                1735689600000,
                 'https://example.com/server-url',
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
@@ -313,7 +316,13 @@ describe('elements/content-sharing/sharingService', () => {
 
             await service.updateSharedLink(sharedLinkSettings);
 
-            expect(convertSharedLinkSettings).toHaveBeenCalledWith(sharedLinkSettings, {}, undefined, undefined);
+            expect(convertSharedLinkSettings).toHaveBeenCalledWith(
+                sharedLinkSettings,
+                {},
+                undefined,
+                undefined,
+                undefined,
+            );
         });
 
         test('should reject with 404 error when hasSharedLink is false', async () => {

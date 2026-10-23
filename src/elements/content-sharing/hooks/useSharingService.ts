@@ -50,11 +50,12 @@ export const useSharingService = ({
             return null;
         }
 
-        const { access, settings } = sharedLink ?? {};
+        const { access, expiresAt, settings } = sharedLink ?? {};
         const { can_set_share_access, can_share, serverUrl } = sharingServiceProps ?? {};
 
         const options = {
             access,
+            expiresAt,
             id: itemId,
             settings,
             permissions: {

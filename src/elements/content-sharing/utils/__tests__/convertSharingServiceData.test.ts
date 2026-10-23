@@ -53,12 +53,13 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
         const mockPrevSettings = {
             canChangeExpiration: true,
             isDownloadAvailable: true,
+            isOtpAvailable: false,
             otpMode: 'none' as const,
         };
 
         describe('basic conversion', () => {
             test('should return settings with correct values', () => {
-                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result).toEqual({
                     password: 'test-password',
@@ -89,7 +90,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     isDownloadAvailable: false,
                 };
 
-                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, '');
+                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, '');
 
                 expect(result).toEqual({
                     password: null,
@@ -109,7 +110,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     expiration: parseDate('2024-12-31'),
                 };
 
-                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
             });
@@ -121,13 +122,41 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     expiration,
                 };
 
-                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
             });
+
+            test('should not set unshared_at when expiration is unchanged', () => {
+                const expiresAt = 1735707600000; // 2024-12-31T21:00:00-08:00
+
+                const result = convertSharedLinkSettings(
+                    mockSettings,
+                    mockPrevSettings,
+                    ACCESS_OPEN,
+                    expiresAt,
+                    mockServerUrl,
+                );
+
+                expect(result).not.toHaveProperty('unshared_at');
+            });
+
+            test('should set unshared_at when expiration is changed', () => {
+                const expiresAt = 1735621200000; // 2024-12-30T21:00:00-08:00
+
+                const result = convertSharedLinkSettings(
+                    mockSettings,
+                    mockPrevSettings,
+                    ACCESS_OPEN,
+                    expiresAt,
+                    mockServerUrl,
+                );
+
+                expect(result.unshared_at).toBe('2024-12-31T08:00:00.000Z');
+            });
         });
 
-        describe('vanity handling', () => {
+        describe('vanity URL handling', () => {
             test.each([
                 ['', ''],
                 ['', 'vanity-name'],
@@ -140,7 +169,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                         vanityName,
                     };
 
-                    const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, serverUrl);
+                    const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, serverUrl);
 
                     expect(result.vanity_url).toBe('');
                 },
@@ -149,7 +178,13 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
         describe('permissions handling', () => {
             test('should not set permissions for ACCESS_COLLAB access level', () => {
-                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, ACCESS_COLLAB, mockServerUrl);
+                const result = convertSharedLinkSettings(
+                    mockSettings,
+                    mockPrevSettings,
+                    ACCESS_COLLAB,
+                    0,
+                    mockServerUrl,
+                );
 
                 expect(result.permissions).toBeUndefined();
             });
@@ -160,7 +195,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     isDownloadEnabled: false,
                 };
 
-                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.permissions).toEqual({
                     can_preview: true,
@@ -174,7 +209,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     isDownloadAvailable: false,
                 };
 
-                const result = convertSharedLinkSettings(mockSettings, prevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(mockSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.permissions).toEqual({
                     can_preview: false,
@@ -191,7 +226,7 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     password: 'existingpassword',
                 };
 
-                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.password).toBeNull();
             });
@@ -203,16 +238,70 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                     password: '',
                 };
 
-                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.password).toBeUndefined();
             });
 
             test.each([ACCESS_COLLAB, ACCESS_COMPANY])('should not set password for non open access level', access => {
-                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, access, mockServerUrl);
+                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, access, 0, mockServerUrl);
 
                 expect(result.password).toBeUndefined();
             });
+        });
+
+        describe('one time password handling', () => {
+            test('should not set one_time_passcode when otp is not available', () => {
+                const nextSettings = {
+                    ...mockSettings,
+                    isPasswordEnabled: false,
+                };
+                const prevSettings = {
+                    isOtpAvailable: false,
+                };
+
+                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
+
+                expect(result).not.toHaveProperty('one_time_passcode');
+            });
+
+            test('should not set one_time_passcode when otp mode is unchanged', () => {
+                const nextSettings = {
+                    ...mockSettings,
+                    isPasswordEnabled: false,
+                };
+                const prevSettings = {
+                    isOtpAvailable: true,
+                    otpMode: 'none' as const,
+                };
+
+                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
+
+                expect(result).not.toHaveProperty('one_time_passcode');
+            });
+
+            test.each([
+                ['none', 'open', { mode: 'open' }],
+                ['none', 'allowlist', { allowlist: [], mode: 'allowlist' }],
+                ['open', 'none', { mode: 'none' }],
+            ] as const)(
+                'should set one_time_passcode when otp mode changes from %s to %s',
+                (prevMode, nextMode, expected) => {
+                    const nextSettings = {
+                        ...mockSettings,
+                        isPasswordEnabled: false,
+                        otpMode: nextMode,
+                    };
+                    const prevSettings = {
+                        isOtpAvailable: true,
+                        otpMode: prevMode,
+                    };
+
+                    const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
+
+                    expect(result.one_time_passcode).toEqual(expected);
+                },
+            );
         });
     });
 });

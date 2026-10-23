@@ -1,4 +1,4 @@
-import { getLocalTimeZone } from '@box/blueprint-web';
+import { fromAbsolute, getLocalTimeZone, toCalendarDate } from '@box/blueprint-web';
 import { type LinkSettingsFormData, type SharedLinkSettings } from '@box/unified-share-modal';
 
 import {
@@ -42,6 +42,7 @@ export const convertSharedLinkSettings = (
     nextSettings: LinkSettingsFormData,
     prevSettings: SharedLinkSettings,
     accessLevel: string,
+    expiresAt: number,
     serverUrl: string,
 ): ConvertSharedLinkSettingsReturnType => {
     const { expiration, isDownloadEnabled, isExpirationEnabled, isPasswordEnabled, otpMode, password, vanityName } =
@@ -52,10 +53,12 @@ export const convertSharedLinkSettings = (
     };
 
     if (prevSettings.canChangeExpiration) {
-        if (isExpirationEnabled && expiration) {
-            convertedSettings.unshared_at = expiration.toDate(getLocalTimeZone()).toISOString();
-        } else {
+        const prevExpiration = toCalendarDate(fromAbsolute(expiresAt ?? 0, getLocalTimeZone()));
+
+        if (!isExpirationEnabled || !expiration) {
             convertedSettings.unshared_at = null;
+        } else if (expiration.compare(prevExpiration)) {
+            convertedSettings.unshared_at = expiration.toDate(getLocalTimeZone()).toISOString();
         }
     }
 
@@ -85,7 +88,7 @@ export const convertSharedLinkSettings = (
         if (!isPasswordEnabled) {
             convertedSettings.password = null;
 
-            if (otpMode !== prevSettings.otpMode) {
+            if (prevSettings.isOtpAvailable && prevSettings.otpMode !== otpMode) {
                 convertedSettings.one_time_passcode = {
                     mode: otpMode,
                     ...(otpMode === OTP_MODE_ALLOWLIST ? { allowlist: [] } : null),
