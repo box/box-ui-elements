@@ -1124,6 +1124,103 @@ describe('useSidebarMetadataFetcher', () => {
 
             expect(suggestions[0].targetLocation).toEqual([{ itemId: 'file_123', page: 1, text: 'some text' }]);
         });
+
+        test('should resolve scope from namespace-only template when caller passes undefined scope', async () => {
+            const namespacedTemplate = {
+                canEdit: true,
+                id: 'metadata_template_namespaced_1',
+                fields: [
+                    {
+                        key: 'field1',
+                        type: 'string' as MetadataTemplateFieldType,
+                        hidden: false,
+                    },
+                ],
+                namespace: 'enterprise_1534885730',
+                templateKey: 'preMigrationScopedTemplate1',
+            };
+
+            mockAPI.getMetadata.mockImplementation((_file, successCallback) => {
+                successCallback({
+                    editors: [],
+                    templates: [namespacedTemplate],
+                    templateInstances: [],
+                });
+            });
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'extractedValue' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+            });
+
+            const { result } = setupHook('123', false, false, false, false, {
+                enterpriseFqn: 'enterprise_1534885730',
+                metadataNamespaceMode: 'FINAL',
+            });
+
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions(
+                'preMigrationScopedTemplate1',
+                undefined as unknown as string,
+            );
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: {
+                    template_key: 'preMigrationScopedTemplate1',
+                    scope: 'enterprise_1534885730',
+                    type: 'metadata_template',
+                },
+            });
+            expect(suggestions).toEqual([{ ...namespacedTemplate.fields[0], aiSuggestion: 'extractedValue' }]);
+        });
+
+        test('should rewrite box.metadata scope to global for extractStructured', async () => {
+            const boxOwnedTemplate = {
+                canEdit: true,
+                id: 'metadata_template_box_owned_1',
+                fields: [
+                    {
+                        key: 'field1',
+                        type: 'string' as MetadataTemplateFieldType,
+                        hidden: false,
+                    },
+                ],
+                namespace: 'box.metadata',
+                templateKey: 'templateKey',
+            };
+
+            mockAPI.getMetadata.mockImplementation((_file, successCallback) => {
+                successCallback({
+                    editors: [],
+                    templates: [boxOwnedTemplate],
+                    templateInstances: [],
+                });
+            });
+            mockAPI.extractStructured.mockResolvedValue({
+                answer: { field1: 'extractedValue' },
+                created_at: '2026-03-27T08:10:14.106-07:00',
+            });
+
+            const { result } = setupHook('123', false, false, false, false, {
+                enterpriseFqn: 'enterprise_1534885730',
+                metadataNamespaceMode: 'FINAL',
+            });
+
+            await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'box.metadata');
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: {
+                    template_key: 'templateKey',
+                    scope: 'global',
+                    type: 'metadata_template',
+                },
+            });
+            expect(suggestions).toEqual([{ ...boxOwnedTemplate.fields[0], aiSuggestion: 'extractedValue' }]);
+        });
     });
 
     test('should fetch metadata once when namespaced mode is available from the start', async () => {

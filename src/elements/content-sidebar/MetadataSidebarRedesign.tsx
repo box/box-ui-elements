@@ -608,6 +608,15 @@ function MetadataSidebarRedesign({
             createService({ scope: resolveTaxonomyScope(scope), templateKey, fieldKey });
     }, [api, fileId, resolveTaxonomyFieldConfig, resolveTaxonomyScope]);
 
+    const fetchSuggestions = useCallback(
+        (templateKey: string, scope: string, agentId?: string) => {
+            const editingNamespace = (editingTemplate as (MetadataTemplateInstance & MetadataTemplateIdentity) | null)
+                ?.namespace;
+            return extractSuggestions(templateKey, scope || editingNamespace || '', agentId);
+        },
+        [editingTemplate, extractSuggestions],
+    );
+
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
             isSessionInitiated.current = true;
@@ -641,7 +650,7 @@ function MetadataSidebarRedesign({
                         />
                     )}
                     <AutofillContextProvider
-                        fetchSuggestions={extractSuggestions}
+                        fetchSuggestions={fetchSuggestions}
                         isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                     >
                         {editingTemplate && (

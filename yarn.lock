@@ -1178,10 +1178,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^2.11.11":
-  version "2.11.11"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.11.11.tgz#0fee4fa8f39c9fa7df35776c492097df6fc015ec"
-  integrity sha512-hsYmDUIfAvu5Bh1wZta9cY80WIFFBZZf/11f5ru3VncKYw/O/OwF1SyNJDQxISzXwLStRUrKVu8t5ZWSN8wsrA==
+"@box/metadata-editor@^2.11.17":
+  version "2.11.17"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.11.17.tgz#661222792b0d9b8fcef3b92d2651083c279e4ac1"
+  integrity sha512-jgMAO/CcWIM/5+JKY+m9gKtiYMM6J+x4+MeTDMGzfOD8uMGzEEoAXlRoB5bi2WLP4VGBmGASHIbkScltkSHFFg==
 
 "@box/metadata-filter@^1.80.23":
   version "1.80.23"
