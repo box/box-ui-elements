@@ -11,8 +11,6 @@ import { annotationActivityLinkProviderProps, user1 } from '../../stories/common
 import { baseCommmentInfoDefaultProps } from '../stories/common';
 import AnnotationActivityLinkProvider from '../../../activity-feed/AnnotationActivityLinkProvider';
 
-import messages from '../../messages';
-
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
     FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
@@ -39,12 +37,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentInfo', () => 
         // This could fail for some locales, but I was unable to use the ReadableTime component to get the properly-formatted time programmatically
         expect(wrapper.getByText('Sep 27, 2017')).toBeInTheDocument();
 
-        expect(wrapper.queryByText(messages.inlineCommentAnnotationIconTitle.defaultMessage)).not.toBeInTheDocument();
+        expect(wrapper.queryByText('Inline Comment')).not.toBeInTheDocument();
     });
     test('should render an annotation badge if annotationActivityLink is defined', () => {
         const wrapper = getWrapper({
             annotationActivityLink: <AnnotationActivityLinkProvider {...annotationActivityLinkProviderProps} />,
         });
-        expect(wrapper.getByText(messages.inlineCommentAnnotationIconTitle.defaultMessage)).toBeInTheDocument();
+        expect(wrapper.getByText('Inline Comment')).toBeInTheDocument();
     });
 });

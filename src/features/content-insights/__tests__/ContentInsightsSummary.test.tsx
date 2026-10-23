@@ -2,7 +2,6 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import ContentInsightsSummary from '../ContentInsightsSummary';
-import messages from '../messages';
 import { GraphData } from '../types';
 
 const mockData = [
@@ -36,7 +35,9 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             getWrapper({ isLoading: true });
 
             expect(screen.getByTestId('GraphCardGhostState')).toBeVisible();
-            expect(screen.queryByLabelText(messages.previewGraphLabel.defaultMessage)).toBeNull();
+            expect(
+                screen.queryByLabelText('Chart displaying the number of previews over the selected time period'),
+            ).toBeNull();
         });
 
         test('should render correctly when isLoading is false and error is null', () => {
@@ -44,7 +45,9 @@ describe('features/content-insights/ContentInsightsSummary', () => {
 
             expect(screen.queryByTestId('ContentAnalyticsErrorState')).toBeNull();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
-            expect(screen.getByLabelText(messages.previewGraphLabel.defaultMessage)).toBeVisible();
+            expect(
+                screen.getByLabelText('Chart displaying the number of previews over the selected time period'),
+            ).toBeVisible();
         });
 
         test('should show the error state when error exists', () => {
@@ -53,7 +56,9 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.getByTestId('ContentAnalyticsErrorState-text')).toBeVisible();
             expect(screen.queryByTestId('ContentAnalyticsErrorState-text--permission')).not.toBeInTheDocument();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
-            expect(screen.queryByLabelText(messages.previewGraphLabel.defaultMessage)).toBeNull();
+            expect(
+                screen.queryByLabelText('Chart displaying the number of previews over the selected time period'),
+            ).toBeNull();
         });
 
         test('should show the permission error state when error exists and is a permission error', () => {
@@ -62,7 +67,9 @@ describe('features/content-insights/ContentInsightsSummary', () => {
             expect(screen.getByTestId('ContentAnalyticsErrorState-text--permission')).toBeVisible();
             expect(screen.queryByTestId('ContentAnalyticsErrorState-text')).not.toBeInTheDocument();
             expect(screen.queryByTestId('GraphCardGhostState')).toBeNull();
-            expect(screen.queryByLabelText(messages.previewGraphLabel.defaultMessage)).toBeNull();
+            expect(
+                screen.queryByLabelText('Chart displaying the number of previews over the selected time period'),
+            ).toBeNull();
         });
 
         test('should call the onClick callback', () => {

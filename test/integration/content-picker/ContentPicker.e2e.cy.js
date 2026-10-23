@@ -1,6 +1,3 @@
-import IntlMessageFormat from 'intl-messageformat';
-import messages from '../../../src/elements/common/messages';
-
 // <reference types="Cypress" />
 const helpers = {
     loadBasic(args = '') {
@@ -26,11 +23,7 @@ const helpers = {
         return cy.getByTestId('content-picker').find('.bdl-Pagination-nav').children();
     },
     getPaginationCountButton: pageNumber => {
-        return cy
-            .getByTestId('content-picker')
-            .contains(
-                new IntlMessageFormat(messages.pageStatus.defaultMessage, 'en').format({ pageNumber, pageCount: 2 }),
-            );
+        return cy.getByTestId('content-picker').contains(`${pageNumber} of 2`);
     },
     getPaginationDropdown: () => {
         return cy.get('.bdl-Pagination-dropdownMenu').first().children();
