@@ -9,7 +9,9 @@ i18n/*.js
 i18n/bundles/
 i18n/json/
 node_modules/
+playwright-report/
 reports/
 storybook/
+test-results/
 test/screenshots/
 test/videos/

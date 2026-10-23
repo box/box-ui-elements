@@ -43,6 +43,7 @@ jest.config.js
 jsconfig.json
 npm-debug.log
 npm-error.log
+playwright.config.ts
 postcss.config.js
 release.config.js
 reports
