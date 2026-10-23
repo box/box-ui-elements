@@ -57,7 +57,7 @@ export const convertSharedLinkSettings = (
 
         if (!isExpirationEnabled || !expiration) {
             convertedSettings.unshared_at = null;
-        } else if (expiration.compare(prevExpiration)) {
+        } else if (expiration.compare(prevExpiration) !== 0) {
             convertedSettings.unshared_at = expiration.toDate(getLocalTimeZone()).toISOString();
         }
     }
