@@ -1,6 +1,4 @@
 // <reference types="Cypress" />
-import localize from '../../support/i18n';
-
 // Similar to ContentSidebar test failures, the comments won't load with local storybook but do load on opensource
 describe.skip('Create Task', () => {
     const getAssigneeField = () => cy.getByTestId('task-form-assignee-input');
@@ -15,10 +13,10 @@ describe.skip('Create Task', () => {
 
     context('Add Task button', () => {
         it('opens task form', () => {
-            cy.contains(localize('be.contentSidebar.addTask')).click();
-            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
+            cy.contains('Add Task').click();
+            cy.contains('Approval Task').click();
             cy.getByTestId('create-task-modal').within(() => {
-                cy.contains(localize('be.contentSidebar.addTask.approval.title')).should('exist');
+                cy.contains('Create Approval Task').should('exist');
                 getSubmitButton().should('exist');
                 getCancelButton().should('exist');
             });
@@ -27,16 +25,16 @@ describe.skip('Create Task', () => {
 
     context('Task Modal', () => {
         it('autofocuses first input (assignees)', () => {
-            cy.contains(localize('be.contentSidebar.addTask')).click();
-            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
+            cy.contains('Add Task').click();
+            cy.contains('Approval Task').click();
             cy.focused().should('have.attr', 'data-testid', 'task-form-assignee-input');
         });
     });
 
     context('Task Form', () => {
         beforeEach(() => {
-            cy.contains(localize('be.contentSidebar.addTask')).click();
-            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
+            cy.contains('Add Task').click();
+            cy.contains('Approval Task').click();
         });
         xit('does not allow submitting form without input', () => {
             getMessageField().type('...').clear();
@@ -52,8 +50,8 @@ describe.skip('Create Task', () => {
             getCancelButton().click();
 
             // reopen modal
-            cy.contains(localize('be.contentSidebar.addTask')).click();
-            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
+            cy.contains('Add Task').click();
+            cy.contains('Approval Task').click();
 
             cy.getByTestId('task-assignee-option').should('not.exist');
         });

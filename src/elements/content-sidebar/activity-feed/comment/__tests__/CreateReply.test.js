@@ -5,8 +5,6 @@ import { IntlProvider } from 'react-intl';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ContentState, EditorState } from 'draft-js';
 import CreateReply from '../CreateReply';
-import localize from '../../../../../../test/support/i18n';
-import messages from '../messages';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -18,8 +16,8 @@ const onFocus = jest.fn();
 const onSubmit = jest.fn();
 const onClick = jest.fn();
 
-const replyInThreadMessage = localize(messages.replyInThread.id);
-const replyMessage = localize(messages.reply.id);
+const replyInThreadMessage = 'Reply in thread';
+const replyMessage = 'Reply';
 
 const getWrapper = props =>
     render(

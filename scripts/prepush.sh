@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# translation properties file
-PROPERTIES="i18n/en-US.properties"
-
 # Styling variables
 red=$"\e[1;31m"
 green=$"\e[1;32m"
@@ -16,37 +13,18 @@ check_uncommitted_files() {
     fi
 }
 
-# commit updated translations if any
-check_and_commit_updated_translations() {
-    if ! git diff --quiet HEAD $PROPERTIES; then
-        printf "${red}--------------------------------------------------------${end}"
-        printf "${red}Committing updated translations${end}"
-        printf "${red}--------------------------------------------------------${end}"
-        git add $PROPERTIES || exit 1
-        git commit --amend --no-edit --no-verify || exit 1
-        printf "${red}--------------------------------------------------------${end}"
-        printf "${red}Amended commit with translations, please push again with --no-verify${end}"
-        printf "${red}--------------------------------------------------------${end}"
-        exit 1
-    else
-        printf "${green}--------------------------------------------------------${end}"
-        printf "${green}en-US.properties is already up to date${end}"
-        printf "${green}--------------------------------------------------------${end}"
-    fi
-}
-
-# lint, test, and build assets to update translations
+# lint, test, and build assets
 prepush() {
 
     printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Building all sources, this will update i18n/json${end}"
+    printf "${blue}Building all sources${end}"
     printf "${blue}-------------------------------------------------------------${end}"
     yarn build:prod:es || exit 1
 
     check_uncommitted_files || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
-    printf "${blue}Building localized bundles, this will update en-US.properties${end}"
+    printf "${blue}Building localized bundles${end}"
     printf "${blue}-------------------------------------------------------------${end}"
     yarn build:i18n || exit 1
 
@@ -55,8 +33,6 @@ prepush() {
     printf "${blue}-------------------------------------------------------------${end}"
     git fetch upstream
     yarn test --changedSince=upstream/master || exit 1
-
-    check_and_commit_updated_translations
 }
 
 # Execute this script
