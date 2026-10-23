@@ -179,9 +179,9 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 options: {
                     access: mockSharedLink.access,
                     id: mockItemId,
-                    settings: mockSharedLink.settings,
                     permissions: { can_set_share_access, can_share },
                     serverUrl,
+                    settings: mockSharedLink.settings,
                 },
             });
         });
@@ -237,9 +237,9 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 options: {
                     access: mockSharedLink.access,
                     id: mockItemId,
-                    settings: mockSharedLink.settings,
                     permissions: { can_set_share_access, can_share },
                     serverUrl,
+                    settings: mockSharedLink.settings,
                 },
             });
         });

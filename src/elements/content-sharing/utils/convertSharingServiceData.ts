@@ -1,3 +1,4 @@
+import { getLocalTimeZone } from '@box/blueprint-web';
 import { type LinkSettingsFormData, type SharedLinkSettings } from '@box/unified-share-modal';
 
 import {
@@ -7,7 +8,6 @@ import {
     PERMISSION_CAN_EDIT,
     PERMISSION_CAN_PREVIEW,
 } from '../../../constants';
-import { convertISOStringToUTCDate } from '../../../utils/datetime';
 import { OTP_MODE_ALLOWLIST } from '../constants';
 
 import type { OtpAccess } from '../../../common/types/core';
@@ -53,7 +53,7 @@ export const convertSharedLinkSettings = (
 
     if (prevSettings.canChangeExpiration) {
         if (isExpirationEnabled && expiration) {
-            convertedSettings.unshared_at = convertISOStringToUTCDate(new Date(expiration).toISOString()).toISOString();
+            convertedSettings.unshared_at = expiration.toDate(getLocalTimeZone()).toISOString();
         } else {
             convertedSettings.unshared_at = null;
         }
