@@ -19,6 +19,8 @@ import {
     ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
+    METADATA_NAMESPACE_GLOBAL,
+    METADATA_SCOPE_GLOBAL,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_CREATE_METADATA_TEMPLATE_INSTANCE,
@@ -29,7 +31,8 @@ import messages from '../../common/messages';
 import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
-import { isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
+import { type AiItemBaseTypeField } from '../../../api/schemas/AiItemBase';
+import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -137,9 +140,16 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
+    // Mode is a constructor option. Each getMetadataAPI() builds a new client,
+    // so every sidebar call passes the resolved mode instead of writing it later.
+    const metadataAPI = React.useCallback(
+        () => api.getMetadataAPI(false, metadataNamespaceMode ? { metadataNamespaceMode } : undefined),
+        [api, metadataNamespaceMode],
+    );
+
     const fetchMetadata = React.useCallback(
         (fetchedFile: BoxItem) => {
-            api.getMetadataAPI(false).getMetadata(
+            metadataAPI().getMetadata(
                 fetchedFile,
                 fetchMetadataSuccessCallback,
                 fetchMetadataErrorCallback,
@@ -147,7 +157,6 @@ function useSidebarMetadataFetcher(
                 {
                     refreshCache: true,
                     ...(enterpriseFqn ? { enterpriseFqn } : {}),
-                    ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
                 },
                 true,
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
@@ -155,13 +164,12 @@ function useSidebarMetadataFetcher(
             );
         },
         [
-            api,
             enterpriseFqn,
             fetchMetadataErrorCallback,
             fetchMetadataSuccessCallback,
             isFeatureEnabled,
             isBoundingBoxOrConfidenceScoreReviewEnabled,
-            metadataNamespaceMode,
+            metadataAPI,
             shouldFetchDetailedMetadata,
         ],
     );
@@ -189,7 +197,7 @@ function useSidebarMetadataFetcher(
                 return;
             }
             setStatus(STATUS.LOADING);
-            await api.getMetadataAPI(false).deleteMetadata(
+            await metadataAPI().deleteMetadata(
                 file,
                 metadataInstance,
                 () => {
@@ -202,12 +210,12 @@ function useSidebarMetadataFetcher(
                 true,
             );
         },
-        [api, onApiError, onSuccess, file],
+        [file, metadataAPI, onApiError, onSuccess],
     );
 
     const handleCreateMetadataInstance = React.useCallback(
         async (templateInstance: MetadataTemplateInstance, successCallback: () => void): Promise<void> => {
-            await api.getMetadataAPI(false).createMetadataRedesign(
+            await metadataAPI().createMetadataRedesign(
                 file,
                 templateInstance,
                 () => {
@@ -219,7 +227,7 @@ function useSidebarMetadataFetcher(
                 isBoundingBoxOrConfidenceScoreReviewEnabled,
             );
         },
-        [api, file, onApiError, onSuccess, isBoundingBoxOrConfidenceScoreReviewEnabled],
+        [file, isBoundingBoxOrConfidenceScoreReviewEnabled, metadataAPI, onApiError, onSuccess],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(
@@ -228,7 +236,7 @@ function useSidebarMetadataFetcher(
             JSONPatch: JSONPatchOperations,
             successCallback: () => void,
         ) => {
-            await api.getMetadataAPI(false).updateMetadataRedesign(
+            await metadataAPI().updateMetadataRedesign(
                 file,
                 metadataInstance,
                 JSONPatch,
@@ -241,7 +249,7 @@ function useSidebarMetadataFetcher(
                 },
             );
         },
-        [api, file, onApiError, onSuccess],
+        [file, metadataAPI, onApiError, onSuccess],
     );
 
     const [, setError] = React.useState();
@@ -250,14 +258,34 @@ function useSidebarMetadataFetcher(
             const aiAPI = api.getIntelligenceAPI();
             setExtractErrorCode(null);
             let response = null;
-            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
+            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id' as const, id: agentId } } : {};
 
             const confidenceScoreParams = isConfidenceScoreApiEnabled ? { include_confidence_score: true } : {};
             const boundingBoxParams = isBoundingBoxApiEnabled ? { include_reference: true } : {};
 
+            const lookupScope = scope || enterpriseFqn;
+            const templateInstance =
+                (lookupScope
+                    ? templates?.find(template =>
+                          isSameMetadataTemplate(template, { templateKey, scope: lookupScope }),
+                      ) ??
+                      templateInstances?.find(instance =>
+                          isSameMetadataTemplate(instance, { templateKey, scope: lookupScope }),
+                      )
+                    : undefined) ??
+                templates?.find(template => template.templateKey === templateKey) ??
+                templateInstances?.find(instance => instance.templateKey === templateKey);
+
+            const rawScope =
+                scope ||
+                (templateInstance ? getMetadataTemplateNamespaceFqn(templateInstance) : undefined) ||
+                enterpriseFqn;
+            // POST /2.0/ai/extract_structured only accepts legacy scopes (`global` or `enterprise_<id>`).
+            const resolvedScope = rawScope === METADATA_NAMESPACE_GLOBAL ? METADATA_SCOPE_GLOBAL : rawScope;
+
             const requestBody: AiExtractStructured = {
-                items: [{ id: file.id, type: file.type }],
-                metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
+                items: [{ id: file.id, type: file.type as AiItemBaseTypeField }],
+                metadata_template: { template_key: templateKey, scope: resolvedScope, type: 'metadata_template' },
                 ...customAiAgent,
                 ...confidenceScoreParams,
                 ...boundingBoxParams,
@@ -298,9 +326,6 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templates.find(template =>
-                isSameMetadataTemplate(template, { templateKey, scope }),
-            );
             const fields = templateInstance?.fields || [];
 
             return fields.map(field => {
@@ -334,7 +359,16 @@ function useSidebarMetadataFetcher(
                 return result;
             });
         },
-        [api, file, isConfidenceScoreApiEnabled, isBoundingBoxApiEnabled, onError, templates],
+        [
+            api,
+            enterpriseFqn,
+            file,
+            isConfidenceScoreApiEnabled,
+            isBoundingBoxApiEnabled,
+            onError,
+            templateInstances,
+            templates,
+        ],
     );
 
     React.useEffect(() => {

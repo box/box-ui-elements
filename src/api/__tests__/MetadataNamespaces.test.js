@@ -214,6 +214,31 @@ describe('api/MetadataNamespaces', () => {
         });
     });
 
+    describe('listTemplatesForNamespace()', () => {
+        test('should GET templates for the namespace with permissions', async () => {
+            const entry = { templateKey: 'contract', displayName: 'Contract' };
+            host.xhr.get.mockResolvedValue({
+                data: { entries: [entry], next_marker: 'cursor-1' },
+            });
+
+            await expect(
+                api.listTemplatesForNamespace(file, 'enterprise_1', { limit: 20, marker: 'cursor-0' }),
+            ).resolves.toEqual({ entries: [entry], next_marker: 'cursor-1' });
+            expect(host.xhr.get).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_templates/enterprise_1',
+                id: 'file_123',
+                params: { limit: 20, marker: 'cursor-0', fields: 'permissions' },
+            });
+        });
+
+        test('should propagate a failed template list', async () => {
+            const error = new Error('unavailable');
+            host.xhr.get.mockRejectedValue(error);
+
+            await expect(api.listTemplatesForNamespace(file, 'enterprise_1', { limit: 20 })).rejects.toBe(error);
+        });
+    });
+
     describe('getTemplateSchemaForEditor()', () => {
         test('should map hidden from the live schema response', async () => {
             host.metadataNamespaceMode = METADATA_SCOPE_MODE_MIGRATION;
