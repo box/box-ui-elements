@@ -1154,10 +1154,10 @@
   resolved "https://registry.yarnpkg.com/@box/content-field/-/content-field-3.1.17.tgz#9e054382059a5f0c0cc6bac0909de5d88d06516e"
   integrity sha512-/ltjqRT6CpE4wSdlTUE2Ye0cbfTfVdcWiD23PBFXYdZPhfPP+Eq9G9HgeByxGh68w7JfTMD5LAYTd/Edxg0WAw==
 
-"@box/copy-input@^1.42.16":
-  version "1.42.16"
-  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-1.42.16.tgz#a5eb28e07d7296fc7277dae96fda73de96b1dfba"
-  integrity sha512-QDjB0MjzYE1IeRFn4C8NPakLhNq/PULcmDgWTbcku2ch69IRTz4GkR488LPfi31K9Pj94dUF+qMYGM2Fe3JEYA==
+"@box/copy-input@^2.3.21":
+  version "2.3.21"
+  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-2.3.21.tgz#8833130c0bf40f64199c90db9a86d859fe7681d3"
+  integrity sha512-RugUMMEQbMsGirjH8A2H25KnlaGCQb1zwwJCf+xzKhm1itLT73A5frXbFWKW/zlA8Hyqw3QTkMq7DWpWVO4B3Q==
 
 "@box/frontend@^11.0.1":
   version "11.0.1"
@@ -1258,20 +1258,20 @@
   resolved "https://registry.yarnpkg.com/@box/types/-/types-2.1.8.tgz#8ff5972f2fc0ea80e511dbcfcdc76dce72f8891f"
   integrity sha512-Cj869wVrXRH0Z5gz5hOlmGciJqbWaEuZcbL4Jd09gF9igBbzmGzfVfiuOgas1940oXwXuTUnQzTyf5mJ646UiQ==
 
-"@box/unified-share-modal@^3.5.25":
-  version "3.5.25"
-  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-3.5.25.tgz#0a6a4864de076248179f7ac5515e21e16f06a93d"
-  integrity sha512-kt2v9v2ggBn5Y2fJ80sAJEgUguVcJuPfiT4+YPEYeCk3YkxkdjH5ythOShXqsM53f7hcc2hZP7fFQtE3H7ZxmQ==
+"@box/unified-share-modal@^3.6.2":
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-3.6.2.tgz#b7b4b71b56371529ed5786b0a281569e300f60ea"
+  integrity sha512-XVmrAdQhW22UhyVrEvWaHE75JM6KjAjsJKE7bsUzepAshrc7aGy8G3i/oNKQgfyE6KGucoANX4pVeGEXVLAvJg==
 
 "@box/uploads-manager@^2.4.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-2.4.0.tgz#c336bc4baef6265fa5a75d266dedd8784532f1eb"
   integrity sha512-8tXfla+FNnKoqLnUSs+CLc2EEIueOJhGvJFhVtnJ8YOKGvoBSC3eiZA9iSScJQ4/OjK0ImqBlCsuLOAReCflfw==
 
-"@box/user-selector@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-3.0.1.tgz#229b92c7c5150cc0090a6cbe15f75d31a00a65b7"
-  integrity sha512-JqgBAwkvTLuw1Gch0YwEIU5rYrJX7ZF0IQGKzHJFcNvoUqjZAsEApzFCELNO10JP7lmMWNdbDCrwHV7UXSExcA==
+"@box/user-selector@^3.1.21":
+  version "3.1.21"
+  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-3.1.21.tgz#2b52a16f0fb9983b03b7f1bdcc4db2dc8ffb9b1d"
+  integrity sha512-5PbmAk3niUzE8VJXdhq5PklhN5DzBpXkoHuRZ3uQfJN9ikWeXd/QQUzLISVEHwIfC22TAAx3cTQpXdbFIP1yKg==
 
 "@cacheable/memory@^2.0.8":
   version "2.0.8"

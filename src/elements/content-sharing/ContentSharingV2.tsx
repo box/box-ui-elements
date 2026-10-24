@@ -72,7 +72,6 @@ function ContentSharingV2({
     const [collaborators, setCollaborators] = React.useState<Collaborator[] | null>(null);
     const [collaboratorsData, setCollaboratorsData] = React.useState<Collaborations | null>(null);
     const [owner, setOwner] = React.useState({ email: '', id: '', name: '' });
-    const [isEnterpriseUser, setIsEnterpriseUser] = React.useState<boolean | null>(null);
 
     const config = React.useMemo(() => {
         return {
@@ -155,7 +154,6 @@ function ContentSharingV2({
         setItem(null);
         setSharedLink(null);
         setCurrentUser(null);
-        setIsEnterpriseUser(null);
         setCollaborationRoles(null);
         setAvatarUrlMap(null);
         setCollaborators(null);
@@ -186,15 +184,14 @@ function ContentSharingV2({
                 return;
             }
 
-            const { enterprise, hostname, id, login } = userData;
+            const { hostname, id, login } = userData;
             const emailDomain = login && /@/.test(login) ? login.split('@')[1] : undefined;
+
             setCurrentUser({ id, email: login, emailDomain });
             setSharingServiceProps(prevSharingServiceProps => ({
                 ...prevSharingServiceProps,
                 serverUrl: hostname ? `${hostname}v/` : '',
             }));
-
-            setIsEnterpriseUser(!!enterprise);
         };
 
         (async () => {
@@ -206,27 +203,6 @@ function ContentSharingV2({
             }
         })();
     }, [api, currentUser, item, itemId, itemType, sharedLink, getError]);
-
-    // Set canChangeExpiration to false for non-enterprise (individual) users on every sharedLink update
-    React.useEffect(() => {
-        if (isEnterpriseUser !== false || !sharedLink?.settings?.canChangeExpiration) {
-            return;
-        }
-
-        setSharedLink(prevSharedLink => {
-            if (!prevSharedLink) {
-                return prevSharedLink;
-            }
-
-            return {
-                ...prevSharedLink,
-                settings: {
-                    ...prevSharedLink.settings,
-                    canChangeExpiration: false,
-                },
-            };
-        });
-    }, [isEnterpriseUser, sharedLink]);
 
     // Get collaborators
     React.useEffect(() => {

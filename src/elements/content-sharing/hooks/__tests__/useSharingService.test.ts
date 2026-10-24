@@ -125,7 +125,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 hasSharedLink: false,
                 options: expect.objectContaining({
                     access: undefined,
-                    isDownloadAvailable: false,
+                    settings: undefined,
                 }),
             }),
         );
@@ -178,11 +178,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 onRemoveSharedLink: expect.any(Function),
                 options: {
                     access: mockSharedLink.access,
-                    currentExpiresAt: null,
-                    isDownloadAvailable: mockSharedLink.settings.isDownloadAvailable,
                     id: mockItemId,
                     permissions: { can_set_share_access, can_share },
                     serverUrl,
+                    settings: mockSharedLink.settings,
                 },
             });
         });
@@ -237,11 +236,10 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 onRemoveSharedLink: expect.any(Function),
                 options: {
                     access: mockSharedLink.access,
-                    currentExpiresAt: null,
-                    isDownloadAvailable: mockSharedLink.settings.isDownloadAvailable,
                     id: mockItemId,
                     permissions: { can_set_share_access, can_share },
                     serverUrl,
+                    settings: mockSharedLink.settings,
                 },
             });
         });
