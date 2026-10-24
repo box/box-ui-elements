@@ -42,7 +42,7 @@ class Xhr {
 
     language: ?string;
 
-    token: Token;
+    token: ?Token;
 
     version: ?string;
 

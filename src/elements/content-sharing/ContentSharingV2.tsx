@@ -126,7 +126,7 @@ function ContentSharingV2({
             let errorMessage;
             if (error.status) {
                 errorMessage = messages[CONTENT_SHARING_ERRORS[error.status]];
-            } else if (error.response && error.response.status) {
+            } else if ('response' in error && error.response && error.response.status) {
                 errorMessage = messages[CONTENT_SHARING_ERRORS[error.response.status]];
             } else {
                 errorMessage = messages.loadingError;

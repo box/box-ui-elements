@@ -15,7 +15,7 @@ export interface UploadsManagerProps {
     isResumableUploadsEnabled: boolean;
     isVisible: boolean;
     items: UploadItem[];
-    onItemActionClick: React.MouseEventHandler<HTMLButtonElement>;
+    onItemActionClick: (item: UploadItem) => void;
     onRemoveActionClick: (item: UploadItem) => void;
     onUpgradeCTAClick?: () => void;
     onUploadsManagerActionClick: (status: UploadStatus) => void;
