@@ -1,4 +1,4 @@
-import boxLanguageKeys from '@box/languages';
+import boxLanguages from '@box/languages';
 
 // Webpack's require.context includes only bundle files present at compile time.
 // Locales without i18n/<locale>.js are skipped by buildLanguageBundles, so Storybook
@@ -6,7 +6,7 @@ import boxLanguageKeys from '@box/languages';
 const bundleContext = require.context('../i18n/bundles', false, /^\.\/[^/]+\.js$/);
 const bundleKeys = new Set(bundleContext.keys());
 
-const messages = boxLanguageKeys.reduce((bundles, language) => {
+const messages = boxLanguages.reduce((bundles, language) => {
     const key = `./${language}.js`;
     if (!bundleKeys.has(key)) {
         return bundles;

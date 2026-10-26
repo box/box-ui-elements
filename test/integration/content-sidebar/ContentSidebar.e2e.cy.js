@@ -1,5 +1,4 @@
 // <reference types="Cypress" />
-
 describe('ContentSidebar', () => {
     describe('navigation buttons', () => {
         beforeEach(() => {
