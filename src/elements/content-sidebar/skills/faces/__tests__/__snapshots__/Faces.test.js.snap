@@ -13,6 +13,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
     text={
       <FormattedMessage
         defaultMessage="Edit"
+        description="Label for an edit action"
         id="be.editLabel"
       />
     }
@@ -57,6 +58,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render err
 >
   <FormattedMessage
     defaultMessage="We’re sorry, no skills information was found."
+    description="Error message when a skill has no data"
     id="be.skillNoInfoFoundError"
   />
 </LoadingIndicatorWrapper>
@@ -121,6 +123,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
     text={
       <FormattedMessage
         defaultMessage="Edit"
+        description="Label for an edit action"
         id="be.editLabel"
       />
     }
@@ -170,6 +173,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Label for cancel action."
         id="be.cancel"
       />
     </Button>
@@ -180,6 +184,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
     >
       <FormattedMessage
         defaultMessage="Save"
+        description="Label for save action."
         id="be.save"
       />
     </PrimaryButton>

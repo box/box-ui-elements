@@ -16,6 +16,7 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
   title={
     <FormattedMessage
       defaultMessage="Create Approval Task"
+      description="title for approval task popup"
       id="be.contentSidebar.addTask.approval.title"
     />
   }
@@ -52,6 +53,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   title={
     <FormattedMessage
       defaultMessage="Create Approval Task"
+      description="title for approval task popup"
       id="be.contentSidebar.addTask.approval.title"
     />
   }
@@ -89,6 +91,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   title={
     <FormattedMessage
       defaultMessage="Modify Approval Task"
+      description="title for when editing an existing approval task"
       id="be.contentSidebar.editTask.approval.title"
     />
   }
@@ -126,6 +129,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
   title={
     <FormattedMessage
       defaultMessage="Create General Task"
+      description="title for general task popup"
       id="be.contentSidebar.addTask.general.title"
     />
   }
@@ -163,6 +167,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
   title={
     <FormattedMessage
       defaultMessage="Modify General Task"
+      description="modal title for when editing an existing general task"
       id="be.contentSidebar.editTask.general.title"
     />
   }

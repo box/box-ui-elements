@@ -20,6 +20,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
   title={
     <FormattedMessage
       defaultMessage="Invite to {itemName}"
+      description="Title of the Invite Collaborators Modal. {itemName} is the name of the file / folder being shared"
       id="boxui.share.inviteCollaboratorsModalTitle"
       values={
         {
@@ -38,6 +39,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
     label={
       <FormattedMessage
         defaultMessage="Invite"
+        description="Label of the field where a user designates who to invite to collaborate on an item"
         id="boxui.share.inviteFieldLabel"
       />
     }
@@ -67,6 +69,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Text on button to cancel and close the invite collaborators modal."
         id="boxui.share.inviteCollaboratorsModalCancelButton"
       />
     </Button>
@@ -76,6 +79,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
     >
       <FormattedMessage
         defaultMessage="Send Invites"
+        description="Text on button to send invitations to collaborators for an item"
         id="boxui.share.inviteCollaboratorsModalSendInvites"
       />
     </PrimaryButton>

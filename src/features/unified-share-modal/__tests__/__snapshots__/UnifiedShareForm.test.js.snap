@@ -22,6 +22,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -30,6 +31,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -40,6 +42,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -56,6 +59,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -81,12 +85,14 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -177,6 +183,7 @@ exports[`features/unified-share-modal/UnifiedShareForm openEmailSharedLinkForm()
       contactsFieldLabel={
         <FormattedMessage
           defaultMessage="Email Shared Link"
+          description="Field label for shared link recipient list (title-case)"
           id="boxui.unifiedShare.sendSharedLinkFieldLabel"
         />
       }
@@ -223,6 +230,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -231,6 +239,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -241,6 +250,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -257,6 +267,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -282,12 +293,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -388,6 +401,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -396,6 +410,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -406,6 +421,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -422,6 +438,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -447,12 +464,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -553,6 +572,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -561,6 +581,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -571,6 +592,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -587,6 +609,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -612,12 +635,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -723,6 +748,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -731,6 +757,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -741,6 +768,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -757,6 +785,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -782,12 +811,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -889,6 +920,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -897,6 +929,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -907,6 +940,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -923,6 +957,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -948,12 +983,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -1056,6 +1093,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -1064,6 +1102,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -1074,6 +1113,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -1090,6 +1130,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -1115,12 +1156,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -1192,6 +1235,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -1200,6 +1244,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -1210,6 +1255,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -1226,6 +1272,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -1251,12 +1298,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="Collaborators cannot be added to bookmarks."
+              description="Invite Collaborators disabled state tooltip due to item being weblink"
               id="boxui.unifiedShare.inviteDisabledWeblinkTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -1359,6 +1408,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -1367,6 +1417,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -1377,6 +1428,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -1393,6 +1445,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -1418,12 +1471,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -1526,6 +1581,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -1534,6 +1590,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -1544,6 +1601,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -1560,6 +1618,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -1585,12 +1644,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -1694,6 +1755,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -1702,6 +1764,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -1712,6 +1775,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -1728,6 +1792,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -1753,12 +1818,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -1872,6 +1939,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -1880,6 +1948,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -1890,6 +1959,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -1906,6 +1976,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -1931,12 +2002,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -2038,6 +2111,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -2046,6 +2120,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -2056,6 +2131,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -2072,6 +2148,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -2097,12 +2174,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -2208,6 +2287,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -2216,6 +2296,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -2226,6 +2307,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -2242,6 +2324,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -2267,12 +2350,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -2375,6 +2460,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -2383,6 +2469,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -2393,6 +2480,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -2409,6 +2497,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -2434,12 +2523,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }
@@ -2541,6 +2632,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
+              description="This title appears in the callout when loading the modal, to let users know about the new UI"
               id="boxui.unifiedShare.ftuxNewUsmUserTitle"
             />
           </h4>
@@ -2549,6 +2641,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           >
             <FormattedMessage
               defaultMessage="We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+              description="This text describes the purpose of the new UI, using the button label to open the modal"
               id="boxui.unifiedShare.ftuxNewUSMUserBody"
             />
              
@@ -2559,6 +2652,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Read more about shared link security here."
+                description="Text on the link which allows to learn more about link security"
                 id="boxui.unifiedShare.ftuxLinkText"
               />
             </Link>
@@ -2575,6 +2669,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             >
               <FormattedMessage
                 defaultMessage="Got it"
+                description="This is label for the button so a user understands the new interface"
                 id="boxui.unifiedShare.ftuxConfirmLabel"
               />
             </Button>
@@ -2600,12 +2695,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           contactsFieldDisabledTooltip={
             <FormattedMessage
               defaultMessage="You do not have permission to invite collaborators."
+              description="Invite Collaborators disabled state tooltip"
               id="boxui.unifiedShare.inviteDisabledTooltip"
             />
           }
           contactsFieldLabel={
             <FormattedMessage
               defaultMessage="Invite People"
+              description="Label of the field where a user designates who to invite to collaborate on an item"
               id="boxui.unifiedShare.inviteFieldLabel"
             />
           }

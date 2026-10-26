@@ -19,6 +19,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -66,6 +67,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -118,6 +120,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -173,6 +176,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         text={
           <FormattedMessage
             defaultMessage="Share this item with coworkers by entering their email addresses"
+            description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
             id="boxui.unifiedShare.enterEmailAddressesCalloutText"
           />
         }
@@ -204,6 +208,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     label={
       <FormattedMessage
         defaultMessage="Message"
+        description="Label for "Message" text box to email the shared Link"
         id="boxui.unifiedShare.message"
       />
     }
@@ -223,6 +228,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Cancel button text"
         id="boxui.core.cancel"
       />
     </Button>
@@ -233,6 +239,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Send"
+        description="Send button text"
         id="boxui.core.send"
       />
     </PrimaryButton>
@@ -259,6 +266,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -289,6 +297,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     label={
       <FormattedMessage
         defaultMessage="Message"
+        description="Label for "Message" text box to email the shared Link"
         id="boxui.unifiedShare.message"
       />
     }
@@ -308,6 +317,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Cancel button text"
         id="boxui.core.cancel"
       />
     </Button>
@@ -318,6 +328,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Send"
+        description="Send button text"
         id="boxui.core.send"
       />
     </PrimaryButton>
@@ -344,6 +355,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -396,6 +408,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -426,6 +439,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     label={
       <FormattedMessage
         defaultMessage="Message"
+        description="Label for "Message" text box to email the shared Link"
         id="boxui.unifiedShare.message"
       />
     }
@@ -445,6 +459,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Cancel button text"
         id="boxui.core.cancel"
       />
     </Button>
@@ -455,6 +470,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Send"
+        description="Send button text"
         id="boxui.core.send"
       />
     </PrimaryButton>
@@ -486,6 +502,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -516,6 +533,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     label={
       <FormattedMessage
         defaultMessage="Message"
+        description="Label for "Message" text box to email the shared Link"
         id="boxui.unifiedShare.message"
       />
     }
@@ -535,6 +553,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Cancel button text"
         id="boxui.core.cancel"
       />
     </Button>
@@ -545,6 +564,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Send"
+        description="Send button text"
         id="boxui.core.send"
       />
     </PrimaryButton>
@@ -571,6 +591,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -601,6 +622,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     label={
       <FormattedMessage
         defaultMessage="Message"
+        description="Label for "Message" text box to email the shared Link"
         id="boxui.unifiedShare.message"
       />
     }
@@ -622,6 +644,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     </span>
     <FormattedMessage
       defaultMessage="This content will be shared with external collaborators."
+      description="Text shown in share modal when there is at least one external collaborators"
       id="boxui.unifiedShare.contentSharedWithExternalCollaborators"
     />
   </div>
@@ -636,6 +659,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Cancel button text"
         id="boxui.core.cancel"
       />
     </Button>
@@ -646,6 +670,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
     >
       <FormattedMessage
         defaultMessage="Send"
+        description="Send button text"
         id="boxui.core.send"
       />
     </PrimaryButton>
@@ -670,6 +695,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       text={
         <FormattedMessage
           defaultMessage="Based on your usage, we think {fullName} would be interested in this file."
+          description="Tooltip description to explain recommendation for sharing tooltip"
           id="boxui.unifiedShare.recommendedSharingTooltipCalloutText"
           values={
             {
@@ -722,6 +748,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -769,6 +796,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }
@@ -816,6 +844,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
       text={
         <FormattedMessage
           defaultMessage="Share this item with coworkers by entering their email addresses"
+          description="Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with"
           id="boxui.unifiedShare.enterEmailAddressesCalloutText"
         />
       }

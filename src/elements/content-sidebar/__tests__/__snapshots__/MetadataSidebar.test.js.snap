@@ -8,6 +8,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }
@@ -38,6 +39,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }
@@ -73,6 +75,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }
@@ -103,6 +106,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render error w
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }
@@ -111,6 +115,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render error w
     title={
       <FormattedMessage
         defaultMessage="Error"
+        description="Generic error label."
         id="be.error"
       />
     }
@@ -128,6 +133,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }
@@ -144,6 +150,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }
@@ -160,6 +167,7 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render loading
   title={
     <FormattedMessage
       defaultMessage="Metadata"
+      description="Title for the preview metadata."
       id="be.sidebarMetadataTitle"
     />
   }

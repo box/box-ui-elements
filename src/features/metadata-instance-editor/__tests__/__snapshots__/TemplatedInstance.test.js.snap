@@ -7,6 +7,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
   >
     <MemoizedFormattedMessage
       defaultMessage="All attributes in this template have been hidden."
+      description="Informational text below collapsible header indicating that all fields for this template are hidden"
       id="boxui.metadataInstanceEditor.allAttributesAreHidden"
     />
   </div>
@@ -167,6 +168,7 @@ exports[`features/metadata-instance-editor/fields/TemplatedInstance should corre
   >
     <MemoizedFormattedMessage
       defaultMessage="There are no attributes in this template."
+      description="Informational text below collapsible header indicating that there are no attributes for this template"
       id="boxui.metadataInstanceEditor.noAttributesForTemplate"
     />
   </div>

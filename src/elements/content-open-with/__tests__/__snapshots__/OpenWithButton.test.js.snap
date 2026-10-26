@@ -36,6 +36,7 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
   text={
     <FormattedMessage
       defaultMessage="No integrations are available for this file"
+      description="Message to the user when there are no Open With integrations"
       id="be.emptyOpenWithDescription"
     />
   }
@@ -68,6 +69,7 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
   text={
     <FormattedMessage
       defaultMessage="No integrations are available for this file"
+      description="Message to the user when there are no Open With integrations"
       id="be.emptyOpenWithDescription"
     />
   }
@@ -100,6 +102,7 @@ exports[`elements/content-open-with/OpenWithButton should render with the correc
   text={
     <FormattedMessage
       defaultMessage="No integrations are available for this file"
+      description="Message to the user when there are no Open With integrations"
       id="be.emptyOpenWithDescription"
     />
   }

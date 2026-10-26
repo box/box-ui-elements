@@ -30,6 +30,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should have no editable p
     title={
       <FormattedMessage
         defaultMessage="Skill Card"
+        description="Label for default skill section in the preview sidebar"
         id="be.defaultSkill"
       />
     }
@@ -99,6 +100,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render only the va
     title={
       <FormattedMessage
         defaultMessage="Skill Card"
+        description="Label for default skill section in the preview sidebar"
         id="be.defaultSkill"
       />
     }
@@ -204,6 +206,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
     title={
       <FormattedMessage
         defaultMessage="Faces"
+        description="Label for face skill section in the preview sidebar"
         id="be.faceSkill"
       />
     }
@@ -278,6 +281,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
     title={
       <FormattedMessage
         defaultMessage="Transcript"
+        description="Label for transcript skill section in the preview sidebar"
         id="be.transcriptSkill"
       />
     }
@@ -350,6 +354,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
     title={
       <FormattedMessage
         defaultMessage="Topics"
+        description="Label for keywords/topics skill section in the preview sidebar"
         id="be.topicsSkill"
       />
     }
@@ -422,6 +427,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
     title={
       <FormattedMessage
         defaultMessage="Status"
+        description="Label for status skill card in the preview sidebar"
         id="be.statusSkill"
       />
     }
@@ -496,6 +502,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
     title={
       <FormattedMessage
         defaultMessage="Error"
+        description="Generic error label."
         id="be.error"
       />
     }
