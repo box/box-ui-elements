@@ -13,6 +13,7 @@ exports[`features/metadata-instance-editor/fields/Footer should correctly render
     >
       <FormattedMessage
         defaultMessage="Remove"
+        description="Label to remove a template"
         id="boxui.metadataInstanceEditor.removeTemplate"
       />
     </PlainButton>
@@ -29,6 +30,7 @@ exports[`features/metadata-instance-editor/fields/Footer should correctly render
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Label for cancel button"
         id="boxui.metadataInstanceEditor.metadataCancel"
       />
     </Button>

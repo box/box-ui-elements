@@ -6,6 +6,7 @@ exports[`features/item-details/EditableURL render() should render component with
   error={
     <FormattedMessage
       defaultMessage="Required Field"
+      description="Error message for when a required field is missing"
       id="boxui.validation.requiredError"
     />
   }
@@ -28,6 +29,7 @@ exports[`features/item-details/EditableURL render() should render component with
   error={
     <FormattedMessage
       defaultMessage="Invalid URL"
+      description="Error message for when an invalid URL is entered"
       id="boxui.validation.URLError"
     />
   }

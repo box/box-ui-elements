@@ -12,6 +12,7 @@ exports[`components/message-preview-content/PreviewErrorNotification.js should r
   >
     <FormattedMessage
       defaultMessage="Sorry, we're having trouble showing this image. "
+      description="Error message for preview not loading an image"
       id="be.messageCenter.previewError"
     />
   </div>

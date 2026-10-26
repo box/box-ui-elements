@@ -13,6 +13,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -28,6 +29,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
         <span>
           <FormattedMessage
             defaultMessage="Shared link is created"
+            description="Call to action text for allowing the user to remove an existing shared link"
             id="boxui.unifiedShare.linkShareOn"
           />
           <Tooltip
@@ -74,6 +76,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -85,6 +88,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -184,6 +188,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -207,6 +212,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         label={
           <FormattedMessage
             defaultMessage="Shared link is created"
+            description="Call to action text for allowing the user to remove an existing shared link"
             id="boxui.unifiedShare.linkShareOn"
           />
         }
@@ -235,6 +241,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -246,6 +253,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -341,6 +349,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -364,6 +373,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         label={
           <FormattedMessage
             defaultMessage="Create shared link"
+            description="Call to action text for allowing the user to create a new shared link"
             id="boxui.unifiedShare.linkShareOff"
           />
         }
@@ -387,6 +397,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -401,6 +412,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       label={
         <FormattedMessage
           defaultMessage="Shared link is created"
+          description="Call to action text for allowing the user to remove an existing shared link"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -428,6 +440,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -439,6 +452,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -538,6 +552,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -552,6 +567,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       label={
         <FormattedMessage
           defaultMessage="Create shared link"
+          description="Call to action text for allowing the user to create a new shared link"
           id="boxui.unifiedShare.linkShareOff"
         />
       }
@@ -578,6 +594,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
     label={
       <FormattedMessage
         defaultMessage="Create shared link"
+        description="Call to action text for allowing the user to create a new shared link"
         id="boxui.unifiedShare.linkShareOff"
       />
     }
@@ -603,6 +620,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
     label={
       <FormattedMessage
         defaultMessage="Shared link is created"
+        description="Call to action text for allowing the user to remove an existing shared link"
         id="boxui.unifiedShare.linkShareOn"
       />
     }
@@ -624,6 +642,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -647,6 +666,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         label={
           <FormattedMessage
             defaultMessage="Shared link is created"
+            description="Call to action text for allowing the user to remove an existing shared link"
             id="boxui.unifiedShare.linkShareOn"
           />
         }
@@ -675,6 +695,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -686,6 +707,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -754,6 +776,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       >
         <FormattedMessage
           defaultMessage="Can edit"
+          description="Label for a shared link permission to show for an editable box note / file"
           id="boxui.unifiedShare.sharedLinkPermissionsEdit"
         />
       </PlainButton>
@@ -775,6 +798,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -789,6 +813,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       label={
         <FormattedMessage
           defaultMessage="Shared link is created"
+          description="Call to action text for allowing the user to remove an existing shared link"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -816,6 +841,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -827,6 +853,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -927,6 +954,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -941,6 +969,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       label={
         <FormattedMessage
           defaultMessage="Shared link is created"
+          description="Call to action text for allowing the user to remove an existing shared link"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -968,6 +997,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -979,6 +1009,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -1078,6 +1109,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -1092,6 +1124,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       label={
         <FormattedMessage
           defaultMessage="Shared link is created"
+          description="Call to action text for allowing the user to remove an existing shared link"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -1119,6 +1152,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -1130,6 +1164,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -1229,6 +1264,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -1243,6 +1279,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       label={
         <FormattedMessage
           defaultMessage="Shared link is created"
+          description="Call to action text for allowing the user to remove an existing shared link"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -1270,6 +1307,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -1281,6 +1319,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }
@@ -1390,6 +1429,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render settings l
 >
   <FormattedMessage
     defaultMessage="Link Settings"
+    description="Description of the shared link settings modal entry point. This shows link-specific options."
     id="boxui.unifiedShare.sharedLinkSettings"
   />
 </PlainButton>
@@ -1408,6 +1448,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
     >
       <FormattedMessage
         defaultMessage="Share Link"
+        description="Label for the shared link section of the unified share modal"
         id="boxui.unifiedShare.sharedLinkSectionLabel"
       />
     </span>
@@ -1422,6 +1463,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       label={
         <FormattedMessage
           defaultMessage="Shared link is created"
+          description="Call to action text for allowing the user to remove an existing shared link"
           id="boxui.unifiedShare.linkShareOn"
         />
       }
@@ -1449,6 +1491,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
         buttonDefaultText={
           <FormattedMessage
             defaultMessage="Copy"
+            description="Copy button text"
             id="boxui.core.copy"
           />
         }
@@ -1460,6 +1503,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
+            description="Copy button text after user clicks on it"
             id="boxui.core.copied"
           />
         }

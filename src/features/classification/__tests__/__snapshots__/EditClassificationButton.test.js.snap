@@ -10,6 +10,7 @@ exports[`features/classification/EditClassificationButton should render correctl
 >
   <FormattedMessage
     defaultMessage="Add"
+    description="Button to add classification on an item"
     id="boxui.classification.add"
   />
 </PlainButton>
@@ -25,6 +26,7 @@ exports[`features/classification/EditClassificationButton should render correctl
 >
   <FormattedMessage
     defaultMessage="Edit"
+    description="Button to edit classification on an item"
     id="boxui.classification.edit"
   />
 </PlainButton>

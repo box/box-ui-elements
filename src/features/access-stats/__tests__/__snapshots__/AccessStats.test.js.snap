@@ -98,6 +98,7 @@ exports[`features/access-stats/AccessStats should render access stats properly w
   >
     <FormattedMessage
       defaultMessage="View Details"
+      description="The text in the link in the sidebar to open up the access stats popup"
       id="boxui.accessStats.accessStatsViewDetails"
     />
   </PlainButton>
@@ -149,6 +150,7 @@ exports[`features/access-stats/AccessStats should render view more button with e
   >
     <FormattedMessage
       defaultMessage="View Details"
+      description="The text in the link in the sidebar to open up the access stats popup"
       id="boxui.accessStats.accessStatsViewDetails"
     />
   </PlainButton>

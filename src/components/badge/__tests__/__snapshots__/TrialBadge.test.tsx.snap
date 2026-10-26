@@ -7,6 +7,7 @@ exports[`components/badge/TrialBadge should render a trial badge 1`] = `
 >
   <FormattedMessage
     defaultMessage="TRIAL"
+    description="Text for the trial badge"
     id="boxui.badges.trial"
   />
 </Badge>

@@ -11,6 +11,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
   >
     <FormattedMessage
       defaultMessage="Shared with"
+      description="Label for collaborator avatars"
       id="boxui.collaboratorAvatars.collaboratorAvatarsLabel"
     />
   </div>
@@ -54,6 +55,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
   >
     <FormattedMessage
       defaultMessage="Shared with"
+      description="Label for collaborator avatars"
       id="boxui.collaboratorAvatars.collaboratorAvatarsLabel"
     />
   </div>
@@ -91,6 +93,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
   >
     <FormattedMessage
       defaultMessage="Shared with"
+      description="Label for collaborator avatars"
       id="boxui.collaboratorAvatars.collaboratorAvatarsLabel"
     />
   </div>

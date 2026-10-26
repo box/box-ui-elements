@@ -16,6 +16,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         >
           <FormattedMessage
             defaultMessage="APPROVED"
+            description="Label for an approved task (in upper-case in supported language)"
             id="be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel"
           >
             <div />
@@ -43,6 +44,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         >
           <FormattedMessage
             defaultMessage="COMPLETED"
+            description="Label for an completed task (in upper-case in supported language)"
             id="be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel"
           >
             <div />
@@ -70,6 +72,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         >
           <FormattedMessage
             defaultMessage="IN PROGRESS"
+            description="Label for a task in progress (in upper-case in supported language)"
             id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
           >
             <div />
@@ -97,6 +100,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         >
           <FormattedMessage
             defaultMessage="IN PROGRESS"
+            description="Label for a task in progress (in upper-case in supported language)"
             id="be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel"
           >
             <div />
@@ -124,6 +128,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskStatus should render
         >
           <FormattedMessage
             defaultMessage="REJECTED"
+            description="Label for a task rejected (in upper-case in supported language)"
             id="be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel"
           >
             <div />
