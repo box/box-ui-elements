@@ -1,5 +1,3 @@
-import localize from '../../support/i18n';
-
 // <reference types="Cypress" />
 const helpers = {
     loadBasic(args = '') {
@@ -25,9 +23,7 @@ const helpers = {
         return cy.getByTestId('content-picker').find('.bdl-Pagination-nav').children();
     },
     getPaginationCountButton: pageNumber => {
-        return cy
-            .getByTestId('content-picker')
-            .contains(localize('be.pagination.pageStatus', { pageNumber, pageCount: 2 }));
+        return cy.getByTestId('content-picker').contains(`${pageNumber} of 2`);
     },
     getPaginationDropdown: () => {
         return cy.get('.bdl-Pagination-dropdownMenu').first().children();

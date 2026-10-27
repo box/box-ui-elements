@@ -39,6 +39,7 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
     >
       <FormattedMessage
         defaultMessage="Cancel"
+        description="Label for cancel action."
         id="be.cancel"
       />
     </Button>
@@ -49,6 +50,7 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
     >
       <FormattedMessage
         defaultMessage="Save"
+        description="Label for save action."
         id="be.save"
       />
     </PrimaryButton>

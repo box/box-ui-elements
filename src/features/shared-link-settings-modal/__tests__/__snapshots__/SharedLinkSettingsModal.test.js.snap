@@ -6,6 +6,7 @@ exports[`features/shared-link-settings-modal/SharedLinkSettingsModal renderModal
 >
   <FormattedMessage
     defaultMessage="Shared Link Settings"
+    description="Title for shared link settings modal (title-case)"
     id="boxui.share.sharedLinkSettings.modalTitle"
   />
   <Classification

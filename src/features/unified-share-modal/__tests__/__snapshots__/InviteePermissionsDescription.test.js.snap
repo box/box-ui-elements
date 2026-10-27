@@ -6,6 +6,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Upload, download, preview, share, edit, and delete"
+    description="Description for Editor permission level in invitee permission dropdown"
     id="boxui.unifiedShare.editorLevelDescription"
   />
 </small>
@@ -17,6 +18,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Manage security, upload, download, preview, share, edit, and delete"
+    description="Description for Co-owner permission level in permissions table"
     id="boxui.unifiedShare.coownerLevelDescription"
   />
 </small>
@@ -28,6 +30,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Preview only"
+    description="Description for Previewer permission level in invitee permission dropdown"
     id="boxui.unifiedShare.previewerLevelDescription"
   />
 </small>
@@ -39,6 +42,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Upload and preview"
+    description="Description for Previewer Uploader permission level in invitee permission dropdown"
     id="boxui.unifiedShare.previewerUploaderLevelDescription"
   />
 </small>
@@ -50,6 +54,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Download, preview, and share"
+    description="Description for Viewer permission level in invitee permission dropdown"
     id="boxui.unifiedShare.viewerLevelDescription"
   />
 </small>
@@ -61,6 +66,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Upload, download, preview, share, and edit"
+    description="Text for Viewer Uploader permission level in invitee permission dropdown"
     id="boxui.unifiedShare.viewerUploaderLevelDescription"
   />
 </small>
@@ -72,6 +78,7 @@ exports[`features/unified-share-modal/InviteePermissionsDescription it should re
 >
   <FormattedMessage
     defaultMessage="Upload only"
+    description="Description for Uploader permission level in invitee permission dropdown"
     id="boxui.unifiedShare.uploaderLevelDescription"
   />
 </small>

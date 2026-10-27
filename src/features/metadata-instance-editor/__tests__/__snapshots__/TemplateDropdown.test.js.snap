@@ -91,6 +91,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add"
+        description="Label to add a template"
         id="boxui.metadataInstanceEditor.templateAdd"
       />
     </MenuToggle>
@@ -161,6 +162,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add"
+        description="Label to add a template"
         id="boxui.metadataInstanceEditor.templateAdd"
       />
     </MenuToggle>
@@ -231,6 +233,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add"
+        description="Label to add a template"
         id="boxui.metadataInstanceEditor.templateAdd"
       />
     </MenuToggle>
@@ -259,6 +262,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
     >
       <FormattedMessage
         defaultMessage="Zero templates"
+        description="Text to indicate that the server has no templates"
         id="boxui.metadataInstanceEditor.templatesServerHasNoTemplates"
       />
     </i>
@@ -293,6 +297,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add"
+        description="Label to add a template"
         id="boxui.metadataInstanceEditor.templateAdd"
       />
     </MenuToggle>
@@ -321,6 +326,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
     >
       <FormattedMessage
         defaultMessage="All templates have been added"
+        description="Text to indicate that all the templates have been added"
         id="boxui.metadataInstanceEditor.templatesNoRemainingTemplates"
       />
     </i>
@@ -355,6 +361,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add"
+        description="Label to add a template"
         id="boxui.metadataInstanceEditor.templateAdd"
       />
     </MenuToggle>
@@ -412,6 +419,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render plain
     <MenuToggle>
       <FormattedMessage
         defaultMessage="Add"
+        description="Label to add a template"
         id="boxui.metadataInstanceEditor.templateAdd"
       />
     </MenuToggle>

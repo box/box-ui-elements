@@ -18,6 +18,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render c
       >
         <FormattedMessage
           defaultMessage="Manage All"
+          description="Manage all link text on collaborator list"
           id="boxui.collaboratorAvatars.manageAllLinkText"
         />
       </span>
@@ -103,6 +104,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render c
     >
       <FormattedMessage
         defaultMessage="Done"
+        description="Done button text"
         id="boxui.core.done"
       />
     </Button>
@@ -128,6 +130,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
       >
         <FormattedMessage
           defaultMessage="Manage All"
+          description="Manage all link text on collaborator list"
           id="boxui.collaboratorAvatars.manageAllLinkText"
         />
       </span>
@@ -207,6 +210,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
     >
       <FormattedMessage
         defaultMessage="Done"
+        description="Done button text"
         id="boxui.core.done"
       />
     </Button>
@@ -232,6 +236,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
       >
         <FormattedMessage
           defaultMessage="Manage All"
+          description="Manage all link text on collaborator list"
           id="boxui.collaboratorAvatars.manageAllLinkText"
         />
       </span>
@@ -297,6 +302,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
         >
           <FormattedMessage
             defaultMessage="View additional people"
+            description="Text to display in collaborator list if there are more items"
             id="boxui.collaboratorAvatars.viewAdditionalPeopleText"
           />
         </Link>
@@ -312,6 +318,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
     >
       <FormattedMessage
         defaultMessage="Done"
+        description="Done button text"
         id="boxui.core.done"
       />
     </Button>

@@ -11,7 +11,17 @@ import type {
 } from '@box/metadata-taxonomy-picker';
 import type { CreateTaxonomyItemsService } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import type API from '../../../api';
-import type { MetadataOptionEntry } from '../../../common/types/metadata';
+
+/**
+ * `/options` entry as consumed by `metadataTaxonomyFetcher`: a `TaxonomyEntry` plus the
+ * tree fields passed through to the combobox. Ancestors are always objects here.
+ */
+type MetadataOptionListEntry = Omit<TaxonomyEntry, 'ancestors'> & {
+    parentId?: string | null;
+    nodePath?: string[] | null;
+    deprecated?: boolean;
+    ancestors?: TaxonomyEntryAncestor[];
+};
 
 type MetadataTaxonomyListEntry = {
     id?: string;
@@ -77,7 +87,7 @@ export const metadataTaxonomyFetcher = async (
     const { marker = null } = options;
 
     return {
-        options: metadataOptions.entries.map((metadataOption: MetadataOptionEntry) => ({
+        options: metadataOptions.entries.map((metadataOption: MetadataOptionListEntry) => ({
             value: metadataOption.id,
             displayValue: metadataOption.display_name || metadataOption.displayName,
             level: metadataOption.level,

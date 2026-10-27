@@ -117,11 +117,13 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
+    getComparedPreview?: Function,
     getViewer?: Function,
     getPreview?: Function,
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
+    onCommentVersionSelect?: (params: { fileVersionId: string, startMs: number }) => void,
     onFilterChange: (status?: ActivityFilterItemType) => void,
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
@@ -1361,6 +1363,43 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     };
 
+    /**
+     * Opens the file version a timestamped comment was made on. The annotations path carries the
+     * version, the same way an annotation from another version is opened.
+     */
+    handleCommentVersionSelect = ({
+        commentId,
+        fileVersionId,
+        startMs,
+    }: {
+        commentId: string,
+        fileVersionId: string,
+        startMs: number,
+    }): void => {
+        const {
+            getAnnotationsPath,
+            history,
+            internalSidebarNavigationHandler,
+            onCommentVersionSelect,
+            routerDisabled,
+        } = this.props;
+
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler({
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryId: commentId,
+                activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                fileVersionId,
+            });
+        } else {
+            history.push(getAnnotationsPath(fileVersionId, commentId));
+        }
+
+        if (onCommentVersionSelect) {
+            onCommentVersionSelect({ fileVersionId, startMs });
+        }
+    };
+
     handleItemsFiltered = (status?: ActivityFilterItemType) => {
         const { onFilterChange } = this.props;
 
@@ -1522,6 +1561,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         createTask={this.createTask}
                         currentUser={currentUser}
                         feedItems={this.getFilteredFeedItems()}
+                        getComparedPreview={this.props.getComparedPreview}
                         getPreview={this.props.getPreview}
                         getViewer={this.props.getViewer}
                         file={file}
@@ -1544,6 +1584,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         onCommentDelete={this.deleteComment}
                         onCommentSelect={this.handleCommentSelect}
                         onCommentUpdate={this.updateComment}
+                        onCommentVersionSelect={this.handleCommentVersionSelect}
                         onReplyCreate={this.createReply}
                         onReplyDelete={this.deleteReply}
                         onReplyUpdate={({ id, onError, onSuccess, parentId, permissions, text }) =>

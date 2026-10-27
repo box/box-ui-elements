@@ -652,8 +652,8 @@ describe('elements/content-preview/ContentPreview', () => {
 
         test('should call preview show with startAt params if provided', async () => {
             const wrapper = getWrapper(props);
+            wrapper.setState({ file });
             wrapper.setState({
-                file,
                 startAt: {
                     unit: 'pages',
                     value: 3,
@@ -679,6 +679,28 @@ describe('elements/content-preview/ContentPreview', () => {
                         },
                     },
                 }),
+            );
+        });
+
+        test('should clear startAt after one load so a later load starts from the beginning', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            wrapper.setState({ startAt: { unit: 'seconds', value: 5 } });
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({ fileOptions: { [file.id]: { startAt: { unit: 'seconds', value: 5 } } } }),
+            );
+            expect(wrapper.state('startAt')).toBeUndefined();
+
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({ fileOptions: {} }),
             );
         });
 
@@ -1511,6 +1533,13 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('isLoading')).toBe(true);
         });
 
+        test('should drop a pending startAt if fileId changes', () => {
+            wrapper.setState({ startAt: { unit: 'seconds', value: 5 } });
+            wrapper.setProps({ fileId: 'bar' });
+
+            expect(wrapper.state('startAt')).toBeUndefined();
+        });
+
         test("should load preview if fileId hasn't changed and shouldLoadPreview returns true", () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setProps({
@@ -1595,6 +1624,63 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.setProps({ isComparing: true });
 
             expect(livePreview.setComparisonMode).not.toHaveBeenCalled();
+        });
+
+        describe('comparison banner', () => {
+            const comparisonBanner = { onDownload: jest.fn() };
+
+            beforeEach(() => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+                instance.preview = {
+                    options: {},
+                    updateComparisonBanner: jest.fn(),
+                };
+            });
+
+            test('should push a changed banner to the live preview', () => {
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBe(comparisonBanner);
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(1);
+            });
+
+            test('should push an empty banner when the banner is cleared', () => {
+                wrapper.setProps({ comparisonBanner });
+                wrapper.setProps({ comparisonBanner: undefined });
+
+                expect(instance.preview.options.comparisonBanner).toEqual({});
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(2);
+            });
+
+            test('should not push the banner when it did not change', () => {
+                wrapper.setProps({ foo: 'bar' });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview is reloading anyway', () => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview has no updateComparisonBanner', () => {
+                instance.preview = { options: {} };
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+            });
+
+            test('should not push the banner when there is no live preview', () => {
+                instance.preview = undefined;
+
+                expect(() => wrapper.setProps({ comparisonBanner })).not.toThrow();
+            });
         });
     });
 
@@ -1970,6 +2056,24 @@ describe('elements/content-preview/ContentPreview', () => {
             const { instance, wrapper } = getComparingWrapper();
 
             instance.handleAnnotationSelect(getAnnotation('OLD'));
+
+            expect(wrapper.state('startAt')).toBeUndefined();
+        });
+    });
+
+    describe('handleCommentVersionSelect', () => {
+        test('should start the next preview load at the comment timestamp in seconds', () => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().handleCommentVersionSelect({ fileVersionId: 'OLD', startMs: 4623 });
+
+            expect(wrapper.state('startAt')).toEqual({ unit: 'seconds', value: 4.623 });
+        });
+
+        test('should not set startAt while comparing', () => {
+            const wrapper = getWrapper({ isComparing: true });
+
+            wrapper.instance().handleCommentVersionSelect({ fileVersionId: 'OLD', startMs: 4623 });
 
             expect(wrapper.state('startAt')).toBeUndefined();
         });

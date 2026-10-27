@@ -543,6 +543,35 @@ describe('elements/content-sidebar/activity-feed-v2/FeedItemRow', () => {
             expect(mockedSeekMediaToMs).toHaveBeenCalledWith(8055, undefined);
         });
 
+        test('should hand the badge click to onCommentTimestampSelect instead of seeking', () => {
+            const onCommentSelect = jest.fn();
+            const onCommentTimestampSelect = jest.fn();
+            const timestampedComment: TransformedCommentItem = {
+                ...mockComment,
+                annotationTarget: { timestamp: '0:08', type: AnnotationBadgeType.Frame },
+                annotationTimestampMs: 8055,
+                annotationTimestampVersionId: '99',
+            };
+            render(
+                <FeedItemRow
+                    {...defaultProps}
+                    item={timestampedComment}
+                    onCommentSelect={onCommentSelect}
+                    onCommentTimestampSelect={onCommentTimestampSelect}
+                />,
+            );
+
+            lastThreadedAnnotationProps.onAnnotationBadgeClick?.('comment-1');
+
+            expect(onCommentTimestampSelect).toHaveBeenCalledWith({
+                commentId: 'comment-1',
+                fileVersionId: '99',
+                startMs: 8055,
+            });
+            expect(mockedSeekMediaToMs).not.toHaveBeenCalled();
+            expect(onCommentSelect).not.toHaveBeenCalled();
+        });
+
         test('should select the comment when its timestamp badge is clicked', () => {
             const onCommentSelect = jest.fn();
             const timestampedComment: TransformedCommentItem = {

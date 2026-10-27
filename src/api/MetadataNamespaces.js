@@ -6,10 +6,10 @@
  * core scoped metadata flows. Methods are delegated from Metadata for a stable
  * public API (`api.getMetadataAPI().listNamespaces(...)`).
  *
- * Migration mode lives on the Metadata host (defaults to SCOPED). The sidebar
- * may overwrite it from getMetadata options after opt-in. This class does
- * not fetch enterprise-configuration flags. Auth is the same file-scoped
- * TokenService path as `getTemplates` (`id: file_…`).
+ * Migration mode lives on the Metadata host (defaults to SCOPED) and is set
+ * when that client is constructed. This class does not fetch
+ * enterprise-configuration flags. Auth is the same file-scoped TokenService
+ * path as `getTemplates` (`id: file_…`).
  */
 
 import getProp from 'lodash/get';
@@ -132,6 +132,10 @@ export default class MetadataNamespaces {
 
     /**
      * Lists templates under a namespace FQN with cursor pagination.
+     *
+     * Errors propagate so the picker can show its list error state. An empty
+     * success is `{ entries: [] }`. Swallowing a failure would let the caller
+     * prepend client-built rows, such as Custom Metadata, onto a failed list.
      */
     async listTemplatesForNamespace(
         file: BoxItem,
@@ -139,16 +143,12 @@ export default class MetadataNamespaces {
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
         const url = this.host.getMetadataTemplateUrlForScope(namespaceFqn);
-        try {
-            const response = await this.host.xhr.get({
-                url,
-                id: this.getRequestFileId(file),
-                params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
-            });
-            return getProp(response, 'data', { entries: [] });
-        } catch (e) {
-            return { entries: [] };
-        }
+        const response = await this.host.xhr.get({
+            url,
+            id: this.getRequestFileId(file),
+            params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
+        });
+        return getProp(response, 'data', { entries: [] });
     }
 
     /**

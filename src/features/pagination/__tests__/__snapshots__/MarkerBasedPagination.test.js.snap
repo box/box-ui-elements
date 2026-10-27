@@ -35,6 +35,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             text={
               <FormattedMessage
                 defaultMessage="Previous Page"
+                description="Previous page button tooltip"
                 id="be.pagination.previousPage"
               />
             }
@@ -47,6 +48,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               text={
                 <FormattedMessage
                   defaultMessage="Previous Page"
+                  description="Previous page button tooltip"
                   id="be.pagination.previousPage"
                 />
               }
@@ -138,6 +140,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             text={
               <FormattedMessage
                 defaultMessage="Next Page"
+                description="Next page button tooltip"
                 id="be.pagination.nextPage"
               />
             }
@@ -225,6 +228,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             text={
               <FormattedMessage
                 defaultMessage="Previous Page"
+                description="Previous page button tooltip"
                 id="be.pagination.previousPage"
               />
             }
@@ -284,6 +288,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             text={
               <FormattedMessage
                 defaultMessage="Next Page"
+                description="Next page button tooltip"
                 id="be.pagination.nextPage"
               />
             }
@@ -296,6 +301,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               text={
                 <FormattedMessage
                   defaultMessage="Next Page"
+                  description="Next page button tooltip"
                   id="be.pagination.nextPage"
                 />
               }
@@ -415,6 +421,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             text={
               <FormattedMessage
                 defaultMessage="Previous Page"
+                description="Previous page button tooltip"
                 id="be.pagination.previousPage"
               />
             }
@@ -427,6 +434,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               text={
                 <FormattedMessage
                   defaultMessage="Previous Page"
+                  description="Previous page button tooltip"
                   id="be.pagination.previousPage"
                 />
               }
@@ -518,6 +526,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
             text={
               <FormattedMessage
                 defaultMessage="Next Page"
+                description="Next page button tooltip"
                 id="be.pagination.nextPage"
               />
             }
@@ -530,6 +539,7 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
               text={
                 <FormattedMessage
                   defaultMessage="Next Page"
+                  description="Next page button tooltip"
                   id="be.pagination.nextPage"
                 />
               }

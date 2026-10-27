@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-// @ts-ignore: No ts definition
-import localize from '../../../../test/support/i18n';
 
-import messages from '../messages';
 import MetricSummary from '../MetricSummary';
 import { METRIC, PERIOD } from '../constants';
 import { GraphData } from '../types';
@@ -39,9 +36,9 @@ const mockUserData = [
 ] as unknown as GraphData;
 
 describe('features/content-insights/MetricSummary', () => {
-    const downloadHeaderMessage = localize(messages.downloadGraphType.id);
-    const peopleHeaderMessage = localize(messages.peopleTitle.id);
-    const previewHeaderMessage = localize(messages.previewGraphType.id);
+    const downloadHeaderMessage = 'DOWNLOADS';
+    const peopleHeaderMessage = 'PEOPLE';
+    const previewHeaderMessage = 'PREVIEWS';
 
     const getWrapper = (props = {}) => {
         return render(

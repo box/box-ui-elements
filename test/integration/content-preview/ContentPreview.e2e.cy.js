@@ -1,6 +1,4 @@
 // <reference types="Cypress" />
-import localize from '../../support/i18n';
-
 describe('ContentPreview', () => {
     const helpers = {
         checkPreviewHeader() {
@@ -166,7 +164,7 @@ describe('ContentPreview', () => {
             helpers.checkPreviewHeader();
         });
         it('Clicking the back button while previewing a previous version should return to the current version', () => {
-            cy.contains(localize('be.back')).click();
+            cy.contains('Back').click();
             helpers.checkPreviewHeader();
         });
         it('Clicking the back arrow while previewing a previous version should return to the current version', () => {

@@ -6,9 +6,6 @@ import { fireEvent, render, type RenderResult } from '@testing-library/react';
 
 import { BaseCommentMenu } from '../BaseCommentMenu';
 import { baseCommmentMenuDefaultProps } from '../stories/common';
-import localize from '../../../../../../../test/support/i18n';
-
-import messages from '../../messages';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -29,12 +26,12 @@ const getWrapper = props =>
 describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => {
     test.each`
         prop            | value    | message
-        ${'canResolve'} | ${true}  | ${localize(messages.commentResolveMenuItem.id)}
-        ${'canResolve'} | ${false} | ${localize(messages.commentResolveMenuItem.id)}
-        ${'canEdit'}    | ${true}  | ${localize(messages.commentEditMenuItem.id)}
-        ${'canEdit'}    | ${false} | ${localize(messages.commentEditMenuItem.id)}
-        ${'canDelete'}  | ${true}  | ${localize(messages.commentDeleteMenuItem.id)}
-        ${'canDelete'}  | ${false} | ${localize(messages.commentDeleteMenuItem.id)}
+        ${'canResolve'} | ${true}  | ${'Resolve'}
+        ${'canResolve'} | ${false} | ${'Resolve'}
+        ${'canEdit'}    | ${true}  | ${'Modify'}
+        ${'canEdit'}    | ${false} | ${'Modify'}
+        ${'canDelete'}  | ${true}  | ${'Delete'}
+        ${'canDelete'}  | ${false} | ${'Delete'}
     `(`should render appropriate menu items when $prop is $value`, ({ prop, value, message }) => {
         const wrapper = getWrapper({ [prop]: value });
         openMenu(wrapper);
@@ -55,7 +52,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => 
         `$should render unresolve menu item when canResolve us $canResolve and isResolved is $isResolved`,
         ({ canResolve, isResolved, should }) => {
             const wrapper = getWrapper({ canResolve, isResolved });
-            const message = localize(messages.commentUnresolveMenuItem.id);
+            const message = 'Unresolve';
             openMenu(wrapper);
             if (should === 'should') {
                 expect(wrapper.getByText(message)).toBeInTheDocument();
@@ -73,7 +70,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => 
         `$should render delete confirmation modal when isConfirmingDelete is $isConfirmingDelete`,
         ({ isConfirmingDelete, should }) => {
             const wrapper = getWrapper({ isConfirmingDelete });
-            const message = localize(messages.commentDeletePrompt.id);
+            const message = 'Are you sure you want to permanently delete this comment?';
             openMenu(wrapper);
             if (should === 'should') {
                 expect(wrapper.getByText(message)).toBeInTheDocument();
