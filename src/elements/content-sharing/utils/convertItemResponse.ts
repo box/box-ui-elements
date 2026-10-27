@@ -25,14 +25,15 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
 
     const {
         download_url: isDirectLinkAvailable,
+        expiration: canChangeExpiration,
         password: isPasswordAvailable,
         vanity_name: isVanityNameAvailable,
     } = shared_link_features;
 
     const {
-        can_download: isDownloadSettingAvailable,
-        can_invite_collaborator: canInvite,
-        can_set_share_access: canChangeAccessLevel,
+        can_download: isDownloadAvailable,
+        can_invite_collaborator: canInviteCollaborator,
+        can_set_share_access: canSetShareAccess,
         can_share: canShare,
     } = permissions;
 
@@ -40,14 +41,13 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
     let classificationData;
     if (classification) {
         const { color, definition, name: classificationName } = classification;
+
         classificationData = {
             colorId: API_TO_USM_CLASSIFICATION_COLORS_MAP[color],
             definition,
             name: classificationName,
         };
     }
-
-    const isEditAllowed = allowed_invitee_roles.includes(INVITEE_ROLE_EDITOR);
 
     let sharedLink;
     if (shared_link) {
@@ -56,16 +56,32 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             effective_access: access,
             effective_permission: permission,
             is_password_enabled: isPasswordEnabled,
+            one_time_passcode: oneTimePassword,
             unshared_at: expirationTimestamp,
             url,
             vanity_name: vanityName,
             vanity_url: vanityUrl,
         } = shared_link;
 
-        const isDownloadAllowed = permission === PERMISSION_CAN_DOWNLOAD || permission === PERMISSION_CAN_EDIT;
-        const canChangeDownload = canChangeAccessLevel && isDownloadSettingAvailable && access !== ACCESS_COLLAB; // access must be "company" or "open"
-        const canChangePassword = canChangeAccessLevel && isPasswordAvailable;
-        const canChangeExpiration = canChangeAccessLevel && isEditAllowed;
+        const isOtpAvailable = !!oneTimePassword;
+        const isDownloadEnabled = permission === PERMISSION_CAN_DOWNLOAD || permission === PERMISSION_CAN_EDIT;
+
+        const canChangeDownload = canSetShareAccess && isDownloadAvailable && access !== ACCESS_COLLAB; // access must be "company" or "open"
+        const canChangePassword = canSetShareAccess && isPasswordAvailable;
+        const canChangeOtp = canSetShareAccess && isOtpAvailable;
+
+        let otpAccessEntries;
+        let otpMode;
+        if (isOtpAvailable) {
+            const { allowlist = [], mode } = oneTimePassword;
+
+            otpAccessEntries = allowlist.map(entry => ({
+                createdAt: new Date(entry.created_at).getTime(),
+                type: entry.type,
+                value: entry.value,
+            }));
+            otpMode = mode;
+        }
 
         sharedLink = {
             access,
@@ -78,18 +94,22 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             permission,
             permissionLevels:
                 shared_link_permission_options ??
-                getAllowedPermissionLevels(canChangeAccessLevel, isDownloadSettingAvailable, permission),
+                getAllowedPermissionLevels(canSetShareAccess, isDownloadAvailable, permission),
             settings: {
                 canChangeDownload,
                 canChangeExpiration,
+                canChangeOtp,
                 canChangePassword,
                 canChangeVanityName: false,
                 isDirectLinkAvailable,
-                isDownloadAvailable: isDownloadSettingAvailable,
-                isDownloadEnabled: isDownloadAllowed,
+                isDownloadAvailable,
+                isDownloadEnabled,
+                isOtpAvailable,
                 isPasswordAvailable,
                 isPasswordEnabled,
                 isVanityNameAvailable,
+                otpAccessEntries,
+                otpMode,
             },
             url,
             vanityDomain: vanityUrl,
@@ -111,16 +131,16 @@ export const convertItemResponse = (itemApiData: ContentSharingItemAPIResponse):
             id,
             name,
             permissions: {
-                canInviteCollaborator: !!canInvite,
-                canSetShareAccess: canChangeAccessLevel,
-                canShare: !!canShare,
+                canInviteCollaborator,
+                canSetShareAccess,
+                canShare,
             },
             type,
         },
         ownedBy,
         sharedLink,
         sharingService: {
-            can_set_share_access: canChangeAccessLevel,
+            can_set_share_access: canSetShareAccess,
             can_share: canShare,
             ownerEmail: ownedBy.login,
             ownerId: ownedBy.id,

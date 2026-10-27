@@ -1,4 +1,5 @@
 import {
+    canonicalMetadataHome,
     getEnterpriseNamespaceFromInstances,
     getEnterpriseRootFromScopeOrNamespace,
     isTemplateExternallyOwned,
@@ -36,6 +37,18 @@ describe('api/metadataNamespaceUtils', () => {
             expect(
                 getEnterpriseNamespaceFromInstances([{ $scope: 'global' }, { $namespace: 'enterprise_123.legal' }]),
             ).toBe('enterprise_123');
+        });
+    });
+
+    describe('canonicalMetadataHome()', () => {
+        test('should treat scope-only global and box.metadata as the same home', () => {
+            expect(canonicalMetadataHome('global', undefined)).toBe(METADATA_NAMESPACE_GLOBAL);
+            expect(canonicalMetadataHome(undefined, 'box.metadata')).toBe(METADATA_NAMESPACE_GLOBAL);
+            expect(canonicalMetadataHome('global', 'box.metadata')).toBe(METADATA_NAMESPACE_GLOBAL);
+        });
+
+        test('should keep an enterprise namespace ahead of a legacy scope', () => {
+            expect(canonicalMetadataHome('enterprise_123', 'enterprise_123.legal')).toBe('enterprise_123.legal');
         });
     });
 

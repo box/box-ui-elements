@@ -26,6 +26,8 @@ import { mark } from '../../utils/performance';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+// $FlowFixMe TypeScript file
+import { FILE_EXTENSIONS } from '../common/item/constants';
 import { withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
@@ -115,11 +117,13 @@ type ExternalProps = {
 type PropsWithoutContext = {
     elementId: string,
     file: BoxItem,
+    getComparedPreview?: Function,
     getViewer?: Function,
     getPreview?: Function,
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
+    onCommentVersionSelect?: (params: { fileVersionId: string, startMs: number }) => void,
     onFilterChange: (status?: ActivityFilterItemType) => void,
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
@@ -814,6 +818,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             hasVersions: shouldShowVersions,
         } = this.props;
         const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
+        const isAudioFile = Boolean(file.extension && FILE_EXTENSIONS.audio.includes(file.extension));
         const shouldShowReplies = hasReplies || isThreadedRepliesV2Enabled;
         const shouldFetchReplies =
             shouldRefreshCache && hasReplies && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
@@ -835,6 +841,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowTasks,
                 shouldShowVersions,
                 shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
+                shouldUseEnhancedTimespanComments: isAudioPlayerV2Enabled && isAudioFile,
                 shouldUseUAA,
                 shouldEnableRichText,
             },
@@ -1356,6 +1363,43 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     };
 
+    /**
+     * Opens the file version a timestamped comment was made on. The annotations path carries the
+     * version, the same way an annotation from another version is opened.
+     */
+    handleCommentVersionSelect = ({
+        commentId,
+        fileVersionId,
+        startMs,
+    }: {
+        commentId: string,
+        fileVersionId: string,
+        startMs: number,
+    }): void => {
+        const {
+            getAnnotationsPath,
+            history,
+            internalSidebarNavigationHandler,
+            onCommentVersionSelect,
+            routerDisabled,
+        } = this.props;
+
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler({
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryId: commentId,
+                activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                fileVersionId,
+            });
+        } else {
+            history.push(getAnnotationsPath(fileVersionId, commentId));
+        }
+
+        if (onCommentVersionSelect) {
+            onCommentVersionSelect({ fileVersionId, startMs });
+        }
+    };
+
     handleItemsFiltered = (status?: ActivityFilterItemType) => {
         const { onFilterChange } = this.props;
 
@@ -1517,6 +1561,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         createTask={this.createTask}
                         currentUser={currentUser}
                         feedItems={this.getFilteredFeedItems()}
+                        getComparedPreview={this.props.getComparedPreview}
                         getPreview={this.props.getPreview}
                         getViewer={this.props.getViewer}
                         file={file}
@@ -1539,6 +1584,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                         onCommentDelete={this.deleteComment}
                         onCommentSelect={this.handleCommentSelect}
                         onCommentUpdate={this.updateComment}
+                        onCommentVersionSelect={this.handleCommentVersionSelect}
                         onReplyCreate={this.createReply}
                         onReplyDelete={this.deleteReply}
                         onReplyUpdate={({ id, onError, onSuccess, parentId, permissions, text }) =>

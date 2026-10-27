@@ -8,6 +8,8 @@ import CommentRangeDragCreateProvider from '../CommentRangeDragCreateProvider';
 import type { ActivityFeedV2Props } from '../ActivityFeedV2';
 import type { TaskModalV2Props } from '../task-modal-v2';
 import type { CreateTaskCallback } from '../task-modal-v2/types';
+import type { Comment } from '../../../../common/types/feed';
+import type { TaskNew } from '../../../../common/types/tasks';
 import { letPreviewSizeSettle } from './testUtils';
 
 type EditorProps = React.ComponentProps<typeof ActivityFeed.Editor> & {
@@ -42,6 +44,11 @@ type TaskListItemProps = {
     id: string;
     onLoadAllAssignee?: () => Promise<unknown>;
 };
+let lastThreadedAnnotationProps: {
+    isHighlighted?: boolean;
+    messages?: Array<{ id: string }>;
+    onAnnotationBadgeClick?: (id: string) => void;
+} = {};
 let lastFilterMenuProps: FilterMenuProps = {};
 let lastShowResolvedOptionProps: FilterOptionProps = {};
 let lastMentionMeOptionProps: FilterOptionProps = {};
@@ -81,9 +88,14 @@ jest.mock('@box/activity-feed', () => {
         lastTaskItemProps = props;
         return <div data-testid={`task-${props.id}`}>Task</div>;
     };
-    ActivityFeedList.ThreadedAnnotation = (props: { messages?: Array<{ id: string }> }) => (
-        <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>
-    );
+    ActivityFeedList.ThreadedAnnotation = (props: {
+        isHighlighted?: boolean;
+        messages?: Array<{ id: string }>;
+        onAnnotationBadgeClick?: (id: string) => void;
+    }) => {
+        lastThreadedAnnotationProps = props;
+        return <div data-testid={`threaded-annotation-${props.messages?.[0]?.id}`}>ThreadedAnnotation</div>;
+    };
     ActivityFeedList.Version = (props: { id: string }) => <div data-testid={`version-${props.id}`}>Version</div>;
     const ActivityFeedEditor = (props: Partial<EditorProps>) => {
         lastEditorProps = props;
@@ -134,7 +146,7 @@ const mockFileWithCommentPermission: NonNullable<ActivityFeedV2Props['file']> = 
     permissions: { can_comment: true },
 };
 
-const mockComment = {
+const mockComment: Comment = {
     created_at: '2024-01-01T00:00:00Z',
     created_by: { id: '2', name: 'Commenter', type: 'user' },
     id: 'comment-1',
@@ -158,7 +170,7 @@ const mockAnnotation = {
     type: 'annotation',
 };
 
-const mockTask = {
+const mockTask: TaskNew = {
     assigned_to: { entries: [], limit: 20, next_marker: null },
     completion_rule: 'ALL_ASSIGNEES',
     created_at: '2024-03-01T00:00:00Z',
@@ -166,7 +178,7 @@ const mockTask = {
         id: 'tc',
         role: 'CREATOR',
         status: 'NOT_STARTED',
-        target: { id: 'user-1', name: 'Current User' },
+        target: { id: 'user-1', name: 'Current User', type: 'user' },
         type: 'task_collaborator',
     },
     description: 'Review document',
@@ -310,7 +322,10 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
     test('should render task feed items', () => {
         render(
-            <ActivityFeedV2 currentUser={mockCurrentUser} feedItems={[mockTask] as ActivityFeedV2Props['feedItems']} />,
+            <ActivityFeedV2
+                currentUser={mockCurrentUser}
+                feedItems={[mockTask] as unknown as ActivityFeedV2Props['feedItems']}
+            />,
         );
 
         expect(screen.getByTestId('task-task-1')).toBeVisible();
@@ -364,7 +379,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
             );
@@ -418,7 +433,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getAvatarUrl={getAvatarUrl}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
@@ -446,7 +461,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getAvatarUrl={getAvatarUrl}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
@@ -474,7 +489,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                 />,
             );
 
@@ -489,7 +504,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             render(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[taskWithMoreAssignees] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[taskWithMoreAssignees] as unknown as ActivityFeedV2Props['feedItems']}
                     getTaskCollaborators={getTaskCollaborators}
                 />,
             );
@@ -1077,6 +1092,110 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             } finally {
                 cleanup();
             }
+        });
+
+        describe('while a previous version is previewed', () => {
+            const previousVersionViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: () => false,
+                removeListener: jest.fn(),
+            };
+            const getPreview = () => ({
+                getCurrentFile: () => ({ file_version: { id: '1' } }),
+                getCurrentViewer: () => previousVersionViewer,
+            });
+
+            test('should not show the timestamp toggle', () => {
+                const { cleanup } = mountVideo();
+                try {
+                    render(
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                            getPreview={getPreview}
+                            isTimestampedCommentsEnabled
+                        />,
+                    );
+                    expect(lastEditorProps.videoTimestamp).toBeUndefined();
+                } finally {
+                    cleanup();
+                }
+            });
+
+            test('should show the timestamp toggle as soon as the previous version viewer is destroyed', () => {
+                jest.useFakeTimers();
+                const { cleanup } = mountVideo();
+                let isDestroyed = false;
+                let previewedVersionId = '1';
+                const destroyableViewer = { ...previousVersionViewer, isDestroyed: () => isDestroyed };
+                try {
+                    render(
+                        <ActivityFeedV2
+                            currentUser={mockCurrentUser}
+                            feedItems={[] as ActivityFeedV2Props['feedItems']}
+                            file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                            getPreview={() => ({
+                                getCurrentFile: () => ({ file_version: { id: previewedVersionId } }),
+                                getCurrentViewer: () => (isDestroyed ? null : destroyableViewer),
+                            })}
+                            isTimestampedCommentsEnabled
+                        />,
+                    );
+                    expect(lastEditorProps.videoTimestamp).toBeUndefined();
+
+                    isDestroyed = true;
+                    previewedVersionId = '99';
+                    act(() => {
+                        jest.advanceTimersByTime(100);
+                    });
+
+                    expect(lastEditorProps.videoTimestamp).toBeDefined();
+                } finally {
+                    cleanup();
+                    jest.useRealTimers();
+                }
+            });
+
+            test('should drop a timestamp picked on the current version', async () => {
+                const { cleanup } = mountVideo();
+                mockSerializeMentionMarkup.mockReturnValue({ hasMention: false, text: 'old version note' });
+                const onCommentCreate = jest.fn();
+                const currentVersionViewer = { ...previousVersionViewer };
+                const renderFeed = (previewHandle: ActivityFeedV2Props['getPreview']) => (
+                    <ActivityFeedV2
+                        currentUser={mockCurrentUser}
+                        feedItems={[] as ActivityFeedV2Props['feedItems']}
+                        file={{ extension: 'mp4', file_version: { id: '99' }, permissions: { can_comment: true } }}
+                        getPreview={previewHandle}
+                        isTimestampedCommentsEnabled
+                        onCommentCreate={onCommentCreate}
+                    />
+                );
+                try {
+                    const { rerender } = render(
+                        renderFeed(() => ({
+                            getCurrentFile: () => ({ file_version: { id: '99' } }),
+                            getCurrentViewer: () => currentVersionViewer,
+                        })),
+                    );
+                    await act(async () => {
+                        lastEditorProps.videoTimestamp?.onPressedChange(true);
+                    });
+                    expect(lastEditorProps.videoTimestamp?.isPressed).toBe(true);
+
+                    rerender(renderFeed(getPreview));
+                    expect(lastEditorProps.videoTimestamp).toBeUndefined();
+
+                    await act(async () => {
+                        await lastEditorProps.onPost?.({ type: 'doc', content: [] });
+                    });
+                    expect(onCommentCreate).toHaveBeenCalledWith('old version note', false);
+                } finally {
+                    cleanup();
+                }
+            });
         });
 
         test('should not pass videoTimestamp when fileVersionId is missing', () => {
@@ -2099,11 +2218,12 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
         const timestampedComment = {
             ...mockComment,
             id: 'ts-comment-1',
-            tagged_message: '#[timestamp:5000,versionId:123] Hello',
+            tagged_message: '#[timestamp:5000,versionId:1] Hello',
         };
 
         const frameAnnotation = {
             ...mockAnnotation,
+            file_version: { id: '1', type: 'version', version_number: '1' },
             id: 'frame-ann-1',
             target: { location: { type: 'frame', value: 10000 }, type: 'region' },
         };
@@ -2166,7 +2286,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     {
                         ...timestampedComment,
                         id: 'ts-range-1',
-                        tagged_message: '#[timestamp:8055,endTimestamp:12000,versionId:123] great take',
+                        tagged_message: '#[timestamp:8055,endTimestamp:12000,versionId:1] great take',
                     },
                 ] as ActivityFeedV2Props['feedItems'],
                 file: { extension: 'mp3', file_version: { id: '1' }, permissions: { can_comment: true } },
@@ -2274,6 +2394,315 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             ]);
         });
 
+        test('should re-send the selected marker when the same timestamp is clicked again', () => {
+            const onCommentSelect = jest.fn();
+            renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1', onCommentSelect });
+            mockViewer.emit.mockClear();
+
+            act(() => {
+                lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+            });
+
+            expect(onCommentSelect).toHaveBeenCalledWith('ts-comment-1');
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                    selectionSeq: 1,
+                }),
+            ]);
+
+            mockViewer.emit.mockClear();
+            act(() => {
+                lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+            });
+
+            expect(mockViewer.emit).toHaveBeenCalledWith('comment_markers', [
+                expect.objectContaining({
+                    id: 'ts-comment-1',
+                    isSelected: true,
+                    selectionSeq: 2,
+                }),
+            ]);
+        });
+
+        describe('timestamp badge on a comment from another version', () => {
+            const previousVersion = { ...mockVersion, id: '123' };
+            const previousVersionComment = {
+                ...timestampedComment,
+                tagged_message: '#[timestamp:5000,versionId:123] Hello',
+            };
+            const setMediaTime = jest.fn();
+            const seekableViewer = { ...mockViewer, pause: jest.fn(), setMediaTime };
+
+            beforeEach(() => {
+                setMediaTime.mockClear();
+            });
+
+            test('should open the comment version at its timestamp', () => {
+                const onCommentSelect = jest.fn();
+                const onCommentVersionSelect = jest.fn();
+                renderComponentWithMarkers({
+                    feedItems: [previousVersionComment, previousVersion] as ActivityFeedV2Props['feedItems'],
+                    getViewer: () => seekableViewer,
+                    onCommentSelect,
+                    onCommentVersionSelect,
+                });
+
+                act(() => {
+                    lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+                });
+
+                expect(onCommentVersionSelect).toHaveBeenCalledWith({
+                    commentId: 'ts-comment-1',
+                    fileVersionId: '123',
+                    startMs: 5000,
+                });
+                expect(setMediaTime).not.toHaveBeenCalled();
+                expect(onCommentSelect).not.toHaveBeenCalled();
+            });
+
+            test('should seek in place when the comment version is an earlier upload in a merged run', () => {
+                const onCommentVersionSelect = jest.fn();
+                const mergedVersions = { ...mockVersion, end: { id: '200' }, id: '200', start: { id: '123' } };
+                renderComponentWithMarkers({
+                    feedItems: [previousVersionComment, mergedVersions] as ActivityFeedV2Props['feedItems'],
+                    getViewer: () => seekableViewer,
+                    onCommentVersionSelect,
+                });
+
+                act(() => {
+                    lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+                });
+
+                expect(onCommentVersionSelect).not.toHaveBeenCalled();
+                expect(setMediaTime).toHaveBeenCalledWith(5);
+            });
+
+            test('should seek in place when the previewed version is the comment version', () => {
+                const onCommentVersionSelect = jest.fn();
+                renderComponentWithMarkers({
+                    feedItems: [previousVersionComment, previousVersion] as ActivityFeedV2Props['feedItems'],
+                    getPreview: () => ({ getCurrentFile: () => ({ file_version: { id: '123' } }) }),
+                    getViewer: () => seekableViewer,
+                    onCommentVersionSelect,
+                });
+
+                act(() => {
+                    lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+                });
+
+                expect(onCommentVersionSelect).not.toHaveBeenCalled();
+                expect(setMediaTime).toHaveBeenCalledWith(5);
+            });
+
+            test('should open the current version when a previous version is previewed', () => {
+                const onCommentVersionSelect = jest.fn();
+                renderComponentWithMarkers({
+                    feedItems: [timestampedComment, { ...mockVersion, id: '1' }] as ActivityFeedV2Props['feedItems'],
+                    getPreview: () => ({ getCurrentFile: () => ({ file_version: { id: '123' } }) }),
+                    getViewer: () => seekableViewer,
+                    onCommentVersionSelect,
+                });
+
+                act(() => {
+                    lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+                });
+
+                expect(onCommentVersionSelect).toHaveBeenCalledWith(expect.objectContaining({ fileVersionId: '1' }));
+            });
+
+            test('should seek in place when the comment version is not in the feed', () => {
+                const onCommentVersionSelect = jest.fn();
+                renderComponentWithMarkers({
+                    feedItems: [previousVersionComment] as ActivityFeedV2Props['feedItems'],
+                    getViewer: () => seekableViewer,
+                    onCommentVersionSelect,
+                });
+
+                act(() => {
+                    lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-1');
+                });
+
+                expect(onCommentVersionSelect).not.toHaveBeenCalled();
+                expect(setMediaTime).toHaveBeenCalledWith(5);
+            });
+        });
+
+        describe('markers on the previewed version', () => {
+            const otherVersionComment = {
+                ...timestampedComment,
+                id: 'ts-comment-other',
+                tagged_message: '#[timestamp:7000,versionId:123] Other',
+            };
+            const unversionedComment = {
+                ...timestampedComment,
+                id: 'ts-comment-unversioned',
+                tagged_message: '#[timestamp:9000] Legacy',
+            };
+            const otherVersionAnnotation = {
+                ...frameAnnotation,
+                file_version: { id: '123', type: 'version', version_number: '1' },
+                id: 'frame-ann-other',
+            };
+            const lastMarkers = (viewer: { emit: jest.Mock }) =>
+                viewer.emit.mock.calls.filter(call => call[0] === 'comment_markers').pop()?.[1];
+
+            test('should leave out comments and annotations from other versions', () => {
+                renderComponentWithMarkers({
+                    feedItems: [
+                        timestampedComment,
+                        otherVersionComment,
+                        unversionedComment,
+                        frameAnnotation,
+                        otherVersionAnnotation,
+                    ] as ActivityFeedV2Props['feedItems'],
+                });
+
+                expect(lastMarkers(mockViewer).map((marker: { id: string }) => marker.id)).toEqual([
+                    'ts-comment-1',
+                    'ts-comment-unversioned',
+                    'frame-ann-1',
+                ]);
+            });
+
+            test('should use the version Preview is showing, not the current file version', () => {
+                renderComponentWithMarkers({
+                    feedItems: [timestampedComment, otherVersionComment] as ActivityFeedV2Props['feedItems'],
+                    getPreview: () => ({ getCurrentFile: () => ({ file_version: { id: '123' } }) }),
+                });
+
+                expect(lastMarkers(mockViewer).map((marker: { id: string }) => marker.id)).toEqual([
+                    'ts-comment-other',
+                ]);
+            });
+
+            test('should send markers to the viewer Preview creates for another version', () => {
+                jest.useFakeTimers();
+                const nextViewer = {
+                    addListener: jest.fn(),
+                    emit: jest.fn(),
+                    isDestroyed: jest.fn(() => false),
+                    removeListener: jest.fn(),
+                };
+                let previewedVersionId = '1';
+                const getViewer = jest.fn(() => mockViewer);
+                renderComponentWithMarkers({
+                    feedItems: [timestampedComment, otherVersionComment] as ActivityFeedV2Props['feedItems'],
+                    getPreview: () => ({ getCurrentFile: () => ({ file_version: { id: previewedVersionId } }) }),
+                    getViewer,
+                });
+
+                previewedVersionId = '123';
+                getViewer.mockReturnValue(nextViewer);
+                act(() => {
+                    jest.advanceTimersByTime(100);
+                });
+
+                expect(mockViewer.removeListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+                expect(lastMarkers(nextViewer).map((marker: { id: string }) => marker.id)).toEqual([
+                    'ts-comment-other',
+                ]);
+                expect(nextViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+                jest.useRealTimers();
+            });
+        });
+
+        describe('side-by-side compared pane', () => {
+            const comparedVersion = { ...mockVersion, id: '123' };
+            const comparedVersionComment = {
+                ...timestampedComment,
+                id: 'ts-comment-compared',
+                tagged_message: '#[timestamp:7000,versionId:123] Compared',
+            };
+            const setMediaTime = jest.fn();
+            const comparedViewer = {
+                addListener: jest.fn(),
+                emit: jest.fn(),
+                isDestroyed: jest.fn(() => false),
+                pause: jest.fn(),
+                removeListener: jest.fn(),
+                setMediaTime,
+            };
+            const getComparedPreview = () => ({
+                getCurrentFile: () => ({ file_version: { id: '123' } }),
+                getCurrentViewer: () => comparedViewer,
+            });
+            const lastMarkerIds = (viewer: { emit: jest.Mock }) =>
+                viewer.emit.mock.calls
+                    .filter(call => call[0] === 'comment_markers')
+                    .pop()?.[1]
+                    .map((marker: { id: string }) => marker.id);
+
+            beforeEach(() => {
+                comparedViewer.addListener.mockClear();
+                comparedViewer.emit.mockClear();
+                setMediaTime.mockClear();
+            });
+
+            test('should send each pane only the markers for its own version', () => {
+                renderComponentWithMarkers({
+                    feedItems: [timestampedComment, comparedVersionComment] as ActivityFeedV2Props['feedItems'],
+                    getComparedPreview,
+                });
+
+                expect(lastMarkerIds(mockViewer)).toEqual(['ts-comment-1']);
+                expect(lastMarkerIds(comparedViewer)).toEqual(['ts-comment-compared']);
+                expect(comparedViewer.addListener).toHaveBeenCalledWith('comment_marker_select', expect.any(Function));
+            });
+
+            test('should seek the compared pane when a comment from its version is clicked', () => {
+                const onCommentVersionSelect = jest.fn();
+                renderComponentWithMarkers({
+                    feedItems: [comparedVersionComment, comparedVersion] as ActivityFeedV2Props['feedItems'],
+                    getComparedPreview,
+                    onCommentVersionSelect,
+                });
+
+                act(() => {
+                    lastThreadedAnnotationProps.onAnnotationBadgeClick?.('ts-comment-compared');
+                });
+
+                expect(setMediaTime).toHaveBeenCalledWith(7);
+                expect(onCommentVersionSelect).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should highlight the active comment again when its waveform marker is selected', () => {
+            jest.useFakeTimers();
+            let onMarkerSelect: ((payload: { id: string }) => void) | undefined;
+            mockViewer.addListener.mockImplementation((event: string, handler: (payload: { id: string }) => void) => {
+                if (event === 'comment_marker_select') {
+                    onMarkerSelect = handler;
+                }
+            });
+
+            try {
+                renderComponentWithMarkers({
+                    activeFeedEntryId: 'ts-comment-1',
+                    onCommentSelect: jest.fn(),
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+
+                act(() => {
+                    jest.advanceTimersByTime(2000);
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(false);
+
+                act(() => {
+                    onMarkerSelect?.({ id: 'ts-comment-1' });
+                });
+                expect(lastThreadedAnnotationProps.isHighlighted).toBe(true);
+                expect(mockViewer.emit).not.toHaveBeenCalledWith(
+                    'comment_markers',
+                    expect.arrayContaining([expect.objectContaining({ selectionSeq: expect.any(Number) })]),
+                );
+            } finally {
+                mockViewer.addListener.mockReset();
+                jest.useRealTimers();
+            }
+        });
+
         test('should not clear comment_markers when the feed refreshes without a comment revision change', () => {
             const { rerender } = renderComponentWithMarkers({ activeFeedEntryId: 'ts-comment-1' });
             mockViewer.emit.mockClear();
@@ -2348,7 +2777,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const laterComment = {
                 ...timestampedComment,
                 id: 'ts-comment-2',
-                tagged_message: '#[timestamp:9000,versionId:123] Later',
+                tagged_message: '#[timestamp:9000,versionId:1] Later',
             };
             rerender(
                 <ActivityFeedV2
@@ -2398,7 +2827,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
             const otherComment = {
                 ...timestampedComment,
                 id: 'ts-comment-2',
-                tagged_message: '#[timestamp:9000,versionId:123] Later',
+                tagged_message: '#[timestamp:9000,versionId:1] Later',
             };
             const { rerender } = renderComponentWithMarkers({
                 activeFeedEntryId: 'ts-comment-1',
@@ -2432,7 +2861,7 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
                     currentUser={mockCurrentUser}
                     feedItems={
                         [
-                            { ...timestampedComment, tagged_message: '#[timestamp:5000,versionId:123] Edited' },
+                            { ...timestampedComment, tagged_message: '#[timestamp:5000,versionId:1] Edited' },
                         ] as ActivityFeedV2Props['feedItems']
                     }
                     file={{ extension: 'mp4', file_version: { id: '1' }, permissions: { can_comment: true } }}
@@ -2504,10 +2933,11 @@ describe('elements/content-sidebar/activity-feed-v2/ActivityFeedV2', () => {
 
             oldViewer.isDestroyed.mockReturnValue(true);
             getViewer.mockReturnValue(newViewer);
+            const newVersionComment = { ...timestampedComment, tagged_message: '#[timestamp:5000,versionId:2] Hello' };
             rerender(
                 <ActivityFeedV2
                     currentUser={mockCurrentUser}
-                    feedItems={[timestampedComment] as ActivityFeedV2Props['feedItems']}
+                    feedItems={[newVersionComment] as ActivityFeedV2Props['feedItems']}
                     file={{ extension: 'mp3', file_version: { id: '2' }, permissions: { can_comment: true } }}
                     getViewer={getViewer}
                     isAudioPlayerV2Enabled

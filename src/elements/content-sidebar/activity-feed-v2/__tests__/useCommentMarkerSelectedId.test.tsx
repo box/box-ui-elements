@@ -74,6 +74,20 @@ describe('useCommentMarkerSelectedId()', () => {
         expect(result.current).toBe('c1');
     });
 
+    test('should re-assert selection when selectionSeq changes after the list changed', () => {
+        const { result, rerender } = renderHook(
+            ({ items, selectionSeq }) => useCommentMarkerSelectedId('c1', items, selectionSeq),
+            { initialProps: { items: [comment('c1')], selectionSeq: 0 } },
+        );
+        expect(result.current).toBe('c1');
+
+        rerender({ items: [comment('c1'), comment('c2')], selectionSeq: 0 });
+        expect(result.current).toBeNull();
+
+        rerender({ items: [comment('c1'), comment('c2')], selectionSeq: 1 });
+        expect(result.current).toBe('c1');
+    });
+
     test('should select again when the active feed entry changes', () => {
         const items = [comment('c1'), comment('c2')];
         const { result, rerender } = renderHook(({ entryId }) => useCommentMarkerSelectedId(entryId, items), {

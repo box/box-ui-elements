@@ -6,12 +6,15 @@ import type { DocGenTag } from '../DocGenSidebar/types';
 import mockData, { mockPdfTemplateData } from '../__mocks__/DocGenSidebar.mock';
 
 const docGenSidebarProps = {
+    checkDocGenTemplate: undefined,
+    enabled: true,
     getDocGenTags: jest.fn().mockReturnValue(
         Promise.resolve({
             pagination: {},
             data: mockData,
         }),
     ),
+    isDocgenTemplate: true,
 };
 
 const processAndResolveMock = jest
@@ -47,7 +50,14 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
     });
 
     const renderComponent = (props = {}) =>
-        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...docGenSidebarProps} {...props} />);
+        render(
+            <DocGenSidebar
+                logger={{ onPreviewMetric: jest.fn(), onReadyMetric: jest.fn() }}
+                onError={jest.fn()}
+                {...docGenSidebarProps}
+                {...props}
+            />,
+        );
 
     test('componentDidMount() should call fetch tags', async () => {
         renderComponent();
@@ -100,7 +110,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         expect(await screen.findByText('pathFromUnknown')).toBeInTheDocument();
     });
 
-    test('should render DocGen sidebar component correctly with tags list', async () => {
+    test('should reveal nested tags when a parent tag is clicked', async () => {
         renderComponent();
         const parentTag = await screen.findByText('about');
         let nestedTag = await screen.queryByText('name');

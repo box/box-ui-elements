@@ -114,8 +114,128 @@ describe('api/MetadataNamespaces', () => {
             expect(host.xhr.get).toHaveBeenCalledWith({
                 url: 'https://api.box.com/2.0/metadata_namespaces/enterprise_1/children',
                 id: 'file_123',
-                params: { limit: 20, marker: undefined },
+                params: { limit: 20, marker: undefined, fields: 'permissions' },
             });
+        });
+    });
+
+    describe('getNamespace()', () => {
+        test('should GET the namespace and return its grants', async () => {
+            host.xhr.get.mockResolvedValue({
+                data: {
+                    fqn: 'enterprise_1',
+                    displayName: 'Enterprise',
+                    permissions: { can_create_templates: true },
+                },
+            });
+
+            await expect(api.getNamespace(file, 'enterprise_1')).resolves.toEqual({
+                fqn: 'enterprise_1',
+                displayName: 'Enterprise',
+                permissions: { can_create_templates: true },
+            });
+            expect(host.xhr.get).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_namespaces/enterprise_1',
+                id: 'file_123',
+                params: { fields: 'permissions' },
+            });
+        });
+
+        test('should return null when the namespace request fails', async () => {
+            host.xhr.get.mockRejectedValue(new Error('not found'));
+
+            await expect(api.getNamespace(file, 'enterprise_1')).resolves.toBeNull();
+        });
+    });
+
+    describe('searchTemplates()', () => {
+        test('should GET /metadata_templates/search with query, limit, and marker', async () => {
+            const entry = {
+                id: '58063d82-4128-7b43-bba9-92f706befcdf',
+                type: 'metadata_template',
+                templateKey: 'legalHold',
+                displayName: 'Legal Hold',
+                namespace: 'enterprise_123.legal.contracts',
+                containingNamespace: {
+                    fqn: 'enterprise_123.legal.contracts',
+                    displayName: 'Contracts',
+                },
+                ancestors: [
+                    { fqn: 'enterprise_123', displayName: 'Enterprise 123' },
+                    { fqn: 'enterprise_123.legal', displayName: 'Legal' },
+                ],
+                permissions: {
+                    can_read: true,
+                    can_update: true,
+                    can_delete: false,
+                    can_view_permissions: true,
+                    can_manage_permissions: false,
+                },
+            };
+            host.xhr.get.mockResolvedValue({
+                data: {
+                    limit: 20,
+                    next_marker: 'cursor-1',
+                    prev_marker: null,
+                    entries: [entry],
+                },
+            });
+
+            await expect(api.searchTemplates(file, { query: 'Le', limit: 20, marker: 'cursor-0' })).resolves.toEqual({
+                limit: 20,
+                next_marker: 'cursor-1',
+                prev_marker: null,
+                entries: [entry],
+            });
+            expect(host.xhr.get).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_templates/search',
+                id: 'file_123',
+                params: { query: 'Le', limit: 20, fields: 'permissions', marker: 'cursor-0' },
+            });
+        });
+
+        test('should omit marker when the caller has no cursor', async () => {
+            host.xhr.get.mockResolvedValue({ data: { entries: [] } });
+
+            await api.searchTemplates(file, { query: 'Le', limit: 20 });
+
+            expect(host.xhr.get).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_templates/search',
+                id: 'file_123',
+                params: { query: 'Le', limit: 20, fields: 'permissions' },
+            });
+        });
+
+        test('should propagate a failed search', async () => {
+            const error = new Error('not found');
+            host.xhr.get.mockRejectedValue(error);
+
+            await expect(api.searchTemplates(file, { query: 'Le', limit: 20 })).rejects.toBe(error);
+        });
+    });
+
+    describe('listTemplatesForNamespace()', () => {
+        test('should GET templates for the namespace with permissions', async () => {
+            const entry = { templateKey: 'contract', displayName: 'Contract' };
+            host.xhr.get.mockResolvedValue({
+                data: { entries: [entry], next_marker: 'cursor-1' },
+            });
+
+            await expect(
+                api.listTemplatesForNamespace(file, 'enterprise_1', { limit: 20, marker: 'cursor-0' }),
+            ).resolves.toEqual({ entries: [entry], next_marker: 'cursor-1' });
+            expect(host.xhr.get).toHaveBeenCalledWith({
+                url: 'https://api.box.com/2.0/metadata_templates/enterprise_1',
+                id: 'file_123',
+                params: { limit: 20, marker: 'cursor-0', fields: 'permissions' },
+            });
+        });
+
+        test('should propagate a failed template list', async () => {
+            const error = new Error('unavailable');
+            host.xhr.get.mockRejectedValue(error);
+
+            await expect(api.listTemplatesForNamespace(file, 'enterprise_1', { limit: 20 })).rejects.toBe(error);
         });
     });
 

@@ -470,6 +470,36 @@ describe('elements/content-preview/ContentPreview', () => {
             );
         });
 
+        test('should tell BCP the current pane is in a comparison session', async () => {
+            const wrapper = getWrapper({ ...props, isComparing: true });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    isComparing: true,
+                    isComparedPreview: false,
+                }),
+            );
+        });
+
+        test('should tell BCP the compared pane is the older version', async () => {
+            const wrapper = getWrapper({ ...props, isComparedPreview: true });
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({
+                    isComparing: true,
+                    isComparedPreview: true,
+                }),
+            );
+        });
+
         test('should omit annotatorToken when token is a string', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -622,8 +652,8 @@ describe('elements/content-preview/ContentPreview', () => {
 
         test('should call preview show with startAt params if provided', async () => {
             const wrapper = getWrapper(props);
+            wrapper.setState({ file });
             wrapper.setState({
-                file,
                 startAt: {
                     unit: 'pages',
                     value: 3,
@@ -649,6 +679,28 @@ describe('elements/content-preview/ContentPreview', () => {
                         },
                     },
                 }),
+            );
+        });
+
+        test('should clear startAt after one load so a later load starts from the beginning', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            wrapper.setState({ startAt: { unit: 'seconds', value: 5 } });
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({ fileOptions: { [file.id]: { startAt: { unit: 'seconds', value: 5 } } } }),
+            );
+            expect(wrapper.state('startAt')).toBeUndefined();
+
+            await instance.loadPreview();
+            expect(instance.preview.show).toHaveBeenCalledWith(
+                file.id,
+                expect.any(Function),
+                expect.objectContaining({ fileOptions: {} }),
             );
         });
 
@@ -1481,6 +1533,13 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(wrapper.state('isLoading')).toBe(true);
         });
 
+        test('should drop a pending startAt if fileId changes', () => {
+            wrapper.setState({ startAt: { unit: 'seconds', value: 5 } });
+            wrapper.setProps({ fileId: 'bar' });
+
+            expect(wrapper.state('startAt')).toBeUndefined();
+        });
+
         test("should load preview if fileId hasn't changed and shouldLoadPreview returns true", () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setProps({
@@ -1535,6 +1594,93 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.setProps({ isComparing: true });
 
             expect(wrapper.state('selectedVersion')).toBeUndefined();
+        });
+
+        test('should stamp comparison flags on the live preview when comparison starts without a reload', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+            instance.preview = {
+                setComparisonMode: jest.fn(),
+                updateExperiences: jest.fn(),
+            };
+
+            wrapper.setProps({ isComparing: true });
+
+            expect(instance.preview.setComparisonMode).toHaveBeenCalledWith({
+                isComparing: true,
+                isComparedPreview: false,
+            });
+        });
+
+        test('should not stamp comparison flags when the preview is reloading anyway', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            const livePreview = {
+                destroy: jest.fn(),
+                removeAllListeners: jest.fn(),
+                setComparisonMode: jest.fn(),
+                updateExperiences: jest.fn(),
+            };
+            instance.preview = livePreview;
+
+            wrapper.setProps({ isComparing: true });
+
+            expect(livePreview.setComparisonMode).not.toHaveBeenCalled();
+        });
+
+        describe('comparison banner', () => {
+            const comparisonBanner = { onDownload: jest.fn() };
+
+            beforeEach(() => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+                instance.preview = {
+                    options: {},
+                    updateComparisonBanner: jest.fn(),
+                };
+            });
+
+            test('should push a changed banner to the live preview', () => {
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBe(comparisonBanner);
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(1);
+            });
+
+            test('should push an empty banner when the banner is cleared', () => {
+                wrapper.setProps({ comparisonBanner });
+                wrapper.setProps({ comparisonBanner: undefined });
+
+                expect(instance.preview.options.comparisonBanner).toEqual({});
+                expect(instance.preview.updateComparisonBanner).toHaveBeenCalledTimes(2);
+            });
+
+            test('should not push the banner when it did not change', () => {
+                wrapper.setProps({ foo: 'bar' });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview is reloading anyway', () => {
+                instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+                expect(instance.preview.updateComparisonBanner).not.toHaveBeenCalled();
+            });
+
+            test('should not push the banner when the preview has no updateComparisonBanner', () => {
+                instance.preview = { options: {} };
+
+                wrapper.setProps({ comparisonBanner });
+
+                expect(instance.preview.options.comparisonBanner).toBeUndefined();
+            });
+
+            test('should not push the banner when there is no live preview', () => {
+                instance.preview = undefined;
+
+                expect(() => wrapper.setProps({ comparisonBanner })).not.toThrow();
+            });
         });
     });
 
@@ -1915,6 +2061,24 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
+    describe('handleCommentVersionSelect', () => {
+        test('should start the next preview load at the comment timestamp in seconds', () => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().handleCommentVersionSelect({ fileVersionId: 'OLD', startMs: 4623 });
+
+            expect(wrapper.state('startAt')).toEqual({ unit: 'seconds', value: 4.623 });
+        });
+
+        test('should not set startAt while comparing', () => {
+            const wrapper = getWrapper({ isComparing: true });
+
+            wrapper.instance().handleCommentVersionSelect({ fileVersionId: 'OLD', startMs: 4623 });
+
+            expect(wrapper.state('startAt')).toBeUndefined();
+        });
+    });
+
     describe('handleAnnotationSelect', () => {
         test.each`
             annotationFileVersionId | selectedVersionId | locationType | setStateCount
@@ -2253,6 +2417,32 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(instance.preview).toBeUndefined();
             });
 
+            test('should return early for a compared markdown file', async () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'md' } });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
+            test('should return early for a compared pane when renderCustomPreview is provided', async () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
+                const instance = wrapper.instance();
+                instance.isPreviewLibraryLoaded = jest.fn().mockReturnValue(true);
+                const getFileIdSpy = jest.spyOn(instance, 'getFileId');
+
+                await instance.loadPreview();
+
+                expect(getFileIdSpy).not.toHaveBeenCalled();
+                expect(instance.preview).toBeUndefined();
+            });
+
             test('should load Box.Preview normally when renderCustomPreview is not provided', async () => {
                 const propsWithoutCustom = { ...props };
                 delete propsWithoutCustom.renderCustomPreview;
@@ -2330,6 +2520,56 @@ describe('elements/content-preview/ContentPreview', () => {
                 // Verify renderCustomPreview is passed to the wrapper
                 const wrapperInstance = measureContent.find('CustomPreviewWrapper');
                 expect(wrapperInstance.prop('renderCustomPreview')).toEqual(props.renderCustomPreview);
+            });
+
+            test('should render the custom preview for a compared markdown file', () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'md' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+            });
+
+            test('should render the custom preview for a compared pane when renderCustomPreview is provided', () => {
+                const wrapper = getWrapper({ ...props, isComparedPreview: true });
+                wrapper.setState({ file: { ...file, extension: 'pdf', name: 'test.pdf' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
+            });
+
+            test('should pass previewVersion id as fileVersionId while comparing', () => {
+                const wrapper = getWrapper({ ...props, isComparing: true, previewVersion: { id: '999' } });
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBe('999');
+            });
+
+            test('should leave fileVersionId empty on the current comparison pane', () => {
+                const wrapper = getWrapper({ ...props, isComparing: true });
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBeUndefined();
+            });
+
+            test('should pass the selected version id as fileVersionId when not comparing', () => {
+                const wrapper = getWrapper(props);
+                wrapper.setState({ file, selectedVersion: { id: '111' } });
+
+                const renderProp = wrapper.find('Measure').prop('children');
+                const measureContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>);
+
+                expect(measureContent.find('CustomPreviewWrapper').prop('fileVersionId')).toBe('111');
             });
 
             test('should pass correct props to custom preview content', () => {
@@ -3051,6 +3291,42 @@ describe('elements/content-preview/ContentPreview', () => {
             wrapper.childAt(0).props().onComparedAnnotationSelect(annotation, true);
 
             expect(comparedPreview.handleAnnotationSelect).toHaveBeenCalledWith(annotation, true);
+        });
+
+        test('should keep the host renderer on the compared instance', () => {
+            const renderCustomPreview = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    renderCustomPreview={renderCustomPreview}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().renderCustomPreview).toBe(renderCustomPreview);
+            expect(wrapper.childAt(1).props().children.props.renderCustomPreview).toBe(renderCustomPreview);
+        });
+
+        test('should stamp isComparedPreview only on the compared instance', () => {
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            expect(wrapper.childAt(0).props().isComparing).toBe(true);
+            expect(wrapper.childAt(0).props().isComparedPreview).toBeUndefined();
+            expect(wrapper.childAt(1).props().children.props.isComparing).toBe(false);
+            expect(wrapper.childAt(1).props().children.props.isComparedPreview).toBe(true);
         });
 
         test('should not navigate when isComparing', () => {

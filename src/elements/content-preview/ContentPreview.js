@@ -132,13 +132,17 @@ type Props = {
     features?: FeatureConfig,
     fileId?: string,
     fileOptions?: Object,
+    getComparedPreview?: () => any,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
     hasProviders?: boolean,
     hideSidebar?: boolean,
     isComparing?: boolean,
+    // Compared pane only. Do not also set isComparing — that flag drives the host layout slot.
+    isComparedPreview?: boolean,
     comparedSlotRef?: (?HTMLDivElement) => mixed,
     comparedVersion?: BoxItemVersion,
+    comparisonBanner?: Object,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -608,14 +612,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.destroyPreview();
             this.loadingWasDeferred = false;
             if (loadingIndicatorDelayMs) {
-                this.setState({ isLoading: true, isLoadingDeferred: true, selectedVersion: undefined });
+                this.setState({
+                    isLoading: true,
+                    isLoadingDeferred: true,
+                    selectedVersion: undefined,
+                    startAt: undefined,
+                });
                 this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
                     this.loadingIndicatorDelayTimeoutId = null;
                     this.loadingWasDeferred = true;
                     this.setState({ isLoadingDeferred: false });
                 }, loadingIndicatorDelayMs);
             } else {
-                this.setState({ isLoading: true, selectedVersion: undefined });
+                this.setState({ isLoading: true, selectedVersion: undefined, startAt: undefined });
             }
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevProps, prevState)) {
@@ -634,6 +643,22 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.setState({ selectedVersion: undefined });
         }
 
+        // Comparison can start on an already-open current pane; stamp BCP without reloading.
+        const comparisonFlagsChanged =
+            !!prevProps.isComparing !== !!this.props.isComparing ||
+            !!prevProps.isComparedPreview !== !!this.props.isComparedPreview;
+        if (
+            comparisonFlagsChanged &&
+            this.preview &&
+            this.preview.setComparisonMode &&
+            !this.shouldLoadPreview(prevProps, prevState)
+        ) {
+            this.preview.setComparisonMode({
+                isComparing: !!(this.props.isComparing || this.props.isComparedPreview),
+                isComparedPreview: !!this.props.isComparedPreview,
+            });
+        }
+
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
         }
@@ -644,6 +669,29 @@ class ContentPreview extends React.PureComponent<Props, State> {
             haveAdvancedContentInsightsChanged
         ) {
             this.preview.updateContentInsightsOptions(features?.advancedContentInsights);
+        }
+
+        this.updatePreviewComparisonBanner(prevProps, prevState);
+    }
+
+    /**
+     * Pushes a changed comparisonBanner into an already-shown preview without reloading.
+     *
+     * @param {Props} prevProps - Previous props
+     * @param {State} prevState - Previous state
+     */
+    updatePreviewComparisonBanner(prevProps: Props, prevState: State) {
+        const { comparisonBanner } = this.props;
+
+        if (
+            prevProps.comparisonBanner !== comparisonBanner &&
+            this.preview &&
+            this.preview.options &&
+            this.preview.updateComparisonBanner &&
+            !this.shouldLoadPreview(prevProps, prevState)
+        ) {
+            this.preview.options.comparisonBanner = comparisonBanner || {};
+            this.preview.updateComparisonBanner();
         }
     }
 
@@ -1054,6 +1102,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions,
             comparedSlotRef,
             isComparing,
+            isComparedPreview,
             onAnnotatorEvent,
             onAnnotator,
             onContentInsightsEventReport,
@@ -1114,6 +1163,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
+            isComparing: !!(isComparing || isComparedPreview),
+            isComparedPreview: !!isComparedPreview,
             experiences: previewExperiences,
             preloadStatus,
             previewMode,
@@ -1155,6 +1206,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         });
         if (advancedContentInsights) {
             this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
+        }
+        if (startAt) {
+            this.setState({ startAt: undefined });
         }
     };
 
@@ -1667,6 +1721,27 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Starts the next preview load at a comment's timestamp. The sidebar switches to the comment's
+     * version, and that load reads startAt.
+     *
+     * @param {number} startMs - Comment timestamp in milliseconds
+     * @return {void}
+     */
+    handleCommentVersionSelect = ({ startMs }: { startMs: number }): void => {
+        // While comparing, the other version opens in the compared pane, which this startAt does not reach.
+        if (this.props.isComparing) {
+            return;
+        }
+
+        this.setState({
+            startAt: {
+                unit: startAtTypes.frame,
+                value: convertTimestampToSeconds(startMs),
+            },
+        });
+    };
+
+    /**
      * Holds the reference the preview container
      *
      * @return {void}
@@ -1863,6 +1938,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     logger={logger}
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
+                                                                    fileVersionId={getProp(versionToPreview, 'id')}
                                                                 />
                                                             ) : null}
                                                         </div>
@@ -1894,6 +1970,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             token={token}
                                             cache={this.api.getCache()}
                                             fileId={currentFileId}
+                                            getComparedPreview={this.props.getComparedPreview}
                                             getPreview={this.getPreview}
                                             getViewer={this.getViewer}
                                             history={history}
@@ -1906,6 +1983,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             requestInterceptor={requestInterceptor}
                                             responseInterceptor={responseInterceptor}
                                             onAnnotationSelect={this.handleAnnotationSelect}
+                                            onCommentVersionSelect={this.handleCommentVersionSelect}
                                             onVersionChange={this.onVersionChange}
                                         />
                                     )}
@@ -1960,12 +2038,18 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
         }
     }, []);
 
+    const getComparedPreview = React.useCallback(() => {
+        const comparedPreview = comparedPreviewRef.current;
+        return comparedPreview ? comparedPreview.getPreview() : null;
+    }, []);
+
     return (
         <React.Fragment>
             <MemoConnectedContentPreview
                 {...rest}
                 collection={isComparing ? EMPTY_COLLECTION : rest.collection}
                 comparedSlotRef={setComparedSlot}
+                getComparedPreview={isComparing ? getComparedPreview : undefined}
                 isComparing={isComparing}
                 onComparedAnnotationSelect={handleComparedAnnotationSelect}
             />
@@ -1992,6 +2076,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           hasHeader={false}
                           hideSidebar
                           isComparing={false}
+                          isComparedPreview
                           // Hosts defer the indicator to let a preloaded image show through instead.
                           // Nothing preloads the compared version, so deferring leaves this pane blank.
                           loadingIndicatorDelayMs={0}
@@ -2009,7 +2094,6 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           preloadStatus={undefined}
                           previewVersion={comparedVersion}
                           resin={undefined}
-                          renderCustomPreview={undefined}
                           showAnnotationsControls={false}
                           showAnnotationsDrawingCreate={false}
                       />,

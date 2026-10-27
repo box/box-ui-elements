@@ -1,6 +1,4 @@
 // <reference types="Cypress" />
-import localize from '../../support/i18n';
-
 describe('ContentSidebar', () => {
     describe('navigation buttons', () => {
         beforeEach(() => {
@@ -109,7 +107,7 @@ describe('ContentSidebar', () => {
     describe.skip('activity feed comments', () => {
         const getDraftJSEditor = () => cy.getByTestId('bcs-CommentForm-body').find('[contenteditable]');
         const getTooltip = () => cy.get('[data-testid="bdl-Tooltip"]');
-        const getCancelButton = () => cy.contains(localize('be.contentSidebar.activityFeed.commentForm.commentCancel'));
+        const getCancelButton = () => cy.contains('Cancel');
 
         beforeEach(() => {
             cy.visitStorybook('elements-contentsidebar-tests-e2e--basic');
@@ -127,7 +125,7 @@ describe('ContentSidebar', () => {
             // should show required error if type and then delete text
             getDraftJSEditor().click().type('qwerty').clear();
 
-            getTooltip().contains(localize('boxui.validation.requiredError'));
+            getTooltip().contains('Required Field');
 
             // should reset validation state after clicking "Cancel" and focusing again
             getCancelButton().click();

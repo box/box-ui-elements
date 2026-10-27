@@ -11,6 +11,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       message={
         {
           "defaultMessage": "Shared links allowed for collaborators only.",
+          "description": "Bullet point that summarizes shared link restriction applied to classification",
           "id": "boxui.securityControls.sharingCollabOnly",
         }
       }
@@ -21,6 +22,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       message={
         {
           "defaultMessage": "External collaboration limited to approved domains.",
+          "description": "Bullet point that summarizes external collaboration restriction applied to classification",
           "id": "boxui.securityControls.externalCollabDomainList",
         }
       }
@@ -31,6 +33,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       message={
         {
           "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+          "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners. Box Drive is a product name and not translated",
           "id": "boxui.securityControls.desktopDownloadOwners",
         }
       }
@@ -41,6 +44,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       message={
         {
           "defaultMessage": "Only select applications are allowed: {appNames}",
+          "description": "Bullet point that summarizes application download restriction applied to classification",
           "id": "boxui.securityControls.appDownloadWhitelist",
           "values": {
             "appNames": "App 1, App 2",
@@ -63,6 +67,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       message={
         {
           "defaultMessage": "Sharing, download and app restrictions apply",
+          "description": "Short summary displayed for items when sharing, download and app download restrictions are applied to them.",
           "id": "boxui.securityControls.shortSharingDownloadApp",
         }
       }
@@ -75,6 +80,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
   >
     <FormattedMessage
       defaultMessage="View All"
+      description="Button to display security controls modal"
       id="boxui.securityControls.viewAll"
     />
   </PlainButton>
@@ -89,24 +95,28 @@ exports[`features/classification/security-controls/SecurityControls should rende
         {
           "message": {
             "defaultMessage": "Shared links allowed for collaborators only.",
+            "description": "Bullet point that summarizes shared link restriction applied to classification",
             "id": "boxui.securityControls.sharingCollabOnly",
           },
         },
         {
           "message": {
             "defaultMessage": "External collaboration limited to approved domains.",
+            "description": "Bullet point that summarizes external collaboration restriction applied to classification",
             "id": "boxui.securityControls.externalCollabDomainList",
           },
         },
         {
           "message": {
             "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
+            "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners. Box Drive is a product name and not translated",
             "id": "boxui.securityControls.desktopDownloadOwners",
           },
         },
         {
           "message": {
             "defaultMessage": "Only select applications are allowed: {appNames}",
+            "description": "Bullet point that summarizes application download restriction applied to classification",
             "id": "boxui.securityControls.appDownloadWhitelist",
             "values": {
               "appNames": "App 1, App 2",
@@ -130,6 +140,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
       message={
         {
           "defaultMessage": "Sharing, download and app restrictions apply",
+          "description": "Short summary displayed for items when sharing, download and app download restrictions are applied to them.",
           "id": "boxui.securityControls.shortSharingDownloadApp",
         }
       }

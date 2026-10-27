@@ -5,6 +5,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Editor"
+      description="Text for Editor permission level in invitee permission dropdown"
       id="boxui.unifiedShare.editorLevelText"
     />
      
@@ -18,6 +19,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 2`] = `
 <FormattedMessage
   defaultMessage="Invite as Editor"
+  description="Text used in button label to describe permission level - editor"
   id="boxui.unifiedShare.editorLevelButtonLabel"
 />
 `;
@@ -27,6 +29,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Co-owner"
+      description="Text for Co-owner permission level in permissions table"
       id="boxui.unifiedShare.coownerLevelText"
     />
      
@@ -40,6 +43,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 4`] = `
 <FormattedMessage
   defaultMessage="Invite as Co-owner"
+  description="Text used in button label to describe permission level - co-owner"
   id="boxui.unifiedShare.coownerLevelButtonLabel"
 />
 `;
@@ -49,6 +53,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Previewer"
+      description="Text for Previewer permission level in invitee permission dropdown"
       id="boxui.unifiedShare.previewerLevelText"
     />
      
@@ -62,6 +67,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 6`] = `
 <FormattedMessage
   defaultMessage="Invite as Previewer"
+  description="Text used in button label to describe permission level - previewer"
   id="boxui.unifiedShare.previewerLevelButtonLabel"
 />
 `;
@@ -71,6 +77,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Previewer Uploader"
+      description="Text for Previewer Uploader permission level in invitee permission dropdown"
       id="boxui.unifiedShare.previewerUploaderLevelText"
     />
      
@@ -84,6 +91,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 8`] = `
 <FormattedMessage
   defaultMessage="Invite as Previewer Uploader"
+  description="Text used in button label to describe permission level - previewer uploader"
   id="boxui.unifiedShare.previewerUploaderLevelButtonLabel"
 />
 `;
@@ -93,6 +101,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Viewer"
+      description="Text for Viewer permission level in invitee permission dropdown"
       id="boxui.unifiedShare.viewerLevelText"
     />
      
@@ -106,6 +115,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 10`] = `
 <FormattedMessage
   defaultMessage="Invite as Viewer"
+  description="Text used in button label to describe permission level - viewer"
   id="boxui.unifiedShare.viewerLevelButtonLabel"
 />
 `;
@@ -115,6 +125,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Viewer Uploader"
+      description="Text for Viewer Uploader permission level in invitee permission dropdown"
       id="boxui.unifiedShare.viewerUploaderLevelText"
     />
      
@@ -128,6 +139,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 12`] = `
 <FormattedMessage
   defaultMessage="Invite as Viewer Uploader"
+  description="Text used in button label to describe permission level - viewer uploader"
   id="boxui.unifiedShare.viewerUploaderLevelButtonLabel"
 />
 `;
@@ -137,6 +149,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
   <strong>
     <FormattedMessage
       defaultMessage="Uploader"
+      description="Text for Uploader permission level in invitee permission dropdown"
       id="boxui.unifiedShare.uploaderLevelText"
     />
      
@@ -150,6 +163,7 @@ exports[`features/unified-share-modal/InviteePermissionsLabel it should render c
 exports[`features/unified-share-modal/InviteePermissionsLabel it should render correct label and description (if applicable) 14`] = `
 <FormattedMessage
   defaultMessage="Invite as Uploader"
+  description="Text used in button label to describe permission level - uploader"
   id="boxui.unifiedShare.uploaderLevelButtonLabel"
 />
 `;

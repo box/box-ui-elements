@@ -4,6 +4,7 @@ exports[`components/message-center/components/message-center-modal/EmptyState sh
 <ErrorState>
   <FormattedMessage
     defaultMessage="There are no posts for this category at the moment."
+    description="Displayed when there are no posts to display"
     id="be.messageCenter.noPosts"
   />
 </ErrorState>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import type { FloatType } from '@box/metadata-filter';
-import type { Collection } from '../../../common/types/core';
+import { FilterKeyTypes, type FloatType } from '@box/metadata-filter';
+import type { BoxItem, Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
 import { render, screen, userEvent, waitFor, within } from '../../../test-utils/testing-library';
 import MetadataViewContainer, {
@@ -16,7 +16,7 @@ Object.defineProperty(Element.prototype, 'scrollTo', {
 });
 
 describe('elements/content-explorer/MetadataViewContainer', () => {
-    const mockItems = [
+    const mockItems: Array<BoxItem & { 'item.name': string; industry: string }> = [
         {
             id: '1',
             name: 'File 1.txt',
@@ -418,6 +418,64 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
     });
 
     describe('convertFilterValuesToExternal', () => {
+        test('should convert advanced enum values to string arrays', () => {
+            const internalFilters = {
+                'status-filter': {
+                    fieldType: 'enum' as const,
+                    options: [{ key: 'active', id: 'active1' }],
+                    value: {
+                        enum: [{ value: 'active', advancedFilterOption: FilterKeyTypes.MATCH_ANY }],
+                    },
+                },
+            };
+
+            const result = convertFilterValuesToExternal(internalFilters);
+
+            expect(result['status-filter'].value).toEqual(['active']);
+        });
+
+        test('should convert an advanced multi-select object to a string array', () => {
+            const internalFilters = {
+                'status-filter': {
+                    fieldType: 'multiSelect' as const,
+                    options: [
+                        { key: 'active', id: 'active1' },
+                        { key: 'inactive', id: 'inactive1' },
+                    ],
+                    value: {
+                        enum: { value: ['active', 'inactive'], advancedFilterOption: FilterKeyTypes.MATCH_ANY },
+                    },
+                },
+            };
+
+            const result = convertFilterValuesToExternal(internalFilters);
+
+            expect(result['status-filter'].value).toEqual(['active', 'inactive']);
+        });
+
+        test('should keep an advanced float range stored on enum', () => {
+            const internalFilters = {
+                'price-filter': {
+                    fieldType: 'float' as const,
+                    value: {
+                        enum: [
+                            {
+                                value: { range: { gt: 10, lt: 100 } },
+                                advancedFilterOption: FilterKeyTypes.BETWEEN,
+                            },
+                        ],
+                    },
+                },
+            };
+
+            const result = convertFilterValuesToExternal(internalFilters);
+
+            expect(result['price-filter'].value).toEqual({
+                range: { gt: 10, lt: 100 },
+                advancedFilterOption: FilterKeyTypes.BETWEEN,
+            });
+        });
+
         test('should convert enum values to string arrays', () => {
             const internalFilters = {
                 'status-filter': {

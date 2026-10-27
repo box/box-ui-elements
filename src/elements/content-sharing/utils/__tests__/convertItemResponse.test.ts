@@ -1,6 +1,7 @@
 import {
     DEFAULT_ITEM_API_RESPONSE,
     MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION,
+    MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE,
     MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK,
     mockOwnerEmail,
     mockOwnerId,
@@ -86,14 +87,18 @@ describe('convertItemResponse', () => {
                 settings: {
                     canChangeDownload: true,
                     canChangeExpiration: true,
+                    canChangeOtp: false,
                     canChangePassword: true,
                     canChangeVanityName: false,
                     isDirectLinkAvailable: true,
                     isDownloadAvailable: true,
                     isDownloadEnabled: true,
+                    isOtpAvailable: false,
                     isPasswordAvailable: true,
                     isPasswordEnabled: true,
                     isVanityNameAvailable: true,
+                    otpAccessEntries: undefined,
+                    otpMode: undefined,
                 },
                 url: 'https://example.com/shared-link',
                 vanityDomain: 'https://example.com/vanity-url',
@@ -127,7 +132,7 @@ describe('convertItemResponse', () => {
             const result = convertItemResponse(MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK_WITH_PERMISSIONS);
             expect(result.sharedLink.settings.canChangeDownload).toEqual(false);
             expect(result.sharedLink.settings.canChangePassword).toEqual(false);
-            expect(result.sharedLink.settings.canChangeExpiration).toEqual(false);
+            expect(result.sharedLink.settings.canChangeExpiration).toEqual(true);
         });
 
         test('should convert shared link settings correctly if user does not have permissions', () => {
@@ -138,7 +143,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     effective_access: 'collaborators',
                 },
-                shared_link_features: { download_url: false, password: false, vanity_name: false },
+                shared_link_features: { download_url: false, expiration: false, password: false, vanity_name: false },
                 permissions: {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.permissions,
                 },
@@ -149,6 +154,35 @@ describe('convertItemResponse', () => {
             expect(result.sharedLink.settings.canChangeExpiration).toEqual(false);
             expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);
             expect(result.sharedLink.settings.isVanityNameAvailable).toEqual(false);
+        });
+
+        test('should convert OTP settings correctly if user cannot change access level', () => {
+            const result = convertItemResponse({
+                ...MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE,
+                permissions: {
+                    ...MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE.permissions,
+                    can_set_share_access: false,
+                },
+            });
+
+            expect(result.sharedLink.settings.canChangeOtp).toBe(false);
+            expect(result.sharedLink.settings.isOtpAvailable).toBe(true);
+        });
+
+        test('should convert OTP settings correctly if there are allowlist entries', () => {
+            const result = convertItemResponse(MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE);
+
+            expect(result.sharedLink.settings).toEqual(
+                expect.objectContaining({
+                    canChangeOtp: true,
+                    isOtpAvailable: true,
+                    otpAccessEntries: [
+                        { createdAt: Date.parse('2026-01-31T08:00:00Z'), type: 'email', value: 'dparrot@example.com' },
+                        { createdAt: Date.parse('2026-01-25T08:00:00Z'), type: 'domain', value: 'example.com' },
+                    ],
+                    otpMode: 'allowlist',
+                }),
+            );
         });
     });
 
@@ -166,7 +200,7 @@ describe('convertItemResponse', () => {
                     ...MOCK_ITEM_API_RESPONSE_WITH_SHARED_LINK.shared_link,
                     download_url: undefined,
                 },
-                shared_link_features: { download_url: false, password: true, vanity_name: true },
+                shared_link_features: { download_url: false, expiration: false, password: true, vanity_name: true },
             };
             const result = convertItemResponse(mockItemWithoutDirectLink);
             expect(result.sharedLink.settings.isDirectLinkAvailable).toEqual(false);

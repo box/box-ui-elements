@@ -211,6 +211,20 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(boxSignSection).toBeInTheDocument();
     });
 
+    test('should not render the Box Sign entry point when isForcedToUseTemplates is true', () => {
+        renderSidebarNav({
+            props: {
+                signSidebarProps: {
+                    enabled: true,
+                    isForcedToUseTemplates: true,
+                    onClick: () => {},
+                },
+            },
+        });
+
+        expect(screen.queryByRole('button', { name: /sign/i })).not.toBeInTheDocument();
+    });
+
     describe('hasNativeBoxAISidebar and customSidebarPanels interaction', () => {
         test('should render native Box AI when hasNativeBoxAISidebar is true, ignoring custom boxai tab', () => {
             const boxAiPanel = createBoxAIPanel({ title: 'Custom Box AI' });

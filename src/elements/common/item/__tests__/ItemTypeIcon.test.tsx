@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, screen } from '../../../../test-utils/testing-library';
-import ItemTypeIcon from '../ItemTypeIcon';
+import ItemTypeIcon, { ItemTypeIconProps } from '../ItemTypeIcon';
 
 describe('elements/common/item/ItemTypeIcon', () => {
-    const renderComponent = (props = {}) => {
-        const defaultProps = {
+    const renderComponent = (props: Partial<ItemTypeIconProps> = {}) => {
+        const defaultProps: ItemTypeIconProps = {
             item: {
+                id: '1',
                 type: 'file',
                 extension: 'pdf',
             },
@@ -20,13 +21,25 @@ describe('elements/common/item/ItemTypeIcon', () => {
     });
 
     test('renders component correctly for a folder item', async () => {
-        renderComponent({ item: { type: 'folder' } });
+        renderComponent({ item: { id: '1', type: 'folder' } });
 
         expect(screen.getByRole('img', { name: 'Personal folder' })).toBeInTheDocument();
     });
 
+    test('renders a folder when the extension is null', () => {
+        renderComponent({ item: { id: '1', type: 'folder', extension: null } });
+
+        expect(screen.getByRole('img', { name: 'Personal folder' })).toBeInTheDocument();
+    });
+
+    test('renders a file when the extension is null', () => {
+        renderComponent({ item: { id: '1', type: 'file', extension: null } });
+
+        expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
+    });
+
     test('renders component correctly for a bookmark item', async () => {
-        renderComponent({ item: { type: 'web_link' } });
+        renderComponent({ item: { id: '1', type: 'web_link' } });
 
         expect(screen.getByRole('img', { name: 'Bookmark' })).toBeInTheDocument();
     });
@@ -38,7 +51,7 @@ describe('elements/common/item/ItemTypeIcon', () => {
         ${{ is_externally_owned: true }}      | ${'External folder'}
         ${{ has_collaborations: true }}       | ${'Collaborated folder'}
     `('renders component when the folder is $label', ({ item, label }) => {
-        renderComponent({ item: { type: 'folder', ...item } });
+        renderComponent({ item: { id: '1', type: 'folder', ...item } });
 
         expect(screen.getByRole('img', { name: label })).toBeInTheDocument();
     });

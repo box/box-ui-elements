@@ -24,6 +24,7 @@ exports[`features/metadata-instance-editor/MetadataInstanceConfirmDialog should 
       >
         <FormattedMessage
           defaultMessage="Cancel"
+          description="Label for cancel button"
           id="boxui.metadataInstanceEditor.metadataCancel"
         />
       </Button>
@@ -34,6 +35,7 @@ exports[`features/metadata-instance-editor/MetadataInstanceConfirmDialog should 
       >
         <FormattedMessage
           defaultMessage="Remove"
+          description="Label for the remove button for custom metadata"
           id="boxui.metadataInstanceEditor.customRemove"
         />
       </PrimaryButton>

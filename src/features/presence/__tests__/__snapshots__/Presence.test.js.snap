@@ -288,6 +288,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     >
       <FormattedMessage
         defaultMessage="See all activity"
+        description="Text for link at footer of the Recent Activity panel"
         id="boxui.presence.previewPresenceFlyoutAccessStatsLink"
       />
     </a>
@@ -421,6 +422,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     >
       <FormattedMessage
         defaultMessage="See all activity"
+        description="Text for link at footer of the Recent Activity panel"
         id="boxui.presence.previewPresenceFlyoutAccessStatsLink"
       />
     </a>
@@ -503,6 +505,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   >
     <FormattedMessage
       defaultMessage="Quickly see who has commented on, edited, or viewed this file."
+      description="Tooltip text visible on page load, to prompt the user to press a button to view activity"
       id="boxui.presence.previewPresenceFlyoutCopy"
     />
     <Button
@@ -514,6 +517,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     >
       <FormattedMessage
         defaultMessage="View Recent Activity"
+        description="Text on button embedded within tooltip that is visible on page load"
         id="boxui.presence.previewPresenceFlyoutActivityCTA"
       />
     </Button>

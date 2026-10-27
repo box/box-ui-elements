@@ -4,6 +4,7 @@ exports[`features/item-details/ItemExpirationNotice should accept node as expira
 <InlineNotice>
   <FormattedMessage
     defaultMessage="This file will be deleted on {expiration}."
+    description="Warning message in the sidebar that this file will be automatically deleted on a certain date, {expiration} is the date"
     id="boxui.itemDetails.fileExpiration"
     values={
       {
@@ -20,6 +21,7 @@ exports[`features/item-details/ItemExpirationNotice should render default compon
 <InlineNotice>
   <FormattedMessage
     defaultMessage="This file will be deleted on {expiration}."
+    description="Warning message in the sidebar that this file will be automatically deleted on a certain date, {expiration} is the date"
     id="boxui.itemDetails.fileExpiration"
     values={
       {
@@ -34,6 +36,7 @@ exports[`features/item-details/ItemExpirationNotice should render default compon
 <InlineNotice>
   <FormattedMessage
     defaultMessage="This folder will be deleted on {expiration}."
+    description="Warning message in the sidebar that this folder will be automatically deleted on a certain date, {expiration} is the date"
     id="boxui.itemDetails.folderExpiration"
     values={
       {
@@ -48,6 +51,7 @@ exports[`features/item-details/ItemExpirationNotice should render default compon
 <InlineNotice>
   <FormattedMessage
     defaultMessage="This bookmark will be deleted on {expiration}."
+    description="Warning message in the sidebar that this bookmark will be automatically deleted on a certain date, {expiration} is the date"
     id="boxui.itemDetails.bookmarkExpiration"
     values={
       {

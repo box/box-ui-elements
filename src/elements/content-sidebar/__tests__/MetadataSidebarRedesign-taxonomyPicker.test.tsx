@@ -92,6 +92,7 @@ const renderSidebar = (features: Record<string, boolean> = {}) => {
         filteredTemplateIds: [],
         getPreview: jest.fn().mockReturnValue({}),
         isFeatureEnabled: true,
+        logger: { onPreviewMetric: jest.fn(), onReadyMetric: jest.fn() },
         onError: jest.fn(),
         onSuccess: jest.fn(),
         ...routerProps,
@@ -159,6 +160,72 @@ describe('MetadataSidebarRedesign taxonomy picker wiring', () => {
         const editorProps = lastEditorProps();
         expect(editorProps.isMetadataTaxonomyPickerEnabled).toBe(false);
         expect(editorProps.createTaxonomyItemsService).toBeUndefined();
+    });
+
+    test('uses the editing template namespace when taxonomy scope is empty', async () => {
+        mockUseMetadataNamespaceContext.mockReturnValue({
+            enterpriseId: 'enterprise_123',
+            metadataNamespaceMode: 'FINAL',
+            isTemplateManagementEnabled: false,
+            isLoading: false,
+        });
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            refetchMetadata: jest.fn(),
+            templateInstances: [
+                {
+                    ...taxonomyTemplateInstance,
+                    scope: '',
+                    namespace: 'enterprise_123.legal',
+                } as unknown as MetadataTemplateInstance,
+            ],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+            extractErrorCode: null,
+        });
+
+        const getMetadataOptions = jest.fn().mockResolvedValue({ entries: [] });
+        api.getMetadataAPI.mockReturnValue({ getMetadataOptions });
+
+        renderSidebar({ 'metadata.taxonomyPicker.enabled': true });
+        await enterEditMode();
+
+        const editorProps = lastEditorProps();
+        await editorProps.taxonomyOptionsFetcher('', 'taxonomyTemplate', 'geography', 1, {
+            marker: null,
+            searchInput: '',
+        });
+
+        expect(getMetadataOptions).toHaveBeenCalledWith(
+            'file-id-1',
+            'enterprise_123.legal',
+            'taxonomyTemplate',
+            'geography',
+            1,
+            expect.objectContaining({ searchInput: '' }),
+        );
+
+        const service = editorProps.createTaxonomyItemsService?.({
+            scope: '',
+            templateKey: 'taxonomyTemplate',
+            fieldKey: 'geography',
+        });
+        await service?.getNodes(null, { limit: 100 });
+
+        expect(getMetadataOptions).toHaveBeenLastCalledWith(
+            'file-id-1',
+            'enterprise_123.legal',
+            'taxonomyTemplate',
+            'geography',
+            1,
+            expect.objectContaining({ level: 1 }),
+        );
     });
 
     test('service factory resolves field config from the editing template', async () => {

@@ -24,6 +24,8 @@ import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
     MetadataFieldValue,
+    MetadataFields,
+    MetadataInstanceV2,
     MetadataType,
     MetadataQueryInstanceTypeField,
 } from '../../common/types/metadata';
@@ -36,6 +38,7 @@ import {
     getStringFilter,
     mergeQueries,
     mergeQueryParams,
+    type QueryParams,
 } from './MetadataQueryBuilder';
 import type { ExternalFilterValues } from './MetadataViewContainer';
 
@@ -74,7 +77,12 @@ export default class MetadataQueryAPIHelper {
             return [];
         }
 
-        let operation = JSON_PATCH_OP_REPLACE;
+        type JsonPatchMutationOp =
+            | typeof JSON_PATCH_OP_ADD
+            | typeof JSON_PATCH_OP_REMOVE
+            | typeof JSON_PATCH_OP_REPLACE;
+
+        let operation: JsonPatchMutationOp = JSON_PATCH_OP_REPLACE;
 
         if (isEmptyValue(oldValue) && !isEmptyValue(newValue)) {
             operation = JSON_PATCH_OP_ADD;
@@ -89,7 +97,11 @@ export default class MetadataQueryAPIHelper {
             path: `/${field}`,
             value: oldValue,
         };
-        const patchOp = {
+        const patchOp: {
+            op: JsonPatchMutationOp;
+            path: string;
+            value?: MetadataFieldValue | null;
+        } = {
             op: operation,
             path: `/${field}`,
             value: newValue,
@@ -124,7 +136,10 @@ export default class MetadataQueryAPIHelper {
 
     flattenMetadata = (metadata?: MetadataType): MetadataType => {
         const templateFields = getProp(this.metadataTemplate, 'fields', []);
-        const instance = getProp(metadata, `${this.templateScope}.${this.templateKey}`);
+        const instance: (MetadataInstanceV2 & MetadataFields) | undefined = getProp(
+            metadata,
+            `${this.templateScope}.${this.templateKey}`,
+        );
 
         if (!instance) {
             return {};
@@ -281,7 +296,7 @@ export default class MetadataQueryAPIHelper {
         successCallback: () => void,
         errorCallback: ErrorCallback,
     ): Promise<void> => {
-        const operations: JSONPatchOperations = [];
+        const operations: JSONPatchOperations[] = [];
         items.forEach(item => {
             const operation = this.generateOperations(item, templateOldFields, templateNewFields);
             operations.push(operation);
@@ -294,7 +309,7 @@ export default class MetadataQueryAPIHelper {
     buildMetadataQueryParams = (filters: ExternalFilterValues) => {
         let argIndex = 0;
         let queries: string[] = [];
-        let queryParams: { [key: string]: number | Date | string } = {};
+        let queryParams: QueryParams = {};
 
         if (filters) {
             Object.keys(filters).forEach(key => {

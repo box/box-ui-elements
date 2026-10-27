@@ -183,18 +183,20 @@ class BaseUpload extends Base {
             this.makePreflightRequest();
             this.retryCount += 1;
 
-            // When rate limited, retry after interval defined in header
+            // When rate limited, retry with the same backoff as folder creation
         } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
-            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+            // Exponential delay plus jitter (0–999 ms) so parallel uploads don't retry together.
+            // Retry-After from the server overrides that delay.
+            let retryAfterMs = DEFAULT_RETRY_DELAY_MS * 2 ** this.retryCount + Math.floor(Math.random() * 1000);
 
             if (errorData.headers) {
-                const retryAfterSec = parseInt(
+                const retryAfterHeaderSec = parseInt(
                     errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
                     10,
                 );
 
-                if (!Number.isNaN(retryAfterSec)) {
-                    retryAfterMs = retryAfterSec * MS_IN_S;
+                if (!Number.isNaN(retryAfterHeaderSec)) {
+                    retryAfterMs = retryAfterHeaderSec * MS_IN_S;
                 }
             }
 

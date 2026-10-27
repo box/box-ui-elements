@@ -35,6 +35,24 @@ export const MOCK_SHARED_LINK = {
     vanity_url: 'https://example.com/vanity-url',
 };
 
+export const MOCK_ONE_TIME_PASSCODE = {
+    allowlist: [
+        {
+            created_at: '2026-01-31T08:00:00Z',
+            created_by: { id: '789', type: 'user' },
+            type: 'email',
+            value: 'dparrot@example.com',
+        },
+        {
+            created_at: '2026-01-25T08:00:00Z',
+            created_by: { id: '789', type: 'user' },
+            type: 'domain',
+            value: 'example.com',
+        },
+    ],
+    mode: 'allowlist',
+};
+
 export const mockAvatarUrlMap = {
     456: 'https://example.com/avatar.jpg',
 };
@@ -94,13 +112,7 @@ export const EMPTY_COLLABORATIONS_RESPONSE = {
 
 export const DEFAULT_USER_API_RESPONSE = {
     id: '789',
-    enterprise: { id: '12345', name: 'Test Enterprise' },
     login: mockOwner.login,
-};
-
-export const FREE_USER_API_RESPONSE = {
-    id: '123',
-    enterprise: null,
 };
 
 export const DEFAULT_ITEM_API_RESPONSE = {
@@ -115,7 +127,7 @@ export const DEFAULT_ITEM_API_RESPONSE = {
     owned_by: mockOwner,
     permissions: MOCK_PERMISSIONS,
     shared_link: null,
-    shared_link_features: { download_url: true, password: true, vanity_name: true },
+    shared_link_features: { download_url: true, expiration: true, password: true, vanity_name: true },
     shared_link_permission_options: ['can_edit', 'can_download', 'can_preview'],
     type: MOCK_ITEM.type,
 };
@@ -133,6 +145,15 @@ export const MOCK_ITEM_API_RESPONSE_WITH_COLLABORATORS = {
 export const MOCK_ITEM_API_RESPONSE_WITH_CLASSIFICATION = {
     ...DEFAULT_ITEM_API_RESPONSE,
     classification: MOCK_CLASSIFICATION,
+};
+
+export const MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE = {
+    ...DEFAULT_ITEM_API_RESPONSE,
+    shared_link: {
+        ...MOCK_SHARED_LINK,
+        is_password_enabled: false,
+        one_time_passcode: MOCK_ONE_TIME_PASSCODE,
+    },
 };
 
 // Mock API class for ContentSharingV2 storybook
@@ -206,6 +227,11 @@ export const mockApiWithCollaborators = createMockApi(
     MOCK_ITEM_API_RESPONSE_WITH_COLLABORATORS,
     DEFAULT_USER_API_RESPONSE,
     MOCK_COLLABORATIONS_RESPONSE,
+);
+export const mockApiWithOneTimePasscode = createMockApi(
+    MOCK_ITEM_API_RESPONSE_WITH_ONE_TIME_PASSCODE,
+    DEFAULT_USER_API_RESPONSE,
+    EMPTY_COLLABORATIONS_RESPONSE,
 );
 
 export const ContentSharingV2Template = (props = {}) => {

@@ -2,26 +2,27 @@ import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 
 import { render, screen } from '../../../test-utils/testing-library';
-import RenameDialog from '../RenameDialog';
+import RenameDialog, { type RenameDialogProps } from '../RenameDialog';
 import { ERROR_CODE_ITEM_NAME_TOO_LONG, ERROR_CODE_ITEM_NAME_IN_USE } from '../../../constants';
 
 jest.mock('react-modal', () => {
     return jest.fn(({ children }) => <div aria-label="Rename">{children}</div>);
 });
 
-const defaultProps = {
+const defaultProps: RenameDialogProps = {
     appElement: document.createElement('div'),
     errorCode: '',
     isLoading: false,
     isOpen: true,
-    item: { name: 'test.txt', extension: 'txt' },
+    item: { id: '1', name: 'test.txt', extension: 'txt' },
     onCancel: jest.fn(),
     onRename: jest.fn(),
     parentElement: document.createElement('div'),
 };
 
 describe('elements/content-explorer/RenameDialog', () => {
-    const renderComponent = (props = {}) => render(<RenameDialog {...defaultProps} {...props} />);
+    const renderComponent = (props: Partial<RenameDialogProps> = {}) =>
+        render(<RenameDialog {...defaultProps} {...props} />);
 
     test('renders the dialog with the correct initial state', () => {
         renderComponent();

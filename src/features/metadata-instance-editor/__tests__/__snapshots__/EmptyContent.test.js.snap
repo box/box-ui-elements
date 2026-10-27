@@ -10,6 +10,7 @@ exports[`features/metadata-instance-editor/EmptyContent should correctly render 
   >
     <FormattedMessage
       defaultMessage="No Metadata Applied"
+      description="Text to display when no metadata is applied to folder"
       id="boxui.metadataInstanceEditor.noMetadata"
     />
   </p>
@@ -26,6 +27,7 @@ exports[`features/metadata-instance-editor/EmptyContent should correctly render 
   >
     <FormattedMessage
       defaultMessage="No Metadata Applied"
+      description="Text to display when no metadata is applied to folder"
       id="boxui.metadataInstanceEditor.noMetadata"
     />
   </p>
@@ -34,6 +36,7 @@ exports[`features/metadata-instance-editor/EmptyContent should correctly render 
   >
     <FormattedMessage
       defaultMessage="Click 'Add' in the top right to add metadata to this item"
+      description="Instructions to create metadata for the selected folder"
       id="boxui.metadataInstanceEditor.noMetadataAddTemplate"
     />
   </p>

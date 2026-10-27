@@ -26,12 +26,14 @@ exports[`elements/content-open-with/IntegrationPortalContainer should render an 
       errorHeader={
         <FormattedMessage
           defaultMessage="We’re sorry, this integration is currently unavailable."
+          description="Header message to the user when an Open With integration fails to execute"
           id="be.executeIntegrationOpenWithErrorHeader"
         />
       }
       errorSubHeader={
         <FormattedMessage
           defaultMessage="Please try again later."
+          description="Sub header message to the user when an Open With integration fails to execute"
           id="be.executeIntegrationOpenWithErrorSubHeader"
         />
       }

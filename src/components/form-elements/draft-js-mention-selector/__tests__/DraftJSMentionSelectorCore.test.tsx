@@ -114,7 +114,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
 
     describe('shouldDisplayMentionLookup()', () => {
         const exampleMention = { mentionString: '@foo' };
-        const exampleContacts = [{ id: 1, name: 'foo' }];
+        const exampleContacts = [{ id: '1', name: 'foo' }];
         [
             // activeMention and contacts set
             {
@@ -199,14 +199,18 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         const wrapper = shallow(
             <DraftJSMentionSelector
                 {...requiredProps}
-                contacts={[{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }]}
+                contacts={[
+                    { id: '1', name: 'foo' },
+                    { id: '2', name: 'bar' },
+                    { id: '3', name: 'baz' },
+                ]}
             />,
         );
 
         const instance = getInstance(wrapper);
 
         test('should call addMention with the appropriate contact when called', () => {
-            sandbox.mock(instance).expects('addMention').withArgs({ name: 'foo' });
+            sandbox.mock(instance).expects('addMention').withArgs({ id: '1', name: 'foo' });
 
             instance.handleContactSelected(0);
         });
@@ -325,8 +329,7 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
     describe('componentDidUpdate()', () => {
         test('should set active mention to null if empty contacts are passed in', () => {
             const contact = {
-                id: 1,
-                item: {},
+                id: '1',
                 name: 'John',
                 value: '867-5309',
             };

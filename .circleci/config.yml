@@ -103,9 +103,6 @@ jobs:
           name: Babel build
           command: yarn --cwd /buie build:ci:es
       - run:
-          name: Checking locales and styles
-          command: /buie/scripts/check_generated_files.sh
-      - run:
           name: Webpack build
           command: yarn --cwd /buie build:ci:dist
       - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV

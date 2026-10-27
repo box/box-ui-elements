@@ -72,18 +72,18 @@ import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import MetadataNamespaces from './MetadataNamespaces';
 import {
+    canonicalMetadataHome,
     getEnterpriseNamespaceFromInstances as resolveEnterpriseNamespaceFromInstances,
     getEnterpriseRootFromScopeOrNamespace as resolveEnterpriseRoot,
     isTemplateExternallyOwned,
     resolveScopeOrNamespace,
 } from './metadataNamespaceUtils';
 
-/** Options for getMetadata — cache flags plus namespace-migration context. */
+/** Options for getMetadata — cache flags plus the viewer's enterprise FQN. */
 type MetadataGetOptions = {
     enterpriseFqn?: string,
     fields?: Array<string>,
     forceFetch?: boolean,
-    metadataNamespaceMode?: string,
     noPagination?: boolean,
     refreshCache?: boolean,
 };
@@ -91,8 +91,8 @@ type MetadataGetOptions = {
 class Metadata extends File {
     /**
      * Namespace migration mode for URL helpers on this Metadata instance.
-     * Defaults to SCOPED. getMetadata updates it from per-call options so
-     * subsequent template/instance URLs match the resolved sidebar mode.
+     * Set from constructor options and fixed for the life of the client.
+     * Defaults to SCOPED. Callers pass the sidebar mode to `getMetadataAPI`.
      *
      * @property {string}
      */
@@ -215,7 +215,7 @@ class Metadata extends File {
     getMetadataUrl(id: string, scope?: string, template?: string): string {
         const baseUrl = `${this.getMetadataInstanceBaseUrl()}/files/${id}/metadata`;
         if (scope && template) {
-            return `${baseUrl}/${scope}/${template}`;
+            return `${baseUrl}/${this.getScopeOrNamespace(scope)}/${template}`;
         }
         return baseUrl;
     }
@@ -234,7 +234,7 @@ class Metadata extends File {
     getMetadataUrlForFolder(id: string, scope?: string, template?: string): string {
         const baseUrl = `${this.getMetadataInstanceBaseUrl()}/folders/${id}/metadata`;
         if (scope && template) {
-            return `${baseUrl}/${scope}/${template}`;
+            return `${baseUrl}/${this.getScopeOrNamespace(scope)}/${template}`;
         }
         return baseUrl;
     }
@@ -292,7 +292,7 @@ class Metadata extends File {
      * @return {string} API url for getting template schema by template key
      */
     getMetadataTemplateSchemaUrl(templateKey: string, scope?: string = METADATA_SCOPE_ENTERPRISE): string {
-        return `${this.getMetadataTemplateUrl()}/${scope}/${templateKey}/schema`;
+        return `${this.getMetadataTemplateUrl()}/${this.getScopeOrNamespace(scope)}/${templateKey}/schema`;
     }
 
     /**
@@ -302,12 +302,17 @@ class Metadata extends File {
      * @return {string} base url for files
      */
     getMetadataTemplateUrlForScope(scope: string): string {
-        return `${this.getMetadataTemplateUrl()}/${scope}`;
+        return `${this.getMetadataTemplateUrl()}/${this.getScopeOrNamespace(scope)}`;
     }
 
     /** @see MetadataNamespaces.getMetadataNamespacesUrl */
     getMetadataNamespacesUrl(namespaceFqn: string): string {
         return this.getNamespacesAPI().getMetadataNamespacesUrl(namespaceFqn);
+    }
+
+    /** @see MetadataNamespaces.getNamespace */
+    getNamespace(file: BoxItem, namespaceFqn: string): Promise<?Object> {
+        return this.getNamespacesAPI().getNamespace(file, namespaceFqn);
     }
 
     /** @see MetadataNamespaces.listNamespaces */
@@ -326,6 +331,14 @@ class Metadata extends File {
         params: { limit: number, marker?: string },
     ): Promise<{ entries: Array<Object>, next_marker?: string }> {
         return this.getNamespacesAPI().listTemplatesForNamespace(file, namespaceFqn, params);
+    }
+
+    /** @see MetadataNamespaces.searchTemplates */
+    searchTemplates(
+        file: BoxItem,
+        params: { query: string, limit: number, marker?: string },
+    ): Promise<{ entries: Array<Object>, next_marker?: string }> {
+        return this.getNamespacesAPI().searchTemplates(file, params);
     }
 
     /** @see MetadataNamespaces.createMetadataTemplate */
@@ -357,9 +370,27 @@ class Metadata extends File {
         );
     }
 
-    /** @see MetadataNamespaces.getTemplateSchemaForEditor */
-    getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file?: BoxItem): Promise<Object> {
-        return this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+    /**
+     * Fetches a template schema for the editor and attaches taxonomy `levels`.
+     *
+     * `getTemplates` hydrates levels for the enterprise-root list only. A
+     * child-namespace template is loaded through this schema call, so the same
+     * hydration has to happen here or the taxonomy picker receives no levels.
+     *
+     * @see MetadataNamespaces.getTemplateSchemaForEditor
+     */
+    async getTemplateSchemaForEditor(namespaceFqn: string, templateKey: string, file?: BoxItem): Promise<Object> {
+        const schema = await this.getNamespacesAPI().getTemplateSchemaForEditor(namespaceFqn, templateKey, file);
+        if (!file || !file.id) {
+            return schema;
+        }
+
+        // Schema responses omit id/scope. Hydration only reads taxonomy fields.
+        // The sidebar list keeps an empty-levels fallback. This editor path must
+        // reject, or a failed levels request opens as a taxonomy with no levels.
+        // $FlowFixMe
+        const [hydrated] = await this.getTaxonomyLevelsForTemplates([schema], file.id, { throwOnError: true });
+        return hydrated || schema;
     }
 
     /**
@@ -431,14 +462,23 @@ class Metadata extends File {
     }
 
     /**
+     * Attaches taxonomy `levels` onto template fields that do not already have them.
+     *
+     * The sidebar list uses the default: a failed levels request becomes
+     * `levels: []` so one missing taxonomy does not fail the whole sidebar.
+     * The template editor passes `{ throwOnError: true }` so that failure
+     * rejects the schema load instead.
      *
      * @param {Array<MetadataTemplate>} metadataTemplates
      * @param {string} id
+     * @param {Object} [options]
+     * @param {boolean} [options.throwOnError]
      * @returns {Array<MetadataTemplate>}
      */
     async getTaxonomyLevelsForTemplates(
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
+        options: { throwOnError?: boolean } = {},
     ): Promise<Array<MetadataTemplate>> {
         const templates = cloneDeep(metadataTemplates);
 
@@ -470,7 +510,11 @@ class Metadata extends File {
                     levels: getProp(result, 'data.levels', []),
                 };
             } catch (error) {
-                // A missing taxonomy must not fail the whole metadata sidebar.
+                // The sidebar list keeps the template. The editor opts into throwOnError
+                // so a failed levels request is not shown as a taxonomy with no levels.
+                if (options.throwOnError) {
+                    throw error;
+                }
                 return { path: taxonomyPath, levels: [] };
             }
         });
@@ -723,19 +767,18 @@ class Metadata extends File {
         const templateKey = instance.$template;
         const scope = instance.$scope;
         const namespace = instance.$namespace;
+        // `global` and `box.metadata` are one home. A scope-only global instance
+        // must match a template listed from `box.metadata`, or the sidebar
+        // fetches `/metadata_templates/global` again and FINAL rejects it.
+        const instanceHome = canonicalMetadataHome(scope, namespace);
 
-        // Primary match: by scope (SCOPED mode; also works for enterprise-scoped
-        // instances in MIGRATION mode where $scope is still populated).
-        // Only run when scope is defined so namespace-only instances (undefined
-        // $scope) do not incorrectly match templates that also lack scope.
-        let template =
-            scope != null ? templates.find(t => t.templateKey === templateKey && t.scope === scope) : undefined;
-
-        // Fallback match: by namespace for namespace-only instances in
-        // MIGRATION/FINAL mode where $scope is absent.
-        if (!template && namespace) {
-            template = templates.find(t => t.templateKey === templateKey && t.namespace === namespace);
-        }
+        const template =
+            instanceHome != null
+                ? templates.find(
+                      t =>
+                          t.templateKey === templateKey && canonicalMetadataHome(t.scope, t.namespace) === instanceHome,
+                  )
+                : undefined;
 
         if (!template && instanceId) {
             const instanceEnterpriseRoot = resolveEnterpriseRoot(scope, namespace);
@@ -754,7 +797,7 @@ class Metadata extends File {
 
                 const fetchedTemplates = await this.getTemplates(
                     id,
-                    scope || namespace || instanceEnterpriseRoot || '',
+                    this.getScopeOrNamespace(scope, namespace) || instanceEnterpriseRoot || '',
                     instanceId,
                     isExternallyOwned,
                 );
@@ -868,6 +911,11 @@ class Metadata extends File {
             });
         }
 
+        const scope =
+            template.scope === METADATA_SCOPE_GLOBAL
+                ? this.getScopeOrNamespace(template.scope, template.namespace)
+                : template.scope;
+
         return {
             isExternallyOwned,
             canEdit: instance.$canEdit && canEdit,
@@ -875,7 +923,9 @@ class Metadata extends File {
             hidden: template.hidden,
             id: template.id,
             fields,
-            scope: template.scope,
+            // FINAL rewrites a legacy `global` scope so the editor does not
+            // request `/metadata_templates/global` for this instance.
+            scope,
             namespace: template.namespace,
             templateKey: template.templateKey,
             type: instance.$type,
@@ -1037,6 +1087,8 @@ class Metadata extends File {
         const cache: APICache = this.getCache();
         const key = this.getMetadataCacheKey(id);
 
+        const { metadataNamespaceMode } = this;
+
         // Clear the cache if needed
         if (options.forceFetch) {
             cache.unset(key);
@@ -1052,12 +1104,6 @@ class Metadata extends File {
 
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
-
-            // Per-call mode for this fetch; persist on the instance so later
-            // URL helpers (create/update/delete) on the same Metadata client
-            // match. Not stored on Base — File/Users/etc. do not use it.
-            const metadataNamespaceMode = options.metadataNamespaceMode || this.metadataNamespaceMode;
-            this.metadataNamespaceMode = metadataNamespaceMode;
 
             const { instances, globalTemplates, enterpriseTemplates } =
                 metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED
@@ -1423,8 +1469,10 @@ class Metadata extends File {
                     cachedMetadata.templateInstances.splice(
                         cachedMetadata.templateInstances.findIndex(
                             instance =>
-                                instance.scope === templateInstance.scope &&
-                                instance.templateKey === templateInstance.templateKey,
+                                instance.templateKey === templateInstance.templateKey &&
+                                (templateInstance.scope
+                                    ? instance.scope === templateInstance.scope
+                                    : instance.namespace === templateInstance.namespace),
                         ),
                         1,
                         templateInstance,
