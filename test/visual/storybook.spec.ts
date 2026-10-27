@@ -51,7 +51,8 @@ function loadStories(): StorybookIndexEntry[] {
         .sort((a, b) => a.id.localeCompare(b.id));
 }
 
-// `storyRendered` fires after the play function completes; screenshotting earlier races `play`.
+// `storyFinished` is the terminal event: it runs after play and afterEach and carries a status.
+// `storyRendered` fires earlier and still runs when the story later finishes in error.
 async function trackStoryLifecycle(page: Page): Promise<void> {
     await page.addInitScript(() => {
         /* eslint-disable no-underscore-dangle */
@@ -67,7 +68,11 @@ async function trackStoryLifecycle(page: Page): Promise<void> {
                 w.__visualStoryError = message ?? description ?? String(payload);
                 w.__visualStoryDone = true;
             };
-            channel.on('storyRendered', () => {
+            channel.on('storyFinished', payload => {
+                const { status } = (payload ?? {}) as { status?: string };
+                if (status !== 'success' && !w.__visualStoryError) {
+                    w.__visualStoryError = `story finished with status ${String(status)}`;
+                }
                 w.__visualStoryDone = true;
             });
             channel.on('storyErrored', fail);
