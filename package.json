@@ -7,7 +7,7 @@
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
     },
-    "homepage": "https://developer.box.com/docs/box-ui-elements",
+    "homepage": "https://developer.box.com/box-ui-elements",
     "main": "es/index.js",
     "module": "es/index.js",
     "jsnext:main": "es/index.js",
