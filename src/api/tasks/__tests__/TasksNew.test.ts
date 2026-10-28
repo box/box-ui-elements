@@ -1,13 +1,16 @@
 import { API_PAGE_LIMIT } from '../../../constants';
 import TasksNew from '../TasksNew';
+import type { APIOptions } from '../../../common/types/api';
+import type { GroupMini, SelectorItems, UserMini } from '../../../common/types/core';
+import type { TaskUpdatePayload } from '../../../common/types/tasks';
 
-let tasks;
+let tasks: TasksNew;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 
 describe('api/TasksNew', () => {
     beforeEach(() => {
-        tasks = new TasksNew({});
+        tasks = new TasksNew({} as APIOptions);
         tasks.get = jest.fn();
         tasks.post = jest.fn();
         tasks.put = jest.fn();
@@ -40,7 +43,7 @@ describe('api/TasksNew', () => {
             id: '22222',
             name: 'group-name',
         };
-        const assignees = [
+        const assignees: SelectorItems<UserMini | GroupMini> = [
             {
                 id: user.id,
                 item: {
@@ -51,7 +54,6 @@ describe('api/TasksNew', () => {
                     email: user.email,
                 },
                 name: user.name,
-                text: user.name,
                 value: user.id,
             },
             {
@@ -62,7 +64,6 @@ describe('api/TasksNew', () => {
                     type: 'group',
                 },
                 name: group.name,
-                text: group.name,
                 value: group.id,
             },
         ];
@@ -163,7 +164,7 @@ describe('api/TasksNew', () => {
                                 id: taskCollabId,
                             },
                         ],
-                    },
+                    } as TaskUpdatePayload,
                     successCallback,
                     errorCallback,
                 });
