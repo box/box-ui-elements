@@ -112,6 +112,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             instance.emitAnnotationReplyUpdateEvent,
         );
         expect(contextProvider.prop('value').emitAnnotationUpdateEvent).toEqual(instance.emitAnnotationUpdateEvent);
+        expect(contextProvider.prop('value').emitShowResolvedChangeEvent).toEqual(instance.emitShowResolvedChangeEvent);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toEqual(instance.getMatchPath);
         expect(contextProvider.prop('value').getAnnotationsPath).toEqual(instance.getAnnotationsPath);
         expect(contextProvider.prop('value').state).toEqual({
@@ -137,6 +138,31 @@ describe('elements/common/annotator-context/withAnnotations', () => {
         const contextProvider = getContextProvider(wrapper);
         expect(contextProvider.prop('value').getAnnotationsMatchPath).toBeUndefined();
         expect(contextProvider.prop('value').getAnnotationsPath).toBeUndefined();
+    });
+
+    describe('emitShowResolvedChangeEvent', () => {
+        test('should emit when the annotator is already available', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.handleAnnotator(mockAnnotator);
+            instance.emitShowResolvedChangeEvent(false);
+
+            expect(mockAnnotator.emit).toHaveBeenCalledWith('annotations_show_resolved_set', false);
+        });
+
+        test('should emit the stored value when the annotator attaches later', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.emitShowResolvedChangeEvent(true);
+
+            expect(mockAnnotator.emit).not.toHaveBeenCalled();
+
+            instance.handleAnnotator(mockAnnotator);
+
+            expect(mockAnnotator.emit).toHaveBeenCalledWith('annotations_show_resolved_set', true);
+        });
     });
 
     describe('emitActiveAnnotationChangeEvent', () => {

@@ -129,6 +129,22 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(ActivitySidebarComponent.prototype.fetchFeedItems).toHaveBeenCalledWith(true);
         });
+
+        test('should hide resolved annotations on the preview when show resolved is off', () => {
+            const emitShowResolvedChangeEvent = jest.fn();
+
+            getWrapper({ emitShowResolvedChangeEvent, showResolved: false });
+
+            expect(emitShowResolvedChangeEvent).toHaveBeenCalledWith(false);
+        });
+
+        test('should leave preview annotations unchanged when the show resolved filter is not used', () => {
+            const emitShowResolvedChangeEvent = jest.fn();
+
+            getWrapper({ emitShowResolvedChangeEvent });
+
+            expect(emitShowResolvedChangeEvent).not.toHaveBeenCalled();
+        });
     });
 
     describe('componentDidUpdate()', () => {
@@ -170,6 +186,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             wrapper.setProps({ shouldFetchSidebarData: false });
 
             expect(instance.fetchFeedItems).not.toHaveBeenCalled();
+        });
+
+        test('should update preview annotations when show resolved changes', () => {
+            const emitShowResolvedChangeEvent = jest.fn();
+            const wrapper = getWrapper({ emitShowResolvedChangeEvent, showResolved: false });
+
+            emitShowResolvedChangeEvent.mockClear();
+            wrapper.setProps({ showResolved: true });
+
+            expect(emitShowResolvedChangeEvent).toHaveBeenCalledWith(true);
         });
     });
 
