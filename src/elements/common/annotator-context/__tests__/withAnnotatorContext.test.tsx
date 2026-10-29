@@ -28,6 +28,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         const mockEmitAnnotationReplyDeleteEvent = jest.fn();
         const mockMmitAnnotationReplyUpdateEvent = jest.fn();
         const mockEmitAnnotationUpdateEvent = jest.fn();
+        const mockEmitShowResolvedChangeEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
 
@@ -39,6 +40,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent,
             emitAnnotationReplyUpdateEvent: mockMmitAnnotationReplyUpdateEvent,
             emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
+            emitShowResolvedChangeEvent: mockEmitShowResolvedChangeEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
         });
@@ -61,6 +63,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         expect(props.emitAnnotationReplyDeleteEvent).toBe(mockEmitAnnotationReplyDeleteEvent);
         expect(props.emitAnnotationReplyUpdateEvent).toBe(mockMmitAnnotationReplyUpdateEvent);
         expect(props.emitAnnotationUpdateEvent).toBe(mockEmitAnnotationUpdateEvent);
+        expect(props.emitShowResolvedChangeEvent).toBe(mockEmitShowResolvedChangeEvent);
         expect(props.getAnnotationsMatchPath).toBe(mockGetAnnotationsMatchPath);
         expect(props.getAnnotationsPath).toBe(mockGetAnnotationsPath);
     });
@@ -76,6 +79,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         const mockEmitAnnotationReplyDeleteEvent = jest.fn();
         const mockMmitAnnotationReplyUpdateEvent = jest.fn();
         const mockEmitAnnotationUpdateEvent = jest.fn();
+        const mockEmitShowResolvedChangeEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
 
@@ -87,6 +91,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent,
             emitAnnotationReplyUpdateEvent: mockMmitAnnotationReplyUpdateEvent,
             emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
+            emitShowResolvedChangeEvent: mockEmitShowResolvedChangeEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
         });
@@ -109,6 +114,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         expect(props.emitAnnotationReplyDeleteEvent).toBe(mockEmitAnnotationReplyDeleteEvent);
         expect(props.emitAnnotationReplyUpdateEvent).toBe(mockMmitAnnotationReplyUpdateEvent);
         expect(props.emitAnnotationUpdateEvent).toBe(mockEmitAnnotationUpdateEvent);
+        expect(props.emitShowResolvedChangeEvent).toBe(mockEmitShowResolvedChangeEvent);
 
         // Router-related props should not be passed when routerDisabled is true
         expect(props.getAnnotationsMatchPath).toBeUndefined();
@@ -126,6 +132,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         const mockEmitAnnotationReplyDeleteEvent = jest.fn();
         const mockMmitAnnotationReplyUpdateEvent = jest.fn();
         const mockEmitAnnotationUpdateEvent = jest.fn();
+        const mockEmitShowResolvedChangeEvent = jest.fn();
         const mockGetAnnotationsMatchPath = jest.fn();
         const mockGetAnnotationsPath = jest.fn();
 
@@ -137,6 +144,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent,
             emitAnnotationReplyUpdateEvent: mockMmitAnnotationReplyUpdateEvent,
             emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
+            emitShowResolvedChangeEvent: mockEmitShowResolvedChangeEvent,
             getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
             getAnnotationsPath: mockGetAnnotationsPath,
         });
@@ -159,6 +167,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         expect(props.emitAnnotationReplyDeleteEvent).toBe(mockEmitAnnotationReplyDeleteEvent);
         expect(props.emitAnnotationReplyUpdateEvent).toBe(mockMmitAnnotationReplyUpdateEvent);
         expect(props.emitAnnotationUpdateEvent).toBe(mockEmitAnnotationUpdateEvent);
+        expect(props.emitShowResolvedChangeEvent).toBe(mockEmitShowResolvedChangeEvent);
 
         // Router-related props should not be passed when routerDisabled is true
         expect(props.getAnnotationsMatchPath).toBeUndefined();

@@ -747,6 +747,51 @@ describe('elements/content-preview/ContentPreview', () => {
             },
         );
 
+        test('should register the annotator when annotations are viewable without create controls', async () => {
+            const onAnnotator = jest.fn();
+            const wrapper = getWrapper({
+                ...props,
+                onAnnotator,
+                showAnnotations: true,
+                showAnnotationsControls: false,
+            });
+
+            wrapper.setState({
+                file: {
+                    ...file,
+                    permissions: { can_view_annotations_all: true },
+                },
+            });
+
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+
+            expect(instance.preview.addListener).toHaveBeenCalledWith('annotator_create', onAnnotator);
+        });
+
+        test('should not register the annotator on the compared pane when create controls are off', async () => {
+            const onAnnotator = jest.fn();
+            const wrapper = getWrapper({
+                ...props,
+                isComparedPreview: true,
+                showAnnotations: true,
+                showAnnotationsControls: false,
+                onAnnotator,
+            });
+
+            wrapper.setState({
+                file: {
+                    ...file,
+                    permissions: { can_view_annotations_all: true },
+                },
+            });
+
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+
+            expect(instance.preview.addListener).not.toHaveBeenCalledWith('annotator_create', onAnnotator);
+        });
+
         test.each`
             called   | advancedContentInsights
             ${true}  | ${{}}

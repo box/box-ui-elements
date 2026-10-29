@@ -53,6 +53,7 @@ export interface AnnotatorContext {
     emitAnnotationReplyDeleteEvent?: (id: string, annotationId: string, isStartEvent?: boolean) => void;
     emitAnnotationReplyUpdateEvent?: (reply: Object, annotationId: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
+    emitShowResolvedChangeEvent?: (showResolved: boolean) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
     state: AnnotatorState;
