@@ -91,7 +91,6 @@ export interface ExternalProps {
     fetchAvatarUrls?: FetchAvatarUrls;
     /**
      * Host-provided migration mode (`SCOPED` | `MIGRATION` | `FINAL`).
-     * Ignored when `features.metadata.namespacesOptIn` is off.
      * When omitted (and opt-in is on), the sidebar stays in SCOPED.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
