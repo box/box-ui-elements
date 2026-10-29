@@ -46,8 +46,8 @@ class Base {
      * Optional regional metadata host.
      *
      * When set and distinct from `apiHost`, subclasses (currently `Metadata`)
-     * route metadata *instance* endpoints to this host while keeping
-     * templates, taxonomies, suggestions, options, and queries on `apiHost`.
+     * route metadata *instance* and *template* endpoints to this host while
+     * keeping taxonomies, suggestions, options, and queries on `apiHost`.
      * Empty values, or values equal to `apiHost`, are treated as "not set"
      * and resolve to the same URLs as `apiHost` alone.
      *
@@ -108,9 +108,10 @@ class Base {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @param {string} [options.apiHost] - Api host
      * @param {string} [options.metadataApiHost] - Regional metadata API host
-     *   used for metadata *instance* endpoints. Templates, taxonomies,
-     *   suggestions, options, and queries continue to use `apiHost`. Falls
-     *   back to `apiHost` when undefined, empty, or equal to `apiHost`.
+     *   used for metadata *instance* and *template* endpoints when configured.
+     *   Taxonomies, suggestions, options, and queries continue to use
+     *   `apiHost`. Falls back to `apiHost` when undefined, empty, or equal to
+     *   `apiHost`.
      * @param {string} [options.uploadHost] - Upload host name
      * @return {Base} Base instance
      */

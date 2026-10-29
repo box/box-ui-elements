@@ -615,7 +615,7 @@ export default {
     "boxui.core.selection.selectAllDescription": "選擇所有項目",
     "boxui.core.selection.shiftDownDescription": "將下一個項目新增到目前的選擇範圍中",
     "boxui.core.selection.shiftUpDescription": "將上一個項目新增到目前的選擇範圍中",
-    "boxui.core.selection.shiftXDescription": "選擇目前項目",
+    "boxui.core.selection.shiftXDescription": "選取目前的項目",
     "boxui.core.selection.upDescription": "選擇上一個項目",
     "boxui.core.send": "傳送",
     "boxui.datePicker.chooseDate": "選擇日期",
