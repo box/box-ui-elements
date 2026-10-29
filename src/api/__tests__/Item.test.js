@@ -181,12 +181,11 @@ describe('api/Item', () => {
             expect(item.successCallback).not.toHaveBeenCalled();
         });
 
-        test('should call merge() if cache has key', () => {
+        test('should call set() with cached item if cache has key', () => {
             createGetCacheSpy(true);
             item.shareSuccessHandler(MOCK_UPDATED_ITEM);
             expect(getCacheKeySpy).toHaveBeenCalledWith('id');
-            expect(mergeItemStub).toHaveBeenCalledWith(MOCK_KEY, MOCK_UPDATED_ITEM);
-            expect(setItemStub).not.toHaveBeenCalled();
+            expect(setItemStub).toHaveBeenCalledWith(MOCK_KEY, { ...MOCK_MERGED_ITEM, ...MOCK_UPDATED_ITEM });
             expect(getItemStub).toHaveBeenCalledWith(MOCK_KEY);
             expect(item.successCallback).toHaveBeenCalledWith(MOCK_MERGED_ITEM);
         });
@@ -196,7 +195,6 @@ describe('api/Item', () => {
             item.shareSuccessHandler(MOCK_UPDATED_ITEM);
             expect(getCacheKeySpy).toHaveBeenCalledWith('id');
             expect(setItemStub).toHaveBeenCalledWith(MOCK_KEY, MOCK_UPDATED_ITEM);
-            expect(mergeItemStub).not.toHaveBeenCalled();
             expect(getItemStub).toHaveBeenCalledWith(MOCK_KEY);
             expect(item.successCallback).toHaveBeenCalledWith(MOCK_MERGED_ITEM);
         });
