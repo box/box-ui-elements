@@ -602,7 +602,7 @@ export default {
     "boxui.core.selection.selectAllDescription": "Vælg alle elementer",
     "boxui.core.selection.shiftDownDescription": "Føj næste element til aktuelt valg",
     "boxui.core.selection.shiftUpDescription": "Føj forrige element til aktuelt valg",
-    "boxui.core.selection.shiftXDescription": "Vælg aktuelt element",
+    "boxui.core.selection.shiftXDescription": "Vælg nuværende element",
     "boxui.core.selection.upDescription": "Vælg forrige element",
     "boxui.datePicker.chooseDate": "Vælg dato",
     "boxui.datePicker.dateClearButton": "Ryd dato",
