@@ -10,15 +10,18 @@
         flex: 1;
         min-height: 0; // Required to prevent overflow of child flex elements
 
+        // Both panes use a zero flex-basis so they split the space left over by the sidebar equally.
+        // A 50% basis would overflow the row together with the sidebar, and flex-shrink would then
+        // squeeze the resizable sidebar below the width it was dragged to.
         &--comparing > .bcpr-container {
-            flex: 1 1 50%;
+            flex: 1 1 0;
             min-width: 0;
         }
     }
 
     .bcpr-compared-slot {
         display: none;
-        flex: 1 1 50%;
+        flex: 1 1 0;
         min-width: 0;
         min-height: 0;
 
