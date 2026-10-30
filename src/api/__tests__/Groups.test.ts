@@ -1,13 +1,14 @@
 import Groups from '../Groups';
+import type { APIOptions } from '../../common/types/api';
 
-let groups;
+let groups: Groups;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 const id = 123;
 
 describe('api/Groups', () => {
     beforeEach(() => {
-        groups = new Groups({});
+        groups = new Groups({} as APIOptions);
     });
 
     describe('CRUD operations', () => {

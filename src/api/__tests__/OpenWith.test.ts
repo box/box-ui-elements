@@ -1,11 +1,13 @@
 import OpenWith from '../OpenWith';
+import type { APIOptions } from '../../common/types/api';
+import type { Integration } from '../../common/types/integrations';
 import mockOpenWithData from './MockOpenWithData.json';
 
-let openWith;
+let openWith: OpenWith;
 
 describe('api/ContentOpenWith', () => {
     beforeEach(() => {
-        openWith = new OpenWith({});
+        openWith = new OpenWith({} as APIOptions);
     });
 
     describe('getOpenWithIntegrations()', () => {
@@ -13,9 +15,9 @@ describe('api/ContentOpenWith', () => {
             const data = mockOpenWithData.default;
             const successFn = jest.fn();
             const errorFn = jest.fn();
-            openWith.get = ({ successCallback }) => {
+            openWith.get = (({ successCallback }) => {
                 successCallback(data);
-            };
+            }) as unknown as OpenWith['get'];
 
             openWith.formatOpenWithData = jest.fn();
             openWith.consolidateBoxEditIntegrations = jest.fn();
@@ -28,23 +30,23 @@ describe('api/ContentOpenWith', () => {
 
     describe('consolidateBoxEditIntegrations()', () => {
         test('should do nothing if no Box Edit integrations are present', () => {
-            const data = mockOpenWithData.default.items;
+            const data = mockOpenWithData.default.items as unknown as Integration[];
             const result = openWith.consolidateBoxEditIntegrations(data);
             expect(result).toEqual(data);
         });
 
         test('should do nothing if only Box Edit is present', () => {
-            const data = mockOpenWithData.boxEdit;
+            const data = mockOpenWithData.boxEdit as unknown as Integration[];
             const result = openWith.consolidateBoxEditIntegrations(data);
             expect(result).toEqual(data);
         });
         test('should do nothing if only Box Edit SFC is present', () => {
-            const data = mockOpenWithData.boxEditSFC;
+            const data = mockOpenWithData.boxEditSFC as unknown as Integration[];
             const result = openWith.consolidateBoxEditIntegrations(data);
             expect(result).toEqual(data);
         });
         test('should only return Box Edit if both Box Edit AND Box Edit SFC are present', () => {
-            const data = mockOpenWithData.boxEditAndSFC;
+            const data = mockOpenWithData.boxEditAndSFC as unknown as Integration[];
             const result = openWith.consolidateBoxEditIntegrations(data);
             expect(result).toEqual(mockOpenWithData.boxEdit);
         });
