@@ -1,37 +1,38 @@
-import MarkerBasedGroups from '../MarkerBasedGroups';
-import { DEFAULT_MAX_CONTACTS, ERROR_CODE_FETCH_ENTERPRISE_GROUPS } from '../../constants';
+import MarkerBasedUsers from '../MarkerBasedUsers';
+import type { APIOptions } from '../../common/types/api';
+import { DEFAULT_MAX_CONTACTS, ERROR_CODE_FETCH_ENTERPRISE_USERS } from '../../constants';
 
-let markerBasedGroups;
-let markerGetSpy;
-let successCallback;
-let errorCallback;
+let markerBasedUsers: MarkerBasedUsers;
+let markerGetSpy: jest.SpyInstance;
+let successCallback: jest.Mock;
+let errorCallback: jest.Mock;
 const BASE_URL = 'https://api.box.com/2.0';
 const ITEM_ID = '14237093';
 const MOCK_REQUEST_DATA = { fields: ['name', 'permissions'], filter_term: 'foo', usemarker: true };
 
-describe('api/MarkerBasedGroups', () => {
+describe('api/MarkerBasedUsers', () => {
     beforeEach(() => {
-        markerBasedGroups = new MarkerBasedGroups({});
-        markerGetSpy = jest.spyOn(markerBasedGroups, 'markerGet');
+        markerBasedUsers = new MarkerBasedUsers({} as APIOptions);
+        markerGetSpy = jest.spyOn(markerBasedUsers, 'markerGet');
         successCallback = jest.fn();
         errorCallback = jest.fn();
     });
 
     describe('getUrl()', () => {
         test('should return the default API URL', () => {
-            expect(markerBasedGroups.getUrl()).toBe(`${BASE_URL}/groups`);
+            expect(markerBasedUsers.getUrl()).toBe(`${BASE_URL}/users`);
         });
     });
 
-    describe('getGroupsInEnterprise()', () => {
+    describe('getUsersInEnterprise()', () => {
         test.each`
             providedLimit | providedRequestData  | limit                   | requestData            | description
             ${undefined}  | ${undefined}         | ${DEFAULT_MAX_CONTACTS} | ${{ usemarker: true }} | ${'default arguments'}
             ${100}        | ${MOCK_REQUEST_DATA} | ${100}                  | ${MOCK_REQUEST_DATA}   | ${'provided arguments'}
         `('should call this.markerGet() with the $description', ({ requestData, limit }) => {
-            jest.spyOn(markerBasedGroups, 'getUrl').mockReturnValue(BASE_URL);
-            markerBasedGroups.getGroupsInEnterprise(ITEM_ID, successCallback, errorCallback, requestData, limit);
-            expect(markerBasedGroups.errorCode).toBe(ERROR_CODE_FETCH_ENTERPRISE_GROUPS);
+            jest.spyOn(markerBasedUsers, 'getUrl').mockReturnValue(BASE_URL);
+            markerBasedUsers.getUsersInEnterprise(ITEM_ID, successCallback, errorCallback, requestData, limit);
+            expect(markerBasedUsers.errorCode).toBe(ERROR_CODE_FETCH_ENTERPRISE_USERS);
             expect(markerGetSpy).toHaveBeenCalledWith({
                 id: ITEM_ID,
                 limit,

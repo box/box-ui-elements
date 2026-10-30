@@ -1,15 +1,17 @@
+import Xhr from '../../utils/Xhr';
 import OffsetBasedAPI from '../OffsetBasedAPI';
+import type { APIOptions } from '../../common/types/api';
 
 const LIMIT = 1000;
 
 describe('api/OffsetBasedAPI', () => {
-    let offsetBasedAPI;
+    let offsetBasedAPI: OffsetBasedAPI;
     const offsetBasedAPIResponse = { total_count: 0, entries: [] };
     const url = 'https://foo.bar';
     const errorCode = 'foo';
 
     beforeEach(() => {
-        offsetBasedAPI = new OffsetBasedAPI({});
+        offsetBasedAPI = new OffsetBasedAPI({} as APIOptions);
         offsetBasedAPI.errorCode = errorCode;
     });
 
@@ -61,7 +63,7 @@ describe('api/OffsetBasedAPI', () => {
                         },
                     }),
                 ),
-            };
+            } as unknown as Xhr;
 
             return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
@@ -77,7 +79,7 @@ describe('api/OffsetBasedAPI', () => {
                         data: offsetBasedAPIResponse,
                     }),
                 ),
-            };
+            } as unknown as Xhr;
 
             return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
@@ -108,7 +110,7 @@ describe('api/OffsetBasedAPI', () => {
         test('should make xhr to get offsetBasedAPI and call success callback', () => {
             offsetBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: offsetBasedAPIResponse })),
-            };
+            } as unknown as Xhr;
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).toHaveBeenCalledWith(offsetBasedAPIResponse);
@@ -135,7 +137,7 @@ describe('api/OffsetBasedAPI', () => {
                         data: pagedCommentsResponse,
                     }),
                 ),
-            };
+            } as unknown as Xhr;
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb, 50).catch(() => {
                 expect(successCb).not.toHaveBeenCalled();
@@ -148,7 +150,7 @@ describe('api/OffsetBasedAPI', () => {
             const error = new Error('error');
             offsetBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
-            };
+            } as unknown as Xhr;
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
