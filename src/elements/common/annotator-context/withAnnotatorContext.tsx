@@ -16,6 +16,7 @@ export interface WithAnnotatorContextProps {
     emitAnnotationReplyDeleteEvent?: (id: string, annotationId: string, isStartEvent?: boolean) => void;
     emitAnnotationReplyUpdateEvent?: (reply: Object, annotationId: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent?: (annotation: Object, isStartEvent?: boolean) => void;
+    emitShowResolvedChangeEvent?: (showResolved: boolean) => void;
     getAnnotationsMatchPath?: GetMatchPath;
     getAnnotationsPath?: (fileVersionId?: string, annotationId?: string) => string;
 }
@@ -33,6 +34,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                             emitAnnotationReplyDeleteEvent,
                             emitAnnotationReplyUpdateEvent,
                             emitAnnotationUpdateEvent,
+                            emitShowResolvedChangeEvent,
                             state,
                         }) => (
                             <WrappedComponent
@@ -45,6 +47,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                                 emitAnnotationReplyDeleteEvent={emitAnnotationReplyDeleteEvent}
                                 emitAnnotationReplyUpdateEvent={emitAnnotationReplyUpdateEvent}
                                 emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
+                                emitShowResolvedChangeEvent={emitShowResolvedChangeEvent}
                             />
                         )}
                     </AnnotatorContext.Consumer>
@@ -59,6 +62,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                         emitAnnotationReplyDeleteEvent,
                         emitAnnotationReplyUpdateEvent,
                         emitAnnotationUpdateEvent,
+                        emitShowResolvedChangeEvent,
                         getAnnotationsMatchPath,
                         getAnnotationsPath,
                         state,
@@ -73,6 +77,7 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                             emitAnnotationReplyDeleteEvent={emitAnnotationReplyDeleteEvent}
                             emitAnnotationReplyUpdateEvent={emitAnnotationReplyUpdateEvent}
                             emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
+                            emitShowResolvedChangeEvent={emitShowResolvedChangeEvent}
                             getAnnotationsMatchPath={getAnnotationsMatchPath}
                             getAnnotationsPath={getAnnotationsPath}
                         />
