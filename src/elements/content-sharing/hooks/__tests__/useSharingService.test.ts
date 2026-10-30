@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 
-import type { CollaborationFormData, SharingResponse } from '@box/unified-share-modal';
+import type { CollaborationForm, SharingResponse } from '@box/unified-share-modal';
 
 import { TYPE_FILE, TYPE_FOLDER } from '../../../../constants';
 import { createSharingService } from '../../sharingService';
@@ -354,7 +354,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 const sendInvitationsResult = (await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                } as unknown as CollaborationFormData)) as SharingResponse;
+                } as unknown as CollaborationForm)) as SharingResponse;
 
                 expect(mockFormatMessage).toHaveBeenCalledWith(
                     expect.objectContaining({ id: 'be.contentSharing.sendInvitationsSuccess' }),
@@ -374,7 +374,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 const sendInvitationsResult = (await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                } as unknown as CollaborationFormData)) as SharingResponse;
+                } as unknown as CollaborationForm)) as SharingResponse;
 
                 expect(mockFormatMessage).toHaveBeenNthCalledWith(
                     1,
@@ -399,7 +399,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 const sendInvitationsResult = (await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                } as unknown as CollaborationFormData)) as SharingResponse;
+                } as unknown as CollaborationForm)) as SharingResponse;
 
                 expect(mockFormatMessage).toHaveBeenCalledWith(
                     expect.objectContaining({ id: 'be.contentSharing.sendInvitationsError' }),
@@ -415,7 +415,7 @@ describe('elements/content-sharing/hooks/useSharingService', () => {
                 const sendInvitationsResult = await result.current.sendInvitations({
                     contacts: mockContacts,
                     role: 'editor',
-                } as unknown as CollaborationFormData);
+                } as unknown as CollaborationForm);
 
                 expect(sendInvitationsResult).toBeNull();
             });

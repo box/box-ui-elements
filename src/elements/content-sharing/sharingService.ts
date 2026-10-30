@@ -1,4 +1,4 @@
-import type { LinkSettingsFormData, OtpAccessEntry, SharedLinkSettings } from '@box/unified-share-modal';
+import type { LinkSettingsForm, OtpAccessEntry, SharedLinkSettings } from '@box/unified-share-modal';
 
 import type { API } from '../../api';
 import { convertSharedLinkPermissions, convertSharedLinkSettings } from './utils';
@@ -66,7 +66,7 @@ export const createSharingService = ({
         );
     };
 
-    const updateSharedLink = async (nextSettings: LinkSettingsFormData) => {
+    const updateSharedLink = async (nextSettings: LinkSettingsForm) => {
         if (!hasSharedLink) {
             return Promise.reject(Object.assign(new Error('Shared link not found'), { status: 404 }));
         }

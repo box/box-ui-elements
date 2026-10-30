@@ -1067,24 +1067,24 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/activity-feed@^3.0.28":
-  version "3.0.30"
-  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-3.0.30.tgz#d9413355684041d99720aed4d81a4ed87fad2843"
-  integrity sha512-lL7ppXem5Q6uVB05ZLem2enM7Dma/zYu48u1aFJJeyQaBMEvVV1yIQsluDBS97Q480wRr/J7vPLk1llW5ZlkjA==
+"@box/activity-feed@^3.1.36":
+  version "3.1.36"
+  resolved "https://registry.yarnpkg.com/@box/activity-feed/-/activity-feed-3.1.36.tgz#7a23134f807633cff888e926062f097ba539090d"
+  integrity sha512-7k/EN1C1MJT8F22bENrx37Byxr8RKQc4psfJU5gSdftkdLvL6GzrEWNp2NL2Y2hdENrgVaCmpQ4nC9PKb4dycA==
 
-"@box/blueprint-web-assets@5.12.0", "@box/blueprint-web-assets@^5.12.0":
-  version "5.12.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-5.12.0.tgz#17add7918b9be0aa0c06609787e0a8a44edeed45"
-  integrity sha512-D08nMiutbTiEM5fpOAFP0OE1EQvV0IG+HhsRdVkyoik28niQBK0+Wcw8xXTLMqQopA9DUFXPhWKG0yiDis3vqQ==
+"@box/blueprint-web-assets@^5.13.9":
+  version "5.13.9"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-5.13.9.tgz#3408793e3d4ab5099ec0ae7cde5aa07a042c9276"
+  integrity sha512-rD9POqDPPUDIU575mlWqbb1wpvLmGi2E/bccY7rgLwe6V0b3AuO5pa7Y35VB1138vaMe9a1cI7wB9ehP8PJn+A==
 
-"@box/blueprint-web@18.2.1":
-  version "18.2.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-18.2.1.tgz#412a381ec8937229899d90a09f1c9e2538eb0413"
-  integrity sha512-4QhIJCGllY97ynob65UpSEPWxn1yfASOCwt5MzK0PriV1uVCmlibFOYG6z73mTncMVOrFkrPPCkSm868mAc8lQ==
+"@box/blueprint-web@^18.9.1":
+  version "18.9.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-18.9.1.tgz#4b0c85886080577033482d745cef03ff51f3d572"
+  integrity sha512-fcDM8Vtyu/qVDxwWL591eyCSXi6Osmd/kuDIDyivqhi35w1pAbBnAbMQyS7qYLdL9B52Q14nq1xKqBdH1+lpsw==
   dependencies:
     "@ariakit/react" "0.4.21"
     "@ariakit/react-core" "0.4.21"
-    "@box/blueprint-web-assets" "^5.12.0"
+    "@box/blueprint-web-assets" "^5.13.9"
     "@internationalized/date" "^3.12.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1095,7 +1095,6 @@
     "@radix-ui/react-focus-scope" "1.0.4"
     "@radix-ui/react-popover" "1.0.7"
     "@radix-ui/react-radio-group" "1.1.3"
-    "@radix-ui/react-scroll-area" "1.0.5"
     "@radix-ui/react-select" "2.0.0"
     "@radix-ui/react-slider" "1.1.2"
     "@radix-ui/react-switch" "1.0.3"
@@ -1112,52 +1111,52 @@
     react-aria-components "1.16.0"
     type-fest "^3.2.0"
 
-"@box/box-ai-agent-selector@2.2.23":
-  version "2.2.23"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-2.2.23.tgz#d79bb5516b7eedb4562234685f756b65e3e6aa59"
-  integrity sha512-i5pG/K66TTRMDmz76AnjGPimDSDUmihsKR63r6meXlNxCLnvlhUMdOhYi26LHzDHUIpk0mbptueex87dGQrT6A==
+"@box/box-ai-agent-selector@^2.3.35":
+  version "2.3.35"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-2.3.35.tgz#8d0057510a1efa5d48ef5b0cf126de5ef9c0cc13"
+  integrity sha512-OyjXY7nZHG1n5NrgbIHRPoy4NYcEheJp9uGts1PdVkkBgjq4CkIBB1FMsgPf0uGFntWNmBTHGawjluptz5l6rg==
 
-"@box/box-ai-content-answers@^2.3.17":
-  version "2.3.17"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-2.3.17.tgz#e379b550b5700aa6c0dddb2dfbe92d97fe3b4c42"
-  integrity sha512-fMrpfmpJ89Zv2bT6F9vXgLkMzlXkkMguHPYDdf2omd94UlToY0NNp8mHTSkXicngp98+5KIpWp5tBIzvCcL4MA==
+"@box/box-ai-content-answers@^2.3.35":
+  version "2.3.35"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-2.3.35.tgz#1cbc49840927d42d06bb4190202d2669972554d6"
+  integrity sha512-m4zlNnSwQm7bjrXacg2iE3uTSw/zqIsRdM7fmcSul7sb2ADmyVb/KYtDbVeNMyQpYwF+Z9a6C9HwvXfUE2k5Zg==
   dependencies:
     dompurify "^3.2.0"
     react-markdown "^10.1.0"
     remark-gfm "^4.0.1"
 
-"@box/box-item-type-selector@^2.3.17":
-  version "2.3.17"
-  resolved "https://registry.yarnpkg.com/@box/box-item-type-selector/-/box-item-type-selector-2.3.17.tgz#fec225c9a466b01d3335f2158c346236c6fa2459"
-  integrity sha512-rpzY4w9Jaidw1XkW3pDw37xA2sE7BXheFlf/aMWc8aCg4kwN/FmUR27N0kRuOwu4plTPhMcnUXdfH0BS3/MtZg==
+"@box/box-item-type-selector@^2.3.33":
+  version "2.3.33"
+  resolved "https://registry.yarnpkg.com/@box/box-item-type-selector/-/box-item-type-selector-2.3.33.tgz#43a59678f14ad1ce5f7e38143302e0f18334406c"
+  integrity sha512-BlCXAONJnqbE4m7dmyQ4+dEwQ1jfz3I6/i+IcJY935HmGBF49kDoC85latHETcLcN3sJNsVh+4r8FswH5nsk4Q==
 
 "@box/cldr-data@^34.2.0":
   version "34.8.0"
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/collaboration-popover@^2.2.21":
-  version "2.2.21"
-  resolved "https://registry.yarnpkg.com/@box/collaboration-popover/-/collaboration-popover-2.2.21.tgz#8c9d4b514f15b99f41929d04cf3984037fc34e07"
-  integrity sha512-aWnnow+kw5ofmXn9GsAJQz1ilcYPFw49DTPj96qmS81w2hBPcKqd/sE6GrWGfX8ufkCKIUhz9djInJl1UCdNpw==
+"@box/collaboration-popover@^2.3.34":
+  version "2.3.34"
+  resolved "https://registry.yarnpkg.com/@box/collaboration-popover/-/collaboration-popover-2.3.34.tgz#73556d46704fb2fe5cfc5a4d3ad3fb94cd5cf6a1"
+  integrity sha512-/9uTJgl07CH9eCDuUKB/M6Ze+1bT/7U73fnSUzth6iApvFBTza7Y1SjrvWAOUpexNgGXNbl6+uDA9xuJqvL+9A==
 
-"@box/combobox-with-api@2.2.25":
-  version "2.2.25"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-2.2.25.tgz#253ea277fff6eec21185a3b7b9d86391d2a3065b"
-  integrity sha512-1kPVzQRM3IkGXSwve9X2iF9GaZ0gdgaGc+EGefrQ8eAEdWLtTCJBhnH/81L/2oYiRjn9liMCx4lKNFxBhLH3EA==
+"@box/combobox-with-api@^2.3.33":
+  version "2.3.33"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-2.3.33.tgz#4cb5f32e5abc96a80991f6c4214bcbfb9d031f82"
+  integrity sha512-Ghpq6AOPR8ao8IGjaxe0jUqBV/I4p2I63X+vN+hcahw+m7E9h/DrYEORPuB7dke08+BtTfgcCLN4Eiu1bld8tA==
   dependencies:
-    "@box/tree" "^2.3.6"
+    "@box/tree" "^2.4.33"
     react-accessible-treeview "2.9.0"
 
-"@box/content-field@^3.1.17":
-  version "3.1.17"
-  resolved "https://registry.yarnpkg.com/@box/content-field/-/content-field-3.1.17.tgz#9e054382059a5f0c0cc6bac0909de5d88d06516e"
-  integrity sha512-/ltjqRT6CpE4wSdlTUE2Ye0cbfTfVdcWiD23PBFXYdZPhfPP+Eq9G9HgeByxGh68w7JfTMD5LAYTd/Edxg0WAw==
+"@box/content-field@^3.1.34":
+  version "3.1.34"
+  resolved "https://registry.yarnpkg.com/@box/content-field/-/content-field-3.1.34.tgz#544878d17a0a9f0f3e107f71a6f102e5c030b425"
+  integrity sha512-MRBU0JCTJnvnv+vfvP2AFLsvbKOaxoHet/SagDpQ2QEP5ZJa3BHJQ+9gQebI1yloy+OzNF9OP9mvJ0vGPO5Pyw==
 
-"@box/copy-input@^2.3.21":
-  version "2.3.21"
-  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-2.3.21.tgz#8833130c0bf40f64199c90db9a86d859fe7681d3"
-  integrity sha512-RugUMMEQbMsGirjH8A2H25KnlaGCQb1zwwJCf+xzKhm1itLT73A5frXbFWKW/zlA8Hyqw3QTkMq7DWpWVO4B3Q==
+"@box/copy-input@^2.3.34":
+  version "2.3.34"
+  resolved "https://registry.yarnpkg.com/@box/copy-input/-/copy-input-2.3.34.tgz#2eb0d77303dd199cf0bb348bc1c8961e0d403a8d"
+  integrity sha512-LAnVUTdioms5j9QafLe49+5Tnaq9GQu/m2m+fsbYQHVBcl5N3ZTzI8V++jTbdia7fTAiknMHxIaVXHPRqJFk+Q==
 
 "@box/frontend@^11.0.1":
   version "11.0.1"
@@ -1168,45 +1167,45 @@
     rimraf "^3.0.0"
     semver "^7.4.0"
 
-"@box/item-icon@^3.2.0":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-3.2.2.tgz#7afa9ddbbd0d519e780c532ad7ec75b037cfc88f"
-  integrity sha512-By6AT/TbrVIgK9dC0YiTh3xmq8NPwQwg1/Wup1VDBKOOYGGlxvxJFyHI6rDDtFEU/cGIiaTKlp+3bbrWeHv3Hg==
+"@box/item-icon@^3.6.33":
+  version "3.6.33"
+  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-3.6.33.tgz#db4ddc7bbeea4e4cc6891209fe7a28fa216847cd"
+  integrity sha512-kTVQGA8bvMl1Y/ltRzWRKUJ+P8kFR+jN+yYhb6wdkory7WxBGszhkCtqY1EpmNq2to3JfBEbjth12CnwEF5Fmg==
 
 "@box/languages@^1.0.0":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^2.11.17":
-  version "2.11.17"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.11.17.tgz#661222792b0d9b8fcef3b92d2651083c279e4ac1"
-  integrity sha512-jgMAO/CcWIM/5+JKY+m9gKtiYMM6J+x4+MeTDMGzfOD8uMGzEEoAXlRoB5bi2WLP4VGBmGASHIbkScltkSHFFg==
+"@box/metadata-editor@^2.11.25":
+  version "2.11.25"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-2.11.25.tgz#0c5608f49c66fbd3ff56e315500a901b1ed72765"
+  integrity sha512-Vi7rFNaHVSqdae/hzrlpbMTn7Qm4Gip+bSytMhECkfSI8gw+Pf5NO8g+hWcWAMtENcnB65/zkdBHRlcgN53ivA==
 
-"@box/metadata-filter@^1.80.23":
-  version "1.80.23"
-  resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-1.80.23.tgz#4eefe51151f71cc96081d5e2d036be18f1f42008"
-  integrity sha512-6G5vgumSbUGk0r9SgCMol9HUW/9CkiHwDL5F8wH4EeRlF75xnxLGw7Q83BMMQfpJv+kkWhjJ0C/O9u0a07nBuQ==
+"@box/metadata-filter@^2.6.36":
+  version "2.6.36"
+  resolved "https://registry.yarnpkg.com/@box/metadata-filter/-/metadata-filter-2.6.36.tgz#d7748998edaf1b8ed0922d7f332ba9a721003d2a"
+  integrity sha512-OSR5RTjEoj6ijtCLdXLTpGVCwz23KMta+UuhvRHsQQW8GZufZr0yytGv7/uHhIjCHNL0Z39+kqL06+AG3LufTw==
 
-"@box/metadata-taxonomy-picker@^3.4.23":
-  version "3.4.23"
-  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.4.23.tgz#c7b519649fcfcb3e7cec8c65e47ba335de8a662b"
-  integrity sha512-r/6BIEKsZFiD9Mhtd8JngRJhVQtoSPKj8maznE/TsCG8eIWH7xpeh1bEzpTVoJx/71B9eqcpza0BYdAz4KxokA==
+"@box/metadata-taxonomy-picker@^3.4.35":
+  version "3.4.35"
+  resolved "https://registry.yarnpkg.com/@box/metadata-taxonomy-picker/-/metadata-taxonomy-picker-3.4.35.tgz#034969d5b03ce9e742dc00113f7d2e5d88b0655f"
+  integrity sha512-bQpVz9PMNbpmsDaMQuWKmaxpBY3QF+frNABgTZUXsN3sQsdEY4wDeR1sZy4nMQZXZEtz0hQbQTnvLKtlQqTkbw==
 
-"@box/metadata-template-browser@^3.0.17":
-  version "3.0.17"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-3.0.17.tgz#15ce80a3b246586de9afec03f325129a4b40f140"
-  integrity sha512-uTkypfG5SzjJNVWj0ii5qRpXgqeENbyQSIQFOvsVtrpahWS5owXx6rV55/RI2WJfusUN8AO+vsPm1yR7Ux8VYQ==
+"@box/metadata-template-browser@^3.0.29":
+  version "3.0.29"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-browser/-/metadata-template-browser-3.0.29.tgz#727e0f162745da620ce1d5a49ff906d7d7310b3b"
+  integrity sha512-6SdN3fMpDpaS8VcqtTYbjj6oXZfbNukjNaxUupQlEJQ3OuE2zSepWbwh91jvVTuKgVNgzcQ/9JmpDDUen5sQXA==
 
-"@box/metadata-template-editor@^2.7.8":
-  version "2.7.8"
-  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.7.8.tgz#c8b36c5d51059df9be0ac92d527a372e298eb4aa"
-  integrity sha512-uxDk8ziw+LoEHejQyBsGB5vu8qHAcnRvZqJX+ZVav29eei1NE8An7PR5KcU3vtavJVSPY2RfyxHntRIFd5adag==
+"@box/metadata-template-editor@^2.7.20":
+  version "2.7.20"
+  resolved "https://registry.yarnpkg.com/@box/metadata-template-editor/-/metadata-template-editor-2.7.20.tgz#f565a3b28a13540b5ac73938ba63915b3b8c1c9f"
+  integrity sha512-BQHKwqaARxKRrx6z7HIx+fP69qKOxUjSwgDpbc51oXLRlvavlC5Yt9jCVzkLwatsB8JsL31vwjBJTaEbu+WYwQ==
 
-"@box/metadata-view@2.4.18":
-  version "2.4.18"
-  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-2.4.18.tgz#be477507c1f6fe3975759e78497852431810c406"
-  integrity sha512-n6nK4Fq2UU495mS5Lj9zlNrH4tzYchahRQd5nFUnW7HsMw41hBsN56m/x5Va23AUw4M1GYwH7Ay7BIZ6a0mP4Q==
+"@box/metadata-view@^2.4.38":
+  version "2.4.38"
+  resolved "https://registry.yarnpkg.com/@box/metadata-view/-/metadata-view-2.4.38.tgz#d1e1315ee676aac2580241d95f645e51f538d91d"
+  integrity sha512-K2WO2e+SVC7FoXKs4jyykXd4AhqPCFX7+vItOlbyOnv3nWeDn6dmg+E0GVpcDvi3OVU+DbTQUOOwOUZ203BZEg==
 
 "@box/react-virtualized@^9.22.3-rc-box.10":
   version "9.22.3-rc-box.10"
@@ -1220,15 +1219,15 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/readable-time@^2.2.21":
-  version "2.2.21"
-  resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-2.2.21.tgz#d7b425f2f42e619d196670e11073764cd73e706b"
-  integrity sha512-yh/eUMZidTUfntCiV/7BwW8Pof7rL9Us1HVYYtKcM1rMz7lmMI96xrFHj+JylP5A/tNRoNClTYNX0XuIMDk2zw==
+"@box/readable-time@^2.3.34":
+  version "2.3.34"
+  resolved "https://registry.yarnpkg.com/@box/readable-time/-/readable-time-2.3.34.tgz#ca379d7b1ae44935f63fc24965b111f2bb4696d1"
+  integrity sha512-O9mUPgp6CZJEg3sCsu/5PeMurFru9HK76/TmNuI7ftpHNrrmx5S5i40hdAb2RcSzbY/rhsBMxixRDHkjABl0eQ==
 
-"@box/threaded-annotations@^4.14.0":
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-4.14.0.tgz#e788c27037e659f575c6117bb375b8c809d95c88"
-  integrity sha512-B7Tq1nSYvx1ZEOxBZGZYm9yxtGHpTN6LTq6lATwwxxhT3unaJ2/XRZ3Vc2MDCvoOTWY2EiyGxCE3VOFWKm24ng==
+"@box/threaded-annotations@^4.15.35":
+  version "4.15.35"
+  resolved "https://registry.yarnpkg.com/@box/threaded-annotations/-/threaded-annotations-4.15.35.tgz#e0f23ede5a07bbf7bf68699bec040d105d129fdf"
+  integrity sha512-XUy/sndjT3D0KQlNloKv5XYnnIbvWgqYoFFoy/wFhnwIokRQn1oj4sjbClP5329+dIqXXwHmDVj+hZuCa5JJkQ==
   dependencies:
     "@floating-ui/dom" "^1.6.0"
     "@tanstack/react-virtual" "^3.10.8"
@@ -1248,30 +1247,30 @@
     markdown-it "^14.2.0"
     uuid "^9.0.1"
 
-"@box/tree@^2.3.6":
-  version "2.3.23"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-2.3.23.tgz#2ec54b0f8e3a83a7ec08d1ed3fa444ae29115163"
-  integrity sha512-zOt515kJStscT7e/GHasQ9A1Uo+QhhmNVxhsS+qQB7RTFvcwxyZT/ib+KngCS6xKgL3KRgqwm5E0czN0GWzNWA==
+"@box/tree@^2.4.33":
+  version "2.4.33"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-2.4.33.tgz#55fb0f2aae1f536e6215e6ce019e713090985082"
+  integrity sha512-nNOTdIzqhF5GqNNa8zx3jyCSas9dl6DBxe5BS0wHLXnLuN8lNVf2Mcx5ORh1sSUQH5A/QBcvoaqEw+mbHxQJVQ==
 
-"@box/types@^2.1.8":
-  version "2.1.8"
-  resolved "https://registry.yarnpkg.com/@box/types/-/types-2.1.8.tgz#8ff5972f2fc0ea80e511dbcfcdc76dce72f8891f"
-  integrity sha512-Cj869wVrXRH0Z5gz5hOlmGciJqbWaEuZcbL4Jd09gF9igBbzmGzfVfiuOgas1940oXwXuTUnQzTyf5mJ646UiQ==
+"@box/types@^3.2.33":
+  version "3.2.33"
+  resolved "https://registry.yarnpkg.com/@box/types/-/types-3.2.33.tgz#983a07cf04731760b38af3d7ce210c77e0626428"
+  integrity sha512-mS/AHrktdie2bx104PcQTpCPK7r+8E4XNUJuGwpUQUMGC2Fi73PTLE1J3VDFE9LjqK8XqRzRB9JxrEvOLeI2mw==
 
-"@box/unified-share-modal@^3.6.2":
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-3.6.2.tgz#b7b4b71b56371529ed5786b0a281569e300f60ea"
-  integrity sha512-XVmrAdQhW22UhyVrEvWaHE75JM6KjAjsJKE7bsUzepAshrc7aGy8G3i/oNKQgfyE6KGucoANX4pVeGEXVLAvJg==
+"@box/unified-share-modal@^3.7.15":
+  version "3.7.15"
+  resolved "https://registry.yarnpkg.com/@box/unified-share-modal/-/unified-share-modal-3.7.15.tgz#548f1ce1263eb26474a30bd008912cd144cc79ce"
+  integrity sha512-qXAL4A6jQ9rWGeCzepYCjwRhqgbkQpE7y/FFiCmyjKZbC57FeBLhWMDJ+NyziJlKewZ7VPyooeQOzb+u4ewI2g==
 
-"@box/uploads-manager@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-2.4.0.tgz#c336bc4baef6265fa5a75d266dedd8784532f1eb"
-  integrity sha512-8tXfla+FNnKoqLnUSs+CLc2EEIueOJhGvJFhVtnJ8YOKGvoBSC3eiZA9iSScJQ4/OjK0ImqBlCsuLOAReCflfw==
+"@box/uploads-manager@^2.5.34":
+  version "2.5.34"
+  resolved "https://registry.yarnpkg.com/@box/uploads-manager/-/uploads-manager-2.5.34.tgz#779ffd33684d75b3aed5e64800df1d3674b46cb7"
+  integrity sha512-9dxy739kooZkRRmjhwfBhg+MUu6vm0OU+rzsRzYZfWpxS9FchWnJAdicpJEbiCpueJotQVyN0y665ZobxPvgiA==
 
-"@box/user-selector@^3.1.21":
-  version "3.1.21"
-  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-3.1.21.tgz#2b52a16f0fb9983b03b7f1bdcc4db2dc8ffb9b1d"
-  integrity sha512-5PbmAk3niUzE8VJXdhq5PklhN5DzBpXkoHuRZ3uQfJN9ikWeXd/QQUzLISVEHwIfC22TAAx3cTQpXdbFIP1yKg==
+"@box/user-selector@^3.1.33":
+  version "3.1.33"
+  resolved "https://registry.yarnpkg.com/@box/user-selector/-/user-selector-3.1.33.tgz#8c1c91f61022691cd7c34be20978c64d44a21f92"
+  integrity sha512-oMcfWAj/Z7//JSd91IzBbcOlpVgGrYwfdSym2ekdcKr3uSLr+OC3dVA8NTx9W5hSbB7mvNr+K9p0V8/1b7Rc8Q==
 
 "@cacheable/memory@^2.0.8":
   version "2.0.8"
@@ -3761,22 +3760,6 @@
     "@radix-ui/react-primitive" "1.0.3"
     "@radix-ui/react-use-callback-ref" "1.0.1"
     "@radix-ui/react-use-controllable-state" "1.0.1"
-
-"@radix-ui/react-scroll-area@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@radix-ui/react-scroll-area/-/react-scroll-area-1.0.5.tgz#01160c6893f24a2ddb5aa399ae5b3ba84ad4d3cc"
-  integrity sha512-b6PAgH4GQf9QEn8zbT2XUHpW5z8BzqEc7Kl11TwDrvuTrxlkcjTD5qa/bxgKr+nmuXKu4L/W5UZ4mlP/VG/5Gw==
-  dependencies:
-    "@babel/runtime" "^7.13.10"
-    "@radix-ui/number" "1.0.1"
-    "@radix-ui/primitive" "1.0.1"
-    "@radix-ui/react-compose-refs" "1.0.1"
-    "@radix-ui/react-context" "1.0.1"
-    "@radix-ui/react-direction" "1.0.1"
-    "@radix-ui/react-presence" "1.0.1"
-    "@radix-ui/react-primitive" "1.0.3"
-    "@radix-ui/react-use-callback-ref" "1.0.1"
-    "@radix-ui/react-use-layout-effect" "1.0.1"
 
 "@radix-ui/react-select@2.0.0":
   version "2.0.0"
