@@ -13,6 +13,7 @@ import {
 } from '../utils';
 import { threadedComments, threadedCommentsFormatted } from '../fixtures';
 import { FIELD_TYPE_STRING, FIELD_TYPE_TAXONOMY } from '../../features/metadata-instance-fields/constants';
+import type { MetadataDetailedFieldValue, MetadataInstanceV2 } from '../../common/types/metadata';
 
 jest.mock('../../utils/Xhr', () => {
     return jest.fn().mockImplementation(() => ({
@@ -293,6 +294,14 @@ describe('api/utils', () => {
     });
 
     describe('mergeDetailedAndHydratedInstances()', () => {
+        type MergedInstance = MetadataInstanceV2 & Record<string, MetadataDetailedFieldValue>;
+
+        const mergeInstances = (detailed: Array<object>, hydrated: Array<object>): Array<MergedInstance> =>
+            mergeDetailedAndHydratedInstances(
+                detailed as Array<MetadataInstanceV2>,
+                hydrated as Array<MetadataInstanceV2>,
+            ) as Array<MergedInstance>;
+
         test('should replace detailed values with hydrated values for taxonomy fields', () => {
             const detailedEntries = [
                 {
@@ -319,7 +328,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result).toEqual([
                 {
@@ -347,7 +356,7 @@ describe('api/utils', () => {
             ];
             const hydratedEntries = [];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result).toEqual(detailedEntries);
         });
@@ -370,7 +379,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result[0].$id).toBe('inst-1');
             expect(result[0].$scope).toBe('enterprise');
@@ -399,7 +408,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result[0].country.values).toEqual([{ id: 'id-1', displayName: 'Japan' }]);
             expect(result[0].country.details).toEqual({ updatedAt: 100 });
@@ -423,7 +432,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result[0].plainField).toBe('just a string');
             expect(result[0].detailedField).toEqual({ values: 'val', details: {} });
@@ -456,7 +465,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result).toEqual([
                 {
@@ -491,7 +500,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result).toEqual([
                 {
@@ -507,7 +516,7 @@ describe('api/utils', () => {
             const detailedEntries = [{ $id: 'id-1', $template: 'properties' }];
             const hydratedEntries = [JSON.parse('{"$id":"id-1","$template":"properties","__proto__":"custom value"}')];
 
-            const [result] = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const [result] = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
             expect(Object.keys(result)).toContain('__proto__');
@@ -552,7 +561,7 @@ describe('api/utils', () => {
                 },
             ];
 
-            const result = mergeDetailedAndHydratedInstances(detailedEntries, hydratedEntries);
+            const result = mergeInstances(detailedEntries, hydratedEntries);
 
             expect(result).toEqual([
                 {
