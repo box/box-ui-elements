@@ -1,5 +1,6 @@
 import Cache from '../../utils/Cache';
 import MetadataQuery from '../MetadataQuery';
+import type { APIOptions } from '../../common/types/api';
 
 import { CACHE_PREFIX_METADATA_QUERY, ERROR_CODE_METADATA_QUERY } from '../../constants';
 
@@ -77,7 +78,7 @@ const mockAPIRequestParams = {
 
 describe('api/MetadataQuery', () => {
     beforeEach(() => {
-        metadataQuery = new MetadataQuery({});
+        metadataQuery = new MetadataQuery({} as APIOptions);
         cache = new Cache();
         metadataQuery.getCache = jest.fn().mockReturnValueOnce(cache);
     });
