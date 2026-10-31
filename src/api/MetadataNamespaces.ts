@@ -1,0 +1,231 @@
+/**
+ * @file Namespace-migration Metadata API surface (list/create/update).
+ *
+ * Collaborator owned by Metadata.js — keeps mid/post-migration HTTP out of the
+ * core scoped metadata flows. Methods are delegated from Metadata for a stable
+ * public API (`api.getMetadataAPI().listNamespaces(...)`).
+ *
+ * Migration mode lives on the Metadata host (defaults to SCOPED) and is set
+ * when that client is constructed. This class does not fetch
+ * enterprise-configuration flags. Auth is the same file-scoped TokenService
+ * path as `getTemplates` (`id: file_…`).
+ */
+
+import getProp from 'lodash/get';
+import { getTypedFileId } from '../utils/file';
+import {
+    ERROR_CODE_CREATE_METADATA_TEMPLATE,
+    ERROR_CODE_UPDATE_METADATA_TEMPLATE,
+    HEADER_CONTENT_TYPE,
+} from '../constants';
+import type { ElementsErrorCallback } from '../common/types/api';
+import type { BoxItem } from '../common/types/core';
+import type APICache from '../utils/Cache';
+import type Xhr from '../utils/Xhr';
+
+/** Minimal host surface MetadataNamespaces needs from Metadata. */
+export type MetadataNamespaceHost = {
+    // Writable: MetadataNamespaces assigns error codes onto the host.
+    errorCode: string;
+    readonly metadataNamespaceMode: string;
+    readonly getBaseApiUrl: () => string;
+    readonly getCache: () => APICache;
+    readonly getMetadataTemplateSchemaCacheKey: (templateKey: string, scope?: string) => string;
+    readonly getMetadataTemplateSchemaUrl: (templateKey: string, scope?: string) => string;
+    readonly getMetadataTemplateUrl: () => string;
+    readonly getMetadataTemplateUrlForScope: (scope: string) => string;
+    readonly isDestroyed: () => boolean;
+    readonly xhr: Xhr;
+};
+
+export default class MetadataNamespaces {
+    host: MetadataNamespaceHost;
+
+    constructor(host: MetadataNamespaceHost) {
+        this.host = host;
+    }
+
+    getMetadataNamespacesUrl(namespaceFqn: string): string {
+        return `${this.host.getBaseApiUrl()}/metadata_namespaces/${namespaceFqn}`;
+    }
+
+    getRequestFileId(file: BoxItem | null | undefined): string | undefined {
+        return file && file.id ? getTypedFileId(file.id) : undefined;
+    }
+
+    /**
+     * Lists the immediate child namespaces of a namespace FQN — one level only,
+     * cursor-paginated.
+     */
+    async listNamespaces(
+        file: BoxItem,
+        namespaceFqn: string,
+        params: { limit: number; marker?: string },
+    ): Promise<{ entries: Array<object>; next_marker?: string }> {
+        const url = `${this.getMetadataNamespacesUrl(namespaceFqn)}/children`;
+        try {
+            const response = await this.host.xhr.get({
+                url,
+                id: this.getRequestFileId(file),
+                params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
+            });
+            return getProp(response, 'data', { entries: [] });
+        } catch (e) {
+            return { entries: [] };
+        }
+    }
+
+    /**
+     * Fetches one namespace, including `permissions` when the caller may create
+     * templates under it.
+     *
+     * The enterprise root is never a row of `.../children`, so template
+     * creation at the root is decided from this response. `permissions` is
+     * omitted unless `fields=permissions` is requested.
+     */
+    async getNamespace(file: BoxItem, namespaceFqn: string): Promise<object | null> {
+        const url = this.getMetadataNamespacesUrl(namespaceFqn);
+        try {
+            const response = await this.host.xhr.get({
+                url,
+                id: this.getRequestFileId(file),
+                params: { fields: 'permissions' },
+            });
+            return getProp(response, 'data', null);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    /**
+     * Typeahead over templates the caller can see.
+     *
+     * `GET /metadata_templates/search`. `query` is a required prefix
+     * matched against `displayName` and `templateKey`. Hits omit template fields
+     * and hidden templates. A sub-namespace hit carries `containingNamespace`
+     * and `ancestors` (`fqn` + `displayName` only); enterprise-root, legacy, and
+     * global hits carry neither. The path is `ancestors` and `containingNamespace`.
+     * `fields=permissions` returns the same template permission object as
+     * template list: `can_read`, `can_update`, `can_delete`,
+     * `can_view_permissions`, and `can_manage_permissions`.
+     * Errors propagate so the picker can show its search error state.
+     */
+    async searchTemplates(
+        file: BoxItem,
+        params: { query: string; limit: number; marker?: string },
+    ): Promise<{ entries: Array<object>; next_marker?: string }> {
+        const url = `${this.host.getMetadataTemplateUrl()}/search`;
+        const response = await this.host.xhr.get({
+            url,
+            id: this.getRequestFileId(file),
+            params: {
+                query: params.query,
+                limit: params.limit,
+                fields: 'permissions',
+                ...(params.marker ? { marker: params.marker } : {}),
+            },
+        });
+        return getProp(response, 'data', { entries: [] });
+    }
+
+    /**
+     * Lists templates under a namespace FQN with cursor pagination.
+     *
+     * Errors propagate so the picker can show its list error state. An empty
+     * success is `{ entries: [] }`. Swallowing a failure would let the caller
+     * prepend client-built rows, such as Custom Metadata, onto a failed list.
+     */
+    async listTemplatesForNamespace(
+        file: BoxItem,
+        namespaceFqn: string,
+        params: { limit: number; marker?: string },
+    ): Promise<{ entries: Array<object>; next_marker?: string }> {
+        const url = this.host.getMetadataTemplateUrlForScope(namespaceFqn);
+        const response = await this.host.xhr.get({
+            url,
+            id: this.getRequestFileId(file),
+            params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
+        });
+        return getProp(response, 'data', { entries: [] });
+    }
+
+    /**
+     * Creates a new namespaced metadata template.
+     */
+    async createMetadataTemplate(
+        file: BoxItem,
+        body: object,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.host.errorCode = ERROR_CODE_CREATE_METADATA_TEMPLATE;
+        const url = `${this.host.getMetadataTemplateUrl()}/schema`;
+        try {
+            const response = await this.host.xhr.post({
+                url,
+                id: this.getRequestFileId(file),
+                data: body,
+            });
+            if (!this.host.isDestroyed()) {
+                successCallback(getProp(response, 'data'));
+            }
+        } catch (e) {
+            errorCallback(e, this.host.errorCode);
+        }
+    }
+
+    /**
+     * Updates a namespaced metadata template via patch operations.
+     */
+    async updateMetadataTemplate(
+        file: BoxItem,
+        namespaceFqn: string,
+        templateKey: string,
+        patchItems: Array<object>,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.host.errorCode = ERROR_CODE_UPDATE_METADATA_TEMPLATE;
+        const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
+        try {
+            const response = await this.host.xhr.put({
+                url,
+                id: this.getRequestFileId(file),
+                headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
+                data: patchItems,
+            });
+            if (!this.host.isDestroyed()) {
+                this.host.getCache().unset(this.host.getMetadataTemplateSchemaCacheKey(templateKey, namespaceFqn));
+                successCallback(getProp(response, 'data'));
+            }
+        } catch (e) {
+            errorCallback(e, this.host.errorCode);
+        }
+    }
+
+    /**
+     * Fetches a template schema in the shape expected by MetadataTemplateEditor.
+     */
+    async getTemplateSchemaForEditor(
+        namespaceFqn: string,
+        templateKey: string,
+        file: BoxItem | null | undefined,
+    ): Promise<object> {
+        const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
+        const response = await this.host.xhr.get({
+            url,
+            id: this.getRequestFileId(file),
+        });
+        const data = getProp(response, 'data', {});
+        return {
+            namespace: data.namespace || namespaceFqn,
+            templateKey: data.templateKey,
+            displayName: data.displayName,
+            fields: (data.fields || []).map(f => ({
+                ...f,
+                hidden: f.hidden != null ? f.hidden : f.isHidden ?? false,
+            })),
+            hidden: data.hidden != null ? data.hidden : data.isHidden ?? false,
+        };
+    }
+}
