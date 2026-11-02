@@ -1,0 +1,12 @@
+[
+  {
+    "id": "boxui.timeInput.invalidTimeError",
+    "description": "Error message for invalid time formats. \"HH:MM A\" should be localized.",
+    "defaultMessage": "Invalid time format. Enter a time in the format HH:MM A."
+  },
+  {
+    "id": "boxui.timeInput.emptyTimeError",
+    "description": "Error message for empty time formats. \"HH:MM A\" should be localized.",
+    "defaultMessage": "Required field. Enter a time in the format HH:MM A."
+  }
+]

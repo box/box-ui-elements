@@ -1,0 +1,57 @@
+[
+  {
+    "id": "be.contentUploader.cancelAllUploads.heading",
+    "description": "Heading for the cancel all uploads confirmation modal",
+    "defaultMessage": "Cancel all uploads?"
+  },
+  {
+    "id": "be.contentUploader.cancelAllUploads.body",
+    "description": "Body content for the cancel all uploads confirmation modal",
+    "defaultMessage": "Files that are still uploading will be canceled. Completed uploads will not be affected."
+  },
+  {
+    "id": "be.contentUploader.cancelAllUploads.confirmButton",
+    "description": "Confirm button for the cancel all uploads modal",
+    "defaultMessage": "Cancel All"
+  },
+  {
+    "id": "be.contentUploader.cancelAllUploads.keepUploadingButton",
+    "description": "Dismiss button for the cancel all uploads modal",
+    "defaultMessage": "Keep Uploading"
+  },
+  {
+    "id": "be.contentUploader.cancelAllUploads.closeLabel",
+    "description": "Aria label for the close button on the cancel all uploads modal",
+    "defaultMessage": "Close cancel uploads dialog"
+  },
+  {
+    "id": "be.contentUploader.largeFileWarning.heading",
+    "description": "Heading for the warning modal shown when one or more files exceed the upload size limit",
+    "defaultMessage": "{count, plural, one {File} other {Files}} Can't Be Uploaded"
+  },
+  {
+    "id": "be.contentUploader.largeFileWarning.body",
+    "description": "Body text in the warning modal informing the user that one or more files exceed their plan upload size limit. Contains a link to upgrade the plan.",
+    "defaultMessage": "{count, plural, one {This file exceeds} other {These files exceed}} the {maxFileSize} limit on your current plan. <link>Upgrade your plan</link> for larger uploads:"
+  },
+  {
+    "id": "be.contentUploader.largeFileWarning.cancelButton",
+    "description": "Label for the button that cancels the upload attempt entirely",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "be.contentUploader.largeFileWarning.uploadTheRestButton",
+    "description": "Label for the button that proceeds with uploading only the files that are within the plan size limit",
+    "defaultMessage": "Upload the Rest"
+  },
+  {
+    "id": "be.contentUploader.largeFileWarning.closeAriaLabel",
+    "description": "Accessible label for the close button in the large file warning modal",
+    "defaultMessage": "Close"
+  },
+  {
+    "id": "be.contentUploader.largeFileWarning.fileListAriaLabel",
+    "description": "Accessible label for the list of oversize files inside the warning modal",
+    "defaultMessage": "Files exceeding the upload size limit"
+  }
+]

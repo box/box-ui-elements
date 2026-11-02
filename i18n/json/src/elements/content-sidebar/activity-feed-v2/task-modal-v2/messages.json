@@ -1,0 +1,162 @@
+[
+  {
+    "id": "be.taskModalV2.assigneeFieldRequiredError",
+    "description": "Error message when the assignee field is empty on submit",
+    "defaultMessage": "Required Field"
+  },
+  {
+    "id": "be.taskModalV2.assigneePlaceholder",
+    "description": "Placeholder text for the assignee combobox in the task modal",
+    "defaultMessage": "Add an assignee or group"
+  },
+  {
+    "id": "be.taskModalV2.assigneeSelectorLabel",
+    "description": "Label for the assignee combobox in the task modal",
+    "defaultMessage": "Select Assignees"
+  },
+  {
+    "id": "be.taskModalV2.cancelButtonLabel",
+    "description": "Label for the Cancel button in the task modal footer",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "be.taskModalV2.close",
+    "description": "aria-label for the task modal close button",
+    "defaultMessage": "Close"
+  },
+  {
+    "id": "be.taskModalV2.completionRuleCheckboxLabel",
+    "description": "Label for the checkbox that switches a task to any-assignee completion",
+    "defaultMessage": "Only one assignee is required to complete this task"
+  },
+  {
+    "id": "be.taskModalV2.createApprovalTask",
+    "description": "Title of the modal for creating an approval task",
+    "defaultMessage": "Create Approval Task"
+  },
+  {
+    "id": "be.taskModalV2.createButtonLabel",
+    "description": "Label for the Create button in the task modal footer (create mode)",
+    "defaultMessage": "Create"
+  },
+  {
+    "id": "be.taskModalV2.createGeneralTask",
+    "description": "Title of the modal for creating a general task",
+    "defaultMessage": "Create General Task"
+  },
+  {
+    "id": "be.taskModalV2.createTaskErrorMessage",
+    "description": "Body text of the error notice when creating a task fails",
+    "defaultMessage": "An error occurred while creating this task. Please try again."
+  },
+  {
+    "id": "be.taskModalV2.taskErrorTitle",
+    "description": "Title of the error notice when creating or updating a task fails",
+    "defaultMessage": "Error"
+  },
+  {
+    "id": "be.taskModalV2.datePickerCalendarAriaLabel",
+    "description": "aria-label for the calendar inside the due-date date picker",
+    "defaultMessage": "Due date calendar"
+  },
+  {
+    "id": "be.taskModalV2.datePickerClearAriaLabel",
+    "description": "aria-label for the clear button on the due-date date picker",
+    "defaultMessage": "Clear due date"
+  },
+  {
+    "id": "be.taskModalV2.datePickerNextMonthAriaLabel",
+    "description": "aria-label for the next-month button in the due-date date picker",
+    "defaultMessage": "Next month"
+  },
+  {
+    "id": "be.taskModalV2.datePickerOpenAriaLabel",
+    "description": "aria-label for the button that opens the due-date calendar",
+    "defaultMessage": "Open due date calendar"
+  },
+  {
+    "id": "be.taskModalV2.datePickerPreviousMonthAriaLabel",
+    "description": "aria-label for the previous-month button in the due-date date picker",
+    "defaultMessage": "Previous month"
+  },
+  {
+    "id": "be.taskModalV2.dueDateLabel",
+    "description": "Label for the due-date field in the task modal; due date is optional",
+    "defaultMessage": "Due Date (optional)"
+  },
+  {
+    "id": "be.taskModalV2.editApprovalTask",
+    "description": "Title of the modal for editing an existing approval task",
+    "defaultMessage": "Modify Approval Task"
+  },
+  {
+    "id": "be.taskModalV2.editApprovalTaskForbiddenMessage",
+    "description": "Warning shown when removing assignees from an approved task fails with 403",
+    "defaultMessage": "Unable to remove assignee(s) because the task is now approved."
+  },
+  {
+    "id": "be.taskModalV2.editForbiddenTitle",
+    "description": "Title of the warning notice when an edit partially fails (403 on update)",
+    "defaultMessage": "Task Updated with Errors"
+  },
+  {
+    "id": "be.taskModalV2.editGeneralTaskForbiddenMessage",
+    "description": "Warning shown when removing assignees from a completed task fails with 403",
+    "defaultMessage": "Unable to remove assignee(s) because the task is now completed."
+  },
+  {
+    "id": "be.taskModalV2.editGeneralTask",
+    "description": "Title of the modal for editing an existing general task",
+    "defaultMessage": "Modify General Task"
+  },
+  {
+    "id": "be.taskModalV2.groupExceedsLimitWarningMessage",
+    "description": "Body of the warning notice when a group assignee exceeds the per-group maximum",
+    "defaultMessage": "One or more groups can not receive this task as a group size cannot exceed the limit of {max} assignees per group."
+  },
+  {
+    "id": "be.taskModalV2.groupExceedsLimitWarningTitle",
+    "description": "Title of the warning notice when a group assignee exceeds the per-group maximum",
+    "defaultMessage": "Exceeded max assignees per group"
+  },
+  {
+    "id": "be.taskModalV2.inlineNoticeErrorAriaLabel",
+    "description": "aria-label for the error variant icon in the task modal inline notice",
+    "defaultMessage": "Error"
+  },
+  {
+    "id": "be.taskModalV2.inlineNoticeWarningAriaLabel",
+    "description": "aria-label for the warning variant icon in the task modal inline notice",
+    "defaultMessage": "Warning"
+  },
+  {
+    "id": "be.taskModalV2.loadingAriaLabel",
+    "description": "aria-label for the loading indicator on the submit button while a task is saving",
+    "defaultMessage": "Loading"
+  },
+  {
+    "id": "be.taskModalV2.messageFieldRequiredError",
+    "description": "Error message when the task message field is empty on submit",
+    "defaultMessage": "Required Field"
+  },
+  {
+    "id": "be.taskModalV2.messageLabel",
+    "description": "Label for the message field in the task modal",
+    "defaultMessage": "Message"
+  },
+  {
+    "id": "be.taskModalV2.messagePlaceholder",
+    "description": "Placeholder text for the message field in the task modal",
+    "defaultMessage": "Write a message"
+  },
+  {
+    "id": "be.taskModalV2.updateButtonLabel",
+    "description": "Label for the Update button in the task modal footer (edit mode)",
+    "defaultMessage": "Update"
+  },
+  {
+    "id": "be.taskModalV2.updateTaskErrorMessage",
+    "description": "Body text of the error notice when updating an existing task fails",
+    "defaultMessage": "An error occurred while modifying this task. Please try again."
+  }
+]

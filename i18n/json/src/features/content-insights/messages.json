@@ -1,0 +1,82 @@
+[
+  {
+    "id": "be.contentInsights.contentAnalyticsErrorText",
+    "description": "Text shown to users when opening the content insights flyout and there is an error",
+    "defaultMessage": "There was a problem loading content insights. Please try again."
+  },
+  {
+    "id": "be.contentInsights.contentAnalyticsPermissionError",
+    "description": "Message shown when the user does not have access to view content insights anymore",
+    "defaultMessage": "Oops! You no longer have access to view content insights."
+  },
+  {
+    "id": "be.contentInsights.contentInsightsTitle",
+    "description": "Title for Content Insights section in file sidebar",
+    "defaultMessage": "Content Insights"
+  },
+  {
+    "id": "be.contentInsights.downloadGraphLabel",
+    "description": "Label for the chart displaying the number of downloads over the selected time period",
+    "defaultMessage": "Chart displaying the number of downloads over the selected time period"
+  },
+  {
+    "id": "be.contentInsights.downloadGraphType",
+    "description": "Title for the content insights graph card regarding number of Previews",
+    "defaultMessage": "DOWNLOADS"
+  },
+  {
+    "id": "be.contentInsights.trendMonth",
+    "description": "Trend description for the content insights graph card regarding the count of events from the past month",
+    "defaultMessage": "PAST MONTH"
+  },
+  {
+    "id": "be.contentInsights.trendThreeMonths",
+    "description": "Trend description for the content insights graph card regarding the count of events from the past three months",
+    "defaultMessage": "PAST 3 MONTHS"
+  },
+  {
+    "id": "be.contentInsights.trendWeek",
+    "description": "Trend description for the content insights graph card regarding the count of events from the past week",
+    "defaultMessage": "PAST WEEK"
+  },
+  {
+    "id": "be.contentInsights.trendYear",
+    "description": "Trend description for the content insights graph card regarding the count of events from the past year",
+    "defaultMessage": "PAST YEAR"
+  },
+  {
+    "id": "be.contentInsights.trendDown",
+    "description": "Label for the arrow indicator in the trend pill",
+    "defaultMessage": "Trending down"
+  },
+  {
+    "id": "be.contentInsights.trendUp",
+    "description": "Label for the arrow indicator in the trend pill",
+    "defaultMessage": "Trending up"
+  },
+  {
+    "id": "be.contentInsights.peopleGraphLabel",
+    "description": "Label for the chart displaying the number of users over the selected time period",
+    "defaultMessage": "Chart displaying the number of users over the selected time period"
+  },
+  {
+    "id": "be.contentInsights.peopleTitle",
+    "description": "Title used to represent how many users have interacted with the file",
+    "defaultMessage": "PEOPLE"
+  },
+  {
+    "id": "be.contentInsights.previewGraphLabel",
+    "description": "Label for the chart displaying the number of previews over the selected time period",
+    "defaultMessage": "Chart displaying the number of previews over the selected time period"
+  },
+  {
+    "id": "be.contentInsights.previewGraphType",
+    "description": "Title for the content insights graph card regarding number of Previews",
+    "defaultMessage": "PREVIEWS"
+  },
+  {
+    "id": "be.contentInsights.openContentInsightsButton",
+    "description": "Open Content Insights button which opens the Content Insights Modal",
+    "defaultMessage": "See Details"
+  }
+]

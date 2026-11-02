@@ -1,0 +1,32 @@
+[
+  {
+    "id": "boxui.collaboratorAvatars.collaboratorAvatarsLabel",
+    "description": "Label for collaborator avatars",
+    "defaultMessage": "Shared with"
+  },
+  {
+    "id": "boxui.collaboratorAvatars.collaborators.expirationTooltipText",
+    "description": "Tooltip text for collaborator expiration badge",
+    "defaultMessage": "Access expires on {date}"
+  },
+  {
+    "id": "boxui.collaboratorAvatars.collaborators.externalCollabTooltipText",
+    "description": "This tooltip indicates that a collaborator is not in the same enterprise of the current user",
+    "defaultMessage": "{email} is from outside of your company"
+  },
+  {
+    "id": "boxui.collaboratorAvatars.manageAllLinkText",
+    "description": "Manage all link text on collaborator list",
+    "defaultMessage": "Manage All"
+  },
+  {
+    "id": "boxui.collaboratorAvatars.collaboration.pendingCollabText",
+    "description": "Text to display for users who have not accepted an invitation to collaborate yet",
+    "defaultMessage": "Pending"
+  },
+  {
+    "id": "boxui.collaboratorAvatars.viewAdditionalPeopleText",
+    "description": "Text to display in collaborator list if there are more items",
+    "defaultMessage": "View additional people"
+  }
+]

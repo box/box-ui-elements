@@ -1,0 +1,42 @@
+[
+  {
+    "id": "boxui.core.hotkeys.hotkeyModalTitle",
+    "description": "Title for keyboard shortcut help modal",
+    "defaultMessage": "Keyboard Shortcuts"
+  },
+  {
+    "id": "boxui.core.hotkeys.enterKey",
+    "description": "Label for \"Enter\" key",
+    "defaultMessage": "Enter"
+  },
+  {
+    "id": "boxui.core.hotkeys.spacebarKey",
+    "description": "Label for \"Spacebar\" key",
+    "defaultMessage": "Spacebar"
+  },
+  {
+    "id": "boxui.core.hotkeys.shiftKey",
+    "description": "Label for \"Shift\" key",
+    "defaultMessage": "Shift"
+  },
+  {
+    "id": "boxui.core.hotkeys.ctrlKey",
+    "description": "Label for \"Control\" key",
+    "defaultMessage": "Ctrl"
+  },
+  {
+    "id": "boxui.core.hotkeys.altKey",
+    "description": "Label for \"Alt\" key",
+    "defaultMessage": "Alt"
+  },
+  {
+    "id": "boxui.core.hotkeys.escKey",
+    "description": "Label for \"Esc\" key",
+    "defaultMessage": "Esc"
+  },
+  {
+    "id": "boxui.core.hotkeys.hotkeySequence",
+    "description": "Describes a hotkey sequence, e.g. \"shift+g then shift+a\". {key1} is the first key (\"shift+g\" in our example) and {key2} is the second (\"shift+a\" in our example).",
+    "defaultMessage": "{key1} then {key2}"
+  }
+]

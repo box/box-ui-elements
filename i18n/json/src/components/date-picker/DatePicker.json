@@ -1,0 +1,42 @@
+[
+  {
+    "id": "boxui.base.previousMonth",
+    "description": "Previous month button for a date picker calendar",
+    "defaultMessage": "Previous Month"
+  },
+  {
+    "id": "boxui.base.nextMonth",
+    "description": "Next month button for a date picker calendar",
+    "defaultMessage": "Next Month"
+  },
+  {
+    "id": "boxui.datePicker.iconAlertText",
+    "description": "Date entered is invalid",
+    "defaultMessage": "Invalid Date"
+  },
+  {
+    "id": "boxui.datePicker.dateClearButton",
+    "description": "Button for clearing date picker",
+    "defaultMessage": "Clear Date"
+  },
+  {
+    "id": "boxui.datePicker.chooseDate",
+    "description": "Button for opening date picker",
+    "defaultMessage": "Choose Date"
+  },
+  {
+    "id": "boxui.datePicker.dateInputRangeError",
+    "description": "Error message when date is out of the minimum and maximum range",
+    "defaultMessage": "Please enter a date between {minLocaleDate} and {maxLocaleDate}"
+  },
+  {
+    "id": "boxui.datePicker.dateInputMaxError",
+    "description": "Error message when date is later than the maximum date",
+    "defaultMessage": "Please enter a date before {maxLocaleDate}"
+  },
+  {
+    "id": "boxui.datePicker.dateInputMinError",
+    "description": "Error message when date is earlier than the minimum date",
+    "defaultMessage": "Please enter a date after {minLocaleDate}"
+  }
+]

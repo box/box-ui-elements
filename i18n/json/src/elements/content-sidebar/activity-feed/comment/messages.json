@@ -1,0 +1,57 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentDeleteMenuItem",
+    "description": "Text to show on menu item to delete comment",
+    "defaultMessage": "Delete"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentDeletePrompt",
+    "description": "Confirmation prompt text to delete comment",
+    "defaultMessage": "Are you sure you want to permanently delete this comment?"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentEditMenuItem",
+    "description": "Text to show on menu item to edit comment",
+    "defaultMessage": "Modify"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentPostedFullDateTime",
+    "description": "Comment posted full date time for title",
+    "defaultMessage": "{time, date, full} at {time, time, short}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentResolveMenuItem",
+    "description": "Text to show on menu item to resolve the comment",
+    "defaultMessage": "Resolve"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.commentUnresolveMenuItem",
+    "description": "Text to show on menu item to unresolve the comment",
+    "defaultMessage": "Unresolve"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.reply",
+    "description": "Text to show on button to start replying to comment",
+    "defaultMessage": "Reply"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.replyInThread",
+    "description": "Text to show on reply form input placeholder",
+    "defaultMessage": "Reply in thread"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.hideReplies",
+    "description": "Text to show to hide more replies of comment or annotation",
+    "defaultMessage": "Hide replies"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.showReplies",
+    "description": "Text to show to get more replies of comment or annotation",
+    "defaultMessage": "See {repliesToLoadCount, plural, one {# reply} other {# replies}}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.comment.inlineCommentAnnotationIconTitle",
+    "description": "Text for aria label of Inline comment circle type icon",
+    "defaultMessage": "Inline Comment"
+  }
+]
