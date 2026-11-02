@@ -1011,7 +1011,7 @@ export default {
     "boxui.unifiedShare.recommendedSharingTooltipCalloutText": "お客様の使用状況から、{fullName}さんにはこのファイルもお勧めです。",
     "boxui.unifiedShare.removeCollaboratorConfirmationDescription": "コラボレータから{name}を削除してもよろしいですか?",
     "boxui.unifiedShare.removeCollaboratorConfirmationTitle": "コラボレータの削除",
-    "boxui.unifiedShare.removeLinkConfirmationDescription": "これにより、共有リンクが完全に削除されます。この項目が他のサイトに埋め込まれている場合は、そのサイトでもアクセスできなくなります。カスタムプロパティ、設定、有効期限も削除されます。続行しますか?",
+    "boxui.unifiedShare.removeLinkConfirmationDescription": "これにより、共有リンクは完全に削除されます。この項目が他のサイトに埋め込まれている場合も、その項目にアクセスできなくなります。カスタムプロパティ、設定、有効期限もすべて削除されます。続行しますか?",
     "boxui.unifiedShare.removeLinkConfirmationTitle": "共有リンクを削除",
     "boxui.unifiedShare.removeLinkTooltip": "リンクを削除する権限がありません。",
     "boxui.unifiedShare.restrictedContactsError": "削除して続行",
