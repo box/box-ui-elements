@@ -609,7 +609,7 @@ export default {
     "boxui.core.selection.selectAllDescription": "Sélectionner tous les éléments",
     "boxui.core.selection.shiftDownDescription": "Ajouter l'élément suivant à la sélection en cours",
     "boxui.core.selection.shiftUpDescription": "Ajouter l'élément précédent à la sélection en cours",
-    "boxui.core.selection.shiftXDescription": "Sélectionner l'élément actif",
+    "boxui.core.selection.shiftXDescription": "Sélectionner l’élément actif",
     "boxui.core.selection.upDescription": "Sélectionner l'élément précédent",
     "boxui.core.send": "Envoyer",
     "boxui.datePicker.chooseDate": "Choisir la date",

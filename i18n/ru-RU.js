@@ -620,7 +620,7 @@ export default {
     "boxui.core.selection.selectAllDescription": "Выбор всех элементов",
     "boxui.core.selection.shiftDownDescription": "Добавление следующего элемента к текущему выбору",
     "boxui.core.selection.shiftUpDescription": "Добавление предыдущего элемента к текущему выбору",
-    "boxui.core.selection.shiftXDescription": "Выбор текущего элемента",
+    "boxui.core.selection.shiftXDescription": "Выберите текущий элемент",
     "boxui.core.selection.upDescription": "Выбор предыдущего элемента",
     "boxui.core.send": "Отправить",
     "boxui.datePicker.chooseDate": "Выбрать дату",

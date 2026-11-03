@@ -278,7 +278,7 @@ class Item extends Base {
             const key = this.getCacheKey(this.id);
 
             if (cache.has(key)) {
-                cache.merge(key, dataWithMissingFields);
+                cache.set(key, { ...cache.get(key), ...dataWithMissingFields });
             } else {
                 cache.set(key, dataWithMissingFields);
             }

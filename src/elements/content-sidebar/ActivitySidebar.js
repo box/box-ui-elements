@@ -168,6 +168,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitAnnotationReplyDeleteEvent: noop,
         emitAnnotationReplyUpdateEvent: noop,
         emitAnnotationUpdateEvent: noop,
+        emitShowResolvedChangeEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
         hasReplies: false,
@@ -210,17 +211,30 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         if (shouldFetchSidebarData) {
             this.fetchFeedItems(true);
         }
+        this.syncResolvedAnnotationVisibility();
     }
 
     componentDidUpdate(prevProps: Props) {
-        const { shouldFetchSidebarData = true } = this.props;
+        const { shouldFetchSidebarData = true, showResolved } = this.props;
         const { shouldFetchSidebarData: prevShouldFetchSidebarData = true } = prevProps;
 
         // Fetch when fetch is enabled
         if (!prevShouldFetchSidebarData && shouldFetchSidebarData) {
             this.fetchFeedItems(true);
         }
+
+        if (prevProps.showResolved !== showResolved) {
+            this.syncResolvedAnnotationVisibility();
+        }
     }
+
+    syncResolvedAnnotationVisibility = () => {
+        const { emitShowResolvedChangeEvent, showResolved } = this.props;
+        if (typeof showResolved !== 'boolean') {
+            return;
+        }
+        emitShowResolvedChangeEvent?.(showResolved);
+    };
 
     componentWillUnmount() {
         // Cancel pending debounces and bump the generations so any in-flight

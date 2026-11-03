@@ -1,5 +1,5 @@
 import { fromAbsolute, getLocalTimeZone, toCalendarDate } from '@box/blueprint-web';
-import { type LinkSettingsFormData, type SharedLinkSettings } from '@box/unified-share-modal';
+import { type LinkSettingsForm, type SharedLinkSettings } from '@box/unified-share-modal';
 
 import {
     ACCESS_COLLAB,
@@ -39,7 +39,7 @@ export const convertSharedLinkPermissions = (permissionLevel: string) => {
 };
 
 export const convertSharedLinkSettings = (
-    nextSettings: LinkSettingsFormData,
+    nextSettings: LinkSettingsForm,
     prevSettings: SharedLinkSettings,
     accessLevel: string,
     expiresAt: number,
