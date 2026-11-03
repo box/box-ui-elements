@@ -5,25 +5,25 @@ import { useFeatureEnabled } from '../../common/feature-checking';
 export type MetadataScopeMode = 'SCOPED' | 'MIGRATION' | 'FINAL';
 
 export interface MetadataNamespaceContext {
-    /** Enterprise root FQN (e.g. `enterprise_123`), or `undefined` when opt-in is off / host omitted it. */
+    /** Enterprise root FQN (e.g. `enterprise_123`), or `undefined` when opt-in is off and no host mode is passed, or the host omitted it. */
     enterpriseId: string | undefined;
     /**
      * Resolved migration mode.
-     * `null` when opt-in is off or flags are still loading.
-     * `SCOPED` when opted in but nothing is enabled / the host omitted mode.
+     * `null` when flags are still loading (`metadataNamespaceMode: null`) or when the host omitted mode and opt-in is off.
+     * `SCOPED` when the host passes `SCOPED`, or when opted in and the host omitted mode.
      */
     metadataNamespaceMode: MetadataScopeMode | null;
     /** True when mode is known and not SCOPED (template browser / management UI). */
     isTemplateManagementEnabled: boolean;
-    /** True while opt-in is on and the host has passed `metadataNamespaceMode: null`. */
+    /** True while the host has passed `metadataNamespaceMode: null`. */
     isLoading: boolean;
 }
 
 export interface MetadataNamespaceContextOptions {
     /**
      * Host-provided migration mode. BUIE does not fetch enterprise-configuration
-     * flags. Ignored when `metadata.namespacesOptIn` is off. Omitting this
-     * (with opt-in on) resolves to `SCOPED`.
+     * flags. When provided, takes effect regardless of `metadata.namespacesOptIn`.
+     * Omitting this (with opt-in on) resolves to `SCOPED`.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
     /**
@@ -48,11 +48,11 @@ function toEnterpriseFqn(hostEnterpriseId?: string | number): string | undefined
 /**
  * Resolves enterprise root namespace + migration mode for the metadata sidebar.
  *
- * Opt-in takes precedence. When `metadata.namespacesOptIn` is off, host mode
- * and enterprise id are ignored (`metadataNamespaceMode: null`, management off).
+ * When a host passes `metadataNamespaceMode`, that mode is used directly without
+ * requiring `metadata.namespacesOptIn`.
  *
- * When opt-in is on, hosts pass `metadataNamespaceMode` and `enterpriseId`.
- * Omitting mode, or passing `SCOPED`, is the opted-in legacy path.
+ * When the host omits `metadataNamespaceMode`, `metadata.namespacesOptIn` gates
+ * the fallback: off resolves to `null` (management off), on resolves to `SCOPED`.
  */
 export default function useMetadataNamespaceContext(
     options: MetadataNamespaceContextOptions = {},
@@ -60,8 +60,9 @@ export default function useMetadataNamespaceContext(
     const isNamespacesOptInEnabled = useFeatureEnabled('metadata.namespacesOptIn.enabled');
     const hasModeOverride = Object.prototype.hasOwnProperty.call(options, 'metadataNamespaceMode');
     const modeOverride = options.metadataNamespaceMode;
+    const isHostModeProvided = hasModeOverride && modeOverride !== undefined;
 
-    if (!isNamespacesOptInEnabled) {
+    if (!isHostModeProvided && !isNamespacesOptInEnabled) {
         return {
             enterpriseId: undefined,
             metadataNamespaceMode: null,
@@ -70,7 +71,7 @@ export default function useMetadataNamespaceContext(
         };
     }
 
-    const isLoading = hasModeOverride && modeOverride == null;
+    const isLoading = isHostModeProvided && modeOverride === null;
     const metadataNamespaceMode = isLoading ? null : modeOverride ?? METADATA_SCOPE_MODE_SCOPED;
     const isTemplateManagementEnabled = !!metadataNamespaceMode && metadataNamespaceMode !== METADATA_SCOPE_MODE_SCOPED;
 

@@ -11,14 +11,14 @@
         min-height: 0; // Required to prevent overflow of child flex elements
 
         &--comparing > .bcpr-container {
-            flex: 1 1 50%;
+            flex: 1 1 0;
             min-width: 0;
         }
     }
 
     .bcpr-compared-slot {
         display: none;
-        flex: 1 1 50%;
+        flex: 1 1 0;
         min-width: 0;
         min-height: 0;
 
