@@ -19,7 +19,7 @@ describe('useMetadataNamespaceContext', () => {
             wrapper: ({ children }) => <FeatureProvider features={features}>{children}</FeatureProvider>,
         });
 
-    test('should leave mode null when namespaces opt-in is off', () => {
+    test('should leave mode null when namespaces opt-in is off and host omits mode', () => {
         const { result } = renderContextHook({ 'metadata.namespacesOptIn.enabled': false });
 
         expect(result.current).toEqual({
@@ -30,7 +30,7 @@ describe('useMetadataNamespaceContext', () => {
         });
     });
 
-    test('should ignore host mode and enterprise id when namespaces opt-in is off', () => {
+    test('should use host mode and enterprise id even when namespaces opt-in is off', () => {
         const { result } = renderContextHook(
             { 'metadata.namespacesOptIn.enabled': false },
             {
@@ -40,8 +40,25 @@ describe('useMetadataNamespaceContext', () => {
         );
 
         expect(result.current).toEqual({
-            enterpriseId: undefined,
-            metadataNamespaceMode: null,
+            enterpriseId,
+            metadataNamespaceMode: 'MIGRATION',
+            isTemplateManagementEnabled: true,
+            isLoading: false,
+        });
+    });
+
+    test('should keep SCOPED when host passes SCOPED and namespaces opt-in is off', () => {
+        const { result } = renderContextHook(
+            { 'metadata.namespacesOptIn.enabled': false },
+            {
+                metadataNamespaceMode: 'SCOPED',
+                enterpriseId,
+            },
+        );
+
+        expect(result.current).toEqual({
+            enterpriseId,
+            metadataNamespaceMode: 'SCOPED',
             isTemplateManagementEnabled: false,
             isLoading: false,
         });
@@ -94,7 +111,7 @@ describe('useMetadataNamespaceContext', () => {
 
     test('should normalize a numeric host enterprise id to an FQN', () => {
         const { result } = renderContextHook(
-            { 'metadata.namespacesOptIn.enabled': true },
+            {},
             {
                 metadataNamespaceMode: 'FINAL',
                 enterpriseId: Number(enterpriseNumericId),
@@ -108,7 +125,7 @@ describe('useMetadataNamespaceContext', () => {
 
     test('should leave enterprise id undefined when the host omits it', () => {
         const { result } = renderContextHook(
-            { 'metadata.namespacesOptIn.enabled': true },
+            {},
             {
                 metadataNamespaceMode: 'FINAL',
             },
@@ -124,7 +141,7 @@ describe('useMetadataNamespaceContext', () => {
 
     test('should not treat host mode as resolved while it is still loading', () => {
         const { result } = renderContextHook(
-            { 'metadata.namespacesOptIn.enabled': true },
+            { 'metadata.namespacesOptIn.enabled': false },
             {
                 metadataNamespaceMode: null,
                 enterpriseId,
