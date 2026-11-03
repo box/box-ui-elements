@@ -1,14 +1,15 @@
 import { API_PAGE_LIMIT } from '../../../constants';
 import TaskCollaborators from '../TaskCollaborators';
+import type { APIOptions } from '../../../common/types/api';
 
-let taskCollaborators;
+let taskCollaborators: TaskCollaborators;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 const USER_ID = 'userone';
 
 describe('api/TaskCollaborators', () => {
     beforeEach(() => {
-        taskCollaborators = new TaskCollaborators({});
+        taskCollaborators = new TaskCollaborators({} as APIOptions);
     });
 
     describe('CRUD operations', () => {
@@ -97,7 +98,6 @@ describe('api/TaskCollaborators', () => {
                     file,
                     task,
                     group,
-                    user,
                     successCallback,
                     errorCallback,
                 });

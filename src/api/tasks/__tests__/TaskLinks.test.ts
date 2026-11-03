@@ -1,12 +1,13 @@
 import TaskLinks from '../TaskLinks';
+import type { APIOptions } from '../../../common/types/api';
 
-let taskLinks;
+let taskLinks: TaskLinks;
 const BASE_URL = 'https://www.foo.com';
 const FILE_ID = 'foo';
 
 describe('api/TaskLinks', () => {
     beforeEach(() => {
-        taskLinks = new TaskLinks({});
+        taskLinks = new TaskLinks({} as APIOptions);
     });
 
     describe('CRUD operations', () => {

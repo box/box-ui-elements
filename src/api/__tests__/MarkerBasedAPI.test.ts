@@ -1,9 +1,11 @@
+import Xhr from '../../utils/Xhr';
 import MarkerBasedAPI from '../MarkerBasedAPI';
+import type { APIOptions } from '../../common/types/api';
 
 const LIMIT = 1000;
 
 describe('api/MarkerBasedAPI', () => {
-    let markerBasedAPI;
+    let markerBasedAPI: MarkerBasedAPI;
     const markerBasedAPIResponse = {
         next_marker: '',
         limit: LIMIT,
@@ -13,7 +15,7 @@ describe('api/MarkerBasedAPI', () => {
     const errorCode = 'foo';
 
     beforeEach(() => {
-        markerBasedAPI = new MarkerBasedAPI({});
+        markerBasedAPI = new MarkerBasedAPI({} as APIOptions);
         markerBasedAPI.errorCode = errorCode;
     });
 
@@ -53,7 +55,7 @@ describe('api/MarkerBasedAPI', () => {
                             data: markerBasedAPIResponse,
                         }),
                     ),
-            };
+            } as unknown as Xhr;
 
             return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
                 expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
@@ -69,7 +71,7 @@ describe('api/MarkerBasedAPI', () => {
                         data: markerBasedAPIResponse,
                     }),
                 ),
-            };
+            } as unknown as Xhr;
 
             return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
                 expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
@@ -109,8 +111,7 @@ describe('api/MarkerBasedAPI', () => {
             };
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
-            };
-            markerBasedAPI.marker = '';
+            } as unknown as Xhr;
 
             return markerBasedAPI
                 .markerGet({
@@ -142,7 +143,7 @@ describe('api/MarkerBasedAPI', () => {
             const error = new Error('error');
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
-            };
+            } as unknown as Xhr;
 
             return markerBasedAPI
                 .markerGet({
@@ -152,7 +153,6 @@ describe('api/MarkerBasedAPI', () => {
                     marker: '',
                     limit: LIMIT,
                     shouldFetchAll: true,
-                    errorCode,
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();
