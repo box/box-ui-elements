@@ -55,7 +55,7 @@ const getConfig = isReactBundle => {
         output: {
             filename: `[name]${isReactBundle ? '' : '.no.react'}.js`,
             path: outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language),
-            publicPath: `/${version}/${language}/`,
+            publicPath: isDevBuild && !outputDir ? `/dist/${version}/${language}/` : `/${version}/${language}/`,
         },
 
         resolve: {
