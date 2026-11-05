@@ -100,9 +100,23 @@ class Metadata extends File {
 
     namespacesAPI: ?MetadataNamespaces;
 
+    /**
+     * Taxonomy level payloads already loaded for this client, keyed by file id
+     * and taxonomy path.
+     */
+    taxonomyLevelsByKey: { [string]: Array<Object> };
+
+    /**
+     * In-flight taxonomy level requests. Concurrent callers for the same file
+     * and taxonomy share the request that is already running.
+     */
+    taxonomyLevelsRequests: { [string]: Promise<Array<Object>> };
+
     constructor(options: Object) {
         super(options);
         this.metadataNamespaceMode = this.options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
+        this.taxonomyLevelsByKey = {};
+        this.taxonomyLevelsRequests = {};
     }
 
     /**
@@ -444,6 +458,49 @@ class Metadata extends File {
     }
 
     /**
+     * Loads taxonomy levels for one path.
+     *
+     * Successful responses are reused for this client. Concurrent callers for
+     * the same file and taxonomy share one request. Failures are not stored,
+     * so a later attempt can retry.
+     *
+     * @param {string} taxonomyPath
+     * @param {string} id - file id
+     * @return {Promise<Array<Object>>}
+     */
+    fetchTaxonomyLevels(taxonomyPath: string, id: string): Promise<Array<Object>> {
+        const cacheKey = `${id}:${taxonomyPath}`;
+        if (Object.prototype.hasOwnProperty.call(this.taxonomyLevelsByKey, cacheKey)) {
+            return Promise.resolve(this.taxonomyLevelsByKey[cacheKey]);
+        }
+
+        const inFlight = this.taxonomyLevelsRequests[cacheKey];
+        if (inFlight) {
+            return inFlight;
+        }
+
+        const request = (async (): Promise<Array<Object>> => {
+            try {
+                const result = await this.xhr.get({
+                    url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
+                    id: getTypedFileId(id),
+                });
+                const levels = getProp(result, 'data.levels', []);
+                this.taxonomyLevelsByKey[cacheKey] = levels;
+                return levels;
+            } catch {
+                // A missing taxonomy must not fail the whole metadata sidebar.
+                return [];
+            } finally {
+                delete this.taxonomyLevelsRequests[cacheKey];
+            }
+        })();
+
+        this.taxonomyLevelsRequests[cacheKey] = request;
+        return request;
+    }
+
+    /**
      *
      * @param {Array<MetadataTemplate>} metadataTemplates
      * @param {string} id
@@ -472,21 +529,10 @@ class Metadata extends File {
                 .filter(Boolean),
         );
 
-        const fetchPromises = taxonomyPaths.map(async taxonomyPath => {
-            try {
-                const result = await this.xhr.get({
-                    url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
-                    id: getTypedFileId(id),
-                });
-                return {
-                    path: taxonomyPath,
-                    levels: getProp(result, 'data.levels', []),
-                };
-            } catch (error) {
-                // A missing taxonomy must not fail the whole metadata sidebar.
-                return { path: taxonomyPath, levels: [] };
-            }
-        });
+        const fetchPromises = taxonomyPaths.map(async taxonomyPath => ({
+            path: taxonomyPath,
+            levels: await this.fetchTaxonomyLevels(taxonomyPath, id),
+        }));
 
         const fetchResults = await Promise.all(fetchPromises);
 
