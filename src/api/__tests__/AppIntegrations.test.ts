@@ -1,16 +1,17 @@
 import AppIntegrations from '../AppIntegrations';
+import type { APIOptions } from '../../common/types/api';
 
-let appIntegrations;
+let appIntegrations: AppIntegrations;
 
 describe('api/AppIntegrations', () => {
     beforeEach(() => {
-        appIntegrations = new AppIntegrations({});
+        appIntegrations = new AppIntegrations({} as APIOptions);
     });
 
     describe('getUrl()', () => {
         test('should throw when version api url without id', () => {
             expect(() => {
-                appIntegrations.getUrl();
+                appIntegrations.getUrl(undefined);
             }).toThrow();
         });
         test('should return correct app integrations api url with id', () => {
@@ -21,11 +22,11 @@ describe('api/AppIntegrations', () => {
     describe('execute()', () => {
         test('should throw an error if the integration ID or file ID is missing', () => {
             expect(() => {
-                appIntegrations.execute(null, '1234', () => {});
+                appIntegrations.execute(null, '1234', jest.fn(), jest.fn());
             }).toThrow();
 
             expect(() => {
-                appIntegrations.execute('1234', null, () => {});
+                appIntegrations.execute('1234', null, jest.fn(), jest.fn());
             }).toThrow();
         });
 
