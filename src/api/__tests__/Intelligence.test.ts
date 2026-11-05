@@ -1,15 +1,18 @@
 import { ERROR_CODE_EXTRACT_STRUCTURED } from '../../constants';
 import Intelligence from '../Intelligence';
+import type { AiExtractStructured } from '../schemas/AiExtractStructured';
+import type { APIOptions } from '../../common/types/api';
+import type { BoxItem } from '../../common/types/core';
 
 describe('api/Intelligence', () => {
-    let intelligence;
+    let intelligence: Intelligence;
 
-    const mockItems = [{ id: '123', type: 'file' }];
+    const mockItems: Array<BoxItem> = [{ id: '123', type: 'file' }];
     const mockPrompt = 'summarize';
     const mockQuestion = { prompt: mockPrompt };
 
     beforeEach(() => {
-        intelligence = new Intelligence({});
+        intelligence = new Intelligence({} as APIOptions);
     });
 
     test('should return promise with data', async () => {
@@ -101,7 +104,7 @@ describe('api/Intelligence', () => {
     });
 
     describe('extractStructured()', () => {
-        const request = {
+        const request: AiExtractStructured = {
             items: [{ id: '123', type: 'file' }],
             metadata_template: {
                 type: 'metadata_template',
@@ -144,7 +147,7 @@ describe('api/Intelligence', () => {
         });
 
         test('should not return any suggestions when error is 400', async () => {
-            const error = new Error();
+            const error: Error & { status?: number } = new Error();
             error.status = 400;
             intelligence.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
             let suggestions;
@@ -163,7 +166,7 @@ describe('api/Intelligence', () => {
         });
 
         test('should throw error when error is not 400', async () => {
-            const error = new Error();
+            const error: Error & { status?: number } = new Error();
             error.status = 401;
             intelligence.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
             let suggestions;
