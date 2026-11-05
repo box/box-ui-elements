@@ -1,12 +1,14 @@
 import Collaborations from '../Collaborations';
+import type { APIOptions } from '../../common/types/api';
+import type { BoxItem, Collaboration } from '../../common/types/core';
 
 const MOCK_URL = 'https://api.box.com/2.0/collaborations';
 
-let collaborations;
+let collaborations: Collaborations;
 
 describe('api/Collaborations', () => {
     beforeEach(() => {
-        collaborations = new Collaborations({});
+        collaborations = new Collaborations({} as APIOptions);
     });
 
     describe('getUrl()', () => {
@@ -18,7 +20,7 @@ describe('api/Collaborations', () => {
     describe('addCollaboration()', () => {
         test('should call post() with the provided item and collaboration', () => {
             const MOCK_ITEM_ID = '542809';
-            const MOCK_ITEM = {
+            const MOCK_ITEM: BoxItem = {
                 id: MOCK_ITEM_ID,
                 type: 'folder',
             };
@@ -28,7 +30,7 @@ describe('api/Collaborations', () => {
                     type: 'user',
                 },
                 role: 'editor',
-            };
+            } as Partial<Collaboration>;
 
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
