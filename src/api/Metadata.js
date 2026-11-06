@@ -460,8 +460,9 @@ class Metadata extends File {
     /**
      * Loads taxonomy levels for one path.
      *
-     * Successful responses are reused for this client. Concurrent callers for
-     * the same file and taxonomy share one request. Failures are not stored,
+     * Array responses are reused for this client, including a confirmed empty
+     * list. Concurrent callers for the same file and taxonomy share one
+     * request. Failures and responses without a levels array are not stored,
      * so a later attempt can retry.
      *
      * @param {string} taxonomyPath
@@ -485,9 +486,12 @@ class Metadata extends File {
                     url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
                     id: getTypedFileId(id),
                 });
-                const levels = getProp(result, 'data.levels', []);
-                this.taxonomyLevelsByKey[cacheKey] = levels;
-                return levels;
+                const levels = getProp(result, 'data.levels');
+                if (Array.isArray(levels)) {
+                    this.taxonomyLevelsByKey[cacheKey] = levels;
+                    return levels;
+                }
+                return [];
             } catch {
                 // A missing taxonomy must not fail the whole metadata sidebar.
                 return [];

@@ -805,6 +805,67 @@ describe('api/Metadata', () => {
             expect(second[0].fields[0].levels).toEqual([{ displayName: 'level 1', description: 'This is level' }]);
             expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
         });
+
+        test('should retry a taxonomy fetch when the response omits levels', async () => {
+            metadata.xhr.get = jest
+                .fn()
+                .mockResolvedValueOnce({ data: {} })
+                .mockResolvedValueOnce({
+                    data: {
+                        levels: [{ displayName: 'level 1', description: 'This is level' }],
+                    },
+                });
+            const templates = [
+                {
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                },
+            ];
+
+            const first = await metadata.getTaxonomyLevelsForTemplates(templates, 'id');
+            const second = await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(first[0].fields[0].levels).toEqual([]);
+            expect(second[0].fields[0].levels).toEqual([{ displayName: 'level 1', description: 'This is level' }]);
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
+            expect(metadata.taxonomyLevelsByKey).toEqual({
+                'id:metadata_taxonomies/namespace1/123': [{ displayName: 'level 1', description: 'This is level' }],
+            });
+        });
+
+        test('should reuse a confirmed empty taxonomy level list', async () => {
+            metadata.xhr.get = jest.fn().mockResolvedValue({
+                data: {
+                    levels: [],
+                },
+            });
+
+            await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+            const second = await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(second[0].fields[0].levels).toEqual([]);
+        });
     });
 
     describe('getTemplates()', () => {
