@@ -601,6 +601,8 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
     detailsSidebar: ElementRefType = React.createRef();
 
+    customSidebars: Map<string, ElementRefType> = new Map();
+
     initialPanel: { current: null | string } = React.createRef();
 
     metadataSidebar: ElementRefType = React.createRef();
@@ -623,20 +625,30 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
     componentDidMount() {
         this.setState({ isInitialized: true });
+        this.redirectToDefaultSidebar();
     }
 
     componentDidUpdate(prevProps: Props): void {
         const { onVersionChange, internalSidebarNavigation } = this.props;
         const { internalSidebarNavigation: prevInternalSidebarNavigation } = prevProps;
 
-        // Reset the current version id if the wrapping versions route is no longer active
+        // Leaving versions: tag annotation-thread exits so compare can stay open.
         if (onVersionChange) {
             const wasPreviousNavigationVersions = this.isVersionsNavigationPath(prevInternalSidebarNavigation);
             const isCurrentNavigationVersions = this.isVersionsNavigationPath(internalSidebarNavigation);
 
             if (wasPreviousNavigationVersions && !isCurrentNavigationVersions) {
-                onVersionChange(null);
+                if (this.isAnnotationsNavigationPath(internalSidebarNavigation)) {
+                    onVersionChange(null, { triggeredBy: 'annotation' });
+                } else {
+                    onVersionChange(null);
+                }
             }
+        }
+
+        // Internal state updates (e.g. isInitialized) do not affect which sidebar should be rendered
+        if (prevProps !== this.props) {
+            this.redirectToDefaultSidebar();
         }
     }
 
@@ -649,6 +661,14 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
             (sidebar === ViewType.ACTIVITY || sidebar === ViewType.DETAILS) &&
             activeFeedEntryType === FeedEntryType.VERSIONS
         );
+    };
+
+    isAnnotationsNavigationPath = (navigation?: InternalSidebarNavigation): boolean => {
+        if (!navigation) {
+            return false;
+        }
+        const { activeFeedEntryType, fileVersionId } = navigation;
+        return activeFeedEntryType === FeedEntryType.ANNOTATIONS && !!fileVersionId;
     };
 
     handlePanelRender = (panel: string): void => {
@@ -667,50 +687,107 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
         this.boxAiSidebarCache[key] = value;
     };
 
-    findSidebarToRender = (): string | null => {
-        const {
-            defaultPanel,
-            features,
-            hasActivity,
-            hasNativeBoxAISidebar,
-            hasDetails,
-            hasDocGen,
-            hasMetadata,
-            hasSkills,
-            hasVersions,
-            internalSidebarNavigation,
-            isOpen,
-        } = this.props;
+    getCustomSidebarRef = (panelId: string): ElementRefType => {
+        if (!this.customSidebars.has(panelId)) {
+            this.customSidebars.set(panelId, React.createRef());
+        }
+        // Flow doesn't understand that we just set the value above, so we need to assert it exists
+        const ref = this.customSidebars.get(panelId);
+        if (!ref) {
+            throw new Error(`Failed to get or create ref for panel ${panelId}`);
+        }
+        return ref;
+    };
 
-        const { shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel, showOnlyNavButton: showOnlyBoxAINavButton } =
-            getFeatureConfig(features, 'boxai.sidebar');
+    getCustomPanel = (path: string): ?CustomSidebarPanel => {
+        const { customSidebarPanels = [] } = this.props;
+        return customSidebarPanels.find(customPanel => !customPanel.isDisabled && customPanel.path === path);
+    };
 
-        const canShowBoxAISidebarPanel = hasNativeBoxAISidebar && !showOnlyBoxAINavButton;
+    getPanelOrder = (
+        customSidebarPanels: Array<CustomSidebarPanel> = [],
+        shouldBoxAIBeDefaultPanel: boolean,
+        hasNativeBoxAISidebar: boolean,
+    ): string[] => {
+        const customPanelPaths = customSidebarPanels.map(panel => panel.path);
+        const hasCustomBoxAIPanel = customSidebarPanels.some(({ id }) => id === SIDEBAR_VIEW_BOXAI);
+        const nonBoxAIPaths = customPanelPaths.filter(path => path !== SIDEBAR_VIEW_BOXAI);
 
-        const panelsEligibility = {
-            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
+        if (hasNativeBoxAISidebar || hasCustomBoxAIPanel) {
+            return [SIDEBAR_VIEW_BOXAI, ...DEFAULT_SIDEBAR_VIEWS, ...nonBoxAIPaths];
+        }
+
+        return [...DEFAULT_SIDEBAR_VIEWS, ...customPanelPaths];
+    };
+
+    canShowBoxAISidebarPanel = (): boolean => {
+        const { features, hasNativeBoxAISidebar } = this.props;
+        const { showOnlyNavButton: showOnlyBoxAINavButton } = getFeatureConfig(features, 'boxai.sidebar');
+
+        return hasNativeBoxAISidebar && !showOnlyBoxAINavButton;
+    };
+
+    getPanelsEligibility = (): { [string]: boolean } => {
+        const { customSidebarPanels = [], hasActivity, hasDetails, hasDocGen, hasMetadata, hasSkills } = this.props;
+
+        const customPanelsEligibility = {};
+        customSidebarPanels.forEach(({ path, isDisabled }) => {
+            customPanelsEligibility[path] = !isDisabled;
+        });
+
+        return {
+            [SIDEBAR_VIEW_BOXAI]: this.canShowBoxAISidebarPanel(),
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
             [SIDEBAR_VIEW_SKILLS]: hasSkills,
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
             [SIDEBAR_VIEW_DETAILS]: hasDetails,
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
+            ...customPanelsEligibility,
         };
+    };
 
-        const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
+    hasAnySidebar = (): boolean => {
+        const {
+            customSidebarPanels = [],
+            hasActivity,
+            hasDetails,
+            hasDocGen,
+            hasMetadata,
+            hasSkills,
+            hasVersions,
+        } = this.props;
 
-        if (
-            !isOpen ||
-            (!hasNativeBoxAISidebar && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)
-        ) {
-            return null;
-        }
+        return (
+            hasActivity ||
+            this.canShowBoxAISidebarPanel() ||
+            hasDetails ||
+            hasMetadata ||
+            hasSkills ||
+            hasDocGen ||
+            hasVersions ||
+            customSidebarPanels.length > 0
+        );
+    };
+
+    /**
+     * Finds the sidebar matching the current navigation, same as the routes of the router version
+     * @returns {string|null} matching sidebar or null if the navigation does not point to any eligible sidebar
+     */
+    getMatchedSidebar = (): string | null => {
+        const { hasActivity, hasDetails, hasDocGen, hasMetadata, hasSkills, hasVersions, internalSidebarNavigation } =
+            this.props;
 
         const currentSidebar = internalSidebarNavigation?.sidebar;
         const versionId = internalSidebarNavigation?.versionId;
         const activeFeedEntryType = internalSidebarNavigation?.activeFeedEntryType;
 
-        if (currentSidebar === SIDEBAR_VIEW_BOXAI && canShowBoxAISidebarPanel) {
+        // Native Box AI takes precedence over a custom Box AI panel, same as the route order
+        if (currentSidebar === SIDEBAR_VIEW_BOXAI && this.canShowBoxAISidebarPanel()) {
             return SIDEBAR_VIEW_BOXAI;
+        }
+
+        if (currentSidebar && this.getCustomPanel(currentSidebar)) {
+            return currentSidebar;
         }
 
         if (currentSidebar === SIDEBAR_VIEW_SKILLS && hasSkills) {
@@ -753,33 +830,53 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
             return SIDEBAR_VIEW_VERSIONS;
         }
 
-        // Determine default sidebar using the same logic as the router version
-        if (showDefaultPanel) {
-            return defaultPanel || null;
-        }
-        if (canShowBoxAISidebarPanel && shouldBoxAIBeDefaultPanel) {
-            return SIDEBAR_VIEW_BOXAI;
-        }
-        if (hasDocGen) {
-            return SIDEBAR_VIEW_DOCGEN;
-        }
-        if (hasSkills) {
-            return SIDEBAR_VIEW_SKILLS;
-        }
-        if (hasActivity) {
-            return SIDEBAR_VIEW_ACTIVITY;
-        }
-        if (hasDetails) {
-            return SIDEBAR_VIEW_DETAILS;
-        }
-        if (hasMetadata) {
-            return SIDEBAR_VIEW_METADATA;
-        }
-        if (canShowBoxAISidebarPanel && !shouldBoxAIBeDefaultPanel) {
-            return SIDEBAR_VIEW_BOXAI;
+        return null;
+    };
+
+    /**
+     * Determines the default sidebar using the same logic as the redirect of the router version
+     * @returns {string|null} default sidebar or null if none of the sidebars is eligible
+     */
+    getDefaultSidebar = (): string | null => {
+        const { customSidebarPanels = [], defaultPanel, features, hasNativeBoxAISidebar } = this.props;
+        const { shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel } = getFeatureConfig(features, 'boxai.sidebar');
+        const panelsEligibility = this.getPanelsEligibility();
+
+        if (defaultPanel && panelsEligibility[defaultPanel]) {
+            return defaultPanel;
         }
 
-        return null;
+        const panelOrder = this.getPanelOrder(customSidebarPanels, shouldBoxAIBeDefaultPanel, hasNativeBoxAISidebar);
+        return panelOrder.find(panel => panelsEligibility[panel]) || null;
+    };
+
+    findSidebarToRender = (): string | null => {
+        const { isOpen } = this.props;
+
+        if (!isOpen || !this.hasAnySidebar()) {
+            return null;
+        }
+
+        return this.getMatchedSidebar() || this.getDefaultSidebar();
+    };
+
+    /**
+     * Replaces the current navigation with the default sidebar when the navigation does not point
+     * to any eligible sidebar - the router-less counterpart of the router version's Redirect
+     * @returns {void}
+     */
+    redirectToDefaultSidebar = (): void => {
+        const { internalSidebarNavigationHandler, isOpen } = this.props;
+
+        if (!internalSidebarNavigationHandler || !isOpen || !this.hasAnySidebar() || this.getMatchedSidebar()) {
+            return;
+        }
+
+        const defaultSidebar = this.getDefaultSidebar();
+
+        if (defaultSidebar) {
+            internalSidebarNavigationHandler({ sidebar: defaultSidebar, silent: true }, true);
+        }
     };
 
     /**
@@ -805,6 +902,13 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
             detailsSidebar.refresh();
         }
 
+        // Refresh all custom sidebars (refresh is optional)
+        this.customSidebars.forEach(ref => {
+            if (ref.current && ref.current.refresh) {
+                ref.current.refresh();
+            }
+        });
+
         if (metadataSidebar) {
             metadataSidebar.refresh();
         }
@@ -826,32 +930,22 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
             features,
             file,
             fileId,
+            getComparedPreview,
             getPreview,
             getViewer,
-            hasActivity,
-            hasNativeBoxAISidebar,
-            hasDetails,
-            hasMetadata,
-            hasSkills,
             hasVersions,
             internalSidebarNavigation,
             internalSidebarNavigationHandler,
-            isOpen,
             metadataSidebarProps,
             onAnnotationSelect,
+            onCommentVersionSelect,
             onVersionChange,
             onVersionHistoryClick,
+            shouldFetchSidebarData,
             versionsSidebarProps,
         } = this.props;
 
         const { isInitialized } = this.state;
-
-        if (
-            !isOpen ||
-            (!hasNativeBoxAISidebar && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)
-        ) {
-            return null;
-        }
 
         const sidebarToRender = this.findSidebarToRender();
 
@@ -867,7 +961,8 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
         }
 
         // Render the appropriate sidebar based on currentSidebar
-        if (sidebarToRender === SIDEBAR_VIEW_BOXAI) {
+        // Native Box AI - only rendered when it can be shown, otherwise custom Box AI panel is used
+        if (sidebarToRender === SIDEBAR_VIEW_BOXAI && this.canShowBoxAISidebarPanel()) {
             return (
                 <LoadableBoxAISidebar
                     contentName={file.name}
@@ -880,6 +975,24 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
                     cache={this.boxAiSidebarCache}
                     setCacheValue={this.setBoxAiSidebarCacheValue}
                     {...boxAISidebarProps}
+                />
+            );
+        }
+
+        const customPanel = sidebarToRender ? this.getCustomPanel(sidebarToRender) : null;
+
+        if (customPanel) {
+            const { id: customPanelId, component: CustomPanelComponent } = customPanel;
+
+            return (
+                <CustomPanelComponent
+                    elementId={elementId}
+                    file={file}
+                    fileId={fileId}
+                    fileExtension={file.extension}
+                    hasSidebarInitialized={isInitialized}
+                    key={customPanelId}
+                    ref={this.getCustomSidebarRef(customPanelId)}
                 />
             );
         }
@@ -909,12 +1022,17 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
             return (
                 <LoadableActivitySidebar
+                    shouldFetchSidebarData={shouldFetchSidebarData}
                     elementId={elementId}
                     currentUser={currentUser}
                     currentUserError={currentUserError}
                     file={file}
+                    getComparedPreview={getComparedPreview}
+                    getPreview={getPreview}
+                    getViewer={getViewer}
                     hasSidebarInitialized={isInitialized}
                     onAnnotationSelect={onAnnotationSelect}
+                    onCommentVersionSelect={onCommentVersionSelect}
                     onVersionChange={onVersionChange}
                     onVersionHistoryClick={onVersionHistoryClick}
                     ref={this.activitySidebar}
@@ -957,6 +1075,7 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
                     fileExtension={file.extension}
                     fileId={fileId}
                     filteredTemplateIds={filteredTemplateIds}
+                    getPreview={getPreview}
                     hasSidebarInitialized={isInitialized}
                     isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                     ref={this.metadataSidebar}
@@ -1010,19 +1129,35 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 }
 
 class SidebarPanels extends React.Component<Props> {
+    sidebarPanels: ElementRefType = React.createRef();
+
+    /**
+     * Refreshes the contents of the active sidebar
+     * Needed as parent components (e.g. withSidebarAnnotations) hold a ref to this component
+     * @returns {void}
+     */
+    refresh(shouldRefreshCache: boolean = true): void {
+        const { current: sidebarPanels } = this.sidebarPanels;
+
+        if (sidebarPanels) {
+            sidebarPanels.refresh(shouldRefreshCache);
+        }
+    }
+
     render() {
         const { routerDisabled, ...otherProps } = this.props;
 
         if (routerDisabled) {
-            return <SidebarPanelsRouterDisabled {...otherProps} />;
+            return <SidebarPanelsRouterDisabled ref={this.sidebarPanels} {...otherProps} />;
         }
 
-        return <SidebarPanelsRouter {...otherProps} />;
+        return <SidebarPanelsRouter ref={this.sidebarPanels} {...otherProps} />;
     }
 }
 
 export { SidebarPanelsRouter as SidebarPanelsComponent };
 export { SidebarPanelsRouterDisabled as SidebarPanelsRouterDisabledComponent };
+export { SidebarPanels as SidebarPanelsDispatcherComponent };
 export default flow([
     withFeatureConsumer,
     withSidebarAnnotations,
