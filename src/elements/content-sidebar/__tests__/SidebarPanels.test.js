@@ -5,6 +5,7 @@ import { render, screen } from '../../../test-utils/testing-library';
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK } from '../../../constants';
 import {
     SidebarPanelsComponent as SidebarPanelsRouter,
+    SidebarPanelsDispatcherComponent as SidebarPanelsDispatcher,
     SidebarPanelsRouterDisabledComponent as SidebarPanelsRouterDisabled,
 } from '../SidebarPanels';
 
@@ -885,6 +886,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
 
         const getSidebarPanelsRouterDisabled = (props = {}) => (
             <SidebarPanelsRouterDisabled
+                customSidebarPanels={[]}
                 file={{ id: '1234' }}
                 hasDocGen
                 hasActivity
@@ -922,26 +924,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 ${{ sidebar: 'skills' }}                                                                                         | ${'skills-sidebar'}
                 ${{ sidebar: 'boxai' }}                                                                                          | ${'boxai-sidebar'}
                 ${{ sidebar: 'docgen' }}                                                                                         | ${'docgen-sidebar'}
-                ${undefined}                                                                                                     | ${'docgen-sidebar'}
+                ${{ sidebar: 'nonsense' }}                                                                                       | ${'boxai-sidebar'}
+                ${undefined}                                                                                                     | ${'boxai-sidebar'}
             `(
                 'should render $sidebar given internalSidebarNavigation = $internalSidebarNavigation',
                 ({ internalSidebarNavigation, sidebar }) => {
                     renderSidebarPanelsRouterDisabled({ internalSidebarNavigation });
-                    expect(screen.getByTestId(sidebar)).toBeInTheDocument();
-                },
-            );
-
-            test.each`
-                internalSidebarNavigation | sidebar
-                ${undefined}              | ${'boxai-sidebar'}
-                ${{}}                     | ${'boxai-sidebar'}
-            `(
-                'should render $sidebar given feature boxai.sidebar.shouldBeDefaultPanel = true and internalSidebarNavigation = $internalSidebarNavigation',
-                ({ internalSidebarNavigation, sidebar }) => {
-                    renderSidebarPanelsRouterDisabled({
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                        internalSidebarNavigation,
-                    });
                     expect(screen.getByTestId(sidebar)).toBeInTheDocument();
                 },
             );
@@ -954,8 +942,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 ${'metadata'} | ${'metadata-sidebar'} | ${'metadata'}
                 ${'skills'}   | ${'skills-sidebar'}   | ${'skills'}
                 ${'boxai'}    | ${'boxai-sidebar'}    | ${'boxai'}
-                ${'nonsense'} | ${'docgen-sidebar'}   | ${'docgen'}
-                ${undefined}  | ${'docgen-sidebar'}   | ${'docgen'}
+                ${'nonsense'} | ${'boxai-sidebar'}    | ${'boxai'}
+                ${undefined}  | ${'boxai-sidebar'}    | ${'boxai'}
             `(
                 'should render $sidebar and call onPanelChange with $expectedPanelName given internalSidebarNavigation = undefined and defaultPanel = $defaultPanel',
                 ({ defaultPanel, sidebar, expectedPanelName }) => {
@@ -969,31 +957,14 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             );
 
             test.each`
-                defaultPanel  | sidebar            | expectedPanelName
-                ${'nonsense'} | ${'boxai-sidebar'} | ${'boxai'}
-                ${undefined}  | ${'boxai-sidebar'} | ${'boxai'}
-            `(
-                'should render $sidebar and call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and internalSidebarNavigation = undefined and defaultPanel = $defaultPanel',
-                ({ defaultPanel, sidebar, expectedPanelName }) => {
-                    renderSidebarPanelsRouterDisabled({
-                        defaultPanel,
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                        internalSidebarNavigation: undefined,
-                    });
-                    expect(screen.getByTestId(sidebar)).toBeInTheDocument();
-                    expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-                },
-            );
-
-            test.each`
-                defaultPanel  | expectedSidebar       | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
-                ${'activity'} | ${'docgen-sidebar'}   | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${'details'}  | ${'docgen-sidebar'}   | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${'metadata'} | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${'skills'}   | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${'docgen'}   | ${'activity-sidebar'} | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}               | ${false}               | ${'activity'}
-                ${'boxai'}    | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
-                ${'boxai'}    | ${'docgen-sidebar'}   | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
+                defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
+                ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
+                ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
+                ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
+                ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'boxai'}
+                ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}               | ${false}               | ${'boxai'}
+                ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
+                ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
             `(
                 'should render first available panel and call onPanelChange with $expectedPanelName for users without rights to render default panel, given internalSidebarNavigation = undefined and defaultPanel = $defaultPanel',
                 ({
@@ -1018,54 +989,6 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         hasDocGen,
                         hasNativeBoxAISidebar,
                         internalSidebarNavigation: undefined,
-                    });
-
-                    expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
-                    expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-                },
-            );
-
-            test.each`
-                defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
-                ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
-                ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
-                ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'boxai'}
-                ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'boxai'}
-                ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}               | ${false}               | ${'boxai'}
-                ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
-                ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
-            `(
-                'should render first available panel and call onPanelChange with $expectedPanelName for users without rights to render default panel, given feature boxai.sidebar.shouldBeDefaultPanel = true and internalSidebarNavigation = undefined and defaultPanel = $defaultPanel',
-                ({
-                    defaultPanel,
-                    expectedSidebar,
-                    hasActivity,
-                    hasDetails,
-                    hasMetadata,
-                    hasSkills,
-                    hasDocGen,
-                    hasNativeBoxAISidebar,
-                    showOnlyBoxAINavButton,
-                    expectedPanelName,
-                }) => {
-                    renderSidebarPanelsRouterDisabled({
-                        features: {
-                            boxai: {
-                                sidebar: {
-                                    shouldBeDefaultPanel: true,
-                                    showOnlyNavButton: showOnlyBoxAINavButton,
-                                },
-                            },
-                        },
-                        defaultPanel,
-                        hasActivity,
-                        hasDetails,
-                        hasMetadata,
-                        hasSkills,
-                        hasDocGen,
-                        hasNativeBoxAISidebar,
-                        internalSidebarNavigation: undefined,
-                        internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
                     });
 
                     expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
@@ -1125,75 +1048,12 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 ${{ sidebar: 'skills' }}                                                                                         | ${'skills'}
                 ${{ sidebar: 'boxai' }}                                                                                          | ${'boxai'}
                 ${{ sidebar: 'docgen' }}                                                                                         | ${'docgen'}
-                ${undefined}                                                                                                     | ${'docgen'}
+                ${{ sidebar: 'nonsense' }}                                                                                       | ${'boxai'}
+                ${undefined}                                                                                                     | ${'boxai'}
             `(
                 'should call onPanelChange with $expectedPanelName given internalSidebarNavigation = $internalSidebarNavigation',
                 ({ internalSidebarNavigation, expectedPanelName }) => {
                     renderSidebarPanelsRouterDisabled({
-                        internalSidebarNavigation,
-                    });
-                    expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-                },
-            );
-
-            test.each`
-                internalSidebarNavigation | expectedPanelName
-                ${undefined}              | ${'boxai'}
-                ${{}}                     | ${'boxai'}
-            `(
-                'should call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and internalSidebarNavigation = $internalSidebarNavigation',
-                ({ internalSidebarNavigation, expectedPanelName }) => {
-                    renderSidebarPanelsRouterDisabled({
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
-                        internalSidebarNavigation,
-                    });
-                    expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
-                },
-            );
-
-            test.each`
-                internalSidebarNavigation                                                                                        | hasActivity | hasDetails | hasVersions | hasMetadata | hasSkills | hasDocGen | hasNativeBoxAISidebar | showOnlyBoxAINavButton | expectedPanelName
-                ${{ sidebar: 'activity' }}                                                                                       | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'comments' }}                                                      | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'comments', activeFeedEntryId: '1234' }}                           | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'tasks' }}                                                         | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'tasks', activeFeedEntryId: '1234' }}                              | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: '5678', fileVersionId: '1234' }} | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', fileVersionId: '1234' }}                            | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'versions' }}                                                      | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'activity', activeFeedEntryType: 'versions', versionId: '1234' }}                                   | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'details' }}                                                                                        | ${true}     | ${false}   | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'details', activeFeedEntryType: 'versions' }}                                                       | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'details', activeFeedEntryType: 'versions', versionId: '1234' }}                                    | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'metadata' }}                                                                                       | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'metadata', filteredTemplateIds: ['1', '3'] }}                                                      | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'skills' }}                                                                                         | ${true}     | ${true}    | ${true}     | ${true}     | ${false}  | ${true}   | ${true}               | ${false}               | ${'docgen'}
-                ${{ sidebar: 'docgen' }}                                                                                         | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${false}  | ${true}               | ${false}               | ${'skills'}
-                ${{ sidebar: 'boxai' }}                                                                                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
-                ${{ sidebar: 'boxai' }}                                                                                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
-            `(
-                'should call onPanelChange with $expectedPanelName given internalSidebarNavigation = $internalSidebarNavigation for users without rights to render the panel for given navigation',
-                ({
-                    internalSidebarNavigation,
-                    hasActivity,
-                    hasDetails,
-                    hasVersions,
-                    hasMetadata,
-                    hasSkills,
-                    hasDocGen,
-                    hasNativeBoxAISidebar,
-                    showOnlyBoxAINavButton,
-                    expectedPanelName,
-                }) => {
-                    renderSidebarPanelsRouterDisabled({
-                        features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
-                        hasActivity,
-                        hasNativeBoxAISidebar,
-                        hasDetails,
-                        hasDocGen,
-                        hasMetadata,
-                        hasSkills,
-                        hasVersions,
                         internalSidebarNavigation,
                     });
                     expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
@@ -1221,7 +1081,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 ${{ sidebar: 'boxai' }}                                                                                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false}              | ${false}               | ${'docgen'}
                 ${{ sidebar: 'boxai' }}                                                                                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}               | ${true}                | ${'docgen'}
             `(
-                'should call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and internalSidebarNavigation = $internalSidebarNavigation for users without rights to render the panel for given navigation',
+                'should call onPanelChange with $expectedPanelName given internalSidebarNavigation = $internalSidebarNavigation for users without rights to render the panel for given navigation',
                 ({
                     internalSidebarNavigation,
                     hasActivity,
@@ -1235,14 +1095,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     expectedPanelName,
                 }) => {
                     renderSidebarPanelsRouterDisabled({
-                        features: {
-                            boxai: {
-                                sidebar: {
-                                    shouldBeDefaultPanel: true,
-                                    showOnlyNavButton: showOnlyBoxAINavButton,
-                                },
-                            },
-                        },
+                        features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
                         hasActivity,
                         hasNativeBoxAISidebar,
                         hasDetails,
@@ -1284,6 +1137,20 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     hasMetadata: false,
                     hasSkills: false,
                     hasVersions: false,
+                    hasDocGen: false,
+                });
+                expect(container.firstChild).toBeNull();
+            });
+
+            test('should render nothing when showOnlyNavButton is true and no other panels are available', () => {
+                const { container } = renderSidebarPanelsRouterDisabled({
+                    features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                    hasActivity: false,
+                    hasDetails: false,
+                    hasMetadata: false,
+                    hasSkills: false,
+                    hasVersions: false,
+                    hasDocGen: false,
                 });
                 expect(container.firstChild).toBeNull();
             });
@@ -1397,13 +1264,9 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             });
 
             describe('boxai sidebar', () => {
-                test('should render, given feature boxai.sidebar.shouldBeDefaultPanel = true and hasNativeBoxAISidebar = true and feature boxai.sidebar.showOnlyNavButton = false', () => {
+                test('should render native Box AI as default panel', () => {
                     renderSidebarPanelsRouterDisabled({
-                        internalSidebarNavigation: {
-                            sidebar: 'boxai',
-                        },
-                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true, showOnlyNavButton: false } } },
-                        hasNativeBoxAISidebar: true,
+                        features: { boxai: { sidebar: { showOnlyNavButton: false } } },
                     });
                     expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
                 });
@@ -1414,7 +1277,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     ${false}              | ${true}
                     ${false}              | ${false}
                 `(
-                    'should not render, given hasNativeBoxAISidebar = $hasNativeBoxAISidebar and feature boxai.sidebar.showOnlyNavButton = $showOnlyNavButton',
+                    'should not render native Box AI, given hasNativeBoxAISidebar = $hasNativeBoxAISidebar and feature boxai.sidebar.showOnlyNavButton = $showOnlyNavButton',
                     ({ hasNativeBoxAISidebar, showOnlyNavButton }) => {
                         renderSidebarPanelsRouterDisabled({
                             internalSidebarNavigation: {
@@ -1426,6 +1289,168 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
                     },
                 );
+
+                describe('canShowBoxAISidebarPanel eligibility', () => {
+                    test.each`
+                        hasNativeBoxAISidebar | showOnlyNavButton | expectedEligible | description
+                        ${true}               | ${false}          | ${true}          | ${'native Box AI enabled and showOnlyNavButton is false'}
+                        ${true}               | ${true}           | ${false}         | ${'native Box AI enabled but showOnlyNavButton is true'}
+                        ${false}              | ${false}          | ${false}         | ${'native Box AI disabled'}
+                        ${false}              | ${true}           | ${false}         | ${'native Box AI disabled and showOnlyNavButton is true'}
+                    `(
+                        'should set Box AI panel eligibility to $expectedEligible when $description',
+                        ({ hasNativeBoxAISidebar, showOnlyNavButton, expectedEligible }) => {
+                            renderSidebarPanelsRouterDisabled({
+                                internalSidebarNavigation: { sidebar: 'boxai' },
+                                features: { boxai: { sidebar: { showOnlyNavButton } } },
+                                hasNativeBoxAISidebar,
+                            });
+                            if (expectedEligible) {
+                                expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                            } else {
+                                expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
+                            }
+                        },
+                    );
+
+                    test('should fall back to first available panel when Box AI is not eligible due to showOnlyNavButton', () => {
+                        renderSidebarPanelsRouterDisabled({
+                            internalSidebarNavigation: { sidebar: 'boxai' },
+                            features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                        });
+                        // Should fall back to docgen (first in DEFAULT_SIDEBAR_VIEWS)
+                        expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+                    });
+
+                    test('should render custom Box AI panel when hasNativeBoxAISidebar is false and custom panel is provided', () => {
+                        renderSidebarPanelsRouterDisabled({
+                            internalSidebarNavigation: { sidebar: 'boxai' },
+                            features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                            hasNativeBoxAISidebar: false,
+                            customSidebarPanels: [createBoxAIPanel()],
+                        });
+                        expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                    });
+
+                    test('should render custom Box AI panel when native cannot show (showOnlyNavButton)', () => {
+                        const CustomBoxAIComponent = () => <div data-testid="custom-boxai-component" />;
+                        renderSidebarPanelsRouterDisabled({
+                            internalSidebarNavigation: { sidebar: 'boxai' },
+                            features: { boxai: { sidebar: { showOnlyNavButton: true } } },
+                            customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAIComponent })],
+                        });
+                        // Custom Box AI renders since native Box AI cannot be shown (canShowBoxAISidebarPanel is false)
+                        expect(screen.getByTestId('custom-boxai-component')).toBeInTheDocument();
+                        expect(onPanelChange).toHaveBeenCalledWith('boxai', true);
+                    });
+                });
+
+                describe('custom boxai sidebar', () => {
+                    const CustomBoxAI = () => <div data-testid="custom-boxai-sidebar" />;
+
+                    test('should render custom Box AI sidebar as default panel', () => {
+                        renderSidebarPanelsRouterDisabled({
+                            hasNativeBoxAISidebar: false,
+                            customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
+                        });
+                        expect(screen.getByTestId('custom-boxai-sidebar')).toBeInTheDocument();
+                        expect(onPanelChange).toHaveBeenCalledWith('boxai', true);
+                    });
+
+                    test('should NOT render custom Box AI sidebar when it is disabled', () => {
+                        renderSidebarPanelsRouterDisabled({
+                            internalSidebarNavigation: { sidebar: 'boxai' },
+                            hasNativeBoxAISidebar: false,
+                            customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI, isDisabled: true })],
+                        });
+                        expect(screen.queryByTestId('custom-boxai-sidebar')).not.toBeInTheDocument();
+                    });
+
+                    test('should fall back to first available panel when custom Box AI sidebar is disabled', () => {
+                        renderSidebarPanelsRouterDisabled({
+                            internalSidebarNavigation: { sidebar: 'boxai' },
+                            hasNativeBoxAISidebar: false,
+                            customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI, isDisabled: true })],
+                        });
+                        // Should fall back to docgen (first in DEFAULT_SIDEBAR_VIEWS)
+                        expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+                    });
+
+                    test.each`
+                        internalSidebarNavigation  | expectedPanelName
+                        ${{ sidebar: 'boxai' }}    | ${'boxai'}
+                        ${{ sidebar: 'nonsense' }} | ${'boxai'}
+                        ${undefined}               | ${'boxai'}
+                    `(
+                        'should render custom Box AI sidebar and call onPanelChange with $expectedPanelName given internalSidebarNavigation = $internalSidebarNavigation',
+                        ({ internalSidebarNavigation, expectedPanelName }) => {
+                            renderSidebarPanelsRouterDisabled({
+                                internalSidebarNavigation,
+                                hasNativeBoxAISidebar: false,
+                                customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
+                            });
+                            expect(screen.getByTestId('custom-boxai-sidebar')).toBeInTheDocument();
+                            expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+                        },
+                    );
+
+                    test.each`
+                        defaultPanel  | sidebar                   | expectedPanelName
+                        ${'boxai'}    | ${'custom-boxai-sidebar'} | ${'boxai'}
+                        ${'nonsense'} | ${'custom-boxai-sidebar'} | ${'boxai'}
+                        ${undefined}  | ${'custom-boxai-sidebar'} | ${'boxai'}
+                    `(
+                        'should render $sidebar and call onPanelChange with $expectedPanelName given custom Box AI and defaultPanel = $defaultPanel',
+                        ({ defaultPanel, sidebar, expectedPanelName }) => {
+                            renderSidebarPanelsRouterDisabled({
+                                defaultPanel,
+                                hasNativeBoxAISidebar: false,
+                                customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
+                            });
+                            expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+                            expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+                        },
+                    );
+
+                    test.each`
+                        internalSidebarNavigation  | sidebar                   | defaultPanel  | expectedPanelName
+                        ${{ sidebar: 'boxai' }}    | ${'custom-boxai-sidebar'} | ${'details'}  | ${'boxai'}
+                        ${{ sidebar: 'boxai' }}    | ${'custom-boxai-sidebar'} | ${'activity'} | ${'boxai'}
+                        ${{ sidebar: 'activity' }} | ${'activity-sidebar'}     | ${'boxai'}    | ${'activity'}
+                        ${{ sidebar: 'details' }}  | ${'details-sidebar'}      | ${'boxai'}    | ${'details'}
+                    `(
+                        'should render $sidebar given custom Box AI with internalSidebarNavigation = $internalSidebarNavigation and defaultPanel = $defaultPanel (navigation takes precedence)',
+                        ({ internalSidebarNavigation, sidebar, defaultPanel, expectedPanelName }) => {
+                            renderSidebarPanelsRouterDisabled({
+                                internalSidebarNavigation,
+                                defaultPanel,
+                                hasNativeBoxAISidebar: false,
+                                customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI })],
+                            });
+                            expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+                            expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+                        },
+                    );
+
+                    test.each`
+                        isDisabled | hasDocGen | expectedSidebar           | expectedPanelName
+                        ${false}   | ${true}   | ${'custom-boxai-sidebar'} | ${'boxai'}
+                        ${true}    | ${true}   | ${'docgen-sidebar'}       | ${'docgen'}
+                        ${true}    | ${false}  | ${'skills-sidebar'}       | ${'skills'}
+                    `(
+                        'should render $expectedSidebar when custom Box AI isDisabled = $isDisabled and hasDocGen = $hasDocGen',
+                        ({ isDisabled, hasDocGen, expectedSidebar, expectedPanelName }) => {
+                            renderSidebarPanelsRouterDisabled({
+                                internalSidebarNavigation: { sidebar: 'boxai' },
+                                hasNativeBoxAISidebar: false,
+                                hasDocGen,
+                                customSidebarPanels: [createBoxAIPanel({ component: CustomBoxAI, isDisabled })],
+                            });
+                            expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
+                            expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+                        },
+                    );
+                });
             });
 
             describe('first loaded behavior', () => {
@@ -1480,6 +1505,36 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         expect(mockRefreshFunctions.versionsSidebar).toHaveBeenCalledWith();
                     },
                 );
+
+                test('should not throw when custom sidebar does not implement refresh', () => {
+                    const sidebarPanelsRef = React.createRef();
+
+                    renderSidebarPanelsRouterDisabled({
+                        hasNativeBoxAISidebar: false,
+                        ref: sidebarPanelsRef,
+                    });
+
+                    // Custom sidebar without refresh method
+                    sidebarPanelsRef.current.customSidebars.set('customPanel', { current: {} });
+
+                    expect(() => sidebarPanelsRef.current.refresh()).not.toThrow();
+                });
+
+                test('should call refresh on custom sidebars that implement it', () => {
+                    const sidebarPanelsRef = React.createRef();
+                    const mockRefresh = jest.fn();
+
+                    renderSidebarPanelsRouterDisabled({
+                        hasNativeBoxAISidebar: false,
+                        ref: sidebarPanelsRef,
+                    });
+
+                    sidebarPanelsRef.current.customSidebars.set('customPanel', { current: { refresh: mockRefresh } });
+
+                    sidebarPanelsRef.current.refresh();
+
+                    expect(mockRefresh).toHaveBeenCalled();
+                });
             });
 
             describe('componentDidUpdate', () => {
@@ -1585,7 +1640,320 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                         expect(mockOnVersionChange).toHaveBeenCalledWith(null);
                     },
                 );
+
+                test.each([
+                    [
+                        { sidebar: 'activity', activeFeedEntryType: 'versions', versionId: '123' },
+                        {
+                            sidebar: 'activity',
+                            activeFeedEntryType: 'annotations',
+                            fileVersionId: '123',
+                            activeFeedEntryId: '456',
+                        },
+                    ],
+                    [
+                        { sidebar: 'activity', activeFeedEntryType: 'versions', versionId: '123' },
+                        { sidebar: 'activity', activeFeedEntryType: 'annotations', fileVersionId: '123' },
+                    ],
+                    [
+                        { sidebar: 'details', activeFeedEntryType: 'versions', versionId: '123' },
+                        {
+                            sidebar: 'activity',
+                            activeFeedEntryType: 'annotations',
+                            fileVersionId: '456',
+                            activeFeedEntryId: '789',
+                        },
+                    ],
+                ])(
+                    'should tag the version reset as triggered by an annotation when transitioning to an annotations navigation',
+                    (prevInternalSidebarNavigation, internalSidebarNavigation) => {
+                        const { rerender } = renderSidebarPanelsRouterDisabled({
+                            internalSidebarNavigation: prevInternalSidebarNavigation,
+                            onVersionChange: mockOnVersionChange,
+                        });
+
+                        rerender(
+                            getSidebarPanelsRouterDisabled({
+                                internalSidebarNavigation,
+                                onVersionChange: mockOnVersionChange,
+                            }),
+                        );
+
+                        expect(mockOnVersionChange).toHaveBeenCalledWith(null, { triggeredBy: 'annotation' });
+                    },
+                );
             });
+        });
+
+        describe('multiple customSidebarPanels rendering', () => {
+            const createCustomPanel = (id, overrides = {}) => ({
+                id,
+                path: id,
+                component: () => <div data-testid={`${id}-sidebar`} />,
+                isDisabled: false,
+                ...overrides,
+            });
+
+            test('should render multiple custom panels including Box AI', () => {
+                const customSidebarPanels = [
+                    createBoxAIPanel(),
+                    createCustomPanel('custom1', { title: 'Custom Panel 1' }),
+                    createCustomPanel('custom2', { title: 'Custom Panel 2' }),
+                ];
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'boxai' },
+                    customSidebarPanels,
+                });
+
+                expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                expect(screen.queryByTestId('custom1-sidebar')).not.toBeInTheDocument();
+                expect(screen.queryByTestId('custom2-sidebar')).not.toBeInTheDocument();
+            });
+
+            test('should render custom panels with regular panels', () => {
+                const customSidebarPanels = [
+                    createCustomPanel('analytics', { title: 'Analytics Panel' }),
+                    createCustomPanel('reports', { title: 'Reports Panel' }),
+                ];
+
+                const { unmount } = renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'analytics' },
+                    customSidebarPanels,
+                    hasActivity: true,
+                    hasMetadata: true,
+                });
+
+                expect(screen.getByTestId('analytics-sidebar')).toBeInTheDocument();
+
+                unmount();
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'reports' },
+                    customSidebarPanels,
+                    hasActivity: true,
+                    hasMetadata: true,
+                });
+
+                expect(screen.getByTestId('reports-sidebar')).toBeInTheDocument();
+            });
+
+            test('should handle custom panels with different properties', () => {
+                const disabledPanel = createCustomPanel('disabled', {
+                    isDisabled: true,
+                    title: 'Disabled Panel',
+                });
+                const enabledPanel = createCustomPanel('enabled', {
+                    title: 'Enabled Panel',
+                });
+
+                const { unmount } = renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'enabled' },
+                    customSidebarPanels: [disabledPanel, enabledPanel],
+                });
+
+                expect(screen.getByTestId('enabled-sidebar')).toBeInTheDocument();
+
+                unmount();
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'disabled' },
+                    customSidebarPanels: [disabledPanel, enabledPanel],
+                });
+
+                expect(screen.queryByTestId('disabled-sidebar')).not.toBeInTheDocument();
+            });
+
+            test('should handle empty custom panels array', () => {
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'activity' },
+                    customSidebarPanels: [],
+                    hasActivity: true,
+                });
+
+                expect(screen.getByTestId('activity-sidebar')).toBeInTheDocument();
+            });
+
+            test('should handle custom panels with Box AI in different positions', () => {
+                const customSidebarPanels = [
+                    createCustomPanel('before', { title: 'Before Box AI' }),
+                    createBoxAIPanel(),
+                    createCustomPanel('after', { title: 'After Box AI' }),
+                ];
+
+                const { unmount: unmountBoxAI } = renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'boxai' },
+                    customSidebarPanels,
+                });
+                expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+                unmountBoxAI();
+
+                const { unmount: unmountBefore } = renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'before' },
+                    customSidebarPanels,
+                });
+                expect(screen.getByTestId('before-sidebar')).toBeInTheDocument();
+                unmountBefore();
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'after' },
+                    customSidebarPanels,
+                });
+                expect(screen.getByTestId('after-sidebar')).toBeInTheDocument();
+            });
+
+            test('should call onPanelChange with correct panel names for custom panels', () => {
+                const customSidebarPanels = [
+                    createCustomPanel('dashboard', { title: 'Dashboard' }),
+                    createBoxAIPanel(),
+                ];
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'dashboard' },
+                    customSidebarPanels,
+                });
+                expect(onPanelChange).toHaveBeenCalledWith('dashboard', true);
+
+                onPanelChange.mockClear();
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'boxai' },
+                    customSidebarPanels,
+                });
+                expect(onPanelChange).toHaveBeenCalledWith('boxai', true);
+            });
+
+            test('should render other custom panels alongside native Box AI', () => {
+                const analyticsPanel = createCustomPanel('analytics', { title: 'Analytics Panel' });
+                const boxAiPanel = createBoxAIPanel();
+
+                renderSidebarPanelsRouterDisabled({
+                    internalSidebarNavigation: { sidebar: 'analytics' },
+                    customSidebarPanels: [boxAiPanel, analyticsPanel],
+                });
+
+                expect(screen.getByTestId('analytics-sidebar')).toBeInTheDocument();
+            });
+        });
+
+        describe('default sidebar redirect', () => {
+            test.each`
+                internalSidebarNavigation                                      | expectedSidebar
+                ${undefined}                                                   | ${'boxai'}
+                ${{}}                                                          | ${'boxai'}
+                ${{ sidebar: 'nonsense' }}                                     | ${'boxai'}
+                ${{ sidebar: 'activity', activeFeedEntryType: 'annotations' }} | ${'boxai'}
+            `(
+                'should replace the navigation with $expectedSidebar given internalSidebarNavigation = $internalSidebarNavigation',
+                ({ internalSidebarNavigation, expectedSidebar }) => {
+                    renderSidebarPanelsRouterDisabled({ internalSidebarNavigation });
+
+                    expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledTimes(1);
+                    expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith(
+                        { sidebar: expectedSidebar, silent: true },
+                        true,
+                    );
+                },
+            );
+
+            test('should replace the navigation with the default panel when the navigated sidebar is not eligible', () => {
+                renderSidebarPanelsRouterDisabled({
+                    defaultPanel: 'details',
+                    hasActivity: false,
+                    internalSidebarNavigation: { sidebar: 'activity' },
+                });
+
+                expect(screen.getByTestId('details-sidebar')).toBeInTheDocument();
+                expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith(
+                    { sidebar: 'details', silent: true },
+                    true,
+                );
+            });
+
+            test.each`
+                internalSidebarNavigation
+                ${{ sidebar: 'activity' }}
+                ${{ sidebar: 'activity', activeFeedEntryType: 'versions', versionId: '123' }}
+                ${{ sidebar: 'boxai' }}
+            `(
+                'should not replace the navigation given internalSidebarNavigation = $internalSidebarNavigation pointing to an eligible sidebar',
+                ({ internalSidebarNavigation }) => {
+                    renderSidebarPanelsRouterDisabled({ internalSidebarNavigation });
+
+                    expect(mockInternalSidebarNavigationHandler).not.toHaveBeenCalled();
+                },
+            );
+
+            test('should not replace the navigation when the sidebar is closed', () => {
+                renderSidebarPanelsRouterDisabled({ isOpen: false });
+
+                expect(mockInternalSidebarNavigationHandler).not.toHaveBeenCalled();
+            });
+
+            test('should replace the navigation once the navigated sidebar is no longer eligible', () => {
+                const internalSidebarNavigation = { sidebar: 'activity' };
+                const { rerender } = renderSidebarPanelsRouterDisabled({ internalSidebarNavigation });
+
+                expect(mockInternalSidebarNavigationHandler).not.toHaveBeenCalled();
+
+                rerender(getSidebarPanelsRouterDisabled({ hasActivity: false, internalSidebarNavigation }));
+
+                expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith(
+                    { sidebar: 'boxai', silent: true },
+                    true,
+                );
+            });
+
+            test('should render the default sidebar when navigation handler is not provided', () => {
+                renderSidebarPanelsRouterDisabled({ internalSidebarNavigationHandler: undefined });
+
+                expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe('SidebarPanels dispatcher', () => {
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        const getSidebarPanelsDispatcher = (props = {}) => (
+            <SidebarPanelsDispatcher
+                customSidebarPanels={[]}
+                file={{ id: '1234' }}
+                hasActivity
+                internalSidebarNavigation={{ sidebar: 'activity' }}
+                isOpen
+                {...props}
+            />
+        );
+
+        test.each`
+            routerDisabled | SidebarPanelsImplementation
+            ${false}       | ${SidebarPanelsRouter}
+            ${true}        | ${SidebarPanelsRouterDisabled}
+        `(
+            'should forward refresh() to the rendered implementation given routerDisabled = $routerDisabled',
+            ({ routerDisabled, SidebarPanelsImplementation }) => {
+                const refreshSpy = jest.spyOn(SidebarPanelsImplementation.prototype, 'refresh').mockImplementation();
+                const sidebarPanelsRef = React.createRef();
+
+                render(
+                    <MemoryRouter initialEntries={['/activity']}>
+                        {getSidebarPanelsDispatcher({ ref: sidebarPanelsRef, routerDisabled })}
+                    </MemoryRouter>,
+                );
+
+                sidebarPanelsRef.current.refresh(false);
+
+                expect(refreshSpy).toHaveBeenCalledWith(false);
+            },
+        );
+
+        test('should render without a Router when routerDisabled is true', () => {
+            render(getSidebarPanelsDispatcher({ routerDisabled: true }));
+
+            expect(screen.getByTestId('activity-sidebar')).toBeInTheDocument();
         });
     });
 });
