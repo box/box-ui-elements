@@ -1,4 +1,0 @@
-### Examples
-```
-<Logo title="Box"/>
-```
