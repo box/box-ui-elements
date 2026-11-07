@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import cloneDeep from 'lodash/cloneDeep';
 import { render, screen } from '../../../test-utils/testing-library';
 import { ActivitySidebarComponent } from '../ActivitySidebar';
-import { formattedReplies } from '../fixtures';
-import ActivityFeed from '../activity-feed';
 import ActivityFeedV2 from '../activity-feed-v2';
 import { ViewType, FeedEntryType } from '../../common/types/SidebarNavigation';
 
@@ -17,10 +14,6 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
-
-jest.mock('../activity-feed', () => {
-    return jest.fn(() => <div data-testid="activity-feed-mock">Activity Feed Mock</div>);
-});
 
 jest.mock('../activity-feed-v2', () => {
     return jest.fn(() => <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>);
@@ -91,6 +84,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockGeneratePath.mockClear();
+        ActivityFeedV2.mockImplementation(() => <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>);
     });
 
     const renderActivitySidebar = (props = {}) => {
@@ -133,11 +127,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test('should call emitActiveAnnotationChangeEvent and onAnnotationSelect appropriately', () => {
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -157,11 +151,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             getAnnotationsPath.mockReturnValue('/activity/annotations/456/124');
             annotation = { file_version: { id: '456' }, id: '124' };
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -180,11 +174,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test('should use current file version if match params returns null', () => {
             getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -205,11 +199,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             getAnnotationsPath.mockReturnValue('/activity/annotations/null/124');
             annotation = { file_version: null, id: '124' };
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -233,11 +227,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ({ locationType, isVideoAnnotation }) => {
                 getAnnotationsPath.mockReturnValue('/activity/annotations/235/124');
                 annotation = { file_version: { id: '235' }, id: '124', target: { location: { type: locationType } } };
-                ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+                ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                     if (onAnnotationSelectProp) {
                         onAnnotationSelectProp(annotation);
                     }
-                    return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                    return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
                 });
 
                 renderActivitySidebar({
@@ -277,11 +271,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test('should call emitActiveAnnotationChangeEvent and onAnnotationSelect appropriately', () => {
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -307,11 +301,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             getAnnotationsPath.mockReturnValue('/activity/annotations/456/124');
             annotation = { file_version: { id: '456' }, id: '124' };
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -331,11 +325,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test('should use current file version if match params returns null', () => {
             getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -362,11 +356,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             getAnnotationsPath.mockReturnValue('/activity/annotations/null/124');
             annotation = { file_version: null, id: '124' };
 
-            ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+            ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                 if (onAnnotationSelectProp) {
                     onAnnotationSelectProp(annotation);
                 }
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
             });
 
             renderActivitySidebar({
@@ -393,11 +387,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 getAnnotationsPath.mockReturnValue('/activity/annotations/456/124');
                 annotation = { file_version: { id: '457' }, id: '124', target: { location: { type: locationType } } };
 
-                ActivityFeed.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
+                ActivityFeedV2.mockImplementation(({ onAnnotationSelect: onAnnotationSelectProp }) => {
                     if (onAnnotationSelectProp) {
                         onAnnotationSelectProp(annotation);
                     }
-                    return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
+                    return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
                 });
 
                 renderActivitySidebar({
@@ -421,127 +415,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         );
     });
 
-    describe('updateReplies()', () => {
-        test('should call updateFeedItem API', () => {
-            const id = '123';
-            const replies = cloneDeep(formattedReplies);
-
-            ActivityFeed.mockImplementation(({ onHideReplies }) => {
-                if (onHideReplies) {
-                    onHideReplies(id, replies);
-                }
-
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
-
-            feedAPI.feedItems = jest
-                .fn()
-                .mockImplementationOnce((_, __, callback) => callback(['test']))
-                .mockImplementation(() => {});
-
+    describe('render() - always renders ActivityFeedV2', () => {
+        test('should always render ActivityFeedV2', () => {
             renderActivitySidebar();
-
-            expect(feedAPI.updateFeedItem).toHaveBeenCalledWith({ replies }, id);
-            expect(feedAPI.feedItems).toHaveBeenCalled();
-        });
-
-        test('should disable active item if replies are being hidden and activeFeedEntryId belongs to a reply that is in currently being updated parent', () => {
-            const historyReplace = jest.fn();
-            const activeReplyId = '123';
-            const itemId = '999';
-            const lastReplyId = '456';
-            const replies = [{ id: lastReplyId }];
-
-            mockGeneratePath.mockReturnValue('/activity');
-
-            feedAPI.feedItems = jest
-                .fn()
-                .mockImplementationOnce((_, __, callback) =>
-                    callback([{ id: itemId, replies: [{ id: activeReplyId }, { id: lastReplyId }], type: 'comment' }]),
-                )
-                .mockImplementation(() => {});
-
-            ActivityFeed.mockImplementation(({ onHideReplies }) => {
-                if (onHideReplies) {
-                    onHideReplies(itemId, replies);
-                }
-
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
-
-            renderActivitySidebar({
-                activeFeedEntryId: activeReplyId,
-                history: { replace: historyReplace },
-            });
-
-            expect(historyReplace).toHaveBeenCalledWith('/activity');
-            expect(feedAPI.updateFeedItem).toHaveBeenCalledWith({ replies }, itemId);
-        });
-
-        test('should call generatePath when getActiveCommentPath is called with commentId', () => {
-            const historyReplace = jest.fn();
-            const activeReplyId = '123';
-            const itemId = '999';
-            const lastReplyId = '456';
-            const replies = [{ id: lastReplyId }];
-
-            mockGeneratePath.mockReturnValue('/activity/comments/123');
-
-            feedAPI.feedItems = jest
-                .fn()
-                .mockImplementationOnce((_, __, callback) =>
-                    callback([
-                        { id: activeReplyId, type: 'comment' },
-                        { id: itemId, replies: [{ id: lastReplyId }], type: 'comment' },
-                    ]),
-                )
-                .mockImplementation(() => {});
-
-            ActivityFeed.mockImplementation(({ onHideReplies }) => {
-                if (onHideReplies) {
-                    onHideReplies(itemId, replies);
-                }
-
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
-
-            renderActivitySidebar({
-                activeFeedEntryId: activeReplyId,
-                history: { replace: historyReplace },
-            });
-
-            expect(historyReplace).not.toHaveBeenCalled();
-            expect(mockGeneratePath).not.toHaveBeenCalled();
-        });
-    });
-
-    describe('render() - threadedRepliesV2 feature gate', () => {
-        test('should render ActivityFeedV2 when threadedRepliesV2 is enabled', () => {
-            renderActivitySidebar({
-                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
-            });
             expect(screen.getByTestId('activity-feed-adapter-v2')).toBeInTheDocument();
-            expect(screen.queryByTestId('activity-feed-mock')).not.toBeInTheDocument();
-        });
-
-        test('should render ActivityFeed when threadedRepliesV2 is not enabled', () => {
-            renderActivitySidebar({
-                features: { activityFeed: { threadedRepliesV2: { enabled: false } } },
-            });
-            expect(screen.getByTestId('activity-feed-mock')).toBeInTheDocument();
-            expect(screen.queryByTestId('activity-feed-adapter-v2')).not.toBeInTheDocument();
-        });
-
-        test('should render ActivityFeed when threadedRepliesV2 feature is not set', () => {
-            renderActivitySidebar();
-            expect(screen.getByTestId('activity-feed-mock')).toBeInTheDocument();
-            expect(screen.queryByTestId('activity-feed-adapter-v2')).not.toBeInTheDocument();
         });
 
         test('should pass isAudioPlayerV2Enabled to ActivityFeedV2 when audioPlayerV2 is enabled', () => {
             renderActivitySidebar({
                 features: {
-                    activityFeed: { threadedRepliesV2: { enabled: true } },
                     audioPlayerV2: { enabled: true },
                 },
             });
@@ -552,9 +434,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test('should pass isAudioPlayerV2Enabled false to ActivityFeedV2 when audioPlayerV2 is not set', () => {
-            renderActivitySidebar({
-                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
-            });
+            renderActivitySidebar();
             expect(ActivityFeedV2).toHaveBeenCalledWith(
                 expect.objectContaining({ isAudioPlayerV2Enabled: false }),
                 expect.anything(),
@@ -563,7 +443,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('handleCommentVersionSelect()', () => {
-        const features = { activityFeed: { threadedRepliesV2: { enabled: true } } };
         const params = { commentId: 'c-1', fileVersionId: '235', startMs: 5000 };
 
         const selectFromFeed = () =>
@@ -582,7 +461,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const onCommentVersionSelect = jest.fn();
             selectFromFeed();
 
-            renderActivitySidebar({ features, getAnnotationsPath, history, onCommentVersionSelect });
+            renderActivitySidebar({ getAnnotationsPath, history, onCommentVersionSelect });
 
             expect(getAnnotationsPath).toHaveBeenCalledWith('235', 'c-1');
             expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/c-1');
@@ -595,7 +474,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             selectFromFeed();
 
             renderActivitySidebar({
-                features,
                 internalSidebarNavigationHandler,
                 onCommentVersionSelect,
                 routerDisabled: true,
@@ -615,7 +493,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         test('should pass isRichTextEnabled=true to ActivityFeedV2 when richText is enabled', () => {
             renderActivitySidebar({
                 features: {
-                    activityFeed: { richText: { enabled: true }, threadedRepliesV2: { enabled: true } },
+                    activityFeed: { richText: { enabled: true } },
                 },
             });
 
@@ -626,88 +504,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test('should pass isRichTextEnabled=false to ActivityFeedV2 when richText is not enabled', () => {
-            renderActivitySidebar({
-                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
-            });
+            renderActivitySidebar();
 
             expect(ActivityFeedV2).toHaveBeenCalledWith(
                 expect.objectContaining({ isRichTextEnabled: false }),
                 expect.anything(),
             );
-        });
-    });
-
-    describe('updateReplies() - Router Disabled', () => {
-        test('should disable active item if replies are being hidden and activeFeedEntryId belongs to a reply that is in currently being updated parent', () => {
-            const internalSidebarNavigationHandler = jest.fn();
-            const activeReplyId = '123';
-            const itemId = '999';
-            const lastReplyId = '456';
-            const replies = [{ id: lastReplyId }];
-
-            feedAPI.feedItems = jest
-                .fn()
-                .mockImplementationOnce((_, __, callback) =>
-                    callback([{ id: itemId, replies: [{ id: activeReplyId }, { id: lastReplyId }], type: 'comment' }]),
-                )
-                .mockImplementation(() => {});
-
-            ActivityFeed.mockImplementation(({ onHideReplies }) => {
-                if (onHideReplies) {
-                    onHideReplies(itemId, replies);
-                }
-
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
-
-            renderActivitySidebar({
-                routerDisabled: true,
-                internalSidebarNavigationHandler,
-                activeFeedEntryId: activeReplyId,
-            });
-
-            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith(
-                {
-                    sidebar: ViewType.ACTIVITY,
-                },
-                true,
-            );
-            expect(feedAPI.updateFeedItem).toHaveBeenCalledWith({ replies }, itemId);
-        });
-
-        test('should not call internalSidebarNavigationHandler when activeReplyId is not being removed', () => {
-            const internalSidebarNavigationHandler = jest.fn();
-            const activeReplyId = '123';
-            const itemId = '999';
-            const lastReplyId = '456';
-            const replies = [{ id: lastReplyId }];
-
-            feedAPI.feedItems = jest
-                .fn()
-                .mockImplementationOnce((_, __, callback) =>
-                    callback([
-                        { id: activeReplyId, type: 'comment' },
-                        { id: itemId, replies: [{ id: lastReplyId }], type: 'comment' },
-                    ]),
-                )
-                .mockImplementation(() => {});
-
-            ActivityFeed.mockImplementation(({ onHideReplies }) => {
-                if (onHideReplies) {
-                    onHideReplies(itemId, replies);
-                }
-
-                return <div data-testid="activity-feed-mock">Activity Feed Mock</div>;
-            });
-
-            renderActivitySidebar({
-                routerDisabled: true,
-                internalSidebarNavigationHandler,
-                activeFeedEntryId: activeReplyId,
-            });
-
-            expect(internalSidebarNavigationHandler).not.toHaveBeenCalled();
-            expect(feedAPI.updateFeedItem).toHaveBeenCalledWith({ replies }, itemId);
         });
     });
 });
