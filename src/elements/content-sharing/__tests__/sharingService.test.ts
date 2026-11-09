@@ -1,7 +1,7 @@
-import { ACCESS_NONE, PERMISSION_CAN_DOWNLOAD, PERMISSION_CAN_PREVIEW } from '../../../constants';
-import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 import { createSharingService } from '../sharingService';
 import { convertSharedLinkPermissions, convertSharedLinkSettings } from '../utils';
+
+import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
 
 jest.mock('../utils');
 
@@ -26,8 +26,8 @@ const createSharingServiceWrapper = (hasSharedLink = true) => {
 describe('elements/content-sharing/sharingService', () => {
     beforeEach(() => {
         (convertSharedLinkPermissions as jest.Mock).mockReturnValue({
-            [PERMISSION_CAN_DOWNLOAD]: true,
-            [PERMISSION_CAN_PREVIEW]: false,
+            can_download: true,
+            can_preview: false,
         });
         (convertSharedLinkSettings as jest.Mock).mockReturnValue({
             unshared_at: null,
@@ -48,10 +48,10 @@ describe('elements/content-sharing/sharingService', () => {
 
         test('should call updateSharedLink with correct parameters when changeSharedLinkPermission is called', async () => {
             const service = createSharingServiceWrapper();
-            const permissionLevel = PERMISSION_CAN_DOWNLOAD;
+            const permissionLevel = 'can_download';
             const expectedPermissions = {
-                [PERMISSION_CAN_DOWNLOAD]: true,
-                [PERMISSION_CAN_PREVIEW]: false,
+                can_download: true,
+                can_preview: false,
             };
 
             await service.changeSharedLinkPermission(permissionLevel);
@@ -68,7 +68,7 @@ describe('elements/content-sharing/sharingService', () => {
         test('should reject with 404 error when hasSharedLink is false', async () => {
             const service = createSharingServiceWrapper(false);
 
-            await expect(service.changeSharedLinkPermission(PERMISSION_CAN_DOWNLOAD)).rejects.toEqual(
+            await expect(service.changeSharedLinkPermission('can_download')).rejects.toEqual(
                 expect.objectContaining({
                     message: 'Shared link not found',
                     status: 404,
@@ -149,7 +149,7 @@ describe('elements/content-sharing/sharingService', () => {
             expect(typeof service.deleteSharedLink).toBe('function');
         });
 
-        test('should call share with ACCESS_NONE and onRemoveSharedLink when deleteSharedLink is called', async () => {
+        test('should call share with correct parameters when deleteSharedLink is called', async () => {
             mockItemApiInstance.share.mockImplementation((_options, _access, successCallback) => {
                 successCallback({ id: '123', shared_link: null });
             });
@@ -159,7 +159,7 @@ describe('elements/content-sharing/sharingService', () => {
 
             expect(mockItemApiInstance.share).toHaveBeenCalledWith(
                 options,
-                ACCESS_NONE,
+                'none',
                 expect.any(Function),
                 expect.any(Function),
                 CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
@@ -188,7 +188,7 @@ describe('elements/content-sharing/sharingService', () => {
         });
 
         test('should call updateSharedLink with basic shared link settings', async () => {
-            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _settings, successCallback) => {
                 successCallback({ id: '123', shared_link: null });
             });
 
@@ -198,7 +198,10 @@ describe('elements/content-sharing/sharingService', () => {
                 expiration: null,
                 isDownloadEnabled: true,
                 isExpirationEnabled: false,
+                isOtpEnabled: false,
                 isPasswordEnabled: false,
+                isVanityNameEnabled: true,
+                otpMode: 'none' as const,
                 password: '',
                 vanityName: 'vanity-name',
             };
@@ -212,10 +215,10 @@ describe('elements/content-sharing/sharingService', () => {
 
             expect(convertSharedLinkSettings).toHaveBeenCalledWith(
                 sharedLinkSettings,
+                {}, // prevSettings
                 undefined, // access
-                undefined, // isDownloadAvailable
+                undefined, // expiresAt
                 undefined, // serverUrl
-                undefined,
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
@@ -226,8 +229,8 @@ describe('elements/content-sharing/sharingService', () => {
             );
         });
 
-        test('should call updateSharedLink with options including access, isDownloadAvailable, and serverUrl', async () => {
-            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
+        test('should call updateSharedLink with options', async () => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _settings, successCallback) => {
                 successCallback({ id: '123', shared_link: null });
             });
 
@@ -248,9 +251,13 @@ describe('elements/content-sharing/sharingService', () => {
                 options: {
                     ...options,
                     access: 'open',
-                    currentExpiresAt: 1700000000000,
-                    isDownloadAvailable: true,
+                    expiresAt: 1735689600000,
                     serverUrl: 'https://example.com/server-url',
+                    settings: {
+                        canChangeExpiration: true,
+                        isDownloadAvailable: true,
+                        otpMode: 'none',
+                    },
                 },
             });
 
@@ -258,7 +265,10 @@ describe('elements/content-sharing/sharingService', () => {
                 expiration: null,
                 isDownloadEnabled: false,
                 isExpirationEnabled: true,
+                isOtpEnabled: false,
                 isPasswordEnabled: true,
+                isVanityNameEnabled: true,
+                otpMode: 'none' as const,
                 password: 'test-password',
                 vanityName: 'vanity-name',
             };
@@ -267,10 +277,14 @@ describe('elements/content-sharing/sharingService', () => {
 
             expect(convertSharedLinkSettings).toHaveBeenCalledWith(
                 sharedLinkSettings,
+                {
+                    canChangeExpiration: true,
+                    isDownloadAvailable: true,
+                    otpMode: 'none',
+                },
                 'open',
-                true,
+                1735689600000,
                 'https://example.com/server-url',
-                1700000000000,
             );
             expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
                 options,
@@ -282,18 +296,20 @@ describe('elements/content-sharing/sharingService', () => {
         });
 
         test('should handle shared link settings correctly', async () => {
-            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _access, successCallback) => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _settings, successCallback) => {
                 successCallback({ id: '123', shared_link: null });
             });
 
             const service = createSharingServiceWrapper();
 
-            const expirationDate = new Date('2024-12-31T23:59:59Z');
             const sharedLinkSettings = {
-                expiration: expirationDate,
+                expiration: null,
                 isDownloadEnabled: false,
                 isExpirationEnabled: true,
+                isOtpEnabled: true,
                 isPasswordEnabled: false,
+                isVanityNameEnabled: true,
+                otpMode: 'allowlist' as const,
                 password: 'test-password',
                 vanityName: 'vanity-name',
             };
@@ -302,7 +318,7 @@ describe('elements/content-sharing/sharingService', () => {
 
             expect(convertSharedLinkSettings).toHaveBeenCalledWith(
                 sharedLinkSettings,
-                undefined,
+                {},
                 undefined,
                 undefined,
                 undefined,
@@ -316,12 +332,72 @@ describe('elements/content-sharing/sharingService', () => {
                 expiration: null,
                 isDownloadEnabled: true,
                 isExpirationEnabled: false,
+                isOtpEnabled: false,
                 isPasswordEnabled: false,
+                isVanityNameEnabled: true,
+                otpMode: 'none' as const,
                 password: '',
                 vanityName: 'vanity-name',
             };
 
             await expect(service.updateSharedLink(sharedLinkSettings)).rejects.toEqual(
+                expect.objectContaining({
+                    message: 'Shared link not found',
+                    status: 404,
+                }),
+            );
+            expect(mockItemApiInstance.updateSharedLink).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('updateSharedLinkOtpAccess', () => {
+        test('should return an object with updateSharedLinkOtpAccess method', () => {
+            const service = createSharingServiceWrapper();
+
+            expect(service).toHaveProperty('updateSharedLinkOtpAccess');
+            expect(typeof service.updateSharedLinkOtpAccess).toBe('function');
+        });
+
+        test('should call updateSharedLink with the allowlist entries', async () => {
+            mockItemApiInstance.updateSharedLink.mockImplementation((_options, _settings, successCallback) => {
+                successCallback({ id: '123', shared_link: null });
+            });
+
+            const service = createSharingServiceWrapper();
+
+            const otpAccessEntries = [
+                { createdAt: 1769846400000, type: 'email' as const, value: 'dparrot@example.com' },
+                { createdAt: 1769932800000, type: 'domain' as const, value: 'example.com' },
+            ];
+
+            await service.updateSharedLinkOtpAccess(otpAccessEntries);
+
+            expect(mockItemApiInstance.updateSharedLink).toHaveBeenCalledWith(
+                options,
+                {
+                    one_time_passcode: {
+                        allowlist: [
+                            { type: 'email', value: 'dparrot@example.com' },
+                            { type: 'domain', value: 'example.com' },
+                        ],
+                        mode: 'allowlist',
+                    },
+                },
+                expect.any(Function),
+                expect.any(Function),
+                CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
+            );
+        });
+
+        test('should reject with 404 error when hasSharedLink is false', async () => {
+            const service = createSharingServiceWrapper(false);
+
+            const otpAccessEntries = [
+                { createdAt: 1769846400000, type: 'email' as const, value: 'dparrot@example.com' },
+                { createdAt: 1769932800000, type: 'domain' as const, value: 'example.com' },
+            ];
+
+            await expect(service.updateSharedLinkOtpAccess(otpAccessEntries)).rejects.toEqual(
                 expect.objectContaining({
                     message: 'Shared link not found',
                     status: 404,
@@ -365,12 +441,31 @@ describe('elements/content-sharing/sharingService', () => {
                 expiration: null,
                 isDownloadEnabled: true,
                 isExpirationEnabled: false,
+                isOtpEnabled: false,
                 isPasswordEnabled: false,
+                isVanityNameEnabled: true,
+                otpMode: 'none' as const,
                 password: '',
                 vanityName: 'vanity-name',
             };
 
             await expect(service.updateSharedLink(sharedLinkSettings)).rejects.toEqual(mockError);
+        });
+
+        test('should reject when updateSharedLinkOtpAccess fails', async () => {
+            const mockError = new Error('Failed to update shared link OTP access');
+            mockItemApiInstance.updateSharedLink.mockImplementation(
+                (_options, _settings, _successCallback, errorCallback) => {
+                    errorCallback(mockError);
+                },
+            );
+
+            const service = createSharingServiceWrapper();
+            const otpAccessEntries = [
+                { createdAt: 1769846400000, type: 'email' as const, value: 'dparrot@example.com' },
+            ];
+
+            await expect(service.updateSharedLinkOtpAccess(otpAccessEntries)).rejects.toEqual(mockError);
         });
     });
 });

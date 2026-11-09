@@ -48,6 +48,7 @@ exports[`elements/content-open-with/OpenWithDropdownMenuItem should render corre
     >
       <FormattedMessage
         defaultMessage="Opening this file with other services is currently unavailable"
+        description="Message to the user when the open with element errors"
         id="be.errorOpenWithDescription"
       />
     </p>
@@ -77,6 +78,7 @@ exports[`elements/content-open-with/OpenWithDropdownMenuItem should render corre
     >
       <FormattedMessage
         defaultMessage="Opening this file with other services is currently unavailable"
+        description="Message to the user when the open with element errors"
         id="be.errorOpenWithDescription"
       />
     </p>
@@ -106,6 +108,7 @@ exports[`elements/content-open-with/OpenWithDropdownMenuItem should render corre
     >
       <FormattedMessage
         defaultMessage="Local editing of this content has been disabled based on an access policy"
+        description="Shown in the open with dropdown when an application is blocked by shield access policy."
         id="be.boxEditErrorBlockedByPolicy"
       />
     </p>
@@ -161,6 +164,7 @@ exports[`elements/content-open-with/OpenWithDropdownMenuItem should use the defa
     >
       <FormattedMessage
         defaultMessage="Opening this file with other services is currently unavailable"
+        description="Message to the user when the open with element errors"
         id="be.errorOpenWithDescription"
       />
     </p>

@@ -63,9 +63,20 @@ export function resolveCreateMetadataTemplateKey(body: { displayName: string; te
     return body.templateKey?.trim() || deriveMetadataTemplateKey(body.displayName);
 }
 
+const METADATA_SCOPE_GLOBAL = 'global';
+const METADATA_NAMESPACE_GLOBAL = 'box.metadata';
+
+/**
+ * `global` and `box.metadata` name the same template scope.
+ * Other FQNs are unchanged.
+ */
+function canonicalMetadataHome(fqn: string): string {
+    return fqn === METADATA_SCOPE_GLOBAL ? METADATA_NAMESPACE_GLOBAL : fqn;
+}
+
 /** Every FQN a template/instance identifies itself by, most specific first. */
 function getIdentifiers(template: MetadataTemplateIdentity): string[] {
-    return [template.namespace, template.scope].filter((fqn): fqn is string => fqn != null);
+    return [template.namespace, template.scope].filter((fqn): fqn is string => fqn != null).map(canonicalMetadataHome);
 }
 
 /**
@@ -86,7 +97,7 @@ export function isSameMetadataTemplate(a: MetadataTemplateIdentity, b: MetadataT
         return false;
     }
     if (a.namespace != null && b.namespace != null) {
-        return a.namespace === b.namespace;
+        return canonicalMetadataHome(a.namespace) === canonicalMetadataHome(b.namespace);
     }
     const aIdentifiers = getIdentifiers(a);
     const bIdentifiers = getIdentifiers(b);

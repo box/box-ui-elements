@@ -50,6 +50,7 @@ export type TransformedCommentItem = {
     annotationTimestampEndMs?: number;
     annotationTimestampMarkup?: string;
     annotationTimestampMs?: number;
+    annotationTimestampVersionId?: string;
     id: string;
     messages: TextMessageType[];
     originalText: string;
@@ -102,8 +103,17 @@ export type ViewerHandle = {
 };
 
 export type PreviewHandle = {
+    getCurrentFile?: () => { file_version?: { id: string } } | null;
     getCurrentViewer?: () => ViewerHandle | null;
 };
+
+export type CommentTimestampSelectParams = {
+    commentId: string;
+    fileVersionId?: string;
+    startMs: number;
+};
+
+export type CommentVersionSelectParams = CommentTimestampSelectParams & { fileVersionId: string };
 
 export type ActivityFeedV2Props = {
     activeFeedEntryId?: string;
@@ -113,6 +123,7 @@ export type ActivityFeedV2Props = {
     file?: ActivityFeedV2File;
     getApproverAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getAvatarUrl?: GetAvatarUrl;
+    getComparedPreview?: () => PreviewHandle | null;
     getMentionAsync?: (searchStr: string) => Promise<SelectorItem<UserMini | GroupMini>[]>;
     getTaskCollaborators?: (task: TaskNew) => Promise<TaskAssigneeCollection>;
     getViewer?: () => ViewerHandle | null;
@@ -144,6 +155,7 @@ export type ActivityFeedV2Props = {
         onSuccess?: (() => void) | null,
         onError?: (() => void) | null,
     ) => void;
+    onCommentVersionSelect?: (params: CommentVersionSelectParams) => void;
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
     onReplyDelete?: OnReplyDelete;
     onReplyUpdate?: OnReplyUpdate;

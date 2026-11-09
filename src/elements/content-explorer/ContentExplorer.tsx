@@ -323,7 +323,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isUploadModalOpen: false,
             markers: [],
             metadataFilters: {},
-            metadataTemplate: {},
+            metadataTemplate: {} as MetadataTemplate,
             rootName: '',
             selectedItemIds: new Set(),
             searchQuery: '',
@@ -459,7 +459,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
-        const { features, metadataQuery = {} }: ContentExplorerProps = this.props;
+        const { features, metadataQuery = {} as MetadataQuery }: ContentExplorerProps = this.props;
         const { currentPageNumber, markers, metadataFilters, sortBy, sortDirection }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 

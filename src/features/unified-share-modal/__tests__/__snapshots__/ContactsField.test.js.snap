@@ -54,6 +54,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   label={
     <FormattedMessage
       defaultMessage="Invite People"
+      description="Label of the field where a user designates who to invite to collaborate on an item"
       id="boxui.unifiedShare.inviteFieldLabel"
     />
   }
@@ -258,6 +259,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
   label={
     <FormattedMessage
       defaultMessage="Invite People"
+      description="Label of the field where a user designates who to invite to collaborate on an item"
       id="boxui.unifiedShare.inviteFieldLabel"
     />
   }

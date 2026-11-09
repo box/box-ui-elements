@@ -1,8 +1,10 @@
 import isNil from 'lodash/isNil';
 import { getFileExtensions } from './utils';
 
+export type QueryParams = { [key: string]: boolean | number | string };
+
 type QueryResult = {
-    queryParams: { [key: string]: number | Date | string };
+    queryParams: QueryParams;
     queries: string[];
     keysGenerated: number;
 };
@@ -18,10 +20,7 @@ type SimpleRangeType = {
 // Union type for filter values
 type SimpleFilterValue = string[] | SimpleRangeType;
 
-export const mergeQueryParams = (
-    targetParams: { [key: string]: number | Date | string },
-    sourceParams: { [key: string]: number | Date | string },
-): { [key: string]: number | Date | string } => {
+export const mergeQueryParams = (targetParams: QueryParams, sourceParams: QueryParams): QueryParams => {
     return { ...targetParams, ...sourceParams };
 };
 
@@ -134,7 +133,7 @@ export const getMimeTypeFilter = (filterValue: string[], fieldKey: string, argIn
     }
 
     let currentArgIndex = argIndexStart;
-    const queryParams: { [key: string]: number | Date | string } = {};
+    const queryParams: QueryParams = {};
     const queries: string[] = [];
 
     // Handle specific extensions and folder type

@@ -1,3 +1,7 @@
+import { parseDate } from '@box/blueprint-web';
+
+import { convertSharedLinkPermissions, convertSharedLinkSettings } from '../convertSharingServiceData';
+
 import {
     ACCESS_COLLAB,
     ACCESS_COMPANY,
@@ -6,24 +10,8 @@ import {
     PERMISSION_CAN_EDIT,
     PERMISSION_CAN_PREVIEW,
 } from '../../../../constants';
-import { convertISOStringToUTCDate } from '../../../../utils/datetime';
-import { convertSharedLinkPermissions, convertSharedLinkSettings } from '../convertSharingServiceData';
-
-jest.mock('../../../../utils/datetime', () => ({
-    ...jest.requireActual('../../../../utils/datetime'),
-    convertISOStringToUTCDate: jest.fn(),
-}));
 
 describe('elements/content-sharing/utils/convertSharingServiceData', () => {
-    beforeEach(() => {
-        // Mock convertISOStringToUTCDate to return a the same date as the expiration date to simplify the test logic
-        (convertISOStringToUTCDate as jest.Mock).mockReturnValue(new Date('2024-12-31T23:59:59Z'));
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
     describe('convertSharedLinkPermissions', () => {
         test.each([
             [
@@ -52,17 +40,26 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
     describe('convertSharedLinkSettings', () => {
         const mockServerUrl = 'https://example.com/server-url/';
         const mockSettings = {
-            expiration: new Date('2024-12-31T23:59:59Z'),
+            expiration: parseDate('2024-12-31'),
             isDownloadEnabled: true,
             isExpirationEnabled: true,
+            isOtpEnabled: false,
             isPasswordEnabled: true,
+            isVanityNameEnabled: true,
+            otpMode: 'none' as const,
             password: 'test-password',
             vanityName: 'vanity-name',
+        };
+        const mockPrevSettings = {
+            canChangeExpiration: true,
+            isDownloadAvailable: true,
+            isOtpAvailable: false,
+            otpMode: 'none' as const,
         };
 
         describe('basic conversion', () => {
             test('should return settings with correct values', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, true, mockServerUrl);
+                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result).toEqual({
                     password: 'test-password',
@@ -70,29 +67,36 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
                         can_preview: false,
                         can_download: true,
                     },
-                    unshared_at: '2024-12-31T23:59:59.000Z',
+                    unshared_at: '2024-12-31T08:00:00.000Z',
                     vanity_url: 'https://example.com/server-url/vanity-name',
                 });
             });
 
             test('should handle minimal settings', () => {
-                const minimalSettings = {
+                const nextSettings = {
                     expiration: null,
                     isDownloadEnabled: false,
                     isExpirationEnabled: false,
+                    isOtpEnabled: false,
                     isPasswordEnabled: false,
+                    isVanityNameEnabled: false,
+                    otpMode: 'none' as const,
                     password: '',
                     vanityName: '',
                 };
+                const prevSettings = {
+                    ...mockPrevSettings,
+                    canChangeExpiration: false,
+                    isDownloadAvailable: false,
+                };
 
-                const result = convertSharedLinkSettings(minimalSettings, ACCESS_OPEN, false, '');
+                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, '');
 
                 expect(result).toEqual({
                     password: null,
                     permissions: {
                         can_preview: true,
                     },
-                    unshared_at: null,
                     vanity_url: '',
                 });
             });
@@ -100,94 +104,59 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
         describe('expiration handling', () => {
             test('should set unshared_at to null when expiration is disabled', () => {
-                const settingsWithoutExpiration = {
+                const nextSettings = {
                     ...mockSettings,
                     isExpirationEnabled: false,
-                    expiration: new Date('2024-12-31T23:59:59Z'),
+                    expiration: parseDate('2024-12-31'),
                 };
 
-                const result = convertSharedLinkSettings(settingsWithoutExpiration, ACCESS_OPEN, true, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
             });
 
             test.each([null, undefined])('should set unshared_at to null when expiration is %s', expiration => {
-                const settingsWithNullExpiration = {
+                const nextSettings = {
                     ...mockSettings,
                     isExpirationEnabled: true,
                     expiration,
                 };
 
-                const result = convertSharedLinkSettings(settingsWithNullExpiration, ACCESS_OPEN, true, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.unshared_at).toBeNull();
             });
 
-            test('should keep the other shared link fields when the calendar date is omitted', () => {
+            test('should not set unshared_at when expiration is unchanged', () => {
+                const expiresAt = 1735707600000; // 2024-12-31T21:00:00-08:00
+
                 const result = convertSharedLinkSettings(
-                    {
-                        ...mockSettings,
-                        expiration: { year: 2026, month: 10, day: 16 },
-                        isDownloadEnabled: false,
-                    },
+                    mockSettings,
+                    mockPrevSettings,
                     ACCESS_OPEN,
-                    true,
+                    expiresAt,
                     mockServerUrl,
-                    new Date(2026, 9, 16, 2, 59, 0).getTime(),
                 );
 
-                expect(result.unshared_at).toBeUndefined();
-                expect(result.permissions).toEqual({ can_preview: true, can_download: false });
+                expect(result).not.toHaveProperty('unshared_at');
             });
 
-            test('should include unshared_at when the submitted date is a different local calendar day', () => {
-                const settings = {
-                    ...mockSettings,
-                    expiration: { year: 2024, month: 12, day: 31, toString: () => '2024-12-31' },
-                };
+            test('should set unshared_at when expiration is changed', () => {
+                const expiresAt = 1735621200000; // 2024-12-30T21:00:00-08:00
 
                 const result = convertSharedLinkSettings(
-                    settings,
+                    mockSettings,
+                    mockPrevSettings,
                     ACCESS_OPEN,
-                    true,
+                    expiresAt,
                     mockServerUrl,
-                    new Date(2024, 11, 30, 23, 0, 0).getTime(),
                 );
 
-                expect(result.unshared_at).toBe('2024-12-31T23:59:59.000Z');
-            });
-
-            test('should include unshared_at when expiration is toggled on and there was no current expiration', () => {
-                const result = convertSharedLinkSettings(
-                    { ...mockSettings, expiration: { year: 2024, month: 12, day: 31, toString: () => '2024-12-31' } },
-                    ACCESS_OPEN,
-                    true,
-                    mockServerUrl,
-                    null,
-                );
-
-                expect(result.unshared_at).toBe('2024-12-31T23:59:59.000Z');
-            });
-
-            test('should set unshared_at to null when expiration is toggled off and there was a current expiration', () => {
-                const settingsWithoutExpiration = {
-                    ...mockSettings,
-                    isExpirationEnabled: false,
-                };
-
-                const result = convertSharedLinkSettings(
-                    settingsWithoutExpiration,
-                    ACCESS_OPEN,
-                    true,
-                    mockServerUrl,
-                    new Date(2024, 11, 31, 18, 30, 0).getTime(),
-                );
-
-                expect(result.unshared_at).toBeNull();
+                expect(result.unshared_at).toBe('2024-12-31T08:00:00.000Z');
             });
         });
 
-        describe('vanity URL', () => {
+        describe('vanity URL handling', () => {
             test.each([
                 ['', ''],
                 ['', 'vanity-name'],
@@ -195,12 +164,12 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
             ])(
                 'should return empty string when at least one of serverURL or vanityName is empty',
                 (serverUrl, vanityName) => {
-                    const result = convertSharedLinkSettings(
-                        { ...mockSettings, vanityName },
-                        ACCESS_OPEN,
-                        true,
-                        serverUrl,
-                    );
+                    const nextSettings = {
+                        ...mockSettings,
+                        vanityName,
+                    };
+
+                    const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, serverUrl);
 
                     expect(result.vanity_url).toBe('');
                 },
@@ -209,23 +178,24 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
         describe('permissions handling', () => {
             test('should not set permissions for ACCESS_COLLAB access level', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_COLLAB, true, mockServerUrl);
+                const result = convertSharedLinkSettings(
+                    mockSettings,
+                    mockPrevSettings,
+                    ACCESS_COLLAB,
+                    0,
+                    mockServerUrl,
+                );
 
                 expect(result.permissions).toBeUndefined();
             });
 
             test('should set permissions with download disabled when isDownloadEnabled is false', () => {
-                const settingsWithDownloadDisabled = {
+                const nextSettings = {
                     ...mockSettings,
                     isDownloadEnabled: false,
                 };
 
-                const result = convertSharedLinkSettings(
-                    settingsWithDownloadDisabled,
-                    ACCESS_OPEN,
-                    true,
-                    mockServerUrl,
-                );
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.permissions).toEqual({
                     can_preview: true,
@@ -234,7 +204,12 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
             });
 
             test('should not set can_download when isDownloadAvailable is false', () => {
-                const result = convertSharedLinkSettings(mockSettings, ACCESS_OPEN, false, mockServerUrl);
+                const prevSettings = {
+                    ...mockPrevSettings,
+                    isDownloadAvailable: false,
+                };
+
+                const result = convertSharedLinkSettings(mockSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.permissions).toEqual({
                     can_preview: false,
@@ -245,39 +220,88 @@ describe('elements/content-sharing/utils/convertSharingServiceData', () => {
 
         describe('password handling', () => {
             test('should set password to null when isPasswordEnabled is false', () => {
-                const settingsWithPasswordDisabled = {
+                const nextSettings = {
                     ...mockSettings,
                     isPasswordEnabled: false,
                     password: 'existingpassword',
                 };
 
-                const result = convertSharedLinkSettings(
-                    settingsWithPasswordDisabled,
-                    ACCESS_OPEN,
-                    true,
-                    mockServerUrl,
-                );
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.password).toBeNull();
             });
 
             test('should not set password when isPasswordEnabled is true but password is empty', () => {
-                const settingsWithEmptyPassword = {
+                const nextSettings = {
                     ...mockSettings,
                     isPasswordEnabled: true,
                     password: '',
                 };
 
-                const result = convertSharedLinkSettings(settingsWithEmptyPassword, ACCESS_OPEN, true, mockServerUrl);
+                const result = convertSharedLinkSettings(nextSettings, mockPrevSettings, ACCESS_OPEN, 0, mockServerUrl);
 
                 expect(result.password).toBeUndefined();
             });
 
             test.each([ACCESS_COLLAB, ACCESS_COMPANY])('should not set password for non open access level', access => {
-                const result = convertSharedLinkSettings(mockSettings, access, true, mockServerUrl);
+                const result = convertSharedLinkSettings(mockSettings, mockPrevSettings, access, 0, mockServerUrl);
 
                 expect(result.password).toBeUndefined();
             });
+        });
+
+        describe('one time password handling', () => {
+            test('should not set one_time_passcode when otp is not available', () => {
+                const nextSettings = {
+                    ...mockSettings,
+                    isPasswordEnabled: false,
+                };
+                const prevSettings = {
+                    isOtpAvailable: false,
+                };
+
+                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
+
+                expect(result).not.toHaveProperty('one_time_passcode');
+            });
+
+            test('should not set one_time_passcode when otp mode is unchanged', () => {
+                const nextSettings = {
+                    ...mockSettings,
+                    isPasswordEnabled: false,
+                };
+                const prevSettings = {
+                    isOtpAvailable: true,
+                    otpMode: 'none' as const,
+                };
+
+                const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
+
+                expect(result).not.toHaveProperty('one_time_passcode');
+            });
+
+            test.each([
+                ['none', 'open', { mode: 'open' }],
+                ['none', 'allowlist', { allowlist: [], mode: 'allowlist' }],
+                ['open', 'none', { mode: 'none' }],
+            ] as const)(
+                'should set one_time_passcode when otp mode changes from %s to %s',
+                (prevMode, nextMode, expected) => {
+                    const nextSettings = {
+                        ...mockSettings,
+                        isPasswordEnabled: false,
+                        otpMode: nextMode,
+                    };
+                    const prevSettings = {
+                        isOtpAvailable: true,
+                        otpMode: prevMode,
+                    };
+
+                    const result = convertSharedLinkSettings(nextSettings, prevSettings, ACCESS_OPEN, 0, mockServerUrl);
+
+                    expect(result.one_time_passcode).toEqual(expected);
+                },
+            );
         });
     });
 });

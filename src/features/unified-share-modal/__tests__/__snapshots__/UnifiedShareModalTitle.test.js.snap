@@ -7,6 +7,7 @@ exports[`features/unified-share-modal/HeaderTitle should not render classificati
   >
     <FormattedMessage
       defaultMessage="Share ‘{itemName}’"
+      description="Title of the Unified Share Modal. {itemName} is the name of the file / folder being shared"
       id="boxui.unifiedShare.modalTitle"
       values={
         {

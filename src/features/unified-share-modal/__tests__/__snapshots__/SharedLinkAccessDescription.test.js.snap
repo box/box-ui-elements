@@ -6,6 +6,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 >
   <FormattedMessage
     defaultMessage="Anyone in your company with the link or people invited to this file can access"
+    description="Description of a company shared link for a file."
     id="boxui.unifiedShare.peopleInCompanyCanAccessFile"
     values={
       {
@@ -22,6 +23,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 >
   <FormattedMessage
     defaultMessage="Anyone at {company} with the link or people invited to this file can access"
+    description="Description of a specific company shared link for a file. {company} is the company name"
     id="boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessFile"
     values={
       {
@@ -38,6 +40,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 >
   <FormattedMessage
     defaultMessage="Anyone in your company with the link or people invited to this folder can access"
+    description="Description of a company shared link for a folder."
     id="boxui.unifiedShare.peopleInCompanyCanAccessFolder"
     values={
       {
@@ -54,6 +57,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 >
   <FormattedMessage
     defaultMessage="Anyone at {company} with the link or people invited to this folder can access"
+    description="Description of a specific company shared link for a folder. {company} is the company name"
     id="boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessFolder"
     values={
       {
@@ -70,6 +74,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 >
   <FormattedMessage
     defaultMessage="Anyone in your company with the link or people invited to this hub can access"
+    description="Description of a company shared link for a hub."
     id="boxui.unifiedShare.peopleInCompanyCanAccessHub"
     values={
       {
@@ -86,6 +91,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 >
   <FormattedMessage
     defaultMessage="Anyone at {company} with the link or people invited to this hub can access"
+    description="Description of a specific company shared link for a hub. {company} is the company name"
     id="boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessHub"
     values={
       {
@@ -102,6 +108,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
 >
   <FormattedMessage
     defaultMessage="Only invited people can access this file"
+    description="Description of a collaborator-only shared link for a file"
     id="boxui.unifiedShare.peopleInItemCanAccessFile"
     values={
       {
@@ -118,6 +125,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
 >
   <FormattedMessage
     defaultMessage="Only invited people can access this folder"
+    description="Description of a collaborator-only shared link for a folder"
     id="boxui.unifiedShare.peopleInItemCanAccessFolder"
     values={
       {
@@ -134,6 +142,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
 >
   <FormattedMessage
     defaultMessage="Only invited people can access this hub"
+    description="Description of a collaborator-only shared link for a hub"
     id="boxui.unifiedShare.peopleInItemCanAccessHub"
     values={
       {
@@ -150,6 +159,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
 >
   <FormattedMessage
     defaultMessage="Publicly accessible and no sign-in required"
+    description="Description of an open shared link"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
       {
@@ -166,6 +176,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
 >
   <FormattedMessage
     defaultMessage="Publicly accessible and no sign-in required"
+    description="Description of an open shared link"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
       {
@@ -182,6 +193,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
 >
   <FormattedMessage
     defaultMessage="Publicly accessible and no sign-in required"
+    description="Description of an open shared link"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
       {

@@ -26,6 +26,7 @@ export type ComponentWithAnnotations = {
     emitAnnotationReplyDeleteEvent: (id: string, annotationId: string, isStartEvent?: boolean) => void;
     emitAnnotationReplyUpdateEvent: (reply: Object, annotationId: string, isStartEvent?: boolean) => void;
     emitAnnotationUpdateEvent: (annotation: Object, isStartEvent?: boolean) => void;
+    emitShowResolvedChangeEvent: (showResolved: boolean) => void;
     getAction: (eventData: AnnotationActionEvent) => Action;
     getAnnotationsPath: (fileVersionId?: string, annotationId?: string | null) => string;
     getMatchPath: GetMatchPath;
@@ -72,6 +73,8 @@ export default function withAnnotations<P extends object>(
         static displayName: string;
 
         annotator: Annotator | null = null;
+
+        showResolved: boolean | null = null;
 
         constructor(props: P & WithAnnotationsProps) {
             super(props);
@@ -175,6 +178,19 @@ export default function withAnnotations<P extends object>(
             const event = isStartEvent ? 'sidebar.annotations_reply_update_start' : 'sidebar.annotations_reply_update';
 
             annotator.emit(event, { annotationId, reply });
+        };
+
+        emitShowResolvedChangeEvent = (showResolved: boolean): void => {
+            this.showResolved = showResolved;
+            this.emitStoredShowResolved();
+        };
+
+        emitStoredShowResolved = (): void => {
+            const { annotator, showResolved } = this;
+            if (!annotator || showResolved === null) {
+                return;
+            }
+            annotator.emit('annotations_show_resolved_set', showResolved);
         };
 
         getAction({ meta: { status }, error }: AnnotationActionEvent): Action {
@@ -319,6 +335,7 @@ export default function withAnnotations<P extends object>(
             this.annotator.addListener('annotations_reply_create', this.handleAnnotationReplyCreate);
             this.annotator.addListener('annotations_reply_delete', this.handleAnnotationReplyDelete);
             this.annotator.addListener('annotations_reply_update', this.handleAnnotationReplyUpdate);
+            this.emitStoredShowResolved();
         };
 
         handlePreviewDestroy = (shouldReset = true): void => {
@@ -358,6 +375,7 @@ export default function withAnnotations<P extends object>(
                         emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
                         emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
                         emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
+                        emitShowResolvedChangeEvent: this.emitShowResolvedChangeEvent,
                         ...annotationsRouterProps,
                         state: this.state,
                     }}

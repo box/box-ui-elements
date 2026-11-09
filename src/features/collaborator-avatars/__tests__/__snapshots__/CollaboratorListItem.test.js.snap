@@ -62,6 +62,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should call
         text={
           <FormattedMessage
             defaultMessage="Remove"
+            description="Label for remove action."
             id="be.remove"
           />
         }
@@ -146,6 +147,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should not 
         text={
           <FormattedMessage
             defaultMessage="Remove"
+            description="Label for remove action."
             id="be.remove"
           />
         }
@@ -288,6 +290,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         text={
           <FormattedMessage
             defaultMessage="Remove"
+            description="Label for remove action."
             id="be.remove"
           />
         }
@@ -453,6 +456,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
     >
       <FormattedMessage
         defaultMessage="Pending"
+        description="Text to display for users who have not accepted an invitation to collaborate yet"
         id="boxui.collaboratorAvatars.collaboration.pendingCollabText"
       />
     </div>

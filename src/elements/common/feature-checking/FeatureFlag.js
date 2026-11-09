@@ -13,7 +13,7 @@ function FeatureFlag({
 }: {
     children?: React.Node,
     disabled?: () => React.Node,
-    enabled?: types.FeatureOptions => React.Node,
+    enabled?: (featureConfig: types.FeatureOptions) => React.Node,
     feature: string,
     not?: boolean, // invert the flag - recommended for use with a child component, not "enabled"/"disabled"
 }) {

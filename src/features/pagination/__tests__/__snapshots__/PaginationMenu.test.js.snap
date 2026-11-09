@@ -16,6 +16,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   >
     <FormattedMessage
       defaultMessage="{pageNumber} of {pageCount}"
+      description="Pagination menu button with current page number out of total number of pages"
       id="be.pagination.pageStatus"
       values={
         {
@@ -57,6 +58,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   >
     <FormattedMessage
       defaultMessage="{pageNumber} of {pageCount}"
+      description="Pagination menu button with current page number out of total number of pages"
       id="be.pagination.pageStatus"
       values={
         {
@@ -126,6 +128,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
   >
     <FormattedMessage
       defaultMessage="{pageNumber} of {pageCount}"
+      description="Pagination menu button with current page number out of total number of pages"
       id="be.pagination.pageStatus"
       values={
         {

@@ -16,6 +16,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       text={
         <FormattedMessage
           defaultMessage="Copy"
+          description="Label for copy action."
           id="be.copy"
         />
       }
@@ -41,6 +42,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       text={
         <FormattedMessage
           defaultMessage="Edit"
+          description="Label for an edit action"
           id="be.editLabel"
         />
       }
@@ -90,6 +92,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
 >
   <FormattedMessage
     defaultMessage="We’re sorry, no skills information was found."
+    description="Error message when a skill has no data"
     id="be.skillNoInfoFoundError"
   />
 </LoadingIndicatorWrapper>
@@ -111,6 +114,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       text={
         <FormattedMessage
           defaultMessage="Copy"
+          description="Label for copy action."
           id="be.copy"
         />
       }
@@ -136,6 +140,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       text={
         <FormattedMessage
           defaultMessage="Expand"
+          description="Message to the user to expand the Transcript entries"
           id="be.expand"
         />
       }
@@ -160,6 +165,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       text={
         <FormattedMessage
           defaultMessage="Edit"
+          description="Label for an edit action"
           id="be.editLabel"
         />
       }
@@ -258,6 +264,7 @@ exports[`elements/content-sidebar/Skills/Transcript/Transcript should correctly 
       text={
         <FormattedMessage
           defaultMessage="Copy"
+          description="Label for copy action."
           id="be.copy"
         />
       }

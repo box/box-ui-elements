@@ -37,12 +37,6 @@ module.exports = {
         '@babel/plugin-transform-object-assign',
         '@babel/plugin-transform-object-rest-spread',
         'babel-plugin-styled-components',
-        [
-            'react-intl',
-            {
-                messagesDir: './i18n/json',
-            },
-        ],
     ],
     env: {
         development: {

@@ -28,6 +28,7 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
       >
         <FormattedMessage
           defaultMessage="Cancel"
+          description="Label for cancel action."
           id="be.cancel"
         />
       </Button>
@@ -37,6 +38,7 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
       >
         <FormattedMessage
           defaultMessage="Save"
+          description="Label for save action."
           id="be.save"
         />
       </PrimaryButton>
@@ -68,6 +70,7 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
       >
         <FormattedMessage
           defaultMessage="Cancel"
+          description="Label for cancel action."
           id="be.cancel"
         />
       </Button>
@@ -77,6 +80,7 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
       >
         <FormattedMessage
           defaultMessage="Save"
+          description="Label for save action."
           id="be.save"
         />
       </PrimaryButton>

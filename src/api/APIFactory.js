@@ -504,14 +504,19 @@ class APIFactory {
      * API for metadata
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @param {Object} [options] - merged over the factory options for this client.
+     *   Callers that know the namespace migration mode pass `metadataNamespaceMode` here.
      * @return {MetadataAPI} MetadataAPI instance
      */
-    getMetadataAPI(shouldDestroy: boolean): MetadataAPI {
+    getMetadataAPI(shouldDestroy?: boolean, options?: Object): MetadataAPI {
         if (shouldDestroy) {
             this.destroy();
         }
 
-        this.metadataAPI = new MetadataAPI(this.options);
+        this.metadataAPI = new MetadataAPI({
+            ...this.options,
+            ...options,
+        });
         return this.metadataAPI;
     }
 

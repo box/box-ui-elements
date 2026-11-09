@@ -3,6 +3,7 @@
 exports[`elements/content-open-with/BoxToolsInstallMessage render should render a translated message with a link 1`] = `
 <FormattedMessage
   defaultMessage="Install {boxTools} to open this file on your desktop"
+  description="Message shown telling user how to install Box Tools"
   id="be.boxToolsInstallMessage"
   values={
     {
@@ -21,6 +22,7 @@ exports[`elements/content-open-with/BoxToolsInstallMessage render should render 
 exports[`elements/content-open-with/BoxToolsInstallMessage render should use passed in name and URL if provided 1`] = `
 <FormattedMessage
   defaultMessage="Install {boxTools} to open this file on your desktop"
+  description="Message shown telling user how to install Box Tools"
   id="be.boxToolsInstallMessage"
   values={
     {

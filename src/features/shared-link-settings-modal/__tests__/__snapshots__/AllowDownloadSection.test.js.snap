@@ -3,6 +3,7 @@
 exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvailable === true should render correct tooltip message when isDirectLinkUnavailableDueToAccessPolicy is true, isDirectLinkUnavailableDueToMaliciousContent is false and classification is set to foo 1`] = `
 <FormattedMessage
   defaultMessage="Download has been disabled for content due to the classification."
+  description="Text to show that direct link download is disabled due to applied shield access policy with classification"
   id="boxui.share.sharedLinkSettings.directDownloadBlockedByAccessPolicyWithClassification"
 />
 `;
@@ -10,6 +11,7 @@ exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvai
 exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvailable === true should render correct tooltip message when isDirectLinkUnavailableDueToAccessPolicy is true, isDirectLinkUnavailableDueToMaliciousContent is false and classification is set to undefined 1`] = `
 <FormattedMessage
   defaultMessage="Download has been disabled for content without classification."
+  description="Text to show that direct link download is disabled due to applied shield access policy without classification"
   id="boxui.share.sharedLinkSettings.directDownloadBlockedByAccessPolicyWithoutClassification"
 />
 `;
@@ -17,6 +19,7 @@ exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvai
 exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvailable === true should render correct tooltip message when isDirectLinkUnavailableDueToAccessPolicy is true, isDirectLinkUnavailableDueToMaliciousContent is true and classification is set to foo 1`] = `
 <FormattedMessage
   defaultMessage="Download for this content has been disabled due to a security policy."
+  description="Text to show that direct link download is disabled due to security policy"
   id="boxui.share.sharedLinkSettings.directDownloadBlockedByMaliciousContent"
 />
 `;
@@ -24,6 +27,7 @@ exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvai
 exports[`features/shared-link-settings-modal/AllowDownloadSection isDownloadAvailable === true should render correct tooltip message when isDirectLinkUnavailableDueToAccessPolicy is true, isDirectLinkUnavailableDueToMaliciousContent is true and classification is set to undefined 1`] = `
 <FormattedMessage
   defaultMessage="Download for this content has been disabled due to a security policy."
+  description="Text to show that direct link download is disabled due to security policy"
   id="boxui.share.sharedLinkSettings.directDownloadBlockedByMaliciousContent"
 />
 `;

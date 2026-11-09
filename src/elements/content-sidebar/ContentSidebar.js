@@ -92,6 +92,7 @@ type Props = {
     docGenSidebarProps?: DocGenSidebarProps,
     features: FeatureConfig,
     fileId?: string,
+    getComparedPreview?: Function,
     getPreview: Function,
     getViewer: Function,
     hasActivityFeed: boolean,
@@ -106,6 +107,7 @@ type Props = {
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onCommentVersionSelect?: (params: { fileVersionId: string, startMs: number }) => void,
     onFetchFileSuccess?: () => void,
     onOpenChange?: (isOpen: boolean, isInitialState: boolean) => void,
     onPanelChange?: (name: string, isInitialState: boolean) => void,
@@ -391,6 +393,7 @@ class ContentSidebar extends React.Component<Props, State> {
             docGenSidebarProps,
             features,
             fileId,
+            getComparedPreview,
             getPreview,
             getViewer,
             hasAdditionalTabs,
@@ -405,6 +408,7 @@ class ContentSidebar extends React.Component<Props, State> {
             messages,
             metadataSidebarProps,
             onAnnotationSelect,
+            onCommentVersionSelect,
             onOpenChange,
             onPanelChange,
             onVersionChange,
@@ -441,6 +445,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 docGenSidebarProps={docGenSidebarProps}
                                 file={displayFile}
                                 fileId={fileId}
+                                getComparedPreview={getComparedPreview}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
                                 hasActivityFeed={hasActivityFeed}
@@ -454,6 +459,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 metadataEditors={metadataEditors}
                                 metadataSidebarProps={metadataSidebarProps}
                                 onAnnotationSelect={onAnnotationSelect}
+                                onCommentVersionSelect={onCommentVersionSelect}
                                 onOpenChange={onOpenChange}
                                 onPanelChange={onPanelChange}
                                 onVersionChange={onVersionChange}

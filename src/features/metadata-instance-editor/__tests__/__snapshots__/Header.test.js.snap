@@ -29,6 +29,7 @@ exports[`features/metadata-instance-editor/fields/Header should correctly render
   >
     <FormattedMessage
       defaultMessage="Templates"
+      description="Overall title of metadata"
       id="boxui.metadataInstanceEditor.templatesTitle"
     />
   </h4>
@@ -44,6 +45,7 @@ exports[`features/metadata-instance-editor/fields/Header should correctly render
   >
     <FormattedMessage
       defaultMessage="Templates"
+      description="Overall title of metadata"
       id="boxui.metadataInstanceEditor.templatesTitle"
     />
   </h4>

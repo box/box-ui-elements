@@ -23,7 +23,8 @@ export interface ReadableTimeProps {
     uppercase?: boolean;
 }
 
-// exclude languages that do not have a grammar for uppercase (e.g. russian)
+// Uppercase is suppressed for these locales as a product/UX choice.
+// Cyrillic does have uppercase; `ru` is still excluded from ALL-CAPS.
 const nonUppercaseLocales = ['ru'];
 const ReadableTime = ({
     intl,

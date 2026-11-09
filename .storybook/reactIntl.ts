@@ -1,13 +1,21 @@
 import boxLanguages from '@box/languages';
 
-const messages = boxLanguages.reduce(
-    (bundles, language) => ({
+// Webpack's require.context includes only bundle files present at compile time.
+// Locales without i18n/<locale>.js are skipped by buildLanguageBundles, so Storybook
+// can boot from the empty en-US catalog before Moji commits translated files.
+const bundleContext = require.context('../i18n/bundles', false, /^\.\/[^/]+\.js$/);
+const bundleKeys = new Set(bundleContext.keys());
+
+const messages = boxLanguages.reduce((bundles, language) => {
+    const key = `./${language}.js`;
+    if (!bundleKeys.has(key)) {
+        return bundles;
+    }
+    return {
         ...bundles,
-        // eslint-disable-next-line global-require, import/no-dynamic-require, @typescript-eslint/no-var-requires
-        [language]: require(`../i18n/bundles/${language}`).messages,
-    }),
-    {},
-);
+        [language]: bundleContext(key).messages,
+    };
+}, {});
 
 export const reactIntl = {
     defaultLocale: 'en-US',

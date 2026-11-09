@@ -27,6 +27,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   title={
     <FormattedMessage
       defaultMessage="Activity"
+      description="Title for the preview activity feed."
       id="be.sidebarActivityTitle"
     />
   }

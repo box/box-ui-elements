@@ -109,7 +109,12 @@ type FolderMini = {
     type: typeof ITEM_TYPE_FOLDER;
 };
 
-type UserMini = {
+type UserBase = {
+    id: string;
+    type: 'user';
+};
+
+type UserMini = UserBase & {
     avatar_url?: string;
     email?: string;
     enterprise?: {
@@ -118,11 +123,9 @@ type UserMini = {
         type: 'enterprise';
     };
     hostname?: string;
-    id: string;
     login?: string;
     name: string;
     status?: string;
-    type: 'user';
 };
 
 type ContactCollection = {
@@ -290,6 +293,18 @@ type FileRepresentationResponse = {
     entries: Array<FileRepresentation>;
 };
 
+type OtpAccessEntry = {
+    created_at: string;
+    created_by: UserBase;
+    type: 'email' | 'domain';
+    value: string;
+};
+
+type OtpAccess = {
+    allowlist?: Array<OtpAccessEntry>;
+    mode: 'none' | 'open' | 'allowlist';
+};
+
 type SharedLink = {
     access: Access;
     download_count?: number;
@@ -297,6 +312,7 @@ type SharedLink = {
     effective_access?: Access;
     effective_permission?: typeof PERMISSION_CAN_DOWNLOAD | typeof PERMISSION_CAN_PREVIEW;
     is_password_enabled?: boolean;
+    one_time_passcode?: OtpAccess;
     password?: string | null; // the API requires a null value to remove a password,
     permissions?: BoxItemPermission;
     preview_count?: number;
@@ -506,6 +522,7 @@ export type {
     Size,
     FileMini,
     FolderMini,
+    UserBase,
     UserMini,
     User,
     UserCollection,
@@ -538,4 +555,5 @@ export type {
     Collaborations,
     NewCollaboration,
     DOMStringList,
+    OtpAccess,
 };

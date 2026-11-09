@@ -10,6 +10,7 @@ import {
     JSONPatchOperations,
     MetadataInstance,
     MetadataInstanceForm,
+    type MetadataTemplate as EditorMetadataTemplate,
     type MetadataTemplateField,
 } from '@box/metadata-editor';
 
@@ -59,7 +60,11 @@ const MetadataSidePanel = ({
         selectedItemIds === 'all'
             ? currentCollection.items
             : currentCollection.items.filter(item => selectedItemIds.has(item.id));
-    const templateInstance = useTemplateInstance(metadataTemplate, selectedItems, isEditing);
+    const templateInstance = useTemplateInstance(
+        metadataTemplate as unknown as EditorMetadataTemplate,
+        selectedItems,
+        isEditing,
+    );
 
     const handleMetadataInstanceEdit = () => {
         onEditingChange(true);

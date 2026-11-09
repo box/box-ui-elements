@@ -2,6 +2,7 @@ import Cache from '../Cache';
 import sort, { sortFeedItems } from '../sorter';
 import { FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK, SORT_ASC, SORT_DESC } from '../../constants';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
+import type { Annotations, Comments, Tasks } from '../../common/types/feed';
 
 let cache;
 let item;
@@ -316,7 +317,11 @@ describe('util/sorter', () => {
         };
 
         test('should sort items based on date', () => {
-            const sorted = sortFeedItems(comments, tasks, annotations);
+            const sorted = sortFeedItems(
+                comments as unknown as Comments,
+                tasks as unknown as Tasks,
+                annotations as unknown as Annotations,
+            );
             expect(sorted[0].id).toEqual(annotations.entries[0].id);
             expect(sorted[1].id).toEqual(tasks.entries[0].id);
             expect(sorted[2].id).toEqual(comments.entries[0].id);

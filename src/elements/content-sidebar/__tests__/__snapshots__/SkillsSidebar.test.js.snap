@@ -7,6 +7,7 @@ exports[`elements/content-sidebar/Skills/SkillsSidebar should render loading ind
   title={
     <FormattedMessage
       defaultMessage="Skills"
+      description="Title for the preview details skills."
       id="be.sidebarSkillsTitle"
     />
   }
@@ -22,6 +23,7 @@ exports[`elements/content-sidebar/Skills/SkillsSidebar should render skills side
   title={
     <FormattedMessage
       defaultMessage="Skills"
+      description="Title for the preview details skills."
       id="be.sidebarSkillsTitle"
     />
   }

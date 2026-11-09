@@ -1,11 +1,21 @@
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
-import { ContentSharingV2Template, mockApiWithSharedLink } from '../utils/__mocks__/ContentSharingV2Mocks';
+import {
+    ContentSharingV2Template,
+    mockApiWithOneTimePasscode,
+    mockApiWithSharedLink,
+} from '../utils/__mocks__/ContentSharingV2Mocks';
 
 export const basic = {};
 
 export const withSharedLink = {
     args: {
         api: mockApiWithSharedLink,
+    },
+};
+
+export const withOneTimePasscode = {
+    args: {
+        api: mockApiWithOneTimePasscode,
     },
 };
 

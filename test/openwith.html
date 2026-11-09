@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <meta charset="UTF-8" />
@@ -25,8 +25,8 @@
                 margin: 20px;
             }
         </style>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/openwith.css" />
-        <script src="../dev/en-US/openwith.js"></script>
+        <link rel="stylesheet" type="text/css" href="../dist/dev/en-US/openwith.css" />
+        <script src="../dist/dev/en-US/openwith.js"></script>
     </head>
     <body>
         <div class="container">
@@ -90,11 +90,11 @@
                 container.querySelector('.file').value = fileId;
                 var openwith = new ContentOpenWith();
 
-                openwith.addListener('execute', function(id) {
+                openwith.addListener('execute', function (id) {
                     console.log('executing app integration: ' + id);
                 });
 
-                openwith.addListener('error', function(error) {
+                openwith.addListener('error', function (error) {
                     console.log(error);
                 });
 

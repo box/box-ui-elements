@@ -354,6 +354,7 @@ export const transformFeedItem = (
                 timestampEndMs,
                 timestampMarkup,
                 timestampMs,
+                timestampVersionId,
             } = extractTimestampMarkup(rawText);
             const root = commentToTextMessage(comment, cleanText, avatarUrls, isRichTextEnabled);
             const replies = (comment.replies ?? []).map(reply =>
@@ -364,6 +365,7 @@ export const transformFeedItem = (
                 annotationTimestampEndMs: timestampEndMs,
                 annotationTimestampMarkup: timestampMarkup,
                 annotationTimestampMs: timestampMs,
+                annotationTimestampVersionId: timestampVersionId,
                 id: comment.id,
                 isResolved: commentIsResolved,
                 messages: [root, ...replies],

@@ -24,6 +24,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     >
       <FormattedMessage
         defaultMessage="Approved {dateTime}"
+        description="Approved task status, where dateTime is a readable time like "Today at 2pm""
         id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusApproved"
         values={
           {
@@ -64,6 +65,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     >
       <FormattedMessage
         defaultMessage="Approved {dateTime}"
+        description="Approved task status, where dateTime is a readable time like "Today at 2pm""
         id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusApproved"
         values={
           {
@@ -127,6 +129,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails should r
     >
       <FormattedMessage
         defaultMessage="Rejected {dateTime}"
+        description="Rejected task status, where dateTime is a readable time like "Today at 2pm""
         id="be.contentSidebar.activityFeed.taskNew.tasksFeedStatusRejected"
         values={
           {

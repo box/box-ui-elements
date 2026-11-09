@@ -32,6 +32,7 @@ export const extractTimestampMarkup = (
     timestampEndMs?: number;
     timestampMarkup?: string;
     timestampMs?: number;
+    timestampVersionId?: string;
 } => {
     if (!text) return { cleanText: '' };
     const match = text.match(TIMESTAMP_MARKUP_REGEX);
@@ -58,6 +59,7 @@ export const extractTimestampMarkup = (
         timestampEndMs: endMs !== undefined && endMs > ms ? endMs : undefined,
         timestampMarkup: fullMatch.trimEnd(),
         timestampMs: ms,
+        timestampVersionId: values.get(KEY_VERSION_ID) || undefined,
     };
 };
 

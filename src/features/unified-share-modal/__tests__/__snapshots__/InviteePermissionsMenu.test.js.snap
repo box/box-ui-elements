@@ -18,6 +18,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -256,6 +257,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -494,6 +496,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -732,6 +735,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -970,6 +974,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -1208,6 +1213,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -1556,6 +1562,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       text={
         <FormattedMessage
           defaultMessage="You do not have permission to invite collaborators."
+          description="Invite Collaborators disabled state tooltip"
           id="boxui.unifiedShare.inviteDisabledTooltip"
         />
       }
@@ -1675,6 +1682,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
   text={
     <FormattedMessage
       defaultMessage="Collaborators cannot be added to bookmarks."
+      description="Invite Collaborators disabled state tooltip due to item being weblink"
       id="boxui.unifiedShare.inviteDisabledWeblinkTooltip"
     />
   }
@@ -1710,6 +1718,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
   text={
     <FormattedMessage
       defaultMessage="You do not have permission to invite collaborators."
+      description="Invite Collaborators disabled state tooltip"
       id="boxui.unifiedShare.inviteDisabledTooltip"
     />
   }

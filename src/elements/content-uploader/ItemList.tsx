@@ -18,7 +18,7 @@ const ACTION_CELL_WIDTH = 32;
 export interface ItemListProps {
     isResumableUploadsEnabled?: boolean;
     items: UploadItem[];
-    onClick: React.MouseEventHandler<HTMLButtonElement>;
+    onClick: (item: UploadItem) => void;
     onRemoveClick?: (item: UploadItem) => void;
     onUpgradeCTAClick?: () => void;
 }

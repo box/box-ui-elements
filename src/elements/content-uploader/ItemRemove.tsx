@@ -3,14 +3,14 @@ import { useIntl } from 'react-intl';
 import { IconButton, Tooltip } from '@box/blueprint-web';
 import { XMark } from '@box/blueprint-web-assets/icons/Fill';
 
-import type { UploadItem, UploadStatus } from '../../common/types/upload';
+import type { UploadStatus } from '../../common/types/upload';
 
 import { STATUS_ERROR, STATUS_IN_PROGRESS, STATUS_STAGED } from '../../constants';
 
 import messages from '../common/messages';
 
 export interface ItemRemoveProps {
-    onClick: (item: UploadItem) => void;
+    onClick: React.MouseEventHandler<HTMLButtonElement>;
     status: UploadStatus;
 }
 

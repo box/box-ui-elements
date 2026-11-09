@@ -97,7 +97,7 @@ export interface ContentUploaderProps {
     onClickResume: (item: UploadItem) => void;
     onClickRetry: (item: UploadItem) => void;
     onClose: () => void;
-    onComplete: (items: UploadItem[]) => void;
+    onComplete: (items: BoxItem[] | UploadItem[]) => void;
     onItemShare?: (itemId: string) => void;
     onItemOpen?: (itemId: string) => void;
     onError: Function;
@@ -585,6 +585,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             };
         });
 
+        // @ts-expect-error no file property
         this.addToQueue(folderUploads, itemUpdateCallback);
     };
 
@@ -637,7 +638,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     addFolderToUploadQueue = (folderUpload: FolderUpload, itemUpdateCallback: Function, apiOptions: Object): void => {
         this.addToQueue(
             [
-                // $FlowFixMe no file property
+                // @ts-expect-error no file property
                 {
                     api: folderUpload,
                     extension: '',

@@ -51,6 +51,7 @@ export type ComponentWithAnnotations = {
         annotation: Object,
         isStartEvent?: boolean
     ) => void,
+    emitShowResolvedChangeEvent: (showResolved: boolean) => void,
     getAction: (eventData: AnnotationActionEvent) => Action,
     getAnnotationsPath?: (
         fileVersionId?: string,

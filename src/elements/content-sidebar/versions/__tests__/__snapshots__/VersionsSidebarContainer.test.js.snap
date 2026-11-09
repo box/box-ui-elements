@@ -5,6 +5,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   error={
     {
       "defaultMessage": "File versions could not be retrieved.",
+      "description": "Error message for the versions fetch call.",
       "id": "be.sidebarVersions.fetchError",
     }
   }
@@ -24,6 +25,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   error={
     {
       "defaultMessage": "File versions could not be retrieved.",
+      "description": "Error message for the versions fetch call.",
       "id": "be.sidebarVersions.fetchError",
     }
   }

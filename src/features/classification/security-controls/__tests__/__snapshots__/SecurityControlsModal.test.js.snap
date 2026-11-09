@@ -14,6 +14,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
   title={
     <FormattedMessage
       defaultMessage="View Classification for “{itemName}”"
+      description="Title for modal to display classification and security controls details"
       id="boxui.securityControls.modalTitle"
       values={
         {
@@ -26,6 +27,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
   <p>
     <FormattedMessage
       defaultMessage="Classification labels defined by your administrator can be used to label content and apply security policies."
+      description="Description for modal to display classification and security controls details"
       id="boxui.securityControls.modalDescription"
     />
   </p>
@@ -36,6 +38,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     text={
       <FormattedMessage
         defaultMessage="Definition"
+        description="Header displayed above the classification definition"
         id="boxui.classification.definition"
       />
     }
@@ -78,6 +81,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     >
       <FormattedMessage
         defaultMessage="Close"
+        description="Close button text"
         id="boxui.core.close"
       />
     </Button>

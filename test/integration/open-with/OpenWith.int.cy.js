@@ -1,6 +1,4 @@
 // <reference types="Cypress" />
-import localize from '../../support/i18n';
-
 const getSingleButton = () => cy.getByTestId('singleintegrationbutton');
 const getOpenWithContent = () => cy.getByTestId('bcow-content');
 // TODO refactor OpenWith tests to use the new Cypress testing library
@@ -59,9 +57,7 @@ xdescribe('OpenWith', () => {
             getSingleButton().should('have.attr', 'aria-disabled', 'true');
 
             // Tooltip should render automatically
-            cy.getTooltip()
-                .as('tooltip')
-                .contains(localize('be.boxToolsInstallMessage', { boxTools: 'Box Tools' }));
+            cy.getTooltip().as('tooltip').contains('Install Box Tools to open this file on your desktop');
 
             // Clicking on the close button of the tooltip
             cy.get('@tooltip').find('button').click();
@@ -121,7 +117,7 @@ xdescribe('OpenWith', () => {
             getOpenWithContent().trigger('mouseover');
 
             // Tooltip should render on mouseover
-            cy.getTooltip().contains(localize('be.boxEditBlacklistedError'));
+            cy.getTooltip().contains('This file cannot be opened locally');
         });
 
         it('the box edit integration cannot be executed', () => {

@@ -25,6 +25,7 @@ import { formatByTimeFormat, formatTimeRange } from './useTimeFormat';
 import { seekMediaToMs } from './useMediaTimestamp';
 
 import type {
+    CommentTimestampSelectParams,
     OnReplyDelete,
     OnReplyUpdate,
     TaskItemProps,
@@ -67,6 +68,7 @@ type FeedItemRowProps = {
     onCommentCopyLink?: (params: { id: string }) => void;
     onCommentDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onCommentSelect?: (commentId: string) => void;
+    onCommentTimestampSelect?: (params: CommentTimestampSelectParams) => void;
     onCommentUpdate?: (
         id: string,
         text: string | undefined,
@@ -121,6 +123,7 @@ const FeedItemRow = ({
     onCommentCopyLink,
     onCommentDelete,
     onCommentSelect,
+    onCommentTimestampSelect,
     onCommentUpdate,
     onReplyCreate,
     onReplyDelete,
@@ -193,6 +196,14 @@ const FeedItemRow = ({
             const handleBadgeClick =
                 timestampMs !== undefined
                     ? () => {
+                          if (onCommentTimestampSelect) {
+                              onCommentTimestampSelect({
+                                  commentId: item.id,
+                                  fileVersionId: item.annotationTimestampVersionId,
+                                  startMs: timestampMs,
+                              });
+                              return;
+                          }
                           seekMediaToMs(timestampMs, getViewer);
                           onCommentSelect?.(item.id);
                       }

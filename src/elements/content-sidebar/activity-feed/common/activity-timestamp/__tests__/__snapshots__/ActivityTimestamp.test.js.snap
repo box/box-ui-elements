@@ -9,6 +9,7 @@ exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should c
   text={
     <FormattedMessage
       defaultMessage="{time, date, full} at {time, time, short}"
+      description="Full date time and time stamp"
       id="be.activityFeed.fullDateTime"
       values={
         {

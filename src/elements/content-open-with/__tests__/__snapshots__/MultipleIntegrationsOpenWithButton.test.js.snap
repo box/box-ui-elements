@@ -6,6 +6,7 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should pa
   text={
     <FormattedMessage
       defaultMessage="Open this file with a partner service"
+      description="Message to the user when there is at least one Open With integration available"
       id="be.defaultOpenWithDescription"
     />
   }
@@ -38,6 +39,7 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should re
   text={
     <FormattedMessage
       defaultMessage="Open this file with a partner service"
+      description="Message to the user when there is at least one Open With integration available"
       id="be.defaultOpenWithDescription"
     />
   }

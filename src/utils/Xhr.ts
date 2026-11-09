@@ -24,6 +24,11 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
 const RETRYABLE_HTTP_METHODS = [HTTP_GET, HTTP_OPTIONS, HTTP_HEAD].map(lowerCase);
 
+/** Xhr constructor options; `token` is optional (e.g. `new Xhr()` in tests). */
+type XhrConstructorOptions = Omit<APIOptions, 'token'> & {
+    token?: Token;
+};
+
 class Xhr {
     id: string | null | undefined;
 
@@ -35,7 +40,7 @@ class Xhr {
 
     language: string | null | undefined;
 
-    token: Token;
+    token: Token | undefined;
 
     version: string | null | undefined;
 
@@ -74,7 +79,7 @@ class Xhr {
         requestInterceptor,
         retryableStatusCodes = [HTTP_STATUS_CODE_RATE_LIMIT],
         shouldRetry = true,
-    }: APIOptions = {}) {
+    }: XhrConstructorOptions = {}) {
         this.clientName = clientName;
         this.id = id;
         this.language = language;

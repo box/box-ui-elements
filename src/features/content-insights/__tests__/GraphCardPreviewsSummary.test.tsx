@@ -3,9 +3,6 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import GraphCardPreviewsSummary from '../GraphCardPreviewsSummary';
-// @ts-ignore: No ts definition
-import localize from '../../../../test/support/i18n';
-import messages from '../messages';
 import { GraphData } from '../types';
 
 const mockData = [
@@ -26,7 +23,9 @@ describe('features/content-insights/GraphCardPreviewsSummary', () => {
         test('should render correctly', () => {
             getWrapper();
 
-            expect(screen.getByLabelText(localize(messages.previewGraphLabel.id))).toBeVisible();
+            expect(
+                screen.getByLabelText('Chart displaying the number of previews over the selected time period'),
+            ).toBeVisible();
             expect(screen.getByText('2')).toBeVisible(); // current period count
             expect(screen.getByText('10')).toBeVisible(); // total count
             expect(screen.getByText('100%')).toBeVisible(); // trend

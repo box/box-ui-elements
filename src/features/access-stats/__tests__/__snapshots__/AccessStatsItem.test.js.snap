@@ -19,6 +19,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of pre
     >
       <FormattedMessage
         defaultMessage="Previews"
+        description="The label for the preview category of access stats"
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
@@ -46,6 +47,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
     >
       <FormattedMessage
         defaultMessage="Previews"
+        description="The label for the preview category of access stats"
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
@@ -73,6 +75,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
     >
       <FormattedMessage
         defaultMessage="Views"
+        description="The label for the view category of access stats for box notes"
         id="boxui.accessStats.accessStatsViews"
       />
     </span>
@@ -100,6 +103,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
     >
       <FormattedMessage
         defaultMessage="Downloads"
+        description="The label for the downloads category of access stats"
         id="boxui.accessStats.accessStatsDownloads"
       />
     </span>
@@ -127,6 +131,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
     >
       <FormattedMessage
         defaultMessage="Comments"
+        description="The label for the comments category of access stats"
         id="boxui.accessStats.accessStatsComments"
       />
     </span>
@@ -154,6 +159,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats of typ
     >
       <FormattedMessage
         defaultMessage="Edits"
+        description="The label for the edit category of access stats"
         id="boxui.accessStats.accessStatsEdits"
       />
     </span>
@@ -183,6 +189,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats with a
     >
       <FormattedMessage
         defaultMessage="Previews"
+        description="The label for the preview category of access stats"
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>
@@ -211,6 +218,7 @@ exports[`features/access-stats/AccessStatsItem should render access stats with a
     >
       <FormattedMessage
         defaultMessage="Previews"
+        description="The label for the preview category of access stats"
         id="boxui.accessStats.accessStatsPreviews"
       />
     </span>

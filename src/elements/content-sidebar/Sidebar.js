@@ -61,6 +61,7 @@ type Props = {
     features: FeatureConfig,
     file: BoxItem,
     fileId: string,
+    getComparedPreview?: Function,
     getPreview: Function,
     getViewer: Function,
     hasActivityFeed: boolean,
@@ -76,6 +77,7 @@ type Props = {
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onCommentVersionSelect?: (params: { fileVersionId: string, startMs: number }) => void,
     onOpenChange?: (isOpen: boolean, isInitialState: boolean) => void,
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
@@ -390,6 +392,7 @@ class Sidebar extends React.Component<Props, State> {
             features,
             file,
             fileId,
+            getComparedPreview,
             getPreview,
             getViewer,
             hasActivityFeed,
@@ -402,6 +405,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onAnnotationSelect,
+            onCommentVersionSelect,
             onVersionChange,
             signSidebarProps,
             size,
@@ -521,6 +525,8 @@ class Sidebar extends React.Component<Props, State> {
                                 key={file.id}
                                 metadataSidebarProps={metadataSidebarProps}
                                 onAnnotationSelect={onAnnotationSelect}
+                                getComparedPreview={getComparedPreview}
+                                onCommentVersionSelect={onCommentVersionSelect}
                                 onPanelChange={this.handlePanelChange}
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}

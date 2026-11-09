@@ -9,6 +9,7 @@ exports[`elements/content-preview/ReloadNotification render() should render corr
   >
     <FormattedMessage
       defaultMessage="A new version of this file is available."
+      description="Message when new preview is available."
       id="be.previewUpdate"
     />
     <Button
@@ -19,6 +20,7 @@ exports[`elements/content-preview/ReloadNotification render() should render corr
     >
       <FormattedMessage
         defaultMessage="Reload"
+        description="Label for reload button."
         id="be.reload"
       />
     </Button>

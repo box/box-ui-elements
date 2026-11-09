@@ -562,6 +562,55 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
+    describe('handleCommentVersionSelect()', () => {
+        const features = { activityFeed: { threadedRepliesV2: { enabled: true } } };
+        const params = { commentId: 'c-1', fileVersionId: '235', startMs: 5000 };
+
+        const selectFromFeed = () =>
+            ActivityFeedV2.mockImplementation(({ onCommentVersionSelect }) => {
+                onCommentVersionSelect?.(params);
+                return <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>;
+            });
+
+        afterEach(() => {
+            ActivityFeedV2.mockImplementation(() => <div data-testid="activity-feed-adapter-v2">Activity Feed V2</div>);
+        });
+
+        test('should route to the comment version and pass the timestamp up', () => {
+            const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/c-1');
+            const history = { push: jest.fn(), replace: jest.fn() };
+            const onCommentVersionSelect = jest.fn();
+            selectFromFeed();
+
+            renderActivitySidebar({ features, getAnnotationsPath, history, onCommentVersionSelect });
+
+            expect(getAnnotationsPath).toHaveBeenCalledWith('235', 'c-1');
+            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/c-1');
+            expect(onCommentVersionSelect).toHaveBeenCalledWith({ fileVersionId: '235', startMs: 5000 });
+        });
+
+        test('should use internal navigation when the router is disabled', () => {
+            const internalSidebarNavigationHandler = jest.fn();
+            const onCommentVersionSelect = jest.fn();
+            selectFromFeed();
+
+            renderActivitySidebar({
+                features,
+                internalSidebarNavigationHandler,
+                onCommentVersionSelect,
+                routerDisabled: true,
+            });
+
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryId: 'c-1',
+                activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                fileVersionId: '235',
+            });
+            expect(onCommentVersionSelect).toHaveBeenCalledWith({ fileVersionId: '235', startMs: 5000 });
+        });
+    });
+
     describe('render() - richText feature gate', () => {
         test('should pass isRichTextEnabled=true to ActivityFeedV2 when richText is enabled', () => {
             renderActivitySidebar({

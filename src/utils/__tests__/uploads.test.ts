@@ -19,16 +19,17 @@ import {
     getFileId,
     getDataTransferItemId,
 } from '../uploads';
+import type { UploadFile, UploadItemAPIOptions } from '../../common/types/upload';
 
-const mockFile = { name: 'hi' };
+const mockFile = { name: 'hi' } as UploadFile;
 const entry = {
     name: 'hi',
     file: fn => {
         fn(mockFile);
     },
 };
-const mockItem = { kind: 'file', webkitGetAsEntry: () => entry };
-const options = { options: true };
+const mockItem = { kind: 'file', webkitGetAsEntry: () => entry } as unknown as DataTransferItem;
+const options = { options: true } as unknown as UploadItemAPIOptions;
 
 describe('util/uploads', () => {
     describe('toISOStringNoMS()', () => {
@@ -100,6 +101,10 @@ describe('util/uploads', () => {
         test('should return false when argument is UploadFile type', () => {
             expect(doesFileContainAPIOptions(mockFile)).toBeFalsy();
         });
+
+        test('should return true when wrapper has file but no options', () => {
+            expect(doesFileContainAPIOptions({ file: mockFile })).toBeTruthy();
+        });
     });
 
     describe('doesDataTransferItemContainAPIOptions()', () => {
@@ -114,6 +119,10 @@ describe('util/uploads', () => {
 
         test('should return false when argument is DataTransferItem type', () => {
             expect(doesDataTransferItemContainAPIOptions(mockItem)).toBeFalsy();
+        });
+
+        test('should return true when wrapper has item but no options', () => {
+            expect(doesDataTransferItemContainAPIOptions({ item: mockItem })).toBeTruthy();
         });
     });
 
@@ -160,6 +169,10 @@ describe('util/uploads', () => {
         test('should return DEFAULT_API_OPTIONS when argument is UploadFile type', () => {
             expect(getFileAPIOptions(mockFile)).toEqual(DEFAULT_API_OPTIONS);
         });
+
+        test('should return DEFAULT_API_OPTIONS when wrapper has file but no options', () => {
+            expect(getFileAPIOptions({ file: mockFile })).toEqual(DEFAULT_API_OPTIONS);
+        });
     });
 
     describe('getDataTransferItemAPIOptions()', () => {
@@ -174,6 +187,10 @@ describe('util/uploads', () => {
 
         test('should return DEFAULT_API_OPTIONS when argument is DataTransferItem type', () => {
             expect(getDataTransferItemAPIOptions(mockItem)).toEqual(DEFAULT_API_OPTIONS);
+        });
+
+        test('should return DEFAULT_API_OPTIONS when wrapper has item but no options', () => {
+            expect(getDataTransferItemAPIOptions({ item: mockItem })).toEqual(DEFAULT_API_OPTIONS);
         });
     });
 
@@ -196,7 +213,7 @@ describe('util/uploads', () => {
             const mockPackageItem = {
                 getAsFile: jest.fn(() => mockFile),
                 webkitGetAsEntry: () => entry,
-            };
+            } as unknown as DataTransferItem;
             const itemData = {
                 item: mockPackageItem,
                 options,
@@ -218,7 +235,7 @@ describe('util/uploads', () => {
             const folderItem = {
                 kind: '',
                 webkitGetAsEntry: () => folderEntry,
-            };
+            } as unknown as DataTransferItem;
 
             const itemData = {
                 item: folderItem,
@@ -237,7 +254,7 @@ describe('util/uploads', () => {
             const folderItem = {
                 kind: 'file',
                 webkitGetAsEntry: () => fileEntry,
-            };
+            } as unknown as DataTransferItem;
 
             const itemData = {
                 item: folderItem,
@@ -257,7 +274,7 @@ describe('util/uploads', () => {
                 kind: 'file',
                 type: 'application/zip',
                 webkitGetAsEntry: () => packageEntry,
-            };
+            } as unknown as DataTransferItem;
 
             const itemData = {
                 item: folderItem,
@@ -276,7 +293,7 @@ describe('util/uploads', () => {
             const folderItem = {
                 kind: 'file',
                 webkitGetAsEntry: () => packageEntry,
-            };
+            } as unknown as DataTransferItem;
 
             const itemData = {
                 item: folderItem,
@@ -295,7 +312,7 @@ describe('util/uploads', () => {
             const folderItem = {
                 kind: '',
                 webkitGetAsEntry: () => folderEntry,
-            };
+            } as unknown as DataTransferItem;
 
             const itemData = {
                 item: folderItem,
@@ -309,7 +326,7 @@ describe('util/uploads', () => {
             const fileEntry = {
                 isDirectory: false,
             };
-            const fileItem = { kind: '', webkitGetAsEntry: () => fileEntry };
+            const fileItem = { kind: '', webkitGetAsEntry: () => fileEntry } as unknown as DataTransferItem;
 
             const itemData = {
                 item: fileItem,
@@ -320,7 +337,7 @@ describe('util/uploads', () => {
         });
 
         test('should return false if item does not have an entry', () => {
-            const fileItem = { kind: '', webkitGetAsEntry: () => undefined };
+            const fileItem = { kind: '', webkitGetAsEntry: () => undefined } as unknown as DataTransferItem;
 
             expect(isDataTransferItemAFolder(fileItem)).toBeFalsy();
         });
@@ -330,7 +347,7 @@ describe('util/uploads', () => {
         test('should return file id correctly when file does not contain API options', () => {
             const file = {
                 name: 'hi',
-            };
+            } as UploadFile;
 
             expect(getFileId(file, '0')).toBe('hi');
         });
@@ -339,7 +356,7 @@ describe('util/uploads', () => {
             const file = {
                 file: {
                     name: 'hi',
-                },
+                } as UploadFile,
                 options: {
                     folderId: '0',
                     uploadInitTimestamp: 123123,
@@ -348,29 +365,9 @@ describe('util/uploads', () => {
 
             expect(getFileId(file, '0')).toBe('hi_0_123123');
         });
-    });
 
-    describe('getFileId()', () => {
-        test('should return file id correctly when file does not contain API options', () => {
-            const file = {
-                name: 'hi',
-            };
-
-            expect(getFileId(file, '0')).toBe('hi');
-        });
-
-        test('should return file id correctly when file does contain API options', () => {
-            const file = {
-                file: {
-                    name: 'hi',
-                },
-                options: {
-                    folderId: '0',
-                    uploadInitTimestamp: 123123,
-                },
-            };
-
-            expect(getFileId(file, '0')).toBe('hi_0_123123');
+        test('should return file name when wrapper has file but no options', () => {
+            expect(getFileId({ file: mockFile }, '0')).toBe('hi');
         });
     });
 
@@ -393,6 +390,10 @@ describe('util/uploads', () => {
             };
 
             expect(getDataTransferItemId(item, rootFolderId)).toBe('hi_0_123123');
+        });
+
+        test('should return item name when wrapper has item but no options', () => {
+            expect(getDataTransferItemId({ item: mockItem }, rootFolderId)).toBe('hi');
         });
     });
 

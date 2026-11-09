@@ -24,8 +24,8 @@ const DEFAULT_API_OPTIONS = {};
  * @returns {boolean}
  */
 function doesFileContainAPIOptions(file: UploadFile | UploadFileWithAPIOptions): boolean {
-    // $FlowFixMe UploadFileWithAPIOptions has `file` and `options` properties
-    return !!(file.options && file.file);
+    // $FlowFixMe UploadFileWithAPIOptions has a `file` property; `options` is optional
+    return !!file.file;
 }
 
 /**
@@ -35,8 +35,8 @@ function doesFileContainAPIOptions(file: UploadFile | UploadFileWithAPIOptions):
  * @returns {boolean}
  */
 function doesDataTransferItemContainAPIOptions(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): boolean {
-    // $FlowFixMe UploadDataTransferItemWithAPIOptions has `item` and `options` properties
-    return !!(item.options && item.item);
+    // $FlowFixMe UploadDataTransferItemWithAPIOptions has an `item` property; `options` is optional
+    return !!item.item;
 }
 
 /**
@@ -313,6 +313,10 @@ function getFileId(file: UploadFileWithAPIOptions | UploadFile, rootFolderId: st
     }
 
     const fileWithOptions = ((file: any): UploadFileWithAPIOptions);
+    if (!fileWithOptions.options) {
+        return fileWithOptions.file.name;
+    }
+
     const folderId = getProp(fileWithOptions, 'options.folderId', rootFolderId);
     const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp', Date.now());
     const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
@@ -337,7 +341,8 @@ function getDataTransferItemId(
 ): string {
     const item = getDataTransferItem(itemData);
     const { name } = getEntryFromDataTransferItem(item);
-    if (!doesDataTransferItemContainAPIOptions(itemData)) {
+    // $FlowFixMe UploadDataTransferItemWithAPIOptions has an optional `options` property
+    if (!doesDataTransferItemContainAPIOptions(itemData) || !itemData.options) {
         return name;
     }
 

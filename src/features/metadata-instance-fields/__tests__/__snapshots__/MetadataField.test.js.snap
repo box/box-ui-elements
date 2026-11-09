@@ -44,18 +44,18 @@ exports[`features/metadata-instance-editor/fields/MetadataField should correctly
 />
 `;
 
-exports[`features/metadata-instance-editor/fields/MetadataField should correctly render a user field - for the time being, in read-only mode 1`] = `
-<ReadOnlyMetadataField
-  dataValue="value"
-  type="user"
-/>
-`;
-
 exports[`features/metadata-instance-editor/fields/MetadataField should correctly render a text field 1`] = `
 <TextMetadataField
   dataValue="value"
   onChange={[MockFunction]}
   onRemove={[MockFunction]}
+/>
+`;
+
+exports[`features/metadata-instance-editor/fields/MetadataField should correctly render a user field - for the time being, in read-only mode 1`] = `
+<ReadOnlyMetadataField
+  dataValue="value"
+  type="user"
 />
 `;
 
@@ -73,6 +73,7 @@ exports[`features/metadata-instance-editor/fields/MetadataField should correctly
 >
   <FormattedMessage
     defaultMessage="Invalid metadata field type!"
+    description="Error message displayed if the template has an field type we don't recognize"
     id="boxui.metadataInstanceFields.invalidMetadataFieldType"
   />
 </InlineError>

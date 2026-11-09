@@ -4,6 +4,7 @@ exports[`features/item-details/SharedLinkExpirationNotice should accept node as 
 <InlineNotice>
   <FormattedMessage
     defaultMessage="This shared link will be disabled on {expiration}."
+    description="Warning message in the sidebar that this shared link will expire on a certain date, {expiration} is the date"
     id="boxui.itemDetails.sharedLinkExpiration"
     values={
       {
@@ -20,6 +21,7 @@ exports[`features/item-details/SharedLinkExpirationNotice should render default 
 <InlineNotice>
   <FormattedMessage
     defaultMessage="This shared link will be disabled on {expiration}."
+    description="Warning message in the sidebar that this shared link will expire on a certain date, {expiration} is the date"
     id="boxui.itemDetails.sharedLinkExpiration"
     values={
       {

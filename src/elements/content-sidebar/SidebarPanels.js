@@ -57,6 +57,7 @@ type Props = {
     features: FeatureConfig,
     file: BoxItem,
     fileId: string,
+    getComparedPreview?: Function,
     getPreview: Function,
     getViewer: Function,
     hasActivity: boolean,
@@ -70,6 +71,7 @@ type Props = {
     location: Location,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onCommentVersionSelect?: (params: { fileVersionId: string, startMs: number }) => void,
     onPanelChange?: (name: string, isInitialState?: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
@@ -282,6 +284,7 @@ class SidebarPanels extends React.Component<Props, State> {
             features,
             file,
             fileId,
+            getComparedPreview,
             getPreview,
             getViewer,
             hasActivity,
@@ -294,6 +297,7 @@ class SidebarPanels extends React.Component<Props, State> {
             isOpen,
             metadataSidebarProps,
             onAnnotationSelect,
+            onCommentVersionSelect,
             onVersionChange,
             onVersionHistoryClick,
             versionsSidebarProps,
@@ -440,10 +444,12 @@ class SidebarPanels extends React.Component<Props, State> {
                                     currentUser={currentUser}
                                     currentUserError={currentUserError}
                                     file={file}
+                                    getComparedPreview={getComparedPreview}
                                     getPreview={getPreview}
                                     getViewer={getViewer}
                                     hasSidebarInitialized={isInitialized}
                                     onAnnotationSelect={onAnnotationSelect}
+                                    onCommentVersionSelect={onCommentVersionSelect}
                                     onVersionChange={onVersionChange}
                                     onVersionHistoryClick={onVersionHistoryClick}
                                     ref={this.activitySidebar}

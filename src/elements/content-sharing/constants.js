@@ -80,6 +80,10 @@ export const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
     [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
 };
 
+export const OTP_MODE_ALLOWLIST = 'allowlist';
+export const OTP_MODE_NONE = 'none';
+export const OTP_MODE_OPEN = 'open';
+
 export const ANYONE_WITH_LINK = 'peopleWithTheLink';
 export const ANYONE_IN_COMPANY = 'peopleInYourCompany';
 export const PEOPLE_IN_ITEM = 'peopleInThisItem';

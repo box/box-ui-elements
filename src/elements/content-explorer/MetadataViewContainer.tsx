@@ -185,7 +185,8 @@ const MetadataViewContainer = ({
 
     const filterGroups = React.useMemo(() => {
         const clonedTemplate = cloneDeep(metadataTemplate);
-        let fields = clonedTemplate?.fields || [];
+        let fields: Pick<MetadataTemplateField, 'key' | 'displayName' | 'type' | 'options'>[] =
+            clonedTemplate?.fields || [];
 
         // Filter fields to only include those that have corresponding columns
         const columnIds = newColumns.map(col => col.id);
@@ -207,7 +208,6 @@ const MetadataViewContainer = ({
                     key: ITEM_FILTER_NAME,
                     displayName: formatMessage(messages.name),
                     type: 'string',
-                    shouldRenderChip: true,
                 },
                 ...fields,
             ];
@@ -223,6 +223,7 @@ const MetadataViewContainer = ({
                             name: field.displayName,
                             fieldType: field.type,
                             options: field.options?.map(({ key }) => key) || [],
+                            selected: false,
                             shouldRenderChip: true,
                         };
                     }) || [],
