@@ -553,7 +553,7 @@ describe('api/Metadata', () => {
             const fileId = 'id';
 
             metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
-            metadata.xhr.get = jest.fn().mockReturnValue({
+            metadata.xhr.get = jest.fn().mockResolvedValue({
                 data: {
                     levels: [
                         { displayName: 'level 1', description: 'This is level' },
@@ -607,7 +607,7 @@ describe('api/Metadata', () => {
             const fileId = 'id';
 
             metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
-            metadata.xhr.get = jest.fn().mockReturnValue({
+            metadata.xhr.get = jest.fn().mockResolvedValue({
                 data: {
                     levels: [
                         { display_name: 'level 1', description: 'This is level' },
@@ -834,9 +834,9 @@ describe('api/Metadata', () => {
             expect(first[0].fields[0].levels).toEqual([]);
             expect(second[0].fields[0].levels).toEqual([{ displayName: 'level 1', description: 'This is level' }]);
             expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
-            expect(metadata.taxonomyLevelsByKey).toEqual({
-                'id:metadata_taxonomies/namespace1/123': [{ displayName: 'level 1', description: 'This is level' }],
-            });
+            await expect(metadata.taxonomyLevelsRequests['id:metadata_taxonomies/namespace1/123']).resolves.toEqual([
+                { displayName: 'level 1', description: 'This is level' },
+            ]);
         });
 
         test('should reuse a confirmed empty taxonomy level list', async () => {

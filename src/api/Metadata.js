@@ -101,21 +101,16 @@ class Metadata extends File {
     namespacesAPI: ?MetadataNamespaces;
 
     /**
-     * Taxonomy level payloads already loaded for this client, keyed by file id
-     * and taxonomy path.
-     */
-    taxonomyLevelsByKey: { [string]: Array<Object> };
-
-    /**
-     * In-flight taxonomy level requests. Concurrent callers for the same file
-     * and taxonomy share the request that is already running.
+     * Taxonomy level requests for this client, keyed by file id and taxonomy
+     * path. A settled promise is the stored result. The entry is removed when
+     * the response has no levels array or the request fails, so a later call
+     * can retry. Concurrent callers share the promise that is already running.
      */
     taxonomyLevelsRequests: { [string]: Promise<Array<Object>> };
 
     constructor(options: Object) {
         super(options);
         this.metadataNamespaceMode = this.options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
-        this.taxonomyLevelsByKey = {};
         this.taxonomyLevelsRequests = {};
     }
 
@@ -471,37 +466,27 @@ class Metadata extends File {
      */
     fetchTaxonomyLevels(taxonomyPath: string, id: string): Promise<Array<Object>> {
         const cacheKey = `${id}:${taxonomyPath}`;
-        if (Object.prototype.hasOwnProperty.call(this.taxonomyLevelsByKey, cacheKey)) {
-            return Promise.resolve(this.taxonomyLevelsByKey[cacheKey]);
-        }
-
-        const inFlight = this.taxonomyLevelsRequests[cacheKey];
-        if (inFlight) {
-            return inFlight;
-        }
-
-        const request = (async (): Promise<Array<Object>> => {
-            try {
-                const result = await this.xhr.get({
+        if (!this.taxonomyLevelsRequests[cacheKey]) {
+            this.taxonomyLevelsRequests[cacheKey] = this.xhr
+                .get({
                     url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
                     id: getTypedFileId(id),
-                });
-                const levels = getProp(result, 'data.levels');
-                if (Array.isArray(levels)) {
-                    this.taxonomyLevelsByKey[cacheKey] = levels;
+                })
+                .then(result => {
+                    const levels = getProp(result, 'data.levels');
+                    if (!Array.isArray(levels)) {
+                        delete this.taxonomyLevelsRequests[cacheKey];
+                        return [];
+                    }
                     return levels;
-                }
-                return [];
-            } catch {
-                // A missing taxonomy must not fail the whole metadata sidebar.
-                return [];
-            } finally {
-                delete this.taxonomyLevelsRequests[cacheKey];
-            }
-        })();
-
-        this.taxonomyLevelsRequests[cacheKey] = request;
-        return request;
+                })
+                .catch(() => {
+                    // A missing taxonomy must not fail the whole metadata sidebar.
+                    delete this.taxonomyLevelsRequests[cacheKey];
+                    return [];
+                });
+        }
+        return this.taxonomyLevelsRequests[cacheKey];
     }
 
     /**
