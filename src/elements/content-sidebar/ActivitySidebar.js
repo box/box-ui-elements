@@ -5,21 +5,16 @@
  */
 
 import * as React from 'react';
-import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
-import { FormattedMessage } from 'react-intl';
 import { generatePath, type ContextRouter } from 'react-router-dom';
-import ActivityFeed from './activity-feed';
 // $FlowFixMe
 import ActivityFeedV2 from './activity-feed-v2';
-import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
-import SidebarContent from './SidebarContent';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError } from '../../utils/error';
 import { mark } from '../../utils/performance';
@@ -31,13 +26,9 @@ import { FILE_EXTENSIONS } from '../common/item/constants';
 import { withFeatureConsumer, isFeatureEnabled, getFeatureConfig } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
-import ActivitySidebarFilter from './ActivitySidebarFilter';
 import { ViewType, FeedEntryType } from '../common/types/SidebarNavigation';
 import {
     ACTIVITY_FILTER_OPTION_ALL,
-    ACTIVITY_FILTER_OPTION_RESOLVED,
-    ACTIVITY_FILTER_OPTION_TASKS,
-    ACTIVITY_FILTER_OPTION_UNRESOLVED,
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
     FEED_ITEM_TYPE_ANNOTATION,
@@ -46,7 +37,6 @@ import {
     FEED_ITEM_TYPE_VERSION,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
-    TASK_COMPLETION_RULE_ALL,
 } from '../../constants';
 import type {
     TaskAssigneeCollection,
@@ -60,7 +50,6 @@ import type {
     Annotation,
     AnnotationPermission,
     ActivityFilterItemType,
-    ActivityFilterOption,
     BoxCommentPermission,
     Comment,
     CommentFeedItemType,
@@ -89,7 +78,6 @@ type ExternalProps = {
     currentUser?: User,
     currentUserError?: Errors,
     getUserProfileUrl?: GetProfileUrlCallback,
-    hasReplies?: boolean,
     hasTasks?: boolean,
     hasVersions?: boolean,
     internalSidebarNavigation?: InternalSidebarNavigation,
@@ -171,7 +159,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitShowResolvedChangeEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
-        hasReplies: false,
         hasTasks: true,
         hasVersions: true,
         isDisabled: false,
@@ -474,19 +461,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxCommentPermission }): void => {
-        const { api, features, file, hasReplies, onCommentDelete } = this.props;
-        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const { api, file, onCommentDelete } = this.props;
 
         const successCallback = (comment: Comment) => {
             this.feedSuccessCallback();
             onCommentDelete(comment);
         };
 
-        if (hasReplies || isThreadedRepliesV2Enabled) {
-            api.getFeedAPI(false).deleteThreadedComment(file, id, permissions, successCallback, this.feedErrorCallback);
-        } else {
-            api.getFeedAPI(false).deleteComment(file, id, permissions, successCallback, this.feedErrorCallback);
-        }
+        api.getFeedAPI(false).deleteThreadedComment(file, id, permissions, successCallback, this.feedErrorCallback);
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -547,8 +529,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onSuccess: ?Function,
         onError: ?Function,
     ): void => {
-        const { api, features, file, hasReplies, onCommentUpdate } = this.props;
-        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const { api, file, onCommentUpdate } = this.props;
 
         const errorCallback = (e, code) => {
             if (onError) {
@@ -565,28 +546,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onCommentUpdate();
         };
 
-        if (hasReplies || isThreadedRepliesV2Enabled) {
-            api.getFeedAPI(false).updateThreadedComment(
-                file,
-                id,
-                text,
-                status,
-                permissions,
-                successCallback,
-                errorCallback,
-                this.getIsRichTextEnabled(),
-            );
-        } else {
-            api.getFeedAPI(false).updateComment(
-                file,
-                id,
-                text || '',
-                hasMention,
-                permissions,
-                successCallback,
-                errorCallback,
-            );
-        }
+        api.getFeedAPI(false).updateThreadedComment(
+            file,
+            id,
+            text,
+            status,
+            permissions,
+            successCallback,
+            errorCallback,
+            this.getIsRichTextEnabled(),
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -635,51 +604,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Updates replies of a comment or annotation in the Feed
-     *
-     * @param {string} id - id of the feed item
-     * @param {Array<Comment>} replies - replies
-     * @return {void}
-     */
-    updateReplies = (id: string, replies: Array<Comment>) => {
-        const { activeFeedEntryId, api, file, history, internalSidebarNavigationHandler, routerDisabled } = this.props;
-        const { feedItems } = this.state;
-
-        if (!feedItems) {
-            return;
-        }
-
-        const feedAPI = api.getFeedAPI(false);
-        feedAPI.file = file;
-
-        // Detect if replies are being hidden and activeFeedEntryId belongs to a reply
-        // that is in currently being updated parent, in order to disable active item
-        if (
-            activeFeedEntryId &&
-            replies.length === 1 &&
-            feedItems.some(
-                (item: FeedItem) =>
-                    item.id === id && item === this.getCommentFeedItemByReplyId(feedItems, activeFeedEntryId),
-            )
-        ) {
-            if (routerDisabled && internalSidebarNavigationHandler) {
-                internalSidebarNavigationHandler(
-                    {
-                        sidebar: ViewType.ACTIVITY,
-                    },
-                    true,
-                );
-            } else {
-                history.replace(this.getActiveCommentPath());
-            }
-        }
-
-        feedAPI.updateFeedItem({ replies }, id);
-
-        this.fetchFeedItems();
-    };
-
-    /**
      * Handles a successful update of a reply
      *
      * @private
@@ -707,9 +631,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {boolean} hasMention - The comment's text
      * @return {Promise<void>}
      */
+    // eslint-disable-next-line no-unused-vars
     createComment = (text: string, hasMention: boolean): Promise<void> => {
-        const { api, currentUser, features, file, hasReplies, onCommentCreate } = this.props;
-        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
+        const { api, currentUser, file, onCommentCreate } = this.props;
 
         if (!currentUser) {
             throw getBadUserError();
@@ -726,25 +650,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 reject(e);
             };
 
-            if (hasReplies || isThreadedRepliesV2Enabled) {
-                api.getFeedAPI(false).createThreadedComment(
-                    file,
-                    currentUser,
-                    text,
-                    successCallback,
-                    errorCallback,
-                    this.getIsRichTextEnabled(),
-                );
-            } else {
-                api.getFeedAPI(false).createComment(
-                    file,
-                    currentUser,
-                    text,
-                    hasMention,
-                    successCallback,
-                    errorCallback,
-                );
-            }
+            api.getFeedAPI(false).createThreadedComment(
+                file,
+                currentUser,
+                text,
+                successCallback,
+                errorCallback,
+                this.getIsRichTextEnabled(),
+            );
 
             // need to load the pending item
             this.fetchFeedItems();
@@ -800,21 +713,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Deletes an app activity item via the API.
-     *
-     * @param {Object} args - A subset of the app activity
-     * @return void
-     */
-    deleteAppActivity = ({ id }: { id: string }): void => {
-        const { api, file } = this.props;
-
-        api.getFeedAPI(false).deleteAppActivity(file, id, this.feedSuccessCallback, this.feedErrorCallback);
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    /**
      * Fetches the feed items for the sidebar
      *
      * @param {boolean} shouldRefreshCache true if the cache should be refreshed
@@ -827,16 +725,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             api,
             file,
             features,
-            hasReplies,
             hasTasks: shouldShowTasks,
             hasVersions: shouldShowVersions,
         } = this.props;
-        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
         const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
         const isAudioFile = Boolean(file.extension && FILE_EXTENSIONS.audio.includes(file.extension));
-        const shouldShowReplies = hasReplies || isThreadedRepliesV2Enabled;
         const shouldFetchReplies =
-            shouldRefreshCache && hasReplies && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
+            shouldRefreshCache && activeFeedEntryId && activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
@@ -851,10 +746,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             {
                 shouldShowAnnotations,
                 shouldShowAppActivity,
-                shouldShowReplies,
+                shouldShowReplies: true,
                 shouldShowTasks,
                 shouldShowVersions,
-                shouldUseEnhancedActivities: isThreadedRepliesV2Enabled,
+                shouldUseEnhancedActivities: true,
                 shouldUseEnhancedTimespanComments: isAudioPlayerV2Enabled && isAudioFile,
                 shouldUseUAA,
                 shouldEnableRichText,
@@ -1281,30 +1176,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Fetches replies (comments) of a comment or annotation
-     *
-     * @param {string} id - id of the feed item
-     * @param {CommentFeedItemType} type - type of the feed item
-     * @return {void}
-     */
-    getReplies = (id: string, type: CommentFeedItemType): void => {
-        const { api, file } = this.props;
-        const shouldEnableRichText = this.getIsRichTextEnabled();
-
-        api.getFeedAPI(false).fetchReplies(
-            file,
-            id,
-            type,
-            this.feedSuccessCallback,
-            this.feedErrorCallback,
-            shouldEnableRichText,
-        );
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    /**
      * Gets the user avatar URL
      *
      * @param {string} userId the user id
@@ -1414,13 +1285,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
     };
 
-    handleItemsFiltered = (status?: ActivityFilterItemType) => {
-        const { onFilterChange } = this.props;
-
-        this.setState({ feedItemsStatusFilter: status });
-        onFilterChange(status);
-    };
-
     getFilteredFeedItems = (): FeedItems | typeof undefined => {
         const { feedItems, feedItemsStatusFilter } = this.state;
         if (!feedItems || !feedItemsStatusFilter || feedItemsStatusFilter === ACTIVITY_FILTER_OPTION_ALL) {
@@ -1439,235 +1303,86 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         });
     };
 
-    onTaskModalClose = () => {
-        this.setState({
-            approverSelectorContacts: [],
-        });
-    };
-
     refresh(shouldRefreshCache: boolean = true): void {
         this.fetchFeedItems(shouldRefreshCache);
     }
 
-    renderAddTaskButton = () => {
-        const { isDisabled, hasTasks, internalSidebarNavigation, internalSidebarNavigationHandler, routerDisabled } =
-            this.props;
-        const { approverSelectorContacts } = this.state;
-        const { getApprover, getAvatarUrl, createTask, onTaskModalClose } = this;
-
-        if (!hasTasks) {
-            return null;
-        }
-
-        return (
-            <AddTaskButton
-                internalSidebarNavigation={internalSidebarNavigation}
-                internalSidebarNavigationHandler={internalSidebarNavigationHandler}
-                isDisabled={isDisabled}
-                onTaskModalClose={onTaskModalClose}
-                routerDisabled={routerDisabled}
-                taskFormProps={{
-                    approvers: [],
-                    approverSelectorContacts,
-                    completionRule: TASK_COMPLETION_RULE_ALL,
-                    createTask,
-                    getApproverWithQuery: getApprover,
-                    getAvatarUrl,
-                    id: '',
-                    message: '',
-                }}
-            />
-        );
-    };
-
-    renderActivitySidebarFilter = () => {
-        const { features, hasTasks } = this.props;
-        const { feedItemsStatusFilter } = this.state;
-        const shouldShowActivityFeedFilter = isFeatureEnabled(features, 'activityFeed.filter.enabled');
-        const shouldShowAdditionalFilterOptions = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
-
-        if (!shouldShowActivityFeedFilter) {
-            return null;
-        }
-
-        const activityFilterOptions: ActivityFilterOption[] = [
-            ACTIVITY_FILTER_OPTION_ALL,
-            ACTIVITY_FILTER_OPTION_UNRESOLVED,
-        ];
-        if (shouldShowAdditionalFilterOptions) {
-            // Determine which filter options to show based on what activity types are available in current context
-            activityFilterOptions.push(ACTIVITY_FILTER_OPTION_RESOLVED);
-            if (hasTasks) {
-                activityFilterOptions.push(ACTIVITY_FILTER_OPTION_TASKS);
-            }
-        }
-
-        return (
-            <ActivitySidebarFilter
-                activityFilterOptions={activityFilterOptions}
-                feedItemType={feedItemsStatusFilter}
-                onFeedItemTypeClick={selectedStatus => {
-                    this.handleItemsFiltered(selectedStatus);
-                }}
-            />
-        );
-    };
-
-    renderActions = () => (
-        <>
-            {this.renderActivitySidebarFilter()}
-            {this.renderAddTaskButton()}
-        </>
-    );
-
-    renderTitle = () => {
-        const { features } = this.props;
-        const shouldHideTitle = isFeatureEnabled(features, 'activityFeed.filter.enabled');
-
-        if (shouldHideTitle) {
-            return null;
-        }
-        return <FormattedMessage {...messages.sidebarActivityTitle} />;
-    };
-
     render() {
         const {
             activeFeedEntryId,
-            activeFeedEntryType,
             currentUser,
-            currentUserError,
             elementId,
             features,
             file,
-            hasReplies,
-            hasVersions,
             isDisabled = false,
             onAnnotationCopyLink,
             onCommentCopyLink,
             onShowOnlyMentionsMeChange,
             onShowResolvedChange,
             onVersionHistoryClick,
-            getUserProfileUrl,
             onTaskView,
             showOnlyMentionsMe,
             showResolved,
         } = this.props;
-        const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
-        const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
-        const isThreadedRepliesV2Enabled = isFeatureEnabled(features, 'activityFeed.threadedRepliesV2.enabled');
-        const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
 
-        if (isThreadedRepliesV2Enabled) {
-            const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
-            const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
-            const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
-            const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
-            return (
-                <div
-                    aria-labelledby={label}
-                    className="bcs-content bcs-NewActivityFeedContent"
-                    data-testid="bcs-content"
-                    id={`${label}-content`}
-                    role="tabpanel"
-                >
-                    <ActivityFeedV2
-                        activeFeedEntryId={activeFeedEntryId}
-                        createTask={this.createTask}
-                        currentUser={currentUser}
-                        feedItems={this.getFilteredFeedItems()}
-                        getComparedPreview={this.props.getComparedPreview}
-                        getPreview={this.props.getPreview}
-                        getViewer={this.props.getViewer}
-                        file={file}
-                        getApproverAsync={this.getApproverAsync}
-                        getAvatarUrl={this.getAvatarUrl}
-                        getMentionAsync={this.getMentionAsync}
-                        getTaskCollaborators={this.getTaskCollaborators}
-                        hasTasks={this.props.hasTasks}
-                        isAudioPlayerV2Enabled={isAudioPlayerV2Enabled}
-                        isDisabled={isDisabled}
-                        isRichTextEnabled={this.getIsRichTextEnabled()}
-                        isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
-                        onAnnotationCopyLink={onAnnotationCopyLink}
-                        onAnnotationDelete={this.handleAnnotationDelete}
-                        onAnnotationEdit={this.handleAnnotationEdit}
-                        onAnnotationSelect={this.handleAnnotationSelect}
-                        onAnnotationStatusChange={this.handleAnnotationStatusChange}
-                        onCommentCopyLink={onCommentCopyLink}
-                        onCommentCreate={this.createComment}
-                        onCommentDelete={this.deleteComment}
-                        onCommentSelect={this.handleCommentSelect}
-                        onCommentUpdate={this.updateComment}
-                        onCommentVersionSelect={this.handleCommentVersionSelect}
-                        onReplyCreate={this.createReply}
-                        onReplyDelete={this.deleteReply}
-                        onReplyUpdate={({ id, onError, onSuccess, parentId, permissions, text }) =>
-                            this.updateReply(id, parentId, text, permissions, onSuccess, onError)
-                        }
-                        onShowOnlyMentionsMeChange={onShowOnlyMentionsMeChange}
-                        onShowResolvedChange={onShowResolvedChange}
-                        onTaskAssignmentUpdate={this.updateTaskAssignment}
-                        onTaskDelete={this.deleteTask}
-                        onTaskUpdate={this.updateTask}
-                        onTaskView={onTaskView}
-                        onVersionHistoryClick={onVersionHistoryClick}
-                        showOnlyMentionsMe={showOnlyMentionsMe}
-                        showResolved={showResolved}
-                    />
-                </div>
-            );
-        }
+        const label = `${elementId}${elementId === '' ? '' : '_'}${SIDEBAR_VIEW_ACTIVITY}`;
+        const timestampedCommentsConfig = getFeatureConfig(features, 'activityFeed.timestampedComments');
+        const isTimestampedCommentsEnabled = timestampedCommentsConfig?.enabled === true;
+        const isAudioPlayerV2Enabled = isFeatureEnabled(features, 'audioPlayerV2.enabled');
 
         return (
-            <SidebarContent
-                actions={this.renderActions()}
-                className={classNames('bcs-activity', { 'bcs-activity--full': hasReplies })}
-                elementId={elementId}
-                sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                title={this.renderTitle()}
+            <div
+                aria-labelledby={label}
+                className="bcs-content bcs-NewActivityFeedContent"
+                data-testid="bcs-content"
+                id={`${label}-content`}
+                role="tabpanel"
             >
-                <ActivityFeed
+                <ActivityFeedV2
                     activeFeedEntryId={activeFeedEntryId}
-                    activeFeedEntryType={activeFeedEntryType}
-                    activityFeedError={activityFeedError}
-                    approverSelectorContacts={approverSelectorContacts}
+                    createTask={this.createTask}
                     currentUser={currentUser}
-                    currentUserError={currentUserError}
                     feedItems={this.getFilteredFeedItems()}
+                    getComparedPreview={this.props.getComparedPreview}
+                    getPreview={this.props.getPreview}
+                    getViewer={this.props.getViewer}
                     file={file}
-                    getApproverWithQuery={this.getApprover}
+                    getApproverAsync={this.getApproverAsync}
                     getAvatarUrl={this.getAvatarUrl}
-                    getMentionWithQuery={this.getMention}
-                    getUserProfileUrl={getUserProfileUrl}
-                    hasNewThreadedReplies={isNewThreadedRepliesEnabled}
-                    hasReplies={hasReplies}
-                    hasVersions={hasVersions}
+                    getMentionAsync={this.getMentionAsync}
+                    getTaskCollaborators={this.getTaskCollaborators}
+                    hasTasks={this.props.hasTasks}
+                    isAudioPlayerV2Enabled={isAudioPlayerV2Enabled}
                     isDisabled={isDisabled}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    contactsLoaded={contactsLoaded}
+                    isRichTextEnabled={this.getIsRichTextEnabled()}
+                    isTimestampedCommentsEnabled={isTimestampedCommentsEnabled}
+                    onAnnotationCopyLink={onAnnotationCopyLink}
                     onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationEdit={this.handleAnnotationEdit}
                     onAnnotationSelect={this.handleAnnotationSelect}
                     onAnnotationStatusChange={this.handleAnnotationStatusChange}
-                    onAppActivityDelete={this.deleteAppActivity}
+                    onCommentCopyLink={onCommentCopyLink}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
+                    onCommentSelect={this.handleCommentSelect}
                     onCommentUpdate={this.updateComment}
-                    onHideReplies={this.updateReplies}
+                    onCommentVersionSelect={this.handleCommentVersionSelect}
                     onReplyCreate={this.createReply}
                     onReplyDelete={this.deleteReply}
-                    onReplyUpdate={this.updateReply}
-                    onShowReplies={this.getReplies}
+                    onReplyUpdate={({ id, onError, onSuccess, parentId, permissions, text }) =>
+                        this.updateReply(id, parentId, text, permissions, onSuccess, onError)
+                    }
+                    onShowOnlyMentionsMeChange={onShowOnlyMentionsMeChange}
+                    onShowResolvedChange={onShowResolvedChange}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
-                    onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
-                    onTaskModalClose={this.onTaskModalClose}
                     onTaskUpdate={this.updateTask}
                     onTaskView={onTaskView}
                     onVersionHistoryClick={onVersionHistoryClick}
-                    shouldUseUAA={shouldUseUAA}
+                    showOnlyMentionsMe={showOnlyMentionsMe}
+                    showResolved={showResolved}
                 />
-            </SidebarContent>
+            </div>
         );
     }
 }
