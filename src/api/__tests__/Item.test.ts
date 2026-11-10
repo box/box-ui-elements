@@ -4,6 +4,7 @@ import Item from '../Item';
 import { fillMissingProperties } from '../../utils/fields';
 import { getBadItemError, getBadPermissionsError } from '../../utils/error';
 import { ERROR_CODE_SHARE_ITEM } from '../../constants';
+import type { APIOptions } from '../../common/types/api';
 
 let item;
 let file;
@@ -25,7 +26,7 @@ const MOCK_FIELDS_STRING = 'shared_link,shared_link_features';
 
 describe('api/Item', () => {
     beforeEach(() => {
-        item = new Item({});
+        item = new Item({} as APIOptions);
         cache = new Cache();
     });
 
@@ -308,8 +309,8 @@ describe('api/Item', () => {
         };
         const MOCK_ITEM_ID = '123456789';
         beforeEach(() => {
-            getBadItemError.mockReturnValue(MOCK_ITEM_ERROR);
-            getBadPermissionsError.mockReturnValue(MOCK_PERMISSIONS_ERROR);
+            (getBadItemError as jest.Mock).mockReturnValue(MOCK_ITEM_ERROR);
+            (getBadPermissionsError as jest.Mock).mockReturnValue(MOCK_PERMISSIONS_ERROR);
         });
 
         test.each`
@@ -689,7 +690,7 @@ describe('api/Item', () => {
                     entries: ['file_item1', 'child', 'file_item2', 'file_item3'],
                 },
             };
-            getBadItemError.mockReturnValue(new Error('Bad Box item'));
+            (getBadItemError as jest.Mock).mockReturnValue(new Error('Bad Box item'));
         });
 
         test('should not do anything if destroyed', () => {
@@ -738,7 +739,7 @@ describe('api/Item', () => {
             item.getCache = jest.fn().mockReturnValueOnce(cache);
             item.getCacheKey = jest.fn();
             item.getParentCacheKey = jest.fn().mockReturnValueOnce('parent');
-            expect(item.deleteSuccessHandler.bind(folder)).toThrow(Error, /Bad Box item/);
+            expect(item.deleteSuccessHandler.bind(folder)).toThrow(/Bad Box item/);
             expect(item.getCacheKey).not.toHaveBeenCalled();
             expect(item.postDeleteCleanup).not.toHaveBeenCalled();
             expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
