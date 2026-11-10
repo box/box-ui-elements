@@ -2,12 +2,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import FileActivities from '../FileActivities';
 import { ERROR_CODE_FETCH_ACTIVITY } from '../../constants';
 import { fileActivities as mockFileActivities } from '../fixtures';
+import type { APIOptions } from '../../common/types/api';
 
 describe('api/FileActivities', () => {
     let fileActivities;
 
     beforeEach(() => {
-        fileActivities = new FileActivities({});
+        fileActivities = new FileActivities({} as APIOptions);
         fileActivities.get = jest.fn();
     });
 
