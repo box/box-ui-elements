@@ -478,6 +478,33 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 },
             };
 
+            test('should use consumer supplied order_by for sort button', async () => {
+                renderComponent({
+                    ...metadataViewV2ElementProps,
+                    metadataQuery: {
+                        ...metadataQuery,
+                        order_by: [{ field_key: `${metadataFieldNamePrefix}.last_contacted_at`, direction: 'DESC' }],
+                    },
+                });
+
+                await waitFor(() => {
+                    // The filter chip
+                    expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(1);
+
+                    // Filter chip AND sort dropdown button
+                    expect(screen.getAllByRole('button', { name: 'Last Contacted At' })).toHaveLength(2);
+                });
+            });
+
+            test('should use default order_by (Name) for sort button if consumer does not pass order_by', async () => {
+                renderComponent(metadataViewV2ElementProps);
+
+                await waitFor(() => {
+                    expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(2);
+                    expect(screen.getAllByRole('button', { name: 'Last Contacted At' })).toHaveLength(1);
+                });
+            });
+
             test('should render metadata view button', async () => {
                 renderComponent(metadataViewV2ElementProps);
                 await waitFor(() => {

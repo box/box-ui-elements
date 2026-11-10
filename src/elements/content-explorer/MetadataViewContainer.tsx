@@ -26,6 +26,7 @@ import type { Collection } from '../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../common/types/metadata';
 
 import messages from '../common/messages';
+import { trimMetadataFieldPrefix } from './MetadataViewSortHelper';
 
 // Public-friendly version of MetadataFormFieldValue from @box/metadata-filter
 // (string[] for enum type, range/float objects stay the same)
@@ -50,21 +51,6 @@ type ActionBarProps = Omit<
 };
 
 const ITEM_FILTER_NAME = 'item_name';
-
-/**
- * Helper function to trim metadataFieldNamePrefix from column names
- * For example: 'metadata.enterprise_1515946.mdViewTemplate1.industry' -> 'industry'
- */
-function trimMetadataFieldPrefix(column: string): string {
-    // Check if the column starts with 'metadata.' and contains at least 2 dots
-    if (column.startsWith('metadata.') && column.split('.').length >= 3) {
-        // Split by dots and take everything after the first 3 parts
-        // metadata.enterprise_1515946.mdViewTemplate1.industry -> industry
-        const parts = column.split('.');
-        return parts.slice(3).join('.');
-    }
-    return column;
-}
 
 function transformInitialFilterValuesToInternal(
     publicValues?: ExternalFilterValues,
@@ -276,6 +262,7 @@ const MetadataViewContainer = ({
             onFilterSubmit: handleFilterSubmit,
             filterGroups,
             sortDropdownProps: {
+                ...actionBarProps?.sortDropdownProps,
                 onSortChange: handleSortChange,
             },
             predefinedFilterOptions: {
