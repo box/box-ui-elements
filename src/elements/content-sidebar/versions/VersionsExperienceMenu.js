@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Versions list backed by the shared `@box/version-experience` component.
+ * @file Versions list backed by the shared `@box/version-history` component.
  *
  * Renders in place of `VersionsMenu` when the `versions.versionExperience.enabled` feature is on.
  * Data fetching, permissions and navigation stay here in the host; the shared component only renders.
@@ -8,7 +8,7 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import { VersionExperience } from '@box/version-experience';
+import { VersionHistory } from '@box/version-history';
 import getVersionEntries from './getVersionEntries';
 import messages from './messages';
 import type { BoxItemVersion } from '../../../common/types/core';
@@ -77,17 +77,21 @@ const VersionsExperienceList = ({
     );
 
     return (
-        <VersionExperience
-            hideTitle
-            onCompare={onCompare}
-            onDelete={onDelete}
-            onDownload={onDownload}
-            onPromote={onPromote}
-            onRestore={onRestore}
-            onVersionSelect={onPreview}
-            selectedVersionId={selectedVersionId}
-            versions={entries}
-        />
+        <VersionHistory.List>
+            {entries.map(entry => (
+                <VersionHistory.Item
+                    key={entry.id}
+                    onCompare={onCompare}
+                    onDelete={onDelete}
+                    onDownload={onDownload}
+                    onPromote={onPromote}
+                    onRestore={onRestore}
+                    onSelect={onPreview}
+                    selectedVersionId={selectedVersionId}
+                    versions={[entry]}
+                />
+            ))}
+        </VersionHistory.List>
     );
 };
 
