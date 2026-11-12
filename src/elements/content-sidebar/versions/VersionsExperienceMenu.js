@@ -77,10 +77,9 @@ const VersionsExperienceList = ({
     );
 
     return (
-        <VersionHistory.List>
-            {entries.map(entry => (
+        <VersionHistory.List versions={entries}>
+            {row => (
                 <VersionHistory.Item
-                    key={entry.id}
                     onCompare={onCompare}
                     onDelete={onDelete}
                     onDownload={onDownload}
@@ -88,9 +87,9 @@ const VersionsExperienceList = ({
                     onRestore={onRestore}
                     onSelect={onPreview}
                     selectedVersionId={selectedVersionId}
-                    versions={[entry]}
+                    versions={row}
                 />
-            ))}
+            )}
         </VersionHistory.List>
     );
 };
