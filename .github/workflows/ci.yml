@@ -63,9 +63,6 @@ jobs:
             - run: yarn install --non-interactive --frozen-lockfile
             - run: yarn build:i18n
             - run: yarn build:ci:es
-            # check_generated_files.sh is shared with CircleCI and expects the repo at /buie.
-            - name: Checking locales and styles
-              run: sudo ln -s "$GITHUB_WORKSPACE" /buie && ./scripts/check_generated_files.sh
             - run: yarn build:ci:dist
             - run: yarn test --maxWorkers=3
 
@@ -118,12 +115,84 @@ jobs:
               if: env.CHROMATIC_PROJECT_TOKEN == ''
               run: yarn build:prod:storybook
 
+    build-storybook:
+        name: Build Storybook
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        outputs:
+            render: ${{ steps.changes.outputs.render }}
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - name: Checking for changes that affect rendering
+              id: changes
+              run: |
+                  STATUS=0
+                  ./scripts/visual_changes.sh || STATUS=$?
+                  if [ "$STATUS" -eq 10 ]; then
+                    echo "render=false" >> "$GITHUB_OUTPUT"
+                  elif [ "$STATUS" -eq 0 ]; then
+                    echo "render=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "visual_changes.sh failed with exit code $STATUS."
+                    exit "$STATUS"
+                  fi
+            - uses: actions/setup-node@v4
+              if: steps.changes.outputs.render == 'true'
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - if: steps.changes.outputs.render == 'true'
+              run: yarn install --non-interactive --frozen-lockfile
+            - if: steps.changes.outputs.render == 'true'
+              run: yarn build:prod:storybook
+            - uses: actions/upload-artifact@v4
+              if: steps.changes.outputs.render == 'true'
+              with:
+                  name: storybook
+                  path: storybook
+                  retention-days: 1
+
+    visual-tests:
+        name: Visual Tests
+        needs: build-storybook
+        if: needs.build-storybook.outputs.render == 'true'
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        # Keep the tag in sync with @playwright/test; baselines are rendered in this image.
+        container:
+            image: mcr.microsoft.com/playwright:v1.63.0-noble
+        steps:
+            - uses: actions/checkout@v4
+            - run: command -v yarn || npm install -g yarn@1
+            - run: yarn install --non-interactive --frozen-lockfile
+            - uses: actions/download-artifact@v4
+              with:
+                  name: storybook
+                  path: storybook
+            - name: Playwright visual tests
+              run: ./scripts/visual_tests.sh
+              env:
+                  VISUAL_ARTIFACTS_DIR: /tmp/visual-artifacts
+            - uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: visual
+                  path: /tmp/visual-artifacts
+                  if-no-files-found: ignore
+
     # Single required check for branch protection and Mergify, so jobs can be added or renamed without touching either.
     ci-status:
         name: CI Status
         if: always()
-        needs: [lint, flow, build-unit-tests, e2e-tests, chromatic]
+        needs: [lint, flow, build-unit-tests, e2e-tests, chromatic, build-storybook, visual-tests]
         runs-on: ubuntu-latest
         steps:
-            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+            # Visual Tests is skipped when no rendering files changed, as CircleCI halts it.
+            - if: >-
+                  needs.lint.result != 'success' || needs.flow.result != 'success' ||
+                  needs.build-unit-tests.result != 'success' || needs.e2e-tests.result != 'success' ||
+                  needs.chromatic.result != 'success' || needs.build-storybook.result != 'success' ||
+                  (needs.visual-tests.result != 'success' && needs.visual-tests.result != 'skipped')
               run: exit 1
