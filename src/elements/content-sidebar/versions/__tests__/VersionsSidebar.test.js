@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, userEvent } from '../../../../test-utils/testing-library';
+import FeatureProvider from '../../../common/feature-checking/FeatureProvider';
 import messages from '../messages';
 import VersionsSidebar from '../VersionsSidebar';
 
@@ -14,6 +15,10 @@ jest.mock('../VersionsMenu', () => ({ versions, fileId, versionCount, versionLim
     <div data-testid="versions-menu">
         Versions: {versions.length}, FileId: {fileId}, Count: {versionCount}, Limit: {versionLimit}
     </div>
+));
+
+jest.mock('../VersionsExperienceMenu', () => ({ versions }) => (
+    <div data-testid="versions-experience-menu">Versions: {versions.length}</div>
 ));
 
 jest.mock('../../../../components/loading-indicator', () => ({
@@ -149,8 +154,8 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
 
         render(
             <TestWrapper>
-                <VersionsSidebar 
-                    {...defaultProps} 
+                <VersionsSidebar
+                    {...defaultProps}
                     parentName="activity"
                     internalSidebarNavigationHandler={mockNavigationHandler}
                 />
@@ -183,7 +188,7 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
         test('should use internalSidebarNavigationHandler when BackButton is clicked', async () => {
             const mockNavigationHandler = jest.fn();
             const user = userEvent();
-            
+
             renderComponentWithoutRouter({
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 parentName: 'details',
@@ -207,6 +212,57 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
             });
 
             expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+        });
+    });
+    describe('versions.versionExperience feature', () => {
+        const renderWithFeatures = features =>
+            render(
+                <MemoryRouter initialEntries={['/versions']}>
+                    <FeatureProvider features={features}>
+                        <VersionsSidebar {...defaultProps} />
+                    </FeatureProvider>
+                </MemoryRouter>,
+            );
+
+        test('should render the shared version experience list when the feature is enabled', () => {
+            renderWithFeatures({ versions: { versionExperience: { enabled: true } } });
+
+            expect(screen.getByTestId('versions-experience-menu')).toBeInTheDocument();
+            expect(screen.queryByTestId('versions-menu')).not.toBeInTheDocument();
+        });
+
+        test('should keep rendering the existing list when the feature is disabled', () => {
+            renderWithFeatures({ versions: { versionExperience: { enabled: false } } });
+
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+            expect(screen.queryByTestId('versions-experience-menu')).not.toBeInTheDocument();
+        });
+
+        test('should not show the UI toggle when the feature is disabled', () => {
+            renderWithFeatures({ versions: { versionExperience: { enabled: false } } });
+
+            expect(screen.queryByTestId('versions-ui-toggle')).not.toBeInTheDocument();
+        });
+
+        test('should switch between the new and old list and remember the choice', async () => {
+            const user = userEvent();
+            window.localStorage.removeItem('bcs-versions-use-old-ui');
+            const features = { versions: { versionExperience: { enabled: true } } };
+
+            const { unmount } = renderWithFeatures(features);
+            expect(screen.getByTestId('versions-experience-menu')).toBeInTheDocument();
+
+            await user.click(screen.getByRole('button', { name: 'Switch to old UI' }));
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+            expect(screen.queryByTestId('versions-experience-menu')).not.toBeInTheDocument();
+
+            unmount();
+            renderWithFeatures(features);
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+
+            await user.click(screen.getByRole('button', { name: 'Switch to new UI' }));
+            expect(screen.getByTestId('versions-experience-menu')).toBeInTheDocument();
+            window.localStorage.removeItem('bcs-versions-use-old-ui');
         });
     });
 });

@@ -173,6 +173,7 @@ const FILE_VERSIONS_FIELDS_TO_FETCH = [
     FIELD_RESTORED_AT,
     FIELD_RESTORED_BY,
     FIELD_RETENTION, // Expensive field to fetch
+    FIELD_SHA1, // Lets a promoted version be matched to the version it was promoted from
     FIELD_SIZE,
     FIELD_TRASHED_AT,
     FIELD_TRASHED_BY,

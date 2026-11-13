@@ -39,6 +39,16 @@ const messages = defineMessages({
         description: 'Title for the preview versions sidebar',
         defaultMessage: 'Version History',
     },
+    versionExperienceSwitchToOld: {
+        id: 'be.sidebarVersions.switchToOldUi',
+        description: 'Button label that switches the versions sidebar back to the previous design',
+        defaultMessage: 'Switch to old UI',
+    },
+    versionExperienceSwitchToNew: {
+        id: 'be.sidebarVersions.switchToNewUi',
+        description: 'Button label that switches the versions sidebar to the new design',
+        defaultMessage: 'Switch to new UI',
+    },
     versionCurrent: {
         id: 'be.sidebarVersions.current',
         defaultMessage: 'Current Version',
