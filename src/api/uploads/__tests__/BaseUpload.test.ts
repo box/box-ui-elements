@@ -1,3 +1,4 @@
+import noop from 'lodash/noop';
 import BaseUpload from '../BaseUpload';
 import { DEFAULT_HOSTNAME_UPLOAD, DEFAULT_HOSTNAME_UPLOAD_APP, DEFAULT_HOSTNAME_UPLOAD_GOV } from '../../../constants';
 
@@ -297,7 +298,7 @@ describe('api/uploads/BaseUpload', () => {
         });
 
         test('should call error callback on file on 409 if overwrite property is "error"', () => {
-            const error = new Error();
+            const error: Error & { status?: number } = new Error();
             error.status = 409;
 
             upload.fileId = '123';
@@ -305,7 +306,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.makePreflightRequest = jest.fn();
             upload.errorCallback = jest.fn();
 
-            upload.preflightErrorHandler(error, () => {});
+            upload.preflightErrorHandler(error, noop);
 
             expect(upload.errorCallback).toHaveBeenCalledWith(error);
         });
@@ -375,7 +376,7 @@ describe('api/uploads/BaseUpload', () => {
 
             clock.advanceTimersByTime(1);
             expect(upload.makePreflightRequest).toHaveBeenCalled();
-            Math.random.mockRestore();
+            (Math.random as jest.Mock).mockRestore();
         });
 
         test('should retry on 429 with exponential backoff and jitter', () => {
@@ -393,7 +394,7 @@ describe('api/uploads/BaseUpload', () => {
 
             clock.advanceTimersByTime(1);
             expect(upload.makePreflightRequest).toHaveBeenCalled();
-            Math.random.mockRestore();
+            (Math.random as jest.Mock).mockRestore();
         });
 
         test('should retry on too_many_requests code after default retry interval', () => {
@@ -408,7 +409,7 @@ describe('api/uploads/BaseUpload', () => {
             clock.advanceTimersByTime(retryAfterMs + 1);
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
-            Math.random.mockRestore();
+            (Math.random as jest.Mock).mockRestore();
         });
 
         test('should retry after interval defined in response header', () => {
@@ -430,11 +431,11 @@ describe('api/uploads/BaseUpload', () => {
         });
 
         test('should call the error callback if error has a status that is not 409 or 429', () => {
-            const error = new Error();
+            const error: Error & { status?: number } = new Error();
             error.status = 500;
 
             upload.errorCallback = jest.fn();
-            upload.preflightErrorHandler(error, () => {});
+            upload.preflightErrorHandler(error, noop);
             expect(upload.errorCallback).toHaveBeenCalledWith(error);
         });
 
@@ -443,7 +444,7 @@ describe('api/uploads/BaseUpload', () => {
             error.message = 'Failed to fetch';
 
             upload.errorCallback = jest.fn();
-            upload.preflightErrorHandler(error, () => {});
+            upload.preflightErrorHandler(error, noop);
             expect(upload.errorCallback).toHaveBeenCalledWith(error);
         });
 
