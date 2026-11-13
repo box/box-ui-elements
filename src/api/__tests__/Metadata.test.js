@@ -578,7 +578,7 @@ describe('api/Metadata', () => {
             const fileId = 'id';
 
             metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
-            metadata.xhr.get = jest.fn().mockReturnValue({
+            metadata.xhr.get = jest.fn().mockResolvedValue({
                 data: {
                     levels: [
                         { displayName: 'level 1', description: 'This is level' },
@@ -632,7 +632,7 @@ describe('api/Metadata', () => {
             const fileId = 'id';
 
             metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
-            metadata.xhr.get = jest.fn().mockReturnValue({
+            metadata.xhr.get = jest.fn().mockResolvedValue({
                 data: {
                     levels: [
                         { display_name: 'level 1', description: 'This is level' },
@@ -703,6 +703,193 @@ describe('api/Metadata', () => {
                     ],
                 },
             ]);
+        });
+
+        test('should fetch a shared taxonomy once for concurrent template batches', async () => {
+            let resolveGet;
+            metadata.xhr.get = jest.fn().mockImplementation(
+                () =>
+                    new Promise(resolve => {
+                        resolveGet = resolve;
+                    }),
+            );
+            const templatesForFirstInstance = [
+                {
+                    id: 1,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                },
+            ];
+            const templatesForSecondInstance = [
+                {
+                    id: 2,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                },
+            ];
+
+            const pending = Promise.all([
+                metadata.getTaxonomyLevelsForTemplates(templatesForFirstInstance, 'id'),
+                metadata.getTaxonomyLevelsForTemplates(templatesForSecondInstance, 'id'),
+            ]);
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+
+            resolveGet({
+                data: {
+                    levels: [{ displayName: 'level 1', description: 'This is level' }],
+                },
+            });
+
+            const [first, second] = await pending;
+            const expectedLevels = [{ displayName: 'level 1', description: 'This is level' }];
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(first[0].fields[0].levels).toEqual(expectedLevels);
+            expect(second[0].fields[0].levels).toEqual(expectedLevels);
+        });
+
+        test('should reuse taxonomy levels already loaded for another instance', async () => {
+            metadata.xhr.get = jest.fn().mockResolvedValue({
+                data: {
+                    levels: [{ displayName: 'level 1', description: 'This is level' }],
+                },
+            });
+
+            await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        id: 1,
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+            const second = await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        id: 2,
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(second[0].fields[0].levels).toEqual([{ displayName: 'level 1', description: 'This is level' }]);
+        });
+
+        test('should request each distinct taxonomy once', async () => {
+            metadata.xhr.get = jest.fn().mockResolvedValue({
+                data: {
+                    levels: [{ displayName: 'level 1' }],
+                },
+            });
+
+            await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        id: 1,
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: 'continents' }],
+                    },
+                    {
+                        id: 2,
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: 'colors' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
+        });
+
+        test('should retry a taxonomy fetch after a failure', async () => {
+            metadata.xhr.get = jest
+                .fn()
+                .mockRejectedValueOnce({ status: 404 })
+                .mockResolvedValueOnce({
+                    data: {
+                        levels: [{ displayName: 'level 1', description: 'This is level' }],
+                    },
+                });
+            const templates = [
+                {
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                },
+            ];
+
+            const first = await metadata.getTaxonomyLevelsForTemplates(templates, 'id');
+            const second = await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(first[0].fields[0].levels).toEqual([]);
+            expect(second[0].fields[0].levels).toEqual([{ displayName: 'level 1', description: 'This is level' }]);
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
+        });
+
+        test('should retry a taxonomy fetch when the response omits levels', async () => {
+            metadata.xhr.get = jest
+                .fn()
+                .mockResolvedValueOnce({ data: {} })
+                .mockResolvedValueOnce({
+                    data: {
+                        levels: [{ displayName: 'level 1', description: 'This is level' }],
+                    },
+                });
+            const templates = [
+                {
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                },
+            ];
+
+            const first = await metadata.getTaxonomyLevelsForTemplates(templates, 'id');
+            const second = await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(first[0].fields[0].levels).toEqual([]);
+            expect(second[0].fields[0].levels).toEqual([{ displayName: 'level 1', description: 'This is level' }]);
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(2);
+            await expect(metadata.taxonomyLevelsRequests['id:metadata_taxonomies/namespace1/123']).resolves.toEqual([
+                { displayName: 'level 1', description: 'This is level' },
+            ]);
+        });
+
+        test('should reuse a confirmed empty taxonomy level list', async () => {
+            metadata.xhr.get = jest.fn().mockResolvedValue({
+                data: {
+                    levels: [],
+                },
+            });
+
+            await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+            const second = await metadata.getTaxonomyLevelsForTemplates(
+                [
+                    {
+                        fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }],
+                    },
+                ],
+                'id',
+            );
+
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(second[0].fields[0].levels).toEqual([]);
         });
 
         test('should reject when taxonomy levels fail and throwOnError is set', async () => {
