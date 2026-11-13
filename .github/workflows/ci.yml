@@ -1,0 +1,129 @@
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - master
+    push:
+        branches:
+            - master
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - name: Commit lint
+              if: github.event_name == 'pull_request'
+              run: git log ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} --pretty=%B | yarn commitlint
+            - run: yarn lint
+
+    flow:
+        name: Flow
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn flow check
+
+    build-unit-tests:
+        name: Build & Unit Tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        env:
+            TZ: America/Los_Angeles
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - run: yarn build:ci:es
+            # check_generated_files.sh is shared with CircleCI and expects the repo at /buie.
+            - name: Checking locales and styles
+              run: sudo ln -s "$GITHUB_WORKSPACE" /buie && ./scripts/check_generated_files.sh
+            - run: yarn build:ci:dist
+            - run: yarn test --maxWorkers=3
+
+    e2e-tests:
+        name: E2E Tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - uses: actions/cache@v4
+              with:
+                  path: ~/.cache/Cypress
+                  key: cypress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - run: yarn test:e2e
+            - uses: actions/upload-artifact@v4
+              if: failure()
+              with:
+                  name: cypress-screenshots
+                  path: test/screenshots
+                  if-no-files-found: ignore
+
+    chromatic:
+        name: Chromatic
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        env:
+            CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - run: yarn build:prod:npm
+            - name: Chromatic
+              if: env.CHROMATIC_PROJECT_TOKEN != ''
+              run: yarn chromatic
+            # Without the token, build the same Storybook that Chromatic would upload so the job still verifies it.
+            - name: Build Storybook (no Chromatic token)
+              if: env.CHROMATIC_PROJECT_TOKEN == ''
+              run: yarn build:prod:storybook
+
+    # Single required check for branch protection and Mergify, so jobs can be added or renamed without touching either.
+    ci-status:
+        name: CI Status
+        if: always()
+        needs: [lint, flow, build-unit-tests, e2e-tests, chromatic]
+        runs-on: ubuntu-latest
+        steps:
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+              run: exit 1
