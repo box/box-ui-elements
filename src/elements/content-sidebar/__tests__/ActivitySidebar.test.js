@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
-import ActivitySidebarFilter from '../ActivitySidebarFilter';
 import { filterableActivityFeedItems } from '../fixtures';
 import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
@@ -253,36 +252,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('deleteComment()', () => {
-        test.each`
-            hasReplies
-            ${undefined}
-            ${false}
-        `(
-            'should call the deleteComment API if it exists when hasReplies prop equals to $hasReplies',
-            ({ hasReplies }) => {
-                const wrapper = getWrapper({ hasReplies });
-                const instance = wrapper.instance();
-                instance.fetchFeedItems = jest.fn();
-
-                const id = '1';
-                const permissions = {
-                    can_edit: false,
-                    can_delete: true,
-                };
-                instance.deleteComment({ id, permissions });
-                expect(feedAPI.deleteComment).toBeCalledWith(
-                    file,
-                    id,
-                    permissions,
-                    expect.any(Function),
-                    expect.any(Function),
-                );
-                expect(instance.fetchFeedItems).toBeCalled();
-            },
-        );
-
-        test('should call the deleteThreadedComment API if it exists when hasReplies prop equals to true', () => {
-            const wrapper = getWrapper({ hasReplies: true });
+        test('should always call the deleteThreadedComment API', () => {
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
@@ -299,31 +270,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
                 expect.any(Function),
             );
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-
-        test('should call the deleteThreadedComment API when threadedRepliesV2 is enabled even if hasReplies is false', () => {
-            const wrapper = getWrapper({
-                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
-                hasReplies: false,
-            });
-            const instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
-
-            const id = '1';
-            const permissions = {
-                can_edit: false,
-                can_delete: true,
-            };
-            instance.deleteComment({ id, permissions });
-            expect(feedAPI.deleteThreadedComment).toBeCalledWith(
-                file,
-                id,
-                permissions,
-                expect.any(Function),
-                expect.any(Function),
-            );
-            expect(feedAPI.deleteComment).not.toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });
@@ -466,34 +412,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(() => instance.createComment(message, true)).toThrow('Bad box user!');
         });
 
-        test.each`
-            hasReplies
-            ${undefined}
-            ${false}
-        `(
-            'should call the createComment API and fetch the items when hasReplies prop equals to $hasReplies',
-            ({ hasReplies }) => {
-                const wrapper = getWrapper({ hasReplies });
-                const instance = wrapper.instance();
-                instance.fetchFeedItems = jest.fn();
-                const message = 'foo';
-                const hasMention = true;
-
-                instance.createComment(message, hasMention);
-                expect(feedAPI.createComment).toBeCalledWith(
-                    file,
-                    currentUser,
-                    message,
-                    hasMention,
-                    expect.any(Function),
-                    expect.any(Function),
-                );
-                expect(instance.fetchFeedItems).toBeCalled();
-            },
-        );
-
-        test('should call the createThreadedComment API and fetch the items when hasReplies prop equals to true', () => {
-            const wrapper = getWrapper({ hasReplies: true });
+        test('should always call the createThreadedComment API and fetch the items', () => {
+            const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             const message = 'foo';
@@ -508,29 +428,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect.any(Function),
                 false,
             );
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-
-        test('should call the createThreadedComment API when threadedRepliesV2 is enabled even if hasReplies is false', () => {
-            const wrapper = getWrapper({
-                features: { activityFeed: { threadedRepliesV2: { enabled: true } } },
-                hasReplies: false,
-            });
-            const instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
-            const message = 'foo';
-            const hasMention = true;
-
-            instance.createComment(message, hasMention);
-            expect(feedAPI.createThreadedComment).toBeCalledWith(
-                file,
-                currentUser,
-                message,
-                expect.any(Function),
-                expect.any(Function),
-                false,
-            );
-            expect(feedAPI.createComment).not.toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
 
@@ -539,11 +436,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const wrapper = getWrapper({ onCommentCreate });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
-            feedAPI.createComment.mockClear();
+            feedAPI.createThreadedComment.mockClear();
             const comment = { id: 'c1' };
 
             const pending = instance.createComment('foo', true);
-            const successCallback = feedAPI.createComment.mock.calls[0][4];
+            const successCallback = feedAPI.createThreadedComment.mock.calls[0][3];
             successCallback(comment);
 
             await expect(pending).resolves.toBeUndefined();
@@ -557,12 +454,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             const errorCallbackSpy = jest.spyOn(instance, 'feedErrorCallback');
-            feedAPI.createComment.mockClear();
+            feedAPI.createThreadedComment.mockClear();
             const error = { status: 500 };
             const contextInfo = { error };
 
             const pending = instance.createComment('foo', false);
-            const errorCallback = feedAPI.createComment.mock.calls[0][5];
+            const errorCallback = feedAPI.createThreadedComment.mock.calls[0][4];
             errorCallback(error, 'create_error', contextInfo);
 
             await expect(pending).rejects.toBe(error);
@@ -632,38 +529,13 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('updateComment()', () => {
         test.each`
-            hasReplies
-            ${undefined}
-            ${false}
-        `('should call updateComment API when hasReplies prop equals to $hasReplies', ({ hasReplies }) => {
-            const wrapper = getWrapper({ hasReplies });
-            const instance = wrapper.instance();
-            instance.fetchFeedItems = jest.fn();
-
-            wrapper.instance().updateComment('123', 'hello', undefined, false, {
-                can_edit: true,
-                can_delete: true,
-            });
-
-            expect(api.getFeedAPI().updateComment).toBeCalledWith(
-                file,
-                '123',
-                'hello',
-                false,
-                { can_edit: true, can_delete: true },
-                expect.any(Function),
-                expect.any(Function),
-            );
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-
-        describe('should call updateThreadedComment API when hasReplies prop equals to true', () => {
-            test.each`
-                status       | text         | expectedStatus | expectedText
-                ${undefined} | ${undefined} | ${undefined}   | ${undefined}
-                ${'open'}    | ${'foo'}     | ${'open'}      | ${'foo'}
-            `('given status=$status and text=$text', ({ status, text, expectedStatus, expectedText }) => {
-                const wrapper = getWrapper({ hasReplies: true });
+            status       | text         | expectedStatus | expectedText
+            ${undefined} | ${undefined} | ${undefined}   | ${undefined}
+            ${'open'}    | ${'foo'}     | ${'open'}      | ${'foo'}
+        `(
+            'should always call updateThreadedComment API given status=$status and text=$text',
+            ({ status, text, expectedStatus, expectedText }) => {
+                const wrapper = getWrapper();
                 const instance = wrapper.instance();
                 instance.fetchFeedItems = jest.fn();
 
@@ -683,8 +555,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     false,
                 );
                 expect(instance.fetchFeedItems).toBeCalled();
-            });
-        });
+            },
+        );
     });
 
     describe('updateReply()', () => {
@@ -821,21 +693,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            annotationsEnabled | appActivityEnabled | repliesEnabled | tasksEnabled | versionsEnabled | uaaIntegrationEnabled | expectedAnnotations | expectedAppActivity | expectedReplies | expectedTasks | expectedVersions | expectedUseUAA
-            ${false}           | ${false}           | ${false}       | ${false}     | ${false}        | ${false}              | ${false}            | ${false}            | ${false}        | ${false}      | ${false}         | ${false}
-            ${true}            | ${true}            | ${true}        | ${true}      | ${true}         | ${true}               | ${true}             | ${true}             | ${true}         | ${true}       | ${true}          | ${true}
+            annotationsEnabled | appActivityEnabled | tasksEnabled | versionsEnabled | uaaIntegrationEnabled | expectedAnnotations | expectedAppActivity | expectedTasks | expectedVersions | expectedUseUAA
+            ${false}           | ${false}           | ${false}     | ${false}        | ${false}              | ${false}            | ${false}            | ${false}      | ${false}         | ${false}
+            ${true}            | ${true}            | ${true}      | ${true}         | ${true}               | ${true}             | ${true}             | ${true}       | ${true}          | ${true}
         `(
-            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, repliesEnabled=$repliesEnabled, tasksEnabled=$tasksEnabled, versionsEnabled=$versionsEnabled and uaaIntegrationEnabled=$uaaIntegrationEnabled',
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, tasksEnabled=$tasksEnabled, versionsEnabled=$versionsEnabled and uaaIntegrationEnabled=$uaaIntegrationEnabled',
             ({
                 annotationsEnabled,
                 appActivityEnabled,
-                repliesEnabled,
                 tasksEnabled,
                 versionsEnabled,
                 uaaIntegrationEnabled,
                 expectedAnnotations,
                 expectedAppActivity,
-                expectedReplies,
                 expectedTasks,
                 expectedVersions,
                 expectedUseUAA,
@@ -848,7 +718,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                             uaaIntegration: { enabled: uaaIntegrationEnabled },
                         },
                     },
-                    hasReplies: repliesEnabled,
                     hasTasks: tasksEnabled,
                     hasVersions: versionsEnabled,
                 });
@@ -868,10 +737,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     {
                         shouldShowAnnotations: expectedAnnotations,
                         shouldShowAppActivity: expectedAppActivity,
-                        shouldShowReplies: expectedReplies,
+                        shouldShowReplies: true,
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
-                        shouldUseEnhancedActivities: false,
+                        shouldUseEnhancedActivities: true,
                         shouldUseEnhancedTimespanComments: false,
                         shouldUseUAA: expectedUseUAA,
                         shouldEnableRichText: false,
@@ -880,13 +749,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             },
         );
 
-        test('should call feedItems with fetchRepliesForFeedItems as success callback instead of fetchFeedItemsSuccessCallback when shouldShowReplies and shouldRefreshCache are true and active comment is set, ', () => {
-            const shouldShowReplies = true;
+        test('should call feedItems with fetchRepliesForFeedItems as success callback when shouldRefreshCache is true and active comment is set', () => {
             const shouldRefreshCache = true;
             wrapper = getWrapper({
                 activeFeedEntryId: '123',
                 activeFeedEntryType: 'comment',
-                hasReplies: shouldShowReplies,
             });
             instance = wrapper.instance();
             instance.errorCallback = jest.fn();
@@ -901,43 +768,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.fetchRepliesForFeedItems,
                 instance.fetchFeedItemsErrorCallback,
                 instance.errorCallback,
-                {
-                    shouldShowAnnotations: false,
-                    shouldShowAppActivity: false,
+                expect.objectContaining({
                     shouldShowReplies: true,
-                    shouldShowTasks: true,
-                    shouldShowVersions: true,
-                    shouldUseEnhancedActivities: false,
-                    shouldUseEnhancedTimespanComments: false,
-                    shouldUseUAA: false,
-                    shouldEnableRichText: false,
-                },
-            );
-        });
-
-        test('should set shouldShowReplies and shouldUseEnhancedActivities to true when threadedRepliesV2 is enabled even if hasReplies is false', () => {
-            wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        threadedRepliesV2: { enabled: true },
-                    },
-                },
-                hasReplies: false,
-            });
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-            instance.fetchFeedItemsErrorCallback = jest.fn();
-            instance.fetchFeedItemsSuccessCallback = jest.fn();
-
-            instance.fetchFeedItems();
-
-            expect(feedAPI.feedItems).toHaveBeenCalledWith(
-                file,
-                false,
-                instance.fetchFeedItemsSuccessCallback,
-                instance.fetchFeedItemsErrorCallback,
-                instance.errorCallback,
-                expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
+                    shouldUseEnhancedActivities: true,
+                }),
             );
         });
 
@@ -971,9 +805,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             wrapper = getWrapper({
                 file: audioFile,
                 features: {
-                    activityFeed: {
-                        threadedRepliesV2: { enabled: true },
-                    },
                     audioPlayerV2: { enabled: true },
                 },
             });
@@ -993,14 +824,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             );
         });
 
-        test('should request enhanced_comment for a non-audio file when audioPlayerV2 is enabled', () => {
+        test('should not request timespan comments for a non-audio file when audioPlayerV2 is enabled', () => {
             const videoFile = { ...file, extension: 'mp4' };
             wrapper = getWrapper({
                 file: videoFile,
                 features: {
-                    activityFeed: {
-                        threadedRepliesV2: { enabled: true },
-                    },
                     audioPlayerV2: { enabled: true },
                 },
             });
@@ -1017,61 +845,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldUseEnhancedActivities: true,
                     shouldUseEnhancedTimespanComments: false,
                 }),
-            );
-        });
-
-        test('should set shouldShowReplies and shouldUseEnhancedActivities to true when both hasReplies and threadedRepliesV2 are enabled', () => {
-            wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        threadedRepliesV2: { enabled: true },
-                    },
-                },
-                hasReplies: true,
-            });
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-            instance.fetchFeedItemsErrorCallback = jest.fn();
-            instance.fetchFeedItemsSuccessCallback = jest.fn();
-
-            instance.fetchFeedItems();
-
-            expect(feedAPI.feedItems).toHaveBeenCalledWith(
-                file,
-                false,
-                instance.fetchFeedItemsSuccessCallback,
-                instance.fetchFeedItemsErrorCallback,
-                instance.errorCallback,
-                expect.objectContaining({ shouldShowReplies: true, shouldUseEnhancedActivities: true }),
-            );
-        });
-
-        test('should not use fetchRepliesForFeedItems for the active comment when only threadedRepliesV2 is enabled', () => {
-            wrapper = getWrapper({
-                activeFeedEntryId: '123',
-                activeFeedEntryType: 'comment',
-                features: {
-                    activityFeed: {
-                        threadedRepliesV2: { enabled: true },
-                    },
-                },
-                hasReplies: false,
-            });
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-            instance.fetchFeedItemsErrorCallback = jest.fn();
-            instance.fetchFeedItemsSuccessCallback = jest.fn();
-            instance.fetchRepliesForFeedItems = jest.fn();
-
-            instance.fetchFeedItems(true);
-
-            expect(feedAPI.feedItems).toHaveBeenCalledWith(
-                file,
-                true,
-                instance.fetchFeedItemsSuccessCallback,
-                instance.fetchFeedItemsErrorCallback,
-                instance.errorCallback,
-                expect.objectContaining({ shouldShowReplies: true }),
             );
         });
     });
@@ -1685,54 +1458,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getReplies()', () => {
-        test('should call fetchReplies API', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const itemId = '123';
-            const itemType = FEED_ITEM_TYPE_COMMENT;
-            instance.fetchFeedItems = jest.fn();
-
-            wrapper.instance().getReplies(itemId, itemType);
-
-            expect(api.getFeedAPI().fetchReplies).toBeCalledWith(
-                file,
-                itemId,
-                itemType,
-                expect.any(Function),
-                expect.any(Function),
-                false,
-            );
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-
-        test('should pass shouldEnableRichText when activityFeed.richText is enabled', () => {
-            const wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        richText: { enabled: true },
-                    },
-                },
-            });
-            const instance = wrapper.instance();
-            const itemId = '123';
-            const itemType = FEED_ITEM_TYPE_COMMENT;
-            instance.fetchFeedItems = jest.fn();
-
-            wrapper.instance().getReplies(itemId, itemType);
-
-            expect(api.getFeedAPI().fetchReplies).toBeCalledWith(
-                file,
-                itemId,
-                itemType,
-                expect.any(Function),
-                expect.any(Function),
-                true,
-            );
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-    });
-
     describe('getAvatarUrl()', () => {
         let wrapper;
         let instance;
@@ -1784,7 +1509,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${'handleAnnotationEdit'}         | ${'updateAnnotation'}      | ${instance => instance.handleAnnotationEdit({ id: '123', permissions, text: 'foo' })}
             ${'handleAnnotationStatusChange'} | ${'updateAnnotation'}      | ${instance => instance.handleAnnotationStatusChange({ id: '123', permissions, status: 'open' })}
         `('$handler should pass shouldEnableRichText=true to feedAPI.$feedMethod', ({ feedMethod, invoke }) => {
-            const wrapper = getWrapper({ features: richTextFeatures, hasReplies: true });
+            const wrapper = getWrapper({ features: richTextFeatures });
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
             instance.setState({ currentUser });
@@ -1938,199 +1663,5 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect(instance.getFilteredFeedItems()).toMatchObject(expected);
             },
         );
-    });
-
-    describe('handleItemsFiltered()', () => {
-        test.each`
-            status        | expected
-            ${undefined}  | ${undefined}
-            ${'open'}     | ${'open'}
-            ${'resolved'} | ${'resolved'}
-            ${'task'}     | ${'task'}
-        `(
-            'given $status should update feedItemsStatusFilter state with $expected and call filter change event callback',
-            ({ status, expected }) => {
-                const mockOnFilterChange = jest.fn();
-                const wrapper = getWrapper({ onFilterChange: mockOnFilterChange });
-                const instance = wrapper.instance();
-                instance.setState = jest.fn();
-                instance.handleItemsFiltered(status);
-                expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
-                expect(mockOnFilterChange).toBeCalledWith(expected);
-            },
-        );
-    });
-
-    describe('renderAddTaskButton()', () => {
-        test('should return null when hasTasks is false', () => {
-            const wrapper = getWrapper({ hasTasks: false });
-            const instance = wrapper.instance();
-            expect(instance.renderAddTaskButton()).toBe(null);
-        });
-    });
-
-    describe('renderActivitySidebarFilter()', () => {
-        describe('should return null', () => {
-            test('when activityFeed.filter feature is not set', () => {
-                const wrapper = getWrapper();
-                const instance = wrapper.instance();
-                expect(instance.renderActivitySidebarFilter()).toBe(null);
-            });
-
-            test('when activityFeed.filter feature is disabled', () => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            filter: { enabled: false },
-                        },
-                    },
-                });
-                const instance = wrapper.instance();
-                expect(instance.renderActivitySidebarFilter()).toBe(null);
-            });
-
-            test.each`
-                hasTasks
-                ${false}
-                ${true}
-            `('when activityFeed.newThreadedReplies is not enabled and hasTasks is $hasTasks', ({ hasTasks }) => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            newThreadedReplies: { enabled: false },
-                        },
-                    },
-                    hasTasks,
-                });
-                const instance = wrapper.instance();
-                expect(instance.renderActivitySidebarFilter()).toBe(null);
-            });
-        });
-
-        describe('should return ActivitySidebarFilter', () => {
-            test('when activityFeed.filter feature is enabled', () => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            filter: { enabled: true },
-                        },
-                    },
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderActivitySidebarFilter());
-                expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
-            });
-
-            test('with default filter options when activityFeed.filter is enabled', () => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            filter: { enabled: true },
-                        },
-                    },
-                    hasTasks: true,
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderActivitySidebarFilter());
-                const sidebarFilter = resultWrapper.find(ActivitySidebarFilter).first();
-                expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
-                expect(sidebarFilter.props().activityFilterOptions).toEqual(['all', 'open']);
-            });
-
-            test.each`
-                expectedOptions                         | hasTasks
-                ${['all', 'open', 'resolved']}          | ${false}
-                ${['all', 'open', 'resolved', 'tasks']} | ${true}
-            `(
-                'with $expectedOptions filter options when activityFeed.newThreadedReplies is enabled, activityFeed.filter is enabled, and hasTasks is $hasTasks',
-                ({ expectedOptions, hasTasks }) => {
-                    const wrapper = getWrapper({
-                        features: {
-                            activityFeed: {
-                                filter: { enabled: true },
-                                newThreadedReplies: { enabled: true },
-                            },
-                        },
-                        hasTasks,
-                    });
-                    const instance = wrapper.instance();
-                    const resultWrapper = mount(instance.renderActivitySidebarFilter());
-                    const sidebarFilter = resultWrapper.find(ActivitySidebarFilter).first();
-                    expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
-                    expect(sidebarFilter.props().activityFilterOptions).toEqual(expectedOptions);
-                },
-            );
-        });
-    });
-
-    describe('renderTitle()', () => {
-        describe('should return FormattedMessage', () => {
-            test('when activityFeed.filter feature is not set', () => {
-                const wrapper = getWrapper();
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderTitle());
-                expect(resultWrapper.name()).toBe('FormattedMessage');
-            });
-
-            test('when activityFeed.filter feature is disabled', () => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            filter: { enabled: false },
-                        },
-                    },
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderTitle());
-                expect(resultWrapper.name()).toBe('FormattedMessage');
-            });
-
-            test.each`
-                hasTasks
-                ${false}
-                ${true}
-            `('when activityFeed.newThreadedReplies is disabled and hasTasks is $hasTasks', ({ hasTasks }) => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            newThreadedReplies: { enabled: false },
-                        },
-                    },
-                    hasTasks,
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderTitle());
-                expect(resultWrapper.name()).toBe('FormattedMessage');
-            });
-        });
-
-        describe('should return null', () => {
-            test('when activityFeed.filter feature is enabled', () => {
-                const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
-                const instance = wrapper.instance();
-                expect(instance.renderTitle()).toBe(null);
-            });
-
-            test.each`
-                hasTasks
-                ${false}
-                ${true}
-            `(
-                'when activityFeed.newThreadedReplies is enabled, activityFeed.filter is enabled, and hasTasks is $hasTasks',
-                ({ hasTasks }) => {
-                    const wrapper = getWrapper({
-                        features: {
-                            activityFeed: {
-                                filter: { enabled: true },
-                                newThreadedReplies: { enabled: true },
-                            },
-                        },
-                        hasTasks,
-                    });
-                    const instance = wrapper.instance();
-                    expect(instance.renderTitle()).toBe(null);
-                },
-            );
-        });
     });
 });

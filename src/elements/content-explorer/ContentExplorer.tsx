@@ -26,6 +26,11 @@ import API from '../../api';
 import MetadataQueryAPIHelperV2 from './MetadataQueryAPIHelper';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import MetadataSidePanel from './MetadataSidePanel';
+import {
+    getInitialSortDropdown,
+    getMetadataQueryOrderBy,
+    hasMetadataQueryOrderByChanged,
+} from './MetadataViewSortHelper';
 import Footer from './Footer';
 import PreviewDialog from '../common/preview-dialog/PreviewDialog';
 import ShareDialog from './ShareDialog';
@@ -50,7 +55,6 @@ import {
     DEFAULT_HOSTNAME_STATIC,
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
-    FIELD_ITEM_NAME,
     FIELD_NAME,
     FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
@@ -224,6 +228,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     firstLoad: boolean = true; // Keeps track of very 1st load
 
+    hasMetadataSortChange: boolean = false;
+
     store: LocalStore = new LocalStore();
 
     metadataQueryAPIHelper: MetadataQueryAPIHelper | MetadataQueryAPIHelperV2;
@@ -386,8 +392,22 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentDidUpdate({ currentFolderId: prevFolderId }: ContentExplorerProps, prevState: State): void {
-        const { currentFolderId }: ContentExplorerProps = this.props;
+    componentDidUpdate(prevProps: ContentExplorerProps, prevState: State): void {
+        const { currentFolderId: prevFolderId, metadataQuery: prevMetadataQuery } = prevProps;
+
+        const { currentFolderId, features, metadataQuery }: ContentExplorerProps = this.props;
+        const { view }: State = this.state;
+        const prevOrderBy = prevMetadataQuery?.order_by?.[0];
+        const newOrderBy = metadataQuery?.order_by?.[0];
+        if (
+            isFeatureEnabled(features, 'contentExplorer.metadataViewV2') &&
+            view === VIEW_METADATA &&
+            hasMetadataQueryOrderByChanged(prevOrderBy, newOrderBy)
+        ) {
+            this.hasMetadataSortChange = false;
+            this.setState({ currentPageNumber: 0, markers: [] }, this.refreshCollection);
+        }
+
         const {
             currentCollection: { id },
         }: State = prevState;
@@ -487,11 +507,13 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         if (isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
             metadataQueryClone.order_by = [
-                {
-                    // Default to the prefixed name field for metadata view v2 only, while not touching the default sortBy for other views.
-                    field_key: sortBy === FIELD_NAME ? FIELD_ITEM_NAME : sortBy,
-                    direction: sortDirection,
-                },
+                // Default to the prefixed name field for metadata view v2 only, while not touching the default sortBy for other views.
+                getMetadataQueryOrderBy(
+                    metadataQuery.order_by?.[0],
+                    String(sortBy),
+                    sortDirection,
+                    this.hasMetadataSortChange,
+                ),
             ];
 
             this.metadataQueryAPIHelper = new MetadataQueryAPIHelperV2(this.api);
@@ -955,14 +977,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy | Key, sortDirection: SortDirection) => {
-        const {
-            currentCollection: { id },
-            view,
-        }: State = this.state;
+        const { view }: State = this.state;
 
-        if (id || view === VIEW_METADATA) {
-            this.setState({ sortBy, sortDirection }, this.refreshCollection);
+        if (view === VIEW_METADATA) {
+            this.hasMetadataSortChange = true;
         }
+        this.setState({ sortBy, sortDirection }, this.refreshCollection);
     };
 
     /**
@@ -1660,13 +1680,26 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         MetadataViewContainerProps,
         'hasError' | 'currentCollection' | 'metadataTemplate'
     > => {
-        const { metadataViewProps } = this.props;
+        const { features, metadataQuery, metadataViewProps } = this.props;
         const { currentPageNumber, markers, selectedItemIds } = this.state;
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPrevMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
+        const initialSort = isFeatureEnabled(features, 'contentExplorer.metadataViewV2')
+            ? getInitialSortDropdown(metadataQuery?.order_by?.[0], metadataViewProps?.columns)
+            : {};
 
         return {
             ...metadataViewProps,
+            actionBarProps: initialSort.initialSortByColumnId
+                ? {
+                      ...metadataViewProps?.actionBarProps,
+                      sortDropdownProps: {
+                          ...metadataViewProps?.actionBarProps?.sortDropdownProps,
+                          ...initialSort,
+                          onSortChange: metadataViewProps?.actionBarProps?.sortDropdownProps?.onSortChange ?? noop,
+                      },
+                  }
+                : metadataViewProps?.actionBarProps,
             selectedKeys: selectedItemIds,
             onSelectionChange: this.handleSelectedIdsChange,
             paginationProps: {

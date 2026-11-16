@@ -146,6 +146,77 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
         expect(screen.getByText('File 2.pdf')).toBeInTheDocument();
     });
 
+    test('shows the consumer sort column on the sort button', () => {
+        renderComponent({
+            actionBarProps: {
+                sortDropdownProps: {
+                    initialSortByColumnId: 'industry',
+                    initialSortDirection: 'descending',
+                    onSortChange: jest.fn(),
+                },
+            },
+        });
+
+        expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(1);
+        expect(screen.getAllByRole('button', { name: 'Industry' })).toHaveLength(2);
+    });
+
+    test('should show the column header the user clicks after the consumer supplies a sort column', async () => {
+        renderComponent({
+            actionBarProps: {
+                sortDropdownProps: {
+                    initialSortByColumnId: 'industry',
+                    initialSortDirection: 'descending',
+                    onSortChange: jest.fn(),
+                },
+            },
+        });
+
+        await user.click(screen.getByRole('columnheader', { name: 'Price' }));
+
+        expect(screen.getAllByRole('button', { name: 'Industry' })).toHaveLength(1);
+        expect(screen.getAllByRole('button', { name: 'Price' })).toHaveLength(2);
+    });
+
+    test('should show the column header the user clicks when the consumer omits a sort column', async () => {
+        renderComponent();
+
+        await user.click(screen.getByRole('columnheader', { name: 'Industry' }));
+
+        expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(1);
+        expect(screen.getAllByRole('button', { name: 'Industry' })).toHaveLength(2);
+    });
+
+    test('should show the sort menu column the user clicks after the consumer supplies a sort column', async () => {
+        renderComponent({
+            actionBarProps: {
+                sortDropdownProps: {
+                    initialSortByColumnId: 'industry',
+                    initialSortDirection: 'descending',
+                    onSortChange: jest.fn(),
+                },
+            },
+        });
+
+        const industryButtons = screen.getAllByRole('button', { name: 'Industry' });
+        await user.click(industryButtons[1]);
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemradio', { name: 'Price' }));
+
+        expect(screen.getAllByRole('button', { name: 'Industry' })).toHaveLength(1);
+        expect(screen.getAllByRole('button', { name: 'Price' })).toHaveLength(2);
+    });
+
+    test('should show the sort menu column the user clicks when the consumer omits a sort column', async () => {
+        renderComponent();
+
+        const nameButtons = screen.getAllByRole('button', { name: 'Name' });
+        await user.click(nameButtons[1]);
+        await user.click(within(screen.getByRole('menu')).getByRole('menuitemradio', { name: 'Price' }));
+
+        expect(screen.getAllByRole('button', { name: 'Name' })).toHaveLength(1);
+        expect(screen.getAllByRole('button', { name: 'Price' })).toHaveLength(2);
+    });
+
     test('should pass values as string[] on submit', async () => {
         const onFilterSubmit = jest.fn();
         const template: MetadataTemplate = {

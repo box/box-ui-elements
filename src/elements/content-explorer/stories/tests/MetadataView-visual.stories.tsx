@@ -26,7 +26,7 @@ const metadataQuery = {
     order_by: [
         {
             field_key: `${metadataFieldNamePrefix}.${mockSchema.fields[0].key}`, // Default to sorting by the first field in the schema
-            direction: 'asc',
+            direction: 'ASC',
         },
     ],
     fields: [
