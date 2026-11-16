@@ -100,9 +100,18 @@ class Metadata extends File {
 
     namespacesAPI: ?MetadataNamespaces;
 
+    /**
+     * Taxonomy level requests for this client, keyed by file id and taxonomy
+     * path. A settled promise is the stored result. The entry is removed when
+     * the response has no levels array or the request fails, so a later call
+     * can retry. Concurrent callers share the promise that is already running.
+     */
+    taxonomyLevelsRequests: { [string]: Promise<Array<Object>> };
+
     constructor(options: Object) {
         super(options);
         this.metadataNamespaceMode = this.options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
+        this.taxonomyLevelsRequests = {};
     }
 
     /**
@@ -462,6 +471,43 @@ class Metadata extends File {
     }
 
     /**
+     * Loads taxonomy levels for one path.
+     *
+     * Array responses are reused for this client, including a confirmed empty
+     * list. Concurrent callers for the same file and taxonomy share one
+     * request. Failures and responses without a levels array are not stored,
+     * so a later attempt can retry. A failed request rejects; the caller
+     * decides whether that rejection fails the sidebar.
+     *
+     * @param {string} taxonomyPath
+     * @param {string} id - file id
+     * @return {Promise<Array<Object>>}
+     */
+    fetchTaxonomyLevels(taxonomyPath: string, id: string): Promise<Array<Object>> {
+        const cacheKey = `${id}:${taxonomyPath}`;
+        if (!this.taxonomyLevelsRequests[cacheKey]) {
+            this.taxonomyLevelsRequests[cacheKey] = this.xhr
+                .get({
+                    url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
+                    id: getTypedFileId(id),
+                })
+                .then(result => {
+                    const levels = getProp(result, 'data.levels');
+                    if (!Array.isArray(levels)) {
+                        delete this.taxonomyLevelsRequests[cacheKey];
+                        return [];
+                    }
+                    return levels;
+                })
+                .catch(error => {
+                    delete this.taxonomyLevelsRequests[cacheKey];
+                    throw error;
+                });
+        }
+        return this.taxonomyLevelsRequests[cacheKey];
+    }
+
+    /**
      * Attaches taxonomy `levels` onto template fields that do not already have them.
      *
      * The sidebar list uses the default: a failed levels request becomes
@@ -501,13 +547,9 @@ class Metadata extends File {
 
         const fetchPromises = taxonomyPaths.map(async taxonomyPath => {
             try {
-                const result = await this.xhr.get({
-                    url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
-                    id: getTypedFileId(id),
-                });
                 return {
                     path: taxonomyPath,
-                    levels: getProp(result, 'data.levels', []),
+                    levels: await this.fetchTaxonomyLevels(taxonomyPath, id),
                 };
             } catch (error) {
                 // The sidebar list keeps the template. The editor opts into throwOnError

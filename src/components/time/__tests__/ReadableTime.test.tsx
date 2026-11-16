@@ -48,12 +48,7 @@ describe('components/time/ReadableTime', () => {
         ${withinRelativeThresholdBehind} | ${'withinRelativeThresholdBehind'} | ${true}               | ${false}       | ${false}    | ${'30 minutes ago'}
     `(
         'timestamp: $timestampName | allowFutureTimestamps: $allowFutureTimestamps | alwaysShowTime: $alwaysShowTime | showWeekday: $showWeekday | $description',
-        ({
-            timestamp,
-            allowFutureTimestamps = true,
-            alwaysShowTime = false,
-            showWeekday = false,
-        }) => {
+        ({ timestamp, allowFutureTimestamps = true, alwaysShowTime = false, showWeekday = false }) => {
             const wrapper = mount(
                 <ReadableTime
                     intl={intl}
@@ -72,30 +67,17 @@ describe('components/time/ReadableTime', () => {
     );
 
     test('should use default relative threshold if not provided', () => {
-        const wrapper = shallow(
-            <ReadableTime
-                intl={intl}
-                timestamp={withinRelativeThresholdAhead}
-            />,
-        );
+        const wrapper = shallow(<ReadableTime intl={intl} timestamp={withinRelativeThresholdAhead} />);
         expect(wrapper).toMatchSnapshot();
     });
     test('should suppress uppercase for locales in the nonUppercaseLocales list (e.g. russian)', () => {
         const ruIntl = createIntl({ locale: 'ru', messages: {} });
 
         const wrapperUppercase = mount(
-            <ReadableTime
-                intl={ruIntl}
-                timestamp={withinRelativeThresholdAhead}
-                uppercase
-            />,
+            <ReadableTime intl={ruIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
         );
         const wrapperLowercase = mount(
-            <ReadableTime
-                intl={ruIntl}
-                timestamp={withinRelativeThresholdAhead}
-                uppercase={false}
-            />,
+            <ReadableTime intl={ruIntl} timestamp={withinRelativeThresholdAhead} uppercase={false} />,
         );
 
         expect(wrapperUppercase.text()).toEqual(wrapperLowercase.text());
@@ -104,18 +86,10 @@ describe('components/time/ReadableTime', () => {
         const jaIntl = createIntl({ locale: 'ja', messages: {} });
 
         const wrapperUppercaseJa = mount(
-            <ReadableTime
-                intl={jaIntl}
-                timestamp={withinRelativeThresholdAhead}
-                uppercase
-            />,
+            <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase />,
         );
         const wrapperLowercaseJa = mount(
-            <ReadableTime
-                intl={jaIntl}
-                timestamp={withinRelativeThresholdAhead}
-                uppercase={false}
-            />,
+            <ReadableTime intl={jaIntl} timestamp={withinRelativeThresholdAhead} uppercase={false} />,
         );
 
         expect(wrapperUppercaseJa.text()).toEqual(wrapperLowercaseJa.text());
