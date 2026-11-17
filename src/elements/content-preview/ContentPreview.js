@@ -34,7 +34,7 @@ import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
 import { withAnnotations, withAnnotatorContext } from '../common/annotator-context';
 import { withErrorBoundary } from '../common/error-boundary';
-import CustomPreviewWrapper, { type ContentPreviewChildProps } from './CustomPreviewWrapper';
+import CustomPreviewWrapper, { type AnnotationSelection, type ContentPreviewChildProps } from './CustomPreviewWrapper';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
@@ -154,6 +154,7 @@ type Props = {
     messages?: StringMap,
     onAnnotator: Function,
     onAnnotatorEvent: Function,
+    onAnnotatorUnregister: Function,
     onBeforeNavigate?: (targetFileId: string) => boolean | Promise<boolean>,
     onClose?: Function,
     onComparedAnnotationSelect: (annotation: Annotation, deferScrollToOnload?: boolean) => void,
@@ -225,6 +226,7 @@ type Props = {
     ContextRouter;
 
 type State = {
+    annotationSelection?: ?AnnotationSelection,
     canPrint?: boolean,
     currentFileId?: string,
     error?: ErrorType,
@@ -358,6 +360,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         loadingIndicatorDelayMs: 0,
         onAnnotator: noop,
         onAnnotatorEvent: noop,
+        onAnnotatorUnregister: noop,
         onComparedAnnotationSelect: noop,
         onContentInsightsEventReport: noop,
         onDownload: noop,
@@ -387,6 +390,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     loadingIndicatorDelayTimeoutId: ?TimeoutID;
 
+    // Never resets, so a selection after a file change is still a new seq for a long-lived child.
+    annotationSelectionSeq: number;
+
     /**
      * [constructor]
      *
@@ -409,6 +415,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         } = props;
 
         this.id = uniqueid('bcpr_');
+        this.annotationSelectionSeq = 0;
         this.loadingWasDeferred = false;
         this.api = new API({
             apiHost,
@@ -613,6 +620,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.loadingWasDeferred = false;
             if (loadingIndicatorDelayMs) {
                 this.setState({
+                    annotationSelection: undefined,
                     isLoading: true,
                     isLoadingDeferred: true,
                     selectedVersion: undefined,
@@ -624,7 +632,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     this.setState({ isLoadingDeferred: false });
                 }, loadingIndicatorDelayMs);
             } else {
-                this.setState({ isLoading: true, selectedVersion: undefined, startAt: undefined });
+                this.setState({
+                    annotationSelection: undefined,
+                    isLoading: true,
+                    selectedVersion: undefined,
+                    startAt: undefined,
+                });
             }
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevProps, prevState)) {
@@ -1693,6 +1706,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
             return;
         }
 
+        // Custom previews have no BCP viewer to scroll; hand them the click instead.
+        // Selected by renderCustomPreview, as in loadPreview() and render().
+        if (this.props.renderCustomPreview) {
+            this.annotationSelectionSeq += 1;
+            this.setState({ annotationSelection: { annotation, seq: this.annotationSelectionSeq } });
+        }
+
         if (unit && isOtherVersion) {
             // Frame.value is milliseconds; Preview SDK startAt expects seconds for video.
             const value = location.type === 'frame' ? convertTimestampToSeconds(location.value) : location.value;
@@ -1924,7 +1944,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                         {file && (
                                             <Measure bounds onResize={this.onResize}>
                                                 {({ measureRef: previewRef }) => {
-                                                    const { renderCustomPreview, logger } = this.props;
+                                                    const {
+                                                        renderCustomPreview,
+                                                        logger,
+                                                        onAnnotator,
+                                                        onAnnotatorUnregister,
+                                                    } = this.props;
+                                                    const { annotationSelection } = this.state;
 
                                                     return (
                                                         <div ref={previewRef} className="bcpr-content">
@@ -1936,6 +1962,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     apiHost={apiHost}
                                                                     file={file}
                                                                     logger={logger}
+                                                                    annotationSelection={annotationSelection}
+                                                                    onAnnotator={onAnnotator}
+                                                                    onAnnotatorUnregister={onAnnotatorUnregister}
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
                                                                     fileVersionId={getProp(versionToPreview, 'id')}
@@ -2083,6 +2112,7 @@ function ContentPreviewWithComparison(props: ContentPreviewProps) {
                           metadataApiHost={undefined}
                           onAnnotator={noop}
                           onAnnotatorEvent={noop}
+                          onAnnotatorUnregister={noop}
                           onBeforeNavigate={undefined}
                           onContentInsightsEventReport={noop}
                           onError={noop}
