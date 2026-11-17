@@ -18,6 +18,7 @@ describe('elements/common/annotator-context/withAnnotations', () => {
     const defaults = {
         className: 'foo',
         onAnnotator: jest.fn(),
+        onAnnotatorUnregister: jest.fn(),
         onError: jest.fn(),
         onPreviewDestroy: jest.fn(),
     };
@@ -526,6 +527,43 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             expect(defaults.onError).toHaveBeenCalledWith(mockError, 'fetch_annotations_error', {
                 showNotification: true,
             });
+        });
+    });
+
+    describe('onAnnotatorUnregister', () => {
+        test('should remove annotator listeners and keep sidebar state', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.handleAnnotator(mockAnnotator);
+            wrapper.setState({ activeAnnotationId: '123', activeAnnotationFileVersionId: '456' });
+            (wrapper.find(MockComponent).props() as unknown as WithAnnotationsProps).onAnnotatorUnregister();
+
+            expect(mockAnnotator.removeListener).toBeCalledWith(
+                'annotations_active_change',
+                instance.handleActiveChange,
+            );
+            expect(mockAnnotator.removeListener).toBeCalledTimes(8);
+            expect(wrapper.state('activeAnnotationId')).toBe('123');
+            expect(wrapper.state('activeAnnotationFileVersionId')).toBe('456');
+
+            instance.handleAnnotator({ addListener: jest.fn(), removeListener: jest.fn() } as unknown as Annotator);
+            expect(mockAnnotator.removeListener).toBeCalledTimes(8);
+        });
+    });
+
+    describe('handleAnnotator() re-register', () => {
+        test('should detach the previous annotator before attaching the new one', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const nextAnnotator = { addListener: jest.fn(), removeListener: jest.fn() } as unknown as Annotator;
+
+            instance.handleAnnotator(mockAnnotator);
+            instance.handleAnnotator(nextAnnotator);
+
+            expect(mockAnnotator.removeListener).toBeCalledTimes(8);
+            expect(nextAnnotator.removeListener).not.toBeCalled();
+            expect(nextAnnotator.addListener).toBeCalledTimes(8);
         });
     });
 
