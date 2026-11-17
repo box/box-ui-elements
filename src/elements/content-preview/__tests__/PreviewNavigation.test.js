@@ -221,7 +221,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
         test('should call navigation handler with metadata deeplinks when left navigation button is clicked', async () => {
             const mockInternalSidebarNavigation = {
                 sidebar: ViewType.METADATA,
-                filteredTemplateIds: '123,124',
+                filteredTemplateIds: ['123', '124'],
             };
             const user = userEvent();
 
@@ -235,7 +235,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
             expect(mockNavigationHandler).toHaveBeenCalledWith({
                 sidebar: ViewType.METADATA,
-                filteredTemplateIds: '123,124',
+                filteredTemplateIds: ['123', '124'],
             });
             expect(onNavigateLeftMock).toHaveBeenCalledTimes(1);
             expect(onNavigateRightMock).not.toHaveBeenCalled();
@@ -244,7 +244,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
         test('should call navigation handler with metadata deeplinks when right navigation button is clicked', async () => {
             const mockInternalSidebarNavigation = {
                 sidebar: ViewType.METADATA,
-                filteredTemplateIds: '123,124',
+                filteredTemplateIds: ['123', '124'],
             };
             const user = userEvent();
 
@@ -258,7 +258,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
             expect(mockNavigationHandler).toHaveBeenCalledWith({
                 sidebar: ViewType.METADATA,
-                filteredTemplateIds: '123,124',
+                filteredTemplateIds: ['123', '124'],
             });
             expect(onNavigateRightMock).toHaveBeenCalledTimes(1);
             expect(onNavigateLeftMock).not.toHaveBeenCalled();
