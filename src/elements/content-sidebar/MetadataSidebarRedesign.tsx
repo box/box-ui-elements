@@ -81,6 +81,8 @@ import { type MetadataTemplateLocator } from './hooks/useMetadataTemplateEventSe
 import useMetadataNamespaceContext, { type MetadataScopeMode } from './hooks/useMetadataNamespaceContext';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
+// Shared default - a new array on every render would retrigger the filtered templates effect endlessly
+const EMPTY_FILTERED_TEMPLATE_IDS: string[] = [];
 
 mark(MARK_NAME_JS_READY);
 
@@ -147,7 +149,7 @@ function MetadataSidebarRedesign({
     fileId,
     fetchAvatarUrls,
     fetchUsers,
-    filteredTemplateIds = [],
+    filteredTemplateIds = EMPTY_FILTERED_TEMPLATE_IDS,
     getPreview,
     history,
     internalSidebarNavigationHandler,

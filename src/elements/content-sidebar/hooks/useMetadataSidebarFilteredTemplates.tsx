@@ -35,11 +35,9 @@ export function useMetadataSidebarFilteredTemplates(
 
     const handleSetFilteredTemplates = (templateIds: string[]) => {
         if (routerDisabled && internalSidebarNavigationHandler) {
-            const navigationPath = { sidebar: '' };
-            if (templateIds.length === 0) {
-                navigationPath.sidebar = `/${SIDEBAR_VIEW_METADATA}`;
-            } else {
-                navigationPath.sidebar = `/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`;
+            const navigationPath = { sidebar: ViewType.METADATA };
+            if (templateIds.length > 0) {
+                navigationPath.filteredTemplateIds = templateIds;
             }
             internalSidebarNavigationHandler(navigationPath);
         } else if (history) {
