@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplateInstance } from '@box/metadata-editor';
 import { SIDEBAR_VIEW_METADATA } from '../../../constants';
-import { type InternalSidebarNavigationHandler, ViewType } from '../../common/types/SidebarNavigation';
+import { type InternalSidebarNavigationHandler} from '../../common/types/SidebarNavigation';
 
 type History = RouteComponentProps['history'];
 
@@ -41,6 +41,7 @@ export function useMetadataSidebarFilteredTemplates(
             } else {
                 navigationPath.sidebar = `/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`;
             }
+            internalSidebarNavigationHandler(navigationPath);
         } else if (history) {
             if (templateIds.length === 0) {
                 history.push(`/${SIDEBAR_VIEW_METADATA}`);
