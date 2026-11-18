@@ -948,6 +948,10 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
         const { isInitialized } = this.state;
 
         const sidebarToRender = this.findSidebarToRender();
+        // Deep link params apply only when the navigation points to the rendered sidebar (not a default one),
+        // same as the router version which redirects to a plain sidebar path
+        const matchedNavigation =
+            sidebarToRender && sidebarToRender === this.getMatchedSidebar() ? internalSidebarNavigation : undefined;
 
         if (sidebarToRender) {
             if (sidebarToRender === SIDEBAR_VIEW_VERSIONS) {
@@ -1013,11 +1017,11 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
         if (sidebarToRender === SIDEBAR_VIEW_ACTIVITY) {
             // Extract activity-specific params from internal navigation
-            const activeFeedEntryId = internalSidebarNavigation?.activeFeedEntryId;
-            const rawActiveFeedEntryType = internalSidebarNavigation?.activeFeedEntryType;
+            const activeFeedEntryId = matchedNavigation?.activeFeedEntryId;
+            const rawActiveFeedEntryType = matchedNavigation?.activeFeedEntryType;
             // Convert activeFeedEntryType to match what ActivitySidebar expects (same as router version)
             const activeFeedEntryType = rawActiveFeedEntryType
-                ? URL_TO_FEED_ITEM_TYPE[rawActiveFeedEntryType] || rawActiveFeedEntryType
+                ? URL_TO_FEED_ITEM_TYPE[rawActiveFeedEntryType]
                 : undefined;
 
             return (
@@ -1065,7 +1069,7 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
 
         if (sidebarToRender === SIDEBAR_VIEW_METADATA) {
             // Extract metadata-specific params from internal navigation
-            const filteredTemplateIds = internalSidebarNavigation?.filteredTemplateIds || [];
+            const filteredTemplateIds = matchedNavigation?.filteredTemplateIds || [];
             const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
             const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
@@ -1080,6 +1084,8 @@ class SidebarPanelsRouterDisabled extends React.Component<Props, State> {
                     isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                     ref={this.metadataSidebar}
                     startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
+                    routerDisabled={true}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                     {...metadataSidebarProps}
                 />
             ) : (

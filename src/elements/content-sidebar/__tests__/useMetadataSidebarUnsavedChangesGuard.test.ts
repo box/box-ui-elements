@@ -161,6 +161,20 @@ describe('useMetadataSidebarUnsavedChangesGuard', () => {
 
             expect(mockUnblock).toHaveBeenCalled();
         });
+
+        test('should not block navigation and not throw when history is not provided (router disabled)', () => {
+            const { rerender, result, unmount } = setup({ history: undefined });
+
+            expect(() => rerender({ editingTemplate: mockTemplate })).not.toThrow();
+            expect(mockBlock).not.toHaveBeenCalled();
+
+            act(() => {
+                result.current.handleUnsavedChangesModalOpen(false);
+            });
+
+            expect(mockReplace).not.toHaveBeenCalled();
+            expect(() => unmount()).not.toThrow();
+        });
     });
 
     describe('block callback behaviour', () => {

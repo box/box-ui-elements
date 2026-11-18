@@ -1220,9 +1220,48 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                     expect(activitySidebar).not.toHaveAttribute('data-active-feed-entry-type');
                     expect(activitySidebar).not.toHaveAttribute('data-active-feed-entry-id');
                 });
+                test('should not pass down activeFeedEntry props when activity is rendered as a default sidebar', () => {
+                    renderSidebarPanelsRouterDisabled({
+                        defaultPanel: 'activity',
+                        hasVersions: false,
+                        internalSidebarNavigation: {
+                            sidebar: 'activity',
+                            activeFeedEntryType: 'versions',
+                            activeFeedEntryId: '12345',
+                        },
+                    });
+                    const activitySidebar = screen.getByTestId('activity-sidebar');
+                    expect(activitySidebar).not.toHaveAttribute('data-active-feed-entry-type');
+                    expect(activitySidebar).not.toHaveAttribute('data-active-feed-entry-id');
+                });
             });
 
             describe('metadata sidebar', () => {
+                test('should provide routerDisabled and navigation handler to redesigned sidebar', () => {
+                    renderSidebarPanelsRouterDisabled({
+                        internalSidebarNavigation: {
+                            sidebar: 'metadata',
+                        },
+                        features: { metadata: { redesign: { enabled: true } } },
+                    });
+                    const metadataSidebar = screen.getByTestId('metadata-sidebar-redesigned');
+                    expect(metadataSidebar).toHaveAttribute('data-router-disabled', 'true');
+                    expect(metadataSidebar).toHaveAttribute('data-has-navigation-handler', 'true');
+                });
+
+                test('should not pass filteredTemplateIds when metadata is rendered as a default sidebar', () => {
+                    renderSidebarPanelsRouterDisabled({
+                        defaultPanel: 'metadata',
+                        internalSidebarNavigation: {
+                            sidebar: 'nonsense',
+                            filteredTemplateIds: ['123', '124'],
+                        },
+                        features: { metadata: { redesign: { enabled: true } } },
+                    });
+                    const metadataSidebar = screen.getByTestId('metadata-sidebar-redesigned');
+                    expect(metadataSidebar).toHaveAttribute('data-filtered-template-ids', JSON.stringify([]));
+                });
+
                 test('should render with filteredTemplates deeplink', () => {
                     renderSidebarPanelsRouterDisabled({
                         internalSidebarNavigation: {

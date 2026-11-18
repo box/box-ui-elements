@@ -5,7 +5,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AutofillContextProvider,
@@ -35,6 +35,8 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { useFeatureEnabled } from '../common/feature-checking';
+import { withRouterIfEnabled } from '../common/routing';
+import { type InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import { resolveScopeOrNamespace } from '../../api/metadataNamespaceUtils';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
@@ -123,16 +125,18 @@ export interface MetadataSidebarRedesignProps
         ErrorContextProps,
         SuccessContextProps,
         WithLoggerProps,
-        RouteComponentProps {
+        Partial<RouteComponentProps> {
     api: API;
     createSessionRequest?: (
         payload: Record<string, unknown>,
         fileId: string,
     ) => Promise<{ metadata: { is_large_file: boolean } }>;
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler;
     onEditingStateChange?: (isEditing: boolean) => void;
     registerOpenWarningModalCallback?: (handleWarningModalOpen: (isOpen: boolean) => void) => void;
     onWarningModalDiscard?: () => void;
     onWarningModalClose?: () => void;
+    routerDisabled?: boolean;
     trackEvent?: (eventName: string, data?: Record<string, unknown>) => void;
 }
 
@@ -146,6 +150,7 @@ function MetadataSidebarRedesign({
     filteredTemplateIds = [],
     getPreview,
     history,
+    internalSidebarNavigationHandler,
     onError,
     onSuccess,
     isFeatureEnabled,
@@ -157,6 +162,7 @@ function MetadataSidebarRedesign({
     registerOpenWarningModalCallback,
     onWarningModalDiscard,
     onWarningModalClose,
+    routerDisabled,
     trackEvent,
 }: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
@@ -547,7 +553,10 @@ function MetadataSidebarRedesign({
     );
 
     const { handleSetFilteredTemplates, filteredTemplates, templateInstancesList } =
-        useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances);
+        useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances, {
+            internalSidebarNavigationHandler,
+            routerDisabled,
+        });
     const filterDropdown =
         isSuccess && isViewMode && visibleTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
@@ -715,7 +724,7 @@ function MetadataSidebarRedesign({
 
 export { MetadataSidebarRedesign as MetadataSidebarRedesignComponent };
 export default flow([
-    withRouter,
+    withRouterIfEnabled,
     withLogger(ORIGIN_METADATA_SIDEBAR_REDESIGN),
     withErrorBoundary(ORIGIN_METADATA_SIDEBAR_REDESIGN),
     withAPIContext,

@@ -127,4 +127,51 @@ describe('useMetadataSidebarFilteredTemplates', () => {
         expect(result.current.filteredTemplates).toEqual(['template1']);
         expect(result.current.templateInstancesList).toEqual([templateInstances[0]]);
     });
+
+    describe('routerDisabled mode', () => {
+        const mockInternalSidebarNavigationHandler = jest.fn();
+
+        test.each`
+            templateIds                   | expectedNavigation
+            ${['template2']}              | ${{ sidebar: 'metadata', filteredTemplateIds: ['template2'] }}
+            ${['template1', 'template2']} | ${{ sidebar: 'metadata', filteredTemplateIds: ['template1', 'template2'] }}
+            ${[]}                         | ${{ sidebar: 'metadata' }}
+        `(
+            'should navigate with $expectedNavigation instead of history when templateIds = $templateIds',
+            ({ templateIds, expectedNavigation }) => {
+                const filteredTemplateIds = ['template1'];
+                const { result } = renderHook(() =>
+                    useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances, {
+                        internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+                        routerDisabled: true,
+                    }),
+                );
+
+                act(() => {
+                    result.current.handleSetFilteredTemplates(templateIds);
+                });
+
+                expect(result.current.filteredTemplates).toEqual(templateIds);
+                expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledTimes(1);
+                expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith(expectedNavigation);
+                expect(mockHistoryPush).not.toHaveBeenCalled();
+            },
+        );
+
+        test('should update filteredTemplates without navigating when history and navigation handler are not provided', () => {
+            const filteredTemplateIds = [];
+            const { result } = renderHook(() =>
+                useMetadataSidebarFilteredTemplates(undefined, filteredTemplateIds, templateInstances, {
+                    routerDisabled: true,
+                }),
+            );
+
+            act(() => {
+                result.current.handleSetFilteredTemplates(['template2']);
+            });
+
+            expect(result.current.filteredTemplates).toEqual(['template2']);
+            expect(result.current.templateInstancesList).toEqual([templateInstances[1]]);
+        });
+    });
 });

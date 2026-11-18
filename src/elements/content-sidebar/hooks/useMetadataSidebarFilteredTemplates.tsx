@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplateInstance } from '@box/metadata-editor';
 import { SIDEBAR_VIEW_METADATA } from '../../../constants';
+import { type InternalSidebarNavigationHandler, ViewType } from '../../common/types/SidebarNavigation';
 
 type History = RouteComponentProps['history'];
 
@@ -11,10 +12,16 @@ interface MetadataSidebarFilter {
     handleSetFilteredTemplates: (templateIds: string[]) => void;
 }
 
+interface SidebarNavigationOptions {
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler;
+    routerDisabled?: boolean;
+}
+
 export function useMetadataSidebarFilteredTemplates(
-    history: History,
+    history: History | undefined,
     filteredTemplateIds: string[],
     templateInstances: MetadataTemplateInstance[],
+    { internalSidebarNavigationHandler, routerDisabled = false }: SidebarNavigationOptions = {},
 ): MetadataSidebarFilter {
     const [filteredTemplates, setFilteredTemplates] = React.useState([]);
 
@@ -27,10 +34,19 @@ export function useMetadataSidebarFilteredTemplates(
     }, [filteredTemplateIds, templateInstances]);
 
     const handleSetFilteredTemplates = (templateIds: string[]) => {
-        if (templateIds.length === 0) {
-            history.push(`/${SIDEBAR_VIEW_METADATA}`);
-        } else {
-            history.push(`/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`);
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            const navigationPath = { sidebar: '' };
+            if (templateIds.length === 0) {
+                navigationPath.sidebar = `/${SIDEBAR_VIEW_METADATA}`;
+            } else {
+                navigationPath.sidebar = `/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`;
+            }
+        } else if (history) {
+            if (templateIds.length === 0) {
+                history.push(`/${SIDEBAR_VIEW_METADATA}`);
+            } else {
+                history.push(`/${SIDEBAR_VIEW_METADATA}/filteredTemplates/${templateIds.join(',')}`);
+            }
         }
         setFilteredTemplates(templateIds);
     };
