@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <meta charset="UTF-8" />
@@ -41,7 +41,7 @@
                 width: 100%;
             }
         </style>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
+        <link rel="stylesheet" type="text/css" href="../dist/dev/en-US/uploader.css" />
     </head>
 
     <body>
@@ -69,11 +69,11 @@
             <div class="drop-zone"><h2>Drop Files/Folders Here</h2></div>
             <div class="uploader1"></div>
         </div>
-        <script src="../dev/en-US/uploader.js"></script>
+        <script src="../dist/dev/en-US/uploader.js"></script>
         <script>
             let resetTimeout;
             // Set token and folder ID to locally stored values if available
-            (function() {
+            (function () {
                 const storageToken = localStorage.getItem('token');
                 const storageFolder = localStorage.getItem('folderId');
 
@@ -121,7 +121,7 @@
                     isUploadsManagerVisible: true,
                 });
 
-                fileInput.onchange = function(event) {
+                fileInput.onchange = function (event) {
                     const filesWithOptions = Array.from(event.target.files).map(file => ({
                         file,
                         options: {

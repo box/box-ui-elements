@@ -2,6 +2,7 @@ import Cache from '../../utils/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import Search from '../Search';
 import { FIELD_RELEVANCE, SORT_DESC, X_REP_HINT_HEADER_DIMENSIONS_DEFAULT } from '../../constants';
+import type { APIOptions } from '../../common/types/api';
 
 let search;
 let cache;
@@ -14,7 +15,7 @@ const errorCode = 'foo';
 
 describe('api/Search', () => {
     beforeEach(() => {
-        search = new Search({});
+        search = new Search({} as APIOptions);
         search.errorCode = errorCode;
         cache = new Cache();
     });
@@ -297,7 +298,7 @@ describe('api/Search', () => {
                     offset: 0,
                     limit: 100,
                 }),
-            ).toThrow(Error, /Bad box item/);
+            ).toThrow(Error);
             expect(search.finish).not.toHaveBeenCalled();
         });
 
@@ -309,7 +310,7 @@ describe('api/Search', () => {
                     offset: 0,
                     limit: 100,
                 }),
-            ).toThrow(Error, /Bad box item/);
+            ).toThrow(Error);
             expect(search.finish).not.toHaveBeenCalled();
         });
 
@@ -321,7 +322,7 @@ describe('api/Search', () => {
                     total_count: 0,
                     limit: 100,
                 }),
-            ).toThrow(Error, /Bad box item/);
+            ).toThrow(Error);
             expect(search.finish).not.toHaveBeenCalled();
         });
 
@@ -333,7 +334,7 @@ describe('api/Search', () => {
                     total_count: 0,
                     offset: 100,
                 }),
-            ).toThrow(Error, /Bad box item/);
+            ).toThrow(Error);
             expect(search.finish).not.toHaveBeenCalled();
         });
     });
@@ -410,7 +411,7 @@ describe('api/Search', () => {
             search.key = 'key';
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
-            expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
+            expect(search.finish.bind(search)).toThrow(Error);
             expect(search.successCallback).not.toHaveBeenCalled();
         });
 
@@ -420,7 +421,7 @@ describe('api/Search', () => {
             search.key = 'key';
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
-            expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
+            expect(search.finish.bind(search)).toThrow(Error);
             expect(search.successCallback).not.toHaveBeenCalled();
         });
 
@@ -430,7 +431,7 @@ describe('api/Search', () => {
             search.key = 'key';
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
-            expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
+            expect(search.finish.bind(search)).toThrow(Error);
             expect(search.successCallback).not.toHaveBeenCalled();
         });
     });

@@ -92,12 +92,11 @@ describe('ContentSidebar', () => {
         });
 
         it('should display the current version as restored', () => {
-            cy.getByTestId('version').contains('promoted v6 to v10');
-
             cy.getByTestId('sidebardetails').click();
             cy.getByTestId('versionhistory').click();
 
             cy.contains('[data-testid="bcs-content"]', 'Version History').as('versionHistory');
+            cy.get('@versionHistory').contains('Promoted from v6');
             cy.get('@versionHistory').contains('Restored by');
         });
     });
