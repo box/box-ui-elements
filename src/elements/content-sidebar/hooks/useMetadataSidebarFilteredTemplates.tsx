@@ -3,6 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplateInstance } from '@box/metadata-editor';
 import { SIDEBAR_VIEW_METADATA } from '../../../constants';
 import { type InternalSidebarNavigationHandler} from '../../common/types/SidebarNavigation';
+import { ViewType } from '../../common/types/SidebarNavigation';
 
 type History = RouteComponentProps['history'];
 
@@ -35,11 +36,11 @@ export function useMetadataSidebarFilteredTemplates(
 
     const handleSetFilteredTemplates = (templateIds: string[]) => {
         if (routerDisabled && internalSidebarNavigationHandler) {
-            const navigationPath = { sidebar: ViewType.METADATA };
+            const navigation: { sidebar: ViewType; filteredTemplateIds?: string[] } = { sidebar: ViewType.METADATA };
             if (templateIds.length > 0) {
-                navigationPath.filteredTemplateIds = templateIds;
+                navigation.filteredTemplateIds = templateIds;
             }
-            internalSidebarNavigationHandler(navigationPath);
+            internalSidebarNavigationHandler(navigation);
         } else if (history) {
             if (templateIds.length === 0) {
                 history.push(`/${SIDEBAR_VIEW_METADATA}`);
