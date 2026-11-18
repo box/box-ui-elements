@@ -1945,6 +1945,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                             <Measure bounds onResize={this.onResize}>
                                                 {({ measureRef: previewRef }) => {
                                                     const {
+                                                        isComparedPreview,
                                                         renderCustomPreview,
                                                         logger,
                                                         onAnnotator,
@@ -1963,8 +1964,11 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                                                     file={file}
                                                                     logger={logger}
                                                                     annotationSelection={annotationSelection}
-                                                                    onAnnotator={onAnnotator}
-                                                                    onAnnotatorUnregister={onAnnotatorUnregister}
+                                                                    // withAnnotations replaces the compared pane's noop callbacks
+                                                                    onAnnotator={isComparedPreview ? noop : onAnnotator}
+                                                                    onAnnotatorUnregister={
+                                                                        isComparedPreview ? noop : onAnnotatorUnregister
+                                                                    }
                                                                     onPreviewError={this.onPreviewError}
                                                                     onPreviewLoad={this.onPreviewLoad}
                                                                     fileVersionId={getProp(versionToPreview, 'id')}

@@ -2609,6 +2609,25 @@ describe('elements/content-preview/ContentPreview', () => {
                     expect(renderedContent.props.annotationSelection).toEqual({ annotation, seq: 1 });
                 });
 
+                test('should not hand the annotator callbacks to a compared custom preview', () => {
+                    const onAnnotator = jest.fn();
+                    const onAnnotatorUnregister = jest.fn();
+                    const wrapper = getWrapper({
+                        ...props,
+                        isComparedPreview: true,
+                        onAnnotator,
+                        onAnnotatorUnregister,
+                    });
+                    wrapper.setState({ file });
+                    const renderProp = wrapper.find('Measure').prop('children');
+                    const customPreview = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>).find(
+                        'CustomPreviewWrapper',
+                    );
+
+                    expect(customPreview.prop('onAnnotator')).not.toBe(onAnnotator);
+                    expect(customPreview.prop('onAnnotatorUnregister')).not.toBe(onAnnotatorUnregister);
+                });
+
                 test('should increment annotationSelection seq on every select, including repeats', () => {
                     const wrapper = getWrapper(props);
                     wrapper.setState({ file });
