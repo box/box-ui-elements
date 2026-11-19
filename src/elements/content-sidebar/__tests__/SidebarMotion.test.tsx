@@ -49,7 +49,7 @@ describe('elements/content-sidebar/SidebarMotion', () => {
     const setup = (isOpen: boolean) => {
         const result = render(<Harness isOpen={isOpen} />);
         const sidebar = result.container.querySelector('aside')!;
-        const panel = result.container.querySelector('.bcs-SidebarMotion')!;
+        const panel = result.container.querySelector<HTMLDivElement>('.bcs-SidebarMotion')!;
         const rect = jest.spyOn(sidebar, 'getBoundingClientRect');
         jest.spyOn(panel, 'getBoundingClientRect').mockReturnValue({ width: 380 } as DOMRect);
         return { ...result, rect, panel, sidebar };
