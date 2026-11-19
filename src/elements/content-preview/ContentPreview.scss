@@ -5,6 +5,12 @@
     flex: 1;
     flex-direction: column;
 
+    // The viewers and sidebar own scrolling. Unlike overflow: hidden, clip
+    // prevents an autofocused panel from scrolling this shell while it enters.
+    &.be {
+        overflow: clip;
+    }
+
     .bcpr-body {
         display: flex;
         flex: 1;

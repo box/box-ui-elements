@@ -43,6 +43,8 @@ import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { SignSidebarProps } from './SidebarNavSign';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
+// $FlowFixMe TypeScript file
+import SidebarMotion from './SidebarMotion';
 import SidebarResizeHandle from './SidebarResizeHandle';
 import SidebarUtils from './SidebarUtils';
 import type { VersionsSidebarProps } from './versions';
@@ -133,6 +135,8 @@ class Sidebar extends React.Component<Props, State> {
     props: Props;
 
     sidebarPanels: { current: null | SidebarPanels } = React.createRef();
+
+    sidebarRef: { current: null | HTMLElement } = React.createRef();
 
     state: State;
 
@@ -452,7 +456,13 @@ class Sidebar extends React.Component<Props, State> {
         const defaultPanel = this.getDefaultPanel();
 
         return (
-            <aside id={this.id} className={styleClassName} data-testid="preview-sidebar" style={inlineStyle}>
+            <aside
+                id={this.id}
+                className={styleClassName}
+                data-testid="preview-sidebar"
+                ref={this.sidebarRef}
+                style={inlineStyle}
+            >
                 {isResizable && isOpen && !isLoading && (
                     <SidebarResizeHandle
                         maxWidth={maxWidth}
@@ -499,40 +509,46 @@ class Sidebar extends React.Component<Props, State> {
                                     signSidebarProps={signSidebarProps}
                                 />
                             )}
-                            <SidebarPanels
-                                activitySidebarProps={activitySidebarProps}
-                                boxAISidebarProps={boxAISidebarProps}
-                                currentUser={currentUser}
-                                currentUserError={currentUserError}
-                                shouldFetchSidebarData={shouldFetchSidebarData}
-                                customSidebarPanels={customSidebarPanels}
-                                elementId={this.id}
-                                defaultPanel={defaultPanel}
-                                detailsSidebarProps={detailsSidebarProps}
-                                docGenSidebarProps={docGenSidebarProps}
-                                file={file}
-                                fileId={fileId}
-                                getPreview={getPreview}
-                                getViewer={getViewer}
-                                hasActivity={hasActivity}
-                                hasNativeBoxAISidebar={hasNativeBoxAISidebar}
-                                hasDetails={hasDetails}
-                                hasDocGen={docGenSidebarProps.isDocGenTemplate}
-                                hasMetadata={hasMetadata}
-                                hasSkills={hasSkills}
-                                hasVersions={hasVersions}
+                            <SidebarMotion
+                                enabled={hasNav && isViewportWideEnoughToResize}
                                 isOpen={isOpen}
-                                key={file.id}
-                                metadataSidebarProps={metadataSidebarProps}
-                                onAnnotationSelect={onAnnotationSelect}
-                                getComparedPreview={getComparedPreview}
-                                onCommentVersionSelect={onCommentVersionSelect}
-                                onPanelChange={this.handlePanelChange}
-                                onVersionChange={onVersionChange}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                                ref={this.sidebarPanels}
-                                versionsSidebarProps={versionsSidebarProps}
-                            />
+                                sidebarRef={this.sidebarRef}
+                            >
+                                <SidebarPanels
+                                    activitySidebarProps={activitySidebarProps}
+                                    boxAISidebarProps={boxAISidebarProps}
+                                    currentUser={currentUser}
+                                    currentUserError={currentUserError}
+                                    shouldFetchSidebarData={shouldFetchSidebarData}
+                                    customSidebarPanels={customSidebarPanels}
+                                    elementId={this.id}
+                                    defaultPanel={defaultPanel}
+                                    detailsSidebarProps={detailsSidebarProps}
+                                    docGenSidebarProps={docGenSidebarProps}
+                                    file={file}
+                                    fileId={fileId}
+                                    getPreview={getPreview}
+                                    getViewer={getViewer}
+                                    hasActivity={hasActivity}
+                                    hasNativeBoxAISidebar={hasNativeBoxAISidebar}
+                                    hasDetails={hasDetails}
+                                    hasDocGen={docGenSidebarProps.isDocGenTemplate}
+                                    hasMetadata={hasMetadata}
+                                    hasSkills={hasSkills}
+                                    hasVersions={hasVersions}
+                                    isOpen={isOpen}
+                                    key={file.id}
+                                    metadataSidebarProps={metadataSidebarProps}
+                                    onAnnotationSelect={onAnnotationSelect}
+                                    getComparedPreview={getComparedPreview}
+                                    onCommentVersionSelect={onCommentVersionSelect}
+                                    onPanelChange={this.handlePanelChange}
+                                    onVersionChange={onVersionChange}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    ref={this.sidebarPanels}
+                                    versionsSidebarProps={versionsSidebarProps}
+                                />
+                            </SidebarMotion>
                         </>
                     )}
                 </CommentRangeDragCreateProvider>
