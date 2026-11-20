@@ -1,0 +1,26 @@
+@import '../common/variables';
+
+// The preview shell clips the drawer at the viewport edge. The rail must not
+// clip the retained panel to its collapsed width while the drawer exits.
+.be.bcs.bcs-is-animating {
+    overflow: visible;
+}
+
+.bcs-SidebarMotion {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    background-color: $white;
+
+    &[data-closed] {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 60px;
+        pointer-events: none;
+    }
+}
+
+.bcs-SidebarMotion--disabled {
+    display: contents;
+}
