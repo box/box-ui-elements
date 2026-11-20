@@ -11,6 +11,7 @@ import {
     type MetadataSidebarRedesignProps,
 } from '../MetadataSidebarRedesign';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
+import * as filteredTemplatesHook from '../hooks/useMetadataSidebarFilteredTemplates';
 import useMetadataFieldSelection from '../hooks/useMetadataFieldSelection';
 import useMetadataNamespaceContext from '../hooks/useMetadataNamespaceContext';
 import type { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
@@ -644,6 +645,45 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
     });
 
+    test('should render filtered instance list without router props and pass navigation handler to filtered templates when routerDisabled is true', () => {
+        const filteredTemplatesSpy = jest.spyOn(filteredTemplatesHook, 'useMetadataSidebarFilteredTemplates');
+        const internalSidebarNavigationHandler = jest.fn();
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockCustomTemplateInstance, mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+            extractErrorCode: null,
+            refetchMetadata: jest.fn(),
+        });
+
+        renderComponent({
+            filteredTemplateIds: [mockVisibleTemplateInstance.id],
+            history: undefined,
+            internalSidebarNavigationHandler,
+            location: undefined,
+            match: undefined,
+            routerDisabled: true,
+        });
+
+        expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 4, name: 'Custom Metadata' })).not.toBeInTheDocument();
+        expect(filteredTemplatesSpy).toHaveBeenCalledWith(
+            undefined,
+            [mockVisibleTemplateInstance.id],
+            expect.any(Array),
+            { internalSidebarNavigationHandler, routerDisabled: true },
+        );
+
+        filteredTemplatesSpy.mockRestore();
+    });
+
     test('should call getStructuredTextRep', async () => {
         renderComponent({ api }, { 'metadata.aiSuggestions.enabled': true });
 
@@ -1005,6 +1045,19 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             await startEditing(mockHistory);
 
             expect(mockHistory.block).not.toHaveBeenCalled();
+        });
+
+        test('should allow editing without router history when routerDisabled is true', async () => {
+            setupWithEditableTemplates();
+            const { mockHistory } = renderComponent(
+                { history: undefined, location: undefined, match: undefined, routerDisabled: true },
+                navBlockFeatures,
+            );
+
+            await startEditing(mockHistory);
+
+            expect(mockHistory.block).not.toHaveBeenCalled();
+            expect(mockEditor).toHaveBeenCalled();
         });
 
         test('should show unsaved changes modal when navigation is attempted while editing', async () => {

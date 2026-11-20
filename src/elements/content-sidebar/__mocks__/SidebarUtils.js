@@ -24,13 +24,15 @@ export default {
             },
             [SIDEBAR_VIEW_METADATA_REDESIGN]: class MetadataSidebarRedesigned extends React.Component {
                 render() {
-                    const { filteredTemplateIds } = this.props;
+                    const { filteredTemplateIds, internalSidebarNavigationHandler, routerDisabled } = this.props;
                     return (
                         <div
                             data-testid="metadata-sidebar-redesigned"
                             data-filtered-template-ids={
                                 filteredTemplateIds ? JSON.stringify(filteredTemplateIds) : undefined
                             }
+                            data-has-navigation-handler={!!internalSidebarNavigationHandler}
+                            data-router-disabled={routerDisabled}
                         />
                     );
                 }

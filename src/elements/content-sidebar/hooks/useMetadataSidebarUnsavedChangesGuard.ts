@@ -6,7 +6,7 @@ import { SIDEBAR_VIEW_METADATA } from '../../../constants';
 interface Params {
     editingTemplate: MetadataTemplateInstance | null;
     fileId: string;
-    history: History;
+    history?: History;
     isBoundingBoxOrConfidenceScoreReviewEnabled: boolean;
     onEditingStateChange?: (isEditing: boolean) => void;
     setEditingTemplate: (t: MetadataTemplateInstance | null) => void;
@@ -46,6 +46,14 @@ export default function useMetadataSidebarUnsavedChangesGuard({
     }, [fileId]);
 
     const blockRouterHistory = useCallback(() => {
+        // Navigation can be blocked only with router history (not available when router is disabled).
+        // No router-less replacement is added here on purpose: router-less sidebar navigation is owned by Sidebar,
+        // which should check the editing state (onEditingStateChange) and open the warning modal
+        // (registerOpenWarningModalCallback) the same way ContentPreview guards file navigation.
+        if (!history) {
+            return;
+        }
+
         unblockRouterRef.current = history.block(location => {
             if (location.pathname === `/${SIDEBAR_VIEW_METADATA}`) {
                 return undefined;
@@ -69,7 +77,8 @@ export default function useMetadataSidebarUnsavedChangesGuard({
             }
 
             // re-sync the URL back to metadata if the URL was updated via host app
-            if (pendingNavLocation) {
+            // (router only - without router the host app owns its navigation and can check the editing state itself)
+            if (pendingNavLocation && history) {
                 history.replace(`/${SIDEBAR_VIEW_METADATA}`);
                 setPendingNavLocation(null);
             }
