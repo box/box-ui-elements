@@ -361,6 +361,12 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     }
 
+    componentDidUpdate(prevProps: DatePickerProps) {
+        if (!prevProps.isDisabled && this.props.isDisabled && this.datePicker?.isVisible()) {
+            this.datePicker.hide();
+        }
+    }
+
     componentWillUnmount() {
         if (this.datePicker) {
             this.datePicker.destroy();

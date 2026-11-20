@@ -283,6 +283,20 @@ describe('components/date-picker/DatePicker', () => {
         });
     });
 
+    test('should hide the calendar when the date picker becomes disabled', () => {
+        const wrapper = renderDatePicker({ isDisabled: false });
+        const { datePicker } = wrapper.instance();
+        if (datePicker) {
+            datePicker.isVisible = jest.fn().mockReturnValue(true);
+            datePicker.hide = jest.fn();
+        }
+
+        wrapper.setProps({ isDisabled: true });
+
+        expect(datePicker?.hide).toHaveBeenCalledTimes(1);
+        wrapper.unmount();
+    });
+
     describe('onSelectHandler()', () => {
         test('should call onChange prop with formatted date param', () => {
             const formattedDate = 1234567;
