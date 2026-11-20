@@ -78,6 +78,7 @@ export type WithAnnotationsProps = {
     features?: FeatureConfig;
     location?: Location,
     onAnnotator: (annotator: Annotator) => void,
+    onAnnotatorUnregister: () => void,
     onError?: (
         error: Error,
         code: string,

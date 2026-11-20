@@ -47,6 +47,7 @@ export type WithAnnotationsProps = {
     features?: FeatureConfig;
     location?: Location;
     onAnnotator: (annotator: Annotator) => void;
+    onAnnotatorUnregister: () => void;
     onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
     onPreviewDestroy: (shouldReset?: boolean) => void;
     routerDisabled?: boolean;
@@ -325,7 +326,23 @@ export default function withAnnotations<P extends object>(
             }
         };
 
+        removeAnnotatorListeners = (): void => {
+            if (this.annotator) {
+                this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
+                this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
+                this.annotator.removeListener('annotations_delete', this.handleAnnotationDelete);
+                this.annotator.removeListener('annotations_fetch_error', this.handleAnnotationFetchError);
+                this.annotator.removeListener('annotations_update', this.handleAnnotationUpdate);
+                this.annotator.removeListener('annotations_reply_create', this.handleAnnotationReplyCreate);
+                this.annotator.removeListener('annotations_reply_delete', this.handleAnnotationReplyDelete);
+                this.annotator.removeListener('annotations_reply_update', this.handleAnnotationReplyUpdate);
+            }
+
+            this.annotator = null;
+        };
+
         handleAnnotator = (annotator: Annotator): void => {
+            this.removeAnnotatorListeners();
             this.annotator = annotator;
             this.annotator.addListener('annotations_active_change', this.handleActiveChange);
             this.annotator.addListener('annotations_create', this.handleAnnotationCreate);
@@ -343,18 +360,7 @@ export default function withAnnotations<P extends object>(
                 this.setState(defaultState);
             }
 
-            if (this.annotator) {
-                this.annotator.removeListener('annotations_active_change', this.handleActiveChange);
-                this.annotator.removeListener('annotations_create', this.handleAnnotationCreate);
-                this.annotator.removeListener('annotations_delete', this.handleAnnotationDelete);
-                this.annotator.removeListener('annotations_fetch_error', this.handleAnnotationFetchError);
-                this.annotator.removeListener('annotations_update', this.handleAnnotationUpdate);
-                this.annotator.removeListener('annotations_reply_create', this.handleAnnotationReplyCreate);
-                this.annotator.removeListener('annotations_reply_delete', this.handleAnnotationReplyDelete);
-                this.annotator.removeListener('annotations_reply_update', this.handleAnnotationReplyUpdate);
-            }
-
-            this.annotator = null;
+            this.removeAnnotatorListeners();
         };
 
         render(): JSX.Element {
@@ -383,6 +389,7 @@ export default function withAnnotations<P extends object>(
                     <WrappedComponent
                         {...this.props}
                         onAnnotator={this.handleAnnotator}
+                        onAnnotatorUnregister={this.removeAnnotatorListeners}
                         onPreviewDestroy={this.handlePreviewDestroy}
                     />
                 </AnnotatorContext.Provider>

@@ -2587,6 +2587,87 @@ describe('elements/content-preview/ContentPreview', () => {
                 expect(measureContent.find('CustomPreviewWrapper').exists()).toBe(true);
             });
 
+            describe('annotations', () => {
+                const annotation = { id: 'a1', target: { location: { type: 'page', value: 1 } } };
+
+                test('should hand the annotator callbacks and selection to the rendered custom preview', () => {
+                    const onAnnotator = jest.fn();
+                    const onAnnotatorUnregister = jest.fn();
+                    const wrapper = getWrapper({ ...props, onAnnotator, onAnnotatorUnregister });
+                    wrapper.setState({ file });
+                    wrapper.instance().handleAnnotationSelect(annotation);
+                    wrapper.update();
+                    const renderProp = wrapper.find('Measure').prop('children');
+                    const renderedContent = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>)
+                        .find('CustomPreviewWrapper')
+                        .dive()
+                        .find('ErrorBoundary')
+                        .prop('children').props.children;
+
+                    expect(renderedContent.props.onAnnotator).toBe(onAnnotator);
+                    expect(renderedContent.props.onAnnotatorUnregister).toBe(onAnnotatorUnregister);
+                    expect(renderedContent.props.annotationSelection).toEqual({ annotation, seq: 1 });
+                });
+
+                test('should not hand the annotator callbacks to a compared custom preview', () => {
+                    const onAnnotator = jest.fn();
+                    const onAnnotatorUnregister = jest.fn();
+                    const wrapper = getWrapper({
+                        ...props,
+                        isComparedPreview: true,
+                        onAnnotator,
+                        onAnnotatorUnregister,
+                    });
+                    wrapper.setState({ file });
+                    const renderProp = wrapper.find('Measure').prop('children');
+                    const customPreview = shallow(<div>{renderProp({ measureRef: jest.fn() })}</div>).find(
+                        'CustomPreviewWrapper',
+                    );
+
+                    expect(customPreview.prop('onAnnotator')).not.toBe(onAnnotator);
+                    expect(customPreview.prop('onAnnotatorUnregister')).not.toBe(onAnnotatorUnregister);
+                });
+
+                test('should increment annotationSelection seq on every select, including repeats', () => {
+                    const wrapper = getWrapper(props);
+                    wrapper.setState({ file });
+
+                    wrapper.instance().handleAnnotationSelect(annotation);
+                    expect(wrapper.state('annotationSelection')).toEqual({ annotation, seq: 1 });
+                    wrapper.instance().handleAnnotationSelect(annotation);
+                    expect(wrapper.state('annotationSelection')).toEqual({ annotation, seq: 2 });
+                });
+
+                test.each([0, 100])(
+                    'should clear annotationSelection on file change and keep seq increasing (delay %i)',
+                    loadingIndicatorDelayMs => {
+                        const wrapper = getWrapper({ ...props, loadingIndicatorDelayMs });
+                        const instance = wrapper.instance();
+                        instance.destroyPreview = jest.fn();
+                        instance.fetchFile = jest.fn();
+                        wrapper.setState({ file });
+
+                        instance.handleAnnotationSelect(annotation);
+                        wrapper.setProps({ fileId: '456' });
+                        expect(wrapper.state('annotationSelection')).toBeUndefined();
+
+                        instance.handleAnnotationSelect(annotation);
+                        expect(wrapper.state('annotationSelection')).toEqual({ annotation, seq: 2 });
+                    },
+                );
+
+                test('should not set annotationSelection without a custom preview', () => {
+                    const { renderCustomPreview, ...propsWithoutCustom } = props;
+                    const wrapper = getWrapper(propsWithoutCustom);
+                    wrapper.setState({ file });
+                    wrapper.instance().getViewer = jest.fn().mockReturnValue({ emit: jest.fn() });
+
+                    wrapper.instance().handleAnnotationSelect(annotation);
+
+                    expect(wrapper.state('annotationSelection')).toBeUndefined();
+                });
+            });
+
             test('should pass previewVersion id as fileVersionId while comparing', () => {
                 const wrapper = getWrapper({ ...props, isComparing: true, previewVersion: { id: '999' } });
                 wrapper.setState({ file, selectedVersion: { id: '111' } });
@@ -3312,6 +3393,28 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.childAt(0).props().onMetric).toBe(onMetric);
             expect(wrapper.childAt(1).props().children.props.onMetric).not.toBe(onMetric);
+        });
+
+        test('should not forward the host annotator callbacks to the compared instance', () => {
+            const onAnnotator = jest.fn();
+            const onAnnotatorUnregister = jest.fn();
+            const wrapper = shallow(
+                <ContentPreviewWithComparison
+                    comparedVersion={{ id: '456' }}
+                    fileId="123"
+                    logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }}
+                    onAnnotator={onAnnotator}
+                    onAnnotatorUnregister={onAnnotatorUnregister}
+                />,
+            );
+
+            wrapper.childAt(0).props().comparedSlotRef(document.createElement('div'));
+            wrapper.update();
+
+            const comparedProps = wrapper.childAt(1).props().children.props;
+            expect(wrapper.childAt(0).props().onAnnotatorUnregister).toBe(onAnnotatorUnregister);
+            expect(comparedProps.onAnnotator).not.toBe(onAnnotator);
+            expect(comparedProps.onAnnotatorUnregister).not.toBe(onAnnotatorUnregister);
         });
 
         test('should call the compared pane when a compared-version annotation is selected', () => {

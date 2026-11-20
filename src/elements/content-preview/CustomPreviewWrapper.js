@@ -3,12 +3,15 @@ import * as React from 'react';
 import ErrorBoundary from '../common/error-boundary';
 import { ORIGIN_CONTENT_PREVIEW } from '../../constants';
 import type { Token, BoxItem } from '../../common/types/core';
+import type { Annotation } from '../../common/types/feed';
 import type { ErrorType } from '../common/flowTypes';
 import type { ElementsXhrError } from '../../common/types/api';
 import type { LoggerProps } from '../../common/types/logging';
 
 type CustomPreviewOnError = (error: Error | ErrorType | ElementsXhrError) => void;
 type CustomPreviewOnLoad = (data: Object) => void;
+// Latest sidebar annotation click. seq increments on every click, so a repeat click is a new value.
+export type AnnotationSelection = { annotation: Annotation, seq: number };
 
 /**
  * Props passed to the renderCustomPreview function.
@@ -36,16 +39,24 @@ export type ContentPreviewChildProps = {
     file: BoxItem,
     onError: CustomPreviewOnError,
     onLoad: CustomPreviewOnLoad,
+    annotationSelection?: ?AnnotationSelection,
+    // Registers an annotator instance with the sidebar. A no-op on a compared pane.
+    onAnnotator: Function,
+    // Removes the registered annotator's sidebar listeners without resetting sidebar state.
+    onAnnotatorUnregister: Function,
     // Id from getVersionToPreview(). Undefined means the current file version.
     fileVersionId?: ?string,
 };
 
 type Props = {
+    annotationSelection?: ?AnnotationSelection,
     renderCustomPreview: (props: ContentPreviewChildProps) => React.Node,
     apiHost: string,
     file: BoxItem,
     fileId: string,
     logger?: LoggerProps,
+    onAnnotator: Function,
+    onAnnotatorUnregister: Function,
     onPreviewError: (errorData: { error: ErrorType }) => void,
     onPreviewLoad: CustomPreviewOnLoad,
     token: Token,
@@ -54,15 +65,18 @@ type Props = {
 
 /**
  * Wrapper component for custom preview content.
- * Calls the render function with props (fileId, token, apiHost, file, onError, onLoad, fileVersionId).
+ * Calls the render function with props (fileId, token, apiHost, file, onError, onLoad, onAnnotator, onAnnotatorUnregister, annotationSelection, fileVersionId).
  * Wraps rendered content in ErrorBoundary and transforms errors to ContentPreview error format.
  */
 function CustomPreviewWrapper({
+    annotationSelection,
     renderCustomPreview,
     apiHost,
     file,
     fileId,
     logger,
+    onAnnotator,
+    onAnnotatorUnregister,
     onPreviewError,
     onPreviewLoad,
     token,
@@ -113,6 +127,9 @@ function CustomPreviewWrapper({
         file,
         onError: handleCustomError,
         onLoad: onPreviewLoad,
+        onAnnotator,
+        onAnnotatorUnregister,
+        annotationSelection,
         fileVersionId,
     };
 
