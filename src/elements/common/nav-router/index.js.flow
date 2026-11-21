@@ -1,4 +1,0 @@
-// @flow
-export { default } from './NavRouter';
-export { withNavRouter } from './withNavRouter';
-export type { WithNavRouterProps } from './withNavRouter';
