@@ -450,6 +450,17 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.preview.addListener).toHaveBeenCalledWith('mediaEndPlayNext', instance.navigateRight);
         });
 
+        test('should bind revealLoadingIndicator to preview "conversionpending" event', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.addListener).toHaveBeenCalledWith(
+                'conversionpending',
+                instance.revealLoadingIndicator,
+            );
+        });
+
         test('should call preview show with correct params', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -1108,6 +1119,79 @@ describe('elements/content-preview/ContentPreview', () => {
 
             expect(wrapper.state('isLoading')).toBe(false);
             expect(wrapper.state('isLoadingDeferred')).toBe(false);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
+
+            jest.useRealTimers();
+        });
+
+        test('timer keeps running after file info arrives and the preview starts loading', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+            instance.loadPreview = jest.fn();
+
+            instance.fetchFileSuccessCallback({ id: '123', file_version: { sha1: 'sha' } });
+
+            expect(instance.loadPreview).toHaveBeenCalledTimes(1);
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+
+            jest.advanceTimersByTime(200);
+
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
+            expect(wrapper.state('isLoading')).toBe(true);
+
+            jest.useRealTimers();
+        });
+
+        test('revealLoadingIndicator shows the indicator right away when conversion is pending', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 2000,
+            });
+            const instance = wrapper.instance();
+
+            instance.revealLoadingIndicator();
+
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(instance.loadingWasDeferred).toBe(true);
+            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
+
+            jest.useRealTimers();
+        });
+
+        test('revealLoadingIndicator does nothing once loading has ended', () => {
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 2000,
+            });
+            const instance = wrapper.instance();
+            instance.endLoadingSession();
+
+            instance.revealLoadingIndicator();
+
+            expect(wrapper.state('isLoading')).toBe(false);
+            expect(instance.loadingWasDeferred).toBe(false);
+        });
+
+        test('componentWillUnmount clears the timer', () => {
+            jest.useFakeTimers();
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 200,
+            });
+            const instance = wrapper.instance();
+
+            wrapper.unmount();
+
             expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
 
             jest.useRealTimers();

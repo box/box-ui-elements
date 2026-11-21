@@ -148,6 +148,7 @@ type Props = {
     language: string,
     // Required when useNpmBoxContentPreview is on. Import loadBoxContentPreview from its own file and pass it here.
     loadPreviewModule?: () => Promise<{ Preview?: any }>,
+    // Waits this long before showing the loading indicator, unless preview reports the file is still converting.
     loadingIndicatorDelayMs?: number,
     logoUrl?: string,
     measureRef: Function,
@@ -444,6 +445,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     componentWillUnmount(): void {
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
+        this.clearLoadingIndicatorDelayTimeout();
         this.destroyPreview();
     }
 
@@ -451,7 +453,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * Cleans up the preview instance.
      */
     destroyPreview(shouldReset: boolean = true) {
-        this.clearLoadingIndicatorDelayTimeout();
         const { onPreviewDestroy } = this.props;
         if (this.preview) {
             this.preview.destroy();
@@ -478,6 +479,27 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.loadingWasDeferred = false;
         this.setState({ isLoading: false, isLoadingDeferred: false });
     };
+
+    /**
+     * Shows the deferred loading indicator, either when the delay elapses or when preview reports a pending conversion.
+     */
+    revealLoadingIndicator = (): void => {
+        this.clearLoadingIndicatorDelayTimeout();
+        if (!this.state.isLoadingDeferred) {
+            return;
+        }
+
+        this.loadingWasDeferred = true;
+        this.setState({ isLoadingDeferred: false });
+    };
+
+    startLoadingIndicatorDelay(): void {
+        this.clearLoadingIndicatorDelayTimeout();
+        this.loadingIndicatorDelayTimeoutId = setTimeout(
+            this.revealLoadingIndicator,
+            this.props.loadingIndicatorDelayMs,
+        );
+    }
 
     /**
      * Destroys api instances with caches
@@ -508,11 +530,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const { loadingIndicatorDelayMs } = this.props;
 
         if (currentFileId && loadingIndicatorDelayMs) {
-            this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
-                this.loadingIndicatorDelayTimeoutId = null;
-                this.loadingWasDeferred = true;
-                this.setState({ isLoadingDeferred: false });
-            }, loadingIndicatorDelayMs);
+            this.startLoadingIndicatorDelay();
         }
 
         this.fetchFile(currentFileId);
@@ -618,12 +636,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
                     selectedVersion: undefined,
                     startAt: undefined,
                 });
-                this.loadingIndicatorDelayTimeoutId = setTimeout(() => {
-                    this.loadingIndicatorDelayTimeoutId = null;
-                    this.loadingWasDeferred = true;
-                    this.setState({ isLoadingDeferred: false });
-                }, loadingIndicatorDelayMs);
+                this.startLoadingIndicatorDelay();
             } else {
+                this.clearLoadingIndicatorDelayTimeout();
                 this.setState({ isLoading: true, selectedVersion: undefined, startAt: undefined });
             }
             this.fetchFile(currentFileId);
@@ -1188,6 +1203,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('mediaEndPlayNext', this.navigateRight);
         this.preview.addListener('preload', this.endLoadingSession);
+        this.preview.addListener('conversionpending', this.revealLoadingIndicator);
 
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
