@@ -6,7 +6,10 @@ const config = {
             '@semantic-release/commit-analyzer',
             {
                 preset: 'angular',
-                releaseRules: [{ type: 'chore', scope: 'i18n', release: 'patch' }],
+                releaseRules: [
+                    { type: 'chore', scope: 'i18n', release: 'patch' },
+                    { type: 'revert', release: 'patch' },
+                ],
             },
         ],
         [
