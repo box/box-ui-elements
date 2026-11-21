@@ -148,7 +148,7 @@ type Props = {
     language: string,
     // Required when useNpmBoxContentPreview is on. Import loadBoxContentPreview from its own file and pass it here.
     loadPreviewModule?: () => Promise<{ Preview?: any }>,
-    // Waits this long before showing the loading indicator, unless preview reports the file is still converting.
+    // Any nonzero value hides the loading indicator unless preview reports the file is still converting.
     loadingIndicatorDelayMs?: number,
     logoUrl?: string,
     measureRef: Function,
@@ -386,8 +386,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
     loadingWasDeferred: boolean;
 
-    loadingIndicatorDelayTimeoutId: ?TimeoutID;
-
     /**
      * [constructor]
      *
@@ -445,7 +443,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     componentWillUnmount(): void {
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
-        this.clearLoadingIndicatorDelayTimeout();
         this.destroyPreview();
     }
 
@@ -463,28 +460,19 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
     }
 
-    clearLoadingIndicatorDelayTimeout(): void {
-        if (this.loadingIndicatorDelayTimeoutId != null) {
-            clearTimeout(this.loadingIndicatorDelayTimeoutId);
-            this.loadingIndicatorDelayTimeoutId = null;
-        }
-    }
-
     /**
-     * Ends the current loading session: clear defer timer, reset session flag, hide loading state.
+     * Ends the current loading session: reset session flag, hide loading state.
      * Call when preview has loaded, errored, or file fetch failed.
      */
     endLoadingSession = (): void => {
-        this.clearLoadingIndicatorDelayTimeout();
         this.loadingWasDeferred = false;
         this.setState({ isLoading: false, isLoadingDeferred: false });
     };
 
     /**
-     * Shows the deferred loading indicator, either when the delay elapses or when preview reports a pending conversion.
+     * Shows the deferred loading indicator when preview reports a pending conversion.
      */
     revealLoadingIndicator = (): void => {
-        this.clearLoadingIndicatorDelayTimeout();
         if (!this.state.isLoadingDeferred) {
             return;
         }
@@ -492,14 +480,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.loadingWasDeferred = true;
         this.setState({ isLoadingDeferred: false });
     };
-
-    startLoadingIndicatorDelay(): void {
-        this.clearLoadingIndicatorDelayTimeout();
-        this.loadingIndicatorDelayTimeoutId = setTimeout(
-            this.revealLoadingIndicator,
-            this.props.loadingIndicatorDelayMs,
-        );
-    }
 
     /**
      * Destroys api instances with caches
@@ -527,12 +507,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const { currentFileId } = this.state;
-        const { loadingIndicatorDelayMs } = this.props;
-
-        if (currentFileId && loadingIndicatorDelayMs) {
-            this.startLoadingIndicatorDelay();
-        }
-
         this.fetchFile(currentFileId);
         this.focusPreview();
     }
@@ -629,18 +603,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (hasFileIdChanged) {
             this.destroyPreview();
             this.loadingWasDeferred = false;
-            if (loadingIndicatorDelayMs) {
-                this.setState({
-                    isLoading: true,
-                    isLoadingDeferred: true,
-                    selectedVersion: undefined,
-                    startAt: undefined,
-                });
-                this.startLoadingIndicatorDelay();
-            } else {
-                this.clearLoadingIndicatorDelayTimeout();
-                this.setState({ isLoading: true, selectedVersion: undefined, startAt: undefined });
-            }
+            this.setState({
+                isLoading: true,
+                ...(loadingIndicatorDelayMs ? { isLoadingDeferred: true } : {}),
+                selectedVersion: undefined,
+                startAt: undefined,
+            });
             this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevProps, prevState)) {
             this.destroyPreview(false);
