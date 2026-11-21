@@ -1,0 +1,34 @@
+$bcs-AddTaskMenu-v-two-width: 256px;
+
+.bcs-AddTaskMenu-v-two {
+    padding: var(--space-2);
+}
+
+.bcs-AddTaskMenu-v-two-menuItem {
+    display: flex;
+    max-width: $bcs-AddTaskMenu-v-two-width;
+    white-space: normal;
+    gap: var(--space-3);
+}
+
+.bcs-AddTaskMenu-v-two-icon {
+    align-self: center;
+    background-color: var(--gray-05);
+    height: var(--size-8);
+    width: var(--size-8);
+    border-radius: var(--radius-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bcs-AddTaskMenu-v-two-title {
+    font-weight: bold;
+}
+
+.bcs-AddTaskMenu-v-two-description {
+    color: var(--gray-65);
+    font-size: var(--caption-default-font-size);
+    line-height: var(--caption-default-line-height);
+}
