@@ -64,11 +64,12 @@ import type { ErrorContextProps, ElementsXhrError } from '../../common/types/api
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
 import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
-import type { OnAnnotationEdit, OnAnnotationStatusChange, Translations } from './flowTypes';
+import type { Translations } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import './ActivitySidebar.scss';
 
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type ExternalProps = {

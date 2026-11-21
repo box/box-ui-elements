@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import type { UseTargetingApi } from '../../features/targeting/types';
-import type { AnnotationPermission, FeedItemStatus } from '../../common/types/feed';
 import type { Props as SidebarNavButtonProps } from './SidebarNavButton';
 
 type ClassificationInfo = {
@@ -65,14 +64,6 @@ type FileAccessStats = {
     preview_count?: number,
 };
 
-type OnAnnotationEdit = (args: { id: string, permissions: AnnotationPermission, text?: string }) => void;
-
-type OnAnnotationStatusChange = (args: {
-    id: string,
-    permissions: AnnotationPermission,
-    status: FeedItemStatus,
-}) => void;
-
 export type {
     ClassificationInfo,
     ContentInsights,
@@ -82,6 +73,4 @@ export type {
     AdditionalSidebarTabFtuxData,
     Translations,
     FileAccessStats,
-    OnAnnotationEdit,
-    OnAnnotationStatusChange,
 };
