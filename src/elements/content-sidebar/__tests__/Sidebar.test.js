@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, fireEvent, render, screen } from '../../../test-utils/testing-library';
+import { act, render, screen, userEvent } from '../../../test-utils/testing-library';
 import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
@@ -513,18 +513,26 @@ describe('elements/content-sidebar/Sidebar', () => {
             viewWidth: 1600,
         };
 
-        // pointerdown goes through React synthetic events, pointermove and pointerup are listened to on window
-        const dragResizeHandle = (startX, endX) => {
-            fireEvent(
-                screen.getByTestId('sidebar-resize-handle'),
-                Object.assign(new MouseEvent('pointerdown', { bubbles: true, clientX: startX }), { pointerId: 1 }),
-            );
-            ['pointermove', 'pointerup'].forEach(type => {
-                act(() => {
-                    window.dispatchEvent(Object.assign(new Event(type), { clientX: endX, pointerId: 1 }));
-                });
-            });
-        };
+        // jsdom does not implement pointer capture, which SidebarResizeHandle checks on pointerup
+        beforeAll(() => {
+            Element.prototype.hasPointerCapture = () => false;
+        });
+
+        afterAll(() => {
+            delete Element.prototype.hasPointerCapture;
+        });
+
+        // pointermove and pointerup bubble from the handle up to window, where SidebarResizeHandle listens to them
+        const dragResizeHandle = (startX, endX) =>
+            userEvent().pointer([
+                {
+                    keys: '[MouseLeft>]',
+                    target: screen.getByTestId('sidebar-resize-handle'),
+                    coords: { clientX: startX },
+                },
+                { coords: { clientX: endX } },
+                { keys: '[/MouseLeft]' },
+            ]);
 
         test('renders the resize handle and bcs-is-resizable class when feature is on and viewport is large', () => {
             LocalStore.mockImplementationOnce(() => ({
@@ -587,31 +595,31 @@ describe('elements/content-sidebar/Sidebar', () => {
             expect(screen.getByTestId('preview-sidebar')).not.toHaveAttribute('style');
         });
 
-        test('applies inline width once the user has dragged the resize handle', () => {
+        test('applies inline width once the user has dragged the resize handle', async () => {
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
             render(getSidebar(resizableProps));
 
-            dragResizeHandle(1000, 850);
+            await dragResizeHandle(1000, 850);
 
             expect(screen.getByTestId('preview-sidebar')).toHaveStyle({ width: '550px', maxWidth: '550px' });
         });
 
-        test('caps maxWidth at 50% of the viewport width', () => {
+        test('caps maxWidth at 50% of the viewport width', async () => {
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
             render(getSidebar({ ...resizableProps, viewWidth: 1200 }));
 
-            dragResizeHandle(1000, 200);
+            await dragResizeHandle(1000, 200);
 
             expect(screen.getByTestId('preview-sidebar')).toHaveStyle({ width: '600px', maxWidth: '600px' });
         });
 
-        test('records programmatic Resin actions when resizing starts and ends', () => {
+        test('records programmatic Resin actions when resizing starts and ends', async () => {
             const recordAction = jest.fn();
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
@@ -625,7 +633,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                 }),
             );
 
-            dragResizeHandle(1000, 850);
+            await dragResizeHandle(1000, 850);
 
             expect(recordAction).toHaveBeenNthCalledWith(1, {
                 action: 'programmatic',
