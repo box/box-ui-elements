@@ -1,5 +1,5 @@
 // @flow
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, passthrough } from 'msw';
 import ContentSidebar from '../ContentSidebar';
 import { mockFileRequest } from './__mocks__/ContentSidebarMocks';
 
@@ -35,7 +35,12 @@ export default {
     parameters: {
         msw: {
             handlers: [
-                http.get(mockFileRequest.url, () => {
+                http.get(mockFileRequest.url, ({ request }) => {
+                    // MSW matches the path only, so let other file requests (e.g. the full file fetch) reach the API
+                    const fields = new URL(request.url).searchParams.get('fields');
+                    if (fields !== new URL(mockFileRequest.url).searchParams.get('fields')) {
+                        return passthrough();
+                    }
                     return HttpResponse.json(mockFileRequest.response);
                 }),
             ],
