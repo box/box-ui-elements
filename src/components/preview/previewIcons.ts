@@ -20,10 +20,7 @@ import IconFileGoogleSlides from '../../icon/content/FileSlides32';
 import IconFileIllustrator from '../../icon/content/FileIllustrator32';
 import IconFileImage from '../../icon/content/FileImage32';
 import IconFileIndesign from '../../icon/content/FileIndesign32';
-import IconFileKeynote from '../../icon/content/FileKeynote32';
-import IconFileNumbers from '../../icon/content/FileNumbers32';
 import IconFilePDF from '../../icon/content/FilePdf32';
-import IconFilePages from '../../icon/content/FilePages32';
 import IconFilePhotoshop from '../../icon/content/FilePhotoshop32';
 import IconFilePowerpoint from '../../icon/content/FilePowerpoint32';
 import IconFilePresentation from '../../icon/content/FilePresentation32';
@@ -142,11 +139,11 @@ register(IconFileImage, '#3FB87F', [
     'tiff',
 ]);
 register(IconFileIndesign, '#FF57A1', ['idml', 'indd', 'indt', 'inx']);
-register(IconFileKeynote, '#007AFF', ['key']);
+register(itemIconTable.keynote, '#007AFF', ['key']);
 register(itemIconTable.markdown, vars.bdlBoxBlue, ['md', 'markdown', 'mdown']);
-register(IconFileNumbers, '#00A650', ['numbers']);
+register(itemIconTable.numbers, '#00A650', ['numbers']);
 register(IconFilePDF, '#D0021B', ['pdf']);
-register(IconFilePages, '#FF9500', ['pages']);
+register(itemIconTable.pages, '#FF9500', ['pages']);
 register(IconFilePhotoshop, '#26C9FF', ['psd']);
 register(IconFilePowerpoint, '#C43E1C', ['ppt', 'pptx']);
 register(IconFilePresentation, '#F7931D', ['odp']);

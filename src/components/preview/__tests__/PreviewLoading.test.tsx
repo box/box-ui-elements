@@ -24,6 +24,19 @@ describe('components/preview/PreviewLoading', () => {
             expect(wrapper.children().type()).toEqual(itemIconTable.markdown);
         });
 
+        test.each`
+            extension    | icon                     | color
+            ${'key'}     | ${itemIconTable.keynote} | ${'#007AFF'}
+            ${'numbers'} | ${itemIconTable.numbers} | ${'#00A650'}
+            ${'pages'}   | ${itemIconTable.pages}   | ${'#FF9500'}
+        `('should use the iWork icon for $extension files', ({ extension, icon, color }) => {
+            const wrapper = getWrapper({ extension });
+
+            expect(getIcon(extension)).toEqual(icon);
+            expect(wrapper.children().type()).toEqual(icon);
+            expect(wrapper.find(PreviewLoadingRing).prop('color')).toEqual(color);
+        });
+
         test('should keep using the code icon for HTML files', () => {
             const wrapper = getWrapper({ extension: 'html' });
 
