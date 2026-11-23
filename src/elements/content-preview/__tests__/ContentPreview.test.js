@@ -450,6 +450,17 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.preview.addListener).toHaveBeenCalledWith('mediaEndPlayNext', instance.navigateRight);
         });
 
+        test('should bind revealLoadingIndicator to preview "conversionpending" event', async () => {
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            await instance.loadPreview();
+            expect(instance.preview.addListener).toHaveBeenCalledWith(
+                'conversionpending',
+                instance.revealLoadingIndicator,
+            );
+        });
+
         test('should call preview show with correct params', async () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -1053,64 +1064,77 @@ describe('elements/content-preview/ContentPreview', () => {
         });
     });
 
-    describe('loading indicator defer and timeout', () => {
-        test('componentDidMount sets up defer timer when loadingIndicatorDelayMs is set', () => {
+    describe('deferred loading indicator', () => {
+        test('stays hidden however long loading takes when loadingIndicatorDelayMs is set', () => {
             jest.useFakeTimers();
             const wrapper = getWrapper({
                 token: 'token',
                 fileId: '123',
-                loadingIndicatorDelayMs: 200,
+                loadingIndicatorDelayMs: 2000,
             });
             const instance = wrapper.instance();
+            instance.loadPreview = jest.fn();
 
-            expect(instance.loadingIndicatorDelayTimeoutId).not.toBeNull();
-            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+            instance.fetchFileSuccessCallback({ id: '123', file_version: { sha1: 'sha' } });
+            jest.advanceTimersByTime(60000);
+
             expect(wrapper.state('isLoading')).toBe(true);
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
 
             jest.useRealTimers();
         });
 
-        test('timeout firing clears isLoadingDeferred so spinner becomes visible', () => {
-            jest.useFakeTimers();
+        test('is shown right away when loadingIndicatorDelayMs is 0', () => {
+            const wrapper = getWrapper({ token: 'token', fileId: '123' });
+
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(wrapper.state('isLoadingDeferred')).toBe(false);
+        });
+
+        test('stays hidden after the file changes', () => {
             const wrapper = getWrapper({
                 token: 'token',
                 fileId: '123',
-                loadingIndicatorDelayMs: 200,
+                loadingIndicatorDelayMs: 2000,
+            });
+            const instance = wrapper.instance();
+            instance.fetchFile = jest.fn();
+            instance.endLoadingSession();
+
+            wrapper.setProps({ fileId: '456' });
+
+            expect(wrapper.state('isLoading')).toBe(true);
+            expect(wrapper.state('isLoadingDeferred')).toBe(true);
+        });
+
+        test('revealLoadingIndicator shows the indicator when conversion is pending', () => {
+            const wrapper = getWrapper({
+                token: 'token',
+                fileId: '123',
+                loadingIndicatorDelayMs: 2000,
             });
             const instance = wrapper.instance();
 
-            expect(wrapper.state('isLoadingDeferred')).toBe(true);
-            expect(wrapper.state('isLoading')).toBe(true);
-            expect(instance.loadingWasDeferred).toBe(false);
-
-            jest.advanceTimersByTime(200);
+            instance.revealLoadingIndicator();
 
             expect(wrapper.state('isLoadingDeferred')).toBe(false);
             expect(wrapper.state('isLoading')).toBe(true);
             expect(instance.loadingWasDeferred).toBe(true);
-            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
-
-            jest.useRealTimers();
         });
 
-        test('endLoadingSession clears timeout before it fires (fast-load scenario)', () => {
-            jest.useFakeTimers();
+        test('revealLoadingIndicator does nothing once loading has ended', () => {
             const wrapper = getWrapper({
                 token: 'token',
                 fileId: '123',
-                loadingIndicatorDelayMs: 200,
+                loadingIndicatorDelayMs: 2000,
             });
             const instance = wrapper.instance();
-
             instance.endLoadingSession();
 
-            jest.advanceTimersByTime(200);
+            instance.revealLoadingIndicator();
 
             expect(wrapper.state('isLoading')).toBe(false);
-            expect(wrapper.state('isLoadingDeferred')).toBe(false);
-            expect(instance.loadingIndicatorDelayTimeoutId).toBeNull();
-
-            jest.useRealTimers();
+            expect(instance.loadingWasDeferred).toBe(false);
         });
     });
 

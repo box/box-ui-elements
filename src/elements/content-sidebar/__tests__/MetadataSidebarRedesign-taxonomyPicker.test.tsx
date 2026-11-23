@@ -76,13 +76,15 @@ const api = {
     getMetadataAPI: jest.fn().mockReturnValue({}),
 };
 
-const renderSidebar = (features: Record<string, boolean> = {}) => {
+const renderSidebar = (features: Record<string, boolean> = {}, { routerDisabled = false } = {}) => {
     const history = createMemoryHistory({ initialEntries: ['/metadata'] });
-    const routerProps = {
-        history,
-        location: history.location,
-        match: { params: {}, isExact: true, path: '/metadata', url: '/metadata' },
-    } as unknown as RouteComponentProps;
+    const routerProps = routerDisabled
+        ? { routerDisabled }
+        : ({
+              history,
+              location: history.location,
+              match: { params: {}, isExact: true, path: '/metadata', url: '/metadata' },
+          } as unknown as RouteComponentProps);
 
     const props = {
         api,
@@ -146,6 +148,15 @@ describe('MetadataSidebarRedesign taxonomy picker wiring', () => {
 
     test('passes createTaxonomyItemsService to the editor when the picker flag is on', async () => {
         renderSidebar({ 'metadata.taxonomyPicker.enabled': true });
+        await enterEditMode();
+
+        const editorProps = lastEditorProps();
+        expect(editorProps.isMetadataTaxonomyPickerEnabled).toBe(true);
+        expect(editorProps.createTaxonomyItemsService).toEqual(expect.any(Function));
+    });
+
+    test('passes createTaxonomyItemsService to the editor without router props when routerDisabled is true', async () => {
+        renderSidebar({ 'metadata.taxonomyPicker.enabled': true }, { routerDisabled: true });
         await enterEditMode();
 
         const editorProps = lastEditorProps();

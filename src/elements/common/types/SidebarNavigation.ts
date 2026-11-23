@@ -5,7 +5,6 @@ export enum ViewType {
     METADATA_REDESIGN = 'metadata_redesign',
     BOXAI = 'boxai',
     ACTIVITY = 'activity',
-    VERSIONS = 'versions',
     DOCGEN = 'docgen',
 }
 
@@ -13,16 +12,18 @@ export enum FeedEntryType {
     ANNOTATIONS = 'annotations',
     COMMENTS = 'comments',
     TASKS = 'tasks',
+    VERSIONS = 'versions',
 }
 
 type VersionSidebarView = {
     sidebar: ViewType.ACTIVITY | ViewType.DETAILS;
-    versionId: string;
+    activeFeedEntryType: FeedEntryType.VERSIONS;
+    versionId?: string;
 };
 
 export type MetadataSidebarView = {
     sidebar: ViewType.METADATA | ViewType.METADATA_REDESIGN;
-    filteredTemplateIds?: string;
+    filteredTemplateIds: string[];
 };
 
 export type ActivityAnnotationsSidebarView = {
@@ -39,7 +40,7 @@ type ActivityCommentsSidebarView = {
 
 export type SidebarNavigation =
     | {
-          sidebar: ViewType;
+          sidebar?: ViewType;
       }
     | VersionSidebarView
     | MetadataSidebarView
@@ -48,6 +49,7 @@ export type SidebarNavigation =
 
 export type InternalSidebarNavigation = SidebarNavigation & {
     open?: boolean;
+    silent?: boolean;
 };
 
 export type SidebarNavigationHandler = (sidebar: SidebarNavigation, replace?: boolean) => void;

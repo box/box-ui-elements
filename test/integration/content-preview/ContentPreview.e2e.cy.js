@@ -18,7 +18,7 @@ describe('ContentPreview', () => {
         it('The sidebar should not render when sidebar props are omitted', () => {
             cy.visitStorybook('elements-contentpreview-tests-e2e--no-sidebar');
 
-            // Gives time for sidebar chunk to potentially load, it shouldn't in this case
+            // Gives time for sidebar chunk to potentially load; it shouldn't in this case
             cy.wait(3000); // eslint-disable-line cypress/no-unnecessary-waiting
             cy.get('.bcs').should('not.exist');
         });
