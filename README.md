@@ -16,7 +16,7 @@
   <img alt="npm beta version" src="https://img.shields.io/npm/v/box-ui-elements/beta.svg">
 </a>
 
-# [Box UI Elements](https://developer.box.com/docs/box-ui-elements)
+# [Box UI Elements](https://developer.box.com/guides/embed/ui-elements)
 
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. Use Box UI Elements to navigate through, upload, preview, and select content stored on Box. Box UI Elements are available as React components and framework-agnostic JavaScript libraries.
 
@@ -32,7 +32,7 @@ To prevent library duplication, the UI Elements require certain peer dependencie
 
 # Usage
 
-This documentation describes how to use UI Elements in a [React](https://facebook.github.io/react) application using [webpack](https://webpack.js.org/). If instead you require a framework-agnostic solution, please refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). You can also reference our [Elements Demo App](https://github.com/box/box-ui-elements-demo) and [Preview Demo App](https://github.com/box/box-content-preview-demo) for examples of minimal React applications using ContentExplorer and ContentPreview, respectively.
+This documentation describes how to use UI Elements in a [React](https://facebook.github.io/react) application using [webpack](https://webpack.js.org/). If instead you require a framework-agnostic solution, please refer to our [developer documentation](https://developer.box.com/guides/embed/ui-elements). You can also reference our [Elements Demo App](https://github.com/box/box-ui-elements-demo) and [Preview Demo App](https://github.com/box/box-content-preview-demo) for examples of minimal React applications using ContentExplorer and ContentPreview, respectively.
 
 ### Common
 
@@ -79,7 +79,7 @@ Licensed under the Box Software License Agreement v.20170516.
 You may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-https://developer.box.com/docs/box-sdk-license
+https://github.com/box/box-ui-elements/blob/master/LICENSE
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
