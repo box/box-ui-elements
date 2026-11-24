@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
-import { MemoryRouter } from 'react-router-dom';
-import { act, render } from '@testing-library/react';
+import { act, render, screen, userEvent } from '../../../test-utils/testing-library';
 import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
@@ -10,17 +8,26 @@ import {
     SidebarComponent as Sidebar,
 } from '../Sidebar';
 import SidebarNav from '../SidebarNav';
-import SidebarPanels from '../SidebarPanels';
 import LocalStore from '../../../utils/LocalStore';
+
+const mockSidebarPanels = jest.fn(() => 'SidebarPanels');
+const mockSidebarPanelsRefresh = jest.fn();
 
 jest.mock('../SidebarNav', () => ({
     __esModule: true,
     default: jest.fn(() => 'SidebarNav'),
 }));
-jest.mock('../SidebarPanels', () => ({
-    __esModule: true,
-    default: jest.fn(() => 'SidebarPanels'),
-}));
+// forwardRef lets Sidebar reach refresh() through its ref, same as with the real SidebarPanels
+jest.mock('../SidebarPanels', () => {
+    const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+    return {
+        __esModule: true,
+        default: forwardRef((props, ref) => {
+            useImperativeHandle(ref, () => ({ refresh: mockSidebarPanelsRefresh }));
+            return mockSidebarPanels(props);
+        }),
+    };
+});
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
@@ -51,13 +58,9 @@ describe('elements/content-sidebar/Sidebar', () => {
         docGenSidebarProps: withOutDocgenFeature,
     };
 
-    const getWrapper = props => shallow(<Sidebar {...defaultProps} {...props} />);
+    const getSidebar = props => <Sidebar {...defaultProps} {...props} />;
 
-    const getSidebar = props => (
-        <MemoryRouter initialEntries={['/']}>
-            <Sidebar {...defaultProps} {...props} />
-        </MemoryRouter>
-    );
+    const getSidebarPanelsProps = () => mockSidebarPanels.mock.lastCall[0];
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -65,15 +68,12 @@ describe('elements/content-sidebar/Sidebar', () => {
 
     describe('componentDidMount', () => {
         test('should call checkDocGenTemplate if docgen is enabeld', () => {
-            const wrapper = shallow(
-                <Sidebar
-                    file={file}
-                    location={{ pathname: '/' }}
-                    docGenSidebarProps={withDocgenFeature}
-                    metadataSidebarProps={{ isFeatureEnabled: true }}
-                />,
+            render(
+                getSidebar({
+                    docGenSidebarProps: withDocgenFeature,
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
             );
-            wrapper.instance();
             expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(1);
         });
 
@@ -102,65 +102,66 @@ describe('elements/content-sidebar/Sidebar', () => {
     });
 
     describe('componentDidUpdate', () => {
+        const mockSetItem = jest.fn();
+
         beforeEach(() => {
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => null),
-                setItem: jest.fn(() => null),
+                setItem: mockSetItem,
             }));
         });
 
-        test('should update if a user-initiated location change occurred', () => {
-            const wrapper = getWrapper({ location: { pathname: '/activity' } });
-            const instance = wrapper.instance();
-            instance.setForcedByLocation = jest.fn();
+        test('should not reset the sidebar on file change after a user-initiated location change', () => {
+            const history = { replace: jest.fn() };
+            const location = { pathname: '/details' };
+            const { rerender } = render(getSidebar({ fileId: 'file-1', history, location: { pathname: '/activity' } }));
 
-            expect(wrapper.state('isDirty')).toBe(false);
-            expect(instance.setForcedByLocation).not.toHaveBeenCalled();
+            rerender(getSidebar({ fileId: 'file-1', history, location }));
+            rerender(getSidebar({ fileId: 'file-2', history, location }));
 
-            wrapper.setProps({ location: { pathname: '/details' } });
-
-            expect(wrapper.state('isDirty')).toBe(true);
-            expect(instance.setForcedByLocation).toHaveBeenCalled();
+            expect(history.replace).not.toHaveBeenCalled();
         });
 
-        test('should not set isDirty if an app-initiated location change occurred', () => {
-            const wrapper = getWrapper({ location: { pathname: '/activity' } });
+        test('should reset the sidebar on file change after an app-initiated location change', () => {
+            const history = { replace: jest.fn() };
+            const location = { pathname: '/details', state: { silent: true } };
+            const { rerender } = render(getSidebar({ fileId: 'file-1', history, location: { pathname: '/activity' } }));
 
-            expect(wrapper.state('isDirty')).toBe(false);
+            rerender(getSidebar({ fileId: 'file-1', history, location }));
+            rerender(getSidebar({ fileId: 'file-2', history, location }));
 
-            wrapper.setProps({ location: { pathname: '/details', state: { silent: true } } });
-
-            expect(wrapper.state('isDirty')).toBe(false);
+            expect(history.replace).toHaveBeenCalledWith({ pathname: '/', state: { silent: true } });
         });
 
         test('should set the forced open state if the location state is present', () => {
-            const wrapper = getWrapper({ location: { pathname: '/' } });
-            const instance = wrapper.instance();
-            instance.isForced = jest.fn();
+            const { rerender } = render(getSidebar({ location: { pathname: '/' } }));
 
-            wrapper.setProps({ location: { pathname: '/details' } });
-            expect(instance.isForced).toHaveBeenCalledWith(); // Getter for render
+            rerender(getSidebar({ location: { pathname: '/details' } }));
+            expect(mockSetItem).not.toHaveBeenCalledWith(SIDEBAR_FORCE_KEY, expect.anything());
 
-            wrapper.setProps({ location: { pathname: '/details/inner', state: { open: true, silent: true } } });
-            expect(instance.isForced).toHaveBeenCalledWith(); // Getter for render
+            rerender(getSidebar({ location: { pathname: '/details/inner', state: { open: true, silent: true } } }));
+            expect(mockSetItem).not.toHaveBeenCalledWith(SIDEBAR_FORCE_KEY, expect.anything());
 
-            wrapper.setProps({ location: { pathname: '/', state: { open: true } } });
-            expect(instance.isForced).toHaveBeenCalledWith(true);
+            rerender(getSidebar({ location: { pathname: '/', state: { open: true } } }));
+            expect(mockSetItem).toHaveBeenLastCalledWith(SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_OPEN);
 
-            wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
-            expect(instance.isForced).toHaveBeenCalledWith(false);
+            rerender(getSidebar({ location: { pathname: '/', state: { open: false } } }));
+            expect(mockSetItem).toHaveBeenLastCalledWith(SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_CLOSED);
         });
         test('should re-check whether a file is docgen template on file change', () => {
-            const wrapper = shallow(
-                <Sidebar
-                    file={file}
-                    location={{ pathname: '/' }}
-                    docGenSidebarProps={withDocgenFeature}
-                    metadataSidebarProps={{ isFeatureEnabled: true }}
-                />,
+            const { rerender } = render(
+                getSidebar({
+                    docGenSidebarProps: withDocgenFeature,
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
             );
-            wrapper.instance();
-            wrapper.setProps({ file: { ...file, id: 'new-file' } });
+            rerender(
+                getSidebar({
+                    docGenSidebarProps: withDocgenFeature,
+                    file: { ...file, id: 'new-file' },
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
+            );
             expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(2);
         });
         test('should redirect to dogen tab if the new file is a docgen template', () => {
@@ -170,23 +171,24 @@ describe('elements/content-sidebar/Sidebar', () => {
                     pathname: '/activity/comments/1234',
                 },
             };
-            const wrapper = shallow(
-                <Sidebar
-                    location={{ pathname: '/' }}
-                    file={file}
-                    history={historyMock}
-                    docGenSidebarProps={withDocgenFeature}
-                    metadataSidebarProps={{ isFeatureEnabled: true }}
-                />,
+            const { rerender } = render(
+                getSidebar({
+                    history: historyMock,
+                    docGenSidebarProps: withDocgenFeature,
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
             );
-            wrapper.instance();
-            wrapper.setProps({
-                file: { ...file, id: 'new-file' },
-                docGenSidebarProps: {
-                    ...withDocgenFeature,
-                    isDocGenTemplate: true,
-                },
-            });
+            rerender(
+                getSidebar({
+                    file: { ...file, id: 'new-file' },
+                    history: historyMock,
+                    docGenSidebarProps: {
+                        ...withDocgenFeature,
+                        isDocGenTemplate: true,
+                    },
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
+            );
             expect(historyMock.push).toHaveBeenCalledWith('/docgen');
         });
         test('test should redirect to default route if new file is not a docgen template', () => {
@@ -196,23 +198,26 @@ describe('elements/content-sidebar/Sidebar', () => {
                     pathname: '/activity/comments/1234',
                 },
             };
-            const wrapper = shallow(
-                <Sidebar
-                    location={{ pathname: '/docgen' }}
-                    file={file}
-                    history={historyMock}
-                    docGenSidebarProps={{
+            const { rerender } = render(
+                getSidebar({
+                    location: { pathname: '/docgen' },
+                    history: historyMock,
+                    docGenSidebarProps: {
                         ...withDocgenFeature,
                         isDocGenTemplate: true,
-                    }}
-                    metadataSidebarProps={{ isFeatureEnabled: true }}
-                />,
+                    },
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
             );
-            wrapper.instance();
-            wrapper.setProps({
-                file: { ...file, id: 'new-file' },
-                docGenSidebarProps: withDocgenFeature,
-            });
+            rerender(
+                getSidebar({
+                    location: { pathname: '/docgen' },
+                    file: { ...file, id: 'new-file' },
+                    history: historyMock,
+                    docGenSidebarProps: withDocgenFeature,
+                    metadataSidebarProps: { isFeatureEnabled: true },
+                }),
+            );
             expect(historyMock.push).toHaveBeenCalledWith('/');
         });
         describe('open state change', () => {
@@ -300,10 +305,15 @@ describe('elements/content-sidebar/Sidebar', () => {
                 preventDefault: preventDefaultMock,
             };
 
-            const wrapper = getWrapper({ history: historyMock, file: { id: '1234', file_version: { id: '4567' } } });
-            const instance = wrapper.instance();
+            render(
+                getSidebar({
+                    file: { id: '1234', file_version: { id: '4567' } },
+                    hasVersions: true,
+                    history: historyMock,
+                }),
+            );
 
-            instance.handleVersionHistoryClick(event);
+            getSidebarPanelsProps().onVersionHistoryClick(event);
 
             expect(preventDefaultMock).toHaveBeenCalled();
             expect(historyMock.push).toHaveBeenCalledWith('/activity/versions/4567');
@@ -323,72 +333,56 @@ describe('elements/content-sidebar/Sidebar', () => {
                 preventDefault: preventDefaultMock,
             };
 
-            const wrapper = getWrapper({ history: historyMock, file: { id: '1234', file_version: { id: '4567' } } });
-            const instance = wrapper.instance();
+            render(
+                getSidebar({
+                    file: { id: '1234', file_version: { id: '4567' } },
+                    hasVersions: true,
+                    history: historyMock,
+                }),
+            );
 
-            instance.handleVersionHistoryClick(event);
+            getSidebarPanelsProps().onVersionHistoryClick(event);
 
             expect(preventDefaultMock).toHaveBeenCalled();
             expect(historyMock.push).toHaveBeenCalledWith('/details/versions/4567');
         });
     });
 
-    describe('isForced', () => {
-        test('returns the current value from the localStore', () => {
+    describe('forced open state', () => {
+        test('should open the sidebar when it was forced open in LocalStore', () => {
+            const mockGetItem = jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN);
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: mockGetItem,
+            }));
+
+            render(getSidebar({ isDefaultOpen: false }));
+
+            expect(mockGetItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY);
+            expect(screen.getByTestId('preview-sidebar')).toHaveClass('bcs-is-open');
+        });
+
+        test('should fall back to isDefaultOpen when the forced state is not set in LocalStore', () => {
+            const mockGetItem = jest.fn(() => null);
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: mockGetItem,
+            }));
+
+            render(getSidebar({ isDefaultOpen: false }));
+
+            expect(mockGetItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY);
+            expect(screen.getByTestId('preview-sidebar')).not.toHaveClass('bcs-is-open');
+        });
+
+        test('should save the forced open state from the initial location state in LocalStore', () => {
+            const mockSetItem = jest.fn();
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
+                setItem: mockSetItem,
             }));
 
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            render(getSidebar({ location: { pathname: '/', state: { open: true } } }));
 
-            expect(instance.store.getItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY);
-            expect(instance.isForced()).toEqual(SIDEBAR_FORCE_VALUE_OPEN);
-        });
-
-        test('returns an empty value from localStore if the value is unset', () => {
-            LocalStore.mockImplementationOnce(() => ({
-                getItem: jest.fn(() => null),
-            }));
-
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            expect(instance.store.getItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY);
-            expect(instance.isForced()).toEqual(null);
-        });
-
-        test('sets and then returns the value to localStore if passed in', () => {
-            LocalStore.mockImplementationOnce(() => ({
-                getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
-                setItem: jest.fn(),
-            }));
-
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.isForced(SIDEBAR_FORCE_VALUE_OPEN);
-
-            expect(instance.store.setItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_OPEN);
-            expect(instance.store.getItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY);
-            expect(instance.isForced()).toEqual(SIDEBAR_FORCE_VALUE_OPEN);
-        });
-    });
-
-    describe('isForcedSet', () => {
-        test('should return true if the value is not null', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.isForced = jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN);
-
-            expect(instance.isForcedSet()).toBe(true);
-        });
-
-        test('should return false if the value is null', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.isForced = jest.fn(() => null);
-
-            expect(instance.isForcedSet()).toBe(false);
+            expect(mockSetItem).toHaveBeenCalledWith(SIDEBAR_FORCE_KEY, SIDEBAR_FORCE_VALUE_OPEN);
         });
     });
 
@@ -409,33 +403,30 @@ describe('elements/content-sidebar/Sidebar', () => {
                     setItem: jest.fn(() => forced),
                 }));
 
-                const wrapper = getWrapper({ isDefaultOpen });
+                render(getSidebar({ isDefaultOpen }));
 
-                expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
+                expect(screen.getByTestId('preview-sidebar').classList.contains('bcs-is-open')).toBe(expected);
             },
         );
 
         test('should not render SidebarNav when hasNav is false', () => {
-            const wrapper = getWrapper({ hasNav: false });
+            render(getSidebar({ hasNav: false }));
 
-            expect(wrapper.exists('SidebarNav')).toBe(false);
+            expect(SidebarNav).not.toHaveBeenCalled();
         });
 
         describe('SidebarPanels', () => {
             const mockGetItem = jest.fn();
-            const MockSidebarPanels = jest.fn(() => 'SidebarPanels');
 
             beforeEach(() => {
                 LocalStore.mockImplementationOnce(() => ({
                     getItem: mockGetItem,
                     setItem: jest.fn(),
                 }));
-                SidebarPanels.mockImplementationOnce(MockSidebarPanels);
             });
 
             afterEach(() => {
                 mockGetItem.mockClear();
-                MockSidebarPanels.mockClear();
             });
             test.each`
                 panelSelectionPreservation | savedDefaultPanel | expected
@@ -453,10 +444,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                             features: { panelSelectionPreservation },
                         }),
                     );
-                    expect(MockSidebarPanels).toHaveBeenCalledWith(
-                        expect.objectContaining({ defaultPanel: expected }),
-                        {},
-                    );
+                    expect(mockSidebarPanels).toHaveBeenCalledWith(expect.objectContaining({ defaultPanel: expected }));
                 },
             );
 
@@ -478,9 +466,8 @@ describe('elements/content-sidebar/Sidebar', () => {
                             location: { pathname },
                         }),
                     );
-                    expect(MockSidebarPanels).toHaveBeenCalledWith(
+                    expect(mockSidebarPanels).toHaveBeenCalledWith(
                         expect.objectContaining({ defaultPanel: 'activity' }),
-                        {},
                     );
                 },
             );
@@ -502,10 +489,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                             location: { pathname },
                         }),
                     );
-                    expect(MockSidebarPanels).toHaveBeenCalledWith(
-                        expect.objectContaining({ defaultPanel: expected }),
-                        {},
-                    );
+                    expect(mockSidebarPanels).toHaveBeenCalledWith(expect.objectContaining({ defaultPanel: expected }));
                 },
             );
         });
@@ -513,13 +497,12 @@ describe('elements/content-sidebar/Sidebar', () => {
 
     describe('refresh()', () => {
         test.each([true, false])('should call panel refresh with the provided boolean', shouldRefreshCache => {
-            const instance = getWrapper().instance();
-            const refresh = jest.fn();
-            instance.sidebarPanels = { current: { refresh } };
+            const sidebarRef = React.createRef();
+            render(getSidebar({ ref: sidebarRef }));
 
-            instance.refresh(shouldRefreshCache);
+            sidebarRef.current.refresh(shouldRefreshCache);
 
-            expect(refresh).toHaveBeenCalledWith(shouldRefreshCache);
+            expect(mockSidebarPanelsRefresh).toHaveBeenCalledWith(shouldRefreshCache);
         });
     });
 
@@ -530,15 +513,36 @@ describe('elements/content-sidebar/Sidebar', () => {
             viewWidth: 1600,
         };
 
+        // jsdom does not implement pointer capture, which SidebarResizeHandle checks on pointerup
+        beforeAll(() => {
+            Element.prototype.hasPointerCapture = () => false;
+        });
+
+        afterAll(() => {
+            delete Element.prototype.hasPointerCapture;
+        });
+
+        // pointermove and pointerup bubble from the handle up to window, where SidebarResizeHandle listens to them
+        const dragResizeHandle = (startX, endX) =>
+            userEvent().pointer([
+                {
+                    keys: '[MouseLeft>]',
+                    target: screen.getByTestId('sidebar-resize-handle'),
+                    coords: { clientX: startX },
+                },
+                { coords: { clientX: endX } },
+                { keys: '[/MouseLeft]' },
+            ]);
+
         test('renders the resize handle and bcs-is-resizable class when feature is on and viewport is large', () => {
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper(resizableProps);
+            render(getSidebar(resizableProps));
 
-            expect(wrapper.hasClass('bcs-is-resizable')).toBe(true);
-            expect(wrapper.find('SidebarResizeHandle').exists()).toBe(true);
+            expect(screen.getByTestId('preview-sidebar')).toHaveClass('bcs-is-resizable');
+            expect(screen.getByTestId('sidebar-resize-handle')).toBeInTheDocument();
         });
 
         test('does not render the resize handle when the feature flag is off', () => {
@@ -546,13 +550,15 @@ describe('elements/content-sidebar/Sidebar', () => {
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper({
-                ...resizableProps,
-                features: { contentSidebar: { resizable: { enabled: false } } },
-            });
+            render(
+                getSidebar({
+                    ...resizableProps,
+                    features: { contentSidebar: { resizable: { enabled: false } } },
+                }),
+            );
 
-            expect(wrapper.hasClass('bcs-is-resizable')).toBe(false);
-            expect(wrapper.find('SidebarResizeHandle').exists()).toBe(false);
+            expect(screen.getByTestId('preview-sidebar')).not.toHaveClass('bcs-is-resizable');
+            expect(screen.queryByTestId('sidebar-resize-handle')).not.toBeInTheDocument();
         });
 
         test.each(['small', 'medium'])(
@@ -562,10 +568,10 @@ describe('elements/content-sidebar/Sidebar', () => {
                     getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                     setItem: jest.fn(),
                 }));
-                const wrapper = getWrapper({ ...resizableProps, size });
+                render(getSidebar({ ...resizableProps, size }));
 
-                expect(wrapper.hasClass('bcs-is-resizable')).toBe(false);
-                expect(wrapper.find('SidebarResizeHandle').exists()).toBe(false);
+                expect(screen.getByTestId('preview-sidebar')).not.toHaveClass('bcs-is-resizable');
+                expect(screen.queryByTestId('sidebar-resize-handle')).not.toBeInTheDocument();
             },
         );
 
@@ -574,9 +580,9 @@ describe('elements/content-sidebar/Sidebar', () => {
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_CLOSED),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper(resizableProps);
+            render(getSidebar(resizableProps));
 
-            expect(wrapper.find('SidebarResizeHandle').exists()).toBe(false);
+            expect(screen.queryByTestId('sidebar-resize-handle')).not.toBeInTheDocument();
         });
 
         test('does not apply inline width until the user has dragged', () => {
@@ -584,47 +590,50 @@ describe('elements/content-sidebar/Sidebar', () => {
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper(resizableProps);
+            render(getSidebar(resizableProps));
 
-            expect(wrapper.find('aside').prop('style')).toBeUndefined();
+            expect(screen.getByTestId('preview-sidebar')).not.toHaveAttribute('style');
         });
 
-        test('applies inline width once handleResize has been called', () => {
+        test('applies inline width once the user has dragged the resize handle', async () => {
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper(resizableProps);
-            wrapper.instance().handleResize(550);
-            wrapper.update();
+            render(getSidebar(resizableProps));
 
-            expect(wrapper.find('aside').prop('style')).toEqual({ width: 550, maxWidth: 550 });
+            await dragResizeHandle(1000, 850);
+
+            expect(screen.getByTestId('preview-sidebar')).toHaveStyle({ width: '550px', maxWidth: '550px' });
         });
 
-        test('caps maxWidth at 50% of the viewport width', () => {
+        test('caps maxWidth at 50% of the viewport width', async () => {
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper({ ...resizableProps, viewWidth: 1200 });
+            render(getSidebar({ ...resizableProps, viewWidth: 1200 }));
 
-            expect(wrapper.find('SidebarResizeHandle').prop('maxWidth')).toBe(600);
+            await dragResizeHandle(1000, 200);
+
+            expect(screen.getByTestId('preview-sidebar')).toHaveStyle({ width: '600px', maxWidth: '600px' });
         });
 
-        test('records programmatic Resin actions when resizing starts and ends', () => {
+        test('records programmatic Resin actions when resizing starts and ends', async () => {
             const recordAction = jest.fn();
             LocalStore.mockImplementationOnce(() => ({
                 getItem: jest.fn(() => SIDEBAR_FORCE_VALUE_OPEN),
                 setItem: jest.fn(),
             }));
-            const wrapper = getWrapper({
-                ...resizableProps,
-                fileId: file.id,
-                resin: { recordAction },
-            });
+            render(
+                getSidebar({
+                    ...resizableProps,
+                    fileId: file.id,
+                    resin: { recordAction },
+                }),
+            );
 
-            wrapper.instance().handleResizeStart(400);
-            wrapper.instance().handleResizeEnd(550, 400);
+            await dragResizeHandle(1000, 850);
 
             expect(recordAction).toHaveBeenNthCalledWith(1, {
                 action: 'programmatic',
@@ -688,7 +697,7 @@ describe('elements/content-sidebar/Sidebar', () => {
         });
 
         test('should call onPanelChange prop when handling setting of initial panel', () => {
-            SidebarPanels.mockImplementationOnce(({ onPanelChange }) => {
+            mockSidebarPanels.mockImplementationOnce(({ onPanelChange }) => {
                 onPanelChange(mockPanelName, true);
                 return 'SidebarPanels';
             });
