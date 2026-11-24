@@ -1,12 +1,13 @@
 import { COMMENTS_FIELDS_TO_FETCH } from '../../utils/fields';
 import Comments from '../Comments';
 import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../../constants';
+import type { APIOptions } from '../../common/types/api';
 
 let comments;
 
 describe('api/Comments', () => {
     beforeEach(() => {
-        comments = new Comments({});
+        comments = new Comments({} as APIOptions);
     });
 
     describe('getUrl()', () => {
