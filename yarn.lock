@@ -1077,6 +1077,11 @@
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-5.13.9.tgz#3408793e3d4ab5099ec0ae7cde5aa07a042c9276"
   integrity sha512-rD9POqDPPUDIU575mlWqbb1wpvLmGi2E/bccY7rgLwe6V0b3AuO5pa7Y35VB1138vaMe9a1cI7wB9ehP8PJn+A==
 
+"@box/blueprint-web-assets@^5.18.0":
+  version "5.18.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-5.18.1.tgz#87f4de2bb29dbd1bfb938c071c00edf045f1a630"
+  integrity sha512-R5y2mPdXppHUr+AkSpU8pZAlAUCrAoHCFtW+9kgGXj15KF5DZ7P8mTR29+gxL8qANpKuKts6H5rn1k6Pgl52+A==
+
 "@box/blueprint-web@^18.9.1":
   version "18.9.1"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-18.9.1.tgz#4b0c85886080577033482d745cef03ff51f3d572"
