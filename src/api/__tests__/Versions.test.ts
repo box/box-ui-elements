@@ -1,6 +1,7 @@
 import Versions from '../Versions';
 import { PERMISSION_CAN_DELETE, PERMISSION_CAN_UPLOAD } from '../../constants';
 import { FILE_VERSIONS_FIELDS_TO_FETCH } from '../../utils/fields';
+import type { APIOptions } from '../../common/types/api';
 
 let versions;
 
@@ -53,7 +54,6 @@ describe('api/Versions', () => {
         },
         restored_from: {
             id: firstVersion.id,
-            type: firstVersion.type,
         },
     };
     const { id: fileId } = file;
@@ -63,7 +63,7 @@ describe('api/Versions', () => {
     };
 
     beforeEach(() => {
-        versions = new Versions({});
+        versions = new Versions({} as APIOptions);
     });
 
     describe('getUrl()', () => {
