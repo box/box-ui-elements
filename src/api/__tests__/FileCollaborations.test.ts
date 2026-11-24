@@ -1,16 +1,17 @@
 import FileCollaborations from '../FileCollaborations';
+import type { APIOptions } from '../../common/types/api';
 
-let fileCollaborations;
+let fileCollaborations: FileCollaborations;
 
 describe('api/FileCollaborations', () => {
     beforeEach(() => {
-        fileCollaborations = new FileCollaborations({});
+        fileCollaborations = new FileCollaborations({} as APIOptions);
     });
 
     describe('getUrl()', () => {
         test('should throw when a file ID is not provided', () => {
             expect(() => {
-                fileCollaborations.getUrl();
+                fileCollaborations.getUrl(undefined);
             }).toThrow();
         });
 

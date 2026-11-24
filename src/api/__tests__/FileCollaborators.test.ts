@@ -1,16 +1,17 @@
 import FileCollaborators from '../FileCollaborators';
+import type { APIOptions } from '../../common/types/api';
 
-let fileCollaborators;
+let fileCollaborators: FileCollaborators;
 
 describe('api/FileCollaborators', () => {
     beforeEach(() => {
-        fileCollaborators = new FileCollaborators({});
+        fileCollaborators = new FileCollaborators({} as APIOptions);
     });
 
     describe('getUrl()', () => {
         test('should throw when collaborators api url without id', () => {
             expect(() => {
-                fileCollaborators.getUrl();
+                fileCollaborators.getUrl(undefined);
             }).toThrow();
         });
         test('should return correct collaborators api url with id', () => {
@@ -50,7 +51,7 @@ describe('api/FileCollaborators', () => {
                 ],
             };
 
-            fileCollaborators.successHandler(response);
+            fileCollaborators.successHandler(response as unknown as Parameters<FileCollaborators['successHandler']>[0]);
 
             expect(fileCollaborators.successCallback).toBeCalledWith(formattedResponse);
         });

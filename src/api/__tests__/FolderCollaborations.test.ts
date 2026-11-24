@@ -1,16 +1,17 @@
 import FolderCollaborations from '../FolderCollaborations';
+import type { APIOptions } from '../../common/types/api';
 
-let folderCollaborations;
+let folderCollaborations: FolderCollaborations;
 
 describe('api/FolderCollaborations', () => {
     beforeEach(() => {
-        folderCollaborations = new FolderCollaborations({});
+        folderCollaborations = new FolderCollaborations({} as APIOptions);
     });
 
     describe('getUrl()', () => {
         test('should throw when a folder ID is not provided', () => {
             expect(() => {
-                folderCollaborations.getUrl();
+                folderCollaborations.getUrl(undefined);
             }).toThrow();
         });
 
