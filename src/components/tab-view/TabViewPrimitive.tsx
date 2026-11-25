@@ -258,7 +258,7 @@ class TabViewPrimitive extends React.Component<TabViewPrimitiveProps, TabViewPri
 
                     const classes = classNames('btn-plain', 'tab', i === selectedIndex ? 'is-selected' : '');
 
-                    const ariaControls = `${this.tabviewID}-panel-${i + 1}`;
+                    const ariaControls = `${this.tabviewID}-panel-${i}`;
                     const ariaSelected = i === selectedIndex;
                     const id = `${this.tabviewID}-tab-${i + 1}`;
                     const { href, component, refProp } = tab.props;
