@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme';
 import type { ReactWrapper } from 'enzyme';
 import sinon from 'sinon';
 
+import { render, screen } from '../../../test-utils/testing-library';
 import { Tab, TabViewPrimitive } from '..';
 
 const sandbox = sinon.sandbox.create();
@@ -673,4 +674,38 @@ describe('components/tab-view/TabViewPrimitive', () => {
             });
         });
     });
+});
+
+describe('components/tab-view/TabViewPrimitive tab and panel ids', () => {
+    const renderTabView = (titles: string[]) =>
+        render(
+            <TabViewPrimitive
+                focusedIndex={0}
+                onTabFocus={jest.fn()}
+                onTabSelect={jest.fn()}
+                resetActiveTab={jest.fn()}
+                resetFocusedTab={jest.fn()}
+                selectedIndex={0}
+            >
+                {titles.map(title => (
+                    <Tab key={title} title={title}>
+                        {`${title} content`}
+                    </Tab>
+                ))}
+            </TabViewPrimitive>,
+        );
+
+    test.each([[['Activity']], [['Activity', 'Details', 'Versions']]])(
+        'points each tab to the panel it labels when there are %p tabs',
+        titles => {
+            renderTabView(titles);
+
+            screen.getAllByRole('tab').forEach(tab => {
+                const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
+
+                expect(panel).toBeInTheDocument();
+                expect(panel).toHaveAttribute('aria-labelledby', tab.id);
+            });
+        },
+    );
 });
