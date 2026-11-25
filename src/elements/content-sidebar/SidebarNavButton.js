@@ -32,6 +32,23 @@ export type Props = {
     tooltip: React.Node,
 };
 
+const useIsElementMounted = (targetId: string, containerId: string): boolean => {
+    const [isMounted, setIsMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        const updateIsMounted = () => setIsMounted(!!document.getElementById(targetId));
+        const container = (containerId && document.getElementById(containerId)) || document;
+        const observer = new MutationObserver(updateIsMounted);
+
+        updateIsMounted();
+        observer.observe(container, { attributeFilter: ['id'], childList: true, subtree: true });
+
+        return () => observer.disconnect();
+    }, [containerId, targetId]);
+
+    return isMounted;
+};
+
 const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>((props: Props, ref) => {
     const {
         'data-resin-target': dataResinTarget,
@@ -50,6 +67,9 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>((props: Prop
     const ariaLabel = typeof tooltip === 'string' ? tooltip : undefined;
     const sidebarPath = `/${sidebarView}`;
     const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
+    const panelId = `${id}-content`;
+    const isPanelMounted = useIsElementMounted(panelId, elementId);
+    const ariaControls = isPanelMounted ? panelId : undefined;
 
     if (routerDisabled) {
         // Mimic router behavior using internalSidebarNavigation
@@ -89,7 +109,7 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>((props: Prop
             <Tooltip content={tooltip} side="left">
                 <Button
                     accessibleWhenDisabled={true}
-                    aria-controls={`${id}-content`}
+                    aria-controls={ariaControls}
                     aria-label={ariaLabel}
                     aria-selected={isActiveValue}
                     className={classNames('bcs-NavButton', {
@@ -142,7 +162,7 @@ const SidebarNavButton = React.forwardRef<Props, HTMLButtonElement>((props: Prop
                     <Tooltip content={tooltip} side="left">
                         <Button
                             accessibleWhenDisabled={true}
-                            aria-controls={`${id}-content`}
+                            aria-controls={ariaControls}
                             aria-label={ariaLabel}
                             aria-selected={isActiveValue}
                             className={classNames('bcs-NavButton', {
