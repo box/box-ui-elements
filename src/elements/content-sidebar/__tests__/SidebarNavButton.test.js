@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
 // Using fireEvent for all click interactions instead of userEvent because
 // userEvent.pointer with right-click doesn't reliably trigger onClick handlers
-import { render, screen, fireEvent } from '../../../test-utils/testing-library';
+import { render, screen, fireEvent, waitFor } from '../../../test-utils/testing-library';
 import SidebarNavButton from '../SidebarNavButton';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {
@@ -29,7 +29,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
 
         expect(button).toHaveAttribute('aria-label', 'foo');
         expect(button).toHaveAttribute('aria-selected', 'false');
-        expect(button).toHaveAttribute('aria-controls', 'activity-content');
+        expect(button).not.toHaveAttribute('aria-controls');
         expect(button).toHaveAttribute('role', 'tab');
         expect(button).toHaveAttribute('tabindex', '-1');
         expect(button).toHaveAttribute('type', 'button');
@@ -141,18 +141,43 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
     `(
         'should generate correct id and aria-controls with elementId=$elementId and sidebarView=$sidebarView',
         ({ elementId, sidebarView, expectedId, expectedAriaControls }) => {
-            renderWrapper({
-                elementId,
-                sidebarView,
-                tooltip: 'test',
-                children: <span>test button</span>,
-            });
+            render(
+                <MemoryRouter>
+                    <SidebarNavButton elementId={elementId} sidebarView={sidebarView} tooltip="test">
+                        <span>test button</span>
+                    </SidebarNavButton>
+                    <div id={expectedAriaControls} role="tabpanel" />
+                </MemoryRouter>,
+            );
 
             const button = screen.getByRole('tab');
             expect(button).toHaveAttribute('id', expectedId);
             expect(button).toHaveAttribute('aria-controls', expectedAriaControls);
         },
     );
+
+    test('should only reference the panel through aria-controls while the panel is mounted', async () => {
+        const SidebarWithPanel = ({ isPanelMounted }) => (
+            <MemoryRouter initialEntries={['/activity']}>
+                <aside id="sidebar">
+                    <SidebarNavButton elementId="sidebar" isOpen sidebarView="activity" tooltip="Activity">
+                        <span>Activity</span>
+                    </SidebarNavButton>
+                    {isPanelMounted && <div id="sidebar_activity-content" role="tabpanel" />}
+                </aside>
+            </MemoryRouter>
+        );
+        const { rerender } = render(<SidebarWithPanel isPanelMounted={false} />);
+        const button = screen.getByRole('tab');
+
+        expect(button).not.toHaveAttribute('aria-controls');
+
+        rerender(<SidebarWithPanel isPanelMounted />);
+        await waitFor(() => expect(button).toHaveAttribute('aria-controls', 'sidebar_activity-content'));
+
+        rerender(<SidebarWithPanel isPanelMounted={false} />);
+        await waitFor(() => expect(button).not.toHaveAttribute('aria-controls'));
+    });
 
     test('should forward ref to the Button', () => {
         const ref = React.createRef();
@@ -279,7 +304,7 @@ describe('elements/content-sidebar/SidebarNavButton - Router Disabled', () => {
 
         expect(button).toHaveAttribute('aria-label', 'foo');
         expect(button).toHaveAttribute('aria-selected', 'false');
-        expect(button).toHaveAttribute('aria-controls', 'activity-content');
+        expect(button).not.toHaveAttribute('aria-controls');
         expect(button).toHaveAttribute('role', 'tab');
         expect(button).toHaveAttribute('tabindex', '-1');
         expect(button).toHaveAttribute('type', 'button');
