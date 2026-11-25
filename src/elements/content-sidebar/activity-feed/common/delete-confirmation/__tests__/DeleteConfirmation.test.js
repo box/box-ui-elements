@@ -2,14 +2,19 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import DeleteConfirmation from '../DeleteConfirmation';
-import messages from '../../../comment/messages';
+
+const commentDeletePrompt = {
+    id: 'be.contentSidebar.activityFeed.comment.commentDeletePrompt',
+    description: 'Confirmation prompt text to delete comment',
+    defaultMessage: 'Are you sure you want to permanently delete this comment?',
+};
 
 describe('elements/content-sidebar/ActivityFeed/common/delete-confirmation', () => {
     const getWrapper = props =>
         shallow(
             <DeleteConfirmation
                 isOpen
-                message={messages.commentDeletePrompt}
+                message={commentDeletePrompt}
                 onDeleteCancel={jest.fn()}
                 onDeleteConfirm={jest.fn()}
                 {...props}
