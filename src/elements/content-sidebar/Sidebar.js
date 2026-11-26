@@ -658,16 +658,16 @@ class SidebarRouterDisabled extends React.Component<Props, RouterDisabledState> 
         const { internalSidebarNavigation, isDirty }: RouterDisabledState = this.state;
 
         // Host navigated the sidebar
-        if (
-            sidebarNavigation &&
+        const hasHostNavigated =
+            !!sidebarNavigation &&
             !isEqual(sidebarNavigation, prevSidebarNavigation) &&
-            !isEqual(sidebarNavigation, internalSidebarNavigation)
-        ) {
+            !isEqual(sidebarNavigation, internalSidebarNavigation);
+        if (hasHostNavigated) {
             this.setNavigation((sidebarNavigation: any));
         }
 
-        // User navigated to a different file without ever navigating the sidebar
-        if (!isDirty && fileId !== prevFileId && internalSidebarNavigation.sidebar) {
+        // User navigated to a different file without ever navigating the sidebar, unless the host navigated with it
+        if (!hasHostNavigated && !isDirty && fileId !== prevFileId && internalSidebarNavigation.sidebar) {
             this.internalSidebarNavigationHandler({ silent: true }, true);
         }
 

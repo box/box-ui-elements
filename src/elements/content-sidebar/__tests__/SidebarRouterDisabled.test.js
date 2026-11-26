@@ -209,6 +209,20 @@ describe('elements/content-sidebar/SidebarRouterDisabled', () => {
             expect(sidebarNavigationHandler).toHaveBeenCalledWith({}, true);
         });
 
+        test('should keep the host navigation when the host changes the file and the navigation together', () => {
+            const sidebarNavigationHandler = jest.fn();
+            const { rerender } = render(
+                getSidebar({ fileId: 'file-1', sidebarNavigation: { sidebar: 'details' }, sidebarNavigationHandler }),
+            );
+
+            rerender(
+                getSidebar({ fileId: 'file-2', sidebarNavigation: { sidebar: 'activity' }, sidebarNavigationHandler }),
+            );
+
+            expect(getSidebarPanelsProps().internalSidebarNavigation).toEqual({ sidebar: 'activity' });
+            expect(sidebarNavigationHandler).not.toHaveBeenCalled();
+        });
+
         test('should not reset the navigation on file change after the user has navigated the sidebar', () => {
             const sidebarNavigationHandler = jest.fn();
             const { rerender } = render(getSidebar({ fileId: 'file-1', sidebarNavigationHandler }));
