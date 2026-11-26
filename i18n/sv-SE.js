@@ -381,7 +381,6 @@ export default {
     "be.sidebarHide": "Dölj sidofält",
     "be.sidebarMetadataEditingErrorContent": "Ett fel inträffade när metadata uppdaterades. Uppdatera sidan och försök igen.",
     "be.sidebarMetadataFetchingErrorContent": "Ett fel inträffade när metadata hämtades. Uppdatera sidan och försök igen.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Mallnamn måste innehålla minst en bokstav eller siffra (A–Z, 0–9). Namn som endast är skiljetecken eller icke-latinska tecken kan inte sparas.",
     "be.sidebarNavLabel": "Sidofält",
     "be.sidebarProperties": "Filegenskaper",
     "be.sidebarShow": "Visa sidofält",

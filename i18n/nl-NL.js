@@ -376,7 +376,6 @@ export default {
     "be.sidebarHide": "Zijbalk verbergen",
     "be.sidebarMetadataEditingErrorContent": "Er is een fout opgetreden tijdens het bijwerken van metadata. Vernieuw de pagina en probeer het opnieuw.",
     "be.sidebarMetadataFetchingErrorContent": "Er is een fout opgetreden tijdens het ophalen van metadata. Vernieuw de pagina en probeer het opnieuw.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Sjabloonnamen moeten ten minste één letter of getal bevatten (A–Z, 0–9). Namen die alleen leestekens of niet-Latijnse tekens bevatten, kunnen niet worden opgeslagen.",
     "be.sidebarNavLabel": "Zijbalk",
     "be.sidebarProperties": "Bestandseigenschappen",
     "be.sidebarShow": "Zijbalk tonen",

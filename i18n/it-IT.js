@@ -379,7 +379,6 @@ export default {
     "be.sidebarHide": "Nascondi barra laterale",
     "be.sidebarMetadataEditingErrorContent": "Si è verificato un errore durante l'aggiornamento dei metadati. Aggiorna la pagina e riprova.",
     "be.sidebarMetadataFetchingErrorContent": "Si è verificato un errore durante il recupero dei metadati. Aggiorna la pagina e riprova.",
-    "be.sidebarMetadataTemplateKeyInvalid": "I nomi dei modelli devono includere almeno una lettera o un numero (A–Z, 0–9). Impossibile salvare i nomi che sono solo segni di punteggiatura o caratteri non latini.",
     "be.sidebarMetadataTitle": "Metadati",
     "be.sidebarNavLabel": "Barra laterale",
     "be.sidebarProperties": "Proprietà file",

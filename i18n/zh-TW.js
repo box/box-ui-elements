@@ -383,7 +383,6 @@ export default {
     "be.sidebarHide": "隱藏側邊欄",
     "be.sidebarMetadataEditingErrorContent": "更新中繼資料時發生錯誤。請重新整理頁面並再試一次。",
     "be.sidebarMetadataFetchingErrorContent": "擷取中繼資料時發生錯誤。請重新整理頁面並再試一次。",
-    "be.sidebarMetadataTemplateKeyInvalid": "範本名稱必須至少包含一個字母或數字 (A–Z、0–9)。無法儲存僅包含標點符號或非拉丁字元的名稱。",
     "be.sidebarMetadataTitle": "中繼資料",
     "be.sidebarNavLabel": "側邊欄",
     "be.sidebarProperties": "檔案屬性",

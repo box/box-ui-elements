@@ -41,7 +41,6 @@ import { resolveScopeOrNamespace } from '../../api/metadataNamespaceUtils';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
-    ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
     METADATA_SCOPE_MODE_SCOPED,
@@ -58,11 +57,7 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import {
-    isSameMetadataTemplate,
-    resolveCreateMetadataTemplateKey,
-    type MetadataTemplateIdentity,
-} from './utils/metadataTemplateIdentity';
+import { isSameMetadataTemplate, type MetadataTemplateIdentity } from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
     metadataTaxonomiesListFetcher,
@@ -369,17 +364,16 @@ function MetadataSidebarRedesign({
 
     const handleCreateTemplate = useCallback(
         async (body: MetadataTemplateCreateBody) => {
-            const templateKey = resolveCreateMetadataTemplateKey(body);
-            if (!templateKey) {
-                const error = new Error(formatMessage(messages.sidebarMetadataTemplateKeyInvalid));
-                onError(error, ERROR_CODE_CREATE_METADATA_TEMPLATE, { showNotification: true });
-                throw error;
-            }
+            // metadata-api generates a key when templateKey is omitted. The editor
+            // has no key input and submits ''. An empty string is not treated as
+            // missing and is rejected, so a blank key is stripped instead of derived.
+            const { templateKey, ...bodyWithoutTemplateKey } = body;
+            const requestBody = templateKey?.trim() ? body : bodyWithoutTemplateKey;
 
             await new Promise<void>((resolve, reject) => {
                 metadataAPI().createMetadataTemplate(
                     file,
-                    { ...body, templateKey },
+                    requestBody,
                     () => {
                         refetchMetadata();
                         resolve();
@@ -391,7 +385,7 @@ function MetadataSidebarRedesign({
                 );
             });
         },
-        [file, formatMessage, metadataAPI, onError, refetchMetadata],
+        [file, metadataAPI, onError, refetchMetadata],
     );
 
     const fetchTaxonomyByKey = useCallback(

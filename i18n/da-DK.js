@@ -378,7 +378,6 @@ export default {
     "be.sidebarHide": "Skjul sidebjælke",
     "be.sidebarMetadataEditingErrorContent": "Der opstod en fejl under opdatering af metadata. Opdater siden, og prøv igen.",
     "be.sidebarMetadataFetchingErrorContent": "Der opstod en fejl under hentning af metadata. Opdater siden, og prøv igen.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Skabelonnavne skal indeholde mindst ét bogstav eller tal (A–Z, 0–9). Navne, der udelukkende består af tegnsætning eller ikke-latinske tegn, kan ikke gemmes.",
     "be.sidebarNavLabel": "Sidepanel",
     "be.sidebarProperties": "Filegenskaber",
     "be.sidebarShow": "Vis sidebjælke",

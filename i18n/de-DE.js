@@ -374,7 +374,6 @@ export default {
     "be.sidebarHide": "Seitenleiste ausblenden",
     "be.sidebarMetadataEditingErrorContent": "Beim Aktualisieren von Metadaten ist ein Fehler aufgetreten. Aktualisieren Sie die Seite und versuchen Sie es erneut.",
     "be.sidebarMetadataFetchingErrorContent": "Beim Abrufen von Metadaten ist ein Fehler aufgetreten. Aktualisieren Sie die Seite und versuchen Sie es erneut.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Vorlagennamen müssen mindestens einen Buchstaben oder eine Zahl (A–Z, 0–9) enthalten. Namen, die nur aus Satzzeichen oder nicht-lateinischen Zeichen bestehen, können nicht gespeichert werden.",
     "be.sidebarMetadataTitle": "Metadaten",
     "be.sidebarNavLabel": "Seitenleiste",
     "be.sidebarProperties": "Dateieigenschaften",

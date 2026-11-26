@@ -384,7 +384,6 @@ export default {
     "be.sidebarHide": "隐藏侧边栏",
     "be.sidebarMetadataEditingErrorContent": "更新元数据时出现错误。请刷新页面并重试。",
     "be.sidebarMetadataFetchingErrorContent": "获取元数据时出现错误。请刷新页面并重试。",
-    "be.sidebarMetadataTemplateKeyInvalid": "模板名称必须包含至少一个字母或数字（A–Z，0–9）。仅由标点符号或非拉丁字符组成的名称无法保存。",
     "be.sidebarMetadataTitle": "元数据",
     "be.sidebarNavLabel": "侧边栏",
     "be.sidebarProperties": "文件属性",

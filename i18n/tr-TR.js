@@ -383,7 +383,6 @@ export default {
     "be.sidebarHide": "Kenar Çubuğunu Gizle",
     "be.sidebarMetadataEditingErrorContent": "Meta veri güncellenirken bir hata oluştu. Lütfen sayfayı yenileyin ve tekrar deneyin.",
     "be.sidebarMetadataFetchingErrorContent": "Meta veri alınırken bir hata oluştu. Lütfen sayfayı yenileyin ve tekrar deneyin.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Şablon adları en az bir harf veya rakam (A–Z, 0–9) içermelidir. Yalnızca noktalama işaretlerinden veya Latin alfabesi dışındaki karakterlerden oluşan adlar kaydedilemez.",
     "be.sidebarMetadataTitle": "Meta veri",
     "be.sidebarNavLabel": "Kenar çubuğu",
     "be.sidebarProperties": "Dosya Özellikleri",

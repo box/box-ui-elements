@@ -384,7 +384,6 @@ export default {
     "be.sidebarHide": "साइडबार छिपाएं",
     "be.sidebarMetadataEditingErrorContent": "मेटाडेटा अपडेट करने के दौरान एक त्रुटि हुई. कृपया पेज रीफ़्रेश करें और फिर से कोशिश करें.",
     "be.sidebarMetadataFetchingErrorContent": "मेटाडेटा प्राप्त करने के दौरान एक त्रुटि हुई. कृपया पेज रीफ़्रेश करें और फिर से कोशिश करें.",
-    "be.sidebarMetadataTemplateKeyInvalid": "टेम्पलेट के नामों में कम से कम एक अक्षर या संख्या (A–Z, 0–9) शामिल होनी चाहिए। उन नामों को सहेजा नहीं जा सकता जो केवल विराम चिह्न या गैर-लैटिन वर्ण हैं।",
     "be.sidebarMetadataTitle": "मेटाडेटा",
     "be.sidebarNavLabel": "साइडबार",
     "be.sidebarProperties": "फ़ाइल के गुण",
