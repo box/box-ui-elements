@@ -24,6 +24,31 @@ export function getMetadataTemplateNamespaceFqn(template: MetadataTemplateIdenti
     return template.namespace ?? template.scope;
 }
 
+/**
+ * Derives a template key from a display name.
+ *
+ * Keeps ASCII letters and digits, then camelCases the words. Punctuation-only
+ * names and names with no Latin letters or digits become `''`. Callers must
+ * omit the field in that case — an empty string is rejected by the API.
+ */
+export function deriveMetadataTemplateKey(displayName: string): string {
+    const words = displayName
+        .replace(/[^a-zA-Z0-9]+/gu, ' ')
+        .trim()
+        .split(' ')
+        .filter(Boolean);
+
+    if (words.length === 0) {
+        return '';
+    }
+
+    return words
+        .map((word, index) =>
+            index === 0 ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1).toLowerCase()}`,
+        )
+        .join('');
+}
+
 const METADATA_SCOPE_GLOBAL = 'global';
 const METADATA_NAMESPACE_GLOBAL = 'box.metadata';
 

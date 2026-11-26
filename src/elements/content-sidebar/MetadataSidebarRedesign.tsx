@@ -57,7 +57,11 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import { isSameMetadataTemplate, type MetadataTemplateIdentity } from './utils/metadataTemplateIdentity';
+import {
+    deriveMetadataTemplateKey,
+    isSameMetadataTemplate,
+    type MetadataTemplateIdentity,
+} from './utils/metadataTemplateIdentity';
 import {
     createTaxonomyItemsService,
     metadataTaxonomiesListFetcher,
@@ -364,11 +368,17 @@ function MetadataSidebarRedesign({
 
     const handleCreateTemplate = useCallback(
         async (body: MetadataTemplateCreateBody) => {
-            // metadata-api generates a key when templateKey is omitted. The editor
-            // has no key input and submits ''. An empty string is not treated as
-            // missing and is rejected, so a blank key is stripped instead of derived.
-            const { templateKey, ...bodyWithoutTemplateKey } = body;
-            const requestBody = templateKey?.trim() ? body : bodyWithoutTemplateKey;
+            // The editor has no key input and submits ''. Derive a key from the
+            // display name when it contains ASCII letters or digits. Otherwise omit
+            // the field so the API generates one — an empty string is rejected.
+            const { templateKey: submittedKey, ...bodyWithoutTemplateKey } = body;
+            let requestBody: MetadataTemplateCreateBody | Omit<MetadataTemplateCreateBody, 'templateKey'> = body;
+            if (!submittedKey?.trim()) {
+                const derivedKey = deriveMetadataTemplateKey(body.displayName);
+                requestBody = derivedKey
+                    ? { ...bodyWithoutTemplateKey, templateKey: derivedKey }
+                    : bodyWithoutTemplateKey;
+            }
 
             await new Promise<void>((resolve, reject) => {
                 metadataAPI().createMetadataTemplate(

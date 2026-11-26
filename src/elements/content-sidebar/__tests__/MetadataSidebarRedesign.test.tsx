@@ -1206,48 +1206,54 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             return createMetadataTemplate;
         };
 
-        test('should omit templateKey for a non-Latin display name', async () => {
-            const createMetadataTemplate = mockCreateMetadataTemplate();
+        test.each(['製品管理', '---', '🎉'])(
+            'should omit templateKey when it cannot be derived from %s',
+            async displayName => {
+                const createMetadataTemplate = mockCreateMetadataTemplate();
 
-            renderComponent();
-            expect(capturedCreateTemplate).toBeDefined();
+                renderComponent();
+                expect(capturedCreateTemplate).toBeDefined();
 
-            const body = createBody({ displayName: '製品管理' });
-            await capturedCreateTemplate!(body);
+                await capturedCreateTemplate!(createBody({ displayName }));
 
-            expect(createMetadataTemplate).toHaveBeenCalledWith(
-                expect.anything(),
-                {
-                    displayName: '製品管理',
-                    namespace: 'enterprise_1',
-                    hidden: false,
-                    fields: [],
-                },
-                expect.any(Function),
-                expect.any(Function),
-            );
-        });
+                expect(createMetadataTemplate).toHaveBeenCalledWith(
+                    expect.anything(),
+                    {
+                        displayName,
+                        namespace: 'enterprise_1',
+                        hidden: false,
+                        fields: [],
+                    },
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+            },
+        );
 
-        test.each(['', '   '])('should strip a blank templateKey (%j) instead of deriving one', async templateKey => {
-            const createMetadataTemplate = mockCreateMetadataTemplate();
+        test.each(['', '   '])(
+            'should derive an ASCII templateKey when the editor sends a blank one (%j)',
+            async templateKey => {
+                const createMetadataTemplate = mockCreateMetadataTemplate();
 
-            renderComponent();
-            expect(capturedCreateTemplate).toBeDefined();
+                renderComponent();
+                expect(capturedCreateTemplate).toBeDefined();
 
-            await capturedCreateTemplate!(createBody({ templateKey }));
+                await capturedCreateTemplate!(createBody({ templateKey }));
 
-            expect(createMetadataTemplate).toHaveBeenCalledWith(
-                expect.anything(),
-                {
-                    displayName: 'Invoice 2026',
-                    namespace: 'enterprise_1',
-                    hidden: false,
-                    fields: [],
-                },
-                expect.any(Function),
-                expect.any(Function),
-            );
-        });
+                expect(createMetadataTemplate).toHaveBeenCalledWith(
+                    expect.anything(),
+                    {
+                        displayName: 'Invoice 2026',
+                        templateKey: 'invoice2026',
+                        namespace: 'enterprise_1',
+                        hidden: false,
+                        fields: [],
+                    },
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+            },
+        );
 
         test('should pass an explicit templateKey through unchanged', async () => {
             const createMetadataTemplate = mockCreateMetadataTemplate();
