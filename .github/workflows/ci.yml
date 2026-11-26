@@ -1,0 +1,198 @@
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - master
+    push:
+        branches:
+            - master
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - name: Commit lint
+              if: github.event_name == 'pull_request'
+              run: git log ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} --pretty=%B | yarn commitlint
+            - run: yarn lint
+
+    flow:
+        name: Flow
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn flow check
+
+    build-unit-tests:
+        name: Build & Unit Tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        env:
+            TZ: America/Los_Angeles
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - run: yarn build:ci:es
+            - run: yarn build:ci:dist
+            - run: yarn test --maxWorkers=3
+
+    e2e-tests:
+        name: E2E Tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - uses: actions/cache@v4
+              with:
+                  path: ~/.cache/Cypress
+                  key: cypress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - run: yarn test:e2e
+            - uses: actions/upload-artifact@v4
+              if: failure()
+              with:
+                  name: cypress-screenshots
+                  path: test/screenshots
+                  if-no-files-found: ignore
+
+    chromatic:
+        name: Chromatic
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        env:
+            CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - run: yarn install --non-interactive --frozen-lockfile
+            - run: yarn build:i18n
+            - run: yarn build:prod:npm
+            - name: Chromatic
+              if: env.CHROMATIC_PROJECT_TOKEN != ''
+              run: yarn chromatic
+            # Without the token, build the same Storybook that Chromatic would upload so the job still verifies it.
+            - name: Build Storybook (no Chromatic token)
+              if: env.CHROMATIC_PROJECT_TOKEN == ''
+              run: yarn build:prod:storybook
+
+    build-storybook:
+        name: Build Storybook
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        outputs:
+            render: ${{ steps.changes.outputs.render }}
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - name: Checking for changes that affect rendering
+              id: changes
+              run: |
+                  STATUS=0
+                  ./scripts/visual_changes.sh || STATUS=$?
+                  if [ "$STATUS" -eq 10 ]; then
+                    echo "render=false" >> "$GITHUB_OUTPUT"
+                  elif [ "$STATUS" -eq 0 ]; then
+                    echo "render=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "visual_changes.sh failed with exit code $STATUS."
+                    exit "$STATUS"
+                  fi
+            - uses: actions/setup-node@v4
+              if: steps.changes.outputs.render == 'true'
+              with:
+                  node-version-file: .nvmrc
+                  cache: yarn
+            - if: steps.changes.outputs.render == 'true'
+              run: yarn install --non-interactive --frozen-lockfile
+            - if: steps.changes.outputs.render == 'true'
+              run: yarn build:prod:storybook
+            - uses: actions/upload-artifact@v4
+              if: steps.changes.outputs.render == 'true'
+              with:
+                  name: storybook
+                  path: storybook
+                  retention-days: 1
+
+    visual-tests:
+        name: Visual Tests
+        needs: build-storybook
+        if: needs.build-storybook.outputs.render == 'true'
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        # Keep the tag in sync with @playwright/test; baselines are rendered in this image.
+        container:
+            image: mcr.microsoft.com/playwright:v1.63.0-noble
+        steps:
+            - uses: actions/checkout@v4
+            - run: command -v yarn || npm install -g yarn@1
+            - run: yarn install --non-interactive --frozen-lockfile
+            - uses: actions/download-artifact@v4
+              with:
+                  name: storybook
+                  path: storybook
+            - name: Playwright visual tests
+              run: ./scripts/visual_tests.sh
+              env:
+                  VISUAL_ARTIFACTS_DIR: /tmp/visual-artifacts
+            - uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: visual
+                  path: /tmp/visual-artifacts
+                  if-no-files-found: ignore
+
+    # Single required check for branch protection and Mergify, so jobs can be added or renamed without touching either.
+    ci-status:
+        name: CI Status
+        if: always()
+        needs: [lint, flow, build-unit-tests, e2e-tests, chromatic, build-storybook, visual-tests]
+        runs-on: ubuntu-latest
+        steps:
+            # Visual Tests is skipped when no rendering files changed, as CircleCI halts it.
+            - if: >-
+                  needs.lint.result != 'success' || needs.flow.result != 'success' ||
+                  needs.build-unit-tests.result != 'success' || needs.e2e-tests.result != 'success' ||
+                  needs.chromatic.result != 'success' || needs.build-storybook.result != 'success' ||
+                  (needs.visual-tests.result != 'success' && needs.visual-tests.result != 'skipped')
+              run: exit 1
