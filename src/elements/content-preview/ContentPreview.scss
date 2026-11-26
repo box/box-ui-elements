@@ -89,6 +89,34 @@
     }
 }
 
+// Stack the version-comparison panes when the preview is narrow, even on a wide viewport (the rule below only
+// stacks at viewport <= 767px). .bcpr is the container because .bcpr-body can't query its own size. Its width
+// includes the sidebar, so the limit is higher than the panes alone would need. Scoped to comparison because a
+// container re-parents fixed-position descendants such as BCP modals.
+.bcpr:has(> .bcpr-body--comparing) {
+    container: bcpr-comparison / inline-size;
+}
+
+// The sidebar is a sibling of the two panes in .bcpr-body, so flex-direction: column would move it below them.
+// Use a grid instead: the panes fill column 1 top to bottom, and the sidebar stays in column 2 at full height.
+// Small viewports keep the bottom-sheet sidebar from the breakpoint below.
+@media (min-width: $size-large-min) {
+    @container bcpr-comparison (max-width: #{$size-large-max}) {
+        .bcpr .bcpr-body--comparing {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-rows: repeat(2, minmax(0, 1fr));
+
+            // Span both rows: the sidebar, and the current pane while the compared slot is still empty (hidden).
+            > :not(.bcpr-container, .bcpr-compared-slot),
+            > .bcpr-container:has(+ .bcpr-compared-slot:empty) {
+                grid-row: span 2;
+            }
+        }
+    }
+}
+
 @include breakpoint($medium-screen) {
     .bcpr {
         position: relative;
