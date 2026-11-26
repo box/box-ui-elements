@@ -41,7 +41,6 @@ import { resolveScopeOrNamespace } from '../../api/metadataNamespaceUtils';
 import {
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     SIDEBAR_VIEW_METADATA,
-    ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
     METADATA_SCOPE_MODE_SCOPED,
@@ -59,8 +58,8 @@ import MetadataTemplateDropdown from './MetadataTemplateDropdown';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import {
+    deriveMetadataTemplateKey,
     isSameMetadataTemplate,
-    resolveCreateMetadataTemplateKey,
     type MetadataTemplateIdentity,
 } from './utils/metadataTemplateIdentity';
 import {
@@ -369,17 +368,22 @@ function MetadataSidebarRedesign({
 
     const handleCreateTemplate = useCallback(
         async (body: MetadataTemplateCreateBody) => {
-            const templateKey = resolveCreateMetadataTemplateKey(body);
-            if (!templateKey) {
-                const error = new Error(formatMessage(messages.sidebarMetadataTemplateKeyInvalid));
-                onError(error, ERROR_CODE_CREATE_METADATA_TEMPLATE, { showNotification: true });
-                throw error;
+            // The editor has no key input and submits ''. Derive a key from the
+            // display name when it contains ASCII letters or digits. Otherwise omit
+            // the field so the API generates one — an empty string is rejected.
+            const { templateKey: submittedKey, ...bodyWithoutTemplateKey } = body;
+            let requestBody: MetadataTemplateCreateBody | Omit<MetadataTemplateCreateBody, 'templateKey'> = body;
+            if (!submittedKey?.trim()) {
+                const derivedKey = deriveMetadataTemplateKey(body.displayName);
+                requestBody = derivedKey
+                    ? { ...bodyWithoutTemplateKey, templateKey: derivedKey }
+                    : bodyWithoutTemplateKey;
             }
 
             await new Promise<void>((resolve, reject) => {
                 metadataAPI().createMetadataTemplate(
                     file,
-                    { ...body, templateKey },
+                    requestBody,
                     () => {
                         refetchMetadata();
                         resolve();
@@ -391,7 +395,7 @@ function MetadataSidebarRedesign({
                 );
             });
         },
-        [file, formatMessage, metadataAPI, onError, refetchMetadata],
+        [file, metadataAPI, onError, refetchMetadata],
     );
 
     const fetchTaxonomyByKey = useCallback(

@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { type MetadataTemplateCreateBody } from '@box/metadata-template-editor';
-import { ERROR_CODE_CREATE_METADATA_TEMPLATE, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
+import { ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
 import { screen, render, waitFor, within } from '../../../test-utils/testing-library';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
@@ -1188,43 +1188,85 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     });
 
     describe('template create key', () => {
-        test('should reject create locally when the derived templateKey is empty', async () => {
-            const createMetadataTemplate = jest.fn();
-            const onError = jest.fn();
-            (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate });
+        const createBody = (overrides: Partial<MetadataTemplateCreateBody> = {}): MetadataTemplateCreateBody =>
+            ({
+                displayName: 'Invoice 2026',
+                templateKey: '',
+                namespace: 'enterprise_1',
+                hidden: false,
+                fields: [],
+                ...overrides,
+            }) as MetadataTemplateCreateBody;
 
-            renderComponent({ onError });
-            expect(capturedCreateTemplate).toBeDefined();
-
-            await expect(
-                capturedCreateTemplate!({ displayName: '日本語', templateKey: '' } as MetadataTemplateCreateBody),
-            ).rejects.toThrow(
-                'Template names must include at least one letter or number (A–Z, 0–9). Names that are only punctuation or non-Latin characters cannot be saved.',
-            );
-
-            expect(createMetadataTemplate).not.toHaveBeenCalled();
-            expect(onError).toHaveBeenCalledWith(expect.any(Error), ERROR_CODE_CREATE_METADATA_TEMPLATE, {
-                showNotification: true,
-            });
-        });
-
-        test('should POST a derived ASCII templateKey', async () => {
+        const mockCreateMetadataTemplate = () => {
             const createMetadataTemplate = jest.fn((_file, _body, successCallback) => {
                 successCallback();
             });
             (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate });
+            return createMetadataTemplate;
+        };
+
+        test.each(['製品管理', '---', '🎉'])(
+            'should omit templateKey when it cannot be derived from %s',
+            async displayName => {
+                const createMetadataTemplate = mockCreateMetadataTemplate();
+
+                renderComponent();
+                expect(capturedCreateTemplate).toBeDefined();
+
+                await capturedCreateTemplate!(createBody({ displayName }));
+
+                expect(createMetadataTemplate).toHaveBeenCalledWith(
+                    expect.anything(),
+                    {
+                        displayName,
+                        namespace: 'enterprise_1',
+                        hidden: false,
+                        fields: [],
+                    },
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+            },
+        );
+
+        test.each(['', '   '])(
+            'should derive an ASCII templateKey when the editor sends a blank one (%j)',
+            async templateKey => {
+                const createMetadataTemplate = mockCreateMetadataTemplate();
+
+                renderComponent();
+                expect(capturedCreateTemplate).toBeDefined();
+
+                await capturedCreateTemplate!(createBody({ templateKey }));
+
+                expect(createMetadataTemplate).toHaveBeenCalledWith(
+                    expect.anything(),
+                    {
+                        displayName: 'Invoice 2026',
+                        templateKey: 'invoice2026',
+                        namespace: 'enterprise_1',
+                        hidden: false,
+                        fields: [],
+                    },
+                    expect.any(Function),
+                    expect.any(Function),
+                );
+            },
+        );
+
+        test('should pass an explicit templateKey through unchanged', async () => {
+            const createMetadataTemplate = mockCreateMetadataTemplate();
 
             renderComponent();
             expect(capturedCreateTemplate).toBeDefined();
 
-            await capturedCreateTemplate!({
-                displayName: 'Invoice Details',
-                templateKey: '',
-            } as MetadataTemplateCreateBody);
+            const body = createBody({ templateKey: 'custom_key' });
+            await capturedCreateTemplate!(body);
 
             expect(createMetadataTemplate).toHaveBeenCalledWith(
                 expect.anything(),
-                expect.objectContaining({ displayName: 'Invoice Details', templateKey: 'invoiceDetails' }),
+                body,
                 expect.any(Function),
                 expect.any(Function),
             );

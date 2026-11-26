@@ -383,7 +383,6 @@ export default {
     "be.sidebarHide": "Ocultar barra lateral",
     "be.sidebarMetadataEditingErrorContent": "Ocorreu um erro ao atualizar os metadados. Atualize a página e tente novamente.",
     "be.sidebarMetadataFetchingErrorContent": "Ocorreu um erro ao buscar os metadados. Atualize a página e tente novamente.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Os nomes dos modelos devem incluir pelo menos uma letra ou número (A a Z, 0 a 9). Nomes compostos apenas por pontuação ou caracteres não latinos não podem ser salvos.",
     "be.sidebarMetadataTitle": "Metadados",
     "be.sidebarNavLabel": "Barra lateral",
     "be.sidebarProperties": "Propriedades do arquivo",

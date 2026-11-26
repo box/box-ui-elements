@@ -1,4 +1,4 @@
-import { deriveMetadataTemplateKey, resolveCreateMetadataTemplateKey } from '../metadataTemplateIdentity';
+import { deriveMetadataTemplateKey } from '../metadataTemplateIdentity';
 
 describe('elements/content-sidebar/utils/metadataTemplateIdentity', () => {
     describe('deriveMetadataTemplateKey()', () => {
@@ -6,9 +6,11 @@ describe('elements/content-sidebar/utils/metadataTemplateIdentity', () => {
             displayName             | expected
             ${'NDA'}                | ${'nda'}
             ${'Invoice Details'}    | ${'invoiceDetails'}
+            ${'Invoice 2026'}       | ${'invoice2026'}
             ${'  Job Requisition'}  | ${'jobRequisition'}
             ${'Q3 2026 Report'}     | ${'q32026Report'}
             ${'Legal / Contracts'}  | ${'legalContracts'}
+            ${'Product 製品'}       | ${'product'}
             ${'---'}                | ${''}
             ${''}                   | ${''}
             ${'日本語テンプレート'} | ${''}
@@ -16,24 +18,6 @@ describe('elements/content-sidebar/utils/metadataTemplateIdentity', () => {
             ${'🎉🎉'}               | ${''}
         `('should derive $expected from $displayName', ({ displayName, expected }) => {
             expect(deriveMetadataTemplateKey(displayName)).toBe(expected);
-        });
-    });
-
-    describe('resolveCreateMetadataTemplateKey()', () => {
-        test('should prefer an explicit templateKey', () => {
-            expect(
-                resolveCreateMetadataTemplateKey({ displayName: 'Invoice Details', templateKey: 'custom_key' }),
-            ).toBe('custom_key');
-        });
-
-        test('should derive from displayName when templateKey is empty', () => {
-            expect(resolveCreateMetadataTemplateKey({ displayName: 'Invoice Details', templateKey: '' })).toBe(
-                'invoiceDetails',
-            );
-        });
-
-        test('should return empty when neither an explicit key nor ASCII letters/digits exist', () => {
-            expect(resolveCreateMetadataTemplateKey({ displayName: '日本語', templateKey: '  ' })).toBe('');
         });
     });
 });

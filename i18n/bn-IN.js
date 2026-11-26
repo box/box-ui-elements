@@ -385,7 +385,6 @@ export default {
     "be.sidebarHide": "পার্শ্ববার লুকান",
     "be.sidebarMetadataEditingErrorContent": "মেটাডেটা আপডেট করার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।",
     "be.sidebarMetadataFetchingErrorContent": "মেটাডেটা প্রাপ্তির সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করুন এবং আবার চেষ্টা করুন।",
-    "be.sidebarMetadataTemplateKeyInvalid": "টেমপ্লেটের নামে অবশ্যই কমপক্ষে একটি অক্ষর বা নম্বর থাকতে হবে (A–Z, 0–9)। যেসব নাম শুধুমাত্র বিরামচিহ্ন বা অ-ল্যাটিন অক্ষর, সেগুলো সেভ করা যাবে না।",
     "be.sidebarMetadataTitle": "মেটাডেটা",
     "be.sidebarNavLabel": "পার্শ্ববার",
     "be.sidebarProperties": "ফাইলের বৈশিষ্ট্য",

@@ -375,7 +375,6 @@ export default {
     "be.sidebarHide": "Ocultar la barra lateral",
     "be.sidebarMetadataEditingErrorContent": "Se ha producido un error al actualizar los metadatos. Actualice la página e inténtelo de nuevo.",
     "be.sidebarMetadataFetchingErrorContent": "Se ha producido un error al obtener los metadatos. Actualice la página e inténtelo de nuevo.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Los nombres de las plantillas deben incluir al menos una letra o un número (A–Z, 0–9). No se pueden guardar los nombres que estén formados solo por signos de puntuación o caracteres que no sean latinos.",
     "be.sidebarMetadataTitle": "Metadatos",
     "be.sidebarNavLabel": "Barra lateral",
     "be.sidebarProperties": "Propiedades del archivo",

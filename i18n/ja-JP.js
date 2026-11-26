@@ -383,7 +383,6 @@ export default {
     "be.sidebarHide": "サイドバーを非表示",
     "be.sidebarMetadataEditingErrorContent": "メタデータの更新中にエラーが発生しました。ページを更新して、もう一度やり直してください。",
     "be.sidebarMetadataFetchingErrorContent": "メタデータの取得中にエラーが発生しました。ページを更新して、もう一度やり直してください。",
-    "be.sidebarMetadataTemplateKeyInvalid": "テンプレート名には、少なくとも1つの文字または数字 (A～Z、0～9) が含まれている必要があります。句読点またはラテン語以外の文字のみの名前は保存できません。",
     "be.sidebarMetadataTitle": "メタデータ",
     "be.sidebarNavLabel": "サイドバー",
     "be.sidebarProperties": "ファイルのプロパティ",

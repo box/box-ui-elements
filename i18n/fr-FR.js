@@ -376,7 +376,6 @@ export default {
     "be.sidebarHide": "Masquer la barre latérale",
     "be.sidebarMetadataEditingErrorContent": "Une erreur s'est produite lors de la mise à jour des métadonnées. Veuillez actualiser la page et réessayer.",
     "be.sidebarMetadataFetchingErrorContent": "Une erreur s'est produite lors de la récupération des métadonnées. Veuillez actualiser la page et réessayer.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Les noms des modèles doivent inclure au moins une lettre ou un nombre (A-Z, 0-9). Les noms qui ne sont que des caractères de ponctuation ou des caractères non latins ne peuvent pas être enregistrés.",
     "be.sidebarMetadataTitle": "Métadonnées",
     "be.sidebarNavLabel": "Barre latérale",
     "be.sidebarProperties": "Propriétés du fichier",

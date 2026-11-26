@@ -384,7 +384,6 @@ export default {
     "be.sidebarHide": "사이드바 숨기기",
     "be.sidebarMetadataEditingErrorContent": "메타데이터를 업데이트하는 동안 오류가 발생했습니다. 페이지를 새로 고치고 다시 시도하십시오.",
     "be.sidebarMetadataFetchingErrorContent": "메타데이터를 가져오는 동안 오류가 발생했습니다. 페이지를 새로 고치고 다시 시도하십시오.",
-    "be.sidebarMetadataTemplateKeyInvalid": "템플릿 이름에는 최소 하나의 문자 또는 숫자(A–Z, 0–9)가 포함되어야 합니다. 구두점 또는 라틴이 아닌 문자만 있는 이름은 저장할 수 없습니다.",
     "be.sidebarMetadataTitle": "메타데이터",
     "be.sidebarNavLabel": "사이드바",
     "be.sidebarProperties": "파일 속성",

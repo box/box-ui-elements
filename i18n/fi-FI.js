@@ -381,7 +381,6 @@ export default {
     "be.sidebarHide": "Piilota sivupalkki",
     "be.sidebarMetadataEditingErrorContent": "Metatietojen päivittämisen aikana tapahtui virhe. Päivitä sivu ja yritä uudelleen.",
     "be.sidebarMetadataFetchingErrorContent": "Metatietojen hakemisen aikana tapahtui virhe. Päivitä sivu ja yritä uudelleen.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Mallin nimien on sisällettävä vähintään yksi kirjain tai numero (A–Z, 0–9). Nimiä, jotka ovat vain välimerkkejä tai muita kuin latinalaisia merkkejä, ei voi tallentaa.",
     "be.sidebarMetadataTitle": "Metatiedot",
     "be.sidebarNavLabel": "Sivupalkki",
     "be.sidebarProperties": "Tiedoston ominaisuudet",

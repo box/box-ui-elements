@@ -382,7 +382,6 @@ export default {
     "be.sidebarHide": "Ukryj pasek boczny",
     "be.sidebarMetadataEditingErrorContent": "Podczas aktualizowania metadanych wystąpił błąd. Odśwież stronę i spróbuj ponownie.",
     "be.sidebarMetadataFetchingErrorContent": "Podczas pobierania metadanych wystąpił błąd. Odśwież stronę i spróbuj ponownie.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Nazwy szablonów muszą zawierać co najmniej jedną literę lub liczbę (A–Z, 0–9). Nie można zapisać nazw, które zawierają tylko znaki interpunkcyjne lub znaki inne niż łacińskie.",
     "be.sidebarMetadataTitle": "Metadane",
     "be.sidebarNavLabel": "Pasek boczny",
     "be.sidebarProperties": "Właściwości pliku",

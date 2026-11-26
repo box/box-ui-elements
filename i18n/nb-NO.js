@@ -380,7 +380,6 @@ export default {
     "be.sidebarHide": "Skjul sidepanel",
     "be.sidebarMetadataEditingErrorContent": "Det oppsto en feil da metadata ble oppdatert. Last inn siden på nytt, og prøv igjen.",
     "be.sidebarMetadataFetchingErrorContent": "Det oppsto en feil ved henting av metadata. Last inn siden på nytt, og prøv igjen.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Navn på maler må inneholde minst én bokstav eller tall (A–Z, 0–9). Navn som kun er tegnsetting eller ikke-latinske tegn, kan ikke lagres.",
     "be.sidebarNavLabel": "Sidepanel",
     "be.sidebarProperties": "Filegenskaper",
     "be.sidebarShow": "Vis sidepanel",

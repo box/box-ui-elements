@@ -25,16 +25,11 @@ export function getMetadataTemplateNamespaceFqn(template: MetadataTemplateIdenti
 }
 
 /**
- * Derives an API-acceptable `templateKey` from a display name.
+ * Derives a template key from a display name.
  *
- * Template keys stay ASCII-only to match the Public API pattern
- * (`^[a-zA-Z_][-a-zA-Z0-9_]*$`). Punctuation-only names (`---`) and names with
- * no Latin letters or digits (Japanese, Arabic, emoji-only, …) therefore
- * become `''`. Callers must reject that result before POSTing — metadata-api
- * would otherwise answer `Invalid template-key value:`.
- *
- * `@box/metadata-template-editor` has no template-key input and submits an empty
- * string. Until the editor owns this, the sidebar fills the gap before POSTing.
+ * Keeps ASCII letters and digits, then camelCases the words. Punctuation-only
+ * names and names with no Latin letters or digits become `''`. Callers must
+ * omit the field in that case — an empty string is rejected by the API.
  */
 export function deriveMetadataTemplateKey(displayName: string): string {
     const words = displayName
@@ -52,15 +47,6 @@ export function deriveMetadataTemplateKey(displayName: string): string {
             index === 0 ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1).toLowerCase()}`,
         )
         .join('');
-}
-
-/**
- * Resolves the `templateKey` to send on create: an explicit key wins, otherwise
- * one is derived from `displayName`. An empty string means the name cannot
- * produce a valid ASCII key and must not be POSTed.
- */
-export function resolveCreateMetadataTemplateKey(body: { displayName: string; templateKey?: string }): string {
-    return body.templateKey?.trim() || deriveMetadataTemplateKey(body.displayName);
 }
 
 const METADATA_SCOPE_GLOBAL = 'global';

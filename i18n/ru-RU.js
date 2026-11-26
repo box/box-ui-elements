@@ -384,7 +384,6 @@ export default {
     "be.sidebarHide": "Скрыть боковую панель",
     "be.sidebarMetadataEditingErrorContent": "Ошибка при обновлении метаданных. Обновите страницу и повторите попытку.",
     "be.sidebarMetadataFetchingErrorContent": "Ошибка при получении метаданных. Обновите страницу и повторите попытку.",
-    "be.sidebarMetadataTemplateKeyInvalid": "Названия шаблонов должны включать хотя бы одну букву или цифру (A–Z, 0–9). Названия, которые содержат только знаки пунктуации или нелатинские символы, не могут быть сохранены.",
     "be.sidebarMetadataTitle": "Метаданные",
     "be.sidebarNavLabel": "Боковая панель",
     "be.sidebarProperties": "Свойства файла",
