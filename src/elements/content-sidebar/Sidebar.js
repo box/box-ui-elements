@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /**
  * @flow
  * @file Content Sidebar Component
@@ -8,6 +9,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { matchPath, withRouter } from 'react-router-dom';
@@ -28,6 +30,13 @@ import type { FeatureConfig } from '../common/feature-checking';
 import { FILE_EXTENSIONS } from '../common/item/constants';
 import type { Errors } from '../common/flowTypes';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
+import { FeedEntryType, ViewType } from '../common/types/SidebarNavigation';
+import type {
+    InternalSidebarNavigation,
+    InternalSidebarNavigationHandler,
+    SidebarNavigation,
+    SidebarNavigationHandler,
+} from '../common/types/SidebarNavigation';
 // $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 // $FlowFixMe TypeScript file
@@ -85,8 +94,13 @@ type Props = {
     resin?: {
         recordAction?: (data: Object) => void,
     },
+    routerDisabled?: boolean,
     /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
     shouldFetchSidebarData?: boolean,
+    /** Navigation of the sidebar when the router is disabled, replaces the router location */
+    sidebarNavigation?: SidebarNavigation,
+    /** Called on every navigation of the sidebar when the router is disabled, replaces the router history */
+    sidebarNavigationHandler?: SidebarNavigationHandler,
     signSidebarProps: SignSidebarProps,
     size: $Values<typeof VIEW_SIZE_TYPE>,
     theme?: Theme,
@@ -95,6 +109,12 @@ type Props = {
 };
 
 type State = {
+    isDirty: boolean,
+    width: ?number,
+};
+
+type RouterDisabledState = {
+    internalSidebarNavigation: InternalSidebarNavigation,
     isDirty: boolean,
     width: ?number,
 };
@@ -119,7 +139,7 @@ const ACTIVITY_DEEP_LINK_PATHS = [
     `/${SIDEBAR_VIEW_ACTIVITY}/:activeFeedEntryType(comments|tasks)/:activeFeedEntryId?`,
 ];
 
-class Sidebar extends React.Component<Props, State> {
+class SidebarRouter extends React.Component<Props, State> {
     static defaultProps = {
         annotatorState: {},
         isDefaultOpen: true,
@@ -541,5 +561,577 @@ class Sidebar extends React.Component<Props, State> {
     }
 }
 
-export { Sidebar as SidebarComponent };
-export default flow([withCurrentUser, withFeatureConsumer, withMediaQuery, withRouter])(Sidebar);
+// Router-less version of SidebarRouter, internal navigation state replaces the router location and history
+class SidebarRouterDisabled extends React.Component<Props, RouterDisabledState> {
+    static defaultProps = {
+        annotatorState: {},
+        isDefaultOpen: true,
+        isLoading: false,
+        getAnnotationsMatchPath: noop,
+        getAnnotationsPath: noop,
+    };
+
+    id: string = uniqueid('bcs_');
+
+    isMetadataEditing: boolean = false;
+
+    openMetadataWarningModal: ?(isOpen: boolean) => void = null;
+
+    // Navigation away from metadata held back until the user discards unsaved metadata changes
+    pendingNavigation: ?{ navigation: InternalSidebarNavigation, replace?: boolean } = null;
+
+    props: Props;
+
+    sidebarPanels: { current: null | SidebarPanels } = React.createRef();
+
+    state: RouterDisabledState;
+
+    store: LocalStore = new LocalStore();
+
+    constructor(props: Props) {
+        super(props);
+
+        const internalSidebarNavigation: InternalSidebarNavigation = (props.sidebarNavigation: any) || {};
+        const persistedWidth = this.store.getItem(SIDEBAR_WIDTH_KEY);
+        this.state = {
+            internalSidebarNavigation,
+            isDirty: internalSidebarNavigation.open || false,
+            width: typeof persistedWidth === 'number' ? persistedWidth : null,
+        };
+
+        this.setForcedByNavigation(internalSidebarNavigation);
+    }
+
+    /**
+     * Default sidebar width based on whether the "wider" (Box AI) variant is active.
+     * Mirrors the SCSS fallback so flipping the flag on doesn't change the rendered width at rest.
+     */
+    getDefaultWidth(hasNativeBoxAISidebar: boolean, hasCustomBoxAISidebar: boolean): number {
+        return hasNativeBoxAISidebar || hasCustomBoxAISidebar ? SIDEBAR_DEFAULT_WIDTH_WIDER : SIDEBAR_DEFAULT_WIDTH;
+    }
+
+    handleResize = (width: number): void => {
+        this.setState({ width });
+    };
+
+    handleResizeStart = (width: number): void => {
+        this.recordResizeAction('resizeStart', width, width);
+    };
+
+    handleResizeEnd = (width: number, startWidth: number): void => {
+        this.store.setItem(SIDEBAR_WIDTH_KEY, width);
+        this.recordResizeAction('resizeEnd', width, startWidth);
+    };
+
+    recordResizeAction = (phase: 'resizeStart' | 'resizeEnd', width: number, startWidth: number): void => {
+        const { file, fileId, resin, viewWidth } = this.props;
+
+        if (resin && resin.recordAction) {
+            resin.recordAction({
+                action: 'programmatic',
+                component: 'preview',
+                data: {
+                    phase,
+                    startWidth,
+                    viewWidth,
+                    width,
+                },
+                fileExtension: file.extension,
+                fileId,
+                target: SIDEBAR_NAV_TARGETS.RESIZE_HANDLE,
+            });
+        }
+    };
+
+    componentDidMount() {
+        const { file, api, metadataSidebarProps, docGenSidebarProps, onOpenChange = noop }: Props = this.props;
+        // if docgen feature is enabled, load metadata to check whether file is a docgen template
+        if (docGenSidebarProps.enabled) {
+            docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
+        }
+        onOpenChange(this.isOpen(), true);
+    }
+
+    componentDidUpdate(prevProps: Props): void {
+        const { fileId, sidebarNavigation }: Props = this.props;
+        const { fileId: prevFileId, sidebarNavigation: prevSidebarNavigation }: Props = prevProps;
+        const { internalSidebarNavigation, isDirty }: RouterDisabledState = this.state;
+
+        // Host navigated the sidebar
+        if (
+            sidebarNavigation &&
+            !isEqual(sidebarNavigation, prevSidebarNavigation) &&
+            !isEqual(sidebarNavigation, internalSidebarNavigation)
+        ) {
+            this.setNavigation((sidebarNavigation: any));
+        }
+
+        // User navigated to a different file without ever navigating the sidebar
+        if (!isDirty && fileId !== prevFileId && internalSidebarNavigation.sidebar) {
+            this.internalSidebarNavigationHandler({ silent: true }, true);
+        }
+
+        this.handleDocgenTemplateOnUpdate(prevProps);
+    }
+
+    handleDocgenTemplateOnUpdate = (prevProps: Props) => {
+        const { file, api, metadataSidebarProps, docGenSidebarProps } = this.props;
+        const { file: prevFile, docGenSidebarProps: prevDocGenSidebarProps }: Props = prevProps;
+        // need to re-check if file is a docgen-template on file change
+        if (file.id !== prevFile.id && docGenSidebarProps.enabled && docGenSidebarProps.checkDocGenTemplate) {
+            docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
+        }
+        // if file turns out to be a docgen template
+        if (
+            docGenSidebarProps.enabled &&
+            prevDocGenSidebarProps.isDocGenTemplate !== docGenSidebarProps.isDocGenTemplate
+        ) {
+            if (docGenSidebarProps.isDocGenTemplate) {
+                // navigate to docgen tab
+                this.internalSidebarNavigationHandler({ sidebar: ViewType.DOCGEN });
+            } else if (this.state.internalSidebarNavigation.sidebar === ViewType.DOCGEN) {
+                this.internalSidebarNavigationHandler({});
+            }
+        }
+    };
+
+    /**
+     * Navigates the sidebar, the router-less counterpart of history.push and history.replace
+     *
+     * @param navigation - The new navigation, silent for navigations not initiated by the user
+     * @param replace - Whether the host should replace the current navigation instead of adding a new one
+     */
+    internalSidebarNavigationHandler: InternalSidebarNavigationHandler = (navigation, replace) => {
+        const nextNavigation = this.withoutSilent(navigation);
+
+        if (isEqual(nextNavigation, this.state.internalSidebarNavigation)) {
+            return;
+        }
+
+        if (!navigation.silent && this.shouldBlockNavigation(nextNavigation)) {
+            this.pendingNavigation = { navigation, replace };
+            if (this.openMetadataWarningModal) {
+                this.openMetadataWarningModal(true);
+            }
+            return;
+        }
+
+        this.navigate(navigation, replace);
+    };
+
+    navigate(navigation: InternalSidebarNavigation, replace?: boolean): void {
+        const { sidebarNavigationHandler } = this.props;
+
+        this.setNavigation(navigation);
+
+        if (sidebarNavigationHandler) {
+            sidebarNavigationHandler(this.withoutSilent(navigation), replace);
+        }
+    }
+
+    withoutSilent(navigation: InternalSidebarNavigation): InternalSidebarNavigation {
+        const { silent, ...nextNavigation } = navigation;
+        return (nextNavigation: any);
+    }
+
+    /**
+     * Applies the navigation, same as the router version reacts to location changes.
+     * Silent is not stored so that it does not leak into navigations built from the current one (e.g. toggle).
+     */
+    setNavigation(navigation: InternalSidebarNavigation): void {
+        const { onOpenChange = noop } = this.props;
+        const nextNavigation = this.withoutSilent(navigation);
+        const { internalSidebarNavigation: prevNavigation } = this.state;
+
+        this.setState({ internalSidebarNavigation: nextNavigation });
+
+        // Metadata sidebar unmounts without reporting that editing has ended
+        if (this.isMetadataEditing && nextNavigation.sidebar !== ViewType.METADATA) {
+            this.handleMetadataEditingStateChange(false);
+        }
+
+        // User navigated or toggled the sidebar intentionally, internally or externally
+        if (!navigation.silent) {
+            this.setForcedByNavigation(nextNavigation);
+            this.setState({ isDirty: true });
+            // Check if the sidebar was expanded / collapsed, open is passed as is like in the router version
+            if (prevNavigation.open !== nextNavigation.open) {
+                onOpenChange((nextNavigation.open: any), false);
+            }
+        }
+    }
+
+    /**
+     * Router-less counterpart of the history.block in the metadata sidebar: leaving the metadata sidebar
+     * with unsaved changes opens its warning modal. Navigation by the host (sidebarNavigation) is not blocked.
+     */
+    shouldBlockNavigation(navigation: InternalSidebarNavigation): boolean {
+        const { features } = this.props;
+        const isGuardEnabled =
+            isFeatureEnabled(features, 'metadata.boundingBox.enabled') ||
+            isFeatureEnabled(features, 'metadata.confidenceScore.enabled');
+
+        return (
+            isGuardEnabled &&
+            this.isMetadataEditing &&
+            !!this.openMetadataWarningModal &&
+            navigation.sidebar !== ViewType.METADATA
+        );
+    }
+
+    handleMetadataEditingStateChange = (isEditing: boolean): void => {
+        const { metadataSidebarProps } = this.props;
+        this.isMetadataEditing = isEditing;
+        if (metadataSidebarProps.onEditingStateChange) {
+            metadataSidebarProps.onEditingStateChange(isEditing);
+        }
+    };
+
+    registerMetadataWarningModalCallback = (openWarningModal: (isOpen: boolean) => void): void => {
+        const { metadataSidebarProps } = this.props;
+        this.openMetadataWarningModal = openWarningModal;
+        if (metadataSidebarProps.registerOpenWarningModalCallback) {
+            metadataSidebarProps.registerOpenWarningModalCallback(openWarningModal);
+        }
+    };
+
+    handleMetadataWarningModalDiscard = (): void => {
+        const { metadataSidebarProps } = this.props;
+        const { pendingNavigation } = this;
+        this.pendingNavigation = null;
+
+        // Editing has already been cancelled by the metadata sidebar, so the navigation is not blocked again
+        if (pendingNavigation) {
+            this.navigate(pendingNavigation.navigation, pendingNavigation.replace);
+        }
+
+        if (metadataSidebarProps.onWarningModalDiscard) {
+            metadataSidebarProps.onWarningModalDiscard();
+        }
+    };
+
+    handleMetadataWarningModalClose = (): void => {
+        const { metadataSidebarProps } = this.props;
+        this.pendingNavigation = null;
+        if (metadataSidebarProps.onWarningModalClose) {
+            metadataSidebarProps.onWarningModalClose();
+        }
+    };
+
+    /**
+     * Handle version history click
+     *
+     * @param {SyntheticEvent} event - The event
+     * @return {void}
+     */
+    handleVersionHistoryClick = (event: SyntheticEvent<>): void => {
+        const { file } = this.props;
+        const { file_version: currentVersion } = file;
+        const { sidebar } = this.state.internalSidebarNavigation;
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+
+        this.internalSidebarNavigationHandler({
+            activeFeedEntryType: FeedEntryType.VERSIONS,
+            sidebar,
+            ...(currentVersion ? { versionId: currentVersion.id } : {}),
+        });
+    };
+
+    /**
+     * Getter/setter for sidebar forced state
+     *
+     * @param isOpen - Optionally set the sidebar to open/closed
+     * @returns {string|null} - The sidebar open/closed state
+     */
+    isForced(isOpen?: boolean): ?(typeof SIDEBAR_FORCE_VALUE_CLOSED | typeof SIDEBAR_FORCE_VALUE_OPEN) {
+        if (isOpen !== undefined) {
+            this.store.setItem(SIDEBAR_FORCE_KEY, isOpen ? SIDEBAR_FORCE_VALUE_OPEN : SIDEBAR_FORCE_VALUE_CLOSED);
+        }
+
+        return this.store.getItem(SIDEBAR_FORCE_KEY);
+    }
+
+    /**
+     * Getter for whether the sidebar has been forced open
+     * @returns {boolean} - True if the sidebar has been forced open
+     */
+    isForcedOpen(): boolean {
+        return this.isForced() === SIDEBAR_FORCE_VALUE_OPEN;
+    }
+
+    /**
+     * Getter for whether the sidebar has been forced open/closed previously
+     * @returns {boolean} - True if the sidebar has been forced open/closed previously
+     */
+    isForcedSet(): boolean {
+        return this.isForced() !== null;
+    }
+
+    /**
+     * Getter for sidebar current open state
+     * @returns {boolean} - True if the sidebar is open
+     */
+    isOpen(): boolean {
+        const { isDefaultOpen } = this.props;
+        return this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
+    }
+
+    /**
+     * Refreshes the sidebar panel
+     * @returns {void}
+     */
+    refresh(shouldRefreshCache: boolean = true): void {
+        const { current: sidebarPanels } = this.sidebarPanels;
+
+        if (sidebarPanels) {
+            sidebarPanels.refresh(shouldRefreshCache);
+        }
+    }
+
+    /**
+     * Helper to set the local store open state based on the navigation open state, if defined
+     */
+    setForcedByNavigation(navigation: InternalSidebarNavigation): void {
+        const { open: isNavigationOpen } = navigation;
+
+        if (isNavigationOpen !== undefined && isNavigationOpen !== null) {
+            this.isForced(isNavigationOpen);
+        }
+    }
+
+    // Mirrors ACTIVITY_DEEP_LINK_PATHS of the router version
+    isActivityDeepLinkNavigation(): boolean {
+        const { activeFeedEntryType, fileVersionId, sidebar } = this.state.internalSidebarNavigation;
+
+        if (sidebar !== ViewType.ACTIVITY) {
+            return false;
+        }
+
+        if (activeFeedEntryType === FeedEntryType.ANNOTATIONS) {
+            return !!fileVersionId;
+        }
+
+        return activeFeedEntryType === FeedEntryType.COMMENTS || activeFeedEntryType === FeedEntryType.TASKS;
+    }
+
+    getDefaultPanel(): string | typeof undefined {
+        const { features } = this.props;
+
+        // Deep links override persisted selection and default-panel fallback order.
+        if (this.isActivityDeepLinkNavigation()) {
+            return SIDEBAR_VIEW_ACTIVITY;
+        }
+
+        if (!isFeatureEnabled(features, 'panelSelectionPreservation')) {
+            return undefined;
+        }
+
+        return this.store.getItem(SIDEBAR_SELECTED_PANEL_KEY) || undefined;
+    }
+
+    handlePanelChange = (name: string, isInitialState: boolean) => {
+        const { features, onPanelChange = noop } = this.props;
+        // We don't need to preserve panel if it's the initial state
+        if (isFeatureEnabled(features, 'panelSelectionPreservation') && !isInitialState) {
+            this.store.setItem(SIDEBAR_SELECTED_PANEL_KEY, name);
+        }
+        onPanelChange(name, isInitialState);
+    };
+
+    render() {
+        const {
+            activitySidebarProps,
+            additionalTabs,
+            boxAISidebarProps,
+            className,
+            currentUser,
+            currentUserError,
+            shouldFetchSidebarData,
+            customSidebarPanels = [],
+            detailsSidebarProps,
+            docGenSidebarProps,
+            features,
+            file,
+            fileId,
+            getComparedPreview,
+            getPreview,
+            getViewer,
+            hasActivityFeed,
+            hasAdditionalTabs,
+            hasNav,
+            hasVersions,
+            isLoading,
+            metadataEditors,
+            metadataSidebarProps,
+            onAnnotationSelect,
+            onCommentVersionSelect,
+            onVersionChange,
+            signSidebarProps,
+            size,
+            theme,
+            versionsSidebarProps,
+            viewWidth,
+        }: Props = this.props;
+        const { internalSidebarNavigation, width }: RouterDisabledState = this.state;
+        const isOpen = this.isOpen();
+
+        const hasCustomBoxAISidebar = customSidebarPanels.some(panel => panel.id === SIDEBAR_VIEW_BOXAI);
+        const isBoxAIEnabled = SidebarUtils.canHaveBoxAISidebar(this.props);
+        // Custom Box AI takes precedence over native when both exist
+        const hasNativeBoxAISidebar = isBoxAIEnabled && !hasCustomBoxAISidebar;
+        const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
+        const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
+        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
+        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
+        const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
+
+        const isViewportWideEnoughToResize = size === VIEW_SIZE_TYPE.large || size === VIEW_SIZE_TYPE.xlarge;
+        const isResizable =
+            isFeatureEnabled(features, 'contentSidebar.resizable.enabled') && isViewportWideEnoughToResize;
+        const minWidth = this.getDefaultWidth(hasNativeBoxAISidebar, hasCustomBoxAISidebar);
+        const maxWidth = Math.max(minWidth, Math.round(viewWidth * SIDEBAR_MAX_WIDTH_RATIO));
+        const currentWidth = width != null ? Math.min(Math.max(width, minWidth), maxWidth) : minWidth;
+        // Only force inline width once the user has actually dragged — otherwise leave the SCSS defaults in place.
+        const shouldApplyInlineWidth = isResizable && isOpen && width != null;
+        const inlineStyle = shouldApplyInlineWidth ? { width: currentWidth, maxWidth: currentWidth } : undefined;
+
+        const commentRangeDragCreateEnabled =
+            Boolean(hasActivityFeed) &&
+            FILE_EXTENSIONS.audio.includes(file?.extension) &&
+            isFeatureEnabled(features, 'audioPlayerV2.enabled') &&
+            isFeatureEnabled(features, 'activityFeed.timestampedComments.enabled');
+
+        const styleClassName = classNames('be bcs', className, {
+            'bcs-is-open': isOpen,
+            'bcs-is-resizable': isResizable,
+            'bcs-is-wider': hasNativeBoxAISidebar || hasCustomBoxAISidebar,
+        });
+        const defaultPanel = this.getDefaultPanel();
+        const guardedMetadataSidebarProps = {
+            ...metadataSidebarProps,
+            onEditingStateChange: this.handleMetadataEditingStateChange,
+            onWarningModalClose: this.handleMetadataWarningModalClose,
+            onWarningModalDiscard: this.handleMetadataWarningModalDiscard,
+            registerOpenWarningModalCallback: this.registerMetadataWarningModalCallback,
+        };
+
+        return (
+            <aside id={this.id} className={styleClassName} data-testid="preview-sidebar" style={inlineStyle}>
+                {isResizable && isOpen && !isLoading && (
+                    <SidebarResizeHandle
+                        maxWidth={maxWidth}
+                        minWidth={minWidth}
+                        onResize={this.handleResize}
+                        onResizeEnd={this.handleResizeEnd}
+                        onResizeStart={this.handleResizeStart}
+                        width={currentWidth}
+                    />
+                )}
+                <ThemingStyles theme={theme} />
+                <CommentRangeDragCreateProvider
+                    enabled={commentRangeDragCreateEnabled}
+                    fileId={fileId}
+                    getPreview={getPreview}
+                    getViewer={getViewer}
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={this.internalSidebarNavigationHandler}
+                    routerDisabled
+                >
+                    {isLoading ? (
+                        <div className="bcs-loading">
+                            <LoadingIndicator />
+                        </div>
+                    ) : (
+                        <>
+                            {hasNav && (
+                                <SidebarNav
+                                    additionalTabs={additionalTabs}
+                                    customSidebarPanels={customSidebarPanels}
+                                    elementId={this.id}
+                                    fileId={fileId}
+                                    hasActivity={hasActivity}
+                                    hasAdditionalTabs={hasAdditionalTabs}
+                                    hasNativeBoxAISidebar={hasNativeBoxAISidebar}
+                                    hasDetails={hasDetails}
+                                    hasMetadata={hasMetadata}
+                                    hasSkills={hasSkills}
+                                    hasDocGen={docGenSidebarProps.isDocGenTemplate}
+                                    internalSidebarNavigation={internalSidebarNavigation}
+                                    internalSidebarNavigationHandler={this.internalSidebarNavigationHandler}
+                                    isOpen={isOpen}
+                                    onPanelChange={this.handlePanelChange}
+                                    routerDisabled
+                                    signSidebarProps={signSidebarProps}
+                                />
+                            )}
+                            <SidebarPanels
+                                activitySidebarProps={activitySidebarProps}
+                                boxAISidebarProps={boxAISidebarProps}
+                                currentUser={currentUser}
+                                currentUserError={currentUserError}
+                                shouldFetchSidebarData={shouldFetchSidebarData}
+                                customSidebarPanels={customSidebarPanels}
+                                elementId={this.id}
+                                defaultPanel={defaultPanel}
+                                detailsSidebarProps={detailsSidebarProps}
+                                docGenSidebarProps={docGenSidebarProps}
+                                file={file}
+                                fileId={fileId}
+                                getPreview={getPreview}
+                                getViewer={getViewer}
+                                hasActivity={hasActivity}
+                                hasNativeBoxAISidebar={hasNativeBoxAISidebar}
+                                hasDetails={hasDetails}
+                                hasDocGen={docGenSidebarProps.isDocGenTemplate}
+                                hasMetadata={hasMetadata}
+                                hasSkills={hasSkills}
+                                hasVersions={hasVersions}
+                                internalSidebarNavigation={internalSidebarNavigation}
+                                internalSidebarNavigationHandler={this.internalSidebarNavigationHandler}
+                                isOpen={isOpen}
+                                key={file.id}
+                                metadataSidebarProps={guardedMetadataSidebarProps}
+                                onAnnotationSelect={onAnnotationSelect}
+                                getComparedPreview={getComparedPreview}
+                                onCommentVersionSelect={onCommentVersionSelect}
+                                onPanelChange={this.handlePanelChange}
+                                onVersionChange={onVersionChange}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                ref={this.sidebarPanels}
+                                routerDisabled
+                                versionsSidebarProps={versionsSidebarProps}
+                            />
+                        </>
+                    )}
+                </CommentRangeDragCreateProvider>
+            </aside>
+        );
+    }
+}
+
+const SidebarRouterWithRouter = withRouter(SidebarRouter);
+
+// ContentSidebar reaches refresh() through withRouter's wrappedComponentRef, kept for both versions
+const Sidebar = ({
+    wrappedComponentRef,
+    ...rest
+}: {
+    ...$Exact<Props>,
+    wrappedComponentRef?: React.Ref<typeof SidebarRouterDisabled>,
+}) => {
+    const { features, routerDisabled } = rest;
+
+    if (routerDisabled === true || isFeatureEnabled(features, 'routerDisabled.value')) {
+        return <SidebarRouterDisabled ref={wrappedComponentRef} {...rest} />;
+    }
+
+    return <SidebarRouterWithRouter wrappedComponentRef={wrappedComponentRef} {...rest} />;
+};
+
+export { SidebarRouter as SidebarComponent };
+export { SidebarRouterDisabled as SidebarRouterDisabledComponent };
+export { Sidebar as SidebarDispatcherComponent };
+export default flow([withCurrentUser, withFeatureConsumer, withMediaQuery])(Sidebar);

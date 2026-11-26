@@ -49,6 +49,7 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+import type { SidebarNavigation, SidebarNavigationHandler } from '../common/types/SidebarNavigation';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
 import type APICache from '../../utils/Cache';
@@ -122,6 +123,10 @@ type Props = {
     sharedLinkPassword?: string,
     /** When true, enables data fetching. When false, defers data fetching. Used to prioritize preview loading. */
     shouldFetchSidebarData?: boolean,
+    /** Navigation of the sidebar when the router is disabled, replaces defaultView and the history location */
+    sidebarNavigation?: SidebarNavigation,
+    /** Called on every navigation of the sidebar when the router is disabled */
+    sidebarNavigationHandler?: SidebarNavigationHandler,
     /** Optional minimal file data to render sidebar shell immediately while fetching full data */
     minimalFile?: BoxItem,
     signSidebarProps: SignSidebarProps,
@@ -414,6 +419,8 @@ class ContentSidebar extends React.Component<Props, State> {
             onVersionChange,
             onVersionHistoryClick,
             resin,
+            sidebarNavigation,
+            sidebarNavigationHandler,
             signSidebarProps,
             theme,
             versionsSidebarProps,
@@ -421,6 +428,9 @@ class ContentSidebar extends React.Component<Props, State> {
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
         const initialPath = defaultView.charAt(0) === '/' ? defaultView : `/${defaultView}`;
+        // Without the router defaultView selects only the initial sidebar, deep links need sidebarNavigation
+        const [, defaultSidebar] = initialPath.split('/');
+        const initialSidebarNavigation = defaultSidebar ? { sidebar: defaultSidebar } : {};
 
         const displayFile = file || minimalFile;
 
@@ -465,6 +475,8 @@ class ContentSidebar extends React.Component<Props, State> {
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}
                                 resin={resin}
+                                sidebarNavigation={sidebarNavigation || initialSidebarNavigation}
+                                sidebarNavigationHandler={sidebarNavigationHandler}
                                 signSidebarProps={signSidebarProps}
                                 theme={theme}
                                 versionsSidebarProps={versionsSidebarProps}
