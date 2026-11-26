@@ -1,13 +1,15 @@
 import ItemCollaborations from '../ItemCollaborations';
 import { DEFAULT_MAX_COLLABORATORS } from '../../constants';
+import type { APIOptions } from '../../common/types/api';
+import type { Collaborations } from '../../common/types/core';
 
 const MOCK_ITEM_ID = '14237093';
-let itemCollaborations;
-let markerGetSpy;
+let itemCollaborations: ItemCollaborations;
+let markerGetSpy: jest.SpyInstance;
 
 describe('api/ItemCollaborations', () => {
     beforeEach(() => {
-        itemCollaborations = new ItemCollaborations({});
+        itemCollaborations = new ItemCollaborations({} as APIOptions);
         markerGetSpy = jest.spyOn(itemCollaborations, 'markerGet');
     });
 
@@ -18,8 +20,8 @@ describe('api/ItemCollaborations', () => {
     });
 
     describe('getCollaborations()', () => {
-        let successCallback;
-        let errorCallback;
+        let successCallback: jest.Mock;
+        let errorCallback: jest.Mock;
 
         beforeEach(() => {
             successCallback = jest.fn();
@@ -52,7 +54,7 @@ describe('api/ItemCollaborations', () => {
     });
 
     describe('successHandler()', () => {
-        const MOCK_DATA = { entries: [] };
+        const MOCK_DATA = { entries: [] } as Collaborations;
 
         test('should do nothing if isDestroyed() returns true', () => {
             jest.spyOn(itemCollaborations, 'isDestroyed').mockReturnValue(true);

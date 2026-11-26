@@ -1,12 +1,14 @@
 import AppActivity from '../AppActivity';
 import { ERROR_CODE_DELETE_APP_ACTIVITY } from '../../constants';
 import { APP_ACTIVITY_FIELDS_TO_FETCH } from '../../utils/fields';
+import type { APIOptions } from '../../common/types/api';
+import type { AppActivityAPIItem, AppActivityAPIItems } from '../../common/types/feed';
 
-let appActivity;
+let appActivity: AppActivity;
 
 describe('api/AppActivity', () => {
     beforeEach(() => {
-        appActivity = new AppActivity({});
+        appActivity = new AppActivity({} as APIOptions);
     });
 
     afterEach(() => {
@@ -21,7 +23,7 @@ describe('api/AppActivity', () => {
                 occurred_at,
             };
 
-            const activityItem = appActivity.mapAppActivityItem(entry);
+            const activityItem = appActivity.mapAppActivityItem(entry as AppActivityAPIItem);
 
             expect(activityItem.created_at).toBe(occurred_at);
             expect(activityItem.occurred_at).toBeUndefined();
@@ -31,7 +33,7 @@ describe('api/AppActivity', () => {
             appActivity.permissions = {
                 can_delete: true,
             };
-            const activityItem = appActivity.mapAppActivityItem({});
+            const activityItem = appActivity.mapAppActivityItem({} as AppActivityAPIItem);
 
             expect(activityItem.permissions.can_delete).toBe(true);
 
@@ -49,7 +51,7 @@ describe('api/AppActivity', () => {
     describe('getDeleteUrl()', () => {
         test('should throw when not provided a file id', () => {
             expect(() => {
-                appActivity.getDeleteUrl();
+                appActivity.getDeleteUrl(undefined);
             }).toThrow();
         });
 
@@ -63,7 +65,7 @@ describe('api/AppActivity', () => {
             appActivity.successCallback = jest.fn();
             appActivity.destroy();
 
-            appActivity.successHandler({});
+            appActivity.successHandler({} as AppActivityAPIItems);
 
             expect(appActivity.successCallback).not.toBeCalled();
         });
@@ -74,7 +76,7 @@ describe('api/AppActivity', () => {
             };
             appActivity.successCallback = jest.fn();
 
-            appActivity.successHandler(data);
+            appActivity.successHandler(data as AppActivityAPIItems);
 
             expect(appActivity.successCallback).toBeCalledWith({
                 entries: [],
