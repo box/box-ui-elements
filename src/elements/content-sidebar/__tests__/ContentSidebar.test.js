@@ -414,5 +414,35 @@ describe('elements/content-sidebar/ContentSidebar', () => {
 
             expect(wrapper.find('sidebar').prop('resin')).toBe(resin);
         });
+
+        test.each`
+            defaultView                 | expectedNavigation
+            ${''}                       | ${{}}
+            ${'/'}                      | ${{}}
+            ${'metadata'}               | ${{ sidebar: 'metadata' }}
+            ${'/activity/comments/123'} | ${{ sidebar: 'activity' }}
+        `(
+            'should pass $expectedNavigation as the sidebar navigation when defaultView is "$defaultView"',
+            ({ defaultView, expectedNavigation }) => {
+                const wrapper = getWrapper({ defaultView, fileId: 'test_id', minimalFile });
+
+                expect(wrapper.find('sidebar').prop('sidebarNavigation')).toEqual(expectedNavigation);
+            },
+        );
+
+        test('should pass the sidebar navigation and its handler to Sidebar instead of defaultView', () => {
+            const sidebarNavigation = { sidebar: 'activity', activeFeedEntryType: 'comments', activeFeedEntryId: '1' };
+            const sidebarNavigationHandler = jest.fn();
+            const wrapper = getWrapper({
+                defaultView: 'metadata',
+                fileId: 'test_id',
+                minimalFile,
+                sidebarNavigation,
+                sidebarNavigationHandler,
+            });
+
+            expect(wrapper.find('sidebar').prop('sidebarNavigation')).toBe(sidebarNavigation);
+            expect(wrapper.find('sidebar').prop('sidebarNavigationHandler')).toBe(sidebarNavigationHandler);
+        });
     });
 });
