@@ -163,12 +163,27 @@ function useSidebarMetadataFetcher(
         [api, metadataApiVersion, metadataNamespaceMode],
     );
 
+    // A fetch started for an older file/mode/version is not aborted, so its callbacks
+    // must not overwrite the result of the fetch that replaced it.
+    const latestMetadataFetchId = React.useRef(0);
     const fetchMetadata = React.useCallback(
         (fetchedFile: BoxItem) => {
+            latestMetadataFetchId.current += 1;
+            const fetchId = latestMetadataFetchId.current;
+            const isLatestFetch = () => fetchId === latestMetadataFetchId.current;
+
             metadataAPI().getMetadata(
                 fetchedFile,
-                fetchMetadataSuccessCallback,
-                fetchMetadataErrorCallback,
+                (data: Parameters<typeof fetchMetadataSuccessCallback>[0]) => {
+                    if (isLatestFetch()) {
+                        fetchMetadataSuccessCallback(data);
+                    }
+                },
+                (e: ElementsXhrError, code: string) => {
+                    if (isLatestFetch()) {
+                        fetchMetadataErrorCallback(e, code);
+                    }
+                },
                 isFeatureEnabled,
                 {
                     refreshCache: true,

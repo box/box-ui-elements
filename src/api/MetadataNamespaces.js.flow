@@ -49,7 +49,7 @@ export default class MetadataNamespaces {
         this.host = host;
     }
 
-    getHeaders(baseHeaders?: StringMap): ?StringMap {
+    getHeaders(baseHeaders?: StringMap): StringMap | void {
         if (!this.host.metadataApiVersion) {
             return baseHeaders;
         }

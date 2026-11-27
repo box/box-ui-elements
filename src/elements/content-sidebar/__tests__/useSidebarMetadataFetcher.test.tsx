@@ -1,5 +1,5 @@
 import { MetadataTemplateFieldType } from '@box/metadata-editor';
-import { renderHook, waitFor } from '../../../test-utils/testing-library';
+import { act, renderHook, waitFor } from '../../../test-utils/testing-library';
 import messages from '../../common/messages';
 import {
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
@@ -1309,6 +1309,85 @@ describe('useSidebarMetadataFetcher', () => {
 
         expect(api.getMetadataAPI).toHaveBeenCalledWith(false, {
             metadataApiVersion: '2024.0',
+        });
+    });
+
+    describe('when the namespace context changes during a fetch', () => {
+        const newerTemplates = [{ ...mockTemplates[0], id: 'newer-template' }];
+        const newerTemplateInstances = [{ ...mockTemplateInstances[0], id: 'newer-instance' }];
+
+        const renderWithChangingVersion = () => {
+            const pendingFetches = [];
+            mockAPI.getMetadata.mockImplementation((_file, successCallback, errorCallback) => {
+                pendingFetches.push({ successCallback, errorCallback });
+            });
+
+            const hook = renderHook(
+                ({ namespaceContext }: { namespaceContext: MetadataNamespaceFetchContext }) =>
+                    useSidebarMetadataFetcher(
+                        api,
+                        '123',
+                        onErrorMock,
+                        onSuccessMock,
+                        isFeatureEnabledMock,
+                        false,
+                        false,
+                        false,
+                        false,
+                        namespaceContext,
+                    ),
+                { initialProps: { namespaceContext: {} } },
+            );
+
+            return { ...hook, pendingFetches };
+        };
+
+        test('should keep the newer result when the superseded fetch resolves last', async () => {
+            const { result, rerender, pendingFetches } = renderWithChangingVersion();
+            await waitFor(() => expect(pendingFetches).toHaveLength(1));
+
+            rerender({ namespaceContext: { metadataApiVersion: '2027.0' } });
+            await waitFor(() => expect(pendingFetches).toHaveLength(2));
+
+            act(() => {
+                pendingFetches[1].successCallback({
+                    templates: newerTemplates,
+                    templateInstances: newerTemplateInstances,
+                });
+            });
+            act(() => {
+                pendingFetches[0].successCallback({
+                    templates: mockTemplates,
+                    templateInstances: mockTemplateInstances,
+                });
+            });
+
+            expect(result.current.status).toBe(STATUS.SUCCESS);
+            expect(result.current.templates).toEqual(newerTemplates);
+            expect(result.current.templateInstances).toEqual(newerTemplateInstances);
+        });
+
+        test('should ignore an error from the superseded fetch', async () => {
+            const { result, rerender, pendingFetches } = renderWithChangingVersion();
+            await waitFor(() => expect(pendingFetches).toHaveLength(1));
+
+            rerender({ namespaceContext: { metadataApiVersion: '2027.0' } });
+            await waitFor(() => expect(pendingFetches).toHaveLength(2));
+
+            act(() => {
+                pendingFetches[1].successCallback({
+                    templates: newerTemplates,
+                    templateInstances: newerTemplateInstances,
+                });
+            });
+            act(() => {
+                pendingFetches[0].errorCallback(mockInternalServerError, 'fetch_metadata_error');
+            });
+
+            expect(result.current.status).toBe(STATUS.SUCCESS);
+            expect(result.current.errorMessage).toBeNull();
+            expect(result.current.templates).toEqual(newerTemplates);
+            expect(onErrorMock).not.toHaveBeenCalled();
         });
     });
 });

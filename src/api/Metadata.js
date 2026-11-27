@@ -69,7 +69,7 @@ import type {
     MetadataTemplateInstance,
     MetadataTemplateInstanceField,
 } from '../common/types/metadata';
-import type { BoxItem } from '../common/types/core';
+import type { BoxItem, StringMap } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import MetadataNamespaces from './MetadataNamespaces';
 import {
@@ -129,10 +129,10 @@ class Metadata extends File {
      * Merges `box-version` into request headers when `metadataApiVersion` is set.
      * Returns `baseHeaders` unchanged (or `undefined` when omitted) if unset.
      *
-     * @param {Object} [baseHeaders] - existing request headers to preserve
-     * @return {Object|void}
+     * @param {StringMap} [baseHeaders] - existing request headers to preserve
+     * @return {StringMap|void}
      */
-    getMetadataApiHeaders(baseHeaders?: Object): ?Object {
+    getMetadataApiHeaders(baseHeaders?: StringMap): StringMap | void {
         if (!this.metadataApiVersion) {
             return baseHeaders;
         }
