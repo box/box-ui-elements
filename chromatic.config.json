@@ -1,6 +1,0 @@
-{
-    "autoAcceptChanges": "master",
-    "buildScriptName": "build:prod:storybook",
-    "onlyChanged": true,
-    "skip": "mojito"
-}
