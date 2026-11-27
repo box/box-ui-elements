@@ -64,4 +64,24 @@ describe('useCanCreateTemplateAtRoot', () => {
         await waitFor(() => expect(getNamespace).toHaveBeenCalled());
         expect(result.current).toBe(false);
     });
+
+    test('should forward metadataApiVersion to getMetadataAPI when provided', async () => {
+        const getNamespace = jest.fn().mockResolvedValue({ fqn: enterpriseFqn, permissions: {} });
+        const api = { getMetadataAPI: jest.fn().mockReturnValue({ getNamespace }) };
+
+        renderHook(() => useCanCreateTemplateAtRoot(api as never, file as never, enterpriseFqn, '2027.0'));
+
+        await waitFor(() => expect(getNamespace).toHaveBeenCalled());
+        expect(api.getMetadataAPI).toHaveBeenCalledWith(false, { metadataApiVersion: '2027.0' });
+    });
+
+    test('should call getMetadataAPI without options when metadataApiVersion is omitted', async () => {
+        const getNamespace = jest.fn().mockResolvedValue({ fqn: enterpriseFqn, permissions: {} });
+        const api = { getMetadataAPI: jest.fn().mockReturnValue({ getNamespace }) };
+
+        renderHook(() => useCanCreateTemplateAtRoot(api as never, file as never, enterpriseFqn));
+
+        await waitFor(() => expect(getNamespace).toHaveBeenCalled());
+        expect(api.getMetadataAPI).toHaveBeenCalledWith(false);
+    });
 });

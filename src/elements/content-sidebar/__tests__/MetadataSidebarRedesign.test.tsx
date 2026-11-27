@@ -1230,4 +1230,103 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             );
         });
     });
+
+    describe('metadataApiVersion', () => {
+        test('should forward metadataApiVersion to useSidebarMetadataFetcher and api.getMetadataAPI alongside metadataNamespaceMode', async () => {
+            mockUseMetadataNamespaceContext.mockReturnValue({
+                enterpriseId: 'enterprise_1',
+                metadataNamespaceMode: 'MIGRATION',
+                isTemplateManagementEnabled: true,
+                isLoading: false,
+            });
+            const createMetadataTemplate = jest.fn((_file, _body, successCallback) => {
+                successCallback();
+            });
+            const getNamespace = jest.fn().mockResolvedValue({ fqn: 'enterprise_1', permissions: {} });
+            (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate, getNamespace });
+
+            renderComponent({
+                metadataNamespaceMode: 'MIGRATION',
+                metadataApiVersion: '2027.0',
+                enterpriseId: 'enterprise_1',
+            });
+
+            expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.objectContaining({
+                    metadataNamespaceMode: 'MIGRATION',
+                    metadataApiVersion: '2027.0',
+                }),
+                expect.anything(),
+            );
+
+            await capturedCreateTemplate!({
+                displayName: 'Invoice Details',
+                templateKey: 'invoiceDetails',
+            } as MetadataTemplateCreateBody);
+
+            expect(api.getMetadataAPI).toHaveBeenCalledWith(false, {
+                metadataNamespaceMode: 'MIGRATION',
+                metadataApiVersion: '2027.0',
+            });
+        });
+
+        test('should forward metadataApiVersion alone when metadataNamespaceMode is omitted', async () => {
+            const createMetadataTemplate = jest.fn((_file, _body, successCallback) => {
+                successCallback();
+            });
+            (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate });
+
+            renderComponent({ metadataApiVersion: '2024.0' });
+
+            expect(mockUseSidebarMetadataFetcher).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.anything(),
+                expect.objectContaining({
+                    metadataApiVersion: '2024.0',
+                }),
+                expect.anything(),
+            );
+
+            await capturedCreateTemplate!({
+                displayName: 'Invoice Details',
+                templateKey: 'invoiceDetails',
+            } as MetadataTemplateCreateBody);
+
+            expect(api.getMetadataAPI).toHaveBeenCalledWith(false, {
+                metadataApiVersion: '2024.0',
+            });
+        });
+
+        test('should not pass metadataApiVersion to api.getMetadataAPI when omitted', async () => {
+            const createMetadataTemplate = jest.fn((_file, _body, successCallback) => {
+                successCallback();
+            });
+            (api.getMetadataAPI as jest.Mock).mockReturnValue({ createMetadataTemplate });
+
+            renderComponent();
+
+            await capturedCreateTemplate!({
+                displayName: 'Invoice Details',
+                templateKey: 'invoiceDetails',
+            } as MetadataTemplateCreateBody);
+
+            expect(api.getMetadataAPI).toHaveBeenCalledWith(false, undefined);
+        });
+    });
 });

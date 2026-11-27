@@ -505,7 +505,8 @@ class APIFactory {
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
      * @param {Object} [options] - merged over the factory options for this client.
-     *   Callers that know the namespace migration mode pass `metadataNamespaceMode` here.
+     *   Callers that know the namespace migration mode pass `metadataNamespaceMode` here,
+     *   and callers opting into a Box API version pass `metadataApiVersion` here.
      * @return {MetadataAPI} MetadataAPI instance
      */
     getMetadataAPI(shouldDestroy?: boolean, options?: Object): MetadataAPI {

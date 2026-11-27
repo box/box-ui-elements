@@ -370,6 +370,16 @@ describe('api/APIFactory', () => {
             expect(first.metadataNamespaceMode).toBe(METADATA_SCOPE_MODE_FINAL);
             expect(second.metadataNamespaceMode).toBe('SCOPED');
         });
+
+        test('should pass metadataApiVersion to the client without leaking to subsequent clients', () => {
+            const first = factory.getMetadataAPI(false, {
+                metadataApiVersion: '2027.0',
+            });
+            const second = factory.getMetadataAPI(false);
+
+            expect(first.metadataApiVersion).toBe('2027.0');
+            expect(second.metadataApiVersion).toBeUndefined();
+        });
     });
 
     describe('getFileCollaboratorsAPI()', () => {

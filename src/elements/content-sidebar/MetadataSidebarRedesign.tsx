@@ -51,6 +51,7 @@ import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
 
 import { type WithLoggerProps } from '../../common/types/logging';
+import { type MetadataApiVersion } from '../../common/types/api';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
@@ -98,6 +99,11 @@ export interface ExternalProps {
      * When omitted (and opt-in is on), the sidebar stays in SCOPED.
      */
     metadataNamespaceMode?: MetadataScopeMode | null;
+    /**
+     * Host-provided Box API version sent in the `box-version` header on metadata-api calls.
+     * When omitted, no `box-version` header is sent.
+     */
+    metadataApiVersion?: MetadataApiVersion;
     /**
      * Host-provided enterprise id (numeric, numeric string, or `enterprise_<id>` FQN).
      * Required for MIGRATION/FINAL template management. Hosts own this value.
@@ -159,6 +165,7 @@ function MetadataSidebarRedesign({
     createSessionRequest,
     getStructuredTextRep,
     metadataNamespaceMode: hostMetadataNamespaceMode,
+    metadataApiVersion,
     enterpriseId: hostEnterpriseId,
     onEditingStateChange,
     registerOpenWarningModalCallback,
@@ -223,6 +230,7 @@ function MetadataSidebarRedesign({
             enterpriseFqn: enterpriseId,
             isLoading: isNamespaceContextLoading,
             metadataNamespaceMode,
+            ...(metadataApiVersion ? { metadataApiVersion } : {}),
         },
         shouldFetchDetailedMetadata,
     );
@@ -248,6 +256,7 @@ function MetadataSidebarRedesign({
         file,
         isTemplateManagementEnabled ? enterpriseId : undefined,
         templates ?? [],
+        metadataApiVersion,
     );
     // The browser reads this only when it mounts, so the dropdown is keyed on
     // the resolved value and remounts once the root namespace grant arrives.
@@ -255,6 +264,7 @@ function MetadataSidebarRedesign({
         api,
         file,
         isTemplateManagementEnabled ? enterpriseId : undefined,
+        metadataApiVersion,
     );
 
     const { handleUnsavedChangesModalOpen, pendingNavLocation, setPendingNavLocation, unblockRouterHistory } =
@@ -323,10 +333,19 @@ function MetadataSidebarRedesign({
         }
     };
 
-    // Mode is a constructor option. Each getMetadataAPI() builds a new client.
+    // Mode and API version are constructor options. Each getMetadataAPI() builds a new client.
     const metadataAPI = useCallback(
-        () => api.getMetadataAPI(false, metadataNamespaceMode ? { metadataNamespaceMode } : undefined),
-        [api, metadataNamespaceMode],
+        () =>
+            api.getMetadataAPI(
+                false,
+                metadataNamespaceMode || metadataApiVersion
+                    ? {
+                          ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
+                          ...(metadataApiVersion ? { metadataApiVersion } : {}),
+                      }
+                    : undefined,
+            ),
+        [api, metadataApiVersion, metadataNamespaceMode],
     );
 
     // The sidebar only loads templates at the enterprise root, so a template the browser

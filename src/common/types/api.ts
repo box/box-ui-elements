@@ -76,6 +76,8 @@ type ElementsSuccess = {
     showNotification: boolean;
 };
 
+type MetadataApiVersion = '2024.0' | '2027.0';
+
 type APIOptions = {
     apiHost?: string;
     cache?: APICache;
@@ -104,6 +106,7 @@ type APIOptions = {
      * a future major version.
      */
     metadataApiHost?: string;
+    metadataApiVersion?: MetadataApiVersion;
     metadataNamespaceMode?: string;
     requestInterceptor?: any;
     responseInterceptor?: any;
@@ -128,6 +131,7 @@ export type {
     RequestData,
     RequestOptions,
     JSONPatchOperations,
+    MetadataApiVersion,
     Method,
     PayloadType,
 };

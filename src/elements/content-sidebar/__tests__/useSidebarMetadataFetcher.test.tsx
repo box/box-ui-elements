@@ -1284,4 +1284,31 @@ describe('useSidebarMetadataFetcher', () => {
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
         expect(mockAPI.getMetadata).toHaveBeenCalledTimes(1);
     });
+
+    test('should pass metadataApiVersion to getMetadataAPI alongside metadataNamespaceMode', async () => {
+        const { result } = setupHook('123', false, false, false, false, {
+            enterpriseFqn: 'enterprise_123',
+            metadataNamespaceMode: 'MIGRATION',
+            metadataApiVersion: '2027.0',
+        });
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(api.getMetadataAPI).toHaveBeenCalledWith(false, {
+            metadataNamespaceMode: 'MIGRATION',
+            metadataApiVersion: '2027.0',
+        });
+    });
+
+    test('should pass metadataApiVersion alone to getMetadataAPI when metadataNamespaceMode is unset', async () => {
+        const { result } = setupHook('123', false, false, false, false, {
+            metadataApiVersion: '2024.0',
+        });
+
+        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+
+        expect(api.getMetadataAPI).toHaveBeenCalledWith(false, {
+            metadataApiVersion: '2024.0',
+        });
+    });
 });

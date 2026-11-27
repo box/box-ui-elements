@@ -16,10 +16,11 @@ import { getTypedFileId } from '../utils/file';
 import {
     ERROR_CODE_CREATE_METADATA_TEMPLATE,
     ERROR_CODE_UPDATE_METADATA_TEMPLATE,
+    HEADER_BOX_VERSION,
     HEADER_CONTENT_TYPE,
 } from '../constants';
-import type { ElementsErrorCallback } from '../common/types/api';
-import type { BoxItem } from '../common/types/core';
+import type { ElementsErrorCallback, MetadataApiVersion } from '../common/types/api';
+import type { BoxItem, StringMap } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import type Xhr from '../utils/Xhr';
 
@@ -27,6 +28,7 @@ import type Xhr from '../utils/Xhr';
 export type MetadataNamespaceHost = {
     // Writable: MetadataNamespaces assigns error codes onto the host.
     errorCode: string;
+    readonly metadataApiVersion?: MetadataApiVersion;
     readonly metadataNamespaceMode: string;
     readonly getBaseApiUrl: () => string;
     readonly getCache: () => APICache;
@@ -45,6 +47,16 @@ export default class MetadataNamespaces {
         this.host = host;
     }
 
+    getHeaders(baseHeaders?: StringMap): StringMap | undefined {
+        if (!this.host.metadataApiVersion) {
+            return baseHeaders;
+        }
+        return {
+            ...baseHeaders,
+            [HEADER_BOX_VERSION]: this.host.metadataApiVersion,
+        };
+    }
+
     getMetadataNamespacesUrl(namespaceFqn: string): string {
         return `${this.host.getBaseApiUrl()}/metadata_namespaces/${namespaceFqn}`;
     }
@@ -60,11 +72,13 @@ export default class MetadataNamespaces {
         params: { limit: number; marker?: string },
     ): Promise<{ entries: Array<object>; next_marker?: string }> {
         const url = `${this.getMetadataNamespacesUrl(namespaceFqn)}/children`;
+        const headers = this.getHeaders();
         try {
             const response = await this.host.xhr.get({
                 url,
                 id: this.getRequestFileId(file),
                 params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
+                ...(headers ? { headers } : {}),
             });
             return getProp(response, 'data', { entries: [] });
         } catch (e) {
@@ -82,11 +96,13 @@ export default class MetadataNamespaces {
      */
     async getNamespace(file: BoxItem, namespaceFqn: string): Promise<object | null> {
         const url = this.getMetadataNamespacesUrl(namespaceFqn);
+        const headers = this.getHeaders();
         try {
             const response = await this.host.xhr.get({
                 url,
                 id: this.getRequestFileId(file),
                 params: { fields: 'permissions' },
+                ...(headers ? { headers } : {}),
             });
             return getProp(response, 'data', null);
         } catch (e) {
@@ -112,6 +128,7 @@ export default class MetadataNamespaces {
         params: { query: string; limit: number; marker?: string },
     ): Promise<{ entries: Array<object>; next_marker?: string }> {
         const url = `${this.host.getMetadataTemplateUrl()}/search`;
+        const headers = this.getHeaders();
         const response = await this.host.xhr.get({
             url,
             id: this.getRequestFileId(file),
@@ -121,6 +138,7 @@ export default class MetadataNamespaces {
                 fields: 'permissions',
                 ...(params.marker ? { marker: params.marker } : {}),
             },
+            ...(headers ? { headers } : {}),
         });
         return getProp(response, 'data', { entries: [] });
     }
@@ -138,10 +156,12 @@ export default class MetadataNamespaces {
         params: { limit: number; marker?: string },
     ): Promise<{ entries: Array<object>; next_marker?: string }> {
         const url = this.host.getMetadataTemplateUrlForScope(namespaceFqn);
+        const headers = this.getHeaders();
         const response = await this.host.xhr.get({
             url,
             id: this.getRequestFileId(file),
             params: { limit: params.limit, marker: params.marker, fields: 'permissions' },
+            ...(headers ? { headers } : {}),
         });
         return getProp(response, 'data', { entries: [] });
     }
@@ -157,11 +177,13 @@ export default class MetadataNamespaces {
     ): Promise<void> {
         this.host.errorCode = ERROR_CODE_CREATE_METADATA_TEMPLATE;
         const url = `${this.host.getMetadataTemplateUrl()}/schema`;
+        const headers = this.getHeaders();
         try {
             const response = await this.host.xhr.post({
                 url,
                 id: this.getRequestFileId(file),
                 data: body,
+                ...(headers ? { headers } : {}),
             });
             if (!this.host.isDestroyed()) {
                 successCallback(getProp(response, 'data'));
@@ -188,7 +210,7 @@ export default class MetadataNamespaces {
             const response = await this.host.xhr.put({
                 url,
                 id: this.getRequestFileId(file),
-                headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
+                headers: this.getHeaders({ [HEADER_CONTENT_TYPE]: 'application/json-patch+json' }),
                 data: patchItems,
             });
             if (!this.host.isDestroyed()) {
@@ -209,9 +231,11 @@ export default class MetadataNamespaces {
         file: BoxItem | null | undefined,
     ): Promise<object> {
         const url = this.host.getMetadataTemplateSchemaUrl(templateKey, namespaceFqn);
+        const headers = this.getHeaders();
         const response = await this.host.xhr.get({
             url,
             id: this.getRequestFileId(file),
+            ...(headers ? { headers } : {}),
         });
         const data = getProp(response, 'data', {});
         return {
