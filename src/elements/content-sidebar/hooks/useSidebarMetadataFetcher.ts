@@ -9,7 +9,7 @@ import {
 import isEmpty from 'lodash/isEmpty';
 import API from '../../../api';
 import { formatMetadataFieldValue } from '../../../api/utils';
-import { type ElementsXhrError } from '../../../common/types/api';
+import { type ElementsXhrError, type MetadataApiVersion } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
 import {
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
@@ -74,6 +74,8 @@ export type MetadataNamespaceFetchContext = {
     enterpriseFqn?: string;
     /** True while opt-in is on and the host has passed `metadataNamespaceMode: null`. */
     isLoading?: boolean;
+    /** Host-provided Box API version (`box-version` header) for metadata-api calls. */
+    metadataApiVersion?: MetadataApiVersion;
     /** Resolved migration mode (`null` when opt-in is off or still loading). */
     metadataNamespaceMode?: string | null;
 };
@@ -91,7 +93,12 @@ function useSidebarMetadataFetcher(
     namespaceContext: MetadataNamespaceFetchContext = {},
     shouldFetchDetailedMetadata: boolean = false,
 ): DataFetcher {
-    const { enterpriseFqn, isLoading: isNamespaceContextLoading, metadataNamespaceMode } = namespaceContext;
+    const {
+        enterpriseFqn,
+        isLoading: isNamespaceContextLoading,
+        metadataApiVersion,
+        metadataNamespaceMode,
+    } = namespaceContext;
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
@@ -140,19 +147,43 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
-    // Mode is a constructor option. Each getMetadataAPI() builds a new client,
-    // so every sidebar call passes the resolved mode instead of writing it later.
+    // Mode and API version are constructor options. Each getMetadataAPI() builds a new client,
+    // so every sidebar call passes them instead of mutating an existing instance.
     const metadataAPI = React.useCallback(
-        () => api.getMetadataAPI(false, metadataNamespaceMode ? { metadataNamespaceMode } : undefined),
-        [api, metadataNamespaceMode],
+        () =>
+            api.getMetadataAPI(
+                false,
+                metadataNamespaceMode || metadataApiVersion
+                    ? {
+                          ...(metadataNamespaceMode ? { metadataNamespaceMode } : {}),
+                          ...(metadataApiVersion ? { metadataApiVersion } : {}),
+                      }
+                    : undefined,
+            ),
+        [api, metadataApiVersion, metadataNamespaceMode],
     );
 
+    // A fetch started for an older file/mode/version is not aborted, so its callbacks
+    // must not overwrite the result of the fetch that replaced it.
+    const latestMetadataFetchId = React.useRef(0);
     const fetchMetadata = React.useCallback(
         (fetchedFile: BoxItem) => {
+            latestMetadataFetchId.current += 1;
+            const fetchId = latestMetadataFetchId.current;
+            const isLatestFetch = () => fetchId === latestMetadataFetchId.current;
+
             metadataAPI().getMetadata(
                 fetchedFile,
-                fetchMetadataSuccessCallback,
-                fetchMetadataErrorCallback,
+                (data: Parameters<typeof fetchMetadataSuccessCallback>[0]) => {
+                    if (isLatestFetch()) {
+                        fetchMetadataSuccessCallback(data);
+                    }
+                },
+                (e: ElementsXhrError, code: string) => {
+                    if (isLatestFetch()) {
+                        fetchMetadataErrorCallback(e, code);
+                    }
+                },
                 isFeatureEnabled,
                 {
                     refreshCache: true,
@@ -392,13 +423,13 @@ function useSidebarMetadataFetcher(
         if (!file || isNamespaceContextLoading) {
             return;
         }
-        const fetchKey = `${file.id}:${enterpriseFqn ?? ''}:${metadataNamespaceMode ?? ''}`;
+        const fetchKey = `${file.id}:${enterpriseFqn ?? ''}:${metadataNamespaceMode ?? ''}:${metadataApiVersion ?? ''}`;
         if (lastMetadataFetchKey.current === fetchKey) {
             return;
         }
         lastMetadataFetchKey.current = fetchKey;
         fetchMetadata(file);
-    }, [enterpriseFqn, fetchMetadata, file, isNamespaceContextLoading, metadataNamespaceMode]);
+    }, [enterpriseFqn, fetchMetadata, file, isNamespaceContextLoading, metadataApiVersion, metadataNamespaceMode]);
 
     const refetchMetadata = React.useCallback(() => {
         if (file) {

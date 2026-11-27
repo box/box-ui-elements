@@ -35,7 +35,12 @@ import {
     SIDEBAR_VIEW_METADATA,
 } from '../../constants';
 import type { WithLoggerProps } from '../../common/types/logging';
-import type { ElementsXhrError, ErrorContextProps, JSONPatchOperations } from '../../common/types/api';
+import type {
+    ElementsXhrError,
+    ErrorContextProps,
+    JSONPatchOperations,
+    MetadataApiVersion,
+} from '../../common/types/api';
 import type { MetadataEditor, MetadataTemplate } from '../../common/types/metadata';
 import type { BoxItem } from '../../common/types/core';
 import './MetadataSidebar.scss';
@@ -55,6 +60,8 @@ type ExternalProps = {
     fetchAvatarUrls?: (userContacts: Array<Object>) => Promise<{ [key: string]: string }>,
     /** Host-provided migration mode. Used by the redesigned sidebar. */
     metadataNamespaceMode?: string,
+    /** Host-provided Box API version (`box-version` header) for metadata-api calls. */
+    metadataApiVersion?: MetadataApiVersion,
     /** Host-provided enterprise id. Used by the redesigned sidebar. */
     enterpriseId?: string | number,
 };

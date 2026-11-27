@@ -82,6 +82,7 @@ export const HEADER_RETRY_AFTER = 'Retry-After';
 export const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 export const HEADER_ACCEPT_LANGUAGE = 'Accept-Language';
+export const HEADER_BOX_VERSION = 'box-version';
 
 /* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';

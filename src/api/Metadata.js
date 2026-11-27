@@ -29,6 +29,7 @@ import File from './File';
 import {
     AI_ACCEPTED_PROCESS,
     AI_EXTRACTED_PROCESS,
+    HEADER_BOX_VERSION,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_MODE_SCOPED,
     METADATA_SCOPE_ENTERPRISE,
@@ -57,7 +58,7 @@ import {
     ERROR_CODE_FETCH_METADATA_TAXONOMIES,
 } from '../constants';
 
-import type { ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
+import type { ElementsErrorCallback, JSONPatchOperations, MetadataApiVersion } from '../common/types/api';
 import type {
     MetadataTemplateSchemaResponse,
     MetadataTemplate,
@@ -68,7 +69,7 @@ import type {
     MetadataTemplateInstance,
     MetadataTemplateInstanceField,
 } from '../common/types/metadata';
-import type { BoxItem } from '../common/types/core';
+import type { BoxItem, StringMap } from '../common/types/core';
 import type APICache from '../utils/Cache';
 import MetadataNamespaces from './MetadataNamespaces';
 import {
@@ -98,6 +99,15 @@ class Metadata extends File {
      */
     metadataNamespaceMode: string;
 
+    /**
+     * Optional Box API version sent in the `box-version` header on metadata-api calls.
+     * Set from constructor options and fixed for the life of the client.
+     * When unset, no `box-version` header is sent.
+     *
+     * @property {?MetadataApiVersion}
+     */
+    metadataApiVersion: ?MetadataApiVersion;
+
     namespacesAPI: ?MetadataNamespaces;
 
     /**
@@ -111,7 +121,25 @@ class Metadata extends File {
     constructor(options: Object) {
         super(options);
         this.metadataNamespaceMode = this.options.metadataNamespaceMode || METADATA_SCOPE_MODE_SCOPED;
+        this.metadataApiVersion = this.options.metadataApiVersion;
         this.taxonomyLevelsRequests = {};
+    }
+
+    /**
+     * Merges `box-version` into request headers when `metadataApiVersion` is set.
+     * Returns `baseHeaders` unchanged (or `undefined` when omitted) if unset.
+     *
+     * @param {StringMap} [baseHeaders] - existing request headers to preserve
+     * @return {StringMap|void}
+     */
+    getMetadataApiHeaders(baseHeaders?: StringMap): StringMap | void {
+        if (!this.metadataApiVersion) {
+            return baseHeaders;
+        }
+        return {
+            ...baseHeaders,
+            [HEADER_BOX_VERSION]: this.metadataApiVersion,
+        };
     }
 
     /**
@@ -615,6 +643,7 @@ class Metadata extends File {
         const url = instanceId
             ? this.getMetadataTemplateUrlForInstance(instanceId)
             : this.getMetadataTemplateUrlForScope(scope);
+        const headers = this.getMetadataApiHeaders();
         try {
             templates = await this.xhr.get({
                 url,
@@ -622,6 +651,7 @@ class Metadata extends File {
                 params: {
                     limit: METADATA_TEMPLATE_FETCH_LIMIT, // internal hard limit is 500
                 },
+                ...(headers ? { headers } : {}),
             });
         } catch (e) {
             const { status } = e;
@@ -663,9 +693,11 @@ class Metadata extends File {
         }
 
         const url = this.getMetadataTemplateSchemaUrl(templateKey, scope);
+        const headers = this.getMetadataApiHeaders();
         const response = await this.xhr.get({
             url,
             ...(fileId ? { id: getTypedFileId(fileId) } : {}),
+            ...(headers ? { headers } : {}),
         });
 
         cache.set(key, response);
@@ -685,10 +717,11 @@ class Metadata extends File {
         baseUrl: string,
         requestId: string,
     ): Promise<Array<MetadataInstanceV2>> {
+        const headers = this.getMetadataApiHeaders();
         try {
             const [detailedResponse, hydratedResponse] = await Promise.all([
-                this.xhr.get({ url: `${baseUrl}?view=detailed`, id: requestId }),
-                this.xhr.get({ url: `${baseUrl}?view=hydrated`, id: requestId }),
+                this.xhr.get({ url: `${baseUrl}?view=detailed`, id: requestId, ...(headers ? { headers } : {}) }),
+                this.xhr.get({ url: `${baseUrl}?view=hydrated`, id: requestId, ...(headers ? { headers } : {}) }),
             ]);
             const detailedEntries = getProp(detailedResponse, 'data.entries', []);
             const hydratedEntries = getProp(hydratedResponse, 'data.entries', []);
@@ -729,10 +762,12 @@ class Metadata extends File {
         const url = isMetadataRedesign ? `${baseUrl}?view=hydrated` : baseUrl;
 
         let instances = {};
+        const headers = this.getMetadataApiHeaders();
         try {
             instances = await this.xhr.get({
                 url,
                 id: requestId,
+                ...(headers ? { headers } : {}),
             });
         } catch (e) {
             const { status } = e;
@@ -1256,6 +1291,7 @@ class Metadata extends File {
 
         try {
             if (!skills.data) {
+                const headers = this.getMetadataApiHeaders();
                 skills = await this.xhr.get({
                     url: this.getMetadataUrl(
                         id,
@@ -1263,6 +1299,7 @@ class Metadata extends File {
                         METADATA_TEMPLATE_SKILLS,
                     ),
                     id: getTypedFileId(id),
+                    ...(headers ? { headers } : {}),
                 });
             }
 
@@ -1310,9 +1347,9 @@ class Metadata extends File {
         try {
             const metadata = await this.xhr.put({
                 url: this.getMetadataUrl(id, this.getScopeOrNamespace(METADATA_SCOPE_GLOBAL), METADATA_TEMPLATE_SKILLS),
-                headers: {
+                headers: this.getMetadataApiHeaders({
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
-                },
+                }),
                 id: getTypedFileId(id),
                 data: operations,
             });
@@ -1381,9 +1418,9 @@ class Metadata extends File {
                               this.getScopeOrNamespace(template.scope, template.namespace),
                               template.templateKey,
                           ),
-                headers: {
+                headers: this.getMetadataApiHeaders({
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
-                },
+                }),
                 id: type === 'file' ? getTypedFileId(id) : getTypedFolderId(id),
                 data: operations,
             });
@@ -1497,9 +1534,9 @@ class Metadata extends File {
                     this.getScopeOrNamespace(templateInstance.scope, templateInstance.namespace),
                     templateInstance.templateKey,
                 ),
-                headers: {
+                headers: this.getMetadataApiHeaders({
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
-                },
+                }),
                 id: getTypedFileId(id),
                 data: operations,
             });
@@ -1568,6 +1605,7 @@ class Metadata extends File {
         this.errorCallback = errorCallback;
 
         try {
+            const headers = this.getMetadataApiHeaders();
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(
                     id,
@@ -1576,6 +1614,7 @@ class Metadata extends File {
                 ),
                 id: getTypedFileId(id),
                 data: {},
+                ...(headers ? { headers } : {}),
             });
             if (!this.isDestroyed()) {
                 const cache: APICache = this.getCache();
@@ -1695,6 +1734,7 @@ class Metadata extends File {
                 }
             }
 
+            const headers = this.getMetadataApiHeaders();
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(
                     id,
@@ -1703,6 +1743,7 @@ class Metadata extends File {
                 ),
                 id: getTypedFileId(id),
                 data: fieldsValues,
+                ...(headers ? { headers } : {}),
             });
 
             if (!this.isDestroyed()) {
@@ -1759,9 +1800,11 @@ class Metadata extends File {
         this.errorCallback = errorCallback;
 
         try {
+            const headers = this.getMetadataApiHeaders();
             await this.xhr.delete({
                 url: this.getMetadataUrl(id, this.getScopeOrNamespace(scope, namespace), templateKey),
                 id: getTypedFileId(id),
+                ...(headers ? { headers } : {}),
             });
             if (!this.isDestroyed()) {
                 const cache: APICache = this.getCache();

@@ -703,4 +703,25 @@ describe('useMetadataTemplateItemsService', () => {
             next_marker: undefined,
         });
     });
+
+    test('should pass metadataApiVersion to getMetadataAPI across namespaces, templates, and search', async () => {
+        const { result } = renderHook(() =>
+            useMetadataTemplateItemsService(
+                api as never,
+                mockFile as never,
+                enterpriseFqn,
+                templates as never,
+                '2027.0',
+            ),
+        );
+
+        await result.current!.getNamespaces(enterpriseFqn, { limit: 20 });
+        await result.current!.getTemplates(enterpriseFqn, { limit: 20 });
+        await result.current!.getSearchResults('con', { limit: 20 });
+
+        expect(api.getMetadataAPI).toHaveBeenCalledTimes(3);
+        expect(api.getMetadataAPI).toHaveBeenNthCalledWith(1, false, { metadataApiVersion: '2027.0' });
+        expect(api.getMetadataAPI).toHaveBeenNthCalledWith(2, false, { metadataApiVersion: '2027.0' });
+        expect(api.getMetadataAPI).toHaveBeenNthCalledWith(3, false, { metadataApiVersion: '2027.0' });
+    });
 });

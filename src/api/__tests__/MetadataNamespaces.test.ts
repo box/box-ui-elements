@@ -265,4 +265,83 @@ describe('api/MetadataNamespaces', () => {
             });
         });
     });
+
+    describe('metadataApiVersion (box-version header)', () => {
+        test.each(['2024.0', '2027.0'] as const)(
+            'sends box-version: %s on every MetadataNamespaces method',
+            async version => {
+                host = createHost({ metadataApiVersion: version });
+                api = new MetadataNamespaces(host);
+
+                await api.listNamespaces(file, 'enterprise_1', { limit: 20 });
+                expect(host.xhr.get).toHaveBeenLastCalledWith(
+                    expect.objectContaining({ headers: { 'box-version': version } }),
+                );
+
+                await api.getNamespace(file, 'enterprise_1');
+                expect(host.xhr.get).toHaveBeenLastCalledWith(
+                    expect.objectContaining({ headers: { 'box-version': version } }),
+                );
+
+                await api.searchTemplates(file, { query: 'con', limit: 20 });
+                expect(host.xhr.get).toHaveBeenLastCalledWith(
+                    expect.objectContaining({ headers: { 'box-version': version } }),
+                );
+
+                await api.listTemplatesForNamespace(file, 'enterprise_1', { limit: 20 });
+                expect(host.xhr.get).toHaveBeenLastCalledWith(
+                    expect.objectContaining({ headers: { 'box-version': version } }),
+                );
+
+                await api.createMetadataTemplate(file, { displayName: 'Contract' }, jest.fn(), jest.fn());
+                expect(host.xhr.post).toHaveBeenLastCalledWith(
+                    expect.objectContaining({ headers: { 'box-version': version } }),
+                );
+
+                const patchItems = [{ op: 'replace', path: '/displayName', value: 'Renamed' }];
+                await api.updateMetadataTemplate(file, 'enterprise_1', 'contract', patchItems, jest.fn(), jest.fn());
+                expect(host.xhr.put).toHaveBeenLastCalledWith(
+                    expect.objectContaining({
+                        headers: {
+                            'Content-Type': 'application/json-patch+json',
+                            'box-version': version,
+                        },
+                    }),
+                );
+
+                await api.getTemplateSchemaForEditor('enterprise_1', 'contract', file);
+                expect(host.xhr.get).toHaveBeenLastCalledWith(
+                    expect.objectContaining({ headers: { 'box-version': version } }),
+                );
+            },
+        );
+
+        test('sends no box-version header on any method when metadataApiVersion is omitted', async () => {
+            await api.listNamespaces(file, 'enterprise_1', { limit: 20 });
+            await api.getNamespace(file, 'enterprise_1');
+            await api.searchTemplates(file, { query: 'con', limit: 20 });
+            await api.listTemplatesForNamespace(file, 'enterprise_1', { limit: 20 });
+            await api.createMetadataTemplate(file, { displayName: 'Contract' }, jest.fn(), jest.fn());
+            await api.updateMetadataTemplate(
+                file,
+                'enterprise_1',
+                'contract',
+                [{ op: 'replace', path: '/displayName', value: 'Renamed' }],
+                jest.fn(),
+                jest.fn(),
+            );
+            await api.getTemplateSchemaForEditor('enterprise_1', 'contract', file);
+
+            const allCalls = [...host.xhr.get.mock.calls, ...host.xhr.post.mock.calls, ...host.xhr.put.mock.calls];
+            expect(allCalls).toHaveLength(7);
+            allCalls.forEach(([requestConfig]) => {
+                expect(requestConfig.headers?.['box-version']).toBeUndefined();
+            });
+            expect(host.xhr.put).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    headers: { 'Content-Type': 'application/json-patch+json' },
+                }),
+            );
+        });
+    });
 });

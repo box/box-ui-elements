@@ -17,6 +17,7 @@ import {
     METADATA_TEMPLATE_PROPERTIES,
 } from '../../../constants';
 import messages from '../../../features/metadata-instance-editor/messages';
+import type { MetadataApiVersion } from '../../../common/types/api';
 import type { BoxItem } from '../../../common/types/core';
 import { getMetadataTemplateNamespaceFqn, isSameMetadataTemplate } from '../utils/metadataTemplateIdentity';
 import { canCreateTemplatesInNamespace, canEditMetadataTemplate } from '../utils/metadataTemplatePermissions';
@@ -228,6 +229,7 @@ export default function useMetadataTemplateItemsService(
     file: BoxItem,
     enterpriseFqn: string | undefined,
     templates: EditorMetadataTemplate[],
+    metadataApiVersion?: MetadataApiVersion,
 ): ItemsService | undefined {
     const { formatMessage } = useIntl();
     const customMetadataName = formatMessage(messages.customTitle);
@@ -237,14 +239,18 @@ export default function useMetadataTemplateItemsService(
             return undefined;
         }
 
+        const getMetadataAPI = () =>
+            metadataApiVersion ? api.getMetadataAPI(false, { metadataApiVersion }) : api.getMetadataAPI(false);
+
         return {
             getNamespaces: async (
                 namespaceFQN: string,
                 params: FetchParams,
             ): Promise<FetchResponse<MetadataNamespace>> => {
-                const result = await api
-                    .getMetadataAPI(false)
-                    .listNamespaces(file, namespaceFQN, { limit: params.limit, marker: params.marker });
+                const result = await getMetadataAPI().listNamespaces(file, namespaceFQN, {
+                    limit: params.limit,
+                    marker: params.marker,
+                });
                 return {
                     entries: (result.entries ?? []).map(entry => {
                         const namespace = entry as { displayName: string; fqn: string };
@@ -262,9 +268,10 @@ export default function useMetadataTemplateItemsService(
                 namespaceFQN: string,
                 params: FetchParams,
             ): Promise<FetchResponse<BrowserMetadataTemplate>> => {
-                const result = await api
-                    .getMetadataAPI(false)
-                    .listTemplatesForNamespace(file, namespaceFQN, { limit: params.limit, marker: params.marker });
+                const result = await getMetadataAPI().listTemplatesForNamespace(file, namespaceFQN, {
+                    limit: params.limit,
+                    marker: params.marker,
+                });
                 // Map the raw API response to the browser-expected shape.
                 // The API returns camelCase fields; we normalise displayName and scope/namespace.
                 const listed: BrowserMetadataTemplate[] = (result.entries ?? [])
@@ -345,7 +352,7 @@ export default function useMetadataTemplateItemsService(
                     return { entries: [] };
                 }
 
-                const result = await api.getMetadataAPI(false).searchTemplates(file, {
+                const result = await getMetadataAPI().searchTemplates(file, {
                     query: normalizedQuery,
                     limit: params.limit,
                     marker: params.marker,
@@ -406,5 +413,5 @@ export default function useMetadataTemplateItemsService(
                 };
             },
         };
-    }, [api, file, enterpriseFqn, templates, customMetadataName]);
+    }, [api, file, enterpriseFqn, templates, customMetadataName, metadataApiVersion]);
 }

@@ -5317,4 +5317,192 @@ describe('api/Metadata', () => {
             expect(fallback.getMetadataSuggestionsUrl()).toBe(baseline.getMetadataSuggestionsUrl());
         });
     });
+
+    describe('metadataApiVersion (box-version header)', () => {
+        const file = {
+            id: '123',
+            type: 'file',
+            permissions: { can_upload: true },
+        };
+        const template = {
+            scope: 'enterprise_1',
+            templateKey: 'contract',
+            fields: [{ key: 'title', type: 'string', value: 'MSA' }],
+        };
+        const patchOps = [{ op: 'replace', path: '/title', value: 'SOW' }];
+
+        const createMetadataWithMockXhr = options => {
+            const client = new Metadata(options);
+            const cache = new Cache();
+            cache.set(client.getMetadataCacheKey(file.id), { editors: [], templateInstances: [] });
+            client.getCache = jest.fn().mockReturnValue(cache);
+            client.xhr = {
+                get: jest.fn().mockResolvedValue({ data: { entries: [], cards: [], suggestions: [{ key: 'k' }] } }),
+                post: jest.fn().mockResolvedValue({ data: { $id: 'inst_1', $type: 'contract-1' } }),
+                put: jest.fn().mockResolvedValue({ data: { $id: 'inst_1', cards: [] } }),
+                delete: jest.fn().mockResolvedValue({ data: {} }),
+            };
+            return client;
+        };
+
+        test.each(['2024.0', '2027.0'])('sends box-version: %s on every metadata-api method', async version => {
+            const client = createMetadataWithMockXhr({ metadataApiVersion: version });
+
+            await client.getTemplates(file.id, 'enterprise_1');
+            expect(client.xhr.get).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            await client.getSchemaByTemplateKey('contract', 'enterprise_1', file.id);
+            expect(client.xhr.get).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            client.xhr.get.mockClear();
+            await client.getDetailedInstancesWithHydratedTaxonomy(client.getMetadataUrl(file.id), 'file_123');
+            expect(client.xhr.get).toHaveBeenCalledTimes(2);
+            expect(client.xhr.get).toHaveBeenNthCalledWith(
+                1,
+                expect.objectContaining({
+                    url: `${client.getMetadataUrl(file.id)}?view=detailed`,
+                    headers: { 'box-version': version },
+                }),
+            );
+            expect(client.xhr.get).toHaveBeenNthCalledWith(
+                2,
+                expect.objectContaining({
+                    url: `${client.getMetadataUrl(file.id)}?view=hydrated`,
+                    headers: { 'box-version': version },
+                }),
+            );
+
+            client.xhr.get.mockClear();
+            await client.getInstances(file.id);
+            expect(client.xhr.get).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            client.xhr.get.mockClear();
+            await client.getSkills(file, jest.fn(), jest.fn(), true);
+            expect(client.xhr.get).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            await client.updateSkills(file, patchOps, jest.fn(), jest.fn());
+            expect(client.xhr.put).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    headers: {
+                        'Content-Type': 'application/json-patch+json',
+                        'box-version': version,
+                    },
+                }),
+            );
+
+            await client.updateMetadata(file, template, patchOps, jest.fn(), jest.fn());
+            expect(client.xhr.put).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    headers: {
+                        'Content-Type': 'application/json-patch+json',
+                        'box-version': version,
+                    },
+                }),
+            );
+
+            await client.updateMetadataRedesign(file, template, patchOps, jest.fn(), jest.fn());
+            expect(client.xhr.put).toHaveBeenLastCalledWith(
+                expect.objectContaining({
+                    headers: {
+                        'Content-Type': 'application/json-patch+json',
+                        'box-version': version,
+                    },
+                }),
+            );
+
+            await client.createMetadata(file, template, jest.fn(), jest.fn());
+            expect(client.xhr.post).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            await client.createMetadataRedesign(file, template, jest.fn(), jest.fn());
+            expect(client.xhr.post).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            await client.deleteMetadata(file, template, jest.fn(), jest.fn());
+            expect(client.xhr.delete).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+
+            // Also forwarded through getNamespacesAPI()
+            client.xhr.get.mockClear();
+            await client.listNamespaces(file, 'enterprise_1', { limit: 10 });
+            expect(client.xhr.get).toHaveBeenLastCalledWith(
+                expect.objectContaining({ headers: { 'box-version': version } }),
+            );
+        });
+
+        test('never sends box-version on suggestions, options, or taxonomy methods', async () => {
+            const client = createMetadataWithMockXhr({ metadataApiVersion: '2027.0' });
+
+            await client.getMetadataSuggestions(file.id, TYPE_FILE, 'enterprise_1', 'contract');
+            expect(client.xhr.get.mock.calls[0][0].headers).toBeUndefined();
+
+            client.xhr.get.mockClear();
+            await client.getMetadataOptions(file.id, 'enterprise_1', 'contract', 'region', 0, {});
+            expect(client.xhr.get.mock.calls[0][0].headers).toBeUndefined();
+
+            client.xhr.get.mockClear();
+            await client.getMetadataTaxonomy(file.id, 'enterprise_1', 'regionTax');
+            expect(client.xhr.get.mock.calls[0][0].headers).toBeUndefined();
+
+            client.xhr.get.mockClear();
+            await client.getMetadataTaxonomies(file.id, 'enterprise_1');
+            expect(client.xhr.get.mock.calls[0][0].headers).toBeUndefined();
+
+            client.xhr.get.mockClear();
+            await client.getMetadataTaxonomyNode(file.id, 'enterprise_1', 'regionTax', 'node_1');
+            expect(client.xhr.get.mock.calls[0][0].headers).toBeUndefined();
+
+            client.xhr.get.mockClear();
+            await client.fetchTaxonomyLevels('metadata_taxonomies/enterprise_1/regionTax', file.id);
+            expect(client.xhr.get.mock.calls[0][0].headers).toBeUndefined();
+        });
+
+        test('sends no box-version header on any method when metadataApiVersion is omitted', async () => {
+            const client = createMetadataWithMockXhr({});
+
+            await client.getTemplates(file.id, 'enterprise_1');
+            await client.getSchemaByTemplateKey('contract', 'enterprise_1', file.id);
+            await client.getDetailedInstancesWithHydratedTaxonomy(client.getMetadataUrl(file.id), 'file_123');
+            await client.getInstances(file.id);
+            await client.getSkills(file, jest.fn(), jest.fn(), true);
+            await client.updateSkills(file, patchOps, jest.fn(), jest.fn());
+            await client.updateMetadata(file, template, patchOps, jest.fn(), jest.fn());
+            await client.updateMetadataRedesign(file, template, patchOps, jest.fn(), jest.fn());
+            await client.createMetadata(file, template, jest.fn(), jest.fn());
+            await client.createMetadataRedesign(file, template, jest.fn(), jest.fn());
+            await client.deleteMetadata(file, template, jest.fn(), jest.fn());
+            await client.getMetadataSuggestions(file.id, TYPE_FILE, 'enterprise_1', 'contract');
+            await client.getMetadataOptions(file.id, 'enterprise_1', 'contract', 'region', 0, {});
+            await client.getMetadataTaxonomy(file.id, 'enterprise_1', 'regionTax');
+            await client.getMetadataTaxonomies(file.id, 'enterprise_1');
+            await client.getMetadataTaxonomyNode(file.id, 'enterprise_1', 'regionTax', 'node_1');
+
+            const allCalls = [
+                ...client.xhr.get.mock.calls,
+                ...client.xhr.post.mock.calls,
+                ...client.xhr.put.mock.calls,
+                ...client.xhr.delete.mock.calls,
+            ];
+            expect(allCalls.length).toBeGreaterThan(0);
+            allCalls.forEach(([requestConfig]) => {
+                expect(requestConfig.headers?.['box-version']).toBeUndefined();
+            });
+            client.xhr.put.mock.calls.forEach(([requestConfig]) => {
+                expect(requestConfig.headers).toEqual({
+                    'Content-Type': 'application/json-patch+json',
+                });
+            });
+        });
+    });
 });

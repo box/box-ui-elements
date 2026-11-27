@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import API from '../../../api';
+import type { MetadataApiVersion } from '../../../common/types/api';
 import type { BoxItem } from '../../../common/types/core';
 import { canCreateTemplatesInNamespace } from '../utils/metadataTemplatePermissions';
 
@@ -15,6 +16,7 @@ export default function useCanCreateTemplateAtRoot(
     api: API,
     file: BoxItem | null,
     enterpriseFqn: string | undefined,
+    metadataApiVersion?: MetadataApiVersion,
 ): boolean {
     const [canCreateAtRoot, setCanCreateAtRoot] = useState(false);
 
@@ -26,7 +28,11 @@ export default function useCanCreateTemplateAtRoot(
 
         let cancelled = false;
 
-        api.getMetadataAPI(false)
+        const metadataAPI = metadataApiVersion
+            ? api.getMetadataAPI(false, { metadataApiVersion })
+            : api.getMetadataAPI(false);
+
+        metadataAPI
             .getNamespace(file, enterpriseFqn)
             .then(namespace => {
                 if (!cancelled) {
@@ -42,7 +48,7 @@ export default function useCanCreateTemplateAtRoot(
         return () => {
             cancelled = true;
         };
-    }, [api, enterpriseFqn, file]);
+    }, [api, enterpriseFqn, file, metadataApiVersion]);
 
     return canCreateAtRoot;
 }
